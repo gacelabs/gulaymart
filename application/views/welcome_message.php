@@ -154,10 +154,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								f_express_fee: "on",
 								f_express_fee_hidden: 40.00 // if express fee is checked*/
 							});
-							realtime.bind('return-delivery', 'returns', function(object) {
-								console.log('received response from portal.toktok.ph', object.data);
-							});
-							// console.log(realtime.events);
+						});
+					},
+					afterConnect: function() {
+						realtime.bind('return-delivery', 'returns', function(object) {
+							console.log('received response from portal.toktok.ph', object.data);
 						});
 					}
 				});
