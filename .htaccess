@@ -1,0 +1,19 @@
+Options +FollowSymLinks -MultiViews
+#RewriteEngine on
+#RewriteCond $1 !^(index\.php|assets|images|js|css|uploads|favicon.png)
+#RewriteCond %(REQUEST_FILENAME) !-f
+#RewriteCond %(REQUEST_FILENAME) !-d
+#RewriteRule ^(.*)$ ./index.php/$1 [L]
+
+RewriteEngine On
+#RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) index.php/$1
+
+<IfModule mod_env.c>
+    SetEnv CI_ENV development
+</IfModule>
+
+php_value max_execution_time 700
+php_value memory_limit 1000M
