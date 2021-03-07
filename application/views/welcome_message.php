@@ -69,7 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			var js, p = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) return;
 			js = d.createElement(s); js.id = id;
-			js.src = '<?php echo ($_SERVER['REQUEST_SCHEME'] == 'https' ? '//app.send-data.co' : '//local.app.send-data')."/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39"?>';
+			js.src = "https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39";
 			p.parentNode.insertBefore(js, p);
 		}(document, "script", "sd-sdk"));
 	</script>
