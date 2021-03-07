@@ -1,0 +1,28 @@
+#marketplace {
+	
+}
+#veggy_categories {
+	display: inline-grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	width: 100%;
+}
+.veggy-category-item-inner {
+	background-color: #edf5de;
+	border-radius: 22px;
+	padding: 8px;
+	text-align: center;
+	display: inline-block;
+	text-decoration: none !important;
+	color: inherit;
+}
+.veggy-category-item-inner>img {
+	width: 70px;
+}
+.veggy-category-item-inner>p {
+	margin: 0;
+}
+.veggy-category-item-inner:hover, .veggy-category-item-inner.active {
+	transition: all .3s ease-in-out;
+	background-color: #fff;
+	box-shadow: 0px 2px 10px 0px rgb(0 0 0 / 14%);
+}

@@ -1,0 +1,121 @@
+body {
+	background-color: #edf5de;
+}
+.icon-left {
+	margin-right: 10px;
+}
+.left-affix-content {
+	margin-left: 230px;
+}
+.panel {
+	position: relative;
+	background-color: #fff;
+	border-radius: 22px;
+	box-shadow: 0px 1px 4px 0px #e2ecd0;
+}
+
+/*search*/
+#search_body, .panel.pads {
+	padding: 15px;
+}
+#search_body .input-group {
+}
+#search_body input {
+	border-radius: 16px;
+	height: 40px;
+	outline: none !important;
+	box-shadow: none !important;
+	display: block;
+	padding-right: 60px;
+	margin: 0;
+	border-right: 0 none;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+#search_body span {
+	background-color: transparent;
+}
+#search_body button {
+	outline: none;
+	border: 1px solid #ccc;
+	border-left: 0 none;
+	background-color: transparent;
+	padding: 9px 14px;
+	box-shadow: none;
+	border-top-right-radius: 16px;
+	border-bottom-right-radius: 16px;
+}
+#search_body button:active {
+	color: #799938;
+}
+/*search*/
+
+
+/*category*/
+#veggy_categories {
+	padding-bottom: 15px;
+}
+/*category*/
+
+/*nav_panel*/
+#nav_panel, #marketplace {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+.nav-top {
+	text-align: center;
+	margin-bottom: 20px;
+}
+.nav-avatar-body {
+	background-color: #fff;
+	border: 3px solid #799938;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-radius: 22px;
+	height: 60px;
+	width: 60px;
+	margin: 0 auto 10px auto;
+}
+.nav-user-name {
+	font-size: 16px;
+	font-weight: bolder;
+	margin-bottom: 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.account-badge {
+	font-size: 11px;
+	font-family: inherit;
+}
+.nav-item-body {
+	margin-bottom: 15px;
+}
+.nav-item-body>a {
+	display: block;
+	border-radius: 22px;
+	background-color: transparent;
+	text-decoration: none !important;
+	color: #a0a0a0;
+	transition: color .3s ease-in-out;
+}
+.nav-item-body>a>i {
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 20px;
+}
+.nav-item-body>a>span {
+	font-weight: bold;
+}
+.nav-item-body>a:hover {
+	color: #496018;
+}
+.nav-item-body>a.active {
+	background-color: #799938;
+	color: #fff;
+}
+.nav-item-body>a.active>i {
+	background-color: #496018;
+} 
+/*nav_panel*/
