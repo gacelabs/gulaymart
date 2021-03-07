@@ -66,12 +66,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<script type="text/javascript">
 		javascript: (function(d, s, id) {
-			var js, dptjs = d.getElementsByTagName(s)[0];
+			var js, p = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) return;
 			js = d.createElement(s); js.id = id;
-			// js.src = "//local.app.send-data/get/jsfile/1E56FA5E54577C98A5FF31F577DFAE75";
-			js.src = "//local.app.send-data/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39";
-			dptjs.parentNode.insertBefore(js, dptjs);
+			js.src = '<?php echo ($_SERVER['REQUEST_SCHEME'] == 'https' ? '//app.send-data.co' : '//local.app.send-data')."/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39"?>';
+			p.parentNode.insertBefore(js, p);
 		}(document, "script", "sd-sdk"));
 	</script>
 </head>
