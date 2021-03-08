@@ -79,6 +79,11 @@
 }
 
 @media (max-width: 767px) {
+	#content_body_wrapper, #marketplace {
+		padding: 0;
+	}
+	.product-item-body {
+	}
 	.product-item-inner {
 		grid-template-columns: 1fr 1fr;
 	}
