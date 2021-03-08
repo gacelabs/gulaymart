@@ -28,10 +28,9 @@ class Marketplace extends CI_Controller {
 			),
 			'body_class' =>array('marketplace'),
 			'content_top' => array(
-
 			),
 			'content_middle' => array(
-				'marketplace/search_category_body',
+				'marketplace/nav_body',
 				'marketplace/product_item_body'
 			),
 			'content_footer' => array(
@@ -41,7 +40,7 @@ class Marketplace extends CI_Controller {
 				'search_popup'
 			),
 			'page_data' => array(
-
+				'is_login' => 0
 			)
 		);
 

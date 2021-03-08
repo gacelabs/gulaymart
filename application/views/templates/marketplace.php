@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<?php $this->load->view('requires/head'); ?>
+		<?php $this->view('requires/head'); ?>
 	</head>
 
 	<body class="<?php foreach($body_class as $value) { echo trim($value)." ";} ?>">
@@ -12,7 +12,7 @@
 			<section id="content__top">
 				<?php
 					foreach ($content_top as $value) {
-						$this->load->view($value);
+						$this->view($value);
 					}
 				?>
 			</section>
@@ -21,7 +21,7 @@
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="marketplace">
 					<?php
 						foreach ($content_middle as $value) {
-							$this->load->view($value);
+							$this->view($value);
 						}
 					?>
 				</div>
@@ -30,7 +30,7 @@
 			<section id="content__footer">
 				<?php
 					foreach ($content_footer as $value) {
-						$this->load->view($value);
+						$this->view($value);
 					}
 				?>
 			</section>
@@ -73,16 +73,22 @@
 				}
 			}(document, "script", "sd-sdk"));
 		</script>
-		<?php $this->load->view('requires/realtime_scripts'); ?>
+		<?php $this->view('requires/realtime_scripts'); ?>
 		<?php
 			foreach ($modals as $view => $value) {
 				if (is_array($value)) {
-					$this->load->view('modals/'.$view.'');
+					$this->view('modals/'.$view.'');
 				} else {
-					$this->load->view('modals/'.$value.'');
+					$this->view('modals/'.$value.'');
 				}
 			}
-		?>		
+		?>
+
+		<?php
+			if ($page_data['is_login'] == 0) {
+				$this->view('modals/login_modal');
+			}
+		?>
 
 	</body>
 </html>
