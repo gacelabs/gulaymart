@@ -130,7 +130,7 @@ ul.spaced-list.around {
 }
 #search_body .input-group {
 	border-radius: 22px;
-	margin: 15px;
+	margin: 15px 0;
 	padding: 0;
 }
 #search_body input {
