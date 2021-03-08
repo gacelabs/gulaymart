@@ -24,27 +24,27 @@ class Marketplace extends CI_Controller {
 			),
 			'js' => array(
 				'head' => array(),
-				'footer' => array()
+				'footer' => array('isotope.min', 'main')
 			),
 			'body_class' =>array('marketplace'),
 			'content_top' => array(
 
 			),
 			'content_middle' => array(
-				'global/nav_panel',
-				'content/marketplace'
+				'marketplace/search_category_body',
+				'marketplace/product_item_body'
 			),
 			'content_footer' => array(
 
 			),
 			'modals' => array(
-
+				'search_popup'
 			),
 			'page_data' => array(
 
 			)
 		);
 
-		$this->load->view('templates/main', $data);
+		$this->load->view('templates/marketplace', $data);
 	}
 }

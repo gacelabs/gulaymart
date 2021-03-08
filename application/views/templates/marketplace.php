@@ -8,8 +8,8 @@
 
 	<body class="<?php foreach($body_class as $value) { echo trim($value)." ";} ?>">
 		
-		<div id="content-body-wrapper">
-			<section id="content--top">
+		<div id="content_body_wrapper">
+			<section id="content__top">
 				<?php
 					foreach ($content_top as $value) {
 						$this->load->view($value);
@@ -17,15 +17,17 @@
 				?>
 			</section>
 
-			<section id="content--middle">
-				<?php
-					foreach ($content_middle as $value) {
-						$this->load->view($value);
-					}
-				?>
+			<section class="container" id="content__middle">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="marketplace">
+					<?php
+						foreach ($content_middle as $value) {
+							$this->load->view($value);
+						}
+					?>
+				</div>
 			</section>
 
-			<section id="content--footer">
+			<section id="content__footer">
 				<?php
 					foreach ($content_footer as $value) {
 						$this->load->view($value);
@@ -34,6 +36,7 @@
 			</section>
 		</div>
 
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/rwd.css'); ?>">
 		<?php
 			foreach ($css as $key => $values) {
 				if ($key == "footer") {
