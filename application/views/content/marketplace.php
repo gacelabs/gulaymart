@@ -56,7 +56,99 @@
 
 	<div class="nav-middle product-item-body">
 		<div class="product-item panel pads">
-			test
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
+		</div>
+
+				<div class="product-item panel pads">
+			<a href="">
+				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+					<kbd class="product-distance"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd>
+				</div>
+				<div class="product-item-middle">
+					<h1 class="product-title">Organic Non-Chemical Onions</h1>
+					<p class="product-price">Php 100 / kilo</p>
+				</div>
+			</a>
 		</div>
 	</div>
 	
