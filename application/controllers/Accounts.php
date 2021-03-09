@@ -31,10 +31,10 @@ class Accounts extends CI_Controller {
 
 			),
 			'content_middle' => array(
-				'forms/register_form'
+				'global/register'
 			),
 			'content_footer' => array(
-
+				
 			),
 			'modals' => array(
 				'login_modal'
