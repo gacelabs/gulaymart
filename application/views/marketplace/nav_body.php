@@ -6,7 +6,7 @@
 		<?php $this->view('forms/search_form'); ?>
 		<ul id="search_nav_btns">
 		<?php if ($page_data['is_login'] == 0) : ?>
-			<li class="login-button" data-toggle="modal" data-target="#login_modal"><a href="#">Log In or Sign Up</a></li>
+			<li class="login-button" data-toggle="modal" data-target="#login_modal"><a href="#">Log In</a></li>	
 		<?php else : ?>
 			<li class="bottom-nav-item"><a href="basket"><i class="fa fa-shopping-basket"></i></a></li>
 			<li class="bottom-nav-item"><a href="notifications"><i class="fa fa-bell-o"></i></a></li>

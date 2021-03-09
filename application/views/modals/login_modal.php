@@ -22,10 +22,10 @@
 									<input type="email" name="email" class="form-control" id="email" placeholder="Email address">
 								</div>
 								<div class="form-group" style="margin-bottom: 5px;">
-									<input type="password" name="password" class="form-control" id="password" placeholder="Email address">
+									<input type="password" name="password" class="form-control" id="password" placeholder="Password">
 								</div>
 								<div style="text-align: right;margin-bottom: 10px;">
-									<a href="password-reset" style="font-size: 11px;color: #aaa">Forgot Password?</a>
+									<a href="password-reset" style="font-size: 11px;">Forgot Password?</a>
 								</div>
 								<button class="btn btn-success btn-block">Log In</button>
 							</form>
@@ -34,9 +34,9 @@
 						<div class="login-with-social">
 							<a href="" class="btn btn-block">
 								<ul class="spaced-list between">
-									<li><i class="fa fa-facebook"></i></li>
+									<li><i class="fa fa-facebook-official" style="color:#4267B2;"></i></li>
 									<li>Facebook</li>
-									<li><i class="fa fa-arrow-right"></i></li>
+									<li><i class="fa fa-arrow-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
 						</div>
