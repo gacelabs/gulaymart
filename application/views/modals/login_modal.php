@@ -17,9 +17,9 @@
 
 					<div class="login-footer">
 						<div class="login-form-body">
-							<form method="post" action="">
+							<form method="post" action="profile/sign_in">
 								<div class="form-group">
-									<input type="email" name="email" class="form-control" id="email" placeholder="Email address">
+									<input type="email" name="email_address" class="form-control" id="email" placeholder="Email address">
 								</div>
 								<div class="form-group" style="margin-bottom: 5px;">
 									<input type="password" name="password" class="form-control" id="password" placeholder="Password">
@@ -32,7 +32,7 @@
 						</div>
 
 						<div class="login-with-social">
-							<a href="" class="btn btn-block">
+							<a href="javascript:;" class="btn btn-block fb-login-btn" scope="public_profile,email">
 								<ul class="spaced-list between">
 									<li><i class="fa fa-facebook-official" style="color:#4267B2;"></i></li>
 									<li>Facebook</li>

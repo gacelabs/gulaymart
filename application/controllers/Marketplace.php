@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Marketplace extends CI_Controller {
+class Marketplace extends MY_Controller {
+
+	public $allowed_methods = 'all';
 
 	public function index()
 	{
@@ -24,7 +26,7 @@ class Marketplace extends CI_Controller {
 			),
 			'js' => array(
 				'head' => array(),
-				'footer' => array('isotope.min', 'main')
+				'footer' => array('isotope.min', 'main', 'fb-login')
 			),
 			'body_class' =>array('marketplace'),
 			'content_top' => array(

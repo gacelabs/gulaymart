@@ -83,3 +83,13 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*FB*/
+defined('FB_APPID') OR define('FB_APPID', '298098848531584');
+defined('FB_VERSION') OR define('FB_VERSION', 'v10.0');
+defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|07c588c019717ee48f348201528e49f9');
+
+defined('APP_NAME') OR define('APP_NAME', 'Gulay Market');
+defined('APP_VERSION') OR define('APP_VERSION', '1.8');
+defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
+defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
