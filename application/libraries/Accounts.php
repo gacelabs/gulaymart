@@ -145,7 +145,7 @@ class Accounts {
 	public function fb_login($post=FALSE)
 	{
 		// debug($post);
-		if ($post != FALSE AND is_array($post)) {
+		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
 			/*user is logging in*/
 			$fbuser = $this->class->db->get_where('users', $post);
 			if ($fbuser->num_rows() > 0) {
