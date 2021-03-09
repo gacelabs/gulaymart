@@ -34,7 +34,7 @@
 }
 .product-item-body {
 	position: relative;
-	padding-bottom: 90px;
+	padding-bottom: 100px;
 }
 .product-item-inner {
 	/*display: inline-grid;
@@ -129,13 +129,14 @@
 	border-radius: 12px;
 	font-size: 18px;
 	padding: 8px;
+	transition: background-color .3s ease-in-out;
 }
 #search_nav_btns .bottom-nav-item>a {
 	color: #fff !important;
 	display: block;
 }
 #search_nav_btns .bottom-nav-item:hover, #search_nav_btns .bottom-nav-item.active {
-	background-color: #496018;
+	background-color: #6d8a33;
 }
 .nav-avatar-li {
 	vertical-align: top;

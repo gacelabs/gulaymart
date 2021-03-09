@@ -76,6 +76,10 @@
 	.product-item {
 		width: 33%;
 	}
+	#register_welcome {
+		padding-top: 0;
+		margin-bottom: 30px;
+	}
 }
 
 @media (max-width: 767px) {
@@ -89,5 +93,34 @@
 	}
 	.product-item {
 		width: 50%;
+	}
+	#register_container .col-xs-12 {
+		padding: 0;
+	}
+	#register_container {
+		padding-top: 10px;
+		padding-bottom: 20px;
+	}
+	#register_welcome {
+		margin-bottom: 15px;
+	}
+	#register_welcome img {
+		width: 60px;
+	}
+	#register_welcome h1 {
+		margin: 0;
+		font-size: 30px;
+	}
+	#register_welcome h3 {
+		margin: 5px 0 0 0;
+		font-size: 16px;
+	}
+	.register-middle input.form-control {
+		height: 36px;
+	}
+	#register_form .btn-theme {
+		height: 36px;
+		padding: 0;
+		font-size: 16px;
 	}
 }

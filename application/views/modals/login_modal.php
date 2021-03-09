@@ -12,7 +12,7 @@
 
 					<div class="login-middle">
 						<h1>Log In</h1>
-						<p>Find the freshes vegetables grown by the framers in your community.</p>
+						<p>Find the freshest vegetables grown by the famers in your community.</p>
 					</div>
 
 					<div class="login-footer">
@@ -36,7 +36,7 @@
 								<ul class="spaced-list between">
 									<li><i class="fa fa-facebook-official" style="color:#4267B2;"></i></li>
 									<li>Facebook</li>
-									<li><i class="fa fa-arrow-right" style="color:#aaa;"></i></li>
+									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
 						</div>

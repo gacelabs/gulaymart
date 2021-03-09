@@ -2,6 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'Marketplace';
+
+$route['register'] = 'Accounts';
+$route['sign-up'] = 'Accounts';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
