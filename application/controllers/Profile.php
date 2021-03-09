@@ -24,16 +24,16 @@ class Profile extends MY_Controller {
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		// debug($post);
-		// $is_ok = $this->accounts->login($post, 'profile');
+		// $is_ok = $this->accounts->login($post, 'account');
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-		if (empty($referrer)) $referrer = 'profile';
+		if (empty($referrer)) $referrer = 'account';
 		// debug($referrer);
 		$is_ok = $this->accounts->login($post, $referrer);
 		// debug($is_ok);
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		if ($this->accounts->has_session) {
-			$to = 'profile?error=You are already signed in!';
+			$to = 'account?error=You are already signed in!';
 		}
 		redirect(base_url($to));
 	}
@@ -43,11 +43,11 @@ class Profile extends MY_Controller {
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
 		// debug($post);
-		$return = $this->accounts->register($post, 'profile'); /*this will redirect to settings page */
+		$return = $this->accounts->register($post, 'account'); /*this will redirect to settings page */
 		// debug($this->session); debug($return);
 		if (isset($return['allowed']) AND $return['allowed'] == false) {
 			if ($this->accounts->has_session) {
-				redirect(base_url('profile?error='.$return['message']));
+				redirect(base_url('account?error='.$return['message']));
 			} else {
 				redirect(base_url('?error='.$return['message']));
 			}
@@ -190,7 +190,7 @@ class Profile extends MY_Controller {
 		// debug($post);
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
-		$to = 'profile';
+		$to = 'account';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
 	}
