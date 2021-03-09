@@ -148,24 +148,19 @@ class Accounts {
 		if ($post != FALSE AND is_array($post)) {
 			/*user is logging in*/
 			$fbuser = $this->class->db->get_where('users', $post);
-			if ($fbuser->num_rows()) {
-				$credits = [
-					'email_address' => $fbuser->row()->email_address,
-					'password' => $fbuser->row()->password,
-					'ismd5' => TRUE,
-				];
-				return $this->login($credits);
+			if ($fbuser->num_rows() > 0) {
+				$user = $fbuser->row_array();
 			} else { /*register this user*/
 				$query = $this->class->db->insert('users', $post);
 				$id = $this->class->db->insert_id();
 				$qry = $this->class->db->get_where('users', ['id' => $id]);
 				$user = $qry->row_array();
-				// debug($user);
-				unset($user['password']); unset($user['re_password']);
-				$this->class->session->set_userdata('profile', $user);
-				$this->profile = $user;
-				return TRUE;
 			}
+			// debug($user);
+			unset($user['password']); unset($user['re_password']);
+			$this->class->session->set_userdata('profile', $user);
+			$this->profile = $user;
+			return TRUE;
 		}
 		/*else the user is logged in or session active*/
 		return FALSE;
