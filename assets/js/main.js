@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var elem = $('#product_item_body').offset().top;
 
 	$(window).scroll(function() {  
-		if ($(window).scrollTop() > elem-20) {
+		if ($(window).scrollTop() > elem-10) {
 			$('#bottom_nav_sm').removeClass('hide');
 		}
 		else {

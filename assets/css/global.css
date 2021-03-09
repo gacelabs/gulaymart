@@ -2,6 +2,30 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+button, .btn {
+	outline: none !important;
+	border-radius: 12px !important;
+}
+button.btn-theme {
+	background-color: #799938;
+	color: #fff !important;
+	transition: all .3s ease-in-out;
+}
+button.btn-theme:hover {
+	background-color: #6d8a33;
+}
+i.i-logo {
+	color: #799938;
+	border: 3px solid #799938;
+	border-radius: 12px;
+	padding: 5px;
+	background: transparent;
+	font-size: 24px;
+	vertical-align: text-bottom;
+}
+i.i-logo.white {
+	background: #fff;
+}
 [data-toggle="modal"] {
 	cursor: pointer;
 }
@@ -24,7 +48,7 @@ a {
 	text-decoration: none !important;
 	color: inherit;
 }
-a:hover {
+a:hover, [data-target="#login_modal"]:hover {
 	color: #337ab7;
 }
 .search-category-body {
@@ -60,17 +84,27 @@ ul.spaced-list.between {
 ul.spaced-list.around {
 	justify-content: space-around;
 }
+ul.inline-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+ul.inline-list>li {
+	display: inline-block;
+}
+.v-middle {
+	vertical-align: middle;
+}
+.v-bottom {
+	vertical-align: text-bottom;
+}
 .login-button>a {
-	background-color: #eee;
 	border-radius: 12px;
 	display: block;
-	padding: 10px 20px;
+	padding: 9px 20px;
 	transition: all .3s ease-in-out;
 	background-color: #337ab7;
-	color: #fff;
-}
-.login-button>a:hover {
-	background-color: #799938;
+	color: #fff !important;
 }
 #login_modal .modal-content {
 	background: transparent;
@@ -114,8 +148,8 @@ ul.spaced-list.around {
 	padding: 7px 20px;
 	outline: none !important;
 }
-.login-form-body button:hover {
-	background-color: #337ab7;
+.login-form-body button:focus, .login-form-body button:hover {
+	background-color: #337ab7 !important;
 }
 .login-form-body .form-control {
 	box-shadow: none;
@@ -177,6 +211,8 @@ ul.spaced-list.around {
 	box-shadow: none;
 	border-top-right-radius: 16px;
 	border-bottom-right-radius: 16px;
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
 }
 #search_body button:active {
 	color: #799938;
@@ -193,7 +229,6 @@ ul.spaced-list.around {
 /*nav_panel*/
 #nav_panel, #marketplace {
 	margin-top: 15px;
-	margin-bottom: 15px;
 }
 .nav-top {
 	text-align: center;
