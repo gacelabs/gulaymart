@@ -42,7 +42,7 @@
 		margin-top: 0;
 	}
 	#content_body_wrapper {
-		width: 750px;
+		/*width: 750px;*/
 		padding-right: 15px;
 		padding-left: 15px;
 		margin-right: auto;
@@ -83,36 +83,92 @@
 }
 
 @media (max-width: 767px) {
+	body.marketplace #content__middle {
+		padding: 0;
+	}
+	div#marketplace {
+		padding: 0;
+		margin-top: 0;
+	}
+	#search_with_nav_btns {
+		grid-template-columns: auto 1fr auto;
+		padding: 10px;
+		grid-gap: 10px;
+	}
+	#search_nav_btns li.onlogged-out-btn {
+		margin: 0;
+	}
+	#search_nav_btns li.onlogged-out-btn>a {
+		padding: 10px 13px;
+	}
+	.my-logo, #search_nav_btns {
+		padding: 0;
+	}
+	#search_body .input-group {
+		margin: 0;
+	}
+	.my-logo i {
+		height: 35px;
+		width: 35px;
+		font-size: 17px;
+		padding: 7px;
+	}
+	#marketplace_nav_body {
+		border-radius: 0;
+	}
+	#search_body input {
+		height: 34px;
+		border-top-left-radius: 12px;
+		border-bottom-left-radius: 12px;
+		padding-right: 0;
+	}
+	#search_body button {
+		padding: 6px 9px;
+	}
+	#veggy_categories {
+		overflow-x: auto;
+		padding: 5px 10px 15px 10px;
+		grid-template-columns: 80px 80px 80px 80px 80px 80px 80px;
+	}
+	.veggy-category-item-inner>img {
+		height: 35px;
+		width: 35px;
+	}
+	.veggy-category-item-inner {
+		width: 85%;
+	}
 	#content_body_wrapper, #marketplace {
 		padding: 0;
 	}
 	.product-item-body {
+	    padding: 0 5px 70px 0;
 	}
 	.product-item-inner {
 		grid-template-columns: 1fr 1fr;
 	}
 	.product-item {
 		width: 50%;
+		border: 5px solid #eeefec;
+	}
+	#register_container {
+		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 	#register_container .col-xs-12 {
 		padding: 0;
 	}
-	#register_container {
-		padding-top: 10px;
-		padding-bottom: 20px;
-	}
 	#register_welcome {
-		margin-bottom: 15px;
+		text-align: center;
 	}
 	#register_welcome img {
-		width: 60px;
+		width: 50px;
 	}
 	#register_welcome h1 {
 		margin: 0;
 		font-size: 30px;
 	}
 	#register_welcome h3 {
-		margin: 5px 0 0 0;
+		margin: 15px 0 0 0;
 		font-size: 16px;
 	}
 	.register-middle input.form-control {
@@ -122,5 +178,14 @@
 		height: 36px;
 		padding: 0;
 		font-size: 16px;
+	}
+	#bottom_nav_sm {
+		width: 80%;
+	}
+	.bottom-nav-item {
+		font-size: 16px;
+	}
+	#bottom_nav_sm .bottom-nav-item>a, #bottom_nav_sm .bottom-nav-item>span, #bottom_nav_sm .bottom-nav-item>i {
+		padding: 8px 0;
 	}
 }
