@@ -46,6 +46,6 @@ class Marketplace extends MY_Controller {
 			)
 		);
 
-		$this->load->view('templates/marketplace', $data);
+		$this->load->render('templates/marketplace', $data);
 	}
 }

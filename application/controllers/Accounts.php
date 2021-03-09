@@ -44,6 +44,6 @@ class Accounts extends CI_Controller {
 			)
 		);
 
-		$this->load->view('templates/default', $data);
+		$this->load->render('templates/default', $data);
 	}
 }
