@@ -1,5 +1,5 @@
 
-var oAjax = false, doAjax = function(form, uploadFile) {
+var oFormAjax = false, formAjax = function(form, uploadFile) {
 	if (typeof $.ajax == 'function') {
 		if (form != undefined && form instanceof HTMLElement) {
 			if (uploadFile == undefined) uploadFile = false;
@@ -46,8 +46,8 @@ var oAjax = false, doAjax = function(form, uploadFile) {
 
 			oSettings.data = formData;
 			// console.log(oSettings);
-			if (oAjax != false && oAjax.readyState !== 4) oAjax.abort();
-			oAjax = $.ajax(oSettings);
+			if (oFormAjax != false && oFormAjax.readyState !== 4) oFormAjax.abort();
+			oFormAjax = $.ajax(oSettings);
 		} else {
 			console.log('form elements only!');
 		}
@@ -56,7 +56,7 @@ var oAjax = false, doAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, SimpleAjax = function(url, data) {
+var oSimpleAjax = false, simpleAjax = function(url, data) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
 	if (url) {

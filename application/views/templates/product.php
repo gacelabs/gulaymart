@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<?php $this->load->view('requires/head'); ?>
+		<?php $this->view('requires/head'); ?>
 	</head>
 
 	<body class="<?php foreach($body_class as $value) { echo trim($value)." ";} ?>">
@@ -12,7 +12,7 @@
 			<section id="content--top">
 				<?php
 					foreach ($content_top as $value) {
-						$this->load->view($value);
+						$this->view($value);
 					}
 				?>
 			</section>
@@ -20,7 +20,7 @@
 			<section id="content--footer">
 				<?php
 					foreach ($content_footer as $value) {
-						$this->load->view($value);
+						$this->view($value);
 					}
 				?>
 			</section>
@@ -51,9 +51,9 @@
 		<?php
 			foreach ($modals as $view => $value) {
 				if (is_array($value)) {
-					$this->load->view('modals/'.$view.'');
+					$this->view('modals/'.$view.'');
 				} else {
-					$this->load->view('modals/'.$value.'');
+					$this->view('modals/'.$value.'');
 				}
 			}
 		?>		
