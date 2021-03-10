@@ -17,7 +17,7 @@
 
 					<div class="login-footer">
 						<div class="login-form-body">
-							<form method="post" action="profile/sign_in" class="form-validate">
+							<form method="post" action="sign-in" class="form-validate">
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" id="email" placeholder="Email address">
 								</div>

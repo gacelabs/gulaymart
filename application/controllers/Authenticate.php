@@ -24,16 +24,15 @@ class Authenticate extends MY_Controller {
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		// debug($post);
-		// $is_ok = $this->accounts->login($post, 'accounts');
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-		if (empty($referrer)) $referrer = 'accounts';
+		if (empty($referrer)) $referrer = 'dashboard/profile';
 		// debug($referrer);
 		$is_ok = $this->accounts->login($post, $referrer);
 		// debug($is_ok);
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		if ($this->accounts->has_session) {
-			$to = 'accounts?error=You are already signed in!';
+			$to = 'dashboard/profile?error=You are already signed in!';
 		}
 		redirect(base_url($to));
 	}
@@ -62,7 +61,7 @@ class Authenticate extends MY_Controller {
 				/* found in views/templates */
 				'head' => [],
 				'body' => [
-					'accounts/register'
+					'dashboard/register'
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -85,11 +84,11 @@ class Authenticate extends MY_Controller {
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
 		// debug($post);
-		$return = $this->accounts->register($post, 'accounts'); /*this will redirect to settings page */
+		$return = $this->accounts->register($post, 'dashboard/profile'); /*this will redirect to settings page */
 		// debug($this->session); debug($return);
 		if (isset($return['allowed']) AND $return['allowed'] == false) {
 			if ($this->accounts->has_session) {
-				redirect(base_url('accounts?error='.$return['message']));
+				redirect(base_url('dashboard/profile?error='.$return['message']));
 			} else {
 				redirect(base_url('?error='.$return['message']));
 			}
@@ -232,7 +231,7 @@ class Authenticate extends MY_Controller {
 		// debug($post);
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
-		$to = 'accounts';
+		$to = 'dashboard/profile';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
 	}

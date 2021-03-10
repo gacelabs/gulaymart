@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Accounts extends MY_Controller {
+class Account extends MY_Controller {
 
 	public $allowed_methods = [];
 
@@ -40,7 +40,7 @@ class Accounts extends MY_Controller {
 				/* found in views/templates */
 				'head' => [],
 				'body' => [
-					'accounts/register'
+					'account/register'
 				],
 				'footer' => [],
 				/* found in views/templates */

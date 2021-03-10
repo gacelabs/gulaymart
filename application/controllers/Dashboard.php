@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller {
 
-	public $allowed_methods = 'all';
+	public $allowed_methods = [];
 
 	public function index()
 	{
