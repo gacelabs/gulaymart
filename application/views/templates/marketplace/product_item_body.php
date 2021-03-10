@@ -35,5 +35,6 @@
 		<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="Basket"><a href="basket"><i class="fa fa-shopping-basket"></i></a></div>
 		<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="<?php echo $current_profile ? $current_profile['info']['firstname'] : '';?>"><a href="account"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a></div>
 		<div class="bottom-nav-item onlogged-out-btn<?php echo $current_profile ? ' hide' : '';?>" data-toggle="modal" data-target="#login_modal"><span data-toggle="tooltip" data-placement="top" title="Log In"><i class="fa fa-sign-in"></i></span></div>
+		<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>"><span data-toggle="tooltip" data-placement="top" title="" data-original-title="Log Out"><a href="sign-out"><i class="fa fa-sign-out"></i></a></span></div>
 	</div>
 </div>
