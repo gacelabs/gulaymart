@@ -52,6 +52,7 @@ class Authenticate extends MY_Controller {
 					// SEO generics
 					'name="description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"'
 				],
+				'index_page' => 'no',
 				'page_title' => 'Gulaymart | Sign Up for FREE!',
 				'css' => ['global', 'register', 'rwd'],
 				'js' => [],
@@ -61,7 +62,7 @@ class Authenticate extends MY_Controller {
 				/* found in views/templates */
 				'head' => [],
 				'body' => [
-					'dashboard/register'
+					'account/register'
 				],
 				'footer' => [],
 				/* found in views/templates */
