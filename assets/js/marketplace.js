@@ -1,9 +1,9 @@
 $(document).ready(function() {
 
-	var elem = $('#product_item_body').offset().top;
+	var elem = $('#banner_container').offset().top;
 
 	$(window).scroll(function() {  
-		if ($(window).scrollTop() > elem-10) {
+		if ($(window).scrollTop() > elem) {
 			$('#bottom_nav_sm').removeClass('hide');
 		}
 		else {

@@ -19,10 +19,10 @@
 						<div class="login-form-body">
 							<form method="post" action="sign-in" class="form-validate">
 								<div class="form-group">
-									<input type="email" name="email_address" class="form-control" id="email" placeholder="Email address">
+									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
 								<div class="form-group" style="margin-bottom: 5px;">
-									<input type="password" name="password" class="form-control" id="password" placeholder="Password">
+									<input type="password" name="password" class="form-control" placeholder="Password">
 								</div>
 								<div style="text-align: right;margin-bottom: 10px;">
 									<a href="password-reset" style="font-size: 11px;">Forgot Password?</a>

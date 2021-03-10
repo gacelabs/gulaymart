@@ -20,13 +20,13 @@
 			<form action="sign-up" method="post" class="form-validate">
 				<div class="register-middle">
 					<div class="form-group">
-						<input type="email" class="form-control" id="email" name="email_address" placeholder="Email address">
+						<input type="email" class="form-control" name="email_address" placeholder="Email address" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+						<input type="password" class="form-control" name="password" placeholder="Password" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" id="retype" name="re_password" placeholder="Retype">
+						<input type="password" class="form-control" name="re_password" placeholder="Retype" />
 					</div>
 					<div class="form-group" style="margin-bottom: 0;">
 						<button class="btn btn-theme btn-lg btn-block">Sign Up</button>

@@ -30,8 +30,10 @@ class Marketplace extends MY_Controller {
 				/* found in views/templates */
 				'head' => [],
 				'body' => [
-					'marketplace/nav_body',
-					'marketplace/product_item_body'
+					'marketplace/navbar',
+					'marketplace/banner',
+					'marketplace/category',
+					'marketplace/products'
 				],
 				'footer' => [],
 				/* found in views/templates */
