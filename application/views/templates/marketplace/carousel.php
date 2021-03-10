@@ -10,14 +10,14 @@
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner" role="listbox">
 			<div class="item active">
-				<img src="assets/images/onions.jpg" alt="...">
+				<img src="assets/images/veg.jpg" alt="...">
 				<div class="carousel-caption">
 					<h3>Carousel Title 1</h3>
 					<p>Carousels require the use of an id on the outermost container (the .carousel) for carousel controls</p>
 				</div>
 			</div>
 			<div class="item">
-				<img src="assets/images/veg.jpg" alt="...">
+				<img src="assets/images/onions.jpg" alt="...">
 				<div class="carousel-caption">
 					<h3>Carousel Title 2</h3>
 					<p>Carousels require the use of an id on the outermost container (the .carousel) for carousel controls</p>
