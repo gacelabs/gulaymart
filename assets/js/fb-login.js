@@ -26,9 +26,9 @@ $(document).ready(function() {
 		if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown'])) {
 			FB.login(function(response) {
 				// if (response.status === 'connected') {
-				// 	SimpleAjax('profile/fb_login', {fb_id: response.authResponse.userID});
+				// 	simpleAjax('profile/fb_login', {fb_id: response.authResponse.userID});
 				// }
-				SimpleAjax('profile/fb_login', {fb_id: '1234567890'});
+				simpleAjax('profile/fb_login', {fb_id: '1234567890'});
 			}, {scope: 'public_profile, email'});
 		} else {
 			console.log('User already logged in thru FB.');

@@ -87,7 +87,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 /*FB*/
 defined('FB_APPID') OR define('FB_APPID', '298098848531584');
 defined('FB_VERSION') OR define('FB_VERSION', 'v10.0');
-defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|07c588c019717ee48f348201528e49f9');
+defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b68e02c6434');
 
 defined('APP_NAME') OR define('APP_NAME', 'Gulay Market');
 defined('APP_VERSION') OR define('APP_VERSION', '1.8');

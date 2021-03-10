@@ -135,7 +135,7 @@ class MY_Loader extends CI_Loader {
 		return $this;
 	}
 
-	public function render($view, $vars = array(), $return = FALSE)
+	public function view($view, $vars = array(), $return = FALSE)
 	{
 		$ci =& get_instance();
 		if ($ci->session->userdata('profile')) {
