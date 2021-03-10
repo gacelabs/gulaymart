@@ -20,6 +20,13 @@ class Accounts {
 				$this->create_profiles_table();
 			}
 		}
+		if (!$this->class->db->table_exists('galleries')) {
+			/*create table for the first time*/
+			$is_created = $this->create_galleries_table();
+			if (empty($is_created)) {
+				throw new Exception("Table Galleries not created!", 403);
+			}
+		}
 		$this->has_session = $this->class->session->userdata('profile') ? TRUE : FALSE;
 		$this->profile = $this->class->session->userdata('profile');
 	}
@@ -97,7 +104,7 @@ class Accounts {
 							$this->profile = $user;
 						}
 						if ($redirect_url != '') {
-							redirect(base_url($redirect_url == 'home' ? '' : $redirect_url));
+							redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 						}
 					} else {
 						$msg = 'Account already exist! Try signing in';
@@ -132,7 +139,7 @@ class Accounts {
 				$this->class->session->set_userdata('profile', $return['profile']);
 				$this->profile = $return['profile'];
 				if ($redirect_url != '') {
-					redirect(base_url($redirect_url == 'home' ? '' : $redirect_url));
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 				} else {
 					return TRUE;
 				}
@@ -174,7 +181,7 @@ class Accounts {
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
 		// $this->class->pushthru->trigger('logout-profile', 'browser-'.$this->device_id.'-sessions-logout', $profile);
-		redirect(base_url($redirect_url == 'home' ? '' : $redirect_url));
+		redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 	}
 
 	public function refetch()
@@ -224,7 +231,7 @@ class Accounts {
 		$this->class->dbforge->add_field([
 			'id' => [
 				'type' => 'INT',
-				'constraint' => '11',
+				'constraint' => '10',
 				'auto_increment' => TRUE
 			],
 			'fb_id' => [
@@ -275,12 +282,12 @@ class Accounts {
 		$this->class->dbforge->add_field([
 			'id' => [
 				'type' => 'INT',
-				'constraint' => '11',
+				'constraint' => '10',
 				'auto_increment' => TRUE
 			],
 			'user_id' => [
 				'type' => 'INT',
-				'constraint' => '11',
+				'constraint' => '10',
 			],
 			'firstname' => [
 				'type' => 'VARCHAR',
@@ -298,6 +305,46 @@ class Accounts {
 		$this->class->dbforge->add_key('id', TRUE);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('profiles', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	private function create_galleries_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'null' => FALSE,
+			],
+			'is_admin' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'null' => TRUE,
+				'default' => '0',
+			],
+			'name' => ['type' => 'TEXT'],
+			'file_path' => ['type' => 'TEXT'],
+			'url_path' => ['type' => 'TEXT'],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'null' => TRUE,
+				'default' => '1',
+			],
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', TRUE);
+		$table_data = $this->class->dbforge->create_table('galleries', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

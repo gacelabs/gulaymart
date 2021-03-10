@@ -5,6 +5,7 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
+		if ($data == 'stop') break;
 		$trace = debug_backtrace();
 		try {
 			// print_r($data);
@@ -67,7 +68,9 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	exit();
+	if (end($args) == 'stop') {
+		exit();
+	}
 }
 
 function check_instance($obj=FALSE, $class=NULL)

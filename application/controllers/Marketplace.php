@@ -7,45 +7,45 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
-		$data = array(
-			'metas' => array(
-				// facebook opengraph
-				'property="fb:app_id" content="xxx"',
-				'property="og:type" content="article"',
-				'property="og:url" content="xxx"',
-				'property="og:title" content="xxx"',
-				'property="og:description" content="Gulaymart is your neighborhood veggies supplier."',
-				'property="og:image" content="xxx"',
-				// SEO generics
-				'name="description" content="Gulaymart is your neighborhood veggies supplier."'
-			),
-			'index_page' => 'yes',
-			'page_title' => 'Gulaymart | Veggies grown by community.',
-			'css' => array(
-				'head' => array('marketplace'),
-				'footer' => array()
-			),
-			'js' => array(
-				'head' => array(),
-				'footer' => array('isotope.min', 'main', 'marketplace', 'fb-login')
-			),
-			'body_class' =>array('marketplace'),
-			'content_top' => array(
-			),
-			'content_middle' => array(
-				'marketplace/nav_body',
-				'marketplace/product_item_body'
-			),
-			'content_footer' => array(
+		$view = [
+			'top' => [
+				'metas' => [
+					// facebook opengraph
+					'property="fb:app_id" content="xxx"',
+					'property="og:type" content="article"',
+					'property="og:url" content="xxx"',
+					'property="og:title" content="xxx"',
+					'property="og:description" content="Gulaymart is your neighborhood veggies supplier."',
+					'property="og:image" content="xxx"',
+					// SEO generics
+					'name="description" content="Gulaymart is your neighborhood veggies supplier."'
+				],
+				'index_page' => 'yes',
+				'page_title' => 'Gulaymart | Veggies grown by community.',
+				'css' => ['marketplace'],
+				'js' => [],
+			],
+			'middle' => [
+				'body_class' => ['marketplace'],
+				/* found in views/templates */
+				'head' => [],
+				'body' => [
+					'marketplace/nav_body',
+					'marketplace/product_item_body'
+				],
+				'footer' => [],
+				/* found in views/templates */
+			],
+			'bottom' => [
+				'modals' => ['search_popup'],
+				'css' => [],
+				'js' => ['isotope.min', 'main', 'fb-login'],
+			],
+		];
+		$data = [
+			'is_login' => 0
+		];
 
-			),
-			'modals' => array(
-				'search_popup'
-			),
-			'page_data' => array(
-			)
-		);
-
-		$this->load->view('templates/marketplace', $data);
+		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}
 }
