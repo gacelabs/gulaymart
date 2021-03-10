@@ -30,6 +30,7 @@ class MY_Controller extends CI_Controller {
 		$this->class_name = trim(strtolower(get_called_class()));
 		$this->load->library('accounts');
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
+		$this->set_form_valid_fields();
 		
 		/*check account logins here*/
 		if ($this->accounts->has_session) {
@@ -39,7 +40,7 @@ class MY_Controller extends CI_Controller {
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
-				do_jsonp_callback('reloadPage', ['type'=>'error', 'message'=>"Session has been expired!"]);
+				echo json_encode(['type'=>'error', 'message'=>"Session has been expired!"]); exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/
 			if (!$this->input->is_ajax_request() AND $this->no_entry_for_signed_out) {
@@ -51,9 +52,36 @@ class MY_Controller extends CI_Controller {
 	public function set_response($type='error', $message='Error occured!', $data=[], $jscallback='alertBox')
 	{
 		if ($this->input->is_ajax_request()) {
-			do_jsonp_callback($jscallback, ['type'=>$type, 'message'=>$message, 'data'=>$data]);
+			echo json_encode(['type'=>$type, 'message'=>$message, 'data'=>$data]); exit();
 		} else {
 			redirect(base_url($this->class_name.'?'.$type.'='.$message));
 		}
+	}
+
+	public function set_form_valid_fields($valids=FALSE)
+	{
+		$defaults = [
+			'firstname' => ['required' => TRUE],
+			'lastname' => ['required' => TRUE],
+			'email_address' => ['required' => TRUE, 'emailExt' => TRUE],
+			'password' => ['required' => TRUE],
+			're_password' => ['required' => TRUE],
+		];
+		if ($valids) {
+			foreach ($valids as $field => $variable) {
+				if (is_array($variable)) {
+					$boolean = isset($variable['required']) ? (bool)$variable['required']: FALSE;
+					$function = isset($variable['function']) ? $variable['function']: FALSE;
+					if (is_string($field)) {
+						$values = ['required' => $boolean];
+						if ($function != FALSE) {
+							$values[$function] = TRUE;
+						}
+						$defaults[$field] = $values;
+					}
+				}
+			}
+		}
+		$this->session->set_userdata('valid_fields', $defaults);
 	}
 }

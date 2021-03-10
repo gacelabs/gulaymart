@@ -24,16 +24,16 @@ class Profile extends MY_Controller {
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		// debug($post);
-		// $is_ok = $this->accounts->login($post, 'account');
+		// $is_ok = $this->accounts->login($post, 'accounts');
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-		if (empty($referrer)) $referrer = 'account';
+		if (empty($referrer)) $referrer = 'accounts';
 		// debug($referrer);
 		$is_ok = $this->accounts->login($post, $referrer);
 		// debug($is_ok);
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		if ($this->accounts->has_session) {
-			$to = 'account?error=You are already signed in!';
+			$to = 'accounts?error=You are already signed in!';
 		}
 		redirect(base_url($to));
 	}
@@ -85,11 +85,11 @@ class Profile extends MY_Controller {
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
 		// debug($post);
-		$return = $this->accounts->register($post, 'account'); /*this will redirect to settings page */
+		$return = $this->accounts->register($post, 'accounts'); /*this will redirect to settings page */
 		// debug($this->session); debug($return);
 		if (isset($return['allowed']) AND $return['allowed'] == false) {
 			if ($this->accounts->has_session) {
-				redirect(base_url('account?error='.$return['message']));
+				redirect(base_url('accounts?error='.$return['message']));
 			} else {
 				redirect(base_url('?error='.$return['message']));
 			}
@@ -107,7 +107,7 @@ class Profile extends MY_Controller {
 				$id = $this->accounts->profile['id'];
 				if ($post['re_password'] === $post['password']) {
 					$post['password'] = md5($post['password']);
-					$this->eo_db->save('users', $post, ['id' => $id]);
+					$this->gm_db->save('users', $post, ['id' => $id]);
 					$type = 'success';
 					$message = 'Password updated!';
 				}
@@ -118,7 +118,7 @@ class Profile extends MY_Controller {
 			$message = 'Provide a valid email address!&modal=pw-reset-modal';
 			if ($post AND (isset($post['email_address']) AND filter_var($post['email_address'], FILTER_VALIDATE_EMAIL))) {
 				// debug($post);
-				$check = $this->eo_db->get('users', ['email_address' => $post['email_address']], 'row');
+				$check = $this->gm_db->get('users', ['email_address' => $post['email_address']], 'row');
 				if ($check) {
 					/*for emailing temp password*/
 					$template_data = [
@@ -126,7 +126,7 @@ class Profile extends MY_Controller {
 						'password' => $check['re_password']
 					];
 					// debug($template_data);
-					$html = $this->load->view('page_requires/email_template', $template_data, TRUE);
+					$html = $this->load->view('email', $template_data, TRUE);
 					// debug($html);
 					
 					$mail = $this->smtpemail->setup();
@@ -169,9 +169,9 @@ class Profile extends MY_Controller {
 		if ($post) {
 			$post['user_id'] = $this->accounts->profile['id'];
 			if ($id == false) {
-				$id = $this->eo_db->new('profiles', $post);
+				$id = $this->gm_db->new('profiles', $post);
 			} else {
-				$this->eo_db->save('profiles', $post, ['id' => $id]);
+				$this->gm_db->save('profiles', $post, ['id' => $id]);
 			}
 			$post['id'] = (int) $id;
 			$type = 'success';
@@ -200,12 +200,12 @@ class Profile extends MY_Controller {
 				// debug($file_data);
 				if (count($file_data)) {
 					foreach ($file_data as $key => $row) {
-						$check = $this->eo_db->get('galleries', ['url_path' => $row['url_path']]);
+						$check = $this->gm_db->get('galleries', ['url_path' => $row['url_path']]);
 						if ($check == false) { /*no dups*/
 							$data_count++;
 							$row['user_id'] = $this->accounts->profile['id'];
 							$row['is_admin'] = $is_admin;
-							$id = $this->eo_db->new('galleries', $row);
+							$id = $this->gm_db->new('galleries', $row);
 							$response['galleries'][$key]['id'] = $id;
 							$response['galleries'][$key]['name'] = $row['name'];
 							$response['galleries'][$key]['url_path'] = $row['url_path'];
@@ -232,7 +232,7 @@ class Profile extends MY_Controller {
 		// debug($post);
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
-		$to = 'account';
+		$to = 'accounts';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
 	}

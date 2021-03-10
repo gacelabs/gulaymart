@@ -31,5 +31,6 @@
 	<link rel="manifest" href="/manifest.json">
 	<script type="text/javascript">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
+		var oValidationRules=<?php echo json_encode($this->session->userdata('valid_fields'));?>;
 	</script>
 </head>

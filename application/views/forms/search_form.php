@@ -1,4 +1,4 @@
-<form action="" method="post" name="search" id="search_body">
+<form action="" method="post" name="search" id="search_body" class="form-validate">
 	<div class="input-group">
 		<input type="text" class="form-control" placeholder="Search veggies...">
 		<span class="input-group-btn">

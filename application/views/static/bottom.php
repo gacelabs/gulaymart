@@ -15,7 +15,7 @@
 			}
 		?>
 
-		<!-- <?php $this->view('requires/realtime_scripts'); ?> -->
+		<?php // $this->view('requires/realtime_scripts'); ?>
 		
 		<?php
 			foreach ($bottom['modals'] as $view => $value) {

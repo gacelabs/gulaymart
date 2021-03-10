@@ -17,7 +17,7 @@
 			<div class="register-top">
 				<h4>Support local farmers. Sign up!</h4>
 			</div>
-			<form action="sign-up" method="post">
+			<form action="sign-up" method="post" class="form-validate">
 				<div class="register-middle">
 					<div class="form-group">
 						<input type="email" class="form-control" id="email" name="email_address" placeholder="Email address">
