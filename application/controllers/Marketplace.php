@@ -22,7 +22,7 @@ class Marketplace extends MY_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => 'Gulaymart | Veggies grown by community.',
-				'css' => ['marketplace'],
+				'css' => ['marketplace', 'rwd'],
 				'js' => [],
 			],
 			'middle' => [
