@@ -48,7 +48,10 @@
 	filter: unset;
 }
 #category_container {
-	margin-bottom: 5px;
+	margin-bottom: 10px;
+}
+#category_container .panel {
+	margin-bottom: 0;
 }
 #banner-container {
 	display: grid;
