@@ -257,4 +257,26 @@
 		font-weight: normal;
 		border: 1px solid #799938;
 	}
+	#navbar-carousel_container {
+		padding-left: 5px;
+		padding-right: 5px;
+		margin-bottom: 20px;
+	}
+	#navbar-carousel {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	.carousel-inner .item {
+		height: 150px;
+	}
+	.carousel-caption {
+		bottom: 10px;
+	}
+	.carousel-caption h3 {
+		font-size: 18px;
+		margin-bottom: 5px;
+	}
+	.carousel-caption p {
+		font-size: 12px;
+	}
 }

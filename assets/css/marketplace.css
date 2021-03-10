@@ -2,10 +2,26 @@
 	position: relative;
 }
 #marketplace_nav_body {
-	margin-bottom: 15px;
+	margin: 0 0 1px 0;
+	z-index: 1;
 }
 #marketplace_nav_body .panel, #banner_container .panel {
 	margin-bottom: 0
+}
+#navbar-carousel {
+	padding: 0 22px;
+	overflow: hidden;
+	z-index: 0;
+}
+.carousel-inner {
+	border-bottom-right-radius: 22px;
+	border-bottom-left-radius: 22px;
+}
+.carousel-inner .item {
+	height: 240px;
+}
+.carousel-indicators {
+	bottom: 0;
 }
 #veggy_categories {
 	width: 100%;

@@ -31,6 +31,7 @@ class Marketplace extends MY_Controller {
 				'head' => [],
 				'body' => [
 					'marketplace/navbar',
+					'marketplace/carousel',
 					'marketplace/banner',
 					'marketplace/category',
 					'marketplace/products'
