@@ -8,7 +8,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title><?php if ($top['page_title']) { echo $top['page_title'];} ?></title> 
 
-	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<meta name="robots" content="<?php echo $top['index_page'] == 'yes' ? "index, follow" : "noindex, nofollow"; ?>">
 	<link rel="canonical" href="<?php echo base_url();?>">
 	<?php foreach ($top['metas'] as $value) { echo "<meta ".$value.">\r\n"; } ?>

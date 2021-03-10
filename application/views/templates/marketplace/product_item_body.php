@@ -7,8 +7,27 @@
 			}
 		?>
 	</div>
+	<nav class="pagination-container" aria-label="Page navigation">
+		<ul class="pagination">
+			<li>
+				<a href="#" aria-label="Previous">
+					<span aria-hidden="true"><i class="fa fa-angle-left"></i></span>
+				</a>
+			</li>
+			<li><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">5</a></li>
+			<li>
+				<a href="#" aria-label="Next">
+					<span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
+				</a>
+			</li>
+		</ul>
+	</nav>
 
-	<div class="hide <?php if ($data['is_login'] == 0) {echo "in";} ?>" id="bottom_nav_sm">
+	<div class="hide <?php echo $current_profile ? "" : "in"; ?>" id="bottom_nav_sm">
 		<div class="bottom-nav-item onlogged-out-btn<?php echo $current_profile ? ' hide' : '';?>" data-toggle="tooltip" data-placement="top" title="Gulaymart"><a href=""><i class="fa fa-leaf"></i></a></div>
 		<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="Notifications"><a href="notifications"><i class="fa fa-bell-o"></i></a></div>
 		<div class="bottom-nav-item" data-toggle="modal" data-target="#search_popup"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Search"></i></div>

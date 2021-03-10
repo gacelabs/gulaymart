@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profile extends MY_Controller {
+class Authenticate extends MY_Controller {
 
 	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover'];
 
@@ -16,7 +16,7 @@ class Profile extends MY_Controller {
 
 	public function index($id=false)
 	{
-		/*nothing yet here*/
+		redirect(base_url('/'));
 	}
 
 	public function sign_in()

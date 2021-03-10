@@ -39,7 +39,7 @@ class Marketplace extends MY_Controller {
 			'bottom' => [
 				'modals' => ['search_popup'],
 				'css' => [],
-				'js' => ['isotope.min', 'main', 'fb-login'],
+				'js' => ['isotope.min', 'main', 'marketplace', 'fb-login'],
 			],
 		];
 		$data = [

@@ -3,10 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'Marketplace';
 
-$route['register'] = 'Profile/register';
-$route['sign-up'] = 'Profile/register';
-$route['sign-in'] = 'Profile/sign_in';
-$route['sign-out'] = 'Profile/sign_out';
+$route['register'] = 'Authenticate/register';
+$route['sign-up'] = 'Authenticate/register';
+$route['sign-in'] = 'Authenticate/sign_in';
+$route['sign-out'] = 'Authenticate/sign_out';
 
 $route['dashboard'] = 'Dashboard';
 $route['dashboard/profile'] = 'Dashboard';
