@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Profile extends MY_Controller {
 
-	public $allowed_methods = ['sign_in', 'sign_up', 'fb_login', 'recover'];
+	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover'];
 
 	public function __construct()
 	{
@@ -36,6 +36,48 @@ class Profile extends MY_Controller {
 			$to = 'account?error=You are already signed in!';
 		}
 		redirect(base_url($to));
+	}
+
+	public function register($id=false)
+	{
+		$view = [
+			'top' => [
+				'metas' => [
+					// facebook opengraph
+					'property="fb:app_id" content="xxx"',
+					'property="og:type" content="article"',
+					'property="og:url" content="xxx"',
+					'property="og:title" content="xxx"',
+					'property="og:description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"',
+					'property="og:image" content="xxx"',
+					// SEO generics
+					'name="description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"'
+				],
+				'page_title' => 'Gulaymart | Sign Up for FREE!',
+				'css' => ['global', 'register', 'rwd'],
+				'js' => [],
+			],
+			'middle' => [
+				'body_class' => ['register'],
+				/* found in views/templates */
+				'head' => [],
+				'body' => [
+					'accounts/register'
+				],
+				'footer' => [],
+				/* found in views/templates */
+			],
+			'bottom' => [
+				'modals' => ['login_modal'],
+				'css' => [],
+				'js' => ['main'],
+			],
+		];
+		$data = [
+			'is_login' => 0
+		];
+
+		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}
 
 	public function sign_up()

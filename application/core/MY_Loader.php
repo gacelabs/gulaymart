@@ -147,12 +147,14 @@ class MY_Loader extends CI_Loader {
 			$vars['current_profile'] = $current_profile;
 			$vars['profile_info'] = $current_profile ? $current_profile['info'] : FALSE;
 			$vars['device_id'] = format_ip($_SERVER['REMOTE_ADDR']);
+			$vars['class_name'] = $ci->class_name;
 		} else if (is_object($vars)) {
 			$vars->current_profile = $current_profile;
 			$vars->profile_info = $current_profile ? $current_profile->info : FALSE;
 			$vars->device_id = format_ip($_SERVER['REMOTE_ADDR']);
+			$vars->class_name = $ci->class_name;
 		}
-		// debug($vars); exit();
+		// debug($vars);
 		return parent::view($view, $vars, $return);
 	}
 

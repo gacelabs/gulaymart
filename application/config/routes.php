@@ -3,8 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'Marketplace';
 
-$route['register'] = 'Accounts';
-$route['sign-up'] = 'Accounts';
+$route['register'] = 'Profile/register';
+$route['sign-up'] = 'Profile/register';
+$route['sign-in'] = 'Profile/sign_in';
+$route['sign-out'] = 'Profile/sign_out';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

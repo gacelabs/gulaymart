@@ -1,5 +1,18 @@
 
 <script type="text/javascript">
+	(function(d, s, id) {
+		if (d.getElementById('sd-sdk') == null) {
+			var js, p = d.getElementsByTagName(s), me = p[p.length - 1];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.type = 'text/javascript';
+			js.src = "https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39";
+			me.parentNode.insertBefore(js, me);
+		} else {
+			console.log('realtime sdk existing.')
+		}
+	}(document, "script", "sd-sdk"));
+	
 	var realtime = false;
 	var i = setInterval(function() {
 		if (typeof SendData == 'function') {

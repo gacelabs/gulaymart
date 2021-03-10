@@ -67,7 +67,9 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	exit();
+	if (end($args) == 'exit') {
+		exit();
+	}
 }
 
 function check_instance($obj=FALSE, $class=NULL)
