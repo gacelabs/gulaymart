@@ -22,7 +22,7 @@ class Marketplace extends MY_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => 'Gulaymart | Veggies grown by community.',
-				'css' => ['marketplace', 'rwd'],
+				'css' => ['marketplace', 'global', 'rwd', 'farmer-card'],
 				'js' => [],
 			],
 			'middle' => [
@@ -34,7 +34,8 @@ class Marketplace extends MY_Controller {
 					'marketplace/carousel',
 					'marketplace/banner',
 					'marketplace/category',
-					'marketplace/products'
+					'marketplace/products',
+					'marketplace/famers'
 				],
 				'footer' => [],
 				/* found in views/templates */

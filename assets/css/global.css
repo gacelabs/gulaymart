@@ -2,6 +2,10 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+.elem-block {
+	display: block;
+	width: 100%;
+}
 i.i-logo {
 	color: #799938;
 	border: 3px solid #799938;
@@ -220,12 +224,12 @@ button, .btn {
 	outline: none !important;
 	border-radius: 12px !important;
 }
-button.btn-theme {
+button.btn-theme, a.btn-theme {
 	background-color: #799938;
 	color: #fff !important;
 	transition: all .3s ease-in-out;
 }
-button.btn-theme:hover {
+button.btn-theme:hover, a.btn-theme:hover {
 	background-color: #6d8a33;
 }
 .btn-generic-container {
@@ -273,7 +277,6 @@ button.btn-theme:hover {
 	position: relative;
 	background-color: #fff;
 	border-radius: 22px;
-	box-shadow: 0px 1px 4px 0px #dedede;
 }
 .panel-nav {
 	margin: 0 0 15px 0 !important;
@@ -346,9 +349,6 @@ ul.inline-list>li {
 	padding: 20px 10px 5px 10px;
 	background: linear-gradient(1deg, rgb(8 8 8) 0%, rgb(0 0 0 / 0%) 100%);
 }
-
-.product-item-sm-footer
-
 .zero-gaps {
 	padding: 0;
 	margin: 0;
