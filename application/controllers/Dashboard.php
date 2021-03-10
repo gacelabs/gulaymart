@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Accounts extends CI_Controller {
+class Dashboard extends CI_Controller {
 
 	public function index()
 	{
@@ -11,34 +11,35 @@ class Accounts extends CI_Controller {
 				'property="fb:app_id" content="xxx"',
 				'property="og:type" content="article"',
 				'property="og:url" content="xxx"',
-				'property="og:title" content="xxx"',
-				'property="og:description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"',
+				'property="og:title" content="Gulaymart | Profile"',
+				'property="og:description" content="Gulaymart | Profile"',
 				'property="og:image" content="xxx"',
 				// SEO generics
-				'name="description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"'
+				'name="description" content="Gulaymart | Profile"'
 			),
 			'index_page' => 'no',
-			'page_title' => 'Gulaymart | Sign Up for FREE!',
+			'page_title' => 'Gulaymart | Profile',
 			'css' => array(
-				'head' => array('global', 'register', 'rwd'),
+				'head' => array('global', 'dashboard','profile', 'rwd'),
 				'footer' => array()
 			),
 			'js' => array(
 				'head' => array(),
 				'footer' => array('main')
 			),
-			'body_class' =>array('register'),
+			'body_class' =>array('dashboard', 'profile'),
 			'content_top' => array(
-
+				'profile/nav_top'
 			),
 			'content_middle' => array(
-				'global/register'
+				'profile/panel_left',
+				'profile/panel_right'
 			),
 			'content_footer' => array(
 				
 			),
 			'modals' => array(
-				'login_modal'
+				
 			),
 			'page_data' => array(
 			)

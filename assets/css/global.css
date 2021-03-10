@@ -14,6 +14,13 @@ button.btn-theme {
 button.btn-theme:hover {
 	background-color: #6d8a33;
 }
+.pagination-container {
+	margin: 10px 0 0;
+	text-align: center;
+}
+.pagination {
+	margin: 0;
+}
 i.i-logo {
 	color: #799938;
 	border: 3px solid #799938;
@@ -34,9 +41,6 @@ i.i-logo.white {
 }
 .icon-left {
 	margin-right: 10px;
-}
-.left-affix-content {
-	margin-left: 16.66666667%;
 }
 .panel {
 	position: relative;

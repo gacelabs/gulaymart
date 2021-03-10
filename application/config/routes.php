@@ -6,6 +6,9 @@ $route['default_controller'] = 'Marketplace';
 $route['register'] = 'Accounts';
 $route['sign-up'] = 'Accounts';
 
+$route['dashboard'] = 'Dashboard';
+$route['dashboard/profile'] = 'Dashboard';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 

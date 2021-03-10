@@ -83,11 +83,13 @@
 }
 
 @media (max-width: 767px) {
-	body.marketplace #content__middle {
+	body.marketplace #content__middle, .my-logo, #search_nav_btns, #content_body_wrapper, #marketplace, #register_container .col-xs-12, #register_form .btn-theme, div#marketplace {
 		padding: 0;
 	}
+	#search_nav_btns li.onlogged-out-btn, #search_body .input-group, .nav-avatar-li .nav-avatar-body, #register_welcome h1 {
+		margin: 0;
+	}
 	div#marketplace {
-		padding: 0;
 		margin-top: 0;
 	}
 	#search_with_nav_btns {
@@ -95,21 +97,10 @@
 		padding: 10px;
 		grid-gap: 10px;
 	}
-	#search_nav_btns li.onlogged-out-btn {
-		margin: 0;
-	}
 	#search_nav_btns li.onlogged-out-btn>a {
 		padding: 10px 13px;
 	}
-	.my-logo, #search_nav_btns {
-		padding: 0;
-	}
-	#search_body .input-group {
-		margin: 0;
-	}
-	.my-logo i {
-		height: 35px;
-		width: 35px;
+	.my-logo i, #search_nav_btns .bottom-nav-item, .nav-avatar-li .nav-avatar-body {
 		font-size: 17px;
 		padding: 7px;
 	}
@@ -127,21 +118,19 @@
 	}
 	#veggy_categories {
 		overflow-x: auto;
-		padding: 5px 10px 15px 10px;
+		padding: 0 10px 10px 2px;
 		grid-template-columns: 80px 80px 80px 80px 80px 80px 80px;
 	}
-	.veggy-category-item-inner>img {
+	.veggy-category-item-inner {
+		width: 80%;
+		padding: 5px;
+	}
+	.veggy-category-item-inner>img, .my-logo i, #search_nav_btns .bottom-nav-item, .nav-avatar-li .nav-avatar-body {
 		height: 35px;
 		width: 35px;
 	}
-	.veggy-category-item-inner {
-		width: 85%;
-	}
-	#content_body_wrapper, #marketplace {
-		padding: 0;
-	}
 	.product-item-body {
-	    padding: 0 5px 70px 0;
+	    padding: 0 5px 65px 5px;
 	}
 	.product-item-inner {
 		grid-template-columns: 1fr 1fr;
@@ -154,9 +143,6 @@
 		padding-top: 20px;
 		padding-bottom: 20px;
 	}
-	#register_container .col-xs-12 {
-		padding: 0;
-	}
 	#register_welcome {
 		text-align: center;
 	}
@@ -164,7 +150,6 @@
 		width: 50px;
 	}
 	#register_welcome h1 {
-		margin: 0;
 		font-size: 30px;
 	}
 	#register_welcome h3 {
@@ -176,7 +161,6 @@
 	}
 	#register_form .btn-theme {
 		height: 36px;
-		padding: 0;
 		font-size: 16px;
 	}
 	#bottom_nav_sm {
@@ -187,5 +171,11 @@
 	}
 	#bottom_nav_sm .bottom-nav-item>a, #bottom_nav_sm .bottom-nav-item>span, #bottom_nav_sm .bottom-nav-item>i {
 		padding: 8px 0;
+	}
+	kbd {
+		font-size: 75%;
+	}
+	.product-item-top>ul>li {
+		margin: 5px;
 	}
 }

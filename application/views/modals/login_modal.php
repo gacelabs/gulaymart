@@ -5,7 +5,7 @@
 				<div id="login_body">
 					<div class="login-top">
 						<ul class="spaced-list between">
-							<li></li>
+							<li data-dismiss="modal" aria-label="Close"><i class="fa fa-chevron-left"></i></li>
 							<li><a href="register">Register</a></li>
 						</ul>
 					</div>

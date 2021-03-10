@@ -20,7 +20,7 @@
 			<section id="content__middle">
 				<?php
 					foreach ($content_middle as $value) {
-						$this->view($value);
+						$this->load->view($value);
 					}
 				?>
 			</section>

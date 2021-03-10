@@ -19,6 +19,7 @@ class Marketplace extends MY_Controller {
 				// SEO generics
 				'name="description" content="Gulaymart is your neighborhood veggies supplier."'
 			),
+			'index_page' => 'yes',
 			'page_title' => 'Gulaymart | Veggies grown by community.',
 			'css' => array(
 				'head' => array('marketplace'),
@@ -26,7 +27,7 @@ class Marketplace extends MY_Controller {
 			),
 			'js' => array(
 				'head' => array(),
-				'footer' => array('isotope.min', 'main', 'fb-login')
+				'footer' => array('isotope.min', 'main', 'marketplace', 'fb-login')
 			),
 			'body_class' =>array('marketplace'),
 			'content_top' => array(
@@ -42,7 +43,6 @@ class Marketplace extends MY_Controller {
 				'search_popup'
 			),
 			'page_data' => array(
-				'is_login' => 0
 			)
 		);
 
