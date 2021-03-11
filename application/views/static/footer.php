@@ -14,11 +14,11 @@
 
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 			<h3 style="font-size: 16px;">Let's social</h3>
-			<p style="margin-bottom:5px;"><a href="">Facebook/Gulaymart</a></p>
-			<p style="margin-bottom:5px;"><a href="">Instagram/Gulaymart</a></p>
-			<p style="margin-bottom:5px;"><a href="">Messenger/Gulaymart</a></p>
+			<p style="margin-bottom:5px;"><a href="">Facebook</a></p>
+			<p style="margin-bottom:5px;"><a href="">Instagram</a></p>
+			<p style="margin-bottom:5px;"><a href="">Messenger</a></p>
+			<p style="margin-bottom:5px;"><a href="">Email us</a></p>
 			<p style="margin-bottom:5px;"><a href="">Blog articles</a></p>
-			<p style="margin-bottom:5px;"><a href="">Send us an email</a></p>
 		</div>
 
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

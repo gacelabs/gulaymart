@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var elem = $('#banner_container').offset().top;
+	var elem = $('#navbar-carousel').offset().top;
 
 	$(window).scroll(function() {  
 		if ($(window).scrollTop() > elem) {

@@ -17,9 +17,6 @@
 	border-bottom-right-radius: 22px;
 	border-bottom-left-radius: 22px;
 }
-.carousel-inner .item {
-	height: 240px;
-}
 .carousel-indicators {
 	bottom: 0;
 }
