@@ -3,7 +3,7 @@
 		<a href="">
 			<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
 				<ul class="spaced-list between">
-					<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 1 KM</small></kbd></li>
+					<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 26 mins</small></kbd></li>
 					<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> Hydrophonic</small></kbd></li>
 				</ul>
 			</div>
