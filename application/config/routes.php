@@ -9,7 +9,7 @@ $route['sign-in'] = 'Authenticate/sign_in';
 $route['sign-out'] = 'Authenticate/sign_out';
 
 $route['dashboard'] = 'Dashboard';
-$route['dashboard/profile'] = 'Dashboard';
+$route['dashboard/profile'] = 'Dashboard/profile';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

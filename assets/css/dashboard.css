@@ -42,3 +42,43 @@ body.dashboard .navbar-btn-list .nav-avatar-body {
 body.dashboard .left-affix-content {
 	margin-left: 16.66666667%;
 }
+#dash_panel_left {
+	height: calc(100vh - 15px);
+	overflow-y: auto;
+	background-color: #fff;
+}
+.aside-nav-container {
+	margin: 20px 0;
+}
+.aside-nav-item>a:hover, .aside-nav-child>a:hover {
+	background-color: #f3f3f3;
+}
+.aside-nav-item>a, .aside-nav-child>a {
+	display: block;
+	padding: 8px 15px;
+	border-radius: 3px;
+	color: inherit;
+}
+.aside-nav-item>a>i, .aside-nav-child>a>i {
+	font-size: 16px;
+	width: 35px;
+	text-align: center;
+	margin-right: 15px;
+	height: 35px;
+	background-color: #dedede;
+	color: #444;
+	padding: 9px 0;
+	border-radius: 100%;
+}
+.aside-nav-item>a.active, .aside-nav-child>a.active {
+	background-color: #e2efc6;
+	color: inherit;
+	font-weight: bold;
+}
+.aside-nav-item>a.active i, .aside-nav-child>a.active i {
+	background-color: #799938;
+	color: #fff;
+}
+.aside-nav-child {
+	margin-left: 25px;
+}

@@ -22,11 +22,11 @@ class Dashboard extends MY_Controller {
 				],
 				'index_page' => 'no',
 				'page_title' => 'Gulaymart | Profile',
-				'css' => ['global', 'dashboard', 'profile', 'rwd'],
+				'css' => ['global', 'dashboard', 'rwd'],
 				'js' => [],
 			],
 			'middle' => [
-				'body_class' => ['dashboard', 'profile'],
+				'body_class' => ['dashboard'],
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [

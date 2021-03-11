@@ -28,7 +28,7 @@
 			?>
 		</section>
 
-		<section class="container" id="content__middle">
+		<section class="<?php if (!in_array("dashboard", $middle['body_class'])) {echo "container";} ?>" id="content__middle">
 			<?php
 				foreach ($middle['body'] as $value) {
 					$this->view('templates/'.$value);

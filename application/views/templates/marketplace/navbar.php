@@ -9,7 +9,7 @@
 				<li class="login-button onlogged-out-btn<?php echo $current_profile ? ' hide' : '';?>" data-toggle="modal" data-target="#login_modal"><a href="javascript:;"><span class="hidden-xs">Log In</span><i class="fa fa-sign-in visible-xs"></i></a></li>
 				<li class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>"><a href="notifications"><i class="fa fa-bell-o"></i></a></li>
 				<li class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>"><a href="basket"><i class="fa fa-shopping-basket"></i></a></li>
-				<li class="nav-avatar-li onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>"><a href="dashboard/profile"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a></li>
+				<li class="nav-avatar-li onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>"><a href="dashboard"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a></li>
 			</ul>
 		</div>
 	</div>
