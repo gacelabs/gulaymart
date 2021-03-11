@@ -100,7 +100,7 @@ class Authenticate extends MY_Controller {
 	{
 		$post = $this->input->post();
 		if ($this->accounts->has_session) {
-			// debug($id); debug($post);
+			// debug($id, $post, 'stop');
 			$type = 'error';
 			$message = 'Password mismatch!';
 			if ($post) {
@@ -115,9 +115,9 @@ class Authenticate extends MY_Controller {
 			}
 		} else {
 			$type = 'error';
-			$message = 'Provide a valid email address!&modal=pw-reset-modal';
+			$message = 'Provide a valid email address!&modal=login_modal';
 			if ($post AND (isset($post['email_address']) AND filter_var($post['email_address'], FILTER_VALIDATE_EMAIL))) {
-				// debug($post);
+				// debug($post, 'stop');
 				$check = $this->gm_db->get('users', ['email_address' => $post['email_address']], 'row');
 				if ($check) {
 					/*for emailing temp password*/
@@ -136,7 +136,7 @@ class Authenticate extends MY_Controller {
 					$email['email_subject'] = 'Password Recovery';
 					$email['email_to'] = $post['email_address'];
 					$email['email_bcc'] = ['sirpoigarcia@gmail.com'];
-					// debug($email);
+					// debug($email, 'stop');
 
 					// $mail->debug = TRUE;
 					$return = $mail->send($email, 5/*, TRUE*/); /*send after 5 mins*/

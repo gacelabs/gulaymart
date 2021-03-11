@@ -10,14 +10,19 @@
 						</ul>
 					</div>
 
-					<div class="login-middle">
+					<div class="login-middle login-detail">
 						<h1>Log In</h1>
 						<p>Find the freshest vegetables grown by the famers in your community.</p>
 					</div>
 
+					<div class="login-middle reset-detail hide">
+						<h1>Reset Password</h1>
+						<p>We will send your old credentials via email provided below.</p>
+					</div>
+
 					<div class="login-footer">
 						<div class="login-form-body">
-							<form method="post" action="sign-in" class="form-validate">
+							<form method="post" action="sign-in" class="form-validate sign-in-form">
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
@@ -25,9 +30,15 @@
 									<input type="password" name="password" class="form-control" placeholder="Password">
 								</div>
 								<div style="text-align: right;margin-bottom: 10px;">
-									<a href="password-reset" style="font-size: 11px;">Forgot Password?</a>
+									<a href="javascript:;" class="resetpass-btn" style="font-size: 11px;">Forgot Password?</a>
 								</div>
 								<button class="btn btn-success btn-block">Log In</button>
+							</form>
+							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide">
+								<div class="form-group">
+									<input type="email" name="email_address" class="form-control" placeholder="Email address">
+								</div>
+								<button class="btn btn-success btn-block resetpass-submit">Reset Password</button>
 							</form>
 						</div>
 
@@ -39,6 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
+							<button class="btn btn-default btn-block ask-sign-in hide">Log In ?</button>
 						</div>
 					</div>
 				</div>

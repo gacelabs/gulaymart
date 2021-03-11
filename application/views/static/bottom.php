@@ -14,8 +14,6 @@
 				echo "\r\n";
 			}
 		?>
-
-		<?php // $this->view('requires/realtime_scripts'); ?>
 		
 		<?php
 			foreach ($bottom['modals'] as $view => $value) {
@@ -32,6 +30,8 @@
 				$this->view('modals/login_modal');
 			}
 		?>
+
+		<?php $this->view('requires/realtime_scripts'); ?>
 
 	</body>
 

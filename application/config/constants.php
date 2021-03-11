@@ -90,6 +90,6 @@ defined('FB_VERSION') OR define('FB_VERSION', 'v10.0');
 defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b68e02c6434');
 
 defined('APP_NAME') OR define('APP_NAME', 'Gulay Market');
-defined('APP_VERSION') OR define('APP_VERSION', '1.8');
+defined('APP_VERSION') OR define('APP_VERSION', '1.0');
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');

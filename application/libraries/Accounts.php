@@ -27,6 +27,13 @@ class Accounts {
 				throw new Exception("Table Galleries not created!", 403);
 			}
 		}
+		if (!$this->class->db->table_exists('email_session')) {
+			/*create table for the first time*/
+			$is_created = $this->create_email_session_table();
+			if (empty($is_created)) {
+				throw new Exception("Table Email_Session not created!", 403);
+			}
+		}
 		$this->has_session = $this->class->session->userdata('profile') ? TRUE : FALSE;
 		$this->profile = $this->class->session->userdata('profile');
 	}
@@ -345,6 +352,33 @@ class Accounts {
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
 		$table_data = $this->class->dbforge->create_table('galleries', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	private function create_email_session_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
+			'session_id' => ['type' => 'TEXT'],
+			"past datetime DEFAULT CURRENT_TIMESTAMP",
+			'deleted' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'null' => TRUE,
+				'default' => '0',
+			],
+		]);
+		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('email_session', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

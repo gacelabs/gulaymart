@@ -22,8 +22,8 @@ class SmtpEmail /*implements EmailFunctions*/ {
 		$config['smtp_host']	= 'ssl://smtp.gmail.com';
 		$config['smtp_port']	= '465';
 		$config['smtp_timeout']	= '30';
-		$config['smtp_user']	= 'eoblends.info@gmail.com';
-		$config['smtp_pass']	= 'oeonjkdrochvxsql';
+		$config['smtp_user']	= 'gacelabs.inc@gmail.com';
+		$config['smtp_pass']	= 'jpmmkjexgngkuktt';
 		$config['charset']		= 'utf-8';
 		$config['newline']		= "\r\n";
 		$config['mailtype']		= 'html'; // or text
@@ -71,7 +71,7 @@ class SmtpEmail /*implements EmailFunctions*/ {
 	{
 		/*set from values*/
 		if (!isset($data['email_from'])) {
-			$this->email->from('eoblends.info@gmail.com', 'Essential Oil Blends');
+			$this->email->from('gulaymart@gmail.com', 'Gulay Mart');
 		} else {
 			$this->email->from($data['email_from'], (isset($data['email_from_name']) ? $data['email_from_name'] : ''), (isset($data['email_return']) ? $data['email_return'] : NULL));
 		}
