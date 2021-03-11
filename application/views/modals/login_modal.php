@@ -32,13 +32,13 @@
 								<div style="text-align: right;margin-bottom: 10px;">
 									<a href="javascript:;" class="resetpass-btn" style="font-size: 11px;">Forgot Password?</a>
 								</div>
-								<button class="btn btn-success btn-block">Log In</button>
+								<button type="submit" class="btn btn-success btn-block">Log In</button>
 							</form>
 							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide">
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
-								<button class="btn btn-success btn-block resetpass-submit">Reset Password</button>
+								<button type="submit" class="btn btn-success btn-block resetpass-submit">Reset Password</button>
 							</form>
 						</div>
 
