@@ -10,6 +10,8 @@
 
 	<meta name="robots" content="<?php echo $top['index_page'] == 'yes' ? "index, follow" : "noindex, nofollow"; ?>">
 	<link rel="canonical" href="<?php echo base_url();?>">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 	<?php foreach ($top['metas'] as $value) { echo "<meta ".$value.">\r\n"; } ?>
 
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">

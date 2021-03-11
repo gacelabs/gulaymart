@@ -37,8 +37,11 @@ class Marketplace extends MY_Controller {
 					'marketplace/products',
 					'marketplace/famers'
 				],
-				'footer' => [],
+				'footer' => [
 				/* found in views/templates */
+					'templates/marketplace/poster',
+					'static/footer'
+				],
 			],
 			'bottom' => [
 				'modals' => ['search_popup'],

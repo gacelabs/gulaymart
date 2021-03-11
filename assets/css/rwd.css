@@ -196,18 +196,21 @@
 	.register-middle input.form-control, #register_form .btn-theme {
 		height: 36px;
 	}
+	#bottom_nav_sm.in .nav-avatar-body {
+		width: 22px;
+		height: 22px;
+		border-radius: 8px;
+	}
 	#register_form .btn-theme {
 		font-size: 16px;
 	}
-	#bottom_nav_sm {
-		left: 50%;
-		transform: translate(-33%, 20%);
-		width: 60%;
+	#bottom_nav_sm, #bottom_nav_sm.in {
+		width: 240px;
 	}
 	.bottom-nav-item {
 		font-size: 16px;
 	}
-	#bottom_nav_sm .bottom-nav-item>a, #bottom_nav_sm .bottom-nav-item>span, #bottom_nav_sm .bottom-nav-item>i {
+	#bottom_nav_sm .bottom-nav-item>a, #bottom_nav_sm .bottom-nav-item>span, #bottom_nav_sm .bottom-nav-item>i, #poster_container {
 		padding: 8px 0;
 	}
 	kbd {
@@ -232,7 +235,7 @@
 	#banner_container {
 		margin-top: 0;
 	}
-	#banner_container h3, #category_container h3, #farmers_container h3 {
+	#banner_container h3, #category_container h3, #farmers_container h3, #poster_container h3 {
 		margin-top: 0;
 		font-size: 18px;
 	}
@@ -249,7 +252,7 @@
 		grid-template-columns: 40% 40% 40% 40%;
 		overflow-x: auto;
 	}
-	.banner-right .product-item-container:last-child .product-item-sm {
+	.banner-right .product-item-container:last-child .product-item-sm, .carousel-inner {
 		border-radius: 0;
 	}
 	.btn-generic-container {
@@ -264,9 +267,9 @@
 	#navbar-carousel_container {
 		padding-left: 5px;
 		padding-right: 5px;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 	}
-	#navbar-carousel_container, #banner_container {
+	#banner_container {
 		margin-bottom: 25px;
 	}
 	#navbar-carousel {
@@ -274,7 +277,7 @@
 		padding-right: 10px;
 	}
 	.carousel-inner .item {
-		height: 150px;
+		height: 80px;
 	}
 	.carousel-caption {
 		bottom: 10px;

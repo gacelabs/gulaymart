@@ -29,19 +29,17 @@
 		</section>
 
 		<section class="container" id="content__middle">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="<?php echo $class_name;?>">
-				<?php
-					foreach ($middle['body'] as $value) {
-						$this->view('templates/'.$value);
-					}
-				?>
-			</div>
+			<?php
+				foreach ($middle['body'] as $value) {
+					$this->view('templates/'.$value);
+				}
+			?>
 		</section>
 
 		<section id="content__footer">
 			<?php
 				foreach ($middle['footer'] as $value) {
-					$this->view('templates/'.$value);
+					$this->view($value);
 				}
 			?>
 		</section>

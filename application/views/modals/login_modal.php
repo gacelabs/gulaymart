@@ -5,7 +5,7 @@
 				<div id="login_body">
 					<div class="login-top">
 						<ul class="spaced-list between">
-							<li data-dismiss="modal" aria-label="Close"><i class="fa fa-chevron-left"></i></li>
+							<li data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></li>
 							<li><a href="register">Register</a></li>
 						</ul>
 					</div>
@@ -16,8 +16,8 @@
 					</div>
 
 					<div class="login-middle reset-detail hide">
-						<h1>Reset Password</h1>
-						<p>We will send your old credentials via email provided below.</p>
+						<h1>Forgot Password</h1>
+						<p>Receive your current password on the email you've used to register.</p>
 					</div>
 
 					<div class="login-footer">
@@ -32,13 +32,13 @@
 								<div style="text-align: right;margin-bottom: 10px;">
 									<a href="javascript:;" class="resetpass-btn" style="font-size: 11px;">Forgot Password?</a>
 								</div>
-								<button type="submit" class="btn btn-success btn-block">Log In</button>
+								<button type="submit" class="btn btn-theme btn-block">Log In</button>
 							</form>
 							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide">
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
-								<button type="submit" class="btn btn-success btn-block resetpass-submit">Reset Password</button>
+								<button type="submit" class="btn btn-danger btn-block resetpass-submit">Send Password</button>
 							</form>
 						</div>
 
@@ -50,7 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
-							<button class="btn btn-default btn-block ask-sign-in hide">Log In ?</button>
+							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left icon-left"></i> back to Log In</button>
 						</div>
 					</div>
 				</div>

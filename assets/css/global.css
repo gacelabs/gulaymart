@@ -1,8 +1,9 @@
 body {
+	font-family: 'Roboto', sans-serif;
 	background-color: #eeefec;
 	color: #444;
 }
-.elem-block {
+.elem-block, .carousel img {
 	display: block;
 	width: 100%;
 }
@@ -72,7 +73,6 @@ i.i-logo.white {
 }
 .login-form-body button {
 	border-radius: 12px;
-	background-color: #8bc34b;
 	border: none;
 	padding: 7px 20px;
 	outline: none !important;
@@ -138,8 +138,8 @@ i.i-logo.white {
 	background-color: transparent;
 	padding: 9px 14px;
 	box-shadow: none;
-	border-top-right-radius: 16px;
-	border-bottom-right-radius: 16px;
+	border-top-right-radius: 16px !important;
+	border-bottom-right-radius: 16px !important;
 	border-top-left-radius: 0 !important;
 	border-bottom-left-radius: 0 !important;
 }
@@ -324,6 +324,9 @@ ul.inline-list {
 ul.inline-list>li {
 	display: inline-block;
 }
+.inline-list.right-gap>li {
+	margin-right: 10px;
+}
 .v-middle {
 	vertical-align: middle;
 }
@@ -348,6 +351,13 @@ ul.inline-list>li {
 	width: 100%;
 	padding: 20px 10px 5px 10px;
 	background: linear-gradient(1deg, rgb(8 8 8) 0%, rgb(0 0 0 / 0%) 100%);
+}
+#footer_page_container {
+	margin-top: 60px;
+	border-top: 2px solid #799938;
+	background-color: #fff;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 .zero-gaps {
 	padding: 0;

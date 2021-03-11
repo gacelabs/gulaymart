@@ -27,3 +27,10 @@ $(document).ready(function() {
 		}
 	});
 });
+
+$(window).on('load resize change scroll', function(){
+		var navSticky = $('#bottom_nav_sm').width(),
+		winWidth = $(window).width();
+
+	$('#bottom_nav_sm').css('left', (winWidth/2)-(navSticky/2)+'px');
+})
