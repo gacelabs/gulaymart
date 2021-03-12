@@ -2,16 +2,20 @@
 	<div class="product-item-body">
 		<div class="product-item-inner">
 			<?php
-				$n = 20;
-				for ($i=0; $i < $n; $i++) { 
-					$this->view('looping/product_item');
+				if ($data['products']) {
+					foreach ($data['products'] as $key => $product) {
+						$this->view('looping/product_item', $product);
+					}
 				}
 			?>
 		</div>
-		
-		<div class="btn-generic-container">
-			<button>More Veggies</button>
-		</div>
+		<?php if ($data['products']): ?>
+			<?php if ($data['total'] > count($data['products'])): ?>
+				<div class="btn-generic-container">
+					<button>More Veggies</button>
+				</div>
+			<?php endif ?>
+		<?php endif ?>
 
 		<div class="hide <?php echo $current_profile ? "in" : ""; ?>" id="bottom_nav_sm">
 			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>">

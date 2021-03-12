@@ -111,7 +111,7 @@ var ajaxSuccessResponse = function(response) {
 			if (response && (typeof response.redirect == 'string')) {
 				if (response.redirect) window.location = response.redirect;
 			}
-		}, 1500);
+		}, 300);
 	}
 }
 

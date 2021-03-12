@@ -223,6 +223,10 @@ class Accounts {
 			if ($farms->num_rows() > 0) {
 				$request['farms'] = $farms->result_array();
 			}
+			$categories = $this->class->gm_db->get('products_category');
+			if ($categories) {
+				$request['categories'] = $categories;
+			}
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			// debug($this->profile, 'stop');

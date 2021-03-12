@@ -173,13 +173,13 @@ class Farm extends MY_Controller {
 					$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
 					if ($this->products->save_location(['location_id' => $post['products']['location_id']], $where)) {
 						$post['products']['id'] = $id;
-						$this->set_response('success', 'Veggie Updated', $post);
+						$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 					}
 				}
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
-			$product = $this->products->get(['id' => $id], false, true);
+			$product = $this->products->get(['id' => $id], false, false, true);
 			// debug($product, 'stop');
 			$view = [
 				'top' => [

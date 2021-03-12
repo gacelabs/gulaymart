@@ -8,6 +8,7 @@ class Marketplace extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('products');
 	}
 
 	public function index()
@@ -55,8 +56,11 @@ class Marketplace extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
+			'is_login' => 0,
+			'products' => $this->products->get(true, 12),
+			'total' => $this->products->count()
 		];
+		// debug($data, 'stop');
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}

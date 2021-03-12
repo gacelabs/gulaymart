@@ -17,6 +17,7 @@
 								<input type="text" name="products[old_price]" placeholder="Old Price" required="required" value="<?php echo $data['product']['old_price'];?>">
 								<input type="text" name="products[current_price]" placeholder="Price" required="required" value="<?php echo $data['product']['current_price'];?>">
 								<textarea name="products[description]" placeholder="Description"><?php echo $data['product']['description'];?></textarea>
+								<input type="text" name="products[procedure]" placeholder="Hydrophonic" value="<?php echo $data['product']['procedure'];?>">
 								<select name="products[measurement]" required="required">
 									<option value="">Measurement</option>
 									<option value="kg"<?php in_array_echo($data['product']['measurement'], ['kg'], ' selected');?>>Kilo</option>
@@ -24,13 +25,20 @@
 								<input type="number" name="products[stocks]" placeholder="Stocks" required="required" value="<?php echo $data['product']['stocks'];?>">
 								<select name="products[category_id]" required="required">
 									<option value="">Category</option>
-									<option value="1"<?php in_array_echo($data['product']['category_id'], ['1'], ' selected');?>>Hydrophonic</option>
+									<?php if ($current_profile['categories']): ?>
+										<?php foreach ($current_profile['categories'] as $key => $category): ?>
+											<option value="<?php echo $category['id'];?>"<?php in_array_echo($data['product']['category_id'], [$category['id']], ' selected');?>><?php echo $category['label'];?></option>
+										<?php endforeach ?>
+									<?php endif ?>
+									<option value="1">Hydrophonic</option>
 								</select>
 								<label>Farm</label>
 								<select name="products[location_id]" required="required">
-									<?php foreach ($current_profile['farms'] as $key => $farm): ?>
-										<option value="<?php echo $farm['location_id'];?>"<?php in_array_echo($data['product']['location_id'], [$farm['location_id']], ' selected');?>><?php echo $farm['farm_name'];?></option>
-									<?php endforeach ?>
+									<?php if ($current_profile['farms']): ?>
+										<?php foreach ($current_profile['farms'] as $key => $farm): ?>
+											<option value="<?php echo $farm['location_id'];?>"<?php in_array_echo($data['product']['location_id'], [$farm['location_id']], ' selected');?>><?php echo $farm['farm_name'];?></option>
+										<?php endforeach ?>
+									<?php endif ?>
 								</select>
 							</div>
 							<div class="dash-panel-footer">

@@ -22,10 +22,13 @@ class Products {
 		$this->profile = $this->class->session->userdata('profile');
 	}
 
-	public function get($where=true, $justdata=true, $row=false)
+	public function get($where=true, $limit=false, $justdata=true, $row=false)
 	{
 		if ($where != false) {
 			if (is_bool($where) AND $where == true) {
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
+				}
 				$data = $this->class->db->get_where('products', ['activity' => 1]);
 			} elseif (is_array($where) OR is_string($where)) {
 				if (is_array($where)) {
@@ -36,6 +39,9 @@ class Products {
 					} else {
 						$where = 'activity = 1';
 					}
+				}
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
 				}
 				$data = $this->class->db->get_where('products', $where);
 			}
@@ -49,6 +55,11 @@ class Products {
 					if ($location) {
 						$farm = $this->class->gm_db->get('user_farms', ['id' => $location['farm_id']], 'row');
 						$products[$key]['farm'] = $farm['farm_name'];
+					}
+
+					$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+					if ($category) {
+						$products[$key]['category'] = $category['label'];
 					}
 					if ($justdata) {
 						unset($products[$key]['id']);
@@ -70,6 +81,11 @@ class Products {
 			}
 		}
 		return false;
+	}
+
+	public function count()
+	{
+		return $this->class->db->from('products')->count_all_results();
 	}
 
 	public function new($new=false, $table='products')
@@ -126,6 +142,7 @@ class Products {
 			],
 			'name' => ['type' => 'TINYTEXT', 'null' => true],
 			'description' => ['type' => 'TEXT', 'null' => true],
+			'procedure' => ['type' => 'TEXT', 'null' => true],
 			'stocks' => [
 				'type' => 'INT',
 				'constraint' => '10',

@@ -16,6 +16,7 @@
 							<input type="text" name="products[old_price]" placeholder="Old Price" required="required">
 							<input type="text" name="products[current_price]" placeholder="Price" required="required">
 							<textarea name="products[description]" placeholder="Description"></textarea>
+							<input type="text" name="products[procedure]" placeholder="Hydrophonic">
 							<select name="products[measurement]" required="required">
 								<option value="">Measurement</option>
 								<option value="kg">Kilo</option>
@@ -23,13 +24,19 @@
 							<input type="number" name="products[stocks]" placeholder="Stocks" required="required">
 							<select name="products[category_id]" required="required">
 								<option value="">Category</option>
-								<option value="1">Hydrophonic</option>
+								<?php if ($current_profile['categories']): ?>
+									<?php foreach ($current_profile['categories'] as $key => $category): ?>
+										<option value="<?php echo $category['id'];?>"><?php echo $category['label'];?></option>
+									<?php endforeach ?>
+								<?php endif ?>
 							</select>
 							<label>Farm</label>
 							<select name="products[location_id]" required="required">
-								<?php foreach ($current_profile['farms'] as $key => $farm): ?>
-									<option value="<?php echo $farm['location_id'];?>"><?php echo $farm['farm_name'];?></option>
-								<?php endforeach ?>
+								<?php if ($current_profile['farms']): ?>
+									<?php foreach ($current_profile['farms'] as $key => $farm): ?>
+										<option value="<?php echo $farm['location_id'];?>"><?php echo $farm['farm_name'];?></option>
+									<?php endforeach ?>
+								<?php endif ?>
 							</select>
 						</div>
 						<div class="dash-panel-footer">

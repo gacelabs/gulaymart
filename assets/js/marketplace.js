@@ -18,6 +18,20 @@ $(document).ready(function() {
 		},
 	});
 
+	$('[data-category-group]').off('click').on('click', function(e) {
+		var a = $(e.target);
+		if (a.prop('tagName') != 'A') {
+			a = a.parents('a');
+		}
+		var group = a.data('category-group');
+		if (group != 'all') {
+			$('[data-category]').hide();
+			$('[data-category*="'+group+'"]').show();
+		} else {
+			$('[data-category]').show();
+		}
+	});
+
 });
 
 $(document).on('ready resize change', function() {
