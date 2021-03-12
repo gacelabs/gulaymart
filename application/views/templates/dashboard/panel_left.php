@@ -33,13 +33,8 @@
 					<i class="fa fa-exchange"></i><span class="hidden-xs">Transactions</span>
 				</a>
 				<div class="aside-nav-child">
-					<a href="" class="<?php if (in_array("new-veggy", $middle['body_class'])) {echo "active";} ?>">
-						<i class="fa fa-shopping-basket"></i><span class="hidden-xs">New orders</span>
-					</a>
-				</div>
-				<div class="aside-nav-child">
-					<a href="" class="<?php if (in_array("fulfilled", $middle['body_class'])) {echo "active";} ?>">
-						<i class="fa fa-check"></i><span class="hidden-xs">Fulfilled</span>
+					<a href="" class="<?php if (in_array("orders", $middle['body_class'])) {echo "active";} ?>">
+						<i class="fa fa-shopping-basket"></i><span class="hidden-xs">Orders</span>
 					</a>
 				</div>
 				<div class="aside-nav-child">
@@ -59,10 +54,15 @@
 					<i class="fa fa-id-badge"></i><span class="hidden-xs">Profile</span>
 				</a>
 				<div class="aside-nav-child">
-					<a href="">
-						<i class="fa fa-sign-out"></i><span class="hidden-xs">Log out</span>
+					<a href="sign-out">
+						<i class="fa fa-sign-out"></i><span class="hidden-xs">Sign out</span>
 					</a>
 				</div>
+			</div>
+			<div class="aside-nav-item">
+				<a href="" class="<?php if (in_array("farm", $middle['body_class'])) {echo "active";} ?>">
+					<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
+				</a>
 			</div>
 		</div>
 	</div>

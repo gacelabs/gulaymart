@@ -15,7 +15,7 @@
 
 		<div class="hide <?php echo $current_profile ? "in" : ""; ?>" id="bottom_nav_sm">
 			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>">
-				<span data-toggle="tooltip" data-placement="top" title="Log Out"><a href="sign-out"><i class="fa fa-sign-out"></i></a></span>
+				<span data-toggle="tooltip" data-placement="top" title="Sign Out"><a href="sign-out"><i class="fa fa-sign-out"></i></a></span>
 			</div>
 			
 			<div class="bottom-nav-item onlogged-out-btn<?php echo $current_profile ? ' hide' : '';?>" data-toggle="tooltip" data-placement="top" title="Gulaymart">
