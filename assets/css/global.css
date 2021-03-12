@@ -7,6 +7,12 @@ body {
 	display: block;
 	width: 100%;
 }
+.mobile-note {
+	background-color: #fff;
+	padding: 5px;
+	border-top: 2px solid #d43333;
+	margin-bottom: 15px;
+}
 i.i-logo {
 	color: #799938;
 	border: 3px solid #799938;

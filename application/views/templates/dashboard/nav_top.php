@@ -9,7 +9,7 @@
 			</li>
 			<li>
 				<ul class="spaced-list around navbar-btn-list">
-					<li class="bottom-nav-item" data-toggle="tooltip" data-placement="left" title="Gulaymart"><a href=""><i class="fa fa-home"></i></a></li>
+					<li class="bottom-nav-item hidden-xs" data-toggle="tooltip" data-placement="left" title="Gulaymart"><a href=""><i class="fa fa-home"></i></a></li>
 					<li class="nav-avatar-li" data-toggle="tooltip" data-placement="left" title="Profile"><a href="dashboard"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a></li>
 				</ul>
 			</li>

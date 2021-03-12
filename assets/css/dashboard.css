@@ -87,5 +87,29 @@ body.dashboard .left-affix-content {
 	margin-left: 25px;
 }
 #dash_panel_right {
-	padding: 20px 10px;
+	padding: 20px 5px;
+}
+.dash-panel-top {
+	padding: 15px !important;
+	margin-bottom: 15px !important;
+	border-bottom: 1px solid rgb(0 0 0 / 15%) !important;
+}
+.dash-panel-top h3 {
+	margin: 0;
+}
+.dash-panel {
+	background-color: #fff;
+	margin-bottom: 25px;
+}
+.dash-panel.theme {
+	border-top: 2px solid #799938;
+}
+.dash-panel-middle {
+	border-bottom: 1px solid #eee;
+}
+.dash-panel-middle, .dash-panel-footer {
+	padding: 15px;
+}
+.dash-panel-footer {
+	box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 15%);
 }
