@@ -27,8 +27,10 @@ $(document).ready(function() {
 		if (group != 'all') {
 			$('[data-category]').hide();
 			$('[data-category*="'+group+'"]').show();
+			$('.product-item-inner').isotope({ filter: '[data-category*="'+group+'"]' });
 		} else {
 			$('[data-category]').show();
+			$('.product-item-inner').isotope({ filter: '*' });
 		}
 	});
 
