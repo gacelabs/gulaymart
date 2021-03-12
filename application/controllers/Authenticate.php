@@ -21,7 +21,7 @@ class Authenticate extends MY_Controller {
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 		$is_ok = $this->accounts->login($post);
-		// debug($post, $this->accounts->profile, $is_ok, 'stop');
+		// debug($post, $this->accounts->profile, $is_ok, $referrer, 'stop');
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		if ($this->accounts->has_session) {

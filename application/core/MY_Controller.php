@@ -41,7 +41,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->accounts->has_session) {
 			/*now allow all pages with session*/
 			$this->accounts->refetch();
-			// debug($this->accounts->profile);
+			// debug($this->accounts->profile, 'stop');
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
