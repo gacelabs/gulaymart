@@ -30,6 +30,9 @@
 		margin: 3px 0 0 0;
 		font-size: 9px;
 	}
+	body.dashboard .left-affix-content {
+		margin-left: 25%;
+	}
 }
 
 @media (max-width: 991px) {
@@ -110,6 +113,15 @@
 		height: 60px;
 		width: 60px;
 		margin: -40px auto 0 auto;
+	}
+	.dash-panel-left-container>h3 {
+		font-size: 18px;
+	}
+	.aside-nav-item>a, .aside-nav-child>a {
+		padding: 8px 10px;
+	}
+	.aside-nav-child {
+		margin-left: 15px;
 	}
 }
 
@@ -307,5 +319,33 @@
 	#footer_page_container {
 		margin-top: 30px;
 	}
-
+	#dash_panel_left {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.aside-nav-container {
+		text-align: center;
+	}
+	.aside-nav-item>a, .aside-nav-child>a, .aside-nav-item>a.active, .aside-nav-child>a.active {
+		padding: 5px;
+	}
+	.aside-nav-item>a>i{
+		font-size: 14px;
+		width: 30px;
+		height: 30px;
+		margin: 0;
+	}
+	.aside-nav-child>a>i {
+		font-size: 12px;
+		width: 25px;
+		height: 25px;
+		padding: 6px 0;
+		margin: 0;
+	}
+	.aside-nav-child {
+		margin-left: 0;
+	}
+	body.dashboard .left-affix-content {
+		margin-left: 16.66666667%;
+	}
 }

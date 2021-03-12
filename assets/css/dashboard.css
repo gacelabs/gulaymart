@@ -46,6 +46,10 @@ body.dashboard .left-affix-content {
 	height: calc(100vh - 15px);
 	overflow-y: auto;
 	background-color: #fff;
+	left: 0;
+}
+.dash-panel-left-container {
+	padding-bottom: 30px;
 }
 .aside-nav-container {
 	margin: 20px 0;
@@ -67,7 +71,7 @@ body.dashboard .left-affix-content {
 	height: 35px;
 	background-color: #dedede;
 	color: #444;
-	padding: 9px 0;
+	padding: 8px 0;
 	border-radius: 100%;
 }
 .aside-nav-item>a.active, .aside-nav-child>a.active {
@@ -81,4 +85,7 @@ body.dashboard .left-affix-content {
 }
 .aside-nav-child {
 	margin-left: 25px;
+}
+#dash_panel_right {
+	padding: 20px 10px;
 }

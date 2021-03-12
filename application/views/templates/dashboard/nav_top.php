@@ -4,6 +4,9 @@
 			<li>
 				<a class="navbar-brand" href=""><i class="fa fa-leaf i-logo"></i></a>
 			</li>
+			<li class="visible-xs" style="padding-top:16px;">
+				<h3 style="margin:0;font-size:16px;"><b>Hello, Poi!</b></h3>
+			</li>
 			<li>
 				<ul class="spaced-list around navbar-btn-list">
 					<li class="bottom-nav-item" data-toggle="tooltip" data-placement="left" title="Gulaymart"><a href=""><i class="fa fa-home"></i></a></li>
