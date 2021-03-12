@@ -219,7 +219,7 @@ class Accounts {
 			// $request['farms'] = $this->assemble_table_fields('user_farms');
 			$request['fullname'] = trim($request['firstname'].' '.$request['lastname']);
 			$request['farms'] = [];
-			$farms = $this->class->db->get_where('user_farms', ['user_id' => $this->profile['id']]);
+			$farms = $this->class->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
 			if ($farms->num_rows() > 0) {
 				$request['farms'] = $farms->result_array();
 			}

@@ -3,10 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Products {
 
-	protected $class = FALSE; 
-	public $has_session = FALSE; 
-	public $profile = FALSE;
-	public $device_id = FALSE;
+	protected $class = false; 
+	public $has_session = false; 
+	public $profile = false;
+	public $device_id = false;
 
 	public function __construct()
 	{
@@ -18,15 +18,52 @@ class Products {
 				throw new Exception("Table Users not created!", 403);
 			}
 		}
-		$this->has_session = $this->class->session->userdata('profile') ? TRUE : FALSE;
+		$this->has_session = $this->class->session->userdata('profile') ? true : false;
 		$this->profile = $this->class->session->userdata('profile');
 	}
 
-	public function save($new=false)
+	public function get($where=true, $row=false, $justdata=true)
+	{
+		if ($where != false) {
+			if (is_bool($where) AND $where == true) {
+				$data = $this->class->db->get('products');
+			} elseif (is_array($where) OR is_string($where)) {
+				$data = $this->class->db->get_where('products', $where);
+			}
+			if (isset($data) AND $data->num_rows()) {
+				$products = $data->result_array();
+				foreach ($products as $key => $product) {
+					$location = $this->class->gm_db->get('user_locations', ['id' => $product['location_id']], 'row');
+					// debug($location, 'stop');
+					if ($location) {
+						$products[$key]['latitude'] = $location['lat'];
+						$products[$key]['longitude'] = $location['lng'];
+					}
+					if ($justdata) {
+						unset($products[$key]['id']);
+						unset($products[$key]['user_id']);
+						unset($products[$key]['delivery_option_id']);
+						unset($products[$key]['activity_id']);
+						unset($products[$key]['category_id']);
+						unset($products[$key]['location_id']);
+						unset($products[$key]['added']);
+					}
+				}
+				// debug($products, 'stop');
+				return $products;
+			}
+		}
+		return false;
+	}
+
+	public function new($new=false)
 	{
 		if ($new) {
-			$this->class->db->new('products');
+			$this->class->db->insert('products', $new);
+			$id = $this->class->db->insert_id();
+			if ($id) return true;
 		}
+		return false;
 	}
 
 	private function create_products_table()
@@ -37,14 +74,14 @@ class Products {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'name' => ['type' => 'TINYTEXT', 'null' => TRUE],
-			'description' => ['type' => 'TEXT', 'null' => TRUE],
+			'name' => ['type' => 'TINYTEXT', 'null' => true],
+			'description' => ['type' => 'TEXT', 'null' => true],
 			'stocks' => [
 				'type' => 'INT',
 				'constraint' => '10',
@@ -75,12 +112,12 @@ class Products {
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('delivery_option_id');
 		$this->class->dbforge->add_key('activity_id');
 		$this->class->dbforge->add_key('category_id');
 		$this->class->dbforge->add_key('location_id');
-		$table_data = $this->class->dbforge->create_table('products', FALSE, [
+		$table_data = $this->class->dbforge->create_table('products', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -91,7 +128,7 @@ class Products {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'label varchar(100) DEFAULT NULL',
 			'value varchar(50) DEFAULT NULL',
@@ -99,8 +136,8 @@ class Products {
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
-		$this->class->dbforge->create_table('products_category', FALSE, [
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->create_table('products_category', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -112,7 +149,7 @@ class Products {
 			'product_id int NOT NULL',
 			'location_id int NOT NULL'
 		]);
-		$this->class->dbforge->create_table('products_location', FALSE, [
+		$this->class->dbforge->create_table('products_location', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -123,15 +160,15 @@ class Products {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'label tinytext',
 			'value tinytext',
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
-		$this->class->dbforge->create_table('products_measurement', FALSE, [
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->create_table('products_measurement', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -142,7 +179,7 @@ class Products {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			"product_id int NOT NULL DEFAULT '0'",
 			"name tinytext",
@@ -150,10 +187,10 @@ class Products {
 			"path longtext",
 			"is_main tinyint(1) NOT NULL DEFAULT '0'",
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('is_main');
-		$this->class->dbforge->create_table('products_photo', FALSE, [
+		$this->class->dbforge->create_table('products_photo', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

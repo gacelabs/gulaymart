@@ -22,9 +22,12 @@ class Farm extends MY_Controller {
 		if ($post) {
 			$message = '';
 			if (check_data_values($post)) {
-				debug($post, $this->products, 'stop');
-				# code...
-				$this->set_response('success', 'New Veggie Added', $post, 'farm');
+				// debug($post, $this->products, 'stop');
+				if ($this->products->new($post['products'])) {
+					$this->set_response('success', 'New Veggie Added', $post);
+				} else {
+					$this->set_response('error', 'Unable to add product', $post);
+				}
 			}
 		} else {
 			$view = [
@@ -51,7 +54,7 @@ class Farm extends MY_Controller {
 					'head' => ['dashboard/nav_top'],
 					'body' => [
 						'dashboard/panel_left',
-						'farm/panel_right'
+						'farm/new_veggy'
 					],
 					'footer' => [],
 					/* found in views/templates */
@@ -95,7 +98,7 @@ class Farm extends MY_Controller {
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/panel_left',
-					'farm/panel_right'
+					'farm/storefront'
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -139,7 +142,7 @@ class Farm extends MY_Controller {
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/panel_left',
-					'farm/panel_right'
+					'farm/inventory'
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -151,8 +154,10 @@ class Farm extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
+			'is_login' => 0,
+			'products' => $this->products->get()
 		];
+		// debug($this->products->get(), 'stop');
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}

@@ -34,7 +34,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
 					}
-					form.reset();
+					// form.reset();
 				}
 			};
 
