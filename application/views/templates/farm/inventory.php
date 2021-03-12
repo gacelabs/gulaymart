@@ -15,13 +15,24 @@
 					<table border="1">
 						<tr>
 							<?php foreach ($data['products'][0] as $key => $value): ?>
-								<th><?php echo fix_title($key);?></th>
+								<?php if ($key != 'id'): ?>
+									<th><?php echo fix_title($key);?></th>	
+								<?php else: ?>
+									<th>action</th>	
+								<?php endif ?>
 							<?php endforeach ?>
 						</tr>
 						<?php foreach ($data['products'] as $key => $product): ?>
-							<tr>
+							<tr product_id="<?php echo $product['id'];?>">
 								<?php foreach ($product as $index => $value): ?>
-									<th><?php echo $value;?></th>
+									<?php if ($index != 'id'): ?>
+										<td><?php echo $value;?></td>
+									<?php else: ?>
+										<td>
+											<a href="farm/edit/<?php echo $value;?>">edit</a>
+											<a href="farm/remove/<?php echo $value;?>" data-ajax="1">remove</a>
+										</td>
+									<?php endif ?>
 								<?php endforeach ?>
 							</tr>
 						<?php endforeach ?>

@@ -34,7 +34,9 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
 					}
-					// form.reset();
+					if (window.location.pathname.indexOf('/edit/') < 0) {
+						form.reset();
+					}
 				}
 			};
 
@@ -84,8 +86,12 @@ var oSimpleAjax = false, simpleAjax = function(url, data) {
 
 var ajaxSuccessResponse = function(response) {
 	console.log(response);
+	var iConfirmed = true;
 	if (response && response.type) {
 		switch (response.type.toLowerCase()) {
+			case 'confirm':
+				iConfirmed = confirm('Confirm Alert: ' + response.message);
+			break;
 			case 'success':
 				alert('Success Alert: ' + response.message);
 			break;
@@ -94,17 +100,19 @@ var ajaxSuccessResponse = function(response) {
 			break;
 		}
 	}
-	if (response && (typeof response.callback == 'string')) {
-		var fn = eval(response.callback);
-		if (typeof fn == 'function') {
-			fn(response.data);
+	if (iConfirmed) {
+		if (response && (typeof response.callback == 'string')) {
+			var fn = eval(response.callback);
+			if (typeof fn == 'function') {
+				fn(response.data);
+			}
 		}
+		setTimeout(function() {
+			if (response && (typeof response.redirect == 'string')) {
+				if (response.redirect) window.location = response.redirect;
+			}
+		}, 1500);
 	}
-	setTimeout(function() {
-		if (response && (typeof response.redirect == 'string')) {
-			if (response.redirect) window.location = response.redirect;
-		}
-	}, 1500);
 }
 
 window.mobileAndTabletCheck = function() {

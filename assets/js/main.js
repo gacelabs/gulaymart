@@ -26,6 +26,21 @@ $(document).ready(function() {
 			uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
 		}
 	});
+	var oPauseAjax = false;
+	$('a[data-ajax]').off('click').on('click', function(e) {
+		e.preventDefault();
+		var oSettings = {
+			url: e.target.href,
+			type: 'get',
+			dataType: 'jsonp',
+			jsonpCallback: 'echo',
+			error: function(xhr, status, thrown) {
+				console.log(status, thrown);
+			}
+		};
+		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
+		oPauseAjax = $.ajax(oSettings);
+	});
 });
 
 $(window).on('load resize change scroll', function(){

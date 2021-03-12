@@ -22,46 +22,90 @@ class Products {
 		$this->profile = $this->class->session->userdata('profile');
 	}
 
-	public function get($where=true, $row=false, $justdata=true)
+	public function get($where=true, $justdata=true, $row=false)
 	{
 		if ($where != false) {
 			if (is_bool($where) AND $where == true) {
-				$data = $this->class->db->get('products');
+				$data = $this->class->db->get_where('products', ['activity' => 1]);
 			} elseif (is_array($where) OR is_string($where)) {
+				if (is_array($where)) {
+					$where['activity'] = 1;
+				} else {
+					if (strlen(trim($where)) > 0) {
+						$where .= ' AND activity = 1';
+					} else {
+						$where = 'activity = 1';
+					}
+				}
 				$data = $this->class->db->get_where('products', $where);
 			}
 			if (isset($data) AND $data->num_rows()) {
 				$products = $data->result_array();
+				$results = [];
 				foreach ($products as $key => $product) {
+					$product_id = $products[$key]['id'];
 					$location = $this->class->gm_db->get('user_locations', ['id' => $product['location_id']], 'row');
 					// debug($location, 'stop');
 					if ($location) {
-						$products[$key]['latitude'] = $location['lat'];
-						$products[$key]['longitude'] = $location['lng'];
+						$farm = $this->class->gm_db->get('user_farms', ['id' => $location['farm_id']], 'row');
+						$products[$key]['farm'] = $farm['farm_name'];
 					}
 					if ($justdata) {
 						unset($products[$key]['id']);
 						unset($products[$key]['user_id']);
 						unset($products[$key]['delivery_option_id']);
-						unset($products[$key]['activity_id']);
+						unset($products[$key]['activity']);
 						unset($products[$key]['category_id']);
 						unset($products[$key]['location_id']);
 						unset($products[$key]['added']);
 					}
+					$products[$key]['id'] = $product_id;
 				}
 				// debug($products, 'stop');
-				return $products;
+				if ($row) {
+					return $products[0];
+				} else {
+					return $products;
+				}
 			}
 		}
 		return false;
 	}
 
-	public function new($new=false)
+	public function new($new=false, $table='products')
 	{
 		if ($new) {
-			$this->class->db->insert('products', $new);
+			$this->class->db->insert($table, $new);
 			$id = $this->class->db->insert_id();
-			if ($id) return true;
+			if ($id) return $id;
+		}
+		return false;
+	}
+
+	public function save($set=false, $where=[], $table='products')
+	{
+		if ($set) {
+			$this->class->db->update($table, $set, $where);
+			return true;
+		}
+		return false;
+	}
+
+	public function new_location($new=false)
+	{
+		if ($new) {
+			$this->class->db->insert('products_location', $new);
+			$affected = $this->class->db->affected_rows();
+			if ($affected) return $affected;
+		}
+		return false;
+	}
+
+	public function save_location($set=false, $where=[])
+	{
+		if ($set) {
+			$this->class->db->update('products_location', $set, $where);
+			return true;
 		}
 		return false;
 	}
@@ -97,7 +141,7 @@ class Products {
 				'type' => 'SMALLINT',
 				'default' => '0',
 			],
-			'activity_id' => [
+			'activity' => [
 				'type' => 'SMALLINT',
 				'default' => '1',
 			],
@@ -114,7 +158,7 @@ class Products {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('delivery_option_id');
-		$this->class->dbforge->add_key('activity_id');
+		$this->class->dbforge->add_key('activity');
 		$this->class->dbforge->add_key('category_id');
 		$this->class->dbforge->add_key('location_id');
 		$table_data = $this->class->dbforge->create_table('products', false, [

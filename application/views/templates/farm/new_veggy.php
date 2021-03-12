@@ -11,6 +11,7 @@
 					</ul>
 					<form action="farm/new-veggy" method="post" enctype="multipart/form-data" class="form-validate" data-ajax="1">
 						<div class="dash-panel-middle">
+							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<input type="text" name="products[name]" placeholder="Name" required="required">
 							<input type="text" name="products[old_price]" placeholder="Old Price" required="required">
 							<input type="text" name="products[current_price]" placeholder="Price" required="required">
