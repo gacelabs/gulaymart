@@ -3,80 +3,76 @@
 	var realtime = false;
 	window.initSendData = function() {
 		realtime = new SendData({
-			// afterInit: function() {
-			// 	realtime.connect(function() {
-			// 		console.log('gulaymart.com communicating and sending order to portal.toktok.ph...');
-			// 		// realtime.trigger('add-delivery', 'deliveries', {
-			// 		// 	f_id: "",
-			// 		// 	'pac-input': 'Orchids St, San Jose del Monte City, Bulacan, Philippines',
-			// 		// 	'pac-input2': 'Santa Maria, Bulacan, Philippines',
-			// 		// 	f_driver_id: "",
-			// 		// 	f_sender_name: "Eddie Garcia",
-			// 		// 	f_sender_mobile: "09172022385",
-			// 		// 	f_sender_landmark: "Test",
-			// 		// 	f_sender_address: 'Orchids St, San Jose del Monte City, Bulacan, Philippines',
-			// 		// 	f_sender_address_lat: 14.8072588,
-			// 		// 	f_sender_address_lng: 121.0366074,
-			// 		// 	f_order_type_send: 1,
-			// 		// 	f_sender_date: "",
-			// 		// 	f_sender_datetime_from: "",
-			// 		// 	f_sender_datetime_to: "",
-			// 		// 	/*f_order_type_send: 2, // if Order Type is SCHEDULED
-			// 		// 	f_sender_date: "03/02/2021",
-			// 		// 	f_sender_datetime_from: "02:13:23",
-			// 		// 	f_sender_datetime_to: "03:13:27",*/
-			// 		// 	f_sen_add_in_city: "",
-			// 		// 	f_sen_add_in_pro: "",
-			// 		// 	f_sen_add_in_reg: "",
-			// 		// 	f_sen_add_in_coun: "",
-			// 		// 	f_recepient_name: "Eddie Garcia 1",
-			// 		// 	f_recepient_mobile: "09172022385",
-			// 		// 	f_recepient_landmark: "Test 1",
-			// 		// 	f_recepient_address: 'Santa Maria, Bulacan, Philippines',
-			// 		// 	f_recepient_address_lat: 14.847608,
-			// 		// 	f_recepient_address_lng: 120.9808582,
-			// 		// 	f_order_type_rec: 1,
-			// 		// 	f_recepient_date: "",
-			// 		// 	f_recepient_datetime_from: "",
-			// 		// 	f_recepient_datetime_to: "",
-			// 		// 	/*f_order_type_rec: 2, // if Order Type is SCHEDULED
-			// 		// 	f_recepient_date: "03/02/2021",
-			// 		// 	f_recepient_datetime_from: "02:13:23",
-			// 		// 	f_recepient_datetime_to: "03:13:27",*/
-			// 		// 	f_rec_add_in_city: "",
-			// 		// 	f_rec_add_in_pro: "",
-			// 		// 	f_rec_add_in_reg: "",
-			// 		// 	f_rec_add_in_coun: "",
-			// 		// 	f_collectFrom: "R",
-			// 		// 	f_recepient_notes: "",
-			// 		// 	f_cargo: "Food",
-			// 		// 	f_cargo_others: "Food",
-			// 		// 	f_is_cod: false,
-			// 		// 	f_express_fee: false,
-			// 		// 	/*f_is_cod: "on",
-			// 		// 	f_recepient_cod: "400", // if COD is checked
-			// 		// 	f_express_fee: "on",
-			// 		// 	f_express_fee_hidden: 40.00 // if express fee is checked*/
-			// 		// });
-			// 	});
-			// },
-			// afterConnect: function() {
-			// 	realtime.bind('return-delivery', 'returns', function(object) {
-			// 		console.log('received response from portal.toktok.ph', object.data);
-			// 	});
-			// }
+			afterInit: function() {
+				realtime.connect(function() {
+					console.log('gulaymart.com ready to communicate!');
+					/*realtime.trigger('add-delivery', 'deliveries', {
+						f_id: "",
+						'pac-input': 'Orchids St, San Jose del Monte City, Bulacan, Philippines',
+						'pac-input2': 'Santa Maria, Bulacan, Philippines',
+						f_driver_id: "",
+						f_sender_name: "Eddie Garcia",
+						f_sender_mobile: "09172022385",
+						f_sender_landmark: "Test",
+						f_sender_address: 'Orchids St, San Jose del Monte City, Bulacan, Philippines',
+						f_sender_address_lat: 14.8072588,
+						f_sender_address_lng: 121.0366074,
+						f_order_type_send: 1,
+						f_sender_date: "",
+						f_sender_datetime_from: "",
+						f_sender_datetime_to: "",
+						// f_order_type_send: 2, // if Order Type is SCHEDULED
+						// f_sender_date: "03/02/2021",
+						// f_sender_datetime_from: "02:13:23",
+						// f_sender_datetime_to: "03:13:27",
+						f_sen_add_in_city: "",
+						f_sen_add_in_pro: "",
+						f_sen_add_in_reg: "",
+						f_sen_add_in_coun: "",
+						f_recepient_name: "Eddie Garcia 1",
+						f_recepient_mobile: "09172022385",
+						f_recepient_landmark: "Test 1",
+						f_recepient_address: 'Santa Maria, Bulacan, Philippines',
+						f_recepient_address_lat: 14.847608,
+						f_recepient_address_lng: 120.9808582,
+						f_order_type_rec: 1,
+						f_recepient_date: "",
+						f_recepient_datetime_from: "",
+						f_recepient_datetime_to: "",
+						// f_order_type_rec: 2, // if Order Type is SCHEDULED
+						// f_recepient_date: "03/02/2021",
+						// f_recepient_datetime_from: "02:13:23",
+						// f_recepient_datetime_to: "03:13:27",
+						f_rec_add_in_city: "",
+						f_rec_add_in_pro: "",
+						f_rec_add_in_reg: "",
+						f_rec_add_in_coun: "",
+						f_collectFrom: "R",
+						f_recepient_notes: "",
+						f_cargo: "Food",
+						f_cargo_others: "Food",
+						f_is_cod: false,
+						f_express_fee: false,
+						// f_is_cod: "on",
+						// f_recepient_cod: "400", // if COD is checked
+						// f_express_fee: "on",
+						// f_express_fee_hidden: 40.00 // if express fee is checked
+					});*/
+				});
+			},
+			afterConnect: function() {
+				/*realtime.bind('return-delivery', 'returns', function(object) {
+					console.log('received response from portal.toktok.ph', object.data);
+				});*/
+			}
 		});
 	};
 	(function(d, s, id) {
-		if (d.getElementById('sd-sdk') == null) {
-			var js, p = d.getElementsByTagName(s), me = p[p.length - 1];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.type = 'text/javascript';
-			js.src = "https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39";
-			me.parentNode.insertBefore(js, me);
-		} else {
-			console.log('realtime sdk existing.')
-		}
+		var js, p = d.getElementsByTagName(s), me = p[p.length - 1];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.type = 'text/javascript';
+		js.src = "<?php echo REALTIME_URL;?>";
+		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
 </script>

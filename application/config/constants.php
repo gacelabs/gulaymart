@@ -95,3 +95,4 @@ defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
 
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
+defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
