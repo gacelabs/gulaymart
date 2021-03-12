@@ -1012,3 +1012,57 @@ function count_rows($table=false, $where=false) {
 	}
 	return 0;
 }
+
+function in_array_echo($key=false, $array=false, $echo='') {
+	if ($key AND is_array($array)) {
+		if (in_array($key, $array)) {
+			echo $echo;
+		}
+	}
+}
+
+function in_array_echo_key($key=false, $array=false) {
+	if ($key AND is_array($array)) {
+		if (in_array($key, $array) AND isset($array[$key])) {
+			echo $array[$key];
+		}
+	}
+}
+
+function not_in_array_echo($key=false, $array=false, $echo='') {
+	if ($key AND is_array($array)) {
+		if (!in_array($key, $array)) {
+			echo $echo;
+		}
+	}
+}
+
+function check_if($to_check=false, $index=false, $expected=false)
+{
+	if ($expected !== false AND is_string($expected)) {
+		switch (strtolower($expected)) {
+			case 'array': case 'object':
+				if (isset($to_check[$index]) AND is_array($to_check[$index]) AND count($to_check[$index])) {
+					return true;
+				}
+				break;
+			case 'boolean': case 'bool':
+				if (isset($to_check[$index]) AND is_array($to_check[$index]) AND count($to_check[$index])) {
+					return true;
+				}
+				break;
+		}
+	}
+	return false;
+}
+
+function echo_message($msg_prefix='', $field=false)
+{
+	if ($field) {
+		$ci =& get_instance();
+		if (isset($ci->accounts) AND $ci->accounts->has_session) {
+			$msg_prefix .= isset($ci->accounts->profile[$field]) ? $ci->accounts->profile[$field] : '';
+		}
+	}
+	echo $msg_prefix;
+}

@@ -11,6 +11,10 @@ $route['sign-out'] = 'Authenticate/sign_out';
 $route['dashboard'] = 'Dashboard';
 $route['dashboard/profile'] = 'Dashboard/profile';
 
+$route['farm/new-veggy'] = 'Farm/new_veggy';
+$route['help-center'] = 'Support/help_center';
+$route['support/help-center'] = 'Support/help_center';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 

@@ -200,15 +200,18 @@ class Accounts {
 			unset($request['re_password']);
 
 			$request['info'] = $this->assemble_table_fields('profiles');
+			$request['info']['fullname'] = 'No Name';
 			$info = $this->class->db->get_where('profiles', ['user_id' => $this->profile['id']]);
 			if ($info->num_rows() > 0) {
-				$request['info'] = $info->row_array();
+				$profile = $info->row_array();
+				$request['info'] = $profile;
+				$request['info']['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
 			}
 			// if (is_null($request['ip_address'])) {
 			$request['ip_address'] = $_SERVER['REMOTE_ADDR'];
 			$this->class->db->update('users', ['ip_address' => $request['ip_address']], ['id' => $this->profile['id']]);
 			// }
-			// debug($request);
+			// debug($request, 'stop');
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			$this->device_id = format_ip();

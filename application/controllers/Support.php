@@ -1,11 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends MY_Controller {
+class Support extends MY_Controller {
 
 	public $allowed_methods = [];
 
 	public function index()
+	{
+		$this->help_center();
+	}
+
+	public function help_center()
 	{
 		$view = [
 			'top' => [
@@ -14,19 +19,19 @@ class Dashboard extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Help Center"',
+					'property="og:description" content="Gulaymart | Help Center"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Help Center"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Help Center',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
 			'middle' => [
-				'body_class' => ['logged-in', 'dashboard'],
+				'body_class' => ['logged-in', 'support', 'help-center'],
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [

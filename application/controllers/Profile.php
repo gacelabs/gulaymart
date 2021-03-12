@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Account extends MY_Controller {
+class Profile extends MY_Controller {
 
 	public $allowed_methods = [];
 
@@ -32,15 +32,16 @@ class Account extends MY_Controller {
 				],
 				'index_page' => 'no',
 				'page_title' => 'Gulaymart | Sign Up for FREE!',
-				'css' => ['global', 'register', 'rwd'],
+				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
 			'middle' => [
-				'body_class' => ['register'],
+				'body_class' => ['logged-in', 'profile'],
 				/* found in views/templates */
-				'head' => [],
+				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'account/register'
+					'dashboard/panel_left',
+					'dashboard/panel_right'
 				],
 				'footer' => [],
 				/* found in views/templates */
