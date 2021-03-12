@@ -5,6 +5,12 @@ class Farm extends MY_Controller {
 
 	public $allowed_methods = [];
 
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('products');
+	}
+
 	public function index()
 	{
 		$this->new_veggy();
@@ -12,46 +18,55 @@ class Farm extends MY_Controller {
 
 	public function new_veggy()
 	{
-		$view = [
-			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+		$post = $this->input->post();
+		if ($post) {
+			$message = '';
+			if (check_data_values($post)) {
+				debug($post, $this->products, 'stop');
+				# code...
+				$this->set_response('success', 'New Veggie Added', $post, 'farm');
+			}
+		} else {
+			$view = [
+				'top' => [
+					'metas' => [
+						// facebook opengraph
+						'property="fb:app_id" content="xxx"',
+						'property="og:type" content="article"',
+						'property="og:url" content="xxx"',
+						'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
+						'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
+						'property="og:image" content="xxx"',
+						// SEO generics
+						'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
+					],
+					'index_page' => 'no',
+					'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
+					'css' => ['global', 'logged-in', 'rwd'],
+					'js' => [],
 				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
-				'css' => ['global', 'logged-in', 'rwd'],
-				'js' => [],
-			],
-			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'new-veggy'],
-				/* found in views/templates */
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/panel_left',
-					'dashboard/panel_right'
+				'middle' => [
+					'body_class' => ['logged-in', 'farm', 'new-veggy'],
+					/* found in views/templates */
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/panel_left',
+						'farm/panel_right'
+					],
+					'footer' => [],
+					/* found in views/templates */
 				],
-				'footer' => [],
-				/* found in views/templates */
-			],
-			'bottom' => [
-				'modals' => ['login_modal'],
-				'css' => [],
-				'js' => ['main'],
-			],
-		];
-		$data = [
-			'is_login' => 0
-		];
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+				'bottom' => [
+					'modals' => ['login_modal'],
+					'css' => [],
+					'js' => ['main'],
+				],
+			];
+			$data = [
+				'is_login' => 0
+			];
+			$this->load->view('main', ['view' => $view, 'data' => $data]);
+		}
 	}
 
 	public function storefront()
@@ -63,14 +78,14 @@ class Farm extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
@@ -80,7 +95,7 @@ class Farm extends MY_Controller {
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/panel_left',
-					'dashboard/panel_right'
+					'farm/panel_right'
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -107,14 +122,14 @@ class Farm extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
@@ -124,7 +139,7 @@ class Farm extends MY_Controller {
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/panel_left',
-					'dashboard/panel_right'
+					'farm/panel_right'
 				],
 				'footer' => [],
 				/* found in views/templates */

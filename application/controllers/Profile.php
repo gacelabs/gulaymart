@@ -7,12 +7,7 @@ class Profile extends MY_Controller {
 
 	public function __construct()
 	{
-		$actions = explode('/', trim($_SERVER['REDIRECT_URL'], '/'));
-		$this->action = str_replace(['/', '-'], ['', '_'], end($actions));
 		parent::__construct();
-		$this->load->library('smtpemail');
-		if (!$this->accounts->has_session) $this->class_name = '';
-		// debug(get_class_methods(__CLASS__));
 	}
 
 	public function index($id=false)

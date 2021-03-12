@@ -5,6 +5,11 @@ class Dashboard extends MY_Controller {
 
 	public $allowed_methods = [];
 
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	public function index()
 	{
 		$view = [
@@ -14,14 +19,14 @@ class Dashboard extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Dashboard"',
+					'property="og:description" content="Gulaymart | Dashboard"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Dashboard"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Dashboard',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],

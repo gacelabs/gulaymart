@@ -3,18 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Authenticate extends MY_Controller {
 
-	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover'];
+	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover', 'drop'];
 
 	public function __construct()
 	{
-		$actions = explode('/', trim($_SERVER['REDIRECT_URL'], '/'));
-		$this->action = str_replace(['/', '-'], ['', '_'], end($actions));
 		parent::__construct();
-		$this->load->library('smtpemail');
-		if (!$this->accounts->has_session) $this->class_name = '';
 	}
 
-	public function index($id=false)
+	public function index($value=false)
 	{
 		redirect(base_url('/'));
 	}
@@ -23,16 +19,19 @@ class Authenticate extends MY_Controller {
 	{
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		// debug($post);
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-		if (empty($referrer)) $referrer = 'dashboard';
-		// debug($referrer);
-		$is_ok = $this->accounts->login($post, $referrer);
-		// debug($is_ok);
+		$is_ok = $this->accounts->login($post);
+		// debug($post, $this->accounts->profile, $is_ok, 'stop');
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		if ($this->accounts->has_session) {
-			$to = 'dashboard?error=You are already signed in!';
+			if ($this->accounts->profile['fullname'] == '') {
+				$to = 'profile?error=Finish your Profile!';
+			} elseif (!empty($referrer)) {
+				$to = $referrer;
+			} else {
+				$to = 'dashboard?error=You are already signed in!';
+			}
 		}
 		redirect(base_url($to));
 	}
@@ -235,5 +234,14 @@ class Authenticate extends MY_Controller {
 		$to = 'dashboard';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
+	}
+
+	public function drop()
+	{
+		// debug(DROP_ALL_TABLE, 'stop');
+		if (DROP_ALL_TABLE) {
+			$this->gm_db->drop_tables();
+		}
+		echo "Tables dropped";
 	}
 }

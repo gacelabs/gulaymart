@@ -20,7 +20,7 @@ $(document).ready(function() {
 		$('.reset-detail').addClass('hide');
 	});
 
-	$('form:not(.use-ajax)').on('submit', function(e) {
+	$('form:not([data-ajax])').on('submit', function(e) {
 		var uiButtonSubmit = $(e.target).find('[type=submit]');
 		if (uiButtonSubmit.length && $(e.target).find('.error').length == 0) {
 			uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');

@@ -13,6 +13,11 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->class_name = trim($this->router->class);
+		$this->action = trim($this->router->method);
+		// $this->load->library('controllerlist');
+		// $controllerlist = $this->controllerlist->getControllers();
+		// debug($this->action, 'stop');
 		/*
 		see allowed methods to this class and set the variables no_entry_for_signed_out, 
 		ajax_no_entry_for_signed_out to false to allow entry
@@ -27,8 +32,8 @@ class MY_Controller extends CI_Controller {
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/
 
 		// debug($this);
-		$this->class_name = trim(strtolower(get_called_class()));
 		$this->load->library('accounts');
+		$this->load->library('smtpemail');
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		
@@ -40,7 +45,7 @@ class MY_Controller extends CI_Controller {
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
-				echo json_encode(['type'=>'error', 'message'=>"Session has been expired!"]); exit();
+				echo do_jsonp_callback('ajaxSuccessResponse', ['type'=>'error', 'message'=>"Session has been expired!", 'redirect'=>'/']); exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/
 			if (!$this->input->is_ajax_request() AND $this->no_entry_for_signed_out) {
@@ -49,10 +54,16 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function set_response($type='error', $message='Error occured!', $data=[], $jscallback='alertBox')
+	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false)
 	{
 		if ($this->input->is_ajax_request()) {
-			echo json_encode(['type'=>$type, 'message'=>$message, 'data'=>$data]); exit();
+			echo do_jsonp_callback('ajaxSuccessResponse', [
+				'type' => $type,
+				'message' => $message,
+				'data' => $data,
+				'redirect' => $redirect_url,
+				'callback' => $callback,
+			]); exit();
 		} else {
 			redirect(base_url($this->class_name.'?'.$type.'='.$message));
 		}

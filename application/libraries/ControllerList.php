@@ -119,22 +119,15 @@ class ControllerList {
 	/**
 	 * Set the array holding the controller name and methods
 	 */
-	public function setControllerMethods($p_sControllerName, $p_aControllerMethods, $p_aControllerSorts) {
-		$this->aControllers[$p_aControllerSorts][$p_sControllerName]['methods'] = $p_aControllerMethods;
+	public function setControllerMethods($p_sControllerName, $p_aControllerMethods) {
+		$this->aControllers[$p_sControllerName]['methods'] = $p_aControllerMethods;
 	}
 
 	/**
 	 * Set the array holding the controller name and variables
 	 */
-	public function setControllerVars($p_sControllerName, $p_aControllerVars, $p_aControllerSorts) {
-		$this->aControllers[$p_aControllerSorts][$p_sControllerName]['variables'] = $p_aControllerVars;
-	}
-
-	/**
-	 * Set the array holding the controller name and variables
-	 */
-	public function setControllerSorts($p_sControllerName, $p_aControllerSorts) {
-		$this->aControllers[$p_sControllerName]['sorts'] = $p_aControllerSorts;
+	public function setControllerVars($p_sControllerName, $p_aControllerVars) {
+		$this->aControllers[$p_sControllerName]['variables'] = $p_aControllerVars;
 	}
 
 	/**
@@ -168,20 +161,16 @@ class ControllerList {
 					}
 					$aVars = get_class_vars($subdircontrollername);
 					$aUserVars = array();
-					$aUserSorts = 0;
 					if (is_array($aVars)) {
 						foreach ($aVars as $index => $var) {
 							if (!in_array($index, ['allowed_methods', 'menus'])) {
 								$aUserVars[$index] = $var;
 							}
-							if ($index == 'sort') {
-								$aUserSorts = $var;
-							}
 						}
 					}
 
-					$this->setControllerMethods($subdircontrollername, ($aUserMethods ?: false), $aUserSorts);
-					$this->setControllerVars($controllername, $aUserVars, $aUserSorts);
+					$this->setControllerMethods($subdircontrollername, ($aUserMethods ?: false));
+					$this->setControllerVars($controllername, $aUserVars);
 				}
 			} else if (pathinfo($controller, PATHINFO_EXTENSION) == "php") {
 				// value is no directory get controller name                
@@ -204,20 +193,16 @@ class ControllerList {
 				}
 				$aVars = get_class_vars($controllername);
 				$aUserVars = array();
-				$aUserSorts = 0;
 				if (is_array($aVars)) {
 					foreach ($aVars as $index => $var) {
 						if (!in_array($index, ['allowed_methods', 'menus'])) {
 							$aUserVars[$index] = $var;
 						}
-						if ($index == 'sort') {
-							$aUserSorts = $var;
-						}
 					}
 				}
 
-				$this->setControllerMethods($controllername, ($aUserMethods ?: false), $aUserSorts);
-				$this->setControllerVars($controllername, $aUserVars, $aUserSorts);
+				$this->setControllerMethods($controllername, ($aUserMethods ?: false));
+				$this->setControllerVars($controllername, $aUserVars);
 			}
 		}   
 	}

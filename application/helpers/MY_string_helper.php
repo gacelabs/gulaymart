@@ -5,65 +5,65 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
-		if ($data == 'stop') break;
-		$trace = debug_backtrace();
-		try {
-			// print_r($data);
-			if (!empty($trace)) {
-				foreach ($trace as $key => $row) {
-					$separator = '------';
-					for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
-					
-					if ($key == 0) {
-						echo ($key==0?'<h1 style="margin:0;">DEBUGGER</h1>':'').$separator."<br /><b>PATH:</b> ".$row['file'];
-						echo "<br /><b>LINE:</b> ".$row['line']."<br />";
-					
-					// if ($key == 0) {
-						if (is_bool($data)) {
-							echo "<b>DATA TYPE:</b> BOOLEAN<br />";
-							if ($data) {
-								echo "<b>DATA:</b> TRUE<br />";
-							} else {
-								echo "<b>DATA:</b> FALSE<br />";
-							}
-						} else {
-							if (is_object($data) OR is_null($data)) echo "<b>DATA TYPE:</b> OBJECT<br />";
-							if (is_array($data)) echo "<b>DATA TYPE:</b> ARRAY<br />";
-							if (is_numeric($data)) {
-								echo "<b>DATA TYPE:</b> NUMBER<br />";
-							} elseif (is_string($data)) {
-								echo "<b>DATA TYPE:</b> STRING<br />";
-							}
-							if (empty($data) AND $data != 0) {
-								if (is_object($data) OR is_null($data)) echo "<b>DATA:</b> NULL<br />";
-								if (is_array($data)) echo "<b>DATA:</b> EMPTY<br />";
-								if (is_string($data)) echo "<b>DATA:</b> BLANK<br />";
-							} else {
-								echo "<b>DATA:</b> ";
-								if (is_null($data)) {
-									var_dump($data);
-								} else if (is_string($data)) {
-									echo '<code>';
-									print_r($data);
-									echo '</code>';
+		if ($data !== 'stop') {
+			$trace = debug_backtrace();
+			try {
+				if (!empty($trace)) {
+					foreach ($trace as $key => $row) {
+						$separator = '------';
+						for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
+						
+						if ($key == 0) {
+							echo ($key==0?'<h1 style="margin:0;">DEBUGGER</h1>':'').$separator."<br /><b>PATH:</b> ".$row['file'];
+							echo "<br /><b>LINE:</b> ".$row['line']."<br />";
+						
+						// if ($key == 0) {
+							if (is_bool($data)) {
+								echo "<b>DATA TYPE:</b> BOOLEAN<br />";
+								if ($data) {
+									echo "<b>DATA:</b> TRUE<br />";
 								} else {
-									print_r($data);
+									echo "<b>DATA:</b> FALSE<br />";
 								}
-								echo "<br />";
+							} else {
+								if (is_object($data) OR is_null($data)) echo "<b>DATA TYPE:</b> OBJECT<br />";
+								if (is_array($data)) echo "<b>DATA TYPE:</b> ARRAY<br />";
+								if (is_numeric($data)) {
+									echo "<b>DATA TYPE:</b> NUMBER<br />";
+								} elseif (is_string($data)) {
+									echo "<b>DATA TYPE:</b> STRING<br />";
+								}
+								if (empty($data) AND $data != 0) {
+									if (is_object($data) OR is_null($data)) echo "<b>DATA:</b> NULL<br />";
+									if (is_array($data)) echo "<b>DATA:</b> EMPTY<br />";
+									if (is_string($data)) echo "<b>DATA:</b> BLANK<br />";
+								} else {
+									echo "<b>DATA:</b> ";
+									if (is_null($data)) {
+										var_dump($data);
+									} else if (is_string($data)) {
+										echo '<code>';
+										print_r($data);
+										echo '</code>';
+									} else {
+										print_r($data);
+									}
+									echo "<br />";
+								}
 							}
 						}
 					}
+				} else {
+					echo "<b>DATA:</b> NULL<br />";
 				}
-			} else {
-				echo "<b>DATA:</b> NULL<br />";
-			}
-		} catch (Exception $e) {
-			foreach ($trace as $key => $row) {
-				$separator = '------';
-				for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
-					echo '<h1 style="margin:0;">DEBUGGER</h1>'.$separator."<br /><b>PATH:</b> ".$row['file'];
-				echo "<br /><b>LINE:</b> ".$row['line']."<br />";
-				echo "<b>DATA:</b> ".$e->getMessage()."<br />";
+			} catch (Exception $e) {
+				foreach ($trace as $key => $row) {
+					$separator = '------';
+					for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
+						echo '<h1 style="margin:0;">DEBUGGER</h1>'.$separator."<br /><b>PATH:</b> ".$row['file'];
+					echo "<br /><b>LINE:</b> ".$row['line']."<br />";
+					echo "<b>DATA:</b> ".$e->getMessage()."<br />";
+				}
 			}
 		}
 	}
@@ -328,7 +328,7 @@ function construct_where($id_post_id=FALSE, $table_or_alias='') {
 
 function fix_title($title=FALSE, $replace=' ') {
 	if ($title) {
-		return preg_replace('/[-]/', $replace, $title);
+		return ucwords(preg_replace('/[_]/', $replace, $title));
 	}
 	return '';
 }
@@ -952,25 +952,41 @@ function unique_random_numbers($min, $max, $quantity) {
 
 function check_data_values($data=false, $is_equal_to='') {
 	/*method on checking blank values in a post or get*/
-	$has_values = false;
+	$has_values = false; $length = 0;
 	if ($data) {
 		/*check if $data has values*/
 		if (is_array($data)) {
 			$values = [];
 			foreach ($data as $key => $value) {
-				if (!is_bool($value) AND strlen(trim($value)) > 0) {
-					if ($is_equal_to != '') {
-						$values[] = $value === $is_equal_to;
-					} else {
-						$values[] = true;
+				if (is_array($value)) {
+					foreach ($value as $index => $val) {
+						++$length;
+						if (!is_bool($val) AND strlen(trim($val)) > 0) {
+							if ($is_equal_to != '') {
+								$values[] = $val === $is_equal_to;
+							} else {
+								$values[] = true;
+							}
+						} elseif (is_bool($val)) {
+							$values[] = $val;
+						}
 					}
-				} elseif (is_bool($value)) {
-					$values[] = $value;
+				} else {
+					++$length;
+					if (!is_bool($value) AND strlen(trim($value)) > 0) {
+						if ($is_equal_to != '') {
+							$values[] = $value === $is_equal_to;
+						} else {
+							$values[] = true;
+						}
+					} elseif (is_bool($value)) {
+						$values[] = $value;
+					}
 				}
 			}
 			// debug($data); debug(in_array(false, $values)); debug($values, 1);
 			/*if false do not exist then it's true*/
-			if (!empty($values)) {
+			if (!empty($values) AND count($values) === $length) {
 				$has_values = (in_array(false, $values) == false) ? true : false;
 			}
 		} else {
@@ -985,7 +1001,7 @@ function check_data_values($data=false, $is_equal_to='') {
 			}
 		}
 	}
-	// debug($has_values, 1);
+	// debug($has_values, $length, 'stop');
 	return $has_values;
 }
 

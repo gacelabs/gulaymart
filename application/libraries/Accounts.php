@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Accounts {
 
-	private $class = FALSE; 
+	protected $class = FALSE; 
 	public $has_session = FALSE; 
 	public $profile = FALSE;
 	public $device_id = FALSE;
@@ -16,8 +16,20 @@ class Accounts {
 			$is_created = $this->create_users_table();
 			if (empty($is_created)) {
 				throw new Exception("Table Users not created!", 403);
-			} else {
-				$this->create_profiles_table();
+			}
+		}
+		if (!$this->class->db->table_exists('user_farms')) {
+			/*create table for the first time*/
+			$is_created = $this->create_user_farms_table();
+			if (empty($is_created)) {
+				throw new Exception("Table user_farms not created!", 403);
+			}
+		}
+		if (!$this->class->db->table_exists('user_settings')) {
+			/*create table for the first time*/
+			$is_created = $this->create_user_settings_table();
+			if (empty($is_created)) {
+				throw new Exception("Table user_Settings not created!", 403);
 			}
 		}
 		if (!$this->class->db->table_exists('galleries')) {
@@ -31,7 +43,14 @@ class Accounts {
 			/*create table for the first time*/
 			$is_created = $this->create_email_session_table();
 			if (empty($is_created)) {
-				throw new Exception("Table Email_Session not created!", 403);
+				throw new Exception("Table Email Session not created!", 403);
+			}
+		}
+		if (!$this->class->db->table_exists('user_locations')) {
+			/*create table for the first time*/
+			$is_created = $this->create_user_locations_table();
+			if (empty($is_created)) {
+				throw new Exception("Table User Locations not created!", 403);
 			}
 		}
 		$this->has_session = $this->class->session->userdata('profile') ? TRUE : FALSE;
@@ -135,11 +154,9 @@ class Accounts {
 
 	public function login($credits=FALSE, $redirect_url='', $table='users')
 	{
-		// debug($credits);
-		if ($credits != FALSE AND is_array($credits) AND $this->has_session == FALSE) {
+		if ($credits != FALSE AND is_array($credits)) {
 			/*user is logging in*/
 			$return = $this->check_credits($credits, $table, __FUNCTION__);
-			// debug($return);
 			if (isset($return['allowed']) AND $return['allowed']) {
 				unset($return['profile']['password']);
 				unset($return['profile']['re_password']);
@@ -199,18 +216,13 @@ class Accounts {
 			unset($request['password']);
 			unset($request['re_password']);
 
-			$request['info'] = $this->assemble_table_fields('profiles');
-			$request['info']['fullname'] = 'No Name';
-			$info = $this->class->db->get_where('profiles', ['user_id' => $this->profile['id']]);
-			if ($info->num_rows() > 0) {
-				$profile = $info->row_array();
-				$request['info'] = $profile;
-				$request['info']['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
+			// $request['farms'] = $this->assemble_table_fields('user_farms');
+			$request['fullname'] = trim($request['firstname'].' '.$request['lastname']);
+			$request['farms'] = [];
+			$farms = $this->class->db->get_where('user_farms', ['user_id' => $this->profile['id']]);
+			if ($farms->num_rows() > 0) {
+				$request['farms'] = $farms->result_array();
 			}
-			// if (is_null($request['ip_address'])) {
-			$request['ip_address'] = $_SERVER['REMOTE_ADDR'];
-			$this->class->db->update('users', ['ip_address' => $request['ip_address']], ['id' => $this->profile['id']]);
-			// }
 			// debug($request, 'stop');
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
@@ -232,7 +244,7 @@ class Accounts {
 			// debug($field_data);
 			return $field_data;
 		}
-		throw new Exception("Add profiles table in DB");	
+		throw new Exception("Add user_farms table in DB");	
 	}
 
 	private function create_users_table()
@@ -249,6 +261,8 @@ class Accounts {
 				'constraint' => '100',
 				'null' => TRUE,
 			],
+			'firstname tinytext',
+			'lastname tinytext',
 			'email_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
@@ -270,11 +284,6 @@ class Accounts {
 				'null' => TRUE,
 				'default' => '0',
 			],
-			'ip_address' => [
-				'type' => 'VARCHAR',
-				'constraint' => '50',
-				'null' => TRUE,
-			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -286,7 +295,7 @@ class Accounts {
 		return $table_data;
 	}
 
-	private function create_profiles_table()
+	private function create_user_farms_table()
 	{
 		$this->class->load->dbforge();
 		$this->class->dbforge->add_field([
@@ -299,22 +308,49 @@ class Accounts {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'firstname' => [
-				'type' => 'VARCHAR',
-				'constraint' => '20',
-				'null' => TRUE,
-			],
-			'lastname' => [
+			'farm_name text',
+			'address longtext',
+			"country_code varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''",
+			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
 				'null' => TRUE,
 			],
-			"gender enum('Male','Female','Others') DEFAULT NULL",
-			"country_code varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''",
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('profiles', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_farms', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	private function create_user_settings_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
+			'setting' => [
+				'type' => 'VARCHAR',
+				'constraint' => '20',
+				'null' => TRUE,
+			],
+			'value' => ['type' => 'longtext'],
+		]);
+		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('user_settings', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -382,6 +418,30 @@ class Accounts {
 		$this->class->dbforge->add_key('id', TRUE);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('email_session', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	private function create_user_locations_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
+			'farm_id int DEFAULT NULL',
+			'lat varchar(100) DEFAULT NULL',
+			'lng varchar(100) DEFAULT NULL',
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('user_locations', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

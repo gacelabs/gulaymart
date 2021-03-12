@@ -114,4 +114,19 @@ class MY_Model extends CI_Model {
 		}
 		return FALSE;
 	}
+
+	public function drop_tables()
+	{
+		$tables = $this->db->query("SHOW TABLES");
+		if ($tables->num_rows()) {
+			$tables = $tables->result_array();
+			// debug($tables, 'stop');
+			foreach ($tables as $key => $table) {
+				if (isset($table['Tables_in_gulay_mart_db']) AND $this->db->table_exists($table['Tables_in_gulay_mart_db'])) {
+					$this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_gulay_mart_db']);
+				}
+			}
+		}
+		return;
+	}
 }

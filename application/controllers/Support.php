@@ -5,6 +5,11 @@ class Support extends MY_Controller {
 
 	public $allowed_methods = [];
 
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	public function index()
 	{
 		$this->help_center();

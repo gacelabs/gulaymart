@@ -34,6 +34,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
 					}
+					form.reset();
 				}
 			};
 
@@ -79,6 +80,31 @@ var oSimpleAjax = false, simpleAjax = function(url, data) {
 		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4) oSimpleAjax.abort();
 		oSimpleAjax = $.ajax(oSettings);
 	}
+}
+
+var ajaxSuccessResponse = function(response) {
+	console.log(response);
+	if (response && response.type) {
+		switch (response.type.toLowerCase()) {
+			case 'success':
+				alert('Success Alert: ' + response.message);
+			break;
+			case 'error':
+				alert('Error Alert: ' + response.message);
+			break;
+		}
+	}
+	if (response && (typeof response.callback == 'string')) {
+		var fn = eval(response.callback);
+		if (typeof fn == 'function') {
+			fn(response.data);
+		}
+	}
+	setTimeout(function() {
+		if (response && (typeof response.redirect == 'string')) {
+			if (response.redirect) window.location = response.redirect;
+		}
+	}, 1500);
 }
 
 window.mobileAndTabletCheck = function() {

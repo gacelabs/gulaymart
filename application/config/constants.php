@@ -93,3 +93,5 @@ defined('APP_NAME') OR define('APP_NAME', 'Gulay Market');
 defined('APP_VERSION') OR define('APP_VERSION', '1.0');
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
+
+defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);

@@ -38,7 +38,7 @@ $(document).ready(function() {
 				if ($(form).data('ajax')) {
 					e.preventDefault();
 					var isFileExists = $(form).find('input:file').length > 0 ? $(form).find('input:file') : false;
-					doAjax(form, isFileExists);
+					formAjax(form, isFileExists);
 				} else {
 					form.submit();
 				}

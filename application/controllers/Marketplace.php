@@ -5,6 +5,11 @@ class Marketplace extends MY_Controller {
 
 	public $allowed_methods = 'all';
 
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	public function index()
 	{
 		$view = [

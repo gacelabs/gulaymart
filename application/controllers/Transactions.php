@@ -5,6 +5,11 @@ class Transactions extends MY_Controller {
 
 	public $allowed_methods = [];
 
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	public function index()
 	{
 		$this->orders();
@@ -19,14 +24,14 @@ class Transactions extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Transactions » '.fix_title(__FUNCTION__).'',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
@@ -63,14 +68,14 @@ class Transactions extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Transactions » '.fix_title(__FUNCTION__).'',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
@@ -107,14 +112,14 @@ class Transactions extends MY_Controller {
 					'property="fb:app_id" content="xxx"',
 					'property="og:type" content="article"',
 					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Profile"',
-					'property="og:description" content="Gulaymart | Profile"',
+					'property="og:title" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
 					'property="og:image" content="xxx"',
 					// SEO generics
-					'name="description" content="Gulaymart | Profile"'
+					'name="description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"'
 				],
 				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Profile',
+				'page_title' => 'Gulaymart | Transactions » '.fix_title(__FUNCTION__).'',
 				'css' => ['global', 'logged-in', 'rwd'],
 				'js' => [],
 			],
