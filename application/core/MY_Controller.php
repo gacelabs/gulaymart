@@ -8,6 +8,8 @@ class MY_Controller extends CI_Controller {
 	public $no_entry_for_signed_out = TRUE;
 	public $ajax_no_entry_for_signed_out = TRUE;
 	public $profile = FALSE;
+	public $farms = FALSE;
+	public $categories = FALSE;
 	public $action = 'index';
 
 	public function __construct()
@@ -36,6 +38,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('smtpemail');
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
+		$this->set_global_values();
 		
 		/*check account logins here*/
 		if ($this->accounts->has_session) {
@@ -94,5 +97,18 @@ class MY_Controller extends CI_Controller {
 			}
 		}
 		$this->session->set_userdata('valid_fields', $defaults);
+	}
+
+	public function set_global_values()
+	{
+		$request = [];
+		$farms = $this->gm_db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
+		if ($farms) {
+			$this->farms = $farms;
+		}
+		$categories = $this->gm_db->get('products_category');
+		if ($categories) {
+			$this->categories = $categories;
+		}
 	}
 }

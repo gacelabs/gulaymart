@@ -25,17 +25,16 @@
 								<input type="number" name="products[stocks]" placeholder="Stocks" required="required" value="<?php echo $data['product']['stocks'];?>">
 								<select name="products[category_id]" required="required">
 									<option value="">Category</option>
-									<?php if ($current_profile['categories']): ?>
-										<?php foreach ($current_profile['categories'] as $key => $category): ?>
+									<?php if ($this->categories): ?>
+										<?php foreach ($this->categories as $key => $category): ?>
 											<option value="<?php echo $category['id'];?>"<?php in_array_echo($data['product']['category_id'], [$category['id']], ' selected');?>><?php echo $category['label'];?></option>
 										<?php endforeach ?>
 									<?php endif ?>
-									<option value="1">Hydrophonic</option>
 								</select>
 								<label>Farm</label>
 								<select name="products[location_id]" required="required">
-									<?php if ($current_profile['farms']): ?>
-										<?php foreach ($current_profile['farms'] as $key => $farm): ?>
+									<?php if ($this->farms): ?>
+										<?php foreach ($this->farms as $key => $farm): ?>
 											<option value="<?php echo $farm['location_id'];?>"<?php in_array_echo($data['product']['location_id'], [$farm['location_id']], ' selected');?>><?php echo $farm['farm_name'];?></option>
 										<?php endforeach ?>
 									<?php endif ?>
