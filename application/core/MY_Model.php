@@ -91,12 +91,34 @@ class MY_Model extends CI_Model {
 				$set = (array)$set;
 				$set['version'] = $data ? (int)$data['version'] + 1 : 1;
 			}
-			// $set['last_updated'] = date('Y-m-d H:i:s');
 			$this->db->update($table, $set, $where);
 			if ($redirect_url != '') {
 				redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 			} else {
-				return $this->db->insert_id();
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	public function save_batch($table=FALSE, $set=FALSE, $where=FALSE, $redirect_url='')
+	{
+		if ($table AND $set AND $where) {
+			if ($this->db->field_exists('version', $table)) {
+				$data = $this->get($table, $where, 'result', 'version');
+				foreach ($data as $key => $row) {
+					if (isset($set[$key])) {
+						$set[$key] = (array)$set[$key];
+						$set[$key]['version'] = $row ? (int)$row['version'] + 1 : 1;
+					}
+				}
+			}
+			// debug($set, 'stop');
+			$this->db->update_batch($table, $set, $where);
+			if ($redirect_url != '') {
+				redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+			} else {
+				return TRUE;
 			}
 		}
 		return FALSE;
@@ -109,7 +131,7 @@ class MY_Model extends CI_Model {
 			if ($redirect_url != '') {
 				redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 			} else {
-				return $this->db->affected_rows();
+				return TRUE;
 			}
 		}
 		return FALSE;

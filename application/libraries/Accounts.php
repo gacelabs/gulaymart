@@ -229,6 +229,7 @@ class Accounts {
 			// debug($request, 'stop');
 			$request['fullname'] = '';
 			// $request['farms'] = $this->assemble_table_fields('user_farms');
+			/*profiles*/
 			$profile = $this->class->gm_db->get('user_profiles', ['user_id' => $this->profile['id']], 'row');
 			if ($profile) {
 				$request['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
@@ -238,15 +239,31 @@ class Accounts {
 				}
 			}
 			$request['profile'] = $profile;
+
+			/*farms*/
 			$request['farms'] = [];
 			$farms = $this->class->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
 			if ($farms->num_rows() > 0) {
 				$request['farms'] = $farms->result_array();
 			}
+
+			/*categories*/
 			$categories = $this->class->gm_db->get('products_category');
+			$request['categories'] = [];
 			if ($categories) {
 				$request['categories'] = $categories;
 			}
+
+			/*settings*/
+			$settings = $this->class->gm_db->get('user_settings', ['user_id' => $this->profile['id']], 'result', 'setting, value');
+			$settings_data = [];
+			if ($settings) {
+				foreach ($settings as $key => $set) {
+					$settings_data[$set['setting']] = $set['value'];
+				}
+			}
+			$request['settings'] = $settings_data;
+
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			// $this->device_id = format_ip();
@@ -359,11 +376,6 @@ class Accounts {
 	{
 		$this->class->load->dbforge();
 		$this->class->dbforge->add_field([
-			'id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-				'auto_increment' => TRUE
-			],
 			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
@@ -374,8 +386,9 @@ class Accounts {
 				'null' => TRUE,
 			],
 			'value' => ['type' => 'longtext'],
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('user_settings', FALSE, [
 			'ENGINE' => 'InnoDB',

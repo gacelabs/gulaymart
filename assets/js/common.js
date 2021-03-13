@@ -88,7 +88,7 @@ var ajaxSuccessResponse = function(response) {
 	console.log(response);
 	var iConfirmed = true;
 	if (response && response.type) {
-		iConfirmed = runAlertBox(response, iConfirmed);
+		iConfirmed = runAlertBox(response, undefined, iConfirmed);
 	}
 	if (iConfirmed) {
 		if (response && (typeof response.callback == 'string')) {
@@ -101,7 +101,7 @@ var ajaxSuccessResponse = function(response) {
 			if (response && (typeof response.redirect == 'string')) {
 				if (response.redirect) window.location = response.redirect;
 			}
-		}, 300);
+		}, 1000);
 	}
 }
 
@@ -154,7 +154,7 @@ var runAlertBox = function(response, heading, iConfirmed) {
 				});
 			break;
 			case 'success':
-				if (heading == undefined) heading = 'Suucess';
+				if (heading == undefined) heading = 'Success';
 				$.toast({
 					heading: heading,
 					text: response.message,

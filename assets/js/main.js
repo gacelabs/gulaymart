@@ -26,6 +26,12 @@ $(document).ready(function() {
 			uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
 		}
 	});
+
+	$('form[data-ajax="2"]').find('input, select').each(function(i, elem) {
+		$(elem).bind('change', function(e) {
+			$(e.target).parents('form[data-ajax="2"]:first').trigger('submit');
+		});
+	});
 	var oPauseAjax = false;
 	$('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault();

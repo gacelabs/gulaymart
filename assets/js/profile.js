@@ -111,6 +111,10 @@ $(document).ready(function() {
 
 		infowindow.open(map, marker);
 	});
+
+	$('#search-place-btn').off('click').on('click', function() {
+		$('#search-place').trigger('changed');
+	});
 });
 
 function setDragEvent(marker, infowindow) {

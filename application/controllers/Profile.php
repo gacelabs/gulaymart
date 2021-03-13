@@ -46,6 +46,8 @@ class Profile extends MY_Controller {
 				'css' => [],
 				'js' => [
 					'main',
+					'jquery.inputmask.min',
+					'inputmask.binding',
 					'profile',
 					'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
 					'markerclustererplus.min'
