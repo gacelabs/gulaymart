@@ -44,7 +44,12 @@ class Profile extends MY_Controller {
 			'bottom' => [
 				'modals' => ['login_modal'],
 				'css' => [],
-				'js' => ['main'],
+				'js' => [
+					'main',
+					'profile',
+					'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
+					'markerclustererplus.min'
+				],
 			],
 		];
 		$data = [

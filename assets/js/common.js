@@ -13,7 +13,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				type: form.method,
 				dataType: 'jsonp',
 				// timeout: 1000,
-				jsonpCallback: 'echo',
+				// jsonpCallback: 'echo',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
 					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
@@ -34,7 +34,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
 					}
-					if (window.location.pathname.indexOf('/edit/') < 0) {
+					if (window.location.pathname.indexOf('new') >= 0) {
 						form.reset();
 					}
 				}
@@ -88,17 +88,7 @@ var ajaxSuccessResponse = function(response) {
 	console.log(response);
 	var iConfirmed = true;
 	if (response && response.type) {
-		switch (response.type.toLowerCase()) {
-			case 'confirm':
-				iConfirmed = confirm('Confirm Alert: ' + response.message);
-			break;
-			case 'success':
-				alert('Success Alert: ' + response.message);
-			break;
-			case 'error':
-				alert('Error Alert: ' + response.message);
-			break;
-		}
+		iConfirmed = runAlertBox(response, iConfirmed);
 	}
 	if (iConfirmed) {
 		if (response && (typeof response.callback == 'string')) {
@@ -124,3 +114,104 @@ window.mobileAndTabletCheck = function() {
 String.prototype.isEmpty = function() {
 	return (this.length === 0 || !this.trim());
 };
+
+var runAlertBox = function(response, heading, iConfirmed) {
+	if (typeof response == 'object') {
+		switch (response.type.toLowerCase()) {
+			case 'confirm':
+				if (heading == undefined) heading = 'Warning';
+				iConfirmed = false;
+				$.toast({
+					heading: heading,
+					text: response.message+'<br><br><button id="toast-ok">ok</button>&nbsp;&nbsp;<button id="toast-cancel">cancel</button>',
+					icon: 'warn',
+					loader: false,
+					stack: false,
+					position: 'top-center',
+					allowToastClose: false,
+					bgColor: 'darkorange',
+					textColor: 'white',
+					hideAfter: false,
+					beforeShow: function () {
+						$('#toast-ok').off('click').on('click', function(e) {
+							if (response && (typeof response.callback == 'string')) {
+								var fn = eval(response.callback);
+								if (typeof fn == 'function') {
+									fn(response.data);
+								}
+							}
+							setTimeout(function() {
+								$('.close-jq-toast-single:visible').trigger('click');
+								if (response && (typeof response.redirect == 'string')) {
+									if (response.redirect) window.location = response.redirect;
+								}
+							}, 300);
+						});
+						$('#toast-cancel').off('click').on('click', function(e) {
+							$('.close-jq-toast-single:visible').trigger('click');
+						});
+					},
+				});
+			break;
+			case 'success':
+				if (heading == undefined) heading = 'Suucess';
+				$.toast({
+					heading: heading,
+					text: response.message,
+					icon: 'success',
+					loader: true,
+					stack: false,
+					position: 'top-center',
+					allowToastClose: true,
+					bgColor: 'darkgreen',
+					textColor: 'white'
+				});
+			break;
+			case 'error':
+				if (heading == undefined) heading = 'Error';
+				$.toast({
+					heading: heading,
+					text: response.message,
+					icon: 'error',
+					loader: false,
+					stack: false,
+					position: 'top-center',
+					allowToastClose: true,
+					bgColor: 'red',
+					textColor: 'white',
+					hideAfter: false
+				});
+			break;
+			case 'info':
+				if (heading == undefined) heading = 'Information';
+				$.toast({
+					heading: heading,
+					text: response.message,
+					icon: 'info',
+					loader: false,
+					stack: false,
+					position: 'top-center',
+					allowToastClose: true,
+					bgColor: 'blue',
+					textColor: 'white'
+				});
+			break;
+		}
+	} else {
+		iConfirmed = false;
+		$.toast({
+			heading: 'Error Encountered!',
+			text: 'Cannot process the request, try again please.',
+			icon: 'error',
+			loader: false,
+			stack: false,
+			position: 'top-center',
+			allowToastClose: true,
+			bgColor: 'red',
+			textColor: 'white',
+			hideAfter: false
+		});
+		console.error('response argument is not an object!');
+	}
+	return iConfirmed;
+}

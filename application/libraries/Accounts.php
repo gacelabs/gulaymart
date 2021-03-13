@@ -53,6 +53,13 @@ class Accounts {
 				throw new Exception("Table User Locations not created!", 403);
 			}
 		}
+		if (!$this->class->db->table_exists('user_profiles')) {
+			/*create table for the first time*/
+			$is_created = $this->create_user_profiles_table();
+			if (empty($is_created)) {
+				throw new Exception("Table User Profiles not created!", 403);
+			}
+		}
 		$this->has_session = $this->class->session->userdata('profile') ? TRUE : FALSE;
 		$this->profile = $this->class->session->userdata('profile');
 	}
@@ -205,7 +212,12 @@ class Accounts {
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
 		// $this->class->pushthru->trigger('logout-profile', 'browser-'.$this->device_id.'-sessions-logout', $profile);
-		redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+		// redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+		if (is_bool($redirect_url) AND $redirect_url == TRUE) {
+			return TRUE;
+		} else {
+			redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+		}
 	}
 
 	public function refetch()
@@ -213,11 +225,19 @@ class Accounts {
 		$user = $this->class->db->get_where('users', ['id' => $this->profile['id']]);
 		if ($user->num_rows()) {
 			$request = $user->row_array();
-			unset($request['password']);
-			unset($request['re_password']);
-
+			unset($request['password']); unset($request['re_password']);
+			// debug($request, 'stop');
+			$request['fullname'] = '';
 			// $request['farms'] = $this->assemble_table_fields('user_farms');
-			$request['fullname'] = trim($request['firstname'].' '.$request['lastname']);
+			$profile = $this->class->gm_db->get('user_profiles', ['user_id' => $this->profile['id']], 'row');
+			if ($profile) {
+				$request['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
+				$profile['latlng'] = '';
+				if (!empty($profile['lat']) AND !empty($profile['lng'])) {
+					$profile['latlng'] = json_encode(['lat' => (float)$profile['lat'], 'lng' => (float)$profile['lng']]);
+				}
+			}
+			$request['profile'] = $profile;
 			$request['farms'] = [];
 			$farms = $this->class->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
 			if ($farms->num_rows() > 0) {
@@ -229,9 +249,8 @@ class Accounts {
 			}
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
-			// debug($this->profile, 'stop');
 			// $this->device_id = format_ip();
-			// debug($this);
+			// debug($this->profile, 'stop');
 			return $this;
 		}
 		return FALSE;
@@ -265,8 +284,6 @@ class Accounts {
 				'constraint' => '100',
 				'null' => TRUE,
 			],
-			'firstname tinytext',
-			'lastname tinytext',
 			'email_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
@@ -288,10 +305,16 @@ class Accounts {
 				'null' => TRUE,
 				'default' => '0',
 			],
+			'is_profile_complete' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('fb_id');
 		$table_data = $this->class->dbforge->create_table('users', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -394,6 +417,7 @@ class Accounts {
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('galleries', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -420,7 +444,6 @@ class Accounts {
 			],
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
-		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('email_session', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -444,8 +467,39 @@ class Accounts {
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
-		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('farm_id');
 		$table_data = $this->class->dbforge->create_table('user_locations', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	private function create_user_profiles_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
+			"user_id INT NOT NULL DEFAULT '0'",
+			"firstname VARCHAR(50) NULL DEFAULT NULL",
+			"lastname VARCHAR(100) NULL DEFAULT NULL",
+			"birth_month VARCHAR(20) NULL DEFAULT NULL",
+			"birth_year VARCHAR(5) NULL DEFAULT NULL",
+			"phone VARCHAR(15) NULL DEFAULT NULL",
+			"lat VARCHAR(100) NULL DEFAULT NULL",
+			"lng VARCHAR(100) NULL DEFAULT NULL",
+			"address_1 VARCHAR(255) NULL DEFAULT NULL",
+			"address_2 VARCHAR(255) NULL DEFAULT NULL",
+			"added DATETIME NULL DEFAULT CURRENT_TIMESTAMP",
+			"updated DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+		]);
+		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('user_profiles', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

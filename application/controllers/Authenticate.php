@@ -21,11 +21,11 @@ class Authenticate extends MY_Controller {
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 		$is_ok = $this->accounts->login($post);
-		// debug($post, $this->accounts->profile, $is_ok, $referrer, 'stop');
 		$to = '/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
+		// debug($post, $this->accounts->profile, $is_ok, $referrer, 'stop');
 		if ($this->accounts->has_session) {
-			if ($this->accounts->profile['fullname'] == '') {
+			if ($this->accounts->profile['is_profile_complete'] == 0) {
 				$to = 'profile?error=Finish your Profile!';
 			} elseif (!empty($referrer)) {
 				$to = $referrer;
@@ -240,8 +240,11 @@ class Authenticate extends MY_Controller {
 	{
 		// debug(DROP_ALL_TABLE, 'stop');
 		if (DROP_ALL_TABLE) {
+			$this->accounts->logout(); /*this will redirect to default page */
 			$this->gm_db->drop_tables();
 		}
 		echo "Tables dropped";
+		sleep(5);
+		redirect(base_url('/'));
 	}
 }

@@ -5,7 +5,7 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
-		if ($data !== 'stop') {
+		if ($data !== 'stop' OR (is_bool($data) AND $data == true) OR (is_numeric($data) AND $data == 1)) {
 			$trace = debug_backtrace();
 			try {
 				if (!empty($trace)) {
@@ -68,7 +68,7 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	if (end($args) == 'stop') {
+	if (end($args) == 'stop' OR (is_bool(end($args)) AND end($args) == true) OR (is_numeric(end($args)) AND end($args) == 1)) {
 		exit();
 	}
 }

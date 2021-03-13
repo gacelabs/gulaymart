@@ -101,14 +101,19 @@ class MY_Controller extends CI_Controller {
 
 	public function set_global_values()
 	{
-		$request = [];
-		$farms = $this->gm_db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
-		if ($farms) {
-			$this->farms = $farms;
+		if ($this->db->table_exists('user_farms')) {
+			$request = [];
+			$farms = $this->gm_db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
+			if ($farms) {
+				$this->farms = $farms;
+			}
 		}
-		$categories = $this->gm_db->get('products_category');
-		if ($categories) {
-			$this->categories = $categories;
+
+		if ($this->db->table_exists('products_category')) {
+			$categories = $this->gm_db->get('products_category');
+			if ($categories) {
+				$this->categories = $categories;
+			}
 		}
 	}
 }

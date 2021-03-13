@@ -7,6 +7,7 @@
 						$this->view('looping/product_item', $product);
 					}
 				}
+				// debug($current_profile);
 			?>
 		</div>
 		<?php if ($data['products']): ?>
@@ -47,7 +48,7 @@
 				<a href="basket"><i class="fa fa-shopping-basket"></i></a>
 			</div>
 			
-			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="<?php echo $current_profile ? $current_profile['firstname'] : '';?>">
+			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="<?php echo $current_profile ? $current_profile['fullname'] : '';?>">
 				<a href="dashboard"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a>
 			</div>
 		</div>

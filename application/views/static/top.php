@@ -17,16 +17,25 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
 	<?php
 	if (count($top['css'])) {
 		foreach ($top['css'] as $value) {
-			echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
+			if ((bool)strstr($value, 'http')) {
+				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
+			} else {
+				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
+			}
 			echo "\r\n";
 		}
 	}
 	if (count($top['js'])) {
 		foreach ($js as $value) {
-			echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
+			if ((bool)strstr($value, 'http')) {
+				echo '<script type="text/javascript" src="'.$value.'"></script>';
+			} else {
+				echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
+			}
 			echo "\r\n";
 		}
 	}?>
