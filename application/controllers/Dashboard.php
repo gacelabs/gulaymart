@@ -42,13 +42,12 @@ class Dashboard extends MY_Controller {
 				/* found in views/templates */
 			],
 			'bottom' => [
-				'modals' => ['login_modal'],
+				'modals' => [],
 				'css' => [],
 				'js' => ['main'],
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);

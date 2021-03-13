@@ -56,7 +56,6 @@ class Marketplace extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0,
 			'products' => $this->products->get(true, 12),
 			'total' => $this->products->count()
 		];

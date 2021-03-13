@@ -26,7 +26,7 @@
 		?>
 
 		<?php
-			if ($data['is_login'] == 0) {
+			if (!$current_profile) {
 				$this->view('modals/login_modal');
 			}
 		?>

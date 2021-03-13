@@ -48,7 +48,6 @@ class Profile extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);

@@ -89,6 +89,10 @@ body.dashboard .left-affix-content {
 #dash_panel_right {
 	padding: 20px 5px;
 }
+.dash-panel-right-canvas {
+	clear: both;
+	position: relative;
+}
 .dash-panel-top {
 	padding: 15px !important;
 	margin-bottom: 15px !important;

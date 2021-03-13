@@ -39,9 +39,6 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 	height: 34px;
 	border-radius: 12px;
 }
-body.logged-in .left-affix-content {
-	margin-left: 16.66666667%;
-}
 #dash_panel_left {
 	height: calc(100vh - 15px);
 	overflow-y: auto;
@@ -75,9 +72,12 @@ body.logged-in .left-affix-content {
 	border-radius: 100%;
 }
 .aside-nav-item>a.active, .aside-nav-child>a.active {
-	background-color: #e2efc6;
+	background-color: #ccdea5;
 	color: inherit;
 	font-weight: bold;
+}
+.aside-nav-child>a.active {
+	background-color: #e2efc6;
 }
 .aside-nav-item>a.active i, .aside-nav-child>a.active i {
 	background-color: #799938;
@@ -91,7 +91,6 @@ body.logged-in .left-affix-content {
 }
 .dash-panel-top {
 	padding: 15px !important;
-	margin-bottom: 15px !important;
 	border-bottom: 1px solid rgb(0 0 0 / 15%) !important;
 }
 .dash-panel-top h3 {

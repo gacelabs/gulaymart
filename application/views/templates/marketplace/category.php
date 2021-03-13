@@ -24,51 +24,6 @@
 					</a>
 				</div>
 			<?php endforeach ?>
-			<!-- <div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner">
-					<img src="assets/images/root.png" />
-					<ul class="spaced-list between">
-						<li><p>Root</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div>
-			<div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner">
-					<img src="assets/images/cruciferous.png" />
-					<ul class="spaced-list between">
-						<li><p>Cruciferous</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div>
-			<div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner">
-					<img src="assets/images/marrow.png" />
-					<ul class="spaced-list between">
-						<li><p>Marrow</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div>
-			<div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner">
-					<img src="assets/images/plant-stem.png" />
-					<ul class="spaced-list between">
-						<li><p>Stem</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div>
-			<div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner">
-					<img src="assets/images/allium.png" />
-					<ul class="spaced-list between">
-						<li><p>Allium</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div> -->
 		</div>
 	</div>
 </div>
