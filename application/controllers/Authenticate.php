@@ -235,11 +235,11 @@ class Authenticate extends MY_Controller {
 	{
 		// debug(DROP_ALL_TABLE, 'stop');
 		if (DROP_ALL_TABLE) {
-			$this->accounts->logout(); /*this will redirect to default page */
+			$this->accounts->logout(true); /*this will redirect to default page */
 			$this->gm_db->drop_tables();
 		}
 		echo "Tables dropped";
-		sleep(5);
+		sleep(10);
 		redirect(base_url('/'));
 	}
 }
