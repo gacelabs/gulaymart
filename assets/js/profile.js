@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 	if ($.trim($('#latlng').val()).length) {
 		hasLatlong = true;
-		var oLatLong = JSON.parse($.trim($('#latlng').val()));
+		oLatLong = JSON.parse($.trim($('#latlng').val()));
 	}
 	savedLatLng = oLatLong;
 
@@ -75,14 +75,14 @@ $(document).ready(function() {
 		}
 		timeout = setTimeout(function() {
 			$('#reset-to-prev-btn').trigger('click');
-		}, 3000);
+		}, 12000);
 	}).on('touchmove', function() {
 		if (timeout !== null) {
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function() {
 			$('#reset-to-prev-btn').trigger('click');
-		}, 3000);
+		}, 12000);
 	});
 
 	$('#reset-to-prev-btn').off('click').on('click', function() {
@@ -150,4 +150,13 @@ function fnDragEnd(marker) {
 			$('#address_1').val(savedAddress1);
 		}
 	});
+}
+
+function updateSavedObjects(data) {
+	console.log(data);
+	if (typeof data == 'object') {
+		savedAddress1 = data.address_1;
+		savedAddress2 = data.address_2;
+		savedLatLng = {'lat': data.lat, 'lng': data.lng};
+	}
 }

@@ -22,7 +22,7 @@ class Api extends MY_Controller {
 			if (isset($post['id']) AND $post['id'] > 0) {
 				$id = $post['id']; unset($post['id']);
 				$this->gm_db->save('user_profiles', $post, ['id' => $id]);
-				$this->set_response('success', 'Shipping address saved!', $post);
+				$this->set_response('success', 'Shipping address saved!', $post, false, 'updateSavedObjects');
 			} elseif (!isset($post['id'])) {
 				$this->gm_db->new('user_profiles', $post);
 				$this->set_response('success', 'Shipping address added!', $post, 'profile');
