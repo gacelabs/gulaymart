@@ -20,7 +20,7 @@ class Authenticate extends MY_Controller {
 		sleep(1);
 		if ($is_ok) {
 			if ($this->accounts->profile['is_profile_complete'] == 0) {
-				$to = 'profile?error=Finish your Profile!';
+				$to = 'profile?info='.ERRORMESSAGE;
 			} else {
 				$to = 'farm/dashboard';
 			}

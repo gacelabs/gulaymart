@@ -219,8 +219,10 @@
 						<div class="dash-panel-footer">
 							<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
 								<button type="button" class="btn btn-danger normal-radius" id="reset-to-prev-btn">Reset</button>
+								<button type="submit" class="btn btn-theme normal-radius pull-right">Save Address</button>
+							<?php else: ?>
+								<button type="submit" class="btn btn-theme normal-radius">Save Address</button>
 							<?php endif ?>
-							<button type="submit" class="btn btn-theme normal-radius pull-right">Save Address</button>
 						</div>
 					</div>
 				</form>

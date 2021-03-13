@@ -47,12 +47,26 @@ $(document).ready(function() {
 		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
 		oPauseAjax = $.ajax(oSettings);
 	});
-	
-	var sErrorMessage = getParameterByName('error');
-	if ($.trim(sErrorMessage).length) {
-		runAlertBox({type:'info', message: sErrorMessage});
-	} else if (oUser && oUser.is_profile_complete == 0) {
+
+	if (oUser && oUser.is_profile_complete == 0) {
 		runAlertBox({type:'info', message: ERRORMESSAGE});
+	} else {
+		var sSuccessMessage = getParameterByName('success');
+		var sInfoMessage = getParameterByName('info');
+		var sWarnMessage = getParameterByName('warn');
+		var sConfirmMessage = getParameterByName('confirm');
+		var sErrorMessage = getParameterByName('error');
+		if ($.trim(sSuccessMessage).length) {
+			runAlertBox({type:'success', message: sSuccessMessage});
+		} else if ($.trim(sInfoMessage).length) {
+			runAlertBox({type:'info', message: sInfoMessage});
+		} else if ($.trim(sWarnMessage).length) {
+			runAlertBox({type:'warn', message: sWarnMessage});
+		} else if ($.trim(sConfirmMessage).length) {
+			runAlertBox({type:'confirm', message: sConfirmMessage});
+		} else if ($.trim(sErrorMessage).length) {
+			runAlertBox({type:'error', message: sErrorMessage});
+		}
 	}
 });
 
