@@ -13,7 +13,49 @@ class Farm extends MY_Controller {
 
 	public function index()
 	{
-		$this->new_veggy();
+		$this->dashboard();
+	}
+
+	public function dashboard()
+	{
+		$view = [
+			'top' => [
+				'metas' => [
+					// facebook opengraph
+					'property="fb:app_id" content="xxx"',
+					'property="og:type" content="article"',
+					'property="og:url" content="xxx"',
+					'property="og:title" content="Gulaymart | Dashboard"',
+					'property="og:description" content="Gulaymart | Dashboard"',
+					'property="og:image" content="xxx"',
+					// SEO generics
+					'name="description" content="Gulaymart | Dashboard"'
+				],
+				'index_page' => 'no',
+				'page_title' => 'Gulaymart | Dashboard',
+				'css' => ['global', 'logged-in', 'rwd'],
+				'js' => [],
+			],
+			'middle' => [
+				'body_class' => ['logged-in', 'farm', 'dashboard'],
+				/* found in views/templates */
+				'head' => ['dashboard/nav_top'],
+				'body' => [
+					'dashboard/panel_left',
+				],
+				'footer' => [],
+				/* found in views/templates */
+			],
+			'bottom' => [
+				'modals' => [],
+				'css' => [],
+				'js' => ['main'],
+			],
+		];
+		$data = [
+		];
+
+		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}
 
 	public function new_veggy()
@@ -237,5 +279,48 @@ class Farm extends MY_Controller {
 		} else {
 			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
 		}
+	}
+
+	public function settings()
+	{
+		$view = [
+			'top' => [
+				'metas' => [
+					// facebook opengraph
+					'property="fb:app_id" content="xxx"',
+					'property="og:type" content="article"',
+					'property="og:url" content="xxx"',
+					'property="og:title" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
+					'property="og:description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
+					'property="og:image" content="xxx"',
+					// SEO generics
+					'name="description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"'
+				],
+				'index_page' => 'no',
+				'page_title' => 'Gulaymart | Transactions » '.fix_title(__FUNCTION__).'',
+				'css' => ['global', 'logged-in', 'rwd'],
+				'js' => [],
+			],
+			'middle' => [
+				'body_class' => ['logged-in', 'farm', 'settings'],
+				/* found in views/templates */
+				'head' => ['dashboard/nav_top'],
+				'body' => [
+					'dashboard/panel_left',
+				],
+				'footer' => [],
+				/* found in views/templates */
+			],
+			'bottom' => [
+				'modals' => ['login_modal'],
+				'css' => [],
+				'js' => ['main'],
+			],
+		];
+		$data = [
+			'is_login' => 0
+		];
+
+		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}
 }

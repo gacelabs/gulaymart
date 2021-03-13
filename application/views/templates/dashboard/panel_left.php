@@ -25,11 +25,11 @@
 			</div>
 			<div><hr></div>
 			<div class="aside-nav-item">
-				<a href="farm/new-veggy/" class="<?php in_array_echo("farm", $middle['body_class'], "active");?>">
+				<a href="farm/" class="<?php in_array_echo("farm", $middle['body_class'], "active");?>">
 					<i class="fa fa-leaf"></i><span class="hidden-xs">My Farm</span>
 				</a>
 				<div class="aside-nav-child">
-					<a href="dashboard/" class="<?php in_array_echo("dashboard", $middle['body_class'], "active");?>">
+					<a href="farm/dashboard/" class="<?php in_array_echo("dashboard", $middle['body_class'], "active");?>">
 						<i class="fa fa-tachometer"></i><span class="hidden-xs">Dashboard</span>
 					</a>
 				</div>
@@ -49,7 +49,7 @@
 					</a>
 				</div>
 				<div class="aside-nav-child">
-					<a href="transactions/settings/" class="<?php in_array_echo("settings", $middle['body_class'], "active");?>">
+					<a href="farm/settings/" class="<?php in_array_echo("settings", $middle['body_class'], "active");?>">
 						<i class="fa fa-cog"></i><span class="hidden-xs">Settings</span>
 					</a>
 				</div>

@@ -9,9 +9,6 @@ $route['sign-up'] = 'Authenticate/sign_up';
 $route['sign-in'] = 'Authenticate/sign_in';
 $route['sign-out'] = 'Authenticate/sign_out';
 
-$route['dashboard'] = 'Dashboard';
-$route['dashboard/profile'] = 'Dashboard/profile';
-
 $route['farm/new-veggy'] = 'Farm/new_veggy';
 $route['help-center'] = 'Support/help_center';
 $route['support/help-center'] = 'Support/help_center';
