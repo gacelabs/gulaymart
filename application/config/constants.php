@@ -99,4 +99,5 @@ defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/
 defined('MONTHS') OR define('MONTHS', serialize([
 'January','February','March','April','May','June','July','August','September','October','November','December'	
 ]));
-defined('ERRORMESSAGE') OR define('ERRORMESSAGE', 'Be sure to fill-out all your info first, then let`s get started!');
+defined('ERRORMESSAGE') OR define('ERRORMESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');
+// defined('ERRORMESSAGE') OR define('ERRORMESSAGE', 'Be sure to fill-out all your info first, then let`s get started!');

@@ -30,8 +30,8 @@ class Profile extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
-					'dashboard/panel_right'
+					'dashboard/navbar_aside',
+					'dashboard/profile'
 				],
 				'footer' => [],
 				/* found in views/templates */

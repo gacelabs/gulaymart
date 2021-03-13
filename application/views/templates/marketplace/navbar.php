@@ -1,5 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="marketplace_nav_body">
-	<div class="panel">
+	<div class="panel marketplace-navbar-container">
 		<div id="search_with_nav_btns">
 			<div class="my-logo">
 				<a href=""><i class="fa fa-leaf"></i></a>

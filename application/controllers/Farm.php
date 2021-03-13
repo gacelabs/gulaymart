@@ -13,10 +13,10 @@ class Farm extends MY_Controller {
 
 	public function index()
 	{
-		$this->dashboard();
+		$this->sales();
 	}
 
-	public function dashboard()
+	public function sales()
 	{
 		$view = [
 			'top' => [
@@ -37,11 +37,11 @@ class Farm extends MY_Controller {
 				'js' => [],
 			],
 			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'dashboard'],
+				'body_class' => ['logged-in', 'farm', 'sales'],
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -96,7 +96,7 @@ class Farm extends MY_Controller {
 					/* found in views/templates */
 					'head' => ['dashboard/nav_top'],
 					'body' => [
-						'dashboard/panel_left',
+						'dashboard/navbar_aside',
 						'farm/new_veggy'
 					],
 					'footer' => [],
@@ -109,7 +109,6 @@ class Farm extends MY_Controller {
 				],
 			];
 			$data = [
-				'is_login' => 0
 			];
 			$this->load->view('main', ['view' => $view, 'data' => $data]);
 		}
@@ -140,7 +139,7 @@ class Farm extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 					'farm/storefront'
 				],
 				'footer' => [],
@@ -153,7 +152,6 @@ class Farm extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);
@@ -184,7 +182,7 @@ class Farm extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 					'farm/inventory'
 				],
 				'footer' => [],
@@ -197,7 +195,6 @@ class Farm extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0,
 			'products' => $this->products->get()
 		];
 		// debug($this->products->get(), 'stop');
@@ -246,7 +243,7 @@ class Farm extends MY_Controller {
 					/* found in views/templates */
 					'head' => ['dashboard/nav_top'],
 					'body' => [
-						'dashboard/panel_left',
+						'dashboard/navbar_aside',
 						'farm/edit_veggy'
 					],
 					'footer' => [],
@@ -259,7 +256,6 @@ class Farm extends MY_Controller {
 				],
 			];
 			$data = [
-				'is_login' => 0,
 				'product' => $product
 			];
 			$this->load->view('main', ['view' => $view, 'data' => $data]);
@@ -306,7 +302,7 @@ class Farm extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -318,7 +314,6 @@ class Farm extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);

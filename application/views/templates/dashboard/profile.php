@@ -167,9 +167,6 @@
 								</div>
 							</div>
 						</div>
-						<!-- <div class="dash-panel-footer text-right">
-							<button class="btn btn-theme normal-radius">Save settings</button>
-						</div> -->
 					</div>
 				</form>
 			</div>
@@ -184,7 +181,7 @@
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="input-group">
-										<input type="text" class="form-control" id="search-place" placeholder="Search location">
+										<input type="text" class="form-control" id="search-place" placeholder="Search your city">
 										<span class="input-group-btn">
 											<button class="btn btn-default normal-radius" id="search-place-btn" type="button"><i class="fa fa-search"></i></button>
 										</span>
@@ -216,11 +213,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="dash-panel-footer">
+						<div class="dash-panel-footer text-right">
 							<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
 								<button type="button" class="btn btn-danger normal-radius" id="reset-to-prev-btn">Reset</button>
 							<?php endif ?>
-							<button type="submit" class="btn btn-theme normal-radius pull-right">Save Address</button>
+							<button type="submit" class="btn btn-theme normal-radius">Save Address</button>
 						</div>
 					</div>
 				</form>
