@@ -8,9 +8,11 @@ class MY_Controller extends CI_Controller {
 	public $no_entry_for_signed_out = TRUE;
 	public $ajax_no_entry_for_signed_out = TRUE;
 	public $profile = FALSE;
+	public $action = 'index';
+
 	public $farms = FALSE;
 	public $categories = FALSE;
-	public $action = 'index';
+	public $measurements = FALSE;
 
 	public function __construct()
 	{
@@ -45,7 +47,6 @@ class MY_Controller extends CI_Controller {
 			/*now allow all pages with session*/
 			$this->accounts->refetch();
 			if ($this->accounts->profile['is_profile_complete'] == 0 AND $this->action != 'profile') {
-			debug($this->accounts->profile, 'stop');
 				redirect(base_url('profile?error=Finish your Profile!'));
 			}
 		} else {
@@ -104,19 +105,11 @@ class MY_Controller extends CI_Controller {
 
 	public function set_global_values()
 	{
-		if ($this->db->table_exists('user_farms')) {
-			$request = [];
-			$farms = $this->gm_db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
-			if ($farms) {
-				$this->farms = $farms;
-			}
-		}
-
-		if ($this->db->table_exists('products_category')) {
-			$categories = $this->gm_db->get('products_category');
-			if ($categories) {
-				$this->categories = $categories;
-			}
+		$data = get_global_values([]);
+		if (count($data)) {
+			$this->farms = isset($data['farms']) ? $data['farms'] : [];
+			$this->categories = isset($data['categories']) ? $data['categories'] : [];
+			$this->measurements = isset($data['measurements']) ? $data['measurements'] : [];
 		}
 	}
 }

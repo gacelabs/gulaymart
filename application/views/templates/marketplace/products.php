@@ -49,7 +49,7 @@
 			</div>
 			
 			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>" data-toggle="tooltip" data-placement="top" title="<?php echo $current_profile ? $current_profile['fullname'] : '';?>">
-				<a href="dashboard"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a>
+				<a href="farm/dashboard"><div class="nav-avatar-body" style="background-image: url('assets/images/avatar.jpg');"></div></a>
 			</div>
 		</div>
 	</div>

@@ -1090,3 +1090,36 @@ function echo_message($msg_prefix='', $field=false)
 	}
 	echo trim($msg_prefix);
 }
+
+function get_global_values($request=[])
+{
+	$ci =& get_instance();
+	/*farms*/
+	$request['farms'] = [];
+	if ($ci->db->table_exists('user_farms')) {
+		$farms = $ci->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
+		if ($farms->num_rows() > 0) {
+			$request['farms'] = $farms->result_array();
+		}
+	}
+
+	/*categories*/
+	$request['categories'] = [];
+	if ($ci->db->table_exists('products_category')) {
+		$categories = $ci->gm_db->get('products_category');
+		if ($categories) {
+			$request['categories'] = $categories;
+		}
+	}
+
+	/*measurements*/
+	$request['measurements'] = [];
+	if ($ci->db->table_exists('products_measurement')) {
+		$measurements = $ci->gm_db->get('products_measurement');
+		if ($measurements) {
+			$request['measurements'] = $measurements;
+		}
+	}
+	
+	return $request;
+}

@@ -203,6 +203,17 @@ class Products {
 			'DEFAULT CHARSET' => 'utf8'
 		]);
 
+		sleep(5);
+		$this->class->db->query("
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (1, 'Leafy', 'Leafy', 'assets/images/leafy.png', '2021-03-12 23:30:04', '2021-03-12 23:59:08');
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (2, 'Root', 'Root', 'assets/images/root.png', '2021-03-13 00:04:05', '2021-03-13 00:04:12');
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (3, 'Cruciferous', 'Cruciferous', 'assets/images/cruciferous.png', '2021-03-13 00:07:35', '2021-03-13 00:07:35');
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (4, 'Marrow', 'Marrow', 'assets/images/marrow.png', '2021-03-13 00:07:44', '2021-03-13 00:07:44');
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (5, 'Stem', 'Stem', 'assets/images/plant-stem.png', '2021-03-13 00:07:58', '2021-03-13 00:08:03');
+			INSERT INTO products_category (id, label, value, photo, added, updated) VALUES (6, 'Allium', 'Allium', 'assets/images/allium.png', '2021-03-13 00:08:15', '2021-03-13 00:08:15');
+		");
+
+
 		$this->class->load->dbforge();
 		sleep(3);
 		$this->class->dbforge->add_field([
@@ -233,6 +244,13 @@ class Products {
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+
+		sleep(5);
+		$this->class->db->query("
+			INSERT INTO products_measurement (id, label, value, added, updated) VALUES (1, 'Kilo', 'kg', '2021-03-12 23:30:04', '2021-03-12 23:59:08');
+			INSERT INTO products_measurement (id, label, value, added, updated) VALUES (2, 'Bundle', 'bundle', '2021-03-13 00:04:05', '2021-03-13 00:04:12');
+			INSERT INTO products_measurement (id, label, value, added, updated) VALUES (3, 'Box', 'box', '2021-03-13 00:07:35', '2021-03-13 00:07:35');
+		");
 
 		$this->class->load->dbforge();
 		sleep(3);

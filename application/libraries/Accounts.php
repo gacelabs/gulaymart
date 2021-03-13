@@ -241,20 +241,8 @@ class Accounts {
 				}
 			}
 			$request['profile'] = $profile;
-
-			/*farms*/
-			$request['farms'] = [];
-			$farms = $this->class->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
-			if ($farms->num_rows() > 0) {
-				$request['farms'] = $farms->result_array();
-			}
-
-			/*categories*/
-			$categories = $this->class->gm_db->get('products_category');
-			$request['categories'] = [];
-			if ($categories) {
-				$request['categories'] = $categories;
-			}
+			
+			$request = get_global_values($request);
 
 			/*settings*/
 			$settings = $this->class->gm_db->get('user_settings', ['user_id' => $this->profile['id']], 'result', 'setting, value');
