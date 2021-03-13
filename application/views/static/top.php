@@ -21,7 +21,7 @@
 	<?php
 	if (count($top['css'])) {
 		foreach ($top['css'] as $value) {
-			if ((bool)strstr($value, 'http')) {
+			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
 			} else {
 				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
@@ -31,7 +31,7 @@
 	}
 	if (count($top['js'])) {
 		foreach ($js as $value) {
-			if ((bool)strstr($value, 'http')) {
+			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<script type="text/javascript" src="'.$value.'"></script>';
 			} else {
 				echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
