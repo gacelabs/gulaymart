@@ -46,8 +46,8 @@ class MY_Controller extends CI_Controller {
 		if ($this->accounts->has_session) {
 			/*now allow all pages with session*/
 			$this->accounts->refetch();
-			if ($this->accounts->profile['is_profile_complete'] == 0 AND $this->action != 'profile') {
-				redirect(base_url('profile?error=Finish your Profile!'));
+			if ($this->accounts->profile['is_profile_complete'] == 0 AND $this->class_name != 'profile') {
+				redirect(base_url('profile?error='.ERRORMESSAGE));
 			}
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/

@@ -47,6 +47,13 @@ $(document).ready(function() {
 		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
 		oPauseAjax = $.ajax(oSettings);
 	});
+	
+	var sErrorMessage = getParameterByName('error');
+	if ($.trim(sErrorMessage).length) {
+		runAlertBox({type:'info', message: sErrorMessage});
+	} else if (oUser && oUser.is_profile_complete == 0) {
+		runAlertBox({type:'info', message: ERRORMESSAGE});
+	}
 });
 
 $(window).on('load resize change scroll', function(){

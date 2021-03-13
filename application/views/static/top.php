@@ -43,5 +43,6 @@
 	<script type="text/javascript">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
 		var oValidationRules=<?php echo json_encode($this->session->userdata('valid_fields'));?>;
+		var ERRORMESSAGE = '<?php echo ERRORMESSAGE;?>';
 	</script>
 </head>

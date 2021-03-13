@@ -118,18 +118,18 @@ String.prototype.isEmpty = function() {
 var runAlertBox = function(response, heading, iConfirmed) {
 	if (typeof response == 'object') {
 		switch (response.type.toLowerCase()) {
-			case 'confirm':
-				if (heading == undefined) heading = 'Warning';
+			case 'confirm': case 'confirmation': 
+				if (heading == undefined) heading = 'Confirmation';
 				iConfirmed = false;
 				$.toast({
 					heading: heading,
-					text: response.message+'<br><br><button id="toast-ok">ok</button>&nbsp;&nbsp;<button id="toast-cancel">cancel</button>',
-					icon: 'warn',
+					text: response.message+'<br><br><button class="btn btn-xs btn-danger pull-right" id="toast-cancel" style="padding: 0 10px;">cancel</button><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>',
+					icon: 'warning',
 					loader: false,
 					stack: false,
 					position: 'top-center',
-					allowToastClose: false,
-					bgColor: 'darkorange',
+					allowToastClose: true,
+					bgColor: '#f1ac2e',
 					textColor: 'white',
 					hideAfter: false,
 					beforeShow: function () {
@@ -167,7 +167,7 @@ var runAlertBox = function(response, heading, iConfirmed) {
 					textColor: 'white'
 				});
 			break;
-			case 'error':
+			case 'error': case 'danger':
 				if (heading == undefined) heading = 'Error';
 				$.toast({
 					heading: heading,
@@ -182,7 +182,7 @@ var runAlertBox = function(response, heading, iConfirmed) {
 					hideAfter: false
 				});
 			break;
-			case 'info':
+			case 'info': case 'information':
 				if (heading == undefined) heading = 'Information';
 				$.toast({
 					heading: heading,
@@ -193,25 +193,39 @@ var runAlertBox = function(response, heading, iConfirmed) {
 					position: 'top-center',
 					allowToastClose: true,
 					bgColor: 'blue',
-					textColor: 'white'
+					textColor: 'white',
+					hideAfter: false
+				});
+			break;
+			case 'warning': case 'warn':
+				if (heading == undefined) heading = 'Warning';
+				iConfirmed = false;
+				$.toast({
+					heading: heading,
+					text: response.message,
+					icon: 'warning',
+					loader: false,
+					stack: false,
+					position: 'top-center',
+					allowToastClose: true,
+					bgColor: '#f1ac2e',
+					textColor: 'white',
+					hideAfter: false
 				});
 			break;
 		}
-	} else {
-		iConfirmed = false;
-		$.toast({
-			heading: 'Error Encountered!',
-			text: 'Cannot process the request, try again please.',
-			icon: 'error',
-			loader: false,
-			stack: false,
-			position: 'top-center',
-			allowToastClose: true,
-			bgColor: 'red',
-			textColor: 'white',
-			hideAfter: false
-		});
-		console.error('response argument is not an object!');
 	}
 	return iConfirmed;
+}
+
+function getParameterByName(name, url) {
+	if (url == undefined) url = window.location.href;
+	name = name.replace(/[\[\]]/g, '\\$&');
+	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+		results = regex.exec(url);
+	// console.log(results);
+	if (!results) return null;
+	if (!results[2]) return '';
+
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
