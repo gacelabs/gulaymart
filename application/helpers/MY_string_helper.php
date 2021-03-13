@@ -1085,8 +1085,8 @@ function echo_message($msg_prefix='', $field=false)
 	if ($field) {
 		$ci =& get_instance();
 		if (isset($ci->accounts) AND $ci->accounts->has_session) {
-			$msg_prefix .= isset($ci->accounts->profile[$field]) ? $ci->accounts->profile[$field] : '';
+			$msg_prefix .= isset($ci->accounts->profile[$field]) ? ' '.$ci->accounts->profile[$field] : '';
 		}
 	}
-	echo $msg_prefix;
+	echo trim($msg_prefix);
 }

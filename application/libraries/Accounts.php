@@ -228,11 +228,13 @@ class Accounts {
 			unset($request['password']); unset($request['re_password']);
 			// debug($request, 'stop');
 			$request['fullname'] = '';
+			$request['firstname'] = '';
 			// $request['farms'] = $this->assemble_table_fields('user_farms');
 			/*profiles*/
 			$profile = $this->class->gm_db->get('user_profiles', ['user_id' => $this->profile['id']], 'row');
 			if ($profile) {
 				$request['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
+				$request['firstname'] = $profile['firstname'];
 				$profile['latlng'] = '';
 				if (!empty($profile['lat']) AND !empty($profile['lng'])) {
 					$profile['latlng'] = json_encode(['lat' => (float)$profile['lat'], 'lng' => (float)$profile['lng']]);
