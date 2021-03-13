@@ -1,5 +1,5 @@
 
-<?php if ($current_profile['categories']): ?>
+<?php if ($this->categories): ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="category_container">
 	<h3>Categories</h3>
 	<div class="panel zero-gaps" style="border-radius:12px;">
@@ -13,7 +13,7 @@
 					</ul>
 				</a>
 			</div>
-			<?php foreach ($current_profile['categories'] as $key => $category): ?>
+			<?php foreach ($this->categories as $key => $category): ?>
 				<div class="veggy-category-item">
 					<a href="javascript:;" class="veggy-category-item-inner" data-category-group="category-<?php echo $category['label'];?>">
 						<img src="<?php echo $category['photo'];?>" />

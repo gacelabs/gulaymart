@@ -20,15 +20,12 @@ $(document).ready(function() {
 
 	$('[data-category-group]').off('click').on('click', function(e) {
 		var a = $(e.target);
-		if (a.prop('tagName') != 'A') {
-			a = a.parents('a');
-		}
+		if (a.prop('tagName') != 'A') a = a.parents('a:first');
 		var group = a.data('category-group');
 		if (group != 'all') {
-			$('[data-category]').hide();
-			$('[data-category*="'+group+'"]').show();
+			$('.product-item-inner').isotope({ filter: '[data-category*="'+group+'"]' });
 		} else {
-			$('[data-category]').show();
+			$('.product-item-inner').isotope({ filter: '*' });
 		}
 	});
 
