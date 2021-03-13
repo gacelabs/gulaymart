@@ -5,11 +5,6 @@ class Authenticate extends MY_Controller {
 
 	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover', 'drop'];
 
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
 	public function index($value=false)
 	{
 		redirect(base_url('/'));

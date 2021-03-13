@@ -5,18 +5,6 @@ class Transactions extends MY_Controller {
 
 	public $allowed_methods = [];
 
-	public function __construct()
-	{
-		parent::__construct();
-		$referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-		if ($this->accounts->profile['is_profile_complete'] == 0) {
-			$to = 'profile?error=Finish your Profile!';
-		} elseif (!empty($referrer)) {
-			$to = $referrer;
-		}
-		if (isset($to)) redirect(base_url($to));
-	}
-
 	public function index()
 	{
 		$this->orders();

@@ -67,7 +67,7 @@ class Api extends MY_Controller {
 				$this->set_response('success', 'Notification Settings Saved!', $post);
 			}
 		}
-		$this->set_response('error', 'Unable to save profile info!', $post);
+		$this->set_response('error', 'Unable to save notification settings!', $post);
 	}
 
 }

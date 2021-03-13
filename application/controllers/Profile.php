@@ -5,11 +5,6 @@ class Profile extends MY_Controller {
 
 	public $allowed_methods = [];
 
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
 	public function index($id=false)
 	{
 		$view = [

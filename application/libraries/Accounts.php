@@ -264,6 +264,11 @@ class Accounts {
 			}
 			$request['settings'] = $settings_data;
 
+			if (strlen(trim($request['fullname'])) AND $request['profile']) {
+				$request['is_profile_complete'] = 1;
+				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
+			}
+
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			// $this->device_id = format_ip();
