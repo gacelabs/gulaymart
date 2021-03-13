@@ -17,8 +17,8 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->class_name = trim($this->router->class);
-		$this->action = trim($this->router->method);
+		$this->class_name = strtolower(trim($this->router->class));
+		$this->action = strtolower(trim($this->router->method));
 		// $this->load->library('controllerlist');
 		// $controllerlist = $this->controllerlist->getControllers();
 		// debug($this->action, 'stop');
@@ -46,7 +46,8 @@ class MY_Controller extends CI_Controller {
 		if ($this->accounts->has_session) {
 			/*now allow all pages with session*/
 			$this->accounts->refetch();
-			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api'])) {
+			// debug($this->class_name, 'stop');
+			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
 				redirect(base_url('profile?error='.ERRORMESSAGE));
 			}
 		} else {
