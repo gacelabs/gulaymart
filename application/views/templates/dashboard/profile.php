@@ -1,8 +1,6 @@
 <div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
 	<div class="dash-panel-right-container">
-		<div class="mobile-note visible-xs">
-			<small><i class="fa fa-info-circle"></i> <span>Some functions may not be available on mobile screens. Please use a desktop or a laptop.</span></small>
-		</div>
+		<?php $this->view('static/mobile_note'); ?>
 		<div class="dash-panel-right-canvas">
 			<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
@@ -123,7 +121,7 @@
 						</ul>
 						<div class="dash-panel-middle">
 							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
 									<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 									<ul class="spaced-list between">
@@ -212,10 +210,28 @@
 									<?php endif ?>
 								</div>
 							</div>
+							<?php if ($current_profile['profile']['address_1']) : ?>
+								<div class="saved-shipping-container">
+									<hr>
+									<div class="saved-shipping-item">
+										<div>
+											<p class="zero-gaps"><?php echo $current_profile['profile']['address_1'];?></p>
+											<p class="zero-gaps"><small><?php echo $current_profile['profile']['address_2'];?></small></p>
+										</div>	
+										<div class="text-center">
+											<p class="zero-gaps">Primary</p>
+											<label class="switch">
+												<input type="checkbox" name="shipping_default">
+												<span class="slider round"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
 						</div>
 						<div class="dash-panel-footer text-right">
 							<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
-								<button type="button" class="btn btn-danger normal-radius" id="reset-to-prev-btn">Reset</button>
+								<button type="button" class="btn normal-radius" id="reset-to-prev-btn">Reset</button>
 							<?php endif ?>
 							<button type="submit" class="btn btn-theme normal-radius">Save Address</button>
 						</div>

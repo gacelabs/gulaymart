@@ -229,6 +229,26 @@ i.i-logo.white {
 .color-blue {
 	color: #337ab7;
 }
+.color-grey {
+	color: #aaa;
+}
+.text-capsule {
+	margin: 0 0 5px;
+	display: inline-block;
+	background-color: #eee;
+	padding: 5px 12px;
+	border-radius: 12px;
+}
+.text-capsule.on-delivery {
+	background-color: #ffe180;
+}
+.text-capsule.received {
+	background-color: #6bffa3;
+}
+.text-capsule.cancelled {
+	background-color: #ff7777;
+}
+
 button, .btn {
 	outline: none !important;
 	border-radius: 12px !important;

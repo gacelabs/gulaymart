@@ -14,7 +14,7 @@
 				</a>
 				<div class="aside-nav-child">
 					<a href="transactions/orders/" class="<?php in_array_echo("orders", $middle['body_class'], "active");?>">
-						<i class="fa fa-shopping-basket"></i><span class="hidden-xs">Orders</span>
+						<i class="fa fa-shopping-basket"></i><span class="hidden-xs">My Orders</span>
 					</a>
 				</div>
 				<div class="aside-nav-child">

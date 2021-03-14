@@ -13,6 +13,9 @@ class Transactions extends MY_Controller {
 	public function orders()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['orders'],
+			],
 			'middle' => [
 				'body_class' => ['transactions', 'orders'],
 				'head' => ['dashboard/nav_top'],

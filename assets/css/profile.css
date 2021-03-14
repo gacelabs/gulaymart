@@ -1,0 +1,11 @@
+.saved-shipping-item {
+	display: grid;
+	grid-template-columns: 1fr 70px;
+	padding: 10px;
+	border: 1px solid #bbb;
+	border-radius: 3px;
+	margin-bottom: 15px;
+}
+.saved-shipping-item:last-child {
+	margin-bottom: 0;
+}

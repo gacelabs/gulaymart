@@ -324,6 +324,7 @@
 	}
 	.aside-nav-item>a, .aside-nav-child>a, .aside-nav-item>a.active, .aside-nav-child>a.active {
 		padding: 5px;
+		border-radius: 0;
 	}
 	.aside-nav-item>a>i{
 		font-size: 14px;
@@ -344,6 +345,9 @@
 	.left-affix-content {
 		margin-left: 16.66666667%;
 	}
+	#dash_panel_right {
+		padding: 14px 5px;
+	}
 	.dash-panel-top, .dash-panel-middle, .dash-panel-footer {
 		padding: 10px !important;
 	}
@@ -356,4 +360,15 @@
 	.dash-panel {
 		margin-bottom: 15px;
 	}
+	body.orders .order-item {
+		grid-template-columns: 70px 1fr;
+	}
+	body.orders .order-item-image {
+		width: 70px;
+		height: 70px;
+	}
+	body.orders .order-info-container {
+		grid-template-columns: 300px 100px 100px 100px;
+	}
+	
 }

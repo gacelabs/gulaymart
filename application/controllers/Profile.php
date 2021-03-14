@@ -13,6 +13,7 @@ class Profile extends MY_Controller {
 					'description' => 'Either you`re a farmer or a customer, '.APP_NAME.' is your best avenue for anything veggies! Sign Up for FREE!',
 					'name' => 'Either you`re a farmer or a customer, '.APP_NAME.' is your best avenue for anything veggies! Sign Up for FREE!',
 				],
+				'css' => ['profile'],
 			],
 			'middle' => [
 				'body_class' => 'dashboard profile',
