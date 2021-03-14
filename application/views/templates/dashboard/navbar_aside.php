@@ -29,8 +29,8 @@
 					<i class="fa fa-leaf"></i><span class="hidden-xs">My Farm</span>
 				</a>
 				<div class="aside-nav-child">
-					<a href="farm/dashboard/" class="<?php in_array_echo("dashboard", $middle['body_class'], "active");?>">
-						<i class="fa fa-tachometer"></i><span class="hidden-xs">Dashboard</span>
+					<a href="farm/sales/" class="<?php in_array_echo("sales", $middle['body_class'], "active");?>">
+						<i class="fa fa-tachometer"></i><span class="hidden-xs">Sales</span>
 					</a>
 				</div>
 				<div class="aside-nav-child">

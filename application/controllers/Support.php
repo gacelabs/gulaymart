@@ -35,7 +35,7 @@ class Support extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 				],
 				'footer' => [],
 				/* found in views/templates */

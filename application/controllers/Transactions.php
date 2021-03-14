@@ -31,11 +31,12 @@ class Transactions extends MY_Controller {
 				'js' => [],
 			],
 			'middle' => [
-				'body_class' => ['logged-in', 'transactions', 'orders'],
+				'body_class' => ['global', 'logged-in', 'logged-in', 'transactions', 'orders', 'rwd'],
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
+					'transactions/orders',
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -47,7 +48,6 @@ class Transactions extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);
@@ -78,7 +78,7 @@ class Transactions extends MY_Controller {
 				/* found in views/templates */
 				'head' => ['dashboard/nav_top'],
 				'body' => [
-					'dashboard/panel_left',
+					'dashboard/navbar_aside',
 				],
 				'footer' => [],
 				/* found in views/templates */
@@ -90,7 +90,6 @@ class Transactions extends MY_Controller {
 			],
 		];
 		$data = [
-			'is_login' => 0
 		];
 
 		$this->load->view('main', ['view' => $view, 'data' => $data]);

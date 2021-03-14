@@ -8,6 +8,11 @@
 #marketplace_nav_body .panel, #banner_container .panel {
 	margin-bottom: 0
 }
+.marketplace-navbar-container {
+	border-radius: 0 !important;
+	border-bottom-left-radius: 3px !important;
+	border-bottom-right-radius: 3px !important;
+}
 #navbar-carousel {
 	padding: 0 22px;
 	overflow: hidden;

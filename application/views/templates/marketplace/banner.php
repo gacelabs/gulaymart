@@ -3,7 +3,7 @@
 	<div class="panel zero-gaps banner-body">
 		<div class="banner-left text-center">
 			<img src="assets/images/delivermotor.png">
-			<h4>At your kitchen in less than an hour!</h4>
+			<h4>At your kitchen in a matter of minutes!</h4>
 		</div>
 		<div class="banner-right">
 			<div class="product-item-container">
