@@ -84,7 +84,7 @@ class Authenticate extends MY_Controller {
 			}
 		} else {
 			$type = 'error';
-			$message = 'Provide a valid email address!&modal=login_modal';
+			$message = 'Provide a valid email address!';
 			if ($post AND (isset($post['email_address']) AND filter_var($post['email_address'], FILTER_VALIDATE_EMAIL))) {
 				// debug($post, 'stop');
 				$check = $this->gm_db->get('users', ['email_address' => $post['email_address']], 'row');
@@ -112,12 +112,13 @@ class Authenticate extends MY_Controller {
 					// $return = 0;
 					if ($return) {
 						$type = 'success';
-						$message = 'Your temporary password has been sent!';
+						$message = 'Your current password has been sent!';
 					} else {
 						$type = 'info';
-						$message = 'Wait for 5 minutes before sending another temporary password request!';
+						$message = 'Wait for 5 minutes before sending another current password request!';
 					}
 					/*debug($message);*/
+					$this->set_response($type, $message, $post, false, 'backToLoginForm');
 				}
 			}
 		}

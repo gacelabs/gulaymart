@@ -111,9 +111,7 @@ window.mobileAndTabletCheck = function() {
 	return check;
 };
 
-String.prototype.isEmpty = function() {
-	return (this.length === 0 || !this.trim());
-};
+String.prototype.isEmpty = function() {return (this.length === 0 || !this.trim());};
 
 var runAlertBox = function(response, heading, iConfirmed) {
 	if (typeof response == 'object') {

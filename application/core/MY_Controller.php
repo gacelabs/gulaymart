@@ -79,14 +79,13 @@ class MY_Controller extends CI_Controller {
 
 	public function set_form_valid_fields($valids=FALSE)
 	{
-		$view = [
+		$defaults = [
 			'firstname' => ['required' => TRUE],
 			'lastname' => ['required' => TRUE],
 			'email_address' => ['required' => TRUE, 'emailExt' => TRUE],
 			'password' => ['required' => TRUE],
 			're_password' => ['required' => TRUE],
 		];
-		$defaults = [];
 		if ($valids) {
 			foreach ($valids as $field => $variable) {
 				if (is_array($variable)) {

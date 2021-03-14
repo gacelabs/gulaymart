@@ -34,7 +34,7 @@
 								</div>
 								<button type="submit" class="btn btn-theme btn-block">Log In</button>
 							</form>
-							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide">
+							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide" data-ajax="1">
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
