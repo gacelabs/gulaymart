@@ -18,44 +18,19 @@ class Farm extends MY_Controller {
 
 	public function sales()
 	{
-		$view = [
-			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Dashboard"',
-					'property="og:description" content="Gulaymart | Dashboard"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart | Dashboard"'
-				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Dashboard',
-				'css' => ['global', 'logged-in', 'rwd'],
-				'js' => [],
-			],
+		$this->render_page([
 			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'sales'],
-				/* found in views/templates */
+				'body_class' => ['farm', 'sales'],
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/navbar_aside',
+					'farm/sales',
 				],
-				'footer' => [],
-				/* found in views/templates */
 			],
 			'bottom' => [
-				'modals' => [],
-				'css' => [],
-				'js' => ['main'],
+				'js' => ['farm'],
 			],
-		];
-		$data = [
-		];
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+		]);
 	}
 
 	public function new_veggy()
@@ -73,133 +48,57 @@ class Farm extends MY_Controller {
 			}
 			$this->set_response('error', 'Unable to add product', $post);
 		} else {
-			$view = [
-				'top' => [
-					'metas' => [
-						// facebook opengraph
-						'property="fb:app_id" content="xxx"',
-						'property="og:type" content="article"',
-						'property="og:url" content="xxx"',
-						'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-						'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-						'property="og:image" content="xxx"',
-						// SEO generics
-						'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
-					],
-					'index_page' => 'no',
-					'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
-					'css' => ['global', 'logged-in', 'rwd'],
-					'js' => [],
-				],
+			$this->render_page([
 				'middle' => [
-					'body_class' => ['logged-in', 'farm', 'new-veggy'],
-					/* found in views/templates */
+					'body_class' => ['farm', 'new-veggy'],
 					'head' => ['dashboard/nav_top'],
 					'body' => [
 						'dashboard/navbar_aside',
-						'farm/new_veggy'
+						'farm/new_veggy',
 					],
-					'footer' => [],
-					/* found in views/templates */
 				],
 				'bottom' => [
-					'modals' => ['login_modal'],
-					'css' => [],
-					'js' => ['main', 'farm'],
+					'js' => ['farm'],
 				],
-			];
-			$data = [
-			];
-			$this->load->view('main', ['view' => $view, 'data' => $data]);
+			]);
 		}
 	}
 
 	public function storefront()
 	{
-		$view = [
-			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-					'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
-				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
-				'css' => ['global', 'logged-in', 'rwd'],
-				'js' => [],
-			],
+		$this->render_page([
 			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'storefront'],
-				/* found in views/templates */
+				'body_class' => ['farm', 'storefront'],
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'farm/storefront'
+					'farm/storefront',
 				],
-				'footer' => [],
-				/* found in views/templates */
 			],
 			'bottom' => [
-				'modals' => ['login_modal'],
-				'css' => [],
-				'js' => ['main', 'farm'],
+				'js' => ['farm'],
 			],
-		];
-		$data = [
-		];
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+		]);
 	}
 
 	public function inventory()
 	{
-		$view = [
-			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-					'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
-				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
-				'css' => ['global', 'logged-in', 'rwd'],
-				'js' => [],
-			],
+		$this->render_page([
 			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'inventory'],
-				/* found in views/templates */
+				'body_class' => ['farm', 'inventory'],
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'farm/inventory'
+					'farm/inventory',
 				],
-				'footer' => [],
-				/* found in views/templates */
 			],
 			'bottom' => [
-				'modals' => ['login_modal'],
-				'css' => [],
-				'js' => ['main', 'farm'],
+				'js' => ['farm'],
 			],
-		];
-		$data = [
-			'products' => $this->products->get()
-		];
-		// debug($this->products->get(), 'stop');
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+			'data' => [
+				'products' => $this->products->get()
+			],
+		]);
 	}
 
 	public function edit($id=0)
@@ -220,45 +119,22 @@ class Farm extends MY_Controller {
 		} else {
 			$product = $this->products->get(['id' => $id], false, false, true);
 			// debug($product, 'stop');
-			$view = [
-				'top' => [
-					'metas' => [
-						// facebook opengraph
-						'property="fb:app_id" content="xxx"',
-						'property="og:type" content="article"',
-						'property="og:url" content="xxx"',
-						'property="og:title" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-						'property="og:description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"',
-						'property="og:image" content="xxx"',
-						// SEO generics
-						'name="description" content="Gulaymart | Farm » '.fix_title(__FUNCTION__).'"'
-					],
-					'index_page' => 'no',
-					'page_title' => 'Gulaymart | Farm » '.fix_title(__FUNCTION__).'',
-					'css' => ['global', 'logged-in', 'rwd'],
-					'js' => [],
-				],
+			$this->render_page([
 				'middle' => [
-					'body_class' => ['logged-in', 'farm', 'new-veggy'],
-					/* found in views/templates */
+					'body_class' => ['farm', 'new-veggy'],
 					'head' => ['dashboard/nav_top'],
 					'body' => [
 						'dashboard/navbar_aside',
-						'farm/edit_veggy'
+						'farm/edit_veggy',
 					],
-					'footer' => [],
-					/* found in views/templates */
 				],
 				'bottom' => [
-					'modals' => ['login_modal'],
-					'css' => [],
-					'js' => ['main', 'farm'],
+					'js' => ['farm'],
 				],
-			];
-			$data = [
-				'product' => $product
-			];
-			$this->load->view('main', ['view' => $view, 'data' => $data]);
+				'data' => [
+					'product' => $product
+				],
+			]);
 		}
 	}
 
@@ -279,43 +155,18 @@ class Farm extends MY_Controller {
 
 	public function settings()
 	{
-		$view = [
-			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
-					'property="og:description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart | Transactions » '.fix_title(__FUNCTION__).'"'
-				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Transactions » '.fix_title(__FUNCTION__).'',
-				'css' => ['global', 'logged-in', 'rwd'],
-				'js' => [],
-			],
+		$this->render_page([
 			'middle' => [
-				'body_class' => ['logged-in', 'farm', 'settings'],
-				/* found in views/templates */
+				'body_class' => ['farm', 'settings'],
 				'head' => ['dashboard/nav_top'],
 				'body' => [
 					'dashboard/navbar_aside',
+					'farm/settings',
 				],
-				'footer' => [],
-				/* found in views/templates */
 			],
 			'bottom' => [
-				'modals' => ['login_modal'],
-				'css' => [],
-				'js' => ['main'],
+				'js' => ['farm'],
 			],
-		];
-		$data = [
-		];
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+		]);
 	}
 }

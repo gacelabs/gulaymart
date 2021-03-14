@@ -23,17 +23,20 @@
 		foreach ($top['css'] as $value) {
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
-			} else {
+			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
 				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
 			}
 			echo "\r\n";
 		}
 	}
+	?>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/rwd.css'); ?>">
+	<?php
 	if (count($top['js'])) {
 		foreach ($js as $value) {
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<script type="text/javascript" src="'.$value.'"></script>';
-			} else {
+			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
 				echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
 			}
 			echo "\r\n";
@@ -43,6 +46,6 @@
 	<script type="text/javascript">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
 		var oValidationRules=<?php echo json_encode($this->session->userdata('valid_fields'));?>;
-		var ERRORMESSAGE = '<?php echo ERRORMESSAGE;?>';
+		var PROFILE_INFO_MESSAGE = '<?php echo PROFILE_INFO_MESSAGE;?>';
 	</script>
 </head>

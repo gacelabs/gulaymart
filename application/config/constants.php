@@ -89,7 +89,7 @@ defined('FB_APPID') OR define('FB_APPID', '298098848531584');
 defined('FB_VERSION') OR define('FB_VERSION', 'v10.0');
 defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b68e02c6434');
 
-defined('APP_NAME') OR define('APP_NAME', 'Gulay Market');
+defined('APP_NAME') OR define('APP_NAME', 'Gulay Mart');
 defined('APP_VERSION') OR define('APP_VERSION', '1.0');
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
@@ -99,5 +99,6 @@ defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/
 defined('MONTHS') OR define('MONTHS', serialize([
 'January','February','March','April','May','June','July','August','September','October','November','December'	
 ]));
-defined('ERRORMESSAGE') OR define('ERRORMESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');
-// defined('ERRORMESSAGE') OR define('ERRORMESSAGE', 'Be sure to fill-out all your info first, then let`s get started!');
+
+defined('PROFILE_INFO_MESSAGE') OR define('PROFILE_INFO_MESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');
+defined('DEFAULT_OG_IMAGE') OR define('DEFAULT_OG_IMAGE', 'assets/images/logo.png');

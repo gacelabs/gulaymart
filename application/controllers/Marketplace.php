@@ -13,28 +13,17 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
-		$view = [
+		$this->render_page([
 			'top' => [
 				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="xxx"',
-					'property="og:description" content="Gulaymart is your neighborhood veggies supplier."',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Gulaymart is your neighborhood veggies supplier."'
+					'description' => APP_NAME.' is your neighborhood veggies supplier.',
+					'name' => APP_NAME.' is your neighborhood veggies supplier.',
 				],
 				'index_page' => 'yes',
-				'page_title' => 'Gulaymart | Veggies grown by community.',
-				'css' => ['marketplace', 'global', 'farmer-card', 'rwd'],
-				'js' => [],
+				'page_title' => APP_NAME.' | Veggies grown by community.',
+				'css' => ['marketplace', 'farmer-card'],
 			],
 			'middle' => [
-				'body_class' => ['marketplace'],
-				/* found in views/templates */
-				'head' => [],
 				'body' => [
 					'marketplace/navbar',
 					'marketplace/carousel',
@@ -44,23 +33,18 @@ class Marketplace extends MY_Controller {
 					'marketplace/famers'
 				],
 				'footer' => [
-				/* found in views/templates */
 					'templates/marketplace/poster',
 					'static/footer'
 				],
 			],
 			'bottom' => [
 				'modals' => ['search_popup'],
-				'css' => [],
-				'js' => ['isotope.min', 'main', 'marketplace', 'fb-login'],
+				'js' => ['isotope.min', 'marketplace', 'fb-login'],
 			],
-		];
-		$data = [
-			'products' => $this->products->get(),
-			'total' => $this->products->count()
-		];
-		// debug($data, 'stop');
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+			'data' => [
+				'products' => $this->products->get(),
+				'total' => $this->products->count()
+			],
+		]);
 	}
 }

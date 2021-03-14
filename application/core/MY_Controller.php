@@ -47,7 +47,7 @@ class MY_Controller extends CI_Controller {
 			/*now allow all pages with session*/
 			$this->accounts->refetch();
 			// debug($this->class_name, 'stop');
-			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
+			if ($this->accounts->profile['is_profile_complete'] === 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
 				redirect(base_url('profile/'));
 			}
 		} else {
@@ -79,13 +79,14 @@ class MY_Controller extends CI_Controller {
 
 	public function set_form_valid_fields($valids=FALSE)
 	{
-		$defaults = [
+		$view = [
 			'firstname' => ['required' => TRUE],
 			'lastname' => ['required' => TRUE],
 			'email_address' => ['required' => TRUE, 'emailExt' => TRUE],
 			'password' => ['required' => TRUE],
 			're_password' => ['required' => TRUE],
 		];
+		$defaults = [];
 		if ($valids) {
 			foreach ($valids as $field => $variable) {
 				if (is_array($variable)) {
@@ -112,5 +113,153 @@ class MY_Controller extends CI_Controller {
 			$this->categories = isset($data['categories']) ? $data['categories'] : [];
 			$this->measurements = isset($data['measurements']) ? $data['measurements'] : [];
 		}
+	}
+
+	public function render_page($rawdata=false, $debug=false)
+	{
+		$body_classes = ($this->accounts->has_session ? ['logged-in', $this->class_name] : [$this->class_name]);
+		$top_css = ($this->accounts->has_session ? ['logged-in'] : []);
+		$view = [
+			'top' => [
+				'metas' => [
+					// facebook opengraph
+					'app_id' => 'property="fb:app_id" content="'.FB_APPID.'"',
+					'type' => 'property="og:type" content="XXX"',
+					'url' => 'property="og:url" content="XXX"',
+					'title' => 'property="og:title" content="XXX"',
+					'description' => 'property="og:description" content="XXX"',
+					'image' => 'property="og:image" content="XXX"',
+					// SEO generics
+					'name' => 'name="description" content="XXX"'
+				],
+				'index_page' => 'XXX',
+				'page_title' => 'XXX',
+				'css' => $top_css,
+				'js' => [],
+			],
+			'middle' => [
+				'body_class' => $body_classes,
+				/* found in views/templates */
+				'head' => [],
+				'body' => [],
+				'footer' => [],
+				/* found in views/templates */
+			],
+			'bottom' => [
+				'modals' => [],
+				'css' => [],
+				'js' => [$this->class_name],
+			],
+		];
+		$data = false;
+
+		if ($rawdata) {
+			/*START top manipulation*/
+			if (isset($rawdata['top'])) {
+				foreach ($rawdata['top'] as $key => $row) {
+					switch (strtolower($key)) {
+						case 'metas':
+							foreach ($row as $index => $value) {
+								if (isset($view['top']['metas'][$index])) {
+									$meta_value = $view['top']['metas'][$index];
+									$view['top']['metas'][$index] = str_replace('XXX', $value, $meta_value);
+								}
+							}
+							break;
+						case 'css': case 'js':
+							foreach ($row as $index => $value) {
+								array_push($view['top'][$key], $value);
+							}
+							break;
+						default:
+							$view['top'][$key] = $row;
+							break;
+					}
+				}
+			}
+			/*STOP top manipulation*/
+
+			/*START middle manipulation*/
+			if (isset($rawdata['middle'])) {
+				foreach ($rawdata['middle'] as $key => $row) {
+					if (isset($view['middle'][$key])) {
+						if (is_array($view['middle'][$key])) {
+							if (is_string($row)) {
+								$view['middle'][$key][] = $row;
+							} elseif (is_array($row)) {
+								$view['middle'][$key] = array_unique(array_merge($view['middle'][$key], $row));
+							}
+						} elseif (is_string($view['middle'][$key])) {
+							if (is_array($row)) {
+								$view['middle'][$key] = implode(' ', $row);
+							} elseif (is_string($row)) {
+								$view['middle'][$key] = $row;
+							}
+						}
+					}
+				}
+			}
+			/*STOP middle manipulation*/
+
+			/*START bottom manipulation*/
+			if (isset($rawdata['bottom'])) {
+				foreach ($rawdata['bottom'] as $key => $row) {
+					if (isset($view['bottom'][$key])) {
+						if (is_array($view['bottom'][$key])) {
+							if (is_string($row)) {
+								$view['bottom'][$key][] = $row;
+							} elseif (is_array($row)) {
+								$view['bottom'][$key] = array_unique(array_merge($view['bottom'][$key], $row));
+							}
+						} elseif (is_string($view['bottom'][$key])) {
+							if (is_array($row)) {
+								$view['bottom'][$key] = implode(' ', $row);
+							} elseif (is_string($row)) {
+								$view['bottom'][$key] = $row;
+							}
+						}
+					}
+				}
+			}
+			/*STOP bottom manipulation*/
+
+			if (isset($rawdata['data'])) {
+				$data = $rawdata['data'];
+			}
+		}
+		/*set view to top meta contents*/
+		foreach ($view['top']['metas'] as $key => $value) {
+			if ((bool)strstr($value, 'XXX')) {
+				if (isset($view['top']['metas'][$key])) {
+					$meta_value = $view['top']['metas'][$key];
+					switch (strtolower($key)) {
+						case 'type':
+							$view['top']['metas'][$key] = str_replace('XXX', 'article', $meta_value);
+							break;
+						case 'url':
+							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);
+							break;
+						case 'title': case 'description':
+							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
+							break;
+						case 'image':
+							$view['top']['metas'][$key] = str_replace('XXX', base_url(DEFAULT_OG_IMAGE), $meta_value);
+							break;
+						case 'name':
+							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
+							break;
+					}
+				}
+			}
+		}
+		/*set default to index_page*/
+		$index_page = $view['top']['index_page'];
+		if ((bool)strstr($index_page, 'XXX')) $view['top']['index_page'] = str_replace('XXX', 'no', $index_page);
+		/*set default to page_title*/
+		$page_title = $view['top']['page_title'];
+		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.document_title(), $page_title);
+
+		if ($debug) debug($view, $data, 'stop');
+		$this->load->view('main', ['view' => $view, 'data' => $data]);
 	}
 }

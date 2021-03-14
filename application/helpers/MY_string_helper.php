@@ -493,7 +493,7 @@ function current_full_url($uri='')
 	if ($_SERVER['QUERY_STRING']) {
 		$url .= $url.'?'.$_SERVER['QUERY_STRING'];
 	}
-	return $url;
+	return rtrim(str_replace('/index.php', '', $url), '/').'/';
 }
 
 function parse_mtb_query($uri=FALSE)
@@ -1122,4 +1122,15 @@ function get_global_values($request=[])
 	}
 	
 	return $request;
+}
+
+function document_title($append='', $replace=' ') {
+	$ci =& get_instance();
+	$title = [];
+	foreach ($ci->uri->rsegments as $key => $value) {
+		if ($value != 'index') {
+			$title[] = ucwords(preg_replace('/[_]/', $replace, trim($value)));
+		}
+	}
+	return trim(str_replace('  ', ' ', implode(' » ', $title)).' '.$append);
 }

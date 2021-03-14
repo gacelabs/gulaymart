@@ -49,7 +49,7 @@ $(document).ready(function() {
 	});
 
 	if (oUser && oUser.is_profile_complete == 0) {
-		runAlertBox({type:'info', message: ERRORMESSAGE});
+		runAlertBox({type:'info', message: PROFILE_INFO_MESSAGE});
 	} else {
 		var sSuccessMessage = getParameterByName('success');
 		var sInfoMessage = getParameterByName('info');
@@ -71,8 +71,7 @@ $(document).ready(function() {
 });
 
 $(window).on('load resize change scroll', function(){
-		var navSticky = $('#bottom_nav_sm').width(),
-		winWidth = $(window).width();
-
+	var navSticky = $('#bottom_nav_sm').width(),
+	winWidth = $(window).width();
 	$('#bottom_nav_sm').css('left', (winWidth/2)-(navSticky/2)+'px');
-})
+});

@@ -20,9 +20,9 @@ class Authenticate extends MY_Controller {
 		sleep(1);
 		if ($is_ok) {
 			if ($this->accounts->profile['is_profile_complete'] === 0) {
-				$to = 'profile?info='.ERRORMESSAGE;
+				$to = 'profile';
 			} else {
-				$to = 'farm/dashboard';
+				$to = 'farm/';
 			}
 		} else {
 			$to = '?error=Invalid credentials';
@@ -33,45 +33,20 @@ class Authenticate extends MY_Controller {
 
 	public function register($id=false)
 	{
-		$view = [
+		$this->render_page([
 			'top' => [
-				'metas' => [
-					// facebook opengraph
-					'property="fb:app_id" content="xxx"',
-					'property="og:type" content="article"',
-					'property="og:url" content="xxx"',
-					'property="og:title" content="xxx"',
-					'property="og:description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"',
-					'property="og:image" content="xxx"',
-					// SEO generics
-					'name="description" content="Either you`re a farmer or a customer, Gulaymart is your best avenue for anything veggies! Sign Up for FREE!"'
-				],
-				'index_page' => 'no',
-				'page_title' => 'Gulaymart | Sign Up for FREE!',
-				'css' => ['global', 'register', 'rwd'],
-				'js' => [],
+				'css' => ['register'],
 			],
 			'middle' => [
 				'body_class' => ['register'],
-				/* found in views/templates */
-				'head' => [],
 				'body' => [
-					'account/register'
+					'account/register',
 				],
-				'footer' => [],
-				/* found in views/templates */
 			],
-			'bottom' => [
-				'modals' => ['login_modal'],
-				'css' => [],
-				'js' => ['main'],
-			],
-		];
-		$data = [
-			'is_login' => 0
-		];
-
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+			'data' => [
+				'is_login' => 0
+			]
+		]);
 	}
 
 	public function sign_up()
@@ -79,11 +54,11 @@ class Authenticate extends MY_Controller {
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
 		// debug($post);
-		$return = $this->accounts->register($post, 'farm/dashboard'); /*this will redirect to settings page */
+		$return = $this->accounts->register($post, 'farm/'); /*this will redirect to settings page */
 		// debug($this->session); debug($return);
 		if (isset($return['allowed']) AND $return['allowed'] == false) {
 			if ($this->accounts->has_session) {
-				redirect(base_url('farm/dashboard?error='.$return['message']));
+				redirect(base_url('farm/?error='.$return['message']));
 			} else {
 				redirect(base_url('register?error='.$return['message']));
 			}
@@ -226,7 +201,7 @@ class Authenticate extends MY_Controller {
 		// debug($post);
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
-		$to = 'farm/dashboard';
+		$to = 'farm/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
 	}
