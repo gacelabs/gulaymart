@@ -14,7 +14,7 @@ class Transactions extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['orders'],
+				'css' => ['orders']
 			],
 			'middle' => [
 				'body_class' => ['transactions', 'orders'],
@@ -30,6 +30,9 @@ class Transactions extends MY_Controller {
 	public function messages()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['messages']
+			],
 			'middle' => [
 				'body_class' => ['transactions', 'messages'],
 				'head' => ['dashboard/nav_top'],
