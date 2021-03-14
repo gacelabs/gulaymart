@@ -49,8 +49,8 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
+										<input type="text" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -186,7 +186,7 @@
 									<div class="input-group">
 										<input type="text" class="form-control" id="search-place" placeholder="Search location">
 										<span class="input-group-btn">
-											<button class="btn btn-default normal-radius" id="search-place-btn" type="button"><i class="fa fa-search"></i></button>
+											<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 										</span>
 									</div>
 								</div>

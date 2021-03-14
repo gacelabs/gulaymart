@@ -19,7 +19,7 @@ class Authenticate extends MY_Controller {
 		$to = '/';
 		sleep(1);
 		if ($is_ok) {
-			if ($this->accounts->profile['is_profile_complete'] == 0) {
+			if ($this->accounts->profile['is_profile_complete'] === 0) {
 				$to = 'profile?info='.ERRORMESSAGE;
 			} else {
 				$to = 'farm/dashboard';
@@ -27,7 +27,7 @@ class Authenticate extends MY_Controller {
 		} else {
 			$to = '?error=Invalid credentials';
 		}
-		// debug($post, $this->accounts->has_session, $is_ok, $to, 'stop');
+		// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
 		redirect(base_url($to));
 	}
 
@@ -235,11 +235,11 @@ class Authenticate extends MY_Controller {
 	{
 		// debug(DROP_ALL_TABLE, 'stop');
 		if (DROP_ALL_TABLE) {
-			$this->accounts->logout(true); /*this will redirect to default page */
+			$this->accounts->logout(true);
 			$this->gm_db->drop_tables();
+			echo "Tables dropped";
+			sleep(10);
 		}
-		echo "Tables dropped";
-		sleep(10);
 		redirect(base_url('/'));
 	}
 }

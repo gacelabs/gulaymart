@@ -1,6 +1,12 @@
-var map, marker, infowindow, savedAddress1, savedAddress2, savedLatLng;
+var isSucceed = false, map, marker, infowindow, savedAddress1, savedAddress2, savedLatLng;
 $(document).ready(function() {
 	var oLatLong = {'lat':14.68244804236, 'lng': 120.98537670912712}, hasLatlong = false;
+	navigator.geolocation.getCurrentPosition(function(response) {
+		if (response != undefined) {
+			oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude}; 
+		}
+	});
+	console.log(oLatLong);
 
 	savedAddress1 = $('#address_1').val();
 	savedAddress2 = $('#address_2').val();
@@ -14,11 +20,7 @@ $(document).ready(function() {
 	map = new google.maps.Map($('#map-box').get(0), {
 		zoom: hasLatlong ? 17 : 7,
 		center: oLatLong,
-		zoomControl: true,
-		// streetViewControl: false,
-		// fullscreenControl: false,
-		// mapTypeControl: false,
-		gestureHandling: 'greedy'
+		gestureHandling: "cooperative",
 	});
 
 	infowindow = new google.maps.InfoWindow({
@@ -31,9 +33,17 @@ $(document).ready(function() {
 		draggable: true,
 		animation: google.maps.Animation.DROP,
 	});
+
+	marker.addListener("click", () => {
+		// map.setZoom(8);
+		map.setCenter(marker.getPosition());
+		infowindow.open(map, marker);
+	});
+	map.setCenter(marker.getPosition());
 	infowindow.open(map, marker);
+
 	google.maps.event.addListener(map, "click", function(e) {
-		// infowindow.close();
+		map.setCenter(marker.getPosition());
 	});
 	// markers.push(marker);
 	setDragEvent(marker, infowindow);
@@ -74,46 +84,38 @@ $(document).ready(function() {
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function() {
-			$('#reset-to-prev-btn').trigger('click');
+			resetMap();
 		}, 12000);
 	}).on('touchmove', function() {
 		if (timeout !== null) {
 			clearTimeout(timeout);
 		}
 		timeout = setTimeout(function() {
-			$('#reset-to-prev-btn').trigger('click');
+			resetMap();
 		}, 12000);
 	});
 
 	$('#reset-to-prev-btn').off('click').on('click', function() {
-		$('#address_1').val(savedAddress1);
-		$('#address_2').val(savedAddress2);
-		$('#search-place').val('');
-		
-		google.maps.event.clearListeners(marker, 'dragend');
-		marker.setMap(null);
-		var newMark = new google.maps.Marker({
-			position: savedLatLng,
-			map: map,
-			draggable: true,
-			animation: google.maps.Animation.DROP,
-		});
-		fnDragEnd(newMark);
-
-		newMark.setMap(map);
-		marker = newMark;
-		setDragEvent(newMark, infowindow);
-
-		var bounds = new google.maps.LatLngBounds();
-		bounds.extend(newMark.getPosition());
-		map.fitBounds(bounds);
-		map.setZoom(17);
-
-		infowindow.open(map, marker);
+		resetMap();
 	});
 
-	$('#search-place-btn').off('click').on('click', function() {
-		$('#search-place').trigger('changed');
+	$('#undo-btn').off('click').on('click', function() {
+		resetMap();
+	});
+
+	$('.email-copy').bind('click', function(e) {
+		var oThis = $(e.target);
+		if (oThis.prop('tagName') != 'DIV') oThis = $(e.target).parent('.email-copy');
+		if (isSucceed == false) {
+			isSucceed = copyToClipboard(oThis.find('input').attr('placeholder'));
+		}
+		setTimeout(function() {
+			oThis.next('.tooltip').fadeOut('fast', function() {
+				$(this).remove();
+				oThis.removeAttr('aria-describedby').trigger('click');
+				isSucceed = false;
+			});
+		}, 300);
 	});
 });
 
@@ -125,7 +127,8 @@ function setDragEvent(marker, infowindow) {
 
 function fnDragEnd(marker) {
 	var uiInputAddress = $('#address_2');
-	// infowindow.close();
+	map.setCenter(marker.getPosition());
+	infowindow.open(map, marker);
 
 	var position = marker.getPosition();
 	$('#latlng').attr('value', JSON.stringify({'lat': position.lat(), 'lng': position.lng()}));
@@ -159,4 +162,31 @@ function updateSavedObjects(data) {
 		savedAddress2 = data.address_2;
 		savedLatLng = {'lat': data.lat, 'lng': data.lng};
 	}
+}
+
+function resetMap() {
+	$('#address_1').val(savedAddress1);
+	$('#address_2').val(savedAddress2);
+	$('#search-place').val('');
+	
+	google.maps.event.clearListeners(marker, 'dragend');
+	marker.setMap(null);
+	var newMark = new google.maps.Marker({
+		position: savedLatLng,
+		map: map,
+		draggable: true,
+		animation: google.maps.Animation.DROP,
+	});
+	fnDragEnd(newMark);
+
+	newMark.setMap(map);
+	marker = newMark;
+	setDragEvent(newMark, infowindow);
+
+	var bounds = new google.maps.LatLngBounds();
+	bounds.extend(newMark.getPosition());
+	map.fitBounds(bounds);
+	map.setZoom(17);
+
+	infowindow.open(map, marker);
 }

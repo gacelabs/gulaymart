@@ -48,7 +48,7 @@ class MY_Controller extends CI_Controller {
 			$this->accounts->refetch();
 			// debug($this->class_name, 'stop');
 			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
-				redirect(base_url('profile'));
+				redirect(base_url('profile/'));
 			}
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/

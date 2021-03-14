@@ -1,6 +1,6 @@
 <div class="col-lg-2 col-md-3 col-sm-3 col-xs-2 affix" id="dash_panel_left">
 	<div class="dash-panel-left-container">
-		<h3 class="text-center hidden-xs"><b><?php echo_message('Hello', 'firstname');?>!</b></h3>
+		<h3 class="text-center hidden-xs"><b><?php echo_message('Hello,', 'firstname');?>!</b></h3>
 		<div class="aside-nav-container">
 			<div class="aside-nav-item">
 				<a href="profile/" class="<?php in_array_echo("profile", $middle['body_class'], "active");?>">

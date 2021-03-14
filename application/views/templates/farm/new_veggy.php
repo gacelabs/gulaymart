@@ -53,7 +53,11 @@
 									<div class="form-group">
 										<select class="form-control" name="products[measurement]" required="required">
 											<option value="">Measurement</option>
-											<option value="kg">Kilo</option>
+											<?php if ($this->measurements): ?>
+												<?php foreach ($this->measurements as $key => $measurement): ?>
+													<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
+												<?php endforeach ?>
+											<?php endif ?>
 										</select>
 									</div>
 								</div>

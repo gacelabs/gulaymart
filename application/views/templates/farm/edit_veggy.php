@@ -20,7 +20,11 @@
 								<input type="text" name="products[procedure]" placeholder="Hydrophonic" value="<?php echo $data['product']['procedure'];?>">
 								<select name="products[measurement]" required="required">
 									<option value="">Measurement</option>
-									<option value="kg"<?php in_array_echo($data['product']['measurement'], ['kg'], ' selected');?>>Kilo</option>
+									<?php if ($this->measurements): ?>
+										<?php foreach ($this->measurements as $key => $measurement): ?>
+											<option value="<?php echo $measurement['value'];?>"<?php in_array_echo($data['product']['measurement'], $measurement['value']], ' selected');?>><?php echo $measurement['label'];?></option>
+										<?php endforeach ?>
+									<?php endif ?>
 								</select>
 								<input type="number" name="products[stocks]" placeholder="Stocks" required="required" value="<?php echo $data['product']['stocks'];?>">
 								<select name="products[category_id]" required="required">
