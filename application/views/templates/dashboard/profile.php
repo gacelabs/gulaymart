@@ -217,6 +217,7 @@
 										<div>
 											<p class="zero-gaps"><?php echo $current_profile['profile']['address_1'];?></p>
 											<p class="zero-gaps"><small><?php echo $current_profile['profile']['address_2'];?></small></p>
+											<p class="zero-gaps"><small><a href="">Edit</a></small></p>
 										</div>	
 										<div class="text-center">
 											<p class="zero-gaps">Primary</p>
