@@ -117,7 +117,7 @@ class MY_Controller extends CI_Controller {
 
 	public function render_page($rawdata=false, $debug=false)
 	{
-		$body_classes = ($this->accounts->has_session ? ['logged-in', $this->class_name] : [$this->class_name]);
+		$body_classes = ($this->accounts->has_session ? ($this->class_name != 'marketplace' ? ['logged-in', $this->class_name] : [$this->class_name]) : [$this->class_name]);
 		$top_css = ($this->accounts->has_session ? ['logged-in'] : []);
 		$view = [
 			'top' => [

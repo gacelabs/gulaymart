@@ -11,7 +11,7 @@
 			?>
 		</section>
 
-		<section <?php not_in_array_echo("logged-in", $middle['body_class'], "class='container'");?> id="content__middle">
+		<section <?php str_has_value_echo("marketplace", $this->class_name, "class='container'");?> id="content__middle">
 			<?php
 				foreach ($middle['body'] as $value) {
 					$this->view('templates/'.$value);

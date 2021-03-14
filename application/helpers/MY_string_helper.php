@@ -1134,3 +1134,9 @@ function document_title($append='', $replace=' ') {
 	}
 	return trim(str_replace('  ', ' ', implode(' » ', $title)).' '.$append);
 }
+
+function str_has_value_echo($search='', $in='', $echo='') {
+	if ((bool)strstr($in, $search)) {
+		echo $echo;
+	}
+}
