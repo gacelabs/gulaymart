@@ -32,6 +32,10 @@
 		margin: 3px 0 0 0;
 		font-size: 9px;
 	}
+	body.orders .order-info-container {
+		grid-template-columns: 40% 1fr 1fr 1fr;
+		grid-gap: 10px;
+	}
 }
 
 @media (max-width: 991px) {
@@ -110,7 +114,7 @@
 		width: 60px;
 		margin: -40px auto 0 auto;
 	}
-	.dash-panel-left-container>h3 {
+	.dash-panel-left-container>h3, .dash-panel-top h3 {
 		font-size: 18px;
 	}
 	.aside-nav-item>a, .aside-nav-child>a {
@@ -118,6 +122,46 @@
 	}
 	.aside-nav-child {
 		margin-left: 15px;
+	}
+	.order-item-container, .dash-panel-right-canvas>.col-xs-12 {
+		padding: 0 !important;
+	}
+	.dash-panel, .order-item-container {
+		margin-bottom: 20px !important;
+	}
+	body.orders .order-item {
+		grid-template-columns: 30px 1fr;
+	}
+	body.orders .order-item-image {
+		width: 30px;
+		height: 30px;
+	}
+	body.orders .order-info-container {
+		display: block;
+	}
+	.order-item-container {
+		padding-bottom: 15px !important;
+		border-bottom: 1px solid #ccc;
+	}
+	.order-item-container:last-child {
+		border-bottom: none;
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+	}
+	.order-info-container, .text-capsule {
+		font-size: 12px;
+	}
+	.order-item-qty, .order-item-price {
+		display: inline-block;
+	}
+	.order-item-qty {
+		float: left;
+	}
+	.order-item-price {
+		margin-left: 20px;
+	}
+	.order-item-status {
+		clear: both;
 	}
 }
 
@@ -274,6 +318,8 @@
 	}
 	#navbar-carousel {
 		margin-bottom: 10px;
+		margin-left: -5px;
+		margin-right: -5px;
 	}
 	#navbar-carousel_container {
 		padding-left: 5px;
@@ -282,10 +328,6 @@
 	}
 	#banner_container {
 		margin-bottom: 25px;
-	}
-	#navbar-carousel {
-		padding-left: 10px;
-		padding-right: 10px;
 	}
 	.carousel-caption {
 		bottom: 10px;
@@ -352,23 +394,22 @@
 		padding: 10px !important;
 	}
 	.dash-panel-top h3 {
-		font-size: 16px;
+		font-size: 14px;
 	}
 	.dash-panel-right-canvas>div[class^="col-"] {
-		padding: 0;
+		padding: 0 !important;
 	}
-	.dash-panel {
-		margin-bottom: 15px;
+	.dash-panel, .order-item-container {
+		margin-bottom: 20px !important;
 	}
 	body.orders .order-item {
-		grid-template-columns: 70px 1fr;
+		grid-template-columns: 30px 1fr;
 	}
 	body.orders .order-item-image {
-		width: 70px;
-		height: 70px;
+		width: 30px;
+		height: 30px;
 	}
 	body.orders .order-info-container {
-		grid-template-columns: 300px 100px 100px 100px;
+		display: block;
 	}
-	
 }

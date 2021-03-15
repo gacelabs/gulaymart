@@ -1,7 +1,7 @@
-body.orders .dash-panel-top {
+body.messages .dash-panel-top {
 	padding-bottom: 0 !important;
 }
-body.orders .dash-panel-top>li>a {
+body.messages .dash-panel-top>li>a {
 	border-bottom: 4px solid transparent;
 	margin-bottom: -2px;
 	padding: 0 5px 11px 5px;
@@ -10,39 +10,38 @@ body.orders .dash-panel-top>li>a {
 	transition: all .3s ease-in-out;
 	color: #aaa;
 }
-body.orders .dash-panel-top>li:hover a, body.orders .dash-panel-top>li>a.active {
+body.messages .dash-panel-top>li:hover a, body.messages .dash-panel-top>li>a.active {
 	border-bottom: 4px solid #555;
 	color: inherit;
 }
-body.orders .order-item-container {
+body.messages .order-item-container {
 	margin: 0;
 	padding: 15px;
 }
-body.orders .order-item {
+body.messages .order-item {
 	display: inline-grid;
 	grid-template-columns: 130px 1fr;
 	width: 100%;
 	grid-gap: 15px;
 }
-body.orders .order-info-container {
+body.messages .order-info-container {
 	display: inline-grid;
-	grid-template-columns: 40% 1fr 1fr 1fr;
+	grid-template-columns: 40% 150px 150px 150px;
 	grid-gap: 15px;
 	width: 100%
 }
-body.orders .order-item-image {
+body.messages .order-item-image {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	width: 100%;
-	padding-top: 100%;
+	height: 90px;
+	width: 90px;
 	margin: 0 auto;
 	text-align: center;
-	border-radius: 3px;
 }
-body.orders .dash-panel-top {
+body.messages .dash-panel-top, body.messages .dash-panel-middle {
 	overflow-y: hidden;
 }
-body.orders .dash-panel-top {
+body.messages .dash-panel-top {
 	white-space: nowrap;
 }

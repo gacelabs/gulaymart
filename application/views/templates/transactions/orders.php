@@ -4,13 +4,13 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dash-panel theme">
 					<ul class="inline-list dash-panel-top">
-						<li><a href="javascript:;" class="<?php in_array_echo("orders", $middle['body_class'], "active");?>"><h3>My Orders</h3></a></li>
-						<li><a href="javascript:;"><h3>Placed</h3></a></li>
-						<li><a href="javascript:;"><h3>On Delivery</h3></a></li>
-						<li><a href="javascript:;"><h3>Received</h3></a></li>
-						<li><a href="javascript:;"><h3>Cancelled</h3></a></li>
+						<li><a href="transactions/orders/" class="hideshow-btn <?php in_array_echo("orders", $middle['body_class'], "active");?>"><h3>My Orders</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_placed"><h3>Placed</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_delivery"><h3>On Delivery</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h3>Received</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_cancelled"><h3>Cancelled</h3></a></li>
 					</ul>
-					<div class="dash-panel-middle">
+					<div class="dash-panel-middle hideshow-container">
 						<div class="order-list-container">
 							<div class="order-item-container">
 								<div style="margin-bottom: 15px;">
@@ -108,6 +108,14 @@
 								</div>
 							</div>
 						</div>
+
+						<?php $this->view('templates/transactions/placed'); ?>
+
+						<?php $this->view('templates/transactions/delivery'); ?>
+
+						<?php $this->view('templates/transactions/received'); ?>
+
+						<?php $this->view('templates/transactions/cancelled'); ?>
 					</div>
 				</div>
 			</div>

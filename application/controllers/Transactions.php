@@ -24,6 +24,9 @@ class Transactions extends MY_Controller {
 					'transactions/orders',
 				],
 			],
+			'bottom' => [
+				'js' => ['hideshow'],
+			],
 		]);
 	}
 
