@@ -38,9 +38,11 @@ $(document).ready(function() {
 	var oPauseAjax = false;
 	$('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault();
+		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
 		var oSettings = {
 			url: e.target.href,
 			type: 'get',
+			data: oData,
 			dataType: 'jsonp',
 			jsonpCallback: 'echo',
 			error: function(xhr, status, thrown) {

@@ -1037,7 +1037,7 @@ function in_array_echo($key=false, $array=false, $echo='') {
 	}
 }
 
-function is_set_echo($array=false, $key=false) {
+function isset_echo($array=false, $key=false) {
 	if ($key AND is_array($array)) {
 		if (isset($array[$key])) {
 			echo $array[$key];
@@ -1097,7 +1097,7 @@ function get_global_values($request=[])
 	/*farms*/
 	$request['farms'] = [];
 	if ($ci->db->table_exists('user_farms')) {
-		$farms = $ci->db->query("SELECT uf.*, ul.id AS location_id, ul.lat, ul.lng FROM user_farms uf LEFT JOIN user_locations ul ON ul.farm_id = uf.id");
+		$farms = $ci->db->query("SELECT uf.* FROM user_farms uf INNER JOIN users u ON u.id = uf.user_id");
 		if ($farms->num_rows() > 0) {
 			$request['farms'] = $farms->result_array();
 		}

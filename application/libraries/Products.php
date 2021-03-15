@@ -50,12 +50,12 @@ class Products {
 				$results = [];
 				foreach ($products as $key => $product) {
 					$product_id = $products[$key]['id'];
-					$location = $this->class->gm_db->get('user_locations', ['id' => $product['location_id']], 'row');
-					// debug($location, 'stop');
-					if ($location) {
-						$farm = $this->class->gm_db->get('user_farms', ['id' => $location['farm_id']], 'row');
-						$products[$key]['farm'] = $farm['farm_name'];
-					}
+					$user_id = $products[$key]['user_id'];
+
+					$products[$key]['farm'] = '';
+					$farm = $this->class->gm_db->get('user_farms', ['id' => $product['farm_id'], 'user_id' => $product['user_id']], 'row');
+					// debug($farm, 'stop');
+					if ($farm) $products[$key]['farm'] = $farm['name'];
 
 					$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
 					if ($category) {
@@ -64,6 +64,7 @@ class Products {
 					if ($justdata) {
 						unset($products[$key]['id']);
 						unset($products[$key]['user_id']);
+						unset($products[$key]['farm_id']);
 						unset($products[$key]['delivery_option_id']);
 						unset($products[$key]['activity']);
 						unset($products[$key]['category_id']);
@@ -140,6 +141,10 @@ class Products {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
+			'farm_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
 			'name' => ['type' => 'TINYTEXT', 'null' => true],
 			'description' => ['type' => 'TEXT', 'null' => true],
 			'procedure' => ['type' => 'TEXT', 'null' => true],
@@ -174,6 +179,8 @@ class Products {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('farm_id');
 		$this->class->dbforge->add_key('delivery_option_id');
 		$this->class->dbforge->add_key('activity');
 		$this->class->dbforge->add_key('category_id');

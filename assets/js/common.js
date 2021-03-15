@@ -138,14 +138,18 @@ var runAlertBox = function(response, heading, iConfirmed) {
 									fn(response.data);
 								}
 							}
+							if (response && (typeof response.callback == 'function')) {
+								response.callback(response.data);
+							}
 							setTimeout(function() {
-								$('.close-jq-toast-single:visible').trigger('click');
 								if (response && (typeof response.redirect == 'string')) {
 									if (response.redirect) window.location = response.redirect;
 								}
 							}, 300);
+							$('.close-jq-toast-single:visible').trigger('click');
 						});
 						$('#toast-cancel').off('click').on('click', function(e) {
+							$('#toast-ok').off('click');
 							$('.close-jq-toast-single:visible').trigger('click');
 						});
 					},
