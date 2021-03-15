@@ -4,7 +4,7 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dash-panel theme">
 					<ul class="inline-list dash-panel-top">
-						<li><a href="transactions/orders/" class="hideshow-btn <?php in_array_echo("orders", $middle['body_class'], "active");?>"><h3>My Orders</h3></a></li>
+						<li><a href="transactions/orders/" class="hideshow-btn active"><h3>My Orders</h3></a></li>
 						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_placed"><h3>Placed</h3></a></li>
 						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_delivery"><h3>On Delivery</h3></a></li>
 						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h3>Received</h3></a></li>
@@ -109,13 +109,12 @@
 							</div>
 						</div>
 
-						<?php $this->view('templates/transactions/placed'); ?>
-
-						<?php $this->view('templates/transactions/delivery'); ?>
-
-						<?php $this->view('templates/transactions/received'); ?>
-
-						<?php $this->view('templates/transactions/cancelled'); ?>
+						<?php
+							$this->view('templates/transactions/placed');
+							$this->view('templates/transactions/delivery');
+							$this->view('templates/transactions/received');
+							$this->view('templates/transactions/cancelled');
+						?>
 					</div>
 				</div>
 			</div>

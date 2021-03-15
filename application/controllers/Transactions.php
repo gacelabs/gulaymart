@@ -44,6 +44,9 @@ class Transactions extends MY_Controller {
 					'transactions/messages',
 				],
 			],
+			'bottom' => [
+				'js' => ['hideshow', 'readmore.min', 'messages'],
+			],
 		]);
 	}
 }
