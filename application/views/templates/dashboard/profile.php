@@ -94,7 +94,7 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
-									<div class="form-group">
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
 										<input type="text" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
