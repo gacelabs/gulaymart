@@ -226,12 +226,12 @@ var onCursorIdle = function(e) {
 	timeout = setTimeout(function() {
 		runAlertBox({
 			type:'confirm',
-			message: 'You have interact with the map 3 seconds ago, do you want to reset previous inputs?',
+			message: 'You have interact with the map 10 seconds ago, do you want to reset previous inputs?',
 			callback: function() { 
 				resetMap(oDefaultLatLng);
 				$(e.target).off('mousemove');
 				$(e.target).on('mousemove', onCursorIdle);
 			}
 		});
-	}, 3000);
+	}, 10000);
 };
