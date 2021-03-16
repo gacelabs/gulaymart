@@ -13,7 +13,7 @@
 		</div>
 		<div class="notif-item-footer hide">
 			<ul class="inline-list">
-				<li><button class="btn btn-default normal-radius">Reply</button></li>
+				<li><button class="btn btn-default normal-radius" data-toggle="modal" data-target="#reply_modal">Reply</button></li>
 			</ul>
 		</div>
 	</div>

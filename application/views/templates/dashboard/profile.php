@@ -169,7 +169,7 @@
 				</form>
 			</div>
 
-			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12">
+			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 shipping-address-panel">
 				<div class="dash-panel theme">
 					<ul class="spaced-list between dash-panel-top">
 						<li><h3>Shipping address</h3></li>
@@ -227,7 +227,7 @@
 						</div>
 						<div class="dash-panel-footer text-right">
 							<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
-								<button type="button" class="btn normal-radius" id="reset-to-prev-btn">Reset</button>
+								<button type="button" class="btn normal-radius" id="reset-to-prev-btn">New Address</button>
 							<?php endif ?>
 							<button type="submit" class="btn btn-theme normal-radius" id="map-submit-btn">Save Address</button>
 						</div>
