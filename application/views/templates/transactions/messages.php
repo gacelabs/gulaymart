@@ -4,108 +4,36 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dash-panel theme">
 					<ul class="inline-list dash-panel-top">
-						<li><a href="javascript:;" class="<?php in_array_echo("messages", $middle['body_class'], "active");?>"><h3>Notifications</h3></a></li>
-						<li><a href="javascript:;"><h3>Inquiries</h3></a></li>
-						<li><a href="javascript:;"><h3>Feedbacks</h3></a></li>
+						<li><a href="transactions/messages" class="hideshow-btn active"><h3>Notifications</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="msg_inquiries"><h3>Inquiries</h3></a></li>
+						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="msg_feedbacks"><h3>Feedbacks</h3></a></li>
 					</ul>
-					<div class="dash-panel-middle">
-						<div class="order-list-container">
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
+					<div class="dash-panel-middle hideshow-container">
+						<div class="notif-list-container">
+							<div class="notif-item-container">
+								<div class="notif-item-top">
+									<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b>System Update</b> - <span class="color-grey">March 1, 2020</span> </p>
 								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule">Placed</p>
-										</div>
-									</div>
+								<div class="notif-item-middle">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+									tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+									consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+									cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+									proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule on-delivery">On Delivery</p>
-											<p><small class="color-grey">March 1, 2020 @ 3:36pm</small></p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule received">Received</p>
-											<p><small class="color-grey">March 1, 2020 @ 3:54pm</small></p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule cancelled">Cancelled</p>
-											<p><small class="color-grey">No riders found.</small></p>
-										</div>
-									</div>
+								<div class="notif-item-footer hide">
+									<ul class="inline-list">
+										<li><button class="btn btn-default normal-radius">Delete</button></li>
+									</ul>
 								</div>
 							</div>
 						</div>
+
+						<?php
+							$this->view('templates/transactions/inquiries');
+							$this->view('templates/transactions/feedbacks');
+						?>
 					</div>
 				</div>
 			</div>

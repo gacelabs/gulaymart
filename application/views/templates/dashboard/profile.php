@@ -48,7 +48,7 @@
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
 									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
-										<input type="text" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
+										<input type="email" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -94,8 +94,8 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
+										<input type="email" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -128,7 +128,7 @@
 										<li><p>Order status</p></li>
 										<li>
 											<label class="switch">
-												<input type="checkbox" name="notif_email" <?php is_set_echo($current_profile['settings'], 'notif_email');?>>
+												<input type="checkbox" name="notif_email" <?php isset_echo($current_profile['settings'], 'notif_email');?>>
 												<span class="slider round"></span>
 											</label>
 										</li>
@@ -137,7 +137,7 @@
 										<li><p>Messages</p></li>
 										<li>
 											<label class="switch">
-												<input type="checkbox" name="notif_cp" <?php is_set_echo($current_profile['settings'], 'notif_cp');?>>
+												<input type="checkbox" name="notif_cp" <?php isset_echo($current_profile['settings'], 'notif_cp');?>>
 												<span class="slider round"></span>
 											</label>
 										</li>
@@ -169,17 +169,44 @@
 				</form>
 			</div>
 
-			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12">
-				<form action="api/save_shipping" method="post" data-ajax="1" class="form-validate">
-					<div class="dash-panel theme">
-						<ul class="spaced-list between dash-panel-top">
-							<li><h3>Shipping address</h3></li>
-						</ul>
+			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 shipping-address-panel">
+				<div class="dash-panel theme">
+					<ul class="spaced-list between dash-panel-top">
+						<li><h3>Shipping address</h3></li>
+					</ul>
+					<div class="dash-panel-middle">
+						<div class="saved-shipping-container">
+							<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+								<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+									<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
+										<div>
+											<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
+											<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
+											<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
+										</div>	
+										<div class="text-center">
+											<p class="zero-gaps">Primary</p>
+											<label class="switch">
+												<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
+												<span class="slider round"></span>
+											</label>
+										</div>
+									</div>
+								<?php endforeach ?>
+							<?php else: ?>
+								<p>No Shipping Address yet. </p>
+							<?php endif; ?>
+						</div>
+					</div>
+					<form action="api/save_shipping" method="post" data-ajax="1" class="form-validate" id="shipping-form">
+						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+						<input type="hidden" name="lat" id="lat" value="" required="required">
+						<input type="hidden" name="lng" id="lng" value="" required="required">
 						<div class="dash-panel-middle">
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="input-group">
-										<input type="text" class="form-control" id="search-place" placeholder="Search your city">
+										<input type="text" class="form-control" id="search-place" placeholder="Search your barangay, subdivision or village...">
 										<span class="input-group-btn">
 											<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 										</span>
@@ -189,55 +216,23 @@
 									<div id="map-box" style="width: 100%; height: 220px; margin-bottom: 15px;"></div>
 								</div>
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-									<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
-										<input type="hidden" name="id" value="<?php echo $current_profile['profile']['id'];?>">
-										<input type="hidden" name="latlng" id="latlng" value='<?php echo $current_profile['profile']['latlng'];?>' required="required">
-										<div class="form-group">
-											<input type="text" class="form-control" name="address_1" id="address_1" placeholder="House #, Street name, Village..." required="required" value="<?php echo $current_profile['profile']['address_1'];?>">
-										</div>
-										<div class="form-group">
-											<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Barangay, City name, Country..." required="required" value="<?php echo $current_profile['profile']['address_2'];?>">
-										</div>
-									<?php else: ?>
-										<input type="hidden" name="latlng" id="latlng" value="" required="required">
-										<div class="form-group">
-											<input type="text" class="form-control" name="address_1" id="address_1" placeholder="House #, Street name, Village..." required="required">
-										</div>
-										<div class="form-group">
-											<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Barangay, City name, Country..." required="required">
-										</div>
-									<?php endif ?>
-								</div>
-							</div>
-							<?php if ($current_profile['profile']['address_1']) : ?>
-								<div class="saved-shipping-container">
-									<hr>
-									<div class="saved-shipping-item">
-										<div>
-											<p class="zero-gaps"><?php echo $current_profile['profile']['address_1'];?></p>
-											<p class="zero-gaps"><small><?php echo $current_profile['profile']['address_2'];?></small></p>
-											<p class="zero-gaps"><small><a href="">Edit</a></small></p>
-										</div>	
-										<div class="text-center">
-											<p class="zero-gaps">Primary</p>
-											<label class="switch">
-												<input type="checkbox" name="shipping_default">
-												<span class="slider round"></span>
-											</label>
-										</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="address_1" id="address_1" placeholder="House #, Street name, Village..." required="required">
+									</div>
+									<div class="form-group">
+										<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Barangay, City name, Country..." required="required">
 									</div>
 								</div>
-							<?php endif; ?>
+							</div>
 						</div>
 						<div class="dash-panel-footer text-right">
 							<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
-								<button type="button" class="btn normal-radius" id="reset-to-prev-btn">Reset</button>
+								<button type="button" class="btn normal-radius" id="reset-to-prev-btn">New Address</button>
 							<?php endif ?>
-							<button type="submit" class="btn btn-theme normal-radius">Save Address</button>
+							<button type="submit" class="btn btn-theme normal-radius" id="map-submit-btn">Save Address</button>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

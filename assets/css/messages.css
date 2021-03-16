@@ -45,3 +45,16 @@ body.messages .dash-panel-top, body.messages .dash-panel-middle {
 body.messages .dash-panel-top {
 	white-space: nowrap;
 }
+<<<<<<< HEAD
+=======
+.notif-item-container {
+	border: 1px solid #eee;
+	margin-bottom: 20px;
+}
+.notif-item-top, .notif-item-middle, .notif-item-footer {
+	padding: 10px;
+}
+.notif-item-footer {
+	background-color: #eee;
+}
+>>>>>>> 30b57951ea1adb977e9138b7f93baa0402035481

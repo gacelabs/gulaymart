@@ -138,15 +138,28 @@ var runAlertBox = function(response, heading, iConfirmed) {
 									fn(response.data);
 								}
 							}
+							if (response && (typeof response.callback == 'function')) {
+								response.callback(response.data);
+							}
+							$('#toast-cancel').off('click');
+							$('.close-jq-toast-single:visible').trigger('click');
 							setTimeout(function() {
-								$('.close-jq-toast-single:visible').trigger('click');
 								if (response && (typeof response.redirect == 'string')) {
 									if (response.redirect) window.location = response.redirect;
 								}
 							}, 300);
 						});
 						$('#toast-cancel').off('click').on('click', function(e) {
+							if (response && (typeof response.cancel == 'function')) {
+								response.cancel(response.data);
+							}
+							$('#toast-ok').off('click');
 							$('.close-jq-toast-single:visible').trigger('click');
+							setTimeout(function() {
+								if (response && (typeof response.redirect == 'string')) {
+									if (response.redirect) window.location = response.redirect;
+								}
+							}, 300);
 						});
 					},
 				});

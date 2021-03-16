@@ -24,6 +24,9 @@ class Transactions extends MY_Controller {
 					'transactions/orders',
 				],
 			],
+			'bottom' => [
+				'js' => ['hideshow'],
+			],
 		]);
 	}
 
@@ -40,6 +43,9 @@ class Transactions extends MY_Controller {
 					'dashboard/navbar_aside',
 					'transactions/messages',
 				],
+			],
+			'bottom' => [
+				'js' => ['hideshow', 'readmore.min', 'messages'],
 			],
 		]);
 	}

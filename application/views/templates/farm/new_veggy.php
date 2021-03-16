@@ -41,7 +41,7 @@
 										<select class="form-control" name="products[location_id]" required="required">
 											<?php if ($this->farms): ?>
 												<?php foreach ($this->farms as $key => $farm): ?>
-													<option value="<?php echo $farm['location_id'];?>"><?php echo $farm['farm_name'];?></option>
+													<option value="<?php echo $farm['location_id'];?>"><?php echo $farm['name'];?></option>
 												<?php endforeach ?>
 											<?php endif ?>
 										</select>

@@ -46,11 +46,11 @@ class Accounts {
 				throw new Exception("Table Email Session not created!", 403);
 			}
 		}
-		if (!$this->class->db->table_exists('user_locations')) {
+		if (!$this->class->db->table_exists('user_shippings')) {
 			/*create table for the first time*/
-			$is_created = $this->create_user_locations_table();
+			$is_created = $this->create_user_shippings_table();
 			if (empty($is_created)) {
-				throw new Exception("Table User Locations not created!", 403);
+				throw new Exception("Table User Shippings not created!", 403);
 			}
 		}
 		if (!$this->class->db->table_exists('user_profiles')) {
@@ -234,12 +234,11 @@ class Accounts {
 			if ($profile) {
 				$request['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
 				$request['firstname'] = $profile['firstname'];
-				$profile['latlng'] = '';
-				if (!empty($profile['lat']) AND !empty($profile['lng'])) {
-					$profile['latlng'] = json_encode(['lat' => (float)$profile['lat'], 'lng' => (float)$profile['lng']]);
-				}
 			}
 			$request['profile'] = $profile;
+
+			$shippings = $this->class->gm_db->get('user_shippings', ['user_id' => $this->profile['id']]);
+			$request['shippings'] = $shippings;
 			
 			$request = get_global_values($request);
 
@@ -253,7 +252,7 @@ class Accounts {
 			}
 			$request['settings'] = $settings_data;
 
-			if (strlen(trim($request['fullname'])) AND $request['profile']) {
+			if ($profile AND $shippings) {
 				$request['is_profile_complete'] = 1;
 				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
 			}
@@ -346,9 +345,11 @@ class Accounts {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'farm_name text',
-			'address longtext',
-			"country_code varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''",
+			'name text DEFAULT NULL',
+			'lat varchar(100) DEFAULT NULL',
+			'lng varchar(100) DEFAULT NULL',
+			"address_1 VARCHAR(255) NULL DEFAULT NULL",
+			"address_2 VARCHAR(255) NULL DEFAULT NULL",
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
@@ -458,7 +459,7 @@ class Accounts {
 		return $table_data;
 	}
 
-	private function create_user_locations_table()
+	private function create_user_shippings_table()
 	{
 		$this->class->load->dbforge();
 		$this->class->dbforge->add_field([
@@ -467,15 +468,28 @@ class Accounts {
 				'constraint' => '10',
 				'auto_increment' => TRUE
 			],
-			'farm_id int DEFAULT NULL',
-			'lat varchar(100) DEFAULT NULL',
-			'lng varchar(100) DEFAULT NULL',
+			'user_id int DEFAULT NULL',
+			"lat VARCHAR(100) NULL DEFAULT NULL",
+			"lng VARCHAR(100) NULL DEFAULT NULL",
+			"address_1 VARCHAR(255) NULL DEFAULT NULL",
+			"address_2 VARCHAR(255) NULL DEFAULT NULL",
+			'ip_address' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'null' => TRUE,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'null' => TRUE,
+				'default' => '0',
+			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', TRUE);
-		$this->class->dbforge->add_key('farm_id');
-		$table_data = $this->class->dbforge->create_table('user_locations', FALSE, [
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('user_shippings', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -497,10 +511,6 @@ class Accounts {
 			"birth_month VARCHAR(20) NULL DEFAULT NULL",
 			"birth_year VARCHAR(5) NULL DEFAULT NULL",
 			"phone VARCHAR(15) NULL DEFAULT NULL",
-			"lat VARCHAR(100) NULL DEFAULT NULL",
-			"lng VARCHAR(100) NULL DEFAULT NULL",
-			"address_1 VARCHAR(255) NULL DEFAULT NULL",
-			"address_2 VARCHAR(255) NULL DEFAULT NULL",
 			"added DATETIME NULL DEFAULT CURRENT_TIMESTAMP",
 			"updated DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
 		]);
