@@ -1,6 +1,6 @@
-var isSucceed = false, hasLatlong = false, map, marker, infowindow, savedAddress1, savedAddress2, savedLatLng, oDefaultLatLng;
+var isSucceed = false, hasLatlong = false, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng, timeout = null;
 $(document).ready(function() {
-	var oLatLong = {'lat':14.68244804236, 'lng': 120.98537670912712};
+	oLatLong = {'lat':14.68244804236, 'lng': 120.98537670912712};
 	navigator.geolocation.getCurrentPosition(function(response) {
 		if (response != undefined) {
 			oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude}; 
@@ -14,14 +14,11 @@ $(document).ready(function() {
 		oLatLong = {'lat': parseFloat($('#lat').val()), 'lng': parseFloat($('#lng').val())};
 	}
 	savedLatLng = oLatLong;
-	oDefaultLatLng = oLatLong;
 	loadMap(oLatLong);
 
-	$('#reset-to-prev-btn').off('click').on('click', function() {
-		resetMap(oDefaultLatLng);
-	});
-	$('#undo-btn').off('click').on('click', function() {
-		resetMap(oDefaultLatLng);
+	$('#reset-to-prev-btn, #undo-btn').off('click').on('click', function() {
+		resetMap();
+		$('#address_2').val('');
 	});
 
 	$('.email-copy').bind('click', function(e) {
@@ -44,10 +41,12 @@ $(document).ready(function() {
 		if (Object.keys(oThis.data('json')).length) {
 			var oJson = $.parseJSON(oThis.attr('data-json'));
 			var oLatLong = {'lat': parseFloat(oJson.lat), 'lng': parseFloat(oJson.lng)};
-			console.log(oLatLong);
+			console.log(oLatLong, oJson);
 
-			$('#lat').attr('value', parseFloat(oJson.lat));
-			$('#lng').attr('value', parseFloat(oJson.lng));
+			$('#lat').attr('value', parseFloat(oJson.lat)).val(parseFloat(oJson.lat));
+			$('#lng').attr('value', parseFloat(oJson.lng)).val(parseFloat(oJson.lng));
+			$('#address_1').attr('value', oJson.address_1).val(oJson.address_1);
+			$('#address_2').attr('value', oJson.address_2).val(oJson.address_2);
 			savedAddress1 = oJson.address_1;
 			savedAddress2 = oJson.address_2;
 			savedLatLng = oLatLong;
@@ -55,7 +54,8 @@ $(document).ready(function() {
 			$('#shipping-id').remove();
 			$('#shipping-form').prepend('<input type="hidden" name="id" id="shipping-id" value="'+oJson.id+'">');
 			
-			resetMap(oLatLong);
+			resetMap(oLatLong, false);
+			// $('.shipping-address-panel:not(.jq-toast-wrap)').off('*').one('mousemove', onCursorIdle).one('touchmove', onCursorIdle);
 		}
 	});
 
@@ -76,7 +76,8 @@ $(document).ready(function() {
 		oPauseInputAjax = $.ajax(oSettings);
 	});
 
-	$('#map-box').on('mousemove', onCursorIdle).on('touchmove', onCursorIdle);
+	setTimeout(function() { $('#search-place').attr('autocomplete', 'input'); }, 300);
+
 });
 
 function setDragEvent(marker, infowindow) {
@@ -99,14 +100,16 @@ function fnDragEnd(marker) {
 		latLng: position
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			var arr = results[0].address_components.slice(-4, results[0].address_components.length);
-			var arVal = [];
-			$.each(arr, function(i, row) {
-				arVal.push(row.long_name);
-			});
-			// console.log(arVal);
-			uiInputAddress.attr('value', arVal.join(', '));
-			uiInputAddress.val(arVal.join(', '));
+			if ($.trim($('#search-place').val()).length) {
+				var arr = results[0].address_components.slice(-4, results[0].address_components.length);
+				var arVal = [];
+				$.each(arr, function(i, row) {
+					arVal.push(row.long_name);
+				});
+				// console.log(arVal);
+				uiInputAddress.attr('value', arVal.join(', '));
+				uiInputAddress.val(arVal.join(', '));
+			}
 		} else {
 			console.log(status);
 			uiInputAddress.attr('value', '');
@@ -131,15 +134,19 @@ function updateSavedObjects(data) {
 	}
 }
 
-function resetMap(oLatLong) {
-	$('#address_1').val('');
-	$('#address_2').val('');
+function resetMap(oThisLatLong) {
+	if (oThisLatLong == undefined) {
+		$('#address_1').val('');
+		$('#address_2').val('');
+		$('#lat').val('');
+		$('#lng').val('');
+	}
 	$('#search-place').val('');
 	
 	google.maps.event.clearListeners(marker, 'dragend');
 	marker.setMap(null);
 	var newMark = new google.maps.Marker({
-		position: oLatLong == undefined ? savedLatLng : oLatLong,
+		position: oThisLatLong == undefined ? oLatLong : oThisLatLong,
 		map: map,
 		draggable: true,
 		animation: google.maps.Animation.DROP,
@@ -220,7 +227,6 @@ function loadMap(oLatLong) {
 	});
 }
 
-var timeout = null;
 var onCursorIdle = function(e) {
 	if (timeout !== null) clearTimeout(timeout);
 	timeout = setTimeout(function() {
@@ -228,10 +234,21 @@ var onCursorIdle = function(e) {
 			type:'confirm',
 			message: 'You have interact with the map 10 seconds ago, do you want to reset previous inputs?',
 			callback: function() { 
-				resetMap(oDefaultLatLng);
-				$(e.target).off('mousemove');
-				$(e.target).on('mousemove', onCursorIdle);
+				timeout = null;
+				$('.shipping-address-panel:not(.jq-toast-wrap)').off('*');
+				resetMap();
+			},
+			cancel: function() {
+				timeout = null;
+				var cnt = 0;
+				var i = setInterval(function() {
+					++cnt;
+					if (cnt == 3) {
+						console.log('here', cnt);
+						$('.shipping-address-panel:not(.jq-toast-wrap)').off('*').on('mousemove', onCursorIdle).on('touchmove', onCursorIdle);
+					}
+				}, 3000);
 			}
 		});
-	}, 10000);
+	}, 3000);
 };
