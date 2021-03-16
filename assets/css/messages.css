@@ -1,0 +1,47 @@
+body.messages .dash-panel-top {
+	padding-bottom: 0 !important;
+}
+body.messages .dash-panel-top>li>a {
+	border-bottom: 4px solid transparent;
+	margin-bottom: -2px;
+	padding: 0 5px 11px 5px;
+	margin-right: 5px;
+	display: block;
+	transition: all .3s ease-in-out;
+	color: #aaa;
+}
+body.messages .dash-panel-top>li:hover a, body.messages .dash-panel-top>li>a.active {
+	border-bottom: 4px solid #555;
+	color: inherit;
+}
+body.messages .order-item-container {
+	margin: 0;
+	padding: 15px;
+}
+body.messages .order-item {
+	display: inline-grid;
+	grid-template-columns: 130px 1fr;
+	width: 100%;
+	grid-gap: 15px;
+}
+body.messages .order-info-container {
+	display: inline-grid;
+	grid-template-columns: 40% 150px 150px 150px;
+	grid-gap: 15px;
+	width: 100%
+}
+body.messages .order-item-image {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	height: 90px;
+	width: 90px;
+	margin: 0 auto;
+	text-align: center;
+}
+body.messages .dash-panel-top, body.messages .dash-panel-middle {
+	overflow-y: hidden;
+}
+body.messages .dash-panel-top {
+	white-space: nowrap;
+}
