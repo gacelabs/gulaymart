@@ -26,7 +26,7 @@ body.orders .order-item {
 }
 body.orders .order-info-container {
 	display: inline-grid;
-	grid-template-columns: 40% 150px 150px 150px;
+	grid-template-columns: 40% 1fr 1fr 1fr;
 	grid-gap: 15px;
 	width: 100%
 }
@@ -34,12 +34,13 @@ body.orders .order-item-image {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	height: 90px;
-	width: 90px;
+	width: 100%;
+	padding-top: 100%;
 	margin: 0 auto;
 	text-align: center;
+	border-radius: 3px;
 }
-body.orders .dash-panel-top, body.orders .dash-panel-middle {
+body.orders .dash-panel-top {
 	overflow-y: hidden;
 }
 body.orders .dash-panel-top {

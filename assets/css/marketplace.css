@@ -10,11 +10,8 @@
 }
 .marketplace-navbar-container {
 	border-radius: 0 !important;
-	border-bottom-left-radius: 3px !important;
-	border-bottom-right-radius: 3px !important;
 }
 #navbar-carousel {
-	padding: 0 22px;
 	overflow: hidden;
 	z-index: 0;
 }

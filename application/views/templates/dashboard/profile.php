@@ -48,7 +48,7 @@
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
 									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
-										<input type="text" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
+										<input type="email" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -95,7 +95,7 @@
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
 									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
-										<input type="text" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
+										<input type="email" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -206,7 +206,7 @@
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="input-group">
-										<input type="text" class="form-control" id="search-place" placeholder="Search your city">
+										<input type="text" class="form-control" id="search-place" placeholder="Search your barangay, subdivision or village...">
 										<span class="input-group-btn">
 											<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 										</span>
