@@ -6,7 +6,7 @@ $(document).ready(function() {
 			oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude}; 
 		}
 	});
-	console.log(oLatLong);
+	// console.log(oLatLong);
 	savedAddress1 = $('#address_1').val();
 	savedAddress2 = $('#address_2').val();
 	if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {
@@ -41,7 +41,7 @@ $(document).ready(function() {
 		if (Object.keys(oThis.data('json')).length) {
 			var oJson = $.parseJSON(oThis.attr('data-json'));
 			var oLatLong = {'lat': parseFloat(oJson.lat), 'lng': parseFloat(oJson.lng)};
-			console.log(oLatLong, oJson);
+			// console.log(oLatLong, oJson);
 
 			$('#lat').attr('value', parseFloat(oJson.lat)).val(parseFloat(oJson.lat));
 			$('#lng').attr('value', parseFloat(oJson.lng)).val(parseFloat(oJson.lng));
@@ -86,7 +86,8 @@ function setDragEvent(marker, infowindow) {
 	});
 }
 
-function fnDragEnd(marker) {
+function fnDragEnd(marker, isNew) {
+	if (isNew == undefined) isNew = false;
 	var uiInputAddress = $('#address_2');
 	map.setCenter(marker.getPosition());
 	infowindow.open(map, marker);
@@ -100,7 +101,7 @@ function fnDragEnd(marker) {
 		latLng: position
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			if ($.trim($('#search-place').val()).length) {
+			if (isNew == false) {
 				var arr = results[0].address_components.slice(-4, results[0].address_components.length);
 				var arVal = [];
 				$.each(arr, function(i, row) {
@@ -135,7 +136,8 @@ function updateSavedObjects(data) {
 }
 
 function resetMap(oThisLatLong) {
-	if (oThisLatLong == undefined) {
+	var isNew = oThisLatLong == undefined ? true : false;
+	if (isNew) {
 		$('#address_1').val('');
 		$('#address_2').val('');
 		$('#lat').val('');
@@ -151,7 +153,7 @@ function resetMap(oThisLatLong) {
 		draggable: true,
 		animation: google.maps.Animation.DROP,
 	});
-	fnDragEnd(newMark);
+	fnDragEnd(newMark, isNew);
 
 	newMark.setMap(map);
 	marker = newMark;
