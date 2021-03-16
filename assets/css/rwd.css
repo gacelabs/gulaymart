@@ -409,7 +409,10 @@
 		width: 30px;
 		height: 30px;
 	}
-	body.orders .order-info-container {
+	body.orders .order-info-container, .modal-footer form {
 		display: block;
+	}
+	.modal-footer form textarea {
+		margin-bottom: 5px;
 	}
 }

@@ -45,16 +45,30 @@ body.messages .dash-panel-top, body.messages .dash-panel-middle {
 body.messages .dash-panel-top {
 	white-space: nowrap;
 }
-<<<<<<< HEAD
-=======
-.notif-item-container {
-	border: 1px solid #eee;
-	margin-bottom: 20px;
-}
 .notif-item-top, .notif-item-middle, .notif-item-footer {
 	padding: 10px;
 }
 .notif-item-footer {
 	background-color: #eee;
 }
->>>>>>> 30b57951ea1adb977e9138b7f93baa0402035481
+.notif-item-container {
+	margin-bottom: 20px;
+	border: 1px solid #eee;
+}
+.media-object {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	width: 40px;
+	height: 40px;
+}
+.media-heading {
+	font-size: 14px;
+}
+.modal-footer form {
+	display: inline-grid;
+	grid-template-columns: 1fr 72px;
+	grid-gap: 10px;
+	width: 100%;
+	text-align: left;
+}
