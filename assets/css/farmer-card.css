@@ -3,10 +3,7 @@
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-gap: 10px;
 	text-align: center;
-	padding-bottom: 25px;
-	margin-bottom: 25px;
-	background-color: #fff;
-	padding: 10px;
+	margin-bottom: 30px;
 }
 .farmers-card-container .farmers-card-item {
 	background-color: #fff;
@@ -30,5 +27,5 @@
 	box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
 }
 .farmers-card-item .card-footer {
-	padding: 10px 0 0 0;
+	padding: 10px 10px 15px 10px;
 }
