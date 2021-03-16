@@ -19,6 +19,9 @@ class Farm extends MY_Controller {
 	public function sales()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['sales', 'chart.min'],
+			],
 			'middle' => [
 				'body_class' => ['farm', 'sales'],
 				'head' => ['dashboard/nav_top'],
@@ -28,7 +31,7 @@ class Farm extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'js' => ['farm'],
+				'js' => ['farm', 'chart.min', 'sales'],
 			],
 		]);
 	}

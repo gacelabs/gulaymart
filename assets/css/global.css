@@ -3,6 +3,11 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+.ellipsis {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
 input[type="text"], .saved-shipping-item {
 	text-transform: capitalize;
 }
