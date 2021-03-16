@@ -7,6 +7,12 @@
 	.left-affix-content {
 		margin-left: 25%;
 	}
+	#sales_metrics {
+		grid-template-columns: 220px 220px 220px 220px 220px;
+	}
+	.panel-grid-top h4 {
+		font-size: 16px;
+	}
 }
 @media (max-width: 1094px) {
 	.nav-avatar-body {
@@ -162,12 +168,6 @@
 	}
 	.order-item-status {
 		clear: both;
-	}
-	#sales_metrics {
-		grid-template-columns: 220px 220px 220px 220px 220px;
-	}
-	.panel-grid-top h4 {
-		font-size: 16px;
 	}
 }
 
