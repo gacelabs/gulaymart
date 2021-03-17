@@ -213,15 +213,34 @@ var runAlertBox = function(response, heading, iConfirmed) {
 				iConfirmed = false;
 				$.toast({
 					heading: heading,
-					text: response.message,
+					text: response.message+'<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>',
 					icon: 'warning',
 					loader: false,
 					stack: false,
 					position: 'top-center',
-					allowToastClose: true,
+					allowToastClose: false,
 					bgColor: '#f1ac2e',
 					textColor: 'white',
-					hideAfter: false
+					hideAfter: false,
+					beforeShow: function () {
+						$('#toast-ok').off('click').on('click', function(e) {
+							if (response && (typeof response.callback == 'string')) {
+								var fn = eval(response.callback);
+								if (typeof fn == 'function') {
+									fn(response.data);
+								}
+							}
+							if (response && (typeof response.callback == 'function')) {
+								response.callback(response.data);
+							}
+							$('.close-jq-toast-single:visible').trigger('click');
+							setTimeout(function() {
+								if (response && (typeof response.redirect == 'string')) {
+									if (response.redirect) window.location = response.redirect;
+								}
+							}, 300);
+						});
+					},
 				});
 			break;
 		}

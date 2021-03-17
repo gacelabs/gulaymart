@@ -210,7 +210,7 @@ class Accounts {
 		$this->class->session->sess_destroy();
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
-		// $this->class->pushthru->trigger('logout-profile', 'browser-'.$this->device_id.'-sessions-logout', $profile);
+		// $this->class->senddata->trigger('session', 'auth-logout', ['device_id' => $profile['device_id']]);
 		// redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 		if (is_bool($redirect_url) AND $redirect_url == TRUE) {
 			return TRUE;

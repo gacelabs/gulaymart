@@ -61,13 +61,25 @@
 					if (oUser == false) {
 						realtime.bind('session', 'auth-login', function(object) {
 							if (object.data.device_id == DEVICE_ID) {
-								window.location.reload(true);
+								runAlertBox({
+									type:'confirm',
+									message: 'Session Log-in detected from other browser, do you want to cancel all log-ins?',
+									callback: function() { 
+										window.location.href = 'sign-out';
+									}
+								});
 							}
 						});
 					} else {
 						realtime.bind('session', 'auth-logout', function(object) {
 							if (object.data.device_id == DEVICE_ID) {
-								window.location.reload(true);
+								runAlertBox({
+									type:'warn',
+									message: 'Log-out request detected from other browser, click ok to reload page.',
+									callback: function() {
+										window.location.reload(true);
+									}
+								});
 							}
 						});
 					}
