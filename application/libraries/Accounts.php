@@ -256,10 +256,10 @@ class Accounts {
 				$request['is_profile_complete'] = 1;
 				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
 			}
+			$request['device_id'] = device_id();
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
-			// $this->device_id = format_ip();
 			// debug($this->profile, 'stop');
 			return $this;
 		}

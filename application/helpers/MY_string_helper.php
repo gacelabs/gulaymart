@@ -5,7 +5,7 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
-		if ($data !== 'stop') {
+		if ($data !== 'stop' AND $data !== true) {
 			$trace = debug_backtrace();
 			try {
 				if (!empty($trace)) {
@@ -17,7 +17,6 @@ function debug()
 							echo ($key==0?'<h1 style="margin:0;">DEBUGGER</h1>':'').$separator."<br /><b>PATH:</b> ".$row['file'];
 							echo "<br /><b>LINE:</b> ".$row['line']."<br />";
 						
-						// if ($key == 0) {
 							if (is_bool($data)) {
 								echo "<b>DATA TYPE:</b> BOOLEAN<br />";
 								if ($data) {
@@ -68,9 +67,7 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	if (end($args) == 'stop') {
-		exit();
-	}
+	if (end($args) == 'stop' OR end($args) == true) exit();
 }
 
 function check_instance($obj=FALSE, $class=NULL)
@@ -89,38 +86,38 @@ function check_instance($obj=FALSE, $class=NULL)
 	return FALSE;
 }
 
-function format_ip($ip='')
+function device_id()
 {
-	$ci =& get_instance();
-	if (isset($ci->accounts) AND $ci->accounts->has_session) {
-		$ID = $ci->accounts->profile['id'].$ci->accounts->profile['email_address'].GACELABS_SUPER_KEY.$ip;
-		// $DEVICE = substr(md5($ID), 0, 7);
-		$DEVICE = substr(md5($ID), 0, 7);
-		if (get_mac_address()) {
-			$DEVICE = substr(md5(get_mac_address()), 0, 7);
-		}
-		// debug($DEVICE, 1);
-		$ci->device_id = strtoupper(GACELABS_KEY.$DEVICE);
-		return $ci->device_id;
+	$DEVICE = get_mac_address();
+	if ($DEVICE == false) {
+		$IP = trim($_SERVER['REMOTE_ADDR']);
+		$DEVICE = trim(GACELABS_KEY.'|'.$IP.'|'.GACELABS_SUPER_KEY);
 	}
-	return 0; /*not yet member*/
+	// debug(strtoupper(substr(md5($DEVICE), 0, 12)), true);
+	return strtoupper(substr(md5($DEVICE), 0, 12));
 }
 
 function get_mac_address()
 {
-	// Turn on output buffering  
-	ob_start();  
-	// Get the ipconfig details using system commond  
-	@system('ipconfig /all');  
-	// Capture the output into a variable  
-	$mycomsys = ob_get_contents();  
-	// Clean (erase) the output buffer  
-	ob_clean();  
-	$find_mac = "Physical"; // Find the "Physical" & Find the position of Physical text  
-	$pmac = strpos($mycomsys, $find_mac);  
-	// Get Physical Address  
-	$macaddress = substr($mycomsys, ($pmac+36), 17);  
-	// Display Mac Address  
+	// debug(PHP_OS, 'stop');
+	$macaddress = false;
+	ob_start();
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+		@system('ipconfig /all');
+		$mycomsys = ob_get_contents();  
+		ob_clean();  
+		$find_mac = "Physical";  
+		$pmac = strpos($mycomsys, $find_mac);  
+		$macaddress = substr($mycomsys, ($pmac+36), 17);  
+	} elseif (strtolower(PHP_OS) == 'LINUX') {
+		@system('ifconfig');
+		$mycomsys = ob_get_contents();
+		ob_clean();
+		$find_mac = "ether";
+		$pmac = strpos($mycomsys, $find_mac);
+		$macaddress = substr($mycomsys, ($pmac+6), 17);
+	}
+	// Display Mac Address 
 	return $macaddress;
 }
 

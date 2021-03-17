@@ -58,12 +58,30 @@
 						// f_express_fee: "on",
 						// f_express_fee_hidden: 40.00 // if express fee is checked
 					});*/
+					if (oUser == false) {
+						realtime.bind('session', 'auth-login', function(object) {
+							if (object.data.device_id == DEVICE_ID) {
+								window.location.reload(true);
+							}
+						});
+					} else {
+						realtime.bind('session', 'auth-logout', function(object) {
+							if (object.data.device_id == DEVICE_ID) {
+								window.location.reload(true);
+							}
+						});
+					}
 				});
 			},
 			afterConnect: function() {
 				/*realtime.bind('return-delivery', 'returns', function(object) {
 					console.log('received response from portal.toktok.ph', object.data);
 				});*/
+				if (oUser) {
+					realtime.trigger('session', 'auth-login', oUser);
+				} else {
+					realtime.trigger('session', 'auth-logout', {device_id: DEVICE_ID});
+				}
 			}
 		});
 	};

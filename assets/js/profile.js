@@ -17,6 +17,7 @@ $(document).ready(function() {
 	loadMap(oLatLong);
 
 	$('#reset-to-prev-btn, #undo-btn').off('click').on('click', function() {
+		$('#shipping-id').remove();
 		resetMap();
 		$('#address_2').val('');
 	});
