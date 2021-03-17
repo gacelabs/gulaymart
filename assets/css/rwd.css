@@ -433,4 +433,9 @@
 		font-size: 12px;
 		padding: 4px 8px;
 	}
+	#sub_category>ul {
+		white-space: nowrap;
+		overflow-x: auto;
+		padding-bottom: 5px;
+	}
 }
