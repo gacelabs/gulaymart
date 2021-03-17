@@ -18,7 +18,7 @@
 								<div class="input-group">
 									<input type="text" class="form-control" id="product_name" name="products[name]" required="required" placeholder="Example: Fresh & Organic Romaine Lettuce [Per kilo]">
 									<span class="input-group-btn">
-										<button class="btn btn-default" type="button" id="prod_name_checker"><i class="fa fa-chevron-right"></i></button>
+										<button class="btn btn-default" type="button" id="prod_name_checker"><i class="fa fa-chevron-right color-theme"></i></button>
 									</span>
 								</div>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Customer likes a short yet concise Product name that tells essential things about your listing.</small>
