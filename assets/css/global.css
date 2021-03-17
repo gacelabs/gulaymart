@@ -10,6 +10,11 @@ body {
 }
 input[type="text"], .saved-shipping-item {
 	text-transform: capitalize;
+	box-shadow: none !important;
+	outline: none !important;
+}
+label {
+	font-weight: normal;
 }
 .dash-panel-top h3 {
 	font-weight: normal !important;
@@ -259,6 +264,7 @@ textarea {
 }
 .text-capsule.on-delivery {
 	background-color: #ffe180;
+	white-space: nowrap;
 }
 .text-capsule.received {
 	background-color: #6bffa3;
@@ -364,6 +370,7 @@ ul.spaced-list>li {
 	display: block;
 	flex: 0 1 auto;
 	list-style-type: none;
+	z-index: 1;
 }
 ul.spaced-list.between {
 	justify-content: space-between;

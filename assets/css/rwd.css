@@ -169,6 +169,11 @@
 	.order-item-status {
 		clear: both;
 	}
+	#category_container>ul {
+		white-space: nowrap;
+		overflow-x: auto;
+		padding-bottom: 5px;
+	}
 }
 
 @media (max-width: 767px) {
@@ -420,5 +425,12 @@
 	}
 	.modal-footer form textarea {
 		margin-bottom: 5px;
+	}
+	.timeline-border {
+		top: 22px;
+	}
+	#new_veggy>ul>li>h3 {
+		font-size: 12px;
+		padding: 4px 8px;
 	}
 }

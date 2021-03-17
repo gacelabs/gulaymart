@@ -52,6 +52,9 @@ class Farm extends MY_Controller {
 			$this->set_response('error', 'Unable to add product', $post);
 		} else {
 			$this->render_page([
+				'top' => [
+					'css' => ['new-veggy']
+				],
 				'middle' => [
 					'body_class' => ['farm', 'new-veggy'],
 					'head' => ['dashboard/nav_top'],
@@ -61,7 +64,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['farm'],
+					'js' => ['farm', 'new-veggy'],
 				],
 			]);
 		}
