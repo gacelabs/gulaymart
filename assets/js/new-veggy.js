@@ -10,6 +10,18 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#product_name').on('keyup', function() {
+		if ($(this).val().length == 0) {
+			$('#sub_category, #category_container').addClass('hide');
+			$('#sub_category>ul').children('li').remove();
+			$('[name="category"], [type="radio"]').prop('checked', false);
+			$('.input-capsule').removeClass('active');
+			$('#product_name').addClass('error');
+		} else {
+			$('#product_name').removeClass('error');
+		}
+	});
+
 
 	$('.input-capsule').click(function() {
 		$('.input-capsule').removeClass('active');
@@ -17,7 +29,7 @@ $(document).ready(function() {
 
 		var cat = $(this).find('input').val();
 			leafySubCat = ['Lettuce', 'Spinach', 'Other'],
-			rootSubCat = ['Carrot', 'Potato', 'Other'],
+			rootSubCat = ['Carrot', 'Potato', 'Turnip', 'Radish', 'Other'],
 			cruSubCat = ['Cabbage', 'Cauliflower', 'Broccoli', 'Brussels Sprout', 'Other'],
 			marSubCat = ['Squash', 'Cucumber', 'Zucchini', 'Other'],
 			steSubCat = ['Celery', 'Asparagus', 'Rosemary', 'Other'],

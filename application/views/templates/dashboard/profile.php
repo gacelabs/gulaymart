@@ -26,7 +26,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday</h5>
+									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Your birth month and year will be used to curate contents."></small></h5>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -52,7 +52,7 @@
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone</h5>
+									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Point of contact for delivery."></small></h5>
 									<div class="form-group">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
 									</div>
@@ -113,6 +113,7 @@
 					</div>
 				</form>
 
+				<?php if ($current_profile['profile']['phone']) : ?>
 				<form action="api/save_notif" method="post" data-ajax="2" class="form-validate">
 					<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 					<div class="dash-panel theme">
@@ -167,8 +168,10 @@
 						</div>
 					</div>
 				</form>
+				<?php endif; ?>
 			</div>
 
+			<?php if ($current_profile['profile']['phone']) : ?>
 			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 shipping-address-panel">
 				<div class="dash-panel theme">
 					<ul class="spaced-list between dash-panel-top">
@@ -234,7 +237,8 @@
 					</form>
 				</div>
 			</div>
-
+			<?php endif; ?>
+			
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				Be a farmer banner here!
 			</div>

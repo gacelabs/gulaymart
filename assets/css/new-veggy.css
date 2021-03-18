@@ -9,13 +9,20 @@
 	top: 30px;
 	z-index: 0;
 }
-#new_veggy>ul>li>h3 {
+#new_veggy>ul>li>.text-capsule {
 	font-size: 16px;
 }
-#new_veggy>ul>li>h3, #new_veggy>ul>li>h3>small {
+#new_veggy>ul>li>.text-capsule.active {
+	background-color: #1bd0de;
+	color: #fff;
+}
+#new_veggy>ul>li>.text-capsule.active small {
+	color: #fff;	
+}
+#new_veggy>ul>li>.text-capsule, #new_veggy>ul>li>.text-capsule>small {
 	color: #aaa;
 }
-#new_veggy>ul>li>h3.active, #new_veggy>ul>li>h3.active>small {
+#new_veggy>ul>li>.text-capsule.active, #new_veggy>ul>li>.text-capsule.active>small {
 	background-color: #799938;
 	color: #fff;
 }

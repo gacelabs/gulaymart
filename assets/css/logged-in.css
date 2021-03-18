@@ -103,13 +103,13 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 }
 .dash-panel.theme {
 	border-top: 2px solid #799938;
+	border-left: 1px solid rgb(10 10 10 / 12%);
+	border-right: 1px solid rgb(10 10 10 / 12%);
+	border-bottom: 1px solid rgb(0 0 0 / 24%);
 }
 .dash-panel-middle {
 	border-bottom: 1px solid #eee;
 }
 .dash-panel-middle, .dash-panel-footer {
 	padding: 15px;
-}
-.dash-panel-footer {
-	box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 15%);
 }
