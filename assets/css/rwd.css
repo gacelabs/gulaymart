@@ -427,11 +427,11 @@
 		margin-bottom: 5px;
 	}
 	.timeline-border {
-		top: 22px;
+		top: 20px;
 	}
-	#new_veggy>ul>li>h3 {
-		font-size: 12px;
-		padding: 4px 8px;
+	#new_veggy .dash-panel-middle>ul>li>h3 {
+		font-size: 12px !important;
+		padding: 4px 8px !important;
 	}
 	#sub_category>ul {
 		white-space: nowrap;

@@ -1,32 +1,35 @@
 #new_veggy .dash-panel-top {
 	border-bottom: none !important;
-	margin-bottom: 10px;
+}
+#new_veggy .dash-panel-middle {
+	position: relative;
 }
 .timeline-border {
 	width: 100%;
 	border-top: 2px solid #eee;
 	position: absolute;
-	top: 30px;
+	top: 28px;
 	z-index: 0;
+	left: 0;
 }
-#new_veggy>ul>li>.text-capsule {
+#new_veggy .dash-panel-middle>ul>li>.text-capsule {
 	font-size: 16px;
 }
-#new_veggy>ul>li>.text-capsule.active {
+#new_veggy .dash-panel-middle>ul>li>.text-capsule.active {
 	background-color: #1bd0de;
 	color: #fff;
 }
-#new_veggy>ul>li>.text-capsule.active small {
+#new_veggy .dash-panel-middle>ul>li>.text-capsule.active small {
 	color: #fff;	
 }
-#new_veggy>ul>li>.text-capsule, #new_veggy>ul>li>.text-capsule>small {
+#new_veggy .dash-panel-middle>ul>li>.text-capsule, #new_veggy .dash-panel-middle>ul>li>.text-capsule>small {
 	color: #aaa;
 }
-#new_veggy>ul>li>.text-capsule.active, #new_veggy>ul>li>.text-capsule.active>small {
+#new_veggy .dash-panel-middle>ul>li>.text-capsule.active, #new_veggy .dash-panel-middle>ul>li>.text-capsule.active>small {
 	background-color: #799938;
 	color: #fff;
 }
-#new_veggy form small, #new_veggy form small {
+#new_veggy small {
 	display: block;
 	margin-top: 5px;
 	font-size: 11px;
@@ -66,7 +69,19 @@
 #new_veggy .input-capsule label {
 	margin: 0;
 }
-
+#prod_attribute .input-group, #prod_desc .input-group {
+	margin-bottom: 10px;
+}
+#prod_attribute input, #prod_desc input, #prod_price input {
+	border-right:1px solid #ccc !important;
+	text-transform: initial;
+}
+#prod_attribute .input-group .input-group-addon small>i {
+	padding-bottom: 3px;
+}
+.normal-radius {
+	border-radius: 3px !important;
+}
 /*arrow*/
 .arrow_box {
 	position: relative;

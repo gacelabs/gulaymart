@@ -1,8 +1,18 @@
 body {
 	font-family: 'Roboto', sans-serif;
-	background-color: #e9ece2;
-	/*background-color: #eeefec;*/
+	/*background-color: #e9ece2;*/
+	background-color: #eeefec;
 	color: #444;
+}
+.text-link {
+	color: #799938;
+	cursor: pointer;
+}
+.text-link.blue {
+	color: #337ab7;
+}
+.text-link:hover {
+	filter: hue-rotate(45deg);
 }
 .ellipsis {
 	white-space: nowrap;

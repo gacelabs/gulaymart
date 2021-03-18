@@ -113,7 +113,7 @@
 					</div>
 				</form>
 
-				<?php if ($current_profile['profile']['phone']) : ?>
+				<?php if (isset($current_profile['profile']['phone'])) : ?>
 				<form action="api/save_notif" method="post" data-ajax="2" class="form-validate">
 					<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 					<div class="dash-panel theme">
@@ -171,7 +171,7 @@
 				<?php endif; ?>
 			</div>
 
-			<?php if ($current_profile['profile']['phone']) : ?>
+			<?php if (isset($current_profile['profile']['phone'])) : ?>
 			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 shipping-address-panel">
 				<div class="dash-panel theme">
 					<ul class="spaced-list between dash-panel-top">
