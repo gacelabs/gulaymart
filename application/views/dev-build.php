@@ -2,7 +2,7 @@
 <html>
 <head>
 	<base href="<?php echo base_url(); ?>">
-	<title>Development Builder</title>
+	<title><?php echo APP_NAME;?> | Dev Builder</title>
 </head>
 <body>
 	<form action="dev-build/run" method="post">
