@@ -31,6 +31,21 @@
 								</div>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 							</div>
+							<!-- <div class="input-container hide" id="category_container" style="margin-bottom:0;">
+								<label for="product_name">Category</label>
+								<ul class="inline-list">
+									<li class="input-capsule"><input type="checkbox" name="category" id="leafy" value="leafy"><label for="leafy">Leafy</label></li>
+									<li class="input-capsule"><input type="checkbox" name="category" id="root" value="root"><label for="root">Root</label></li>
+									<li class="input-capsule"><input type="checkbox" name="category" id="cruciferous" value="cruciferous"><label for="cruciferous">Cruciferous</label></li>
+									<li class="input-capsule"><input type="checkbox" name="category" id="marrow" value="marrow"><label for="marrow">Marrow</label></li>
+									<li class="input-capsule"><input type="checkbox" name="category" id="stem" value="stem"><label for="stem">Stem</label></li>
+									<li class="input-capsule"><input type="checkbox" name="category" id="allium" value="allium"><label for="allium">Allium</label></li>
+								</ul>
+								<div class="hide arrow_box" id="sub_category">
+									<p>Sub Category</p>
+									<ul class="inline-list"></ul>
+								</div>
+							</div> -->
 							<div class="input-container hide" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
 								<?php if ($this->categories): ?>
