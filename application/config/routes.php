@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'Marketplace';
 
-$route['auth/drop'] = 'Authenticate/drop';
 $route['register'] = 'Authenticate/register';
 $route['sign-up'] = 'Authenticate/sign_up';
 $route['sign-in'] = 'Authenticate/sign_in';

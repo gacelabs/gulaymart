@@ -19,9 +19,9 @@ class DevBuild extends CI_Controller {
 		/*DEFAULT PASSWORD IS 1*/
 		$post = $this->input->post();
 		if ($post) {
-			if (check_data_values($post) AND $post['password'] === '1') {
-				$drop = ((isset($post['drop']) AND $post['drop']) ? 'true' : 'false');
-				// debug($post, $drop, true);
+			if (check_data_values($post) AND $post['password'] === DEVBUILD_PASS) {
+				/*$drop = ((isset($post['drop']) AND $post['drop']) ? 'true' : 'false');
+				debug($post, $drop, true);*/
 				$this->build((isset($post['drop']) AND $post['drop']) ? true : false);
 			}
 		}

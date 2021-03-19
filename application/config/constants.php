@@ -103,3 +103,4 @@ defined('MONTHS') OR define('MONTHS', serialize([
 
 defined('PROFILE_INFO_MESSAGE') OR define('PROFILE_INFO_MESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');
 defined('DEFAULT_OG_IMAGE') OR define('DEFAULT_OG_IMAGE', 'assets/images/logo.png');
+defined('DEVBUILD_PASS') OR define('DEVBUILD_PASS', '1');
