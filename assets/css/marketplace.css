@@ -1,3 +1,16 @@
+#content__top {
+/*	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 0;
+	background-image: url(../images/marketplace-bg.png);
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 55vh;
+	max-height: 500px;
+	filter: grayscale(1);*/
+}
 #marketplace {
 	position: relative;
 }

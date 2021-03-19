@@ -82,6 +82,24 @@
 .normal-radius {
 	border-radius: 3px !important;
 }
+#preview_images_list {
+	margin-top: 15px;
+}
+#preview_images_list>li {
+	margin-right: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+.preview-image-item {
+	background-size: cover;
+	width: 100px;
+	height: 100px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	overflow: hidden;
+	border: 2px solid #ddd;
+	border-radius: 3px;
+}
 /*arrow*/
 .arrow_box {
 	position: relative;

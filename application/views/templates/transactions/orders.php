@@ -10,7 +10,7 @@
 						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h3>Received</h3></a></li>
 						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_cancelled"><h3>Cancelled</h3></a></li>
 					</ul>
-					<div class="dash-panel-middle hideshow-container">
+					<div class="dash-panel-middle hideshow-container" style="padding:0 !important;">
 						<div class="order-list-container">
 							<div class="order-item-container">
 								<div style="margin-bottom: 15px;">
@@ -69,6 +69,7 @@
 									<div class="order-info-container">
 										<div class="order-item-title">
 											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+											<p class="text-link hidden-sm hidden-xs">Write A Feedback</p>
 										</div>
 										<div class="order-item-qty">
 											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
@@ -80,6 +81,7 @@
 											<p class="text-capsule received">Received</p>
 											<p><small class="color-grey">March 1, 2020 @ 3:54pm</small></p>
 										</div>
+										<p class="text-link visible-sm visible-xs">Write A Feedback</p>
 									</div>
 								</div>
 							</div>

@@ -14,9 +14,6 @@ body.orders .dash-panel-top>li:hover a, body.orders .dash-panel-top>li>a.active 
 	border-bottom: 4px solid #555;
 	color: inherit;
 }
-body.orders .order-item-container {
-	margin: 0 0 20px 0;
-}
 body.orders .order-item {
 	display: inline-grid;
 	grid-template-columns: 80px 1fr;
@@ -33,8 +30,8 @@ body.orders .order-item-image {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	width: 100%;
-	padding-top: 100%;
+	width: 80px;
+	height: 80px;
 	margin: 0 auto;
 	text-align: center;
 	border-radius: 3px;
@@ -44,4 +41,10 @@ body.orders .dash-panel-top {
 }
 body.orders .dash-panel-top {
 	white-space: nowrap;
+}
+body.orders .order-list-container>.order-item-container {
+	padding: 10px 15px !important;
+}
+body.orders .order-list-container>.order-item-container:nth-child(even) {
+	background-color: #f7f7f7;
 }

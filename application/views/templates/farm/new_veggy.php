@@ -1,4 +1,5 @@
-<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+<div class="col-lg-8 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
@@ -31,21 +32,6 @@
 								</div>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 							</div>
-							<!-- <div class="input-container hide" id="category_container" style="margin-bottom:0;">
-								<label for="product_name">Category</label>
-								<ul class="inline-list">
-									<li class="input-capsule"><input type="checkbox" name="category" id="leafy" value="leafy"><label for="leafy">Leafy</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="root" value="root"><label for="root">Root</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="cruciferous" value="cruciferous"><label for="cruciferous">Cruciferous</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="marrow" value="marrow"><label for="marrow">Marrow</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="stem" value="stem"><label for="stem">Stem</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="allium" value="allium"><label for="allium">Allium</label></li>
-								</ul>
-								<div class="hide arrow_box" id="sub_category">
-									<p>Sub Category</p>
-									<ul class="inline-list"></ul>
-								</div>
-							</div> -->
 							<div class="input-container hide" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
 								<?php if ($this->categories): ?>
@@ -175,12 +161,6 @@
 							<div class="row">
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
-										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
-									</div>
-								</div>
-								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-									<div class="input-group">
 										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
 										<input type="text" class="form-control" name="products[price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" required="required">
 									</div>
@@ -194,6 +174,12 @@
 												<?php endforeach ?>
 											<?php endif ?>
 										</select>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+									<div class="input-group">
+										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
 									</div>
 								</div>
 							</div>
@@ -227,24 +213,30 @@
 				</div>
 
 				<div class="dash-panel theme">
-					<div class="dash-panel-middle">
-						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Images</p>
-							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
-						</div>
-						<form action="" method="post" enctype="multipart/form-data" id="prod_image">
+					<form action="" method="post" enctype="multipart/form-data" id="prod_image">
+						<div class="dash-panel-middle">
+							<div style="margin-bottom:15px;">
+								<p class="zero-gaps">Images</p>
+								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
+							</div>
+							<ul class="inline-list" id="preview_images_list"></ul>
 							<div class="input-group">
-								<input type="file" class="form-control" required="required">
+								<input type="file" class="form-control" id="input_upload_images" required="required" multiple>
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button">Upload<i class="fa fa-upload icon-right"></i></button>
 								</span>
 							</div>
-							<div id="image_btn_container" style="margin-top:15px;text-align:right;">
-								<button class="btn btn-theme normal-radius">Preview<i class="fa fa-eye icon-right"></i></button>
-							</div>
-						</form>
-					</div>
+						</div>
+						<div class="dash-panel-footer text-right bg-grey">
+							<button class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
+							<button class="btn btn-theme normal-radius icon-right">Publish<i class="fa fa-check icon-right"></i></button>
+						</div>
+					</form>
 				</div>
+			</div>
+
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+				test
 			</div>
 		</div>
 	</div>

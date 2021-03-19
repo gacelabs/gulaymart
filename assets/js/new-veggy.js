@@ -126,4 +126,24 @@ $(document).ready(function() {
 		});
 	});
 
+	$('#input_upload_images').change(function(){
+
+		var checked = "";
+
+		if ($(this)[0].files.length == 1) {
+			checked = "checked";
+		}
+
+        for (var i= 0; i < $(this)[0].files.length; i++) {
+
+        	$('#preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Set as main"><div class="preview-image-item" style="background-image: url('+window.URL.createObjectURL(this.files[i])+')"></div><input type="radio" name="main-image" '+checked+'></li>');
+        }
+
+    	$('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(document).on('click', '.preview-image-item', function() {
+    	$(this).next('input[type="radio"]').prop('checked', true);
+    });
+
 });

@@ -4,6 +4,9 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+.bg-grey {
+	background-color: #f7f7f7;
+}
 .text-link {
 	color: #799938;
 	cursor: pointer;

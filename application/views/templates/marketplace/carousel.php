@@ -14,6 +14,9 @@
 			<div class="item">
 				<img src="assets/images/carousel/lettuce.png">
 			</div>
+			<div class="item">
+				<img src="assets/images/carousel/be-farmer-2.png">
+			</div>
 		</div>
 	</div>
 </div>

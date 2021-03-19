@@ -209,6 +209,7 @@
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<div class="input-group">
+										<span class="input-group-addon"><span class="hidden-xs">Step 1</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 1. Search your barangay name."></i></span>
 										<input type="text" class="form-control" id="search-place" placeholder="Search your barangay, subdivision or village...">
 										<span class="input-group-btn">
 											<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
@@ -219,11 +220,12 @@
 									<div id="map-box" style="width: 100%; height: 220px; margin-bottom: 15px;"></div>
 								</div>
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<div class="form-group">
-										<input type="text" class="form-control" name="address_1" id="address_1" placeholder="House #, Street name, Village..." required="required">
+									<div class="input-group">
+										<span class="input-group-addon"><span class="hidden-xs">Step 2<i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 2. Enter your complete shipping address."></i></span></span>
+										<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter your complete shipping address." required="required">
 									</div>
 									<div class="form-group">
-										<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Barangay, City name, Country..." required="required">
+										<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Search you barangay from Step 1." required="required">
 									</div>
 								</div>
 							</div>
@@ -239,8 +241,11 @@
 			</div>
 			<?php endif; ?>
 			
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				Be a farmer banner here!
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+				<hr>
+				<a href="farm/storefront/">
+					<img src="assets/images/be-farmer.png" class="img-responsive" style="margin:0 auto;">
+				</a>
 			</div>
 		</div>
 	</div>
