@@ -147,12 +147,12 @@ class MY_Loader extends CI_Loader {
 			$vars['current_profile'] = $current_profile;
 			$vars['farms'] = $current_profile ? $current_profile['farms'] : FALSE;
 			// $vars['device_id'] = device_id($_SERVER['REMOTE_ADDR']);
-			$vars['class_name'] = $ci->class_name;
+			$vars['class_name'] = isset($ci->class_name) ? $ci->class_name : 'dev-build';
 		} else if (is_object($vars)) {
 			$vars->current_profile = $current_profile;
 			$vars->farms = $current_profile ? $current_profile->farms : FALSE;
 			// $vars->device_id = device_id($_SERVER['REMOTE_ADDR']);
-			$vars->class_name = $ci->class_name;
+			$vars->class_name = isset($ci->class_name) ? $ci->class_name : 'dev-build';
 		}
 		// debug($vars, 'stop');
 		return parent::view($view, $vars, $return);

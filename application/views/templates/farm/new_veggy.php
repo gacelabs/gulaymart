@@ -33,18 +33,29 @@
 							</div>
 							<div class="input-container hide" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
-								<ul class="inline-list">
-									<li class="input-capsule"><input type="checkbox" name="category" id="leafy" value="leafy"><label for="leafy">Leafy</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="root" value="root"><label for="root">Root</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="cruciferous" value="cruciferous"><label for="cruciferous">Cruciferous</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="marrow" value="marrow"><label for="marrow">Marrow</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="stem" value="stem"><label for="stem">Stem</label></li>
-									<li class="input-capsule"><input type="checkbox" name="category" id="allium" value="allium"><label for="allium">Allium</label></li>
-								</ul>
+								<?php if ($this->categories): ?>
+									<ul class="inline-list">
+									<?php foreach ($this->categories as $key => $category): ?>
+										<li class="input-capsule"><input type="checkbox" name="category" id="category-<?php echo $category['id'];?>" value="<?php echo $category['value'];?>"><label for="category-<?php echo $category['id'];?>"><?php echo $category['label'];?></label></li>
+									<?php endforeach ?>
+									</ul>
+								<?php endif ?>
 								<div class="hide arrow_box" id="sub_category">
 									<p>Sub Category</p>
-									<ul class="inline-list"></ul>
+									<?php if ($this->subcategories): 
+										$reset = array_keys($this->subcategories);
+										$first = reset($reset);
+										?>
+										<?php foreach ($this->subcategories as $cat_id => $subcategory): ?>
+										<ul class="inline-list hide category-<?php echo $cat_id;?>">
+											<?php foreach ($subcategory as $key => $sub): ?>
+												<li class="input-capsule"><input type="radio" name="subcategory" id="subcategory-<?php echo $sub['id'];?>" value="<?php echo $sub['value'];?>"><label for="subcategory-<?php echo $sub['id'];?>"><?php echo $sub['label'];?></label></li>
+											<?php endforeach ?>
+										</ul>
+										<?php endforeach ?>
+									<?php endif ?>
 								</div>
+								<div id='basic_btn_container' style='margin-top:15px;text-align:right;display:none;'><button class='btn btn-theme normal-radius'>Next<i class='fa fa-chevron-right icon-right'></i></button></div>
 							</div>
 						</form>
 					</div>
@@ -156,13 +167,17 @@
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
 										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
-										<input type="text" class="form-control" name="products[price]" required="required">
+										<input type="text" class="form-control" name="products[price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" required="required">
 									</div>
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="form-group">
 										<select type="text" class="form-control" name="products[price]" required="required">
-											<option>Kilo</option>
+											<?php if ($this->measurements): ?>
+												<?php foreach ($this->measurements as $key => $measurement): ?>
+													<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
+												<?php endforeach ?>
+											<?php endif ?>
 										</select>
 									</div>
 								</div>

@@ -1109,6 +1109,17 @@ function get_global_values($request=[])
 		}
 	}
 
+	/*subcategories*/
+	$request['subcategories'] = [];
+	if ($ci->db->table_exists('products_subcategory')) {
+		$subcategories = $ci->gm_db->get('products_subcategory');
+		if ($subcategories) {
+			foreach ($subcategories as $key => $row) {
+				$request['subcategories'][$row['cat_id']][] = $row;
+			}
+		}
+	}
+
 	/*measurements*/
 	$request['measurements'] = [];
 	if ($ci->db->table_exists('products_measurement')) {
@@ -1133,7 +1144,13 @@ function document_title($append='', $replace=' ') {
 }
 
 function str_has_value_echo($search='', $in='', $echo='') {
-	if ((bool)strstr($in, $search)) {
+	if ((bool)strstr($in, (string)$search)) {
+		echo $echo;
+	}
+}
+
+function str_not_value_echo($search='', $in='', $echo='') {
+	if ((bool)strstr($in, (string)$search) == false) {
 		echo $echo;
 	}
 }

@@ -13,6 +13,9 @@ $route['farm/new-veggy'] = 'Farm/new_veggy';
 $route['help-center'] = 'Support/help_center';
 $route['support/help-center'] = 'Support/help_center';
 
+$route['dev-build'] = 'DevBuild/index';
+$route['dev-build/run'] = 'DevBuild/run';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 

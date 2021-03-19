@@ -1,4 +1,5 @@
-<div class="product-item panel" data-category="category-<?php echo $category?>">
+<?php if (isset($category)): ?>
+<div class="product-item panel" data-category="category-<?php echo $category;?>">
 	<div class="product-item-info">
 		<a href="">
 			<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
@@ -14,3 +15,4 @@
 		</a>
 	</div>
 </div>
+<?php endif ?>

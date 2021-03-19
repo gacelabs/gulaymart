@@ -10,10 +10,6 @@ class MY_Controller extends CI_Controller {
 	public $profile = FALSE;
 	public $action = 'index';
 
-	public $farms = FALSE;
-	public $categories = FALSE;
-	public $measurements = FALSE;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -113,9 +109,9 @@ class MY_Controller extends CI_Controller {
 	{
 		$data = get_global_values([]);
 		if (count($data)) {
-			$this->farms = isset($data['farms']) ? $data['farms'] : [];
-			$this->categories = isset($data['categories']) ? $data['categories'] : [];
-			$this->measurements = isset($data['measurements']) ? $data['measurements'] : [];
+			foreach ($data as $key => $value) {
+				$this->$key = $value;
+			}
 		}
 	}
 
@@ -243,14 +239,14 @@ class MY_Controller extends CI_Controller {
 						case 'url':
 							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);
 							break;
-						case 'title': case 'description':
+						case 'title': 
 							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
+							break;
+						case 'description': case 'name':
+							$view['top']['metas'][$key] = str_replace('XXX', APP_DESCRIPTION, $meta_value);
 							break;
 						case 'image':
 							$view['top']['metas'][$key] = str_replace('XXX', base_url(DEFAULT_OG_IMAGE), $meta_value);
-							break;
-						case 'name':
-							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
 							break;
 					}
 				}

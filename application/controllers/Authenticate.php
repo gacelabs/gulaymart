@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Authenticate extends MY_Controller {
 
-	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover', 'drop'];
+	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover'];
 
 	public function index($value=false)
 	{
@@ -205,18 +205,5 @@ class Authenticate extends MY_Controller {
 		$to = 'farm/';
 		if ($is_ok == false) $to = '?error=Invalid credentials';
 		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
-	}
-
-	public function drop()
-	{
-		// debug(DROP_ALL_TABLE, 'stop');
-		if (DROP_ALL_TABLE) {
-			$this->accounts->logout(true);
-			sleep(3);
-			$this->gm_db->drop_tables();
-			echo "All Tables dropped";
-			sleep(10);
-		}
-		redirect(base_url('/'));
 	}
 }

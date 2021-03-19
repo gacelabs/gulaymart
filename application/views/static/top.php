@@ -33,7 +33,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/rwd.css'); ?>">
 	<?php
 	if (count($top['js'])) {
-		foreach ($js as $value) {
+		foreach ($top['js'] as $value) {
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<script type="text/javascript" src="'.$value.'"></script>';
 			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {

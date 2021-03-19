@@ -64,7 +64,12 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'new-veggy'],
+					'js' => [
+						'jquery.inputmask.min',
+						'inputmask.binding',
+						'farm',
+						'new-veggy'
+					],
 				],
 			]);
 		}
