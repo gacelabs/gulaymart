@@ -43,9 +43,14 @@ class DevBuild extends CI_Controller {
 				sleep(10);
 			}
 		}
+
 		/*re-create table*/
-		$tables = [ 'users', 'user_farms', 'user_settings', 'galleries', 'email_session', 'user_shippings', 'user_profiles', 'products', 'products_category', 'products_subcategory', 'products_location', 'products_measurement', 'products_photo' ];
-		foreach ($tables as $key => $table) {
+		foreach ($this->get_data() as $key => $table) {
+			$fields = false;
+			if (is_array($table)) {
+				$fields = $table;
+				$table = $key;
+			}
 			if (!$this->db->table_exists($table)) {
 				/*create table for the first time*/
 				$method = 'create_'.$table.'_table';
@@ -60,11 +65,119 @@ class DevBuild extends CI_Controller {
 					echo "Method ".$method." does not exists! <br>";
 				}
 			}
+			if ($fields) {
+				foreach ($fields as $column => $row) {
+					// debug($row, true);
+					if (!$this->db->field_exists($column, $table) AND !isset($row['alter'])) {
+						$this->load->dbforge();
+						$is_col_created = $this->dbforge->add_column($table, [$column => $row['definition']], (isset($row['after']) ? $row['after'] : NULL));
+						if ($is_col_created AND (isset($row['add_key']) AND strlen(trim($row['add_key'])))) {
+							$this->db->query($row['add_key']);
+						}
+					} elseif (isset($row['alter']) AND $this->db->field_exists($column, $table)) {
+						$this->db->query($row['alter']);
+						$is_col_altered = 1;
+					}
+					if (isset($row['alter']) AND isset($is_col_altered) AND $is_col_altered) {
+						echo "Field ".$column." ".$row['altered']['status']." in Table ".$table."! <br>";
+					} elseif (isset($is_col_created) AND $is_col_created) {
+						echo "Field ".$column." in Table ".$table." created! <br>";
+					} else {
+						echo "Field ".$column." in Table ".$table." existing! <br>";
+					}
+				}
+			}
 		}
 		if (!isset($is_created)) {
-			echo "All Tables and Values already exists! <br>";
+			echo "<br>All Tables and Values already exists! <br>";
 		}
 		return;
+	}
+
+	private function get_data()
+	{
+		$data = [
+			'users',
+			'user_farms',
+			'user_settings',
+			'galleries',
+			'email_session',
+			'user_shippings',
+			'user_profiles',
+			'products' => [
+				'subcategory_id' => [
+					'definition' => [
+						'type' => 'SMALLINT',
+						'default' => '0',
+						'null' => false,
+					],
+					'add_key' => "ALTER TABLE products ADD INDEX subcategory_id (subcategory_id);",
+					'after' => 'category_id',
+				],
+				'inclusion' => [
+					'definition' => [
+						'type' => 'TEXT',
+					],
+					'after' => 'description',
+				],
+				'activity' => [
+					'alter' => "ALTER TABLE products CHANGE COLUMN activity activity SMALLINT(5) NOT NULL DEFAULT '0' AFTER delivery_option_id;",
+					'altered' => [
+						'status' => 'changed default value',
+					],
+				],
+				'current_price' => [
+					'alter' => "ALTER TABLE products CHANGE COLUMN current_price price DECIMAL(10,2) NOT NULL DEFAULT '0.00' AFTER measurement;",
+					'altered' => [
+						'status' => 'changed to price',
+						'column' => 'price',
+					],
+				],
+			],
+			'products_category',
+			'products_subcategory',
+			'products_location',
+			'products_measurement',
+			'products_photo' => [
+				'url_path' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'path',
+				],
+				'status' => [
+					'definition' => [
+						'type' => 'TINYINT',
+						'constraint' => '1',
+						'default' => '1',
+						'null' => false,
+					],
+					'after' => 'url_path',
+				],
+			],
+			'products_attribute' => [
+				'product_id' => [
+					'definition' => [
+						'type' => 'INT',
+						'constraint' => '10',
+						'default' => '0',
+						'null' => false,
+					],
+					'add_key' => "ALTER TABLE products_attribute ADD INDEX product_id (product_id);",
+					'after' => 'id',
+				],
+				'attribute' => [
+					'definition' => [
+						'type' => 'TEXT',
+					],
+					'after' => 'product_id',
+				],
+			],
+		];
+
+		return $data;
 	}
 
 }

@@ -282,7 +282,7 @@ class CreateDev {
 				'constraint' => '10',
 				'default' => 'kg',
 			],
-			"current_price decimal(10,2) NOT NULL DEFAULT '0.00'",
+			"price decimal(10,2) NOT NULL DEFAULT '0.00'",
 			"old_price decimal(10,2) NOT NULL DEFAULT '0.00'",
 			'delivery_option_id' => [
 				'type' => 'SMALLINT',
@@ -290,9 +290,13 @@ class CreateDev {
 			],
 			'activity' => [
 				'type' => 'SMALLINT',
-				'default' => '1',
+				'default' => '0',
 			],
 			'category_id' => [
+				'type' => 'SMALLINT',
+				'default' => '0',
+			],
+			'subcategory_id' => [
 				'type' => 'SMALLINT',
 				'default' => '0',
 			],
@@ -309,6 +313,7 @@ class CreateDev {
 		$this->class->dbforge->add_key('delivery_option_id');
 		$this->class->dbforge->add_key('activity');
 		$this->class->dbforge->add_key('category_id');
+		$this->class->dbforge->add_key('subcategory_id');
 		$this->class->dbforge->add_key('location_id');
 		$table_data = $this->class->dbforge->create_table('products', false, [
 			'ENGINE' => 'InnoDB',
@@ -479,6 +484,27 @@ class CreateDev {
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('is_main');
 		$table_data = $this->class->dbforge->create_table('products_photo', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	public function create_products_attribute_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('products_attribute', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

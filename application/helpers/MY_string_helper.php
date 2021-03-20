@@ -218,7 +218,7 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 						$file_n_extension = explode('.'.$ext, $pathname);
 						$result[] = [
 							'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-							'file_path' => $uploadfile,
+							'path' => $uploadfile,
 							'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 							'status' => $status
 						];
@@ -246,7 +246,7 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 					$file_n_extension = explode('.'.$ext, $pathname);
 					$result = [
 						'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-						'file_path' => $uploadfile,
+						'path' => $uploadfile,
 						'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 						'status' => $status
 					];
@@ -947,48 +947,36 @@ function unique_random_numbers($min, $max, $quantity) {
 	return array_slice($numbers, 0, $quantity);
 }
 
-function check_data_values($data=false, $is_equal_to='') {
+function check_data_values($data=false, $is_equal_to='', &$values=[], &$length=0) {
 	/*method on checking blank values in a post or get*/
-	$has_values = false; $length = 0;
+	$has_values = false;
 	if ($data) {
 		/*check if $data has values*/
 		if (is_array($data)) {
-			$values = [];
-			foreach ($data as $key => $value) {
-				if (is_array($value)) {
-					foreach ($value as $index => $val) {
-						++$length;
-						if (!is_bool($val) AND strlen(trim($val)) > 0) {
-							if ($is_equal_to != '') {
-								$values[] = $val === $is_equal_to;
-							} else {
-								$values[] = true;
-							}
-						} elseif (is_bool($val)) {
-							$values[] = $val;
-						}
-					}
-				} else {
-					++$length;
-					if (!is_bool($value) AND strlen(trim($value)) > 0) {
+			foreach ($data as $key => $row) {
+				if (!is_array($row)) {
+					if (!is_bool($row) AND strlen(trim($row)) > 0) {
 						if ($is_equal_to != '') {
-							$values[] = $value === $is_equal_to;
+							$values[] = $row == $is_equal_to;
 						} else {
 							$values[] = true;
 						}
-					} elseif (is_bool($value)) {
-						$values[] = $value;
+					} elseif (is_bool($row)) {
+						$values[] = $row;
 					}
+				} else {
+					check_data_values($row, $is_equal_to, $values, $length);
 				}
+				$length++;
 			}
-			// debug($data); debug(in_array(false, $values)); debug($values, 1);
+			// debug(!empty($values) AND count($values) == $length);
 			/*if false do not exist then it's true*/
-			if (!empty($values) AND count($values) === $length) {
+			if (!empty($values) AND count($values) == $length) {
 				$has_values = (in_array(false, $values) == false) ? true : false;
 			}
 		} else {
 			if ($is_equal_to != '') {
-				$has_values = $data === $is_equal_to;
+				$has_values = $data == $is_equal_to;
 			} else {
 				if (!is_bool($value) AND strlen(trim($value)) > 0) {
 					$has_values = true;
@@ -998,7 +986,7 @@ function check_data_values($data=false, $is_equal_to='') {
 			}
 		}
 	}
-	// debug($has_values, $length, 'stop');
+	// debug((string)$has_values, $length, $values, 'stop');
 	return $has_values;
 }
 

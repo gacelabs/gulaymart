@@ -54,6 +54,11 @@ class Products {
 					if ($category) {
 						$products[$key]['category'] = $category['label'];
 					}
+
+					$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+					if ($subcategory) {
+						$products[$key]['subcategory'] = $subcategory['label'];
+					}
 					if ($justdata) {
 						unset($products[$key]['id']);
 						unset($products[$key]['user_id']);
@@ -61,6 +66,7 @@ class Products {
 						unset($products[$key]['delivery_option_id']);
 						unset($products[$key]['activity']);
 						unset($products[$key]['category_id']);
+						unset($products[$key]['subcategory_id']);
 						unset($products[$key]['location_id']);
 						unset($products[$key]['added']);
 					}
@@ -77,9 +83,13 @@ class Products {
 		return false;
 	}
 
-	public function count()
+	public function count($where=false)
 	{
-		return $this->class->db->from('products')->count_all_results();
+		if ($where == false) {
+			return $this->class->db->from('products')->count_all_results();
+		} else {
+			return $this->class->db->from('products')->where($where)->count_all_results();
+		}
 	}
 
 	public function new($new=false, $table='products')

@@ -19,9 +19,11 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme">
+				<div class="dash-panel theme score-0">
 					<div class="dash-panel-middle">
-						<form action="" method="post" enctype="multipart/form-data" id="basic_prod_info">
+						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="basic_prod_info">
+							<input type="hidden" name="pos" value="0">
+							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="input-container">
 								<label for="product_name">Product name</label>
 								<div class="input-group">
@@ -37,7 +39,7 @@
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
 									<?php foreach ($this->categories as $key => $category): ?>
-										<li class="input-capsule"><input type="checkbox" name="category" id="category-<?php echo $category['id'];?>" value="<?php echo $category['value'];?>"><label for="category-<?php echo $category['id'];?>"><?php echo $category['label'];?></label></li>
+										<li class="input-capsule"><input type="checkbox" name="products[category_id]" id="category-<?php echo $category['id'];?>" value="<?php echo $category['id'];?>"><label for="category-<?php echo $category['id'];?>"><?php echo $category['label'];?></label></li>
 									<?php endforeach ?>
 									</ul>
 								<?php endif ?>
@@ -50,7 +52,7 @@
 										<?php foreach ($this->subcategories as $cat_id => $subcategory): ?>
 										<ul class="inline-list hide category-<?php echo $cat_id;?>">
 											<?php foreach ($subcategory as $key => $sub): ?>
-												<li class="input-capsule"><input type="radio" name="subcategory" id="subcategory-<?php echo $sub['id'];?>" value="<?php echo $sub['value'];?>"><label for="subcategory-<?php echo $sub['id'];?>"><?php echo $sub['label'];?></label></li>
+												<li class="input-capsule"><input type="radio" name="products[subcategory_id]" id="subcategory-<?php echo $sub['id'];?>" value="<?php echo $sub['id'];?>"><label for="subcategory-<?php echo $sub['id'];?>"><?php echo $sub['label'];?></label></li>
 											<?php endforeach ?>
 										</ul>
 										<?php endforeach ?>
@@ -62,16 +64,17 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme">
+				<div class="dash-panel theme hide score-1">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
 							<p class="zero-gaps">Product attributes</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
-						<form action="" method="post" enctype="multipart/form-data" id="prod_attribute">
+						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_attribute">
+							<input type="hidden" name="pos" value="1">
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
-								<input type="text" class="form-control" name="products[attribute]" required="required" placeholder="How do you grow your plant?">
+								<input type="text" class="form-control" name="products_attribute[0][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="How do you grow your plant?">
 								<div class="input-group-btn">
 									<div class="dropdown">
 										<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -89,7 +92,7 @@
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
-								<input type="text" class="form-control" name="products[attribute]" required="required" placeholder="Sold ripe or unripe?">
+								<input type="text" class="form-control" name="products_attribute[1][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Sold ripe or unripe?">
 								<div class="input-group-btn">
 									<div class="dropdown">
 										<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -104,7 +107,7 @@
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
-								<input type="text" class="form-control" name="products[attribute]" required="required" placeholder="Is the product in good shape?">
+								<input type="text" class="form-control" name="products_attribute[2][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Is the product in good shape?">
 								<div class="input-group-btn">
 									<div class="dropdown">
 										<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -119,7 +122,7 @@
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
-								<input type="text" class="form-control" name="products[attribute]" required="required" placeholder="Freshness detail">
+								<input type="text" class="form-control" name="products_attribute[3][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Freshness detail">
 								<div class="input-group-btn">
 									<div class="dropdown">
 										<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -134,7 +137,7 @@
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
-								<input type="text" class="form-control" name="products[attribute]" required="required" placeholder="How do you package the product?">
+								<input type="text" class="form-control" name="products_attribute[4][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="How do you package the product?">
 								<div class="input-group-btn">
 									<div class="dropdown">
 										<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -151,13 +154,15 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme">
+				<div class="dash-panel theme hide score-2">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
 							<p class="zero-gaps">Pricing</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
-						<form action="" method="post" enctype="multipart/form-data" id="prod_price">
+						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_price">
+							<input type="hidden" name="pos" value="2">
+							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
@@ -167,7 +172,7 @@
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="form-group">
-										<select type="text" class="form-control" name="products[price]" required="required">
+										<select type="text" class="form-control" name="products[measurement]" required="required">
 											<?php if ($this->measurements): ?>
 												<?php foreach ($this->measurements as $key => $measurement): ?>
 													<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
@@ -191,15 +196,17 @@
 				</div>
 
 
-				<div class="dash-panel theme">
+				<div class="dash-panel theme hide score-3">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
 							<p class="zero-gaps">Short description</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
-						<form action="" method="post" enctype="multipart/form-data" id="prod_desc">
+						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_desc">
+							<input type="hidden" name="pos" value="3">
+							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="form-group">
-								<textarea class="form-control" rows="5" required="required"></textarea>
+								<textarea class="form-control" rows="5" name="products[description]" required="required"></textarea>
 							</div>
 							<div class="input-group">
 								<span class="input-group-addon"><span class=" hidden-sm hidden-xs">What's in the bag?</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="What's in the bag?"></i></span>
@@ -212,8 +219,9 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme">
-					<form action="" method="post" enctype="multipart/form-data" id="prod_image">
+				<div class="dash-panel theme hide score-4">
+					<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_image">
+						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">
 								<p class="zero-gaps">Images</p>
@@ -221,15 +229,15 @@
 							</div>
 							<ul class="inline-list" id="preview_images_list"></ul>
 							<div class="input-group">
-								<input type="file" class="form-control" id="input_upload_images" required="required" multiple>
+								<input type="file" class="form-control" name="products_photo[]" id="input_upload_images" required="required" multiple>
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button">Upload<i class="fa fa-upload icon-right"></i></button>
 								</span>
 							</div>
 						</div>
 						<div class="dash-panel-footer text-right bg-grey">
-							<button class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button class="btn btn-theme normal-radius icon-right">Publish<i class="fa fa-check icon-right"></i></button>
+							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
+							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Publish<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>

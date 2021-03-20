@@ -13,7 +13,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				type: form.method,
 				dataType: 'jsonp',
 				// timeout: 1000,
-				// jsonpCallback: 'echo',
+				jsonpCallback: 'gmCall',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
 					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
@@ -34,9 +34,9 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
 					}
-					if (window.location.pathname.indexOf('new') >= 0) {
+					/*if (window.location.pathname.indexOf('new') >= 0) {
 						form.reset();
-					}
+					}*/
 				}
 			};
 

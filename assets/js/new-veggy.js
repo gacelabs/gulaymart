@@ -136,10 +136,15 @@ $(document).ready(function() {
 
         for (var i= 0; i < $(this)[0].files.length; i++) {
 
-        	$('#preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Set as main"><div class="preview-image-item" style="background-image: url('+window.URL.createObjectURL(this.files[i])+')"></div><input type="radio" name="main-image" '+checked+'></li>');
+        	$('#preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Set as main"><div class="preview-image-item" style="background-image: url('+window.URL.createObjectURL(this.files[i])+')"></div><input type="radio" name="products_photo[index]" '+checked+' value="'+i+'" required /></li>');
         }
 
     	$('[data-toggle="tooltip"]').tooltip();
+    	var position = $('.dash-panel[class*=score-]').length - 1;
+		var iTop = ($('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
+		$("html,body").stop().animate({
+			scrollTop: iTop, scrollLeft: 0
+		}, 500);
     });
 
     $(document).on('click', '.preview-image-item', function() {
@@ -147,3 +152,51 @@ $(document).ready(function() {
     });
 
 });
+
+var setProductScore = function(obj) {
+	console.log(obj);
+	var position = parseInt(obj.pos) + 1;
+	if ($('.dash-panel.score-'+(position)).length) {
+		$('.dash-panel.score-'+(position)).removeClass('hide');
+		var iTop = ($('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
+		$("html,body").stop().animate({
+			scrollTop: iTop, scrollLeft: 0
+		}, 500);
+	}
+	if ($('.dash-panel.score-'+parseInt(obj.pos)).length) {
+		$('.dash-panel.score-'+parseInt(obj.pos)).find('form').find('[name="passed"]').remove();
+		$('.dash-panel.score-'+parseInt(obj.pos)).find('form').prepend('<input type="hidden" name="passed" value="'+obj.passed+'"/>');
+	}
+	if (obj.product_id != undefined) {
+		$('[name="product_id"]').remove();
+		$('.dash-panel[class*=score-]').each(function(i, elem) {
+			$(elem).find('form').prepend('<input type="hidden" name="product_id" value="'+obj.product_id+'"/>');
+		});
+	}
+	if (obj.pos == '1') {
+		$.each(obj.products_attribute, function(i, data) {
+			$('[name^="products_attribute"][value="'+data.id+'"]').remove();
+			$('.dash-panel.score-'+parseInt(obj.pos))
+			.find('form')
+			.prepend('<input type="hidden" name="products_attribute['+i+'][id]" value="'+data.id+'" />');
+		});
+	}
+	$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
+}
+
+var failedProductScore = function(obj) {
+	console.log(obj);
+	var panelCnt = $('.dash-panel[class*=score-]').length;
+	for (var position = panelCnt-1; position >= 1; position--) {
+		if ($('.dash-panel.score-'+(position)).length) {
+			$('h3.text-capsule:eq('+position+')').removeClass('score');
+		}
+	}
+}
+
+var redirectNewProduct = function(obj) {
+	runAlertBox({type:'info', message: 'Page will be reloaded after 5 seconds, You may view your inventories <a href="/farm/inventory/"><b>HERE</b></a>'});
+	setTimeout(function() {
+		if (obj.passed) window.location.reload();
+	}, 5000);
+}

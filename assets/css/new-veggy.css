@@ -122,3 +122,10 @@
 	margin-left: -5px;*/
 }
 /*arrow*/
+h3.text-capsule.score {
+	background: #799938 !important;
+	color: white !important;
+}
+h3.text-capsule.score small {
+	color: white !important;
+}

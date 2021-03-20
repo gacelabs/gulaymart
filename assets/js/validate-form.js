@@ -13,11 +13,15 @@ $(document).ready(function() {
 			errorPlacement: function(error, element) {
 				if (element.hasClass('chosen-select')) {
 					element.parent('div').find('.chosen-container-single').addClass('error');
+				} else if (element.attr('type') == 'radio') {
+					element.addClass('error').parent().addClass('error').siblings().addClass('error');
 				}
 			},
 			highlight: function (element, errorClass, validClass) {
 				if ($(element).hasClass('chosen-select')) {
 					$(element).parent('div').find('.chosen-container-single').addClass('error');
+				} else if ($(element).attr('type') == 'radio') {
+					$(element).addClass('error').parent().addClass('error').siblings().addClass('error');
 				} else if ($(element).data('error-include-parent') != undefined) {
 					$(element).parents($(element).data('error-include-parent')+':first').addClass('error');
 				} else {
@@ -27,6 +31,8 @@ $(document).ready(function() {
 			unhighlight: function (element, errorClass, validClass) {
 				if ($(element).hasClass('chosen-select')) {
 					$(element).parent('div').find('.chosen-container-single').removeClass('error');
+				} else if ($(element).attr('type') == 'radio') {
+					$(element).removeClass('error').parent().removeClass('error').siblings().removeClass('error');
 				} else if ($(element).data('error-include-parent') != undefined) {
 					$(element).parents($(element).data('error-include-parent')+':first').removeClass('error');
 				} else {
