@@ -2,6 +2,7 @@
 
 Profile (page)
 
+[1]
 Description:
 Bagong sign up. Tool tip (sa question mark icon) sa may Birthday and Cellphone inputs, ayaw gumana.
 
@@ -15,6 +16,7 @@ Gmap error:
 
 New Veggy (page)
 
+[1]
 Description:
 Sa kalagitnaan ng pag fill out ng new veggy form, na-pindot ung refresh button, or nawalan ng internet, or nag crash ung browser, or kung ano pa mang reason na hindi nakatuloy si user sa dulo ng form.
 
@@ -29,19 +31,19 @@ Pag click ng Next button sa #basic_prod_info, mag check si BE para malaman kung 
 NOTE:
 Eto na din siguro ung sagot sa challenge naten sa duplicate entries.
 
-=-=-=-=-=-=-=-=-=
 
-New Veggy (page)
-
+[2]
 Request:
 1. Stay on the page after Publish, with lahat ng details sa form.
 2. 
 Show #preview_container UI, after Publish.
 
+
 =-=-=-=-=-=-=-=-=
 
 Inventory (page)
 
+[1]
 Request:
 Pwede ko ba piliin lang ung data na idi display?
 For example:
