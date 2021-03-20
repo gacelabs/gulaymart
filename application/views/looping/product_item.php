@@ -10,7 +10,7 @@
 			</div>
 			<div class="product-item-middle">
 				<h1 class="product-title"><?php echo $name;?></h1>
-				<p class="product-price">Php <?php echo $current_price;?> / <?php echo $measurement;?></p>
+				<p class="product-price">&#x20b1; <?php echo $current_price;?> / <?php echo $measurement;?></p>
 			</div>
 		</a>
 	</div>

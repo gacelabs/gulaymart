@@ -195,7 +195,7 @@ var failedProductScore = function(obj) {
 }
 
 var redirectNewProduct = function(obj) {
-	runAlertBox({type:'info', message: 'Page will be reloaded after 5 seconds, You may view your inventories <a href="/farm/inventory/"><b>HERE</b></a>'});
+	runAlertBox({type:'info', message: 'Page reloads in 5 seconds. View your products <a href="/farm/inventory/"><b>HERE</b></a>'});
 	setTimeout(function() {
 		if (obj.passed) window.location.reload();
 	}, 5000);

@@ -1,4 +1,4 @@
-<div class="col-lg-8 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
 	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
@@ -38,9 +38,9 @@
 								<label for="product_name">Category</label>
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
-									<?php foreach ($this->categories as $key => $category): ?>
-										<li class="input-capsule"><input type="checkbox" name="products[category_id]" id="category-<?php echo $category['id'];?>" value="<?php echo $category['id'];?>"><label for="category-<?php echo $category['id'];?>"><?php echo $category['label'];?></label></li>
-									<?php endforeach ?>
+										<?php foreach ($this->categories as $key => $category): ?>
+											<li class="input-capsule"><input type="checkbox" name="products[category_id]" id="category-<?php echo $category['id'];?>" value="<?php echo $category['id'];?>"><label for="category-<?php echo $category['id'];?>"><?php echo $category['label'];?></label></li>
+										<?php endforeach ?>
 									</ul>
 								<?php endif ?>
 								<div class="hide arrow_box" id="sub_category">
@@ -50,11 +50,11 @@
 										$first = reset($reset);
 										?>
 										<?php foreach ($this->subcategories as $cat_id => $subcategory): ?>
-										<ul class="inline-list hide category-<?php echo $cat_id;?>">
-											<?php foreach ($subcategory as $key => $sub): ?>
-												<li class="input-capsule"><input type="radio" name="products[subcategory_id]" id="subcategory-<?php echo $sub['id'];?>" value="<?php echo $sub['id'];?>"><label for="subcategory-<?php echo $sub['id'];?>"><?php echo $sub['label'];?></label></li>
-											<?php endforeach ?>
-										</ul>
+											<ul class="inline-list hide category-<?php echo $cat_id;?>">
+												<?php foreach ($subcategory as $key => $sub): ?>
+													<li class="input-capsule"><input type="radio" name="products[subcategory_id]" id="subcategory-<?php echo $sub['id'];?>" value="<?php echo $sub['id'];?>"><label for="subcategory-<?php echo $sub['id'];?>"><?php echo $sub['label'];?></label></li>
+												<?php endforeach ?>
+											</ul>
 										<?php endforeach ?>
 									<?php endif ?>
 								</div>
@@ -81,7 +81,7 @@
 											Preset <i class="fa fa-angle-down"></i>
 										</button>
 										<ul class="dropdown-menu pull-right">
-											<li><a href="javascript:;">Home grown organically.</a></li>
+											<li><a href="javascript:;">Home or commercially grown organically.</a></li>
 											<li><a href="javascript:;">Traditional soil-based plant.</a></li>
 											<li><a href="javascript:;">Grown using Hydrophonic technology.</a></li>
 											<li><a href="javascript:;">Utilized Acquaphonic technology.</a></li>
@@ -183,7 +183,7 @@
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
 										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
 									</div>
 								</div>
@@ -231,7 +231,7 @@
 							<div class="input-group">
 								<input type="file" class="form-control" name="products_photo[]" id="input_upload_images" required="required" multiple>
 								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">Upload<i class="fa fa-upload icon-right"></i></button>
+									<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
 								</span>
 							</div>
 						</div>
@@ -243,8 +243,32 @@
 				</div>
 			</div>
 
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-				test
+			<!-- show after Publish -->
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
+				<div class="dash-panel">
+					<div class="dash-panel-top">
+						<ul class="spaced-list between">
+							<li><h3>Listing</h3></li>
+							<li><h3><a href="#" target="_new" class="text-link">View</a></h3></li>
+						</ul>
+						<div class="product-item-info">
+							<div class="product-item-top" style="background-image:url('assets/images/onions.jpg');">
+								<ul class="spaced-list between">
+									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 26 mins</small></kbd></li>
+									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> Organic</small></kbd></li>
+								</ul>
+							</div>
+							<div class="product-item-middle">
+								<h1 class="product-title">Fresh & Organic Sweet White Onions</h1>
+								<p class="product-price">&#x20b1; 1.00 / kilo</p>
+							</div>
+							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> For review</h5>
+						</div>
+					</div>
+					<div class="dash-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
+						<a href="farm/new-veggy" class="btn btn-info normal-radius btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
