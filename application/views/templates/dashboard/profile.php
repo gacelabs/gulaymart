@@ -73,7 +73,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday</h5>
+									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Your birth month and year will be used to curate contents."></small></h5>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -99,7 +99,7 @@
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone</h5>
+									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Point of contact for delivery."></small></h5>
 									<div class="form-group">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required">
 									</div>
@@ -242,10 +242,10 @@
 			<?php endif; ?>
 			
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-				<hr>
-				<a href="farm/storefront/">
+				<hr class="carved">
+				<div data-toggle="modal" data-target="#farmer_terms_modal">
 					<img src="assets/images/be-farmer.png" class="img-responsive" style="margin:0 auto;">
-				</a>
+				</div>
 			</div>
 		</div>
 	</div>

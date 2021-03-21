@@ -28,6 +28,10 @@
 	overflow: hidden;
 	z-index: 0;
 }
+.carousel-inner>.item {
+	max-height: 240px;
+	overflow: hidden;
+}
 .carousel-inner {
 	border-bottom-right-radius: 22px;
 	border-bottom-left-radius: 22px;
@@ -106,10 +110,6 @@
 	margin-bottom: 0;
 	padding: 0 !important;
 	box-shadow: none;
-}
-.product-item-info {
-	border-radius: 12px;
-	transition: box-shadow .3s ease-in-out;
 }
 .product-item>a {
 	display: block;
