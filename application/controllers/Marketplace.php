@@ -22,7 +22,7 @@ class Marketplace extends MY_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => APP_NAME.' | Veggies grown by community.',
-				'css' => ['marketplace', 'farmer-card'],
+				'css' => ['marketplace', 'farmer-card', 'product-item'],
 			],
 			'middle' => [
 				'body' => [

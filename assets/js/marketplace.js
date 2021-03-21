@@ -17,6 +17,13 @@ $(document).ready(function() {
 		},
 	});
 
+	$('.veggy-category-item').click(function() {
+		$('.veggy-category-item').find('.veggy-category-item-inner').removeClass('active');
+		$(this).find('.veggy-category-item-inner').addClass('active');
+
+		$('.product-item-inner').masonry();
+	});
+
 	$(document.body).find('[data-category-group]').off('click').on('click', function(e) {
 		$('button[data-category*="loadmore-"]').parent().hide();
 		var a = $(e.target);
@@ -33,6 +40,9 @@ $(document).ready(function() {
 		if (jsonPages[i] != undefined) {
 			$(evt.target).prop('value', i+1).val(i+1);
 			simpleAjax('/marketplace/loadmore/', {record: i, selector: selector, page: jsonPages[i]}, $(evt.target));
+
+			$('.product-item-inner').masonry();
+			
 		}
 		if (jsonPages.length == i+1) $(evt.target).hide();
 	});
@@ -40,12 +50,7 @@ $(document).ready(function() {
 });
 
 $(document).on('ready resize change', function() {
-	$('.product-item-inner').masonry({
-		itemSelector: '.product-item',
-		masonry: {
-			horizontalOrder: true
-		},
-	});
+	$('.product-item-inner').masonry();
 });
 
 var backToLoginForm = function (data) {
