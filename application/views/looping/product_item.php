@@ -9,8 +9,8 @@
 				</ul>
 			</div>
 			<div class="product-item-middle">
-				<h1 class="product-title"><?php echo $name;?></h1>
-				<p class="product-price">&#x20b1; <?php echo $current_price;?> / <?php echo $measurement;?></p>
+				<h1 class="product-title"><?php echo $data['name'];?></h1>
+				<p class="product-price">Php <?php echo $data['price'];?> / <?php echo $data['measurement'];?></p>
 			</div>
 		</a>
 	</div>
