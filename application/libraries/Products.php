@@ -43,33 +43,7 @@ class Products {
 				$results = [];
 				foreach ($products as $key => $product) {
 					$product_id = $products[$key]['id'];
-					$user_id = $products[$key]['user_id'];
-
-					$products[$key]['farm'] = '';
-					$farm = $this->class->gm_db->get('user_farms', ['id' => $product['farm_id'], 'user_id' => $product['user_id']], 'row');
-					// debug($farm, 'stop');
-					if ($farm) $products[$key]['farm'] = $farm['name'];
-
-					$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
-					if ($category) {
-						$products[$key]['category'] = $category['label'];
-					}
-
-					$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
-					if ($subcategory) {
-						$products[$key]['subcategory'] = $subcategory['label'];
-					}
-					if ($justdata) {
-						unset($products[$key]['id']);
-						unset($products[$key]['user_id']);
-						unset($products[$key]['farm_id']);
-						unset($products[$key]['delivery_option_id']);
-						unset($products[$key]['activity']);
-						unset($products[$key]['category_id']);
-						unset($products[$key]['subcategory_id']);
-						unset($products[$key]['location_id']);
-						unset($products[$key]['added']);
-					}
+					$products[$key] = $this->gulay_assemble($products[$key], $justdata);
 					$products[$key]['id'] = $product_id;
 				}
 				// debug($products, 'stop');
@@ -81,6 +55,90 @@ class Products {
 			}
 		}
 		return false;
+	}
+
+	public function get_by_category_pages($where=false)
+	{
+		$clause = ['activity' => 1];
+		if ($where != false) {
+			$clause = $where + $clause;
+		}
+		// debug($clause, 'stop');
+		$data = $this->class->gm_db->get('products', $clause);
+		// $data = $this->get(['activity' => 1]);
+		$tmp_all = $tmp_by_category = [];
+		if ($data) {
+			$tmp_all = $data;
+			// debug($data, 'stop');
+			$all = [];
+			if (count($tmp_all) > PRODUCTSDATALIMIT) {
+				for ($i=0; $i < PRODUCTSDATALIMIT; $i++) {
+					if (isset($tmp_all[$i])) {
+						$product = $tmp_all[$i];
+						$product = $this->gulay_assemble($product);
+						$all['data_page'][] = $product;
+					}
+				}
+				for ($x=$i; $x < count($tmp_all); $x++) {
+					if (isset($tmp_all[$x])) {
+						$product = $tmp_all[$x];
+						$all['next_page'][] = $product['id'];
+					}
+				}
+				if (isset($all['next_page'])) {
+					$next_data = $all['next_page'];
+					$all['next_page'] = array_chunk($next_data, PRODUCTSDATALIMIT);
+				}
+			} else {
+				foreach ($tmp_all as $key => $product) {
+					$tmp_all[$key] = $this->gulay_assemble($product);
+				}
+				$all['data_page'] = $tmp_all;
+				$all['next_page'] = 0;
+			}
+			// debug($all, 'stop');
+
+			/*setup per category*/
+			foreach ($data as $row) $tmp_by_category[$row['category_id']][] = $row;
+			// debug($tmp_by_category, 'stop');
+
+			$categories = [];
+			foreach ($tmp_by_category as $category_id => $products) {
+				$handler = [];
+				if (count($products) > PRODUCTSDATALIMIT) {
+					for ($i=0; $i < PRODUCTSDATALIMIT; $i++) {
+						if (isset($products[$i])) {
+							$product = $products[$i];
+							$product = $this->gulay_assemble($product);
+							$handler['data_page'][] = $product;
+						}
+					}
+					for ($x=$i; $x < count($products); $x++) {
+						if (isset($products[$x])) {
+							$handler['next_page'][] = $products[$x]['id'];
+						}
+					}
+					if (isset($handler['next_page'])) {
+						$next_data = $handler['next_page'];
+						$handler['next_page'] = array_chunk($next_data, PRODUCTSDATALIMIT);
+					}
+				} else {
+					foreach ($products as $key => $product) {
+						$products[$key] = $this->gulay_assemble($product);
+					}
+					$handler['data_page'] = $products;
+					$handler['next_page'] = 0;
+				}
+				$categories[$category_id] = $handler;
+			}
+
+			$products = [
+				'all' => $all,
+				'categories' => $categories,
+			];
+			// debug($products, 'stop');
+			return $products;
+		}
 	}
 
 	public function count($where=false)
@@ -128,5 +186,43 @@ class Products {
 			return true;
 		}
 		return false;
+	}
+
+	public function gulay_assemble($product=false, $data_only=true)
+	{
+		if ($product) {
+			$farm = $this->class->gm_db->get('user_farms', [
+				'id' => $product['farm_id'], 'user_id' => $product['user_id']
+			], 'row');
+			$product['farm'] = false;
+			if ($farm) $product['farm'] = $farm['name'];
+
+			$product['category'] = false;
+			$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+			if ($category) $product['category'] = $category['label'];
+
+			$product['subcategory'] = false;
+			$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+			if ($subcategory) {
+				$product['subcategory'] = $subcategory['label'];
+			}
+			$updated = $product['updated'];
+			$product['activity'] = $product['activity'] ? 'Published' : 'Draft';
+
+			if ($data_only) {
+				unset($product['user_id']);
+				unset($product['farm_id']);
+				unset($product['delivery_option_id']);
+				unset($product['old_price']);
+				unset($product['category_id']);
+				unset($product['subcategory_id']);
+				unset($product['location_id']);
+				unset($product['added']);
+				unset($product['updated']);
+			}
+			
+			$product['updated'] = $updated;
+		}
+		return $product;
 	}
 }

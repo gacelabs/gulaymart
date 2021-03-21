@@ -2,21 +2,43 @@
 	<div class="product-item-body">
 		<div class="product-item-inner">
 			<?php
+				// debug($data['products'], 'stop');
 				if ($data['products']) {
-					foreach ($data['products'] as $key => $product) {
-						$this->view('looping/product_item', $product);
+					$all = $data['products']['all'];
+					foreach ($all['data_page'] as $key => $product) {
+						$this->view('looping/product_item', ['data'=>$product, 'id'=>'all']);
+					}
+					$categories = $data['products']['categories'];
+					foreach ($categories as $category_id => $row) {
+						$category = $row['data_page'];
+						foreach ($category as $key => $product) {
+							$this->view('looping/product_item', ['data'=>$product, 'id'=>$category_id]);
+						}
 					}
 				}
 				// debug($current_profile);
 			?>
 		</div>
-		<?php if ($data['products']): ?>
-			<?php if ($data['total'] > count($data['products'])): ?>
+		<?php
+		if ($data['products']) {
+			$all = $data['products']['all'];
+			if (isset($all['next_page']) AND $all['next_page'] != 0) {
+				$next_page = json_encode($all['next_page']);?>
 				<div class="btn-generic-container">
-					<button>More Veggies</button>
-				</div>
-			<?php endif ?>
-		<?php endif ?>
+					<button data-json='<?php echo $next_page;?>' value="0" data-selector='data-category="all"' data-category="loadmore-all">More Veggies</button>
+				</div><?php
+			}
+			$categories = $data['products']['categories'];
+			foreach ($categories as $category_id => $row) {
+				if (isset($row['next_page']) AND $row['next_page'] != 0) {
+					$next_page = json_encode($row['next_page']);?>
+					<div class="btn-generic-container" style="display: none;">
+						<button data-json='<?php echo $next_page;?>' value="0" data-selector='data-category="<?php echo $category_id;?>"' data-category="loadmore-<?php echo $category_id;?>">More Veggies</button>
+					</div><?php
+				}
+			}
+		}
+		?>
 
 		<div class="hide <?php echo $current_profile ? "in" : ""; ?>" id="bottom_nav_sm">
 			<div class="bottom-nav-item onlogged-in-btns<?php echo $current_profile ? '' : ' hide';?>">

@@ -13,6 +13,7 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
+		// debug($this->products->get_by_category_pages(), 'stop');
 		$this->render_page([
 			'top' => [
 				'metas' => [
@@ -42,9 +43,25 @@ class Marketplace extends MY_Controller {
 				'js' => ['isotope.min', 'marketplace', 'fb-login'],
 			],
 			'data' => [
-				'products' => $this->products->get(),
-				'total' => $this->products->count()
+				'products' => $this->products->get_by_category_pages()
 			],
 		]);
+	}
+
+	public function loadmore()
+	{
+		$post = $this->input->post();
+		$html = '';
+		if ($post) {
+			foreach ($post['page'] as $key => $id) {
+				$product = $this->products->get(['id' => $id], false, true, true);
+				$html .= $this->load->view('looping/product_item', ['data'=>$product, 'id'=>$id, 'forajax'=>true], true);
+			}
+			// debug($post, $html, 'stop');
+			if (strlen(trim($html)) > 0) {
+				echo json_encode(['success' => true, 'data' => ['post' => $post, 'html' => $html], 'callback' => 'renderMoreVeggies']); exit();
+			}
+		}
+		echo json_encode(['success' => false, 'data' => ['post' => $post, 'html' => $html]]); exit();
 	}
 }

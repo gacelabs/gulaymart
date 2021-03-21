@@ -17,15 +17,24 @@ $(document).ready(function() {
 		},
 	});
 
-	$('[data-category-group]').off('click').on('click', function(e) {
+	$(document.body).find('[data-category-group]').off('click').on('click', function(e) {
+		$('button[data-category*="loadmore-"]').parent().hide();
 		var a = $(e.target);
 		if (a.prop('tagName') != 'A') a = a.parents('a:first');
-		var group = a.data('category-group');
-		if (group != 'all') {
-			$('.product-item-inner').isotope({filter: '[data-category*="'+group+'"]'});
-		} else {
-			$('.product-item-inner').isotope({filter: '*'});
+		var id = a.data('category-group');
+		$('.product-item-inner').isotope({filter: '[data-category="'+id+'"]'});
+		$('button[data-category="loadmore-'+id+'"]').parent().show();
+	});
+
+	$(document.body).find('.product-item-inner').isotope({filter: '[data-category="all"]'});
+
+	$(document.body).find('button[data-category*="loadmore-"]').off('click').on('click', function(evt) {
+		var jsonPages = $(evt.target).data('json'), i = parseInt($(evt.target).val()), selector = $(evt.target).data('selector');
+		if (jsonPages[i] != undefined) {
+			$(evt.target).prop('value', i+1).val(i+1);
+			simpleAjax('/marketplace/loadmore/', {record: i, selector: selector, page: jsonPages[i]}, $(evt.target));
 		}
+		if (jsonPages.length == i+1) $(evt.target).hide();
 	});
 
 });
@@ -46,4 +55,15 @@ var backToLoginForm = function (data) {
 		$('.ask-sign-in:visible').trigger('click');
 		$('#login_modal').modal('hide');
 	}, 1000);
+}
+
+var renderMoreVeggies = function (data) {
+	if (data && data.post) {
+		var selector = $('['+data.post.selector+']').parent('.product-item-inner');
+		if (selector.length) {
+			// selector.append($(data.html)).isotope('appended', $(data.html)).isotope('reloadItems');
+			// selector.isotope({filter: '['+data.post.selector+']'});
+			selector.isotope('insert', $(data.html)).isotope('reloadItems');
+		}
+	}
 }

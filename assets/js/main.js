@@ -44,7 +44,7 @@ $(document).ready(function() {
 			type: 'get',
 			data: oData,
 			dataType: 'jsonp',
-			jsonpCallback: 'echo',
+			jsonpCallback: 'gmCall',
 			error: function(xhr, status, thrown) {
 				console.log(status, thrown);
 			}

@@ -15,7 +15,7 @@
 			</div>
 			<?php foreach ($this->categories as $key => $category): ?>
 				<div class="veggy-category-item">
-					<a href="javascript:;" class="veggy-category-item-inner" data-category-group="category-<?php echo $category['label'];?>">
+					<a href="javascript:;" class="veggy-category-item-inner" data-category-group="<?php echo $category['id'];?>">
 						<img src="<?php echo $category['photo'];?>" />
 						<ul class="spaced-list between">
 							<li><p><?php echo $category['label'];?></p></li>

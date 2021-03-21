@@ -59,25 +59,38 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, simpleAjax = function(url, data) {
+var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
+	if (ui == undefined) ui = false;
 	if (url) {
+		if (ui) var sLastButtonText = ui.html();
 		var oSettings = {
 			url: url,
 			type: 'post',
 			data: data,
 			dataType: 'json',
-			beforeSend: function(xhr, settings) {},
+			beforeSend: function(xhr, settings) {
+				if (ui) {
+					ui.addClass('active-ajaxed-btn');
+					ui.attr('data-orig-ui', sLastButtonText);
+					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Fetching ...');
+				}
+			},
 			success: function(data) {
 				if (data && data.success) {
-					if (data.redirect) window.location = data.redirect;
+					ajaxSuccessResponse(data);
 				}
 			},
 			error: function(xhr, status, thrown) {
 				console.log(status, thrown);
 			},
-			complete: function(xhr, status) {}
+			complete: function(xhr, status) {
+				if (ui) {
+					ui.html(ui.data('orig-ui'));
+					ui.removeAttr('disabled');
+				}
+			}
 		};
 		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4) oSimpleAjax.abort();
 		oSimpleAjax = $.ajax(oSettings);
@@ -87,13 +100,14 @@ var oSimpleAjax = false, simpleAjax = function(url, data) {
 var ajaxSuccessResponse = function(response) {
 	console.log(response);
 	var iConfirmed = true;
-	if (response && response.type) {
+	if (response && response.type && response.type.length) {
 		iConfirmed = runAlertBox(response, undefined, iConfirmed);
 	}
 	if (iConfirmed) {
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
+				console.log(response.callback, 'function');
 				fn(response.data);
 			}
 		}
