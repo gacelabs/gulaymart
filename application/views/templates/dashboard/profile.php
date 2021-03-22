@@ -243,7 +243,7 @@
 			
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
 				<hr class="carved">
-				<div data-toggle="modal" data-target="#farmer_terms_modal">
+				<div data-toggle="modal" data-target="#farmer_terms_modal" style="background-color:#f8f8f8;padding:30px 0;margin:40px 0 0;">
 					<img src="assets/images/be-farmer.png" class="img-responsive" style="margin:0 auto;">
 				</div>
 			</div>

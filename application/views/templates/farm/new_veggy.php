@@ -249,7 +249,7 @@
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">
 							<li><h3>Listing</h3></li>
-							<li><h3><a href="#" target="_new" class="text-link">View</a></h3></li>
+							<li><h3><a href="#" target="_new" class="text-link">Product Page</a></h3></li>
 						</ul>
 						<div class="product-item-info">
 							<div class="product-item-top" style="background-image:url('assets/images/onions.jpg');">

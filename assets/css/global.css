@@ -8,6 +8,10 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+.center-panel-md {
+	width: 900px;
+	margin: 0 auto;
+}
 b, label {
 	font-family: 'Roboto-Bold', sans-serif;
 	font-weight: normal;
