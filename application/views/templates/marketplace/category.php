@@ -5,16 +5,16 @@
 	<div class="panel zero-gaps" style="border-radius:12px;">
 		<div id="veggy_categories">
 			<div class="veggy-category-item">
-				<div class="veggy-category-item-inner active" data-category-group="all">
+				<a href="" class="veggy-category-item-inner active" data-category-group="all">
 					<img src="assets/images/all.png" />
 					<ul class="spaced-list between">
 						<li><p>All</p></li>
 						<li><i class="fa fa-chevron-down icon-right"></i></li>
 					</ul>
-				</div>
+				</a>
 			</div>
 			<?php foreach ($this->categories as $key => $category): ?>
-				<div class="veggy-category-item">
+				<a href="" class="veggy-category-item">
 					<div class="veggy-category-item-inner" data-category-group="<?php echo $category['id'];?>">
 						<img src="<?php echo $category['photo'];?>" />
 						<ul class="spaced-list between">
@@ -22,7 +22,7 @@
 							<li><i class="fa fa-chevron-down icon-right"></i></li>
 						</ul>
 					</div>
-				</div>
+				</a>
 			<?php endforeach ?>
 		</div>
 	</div>

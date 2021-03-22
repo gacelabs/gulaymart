@@ -6,7 +6,7 @@
 				<div class="dash-panel">
 					<div class="dash-panel-top">
 						<h3 style="margin-bottom: 15px;">Welcome to Storefront!</h3>
-						<p>On this page, you can create your very own website-like business page for your farm. Get discovered by the Gulaymart community by sharing your farming stories, experiences, videos, photos and more!</p>
+						<p>On this page, you can build your very own online store for your farm. Get discovered by the Gulaymart community by sharing your farming stories, posting videos or photos and more!</p>
 						<div class="text-center">
 							<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;">
 							<button class="btn btn-lg btn-theme normal-radius">Let's get started!</button>
