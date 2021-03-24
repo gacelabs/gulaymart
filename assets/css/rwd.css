@@ -45,6 +45,12 @@
 	.center-panel-md {
 		width: 90%;
 	}
+	#storefront_customs_parent {
+		padding: 0 10px;
+	}
+	.custom-item-btn {
+		padding: 10px 10px 10px 7px !important;
+	}
 }
 
 @media (max-width: 991px) {
@@ -132,7 +138,7 @@
 	.aside-nav-child {
 		margin-left: 15px;
 	}
-	.order-item-container, .dash-panel-right-canvas>.col-xs-12 {
+	.order-item-container, .dash-panel-right-canvas>.col-xs-12, #storefront_customs_parent {
 		padding: 0 !important;
 	}
 	.dash-panel {

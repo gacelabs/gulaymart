@@ -197,7 +197,7 @@ class Farm extends MY_Controller {
 			],
 			'bottom' => [
 				'modals' => ['farmer_terms_modal'],
-				'js' => ['farm'],
+				'js' => ['farm', 'storefront'],
 			],
 		]);
 	}

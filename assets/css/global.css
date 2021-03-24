@@ -323,6 +323,13 @@ button.btn-theme, a.btn-theme {
 button.btn-theme:hover, a.btn-theme:hover {
 	background-color: #3b9ff5 !important;
 }
+button.btn-blue {
+	background-color: #3b9ff5;
+	color: #fff !important;
+}
+button.btn-blue:hover {
+	filter: hue-rotate(45deg);
+}
 .btn-generic-container {
 	text-align: center;
 	margin: 10px 0;

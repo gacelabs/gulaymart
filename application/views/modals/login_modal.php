@@ -17,7 +17,7 @@
 
 					<div class="login-middle reset-detail hide">
 						<h1>Forgot Password</h1>
-						<p>Receive your current password on the email you've used to register.</p>
+						<p>We'll send your current password to the email address you've used to register.</p>
 					</div>
 
 					<div class="login-footer">
@@ -50,7 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
-							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left icon-left"></i> back to Log In</button>
+							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-angle-left icon-left"></i>Log In</button>
 						</div>
 					</div>
 				</div>

@@ -74,7 +74,7 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 .aside-nav-item>a.active, .aside-nav-child>a.active {
 	background-color: #ccdea5;
 	color: inherit;
-	font-weight: bold;
+	font-family: 'Roboto-Bold', sans-serif;
 }
 .aside-nav-child>a.active {
 	background-color: #e2efc6;
