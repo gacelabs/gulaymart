@@ -1,7 +1,6 @@
-
 <?php if ($this->categories): ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="category_container">
-	<h3>Categories</h3>
+	<h3><b>Categories</b></h3>
 	<div class="panel zero-gaps" style="border-radius:12px;">
 		<div id="veggy_categories">
 			<div class="veggy-category-item">

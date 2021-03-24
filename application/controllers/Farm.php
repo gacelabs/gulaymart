@@ -184,6 +184,9 @@ class Farm extends MY_Controller {
 	public function storefront()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['storefront'],
+			],
 			'middle' => [
 				'body_class' => ['farm', 'storefront'],
 				'head' => ['dashboard/nav_top'],
@@ -193,6 +196,7 @@ class Farm extends MY_Controller {
 				],
 			],
 			'bottom' => [
+				'modals' => ['farmer_terms_modal'],
 				'js' => ['farm'],
 			],
 		]);

@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="poster_container">
-		<h3>Support local farmers</h3>
+		<h3><b>Support local farmers</b></h3>
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
 				<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>

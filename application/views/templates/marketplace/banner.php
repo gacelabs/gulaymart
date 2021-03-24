@@ -1,5 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="banner_container">
-	<h3>Veggies nearby</h3>
+	<h3><b>Veggies nearby</b></h3>
 	<div class="panel zero-gaps banner-body">
 		<div class="banner-left text-center">
 			<img src="assets/images/delivermotor.png">

@@ -24,7 +24,7 @@ class Profile extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'modals' => ['login_modal', 'farmer_terms_modal'],
+				'modals' => ['login_modal'],
 				'js' => [
 					'jquery.inputmask.min',
 					'inputmask.binding',

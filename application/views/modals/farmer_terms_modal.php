@@ -31,12 +31,12 @@
 					<h4>Sounds good?</h4>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="farmer_terms" style="margin-top:3px;"> Terms &amp; Condition
+							<input type="checkbox" name="farmer_terms" style="margin-top:3px;" required="required"> Terms &amp; Condition
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="farmer_terms" style="margin-top:3px;"> Privacy Policy
+							<input type="checkbox" name="farmer_terms" style="margin-top:3px;" required="required"> Privacy Policy
 						</label>
 					</div>
 					<button type="submit" class="btn btn-theme normal-radius">Create My Farm</button>

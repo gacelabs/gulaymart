@@ -42,6 +42,9 @@
 		grid-template-columns: 40% 1fr 1fr 1fr;
 		grid-gap: 10px;
 	}
+	.center-panel-md {
+		width: 90%;
+	}
 }
 
 @media (max-width: 991px) {
@@ -173,6 +176,9 @@
 	#content__top {
 		max-height: 370px;
 	}
+	.center-panel-md {
+		width: 100%;
+	}
 }
 
 @media (max-width: 767px) {
@@ -185,7 +191,17 @@
 	div#marketplace {
 		margin-top: 0;
 	}
-	
+	body.marketplace {
+		padding-top: 0;
+	}
+	#marketplace_nav_body {
+		padding: 0;
+		position: static;
+	}
+	.marketplace-navbar-container {
+    	width: 100%;
+		padding: 0;
+	}
 	#search_with_nav_btns {
 		grid-template-columns: auto 1fr auto;
 		padding: 10px;
@@ -349,14 +365,13 @@
 	.carousel-caption p {
 		font-size: 12px;
 	}
-	#banner_container .panel, #banner_container .panel {
-		margin-left: -15px;
-		margin-right: -15px;
+	#banner_container .panel, #banner_container .panel, #category_container .panel, #content__footer #carousel-example-generic  {
+		margin-left: -15px !important;
+		margin-right: -15px !important;
 		border-radius: 0;
 	}
 	#category_container .panel {
-		margin-left: -10px;
-		margin-right: -10px;
+		border-radius: 0 !important;
 	}
 	.farmers-card-container {
 		overflow-x: auto;
@@ -441,5 +456,8 @@
 		white-space: nowrap;
 		overflow-x: auto;
 		padding-bottom: 5px;
+	}
+	#content__top {
+		background-image: none;
 	}
 }

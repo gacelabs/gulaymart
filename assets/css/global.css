@@ -8,6 +8,10 @@ body {
 	background-color: #eeefec;
 	color: #444;
 }
+#farmer_terms_modal .modal-body {
+	max-height: 500px;
+	overflow-y: auto;
+}
 .center-panel-md {
 	width: 900px;
 	margin: 0 auto;
@@ -89,8 +93,11 @@ i.i-logo.white {
 	display: block;
 	padding: 9px 20px;
 	transition: all .3s ease-in-out;
-	background-color: #337ab7;
+	background-color: #3b9ff5;
 	color: #fff !important;
+}
+.login-button>a:hover {
+	filter: saturate(2);
 }
 #login_modal .modal-content {
 	background: transparent;
@@ -515,8 +522,8 @@ input:checked + .slider:before {
 	border-radius: 50%;
 }
 .zero-gaps {
-	padding: 0;
-	margin: 0;
+	padding: 0 !important;
+	margin: 0 !important;
 }
 @-webkit-keyframes spinner-border {
 	to {

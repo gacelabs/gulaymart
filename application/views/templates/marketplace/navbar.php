@@ -1,8 +1,8 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="marketplace_nav_body">
-	<div class="panel marketplace-navbar-container">
+	<div class="container marketplace-navbar-container">
 		<div id="search_with_nav_btns">
 			<div class="my-logo">
-				<a href=""><i class="fa fa-leaf"></i></a>
+				<a href=""><i class="fa fa-leaf" style="border-color:#fff;color:#fff;"></i></a>
 			</div>
 			<?php $this->load->view('forms/search_form'); ?>
 			<ul id="search_nav_btns">
