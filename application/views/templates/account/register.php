@@ -15,7 +15,7 @@
 	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 		<div id="register_form">
 			<div class="register-top">
-				<h4>Support local farmers. Sign up!</h4>
+				<h4><b>Support local farmers. Sign up!</b></h4>
 			</div>
 			<form action="sign-up" method="post" class="form-validate">
 				<div class="register-middle">
@@ -46,3 +46,5 @@
 		</div>
 	</div>
 </div>
+
+<?php $this->view('static/footer'); ?>

@@ -33,10 +33,10 @@ hr.carved {
 	cursor: pointer;
 }
 .text-link.blue {
-	color: #337ab7;
+	color: #3b9ff5;
 }
 .text-link:hover {
-	filter: hue-rotate(45deg);
+	filter: hue-rotate(45deg)
 }
 .ellipsis {
 	white-space: nowrap;
@@ -97,7 +97,7 @@ i.i-logo.white {
 	color: #fff !important;
 }
 .login-button>a:hover {
-	filter: saturate(2);
+	filter: hue-rotate(45deg);
 }
 #login_modal .modal-content {
 	background: transparent;
@@ -321,7 +321,7 @@ button.btn-theme, a.btn-theme {
 	transition: all .3s ease-in-out;
 }
 button.btn-theme:hover, a.btn-theme:hover {
-	background-color: #6d8a33;
+	background-color: #3b9ff5 !important;
 }
 .btn-generic-container {
 	text-align: center;
@@ -392,7 +392,7 @@ a {
 	color: inherit;
 }
 a:hover, [data-target="#login_modal"]:hover {
-	color: #337ab7;
+	color: #3b9ff5;
 }
 .search-category-body {
 	margin-bottom: 10px;
