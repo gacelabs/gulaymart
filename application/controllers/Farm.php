@@ -185,7 +185,7 @@ class Farm extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['storefront'],
+				'css' => ['storefront', 'storefront-page'],
 			],
 			'middle' => [
 				'body_class' => ['farm', 'storefront'],

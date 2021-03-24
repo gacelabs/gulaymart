@@ -125,20 +125,28 @@
 				</div>
 			</div>
 
-			<div class="col-lg-3 col-md-4 col-sm-12 hidden-xs" id="storefront_preview_parent">
+			<div class="col-lg-1 hidden-md hidden-sm hidden-xs"></div>			
+
+			<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs" id="storefront_preview_parent">
 				<div class="cover_image" id="storefront_page_container">
-					<div class="storefront-top ">
-						<ul class="grid-list half">
-							<li><h1 class="farm_name"></h1></li>
-							<li class="text-center"><div class="profile_photo"></div></li>
-						</ul>
+					<div class="storefront-top" style="background-image: url(assets/images/storefront-top.jpg);">
+						<div id="farm_identity">
+							<ul class="grid-list half">
+								<li class="text-left">
+									<h1 class="farm_name">The Humble Farm</h1>
+									<h4 class="tagline">Your friendly neighborhood vegetable farm.</h4>
+								</li>
+								<li class="text-right"><div class="profile_photo" style="background-image: url(assets/images/noavatar.png);"></div></li>
+							</ul>
+						</div>
 					</div>
 					
 					<div class="storefront-middle">
-						<ul class="spaced-list between" id="storefront_navbar">
-							<li><a href="store/store-name/products/">Products</a></li>
-							<li><a href="store/store-name/products/">Stories</a></li>
-							<li><a href="store/store-name/products/">About</a></li>
+						<ul class="spaced-list around" id="storefront_navbar">
+							<li><a href="javascript:;" class="active">Products</a></li>
+							<li><a href="javascript:;">Stories</a></li>
+							<li><a href="javascript:;">Gallery</a></li>
+							<li><a href="javascript:;">About</a></li>
 						</ul>
 
 						<div id="storefront_product_container">
