@@ -1,13 +1,20 @@
 $(document).ready(function() {
-	jQuery.validator.addMethod("emailExt", function(value, element, param) {
-		return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
-	},'Your E-mail is wrong');
+	runFormValidation();
+});
 
-	var forms = $(document.body).find('.form-validate');
+jQuery.validator.addMethod("emailExt", function(value, element, param) {
+	return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+},'Your E-mail is wrong');
 
+function runFormValidation(forms) {
+	if (forms == undefined) {
+		forms = $(document.body).find('.form-validate');
+	} else {
+		forms = $(forms);
+	}
+	// console.log(forms);
 	forms.each(function(i, elem) {
 		var form = $(elem);
-
 		form.validate({
 			ignore: '.ignore',
 			errorPlacement: function(error, element) {
@@ -51,6 +58,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-});
 
-// revised and moved the codes from down here to public\requirements\js\recaptcha-loader.js
+
+}

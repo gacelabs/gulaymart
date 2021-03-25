@@ -5,3 +5,8 @@
 <script type="text/javascript" src="<?php echo base_url('assets/js/validate-form.js');?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/toast.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/common.js'); ?>"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#main-obj-script').remove();
+	});
+</script>
