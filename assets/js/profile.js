@@ -68,7 +68,6 @@ $(document).ready(function() {
 			url: $(e.target).data('url'),
 			type: 'get',
 			data: oData,
-			dataType: 'json',
 			error: function(xhr, status, thrown) {
 				console.log(xhr, status, thrown);
 			}

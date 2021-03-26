@@ -5,7 +5,7 @@
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
 				<div class="dash-panel" id="score-detail-panel">
 					<div class="dash-panel-top">
-						<h3>Product details score</h3>
+						<h3>Product Details Score</h3>
 					</div>
 					<div class="dash-panel-middle">
 						<ul class="spaced-list around">
@@ -22,7 +22,7 @@
 
 				<div class="dash-panel theme score-0">
 					<div class="dash-panel-middle">
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="basic_prod_info">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
 							<input type="hidden" name="pos" value="0">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="input-container">
@@ -71,7 +71,7 @@
 							<p class="zero-gaps">Product attributes</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_attribute">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
@@ -161,7 +161,7 @@
 							<p class="zero-gaps">Pricing</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_price">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
@@ -196,14 +196,13 @@
 					</div>
 				</div>
 
-
 				<div class="dash-panel theme hide score-3">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
 							<p class="zero-gaps">Short description</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_desc">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="form-group">
@@ -221,7 +220,7 @@
 				</div>
 
 				<div class="dash-panel theme hide score-4">
-					<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_image">
+					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_image">
 						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">

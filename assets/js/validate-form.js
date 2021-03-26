@@ -15,13 +15,19 @@ function runFormValidation(forms) {
 	// console.log(forms);
 	forms.each(function(i, elem) {
 		var form = $(elem);
-		form.on('keyup keypress', function(e) {
-			var keyCode = e.keyCode || e.which;
-			if (keyCode === 13) { 
-				e.preventDefault();
-				return false;
+		if (form.data('disable') != undefined) {
+			switch (form.data('disable')) {
+				case 'enter':
+					form.on('keyup keypress', function(e) {
+						var keyCode = e.keyCode || e.which;
+						if (keyCode === 13) { 
+							e.preventDefault();
+							return false;
+						}
+					});
+				break;
 			}
-		});
+		}
 		form.validate({
 			ignore: '.ignore',
 			errorPlacement: function(error, element) {
