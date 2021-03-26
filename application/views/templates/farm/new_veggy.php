@@ -16,6 +16,7 @@
 							<li><h3 class="text-capsule"><i class="fa fa-check"></i></h3></li>
 						</ul>
 						<div class="timeline-border"></div>
+						<div class="timeline-border-progress"></div>
 					</div>
 				</div>
 

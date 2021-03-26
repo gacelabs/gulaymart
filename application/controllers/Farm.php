@@ -122,6 +122,7 @@ class Farm extends MY_Controller {
 				case '4':
 					if (isset($product_id) AND $product_id > 0) {
 						// debug($post, 'stop');
+						if (!isset($post['activity'])) $post['activity'] = 0;
 						$dir = str_replace('@', '-', $profile['email_address']);
 						$uploads = files_upload($_FILES, $dir);
 						$ids = [];

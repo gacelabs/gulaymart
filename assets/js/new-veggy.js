@@ -166,10 +166,12 @@ var setProductScore = function(obj) {
 			$(elem).find('form').prepend('<input type="hidden" name="product_id" value="'+obj.product_id+'"/>');
 		});
 	}
+	$('.timeline-border-progress').removeAttr('data-percent');
 	switch (obj.pos) {
 		case '0':
 			$('#order-title').text(obj.products.name);
 			$('#order-link').attr('href', 'view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
+			$('.timeline-border-progress').attr('data-percent', '10');
 		break;
 		case '1':
 			$.each(obj.products_attribute, function(i, data) {
@@ -178,14 +180,18 @@ var setProductScore = function(obj) {
 				.find('form')
 				.prepend('<input type="hidden" name="products_attribute['+i+'][id]" value="'+data.id+'" />');
 			});
+			$('.timeline-border-progress').attr('data-percent', '30');
 		break;
 		case '2':
 			$('#order-price').text(obj.products.price);
 			$('#order-unit').text(obj.products.measurement);
+			$('.timeline-border-progress').attr('data-percent', '60');
 		break;
 		case '3':
+			$('.timeline-border-progress').attr('data-percent', '80');
 		break;
 		case '4':
+			$('.timeline-border-progress').attr('data-percent', '100');
 		break;
 	}
 
@@ -205,6 +211,7 @@ var failedProductScore = function(obj) {
 var redirectNewProduct = function(obj) {
 	runAlertBox({type:'info', message: 'View your product <a href="'+$('#order-link').attr('href')+'"><b>HERE</b></a>'});
 	$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
+	$('.timeline-border-progress').attr('data-percent', '100');
 	// console.log(obj);
 	$.each(obj.file_photos, function(i, data) {
 		// console.log(data);
