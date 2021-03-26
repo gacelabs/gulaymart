@@ -70,7 +70,7 @@ $(document).ready(function() {
 			data: oData,
 			dataType: 'json',
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				console.log(xhr, status, thrown);
 			}
 		};
 		if (oPauseInputAjax != false && oPauseInputAjax.readyState !== 4) oPauseInputAjax.abort();
@@ -173,12 +173,13 @@ function loadMap(oLatLong) {
 		zoom: hasLatlong ? 12 : 10,
 		center: oLatLong,
 		gestureHandling: "cooperative",
+		draggableCursor: 'pointer'
 	});
 
 	infowindow = new google.maps.InfoWindow({
 		content: '<b>Drag Me!</b>',
 	});
-	// maps.push(map);
+	// maps.push(map); 
 	marker = new google.maps.Marker({
 		position: oLatLong,
 		map: map,
@@ -194,8 +195,29 @@ function loadMap(oLatLong) {
 	infowindow.open(map, marker);
 	map.setCenter(marker.getPosition());
 
-	google.maps.event.addListener(map, "click", function(e) {
+	google.maps.event.addListener(map, "contextmenu", function(event) {
 		map.setCenter(marker.getPosition());
+	});
+
+	google.maps.event.addListener(map, "click", function(event) {
+		// console.log(event);
+		var lat = event.latLng.lat();
+		var long = event.latLng.lng();
+		
+		google.maps.event.clearListeners(marker, 'dragend');
+		marker.setMap(null);
+		var newMark = new google.maps.Marker({
+			position: {'lat': lat, 'lng': long},
+			map: map,
+			draggable: true,
+			animation: google.maps.Animation.DROP,
+		});
+		fnDragEnd(newMark);
+
+		newMark.setMap(map);
+		marker = newMark;
+		setDragEvent(newMark, infowindow);
+		map.setZoom(map.getZoom());
 	});
 	// markers.push(marker);
 	setDragEvent(marker, infowindow);
