@@ -22,11 +22,10 @@
 						<div class="dash-panel-top">
 							<ul class="spaced-list between">
 								<li><h3>Storefront customs</h3></li>
-								<li><button class="btn btn-blue btn-sm normal-radius">Apply</button></li>
+								<li><button type="submit" class="btn btn-blue btn-sm normal-radius">Apply</button></li>
 							</ul>
 						</div>
 						<div class="dash-panel-middle zero-gaps" id="storefront_nav">
-						
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
 									<li>Farm identity</li>
@@ -37,7 +36,7 @@
 										<label for="farm_name">Farm name</label>
 										<input type="text" name="farm_name" id="farm_name" class="form-control" placeholder="The Humble Farm" required="required">
 									</div>
-									<div class="form-group zero-gaps">
+									<div class="form-group">
 										<label for="tagline">Tagline</label>
 										<input type="text" name="tagline" id="tagline" class="form-control" placeholder="Your friendly neighborhood farmer" required="required">
 									</div>
@@ -46,7 +45,7 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Masthead design</li>
+									<li>Masthead</li>
 									<li><i class="fa fa-angle-down"></i></li>
 								</ul>
 								<div class="custom-item-child">
@@ -58,7 +57,7 @@
 										<input type="file" name="cover_image" id="cover_image" class="form-control" placeholder="The Humble Farm" required="required">
 										<small class="color-grey"><i class="fa fa-question-circle"></i> Recommended size: </small>
 									</div>
-									<div class="form-group zero-gaps">
+									<div class="form-group">
 										<ul class="spaced-list between">
 											<li><label for="profile_photo">Profile photo</label></li>
 											<li class="text-link">Photos</li>
@@ -71,23 +70,33 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>My farm story</li>
+									<li>About</li>
 									<li><i class="fa fa-angle-down"></i></li>
 								</ul>
 								<div class="custom-item-child">
-									<div class="form-group zero-gaps">
+									<div class="form-group">
 										<textarea type="text" name="farm_story" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
+									</div>
+									<ul class="spaced-list between">
+										<li><label for="location">Location</label></li>
+										<li data-toggle="tooltip" data-placement="left" title="Add Farm Location"><button type="button" class="btn btn-xs"><i class="fa fa-plus color-blue"></i></button></li>
+									</ul>
+									<div id="location_container">
+										<div class="form-group" data-toggle="modal" data-target="#farm_location_modal">
+											<input type="text" name="location" id="location" class="form-control" placeholder="Complete address" required="required">
+											<small class="color-grey"><i class="fa fa-question-circle"></i> Serves as the <b>pick up location</b> of your product.</small>
+										</div>
 									</div>
 								</div>
 							</div>
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Banner section</li>
+									<li>Banner</li>
 									<li><i class="fa fa-angle-down"></i></li>
 								</ul>
 								<div class="custom-item-child">
-									<div class="form-group zero-gaps">
+									<div class="form-group">
 										<label for="banner_section">Select a banner</label>
 										<select name="banner_section" id="banner_section" class="form-control">
 											<option img-file="">Deliver fast</option>
@@ -114,7 +123,7 @@
 										<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
 										<input type="url" name="social_acct_yt" class="form-control" placeholder="YouTube URL">
 									</div>
-									<div class="input-group zero-gaps">
+									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
 										<input type="url" name="social_acct_msgr" class="form-control" placeholder="Messenger URL">
 									</div>
@@ -129,24 +138,26 @@
 
 			<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs" id="storefront_preview_parent">
 				<div class="cover_image" id="storefront_page_container">
-					<div class="storefront-top" style="background-image: url(assets/images/storefront-top.jpg);">
-						<div id="farm_identity">
-							<ul class="grid-list half">
-								<li class="text-left">
-									<h1 class="farm_name">The Humble Farm</h1>
-									<h4 class="tagline">Your friendly neighborhood vegetable farm.</h4>
-								</li>
-								<li class="text-right"><div class="profile_photo" style="background-image: url(assets/images/noavatar.png);"></div></li>
-							</ul>
+					<div class="storefront-top">
+						<div class="storefront-img-bg" style="background-image: url(assets/images/storefront-top.jpg);">
+							<div id="farm_identity">
+								<ul class="grid-list half">
+									<li class="text-left">
+										<h1 class="farm_name">The Humble Farm</h1>
+										<h4 class="tagline">Your friendly neighborhood farmer</h4>
+									</li>
+									<li class="text-right"><div class="profile_photo" style="background-image: url(assets/images/noavatar.png);"></div></li>
+								</ul>
+							</div>
 						</div>
 					</div>
 					
 					<div class="storefront-middle">
 						<ul class="spaced-list around" id="storefront_navbar">
-							<li><a href="javascript:;" class="active">Products</a></li>
-							<li><a href="javascript:;">Stories</a></li>
-							<li><a href="javascript:;">Gallery</a></li>
-							<li><a href="javascript:;">About</a></li>
+							<li><a href="javascript:;" class="active">PRODUCTS</a></li>
+							<li><a href="javascript:;">STORIES</a></li>
+							<li><a href="javascript:;">GALLERY</a></li>
+							<li><a href="javascript:;">ABOUT</a></li>
 						</ul>
 
 						<div id="storefront_product_container">

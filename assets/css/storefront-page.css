@@ -3,13 +3,19 @@
 	margin: 0 auto;
 }
 .storefront-top {
-	background-position: center center;
-	background-size: cover;
-	background-repeat: no-repeat;
 	height: 250px;
 	padding: 0;
 	overflow: hidden;
 	position: relative;
+}
+.storefront-img-bg {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 0 auto;
+	height: 100%;
+	width: 100%;
 }
 #farm_identity {
 	padding: 20px;

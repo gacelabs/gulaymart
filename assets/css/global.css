@@ -35,9 +35,6 @@ hr.carved {
 .text-link.blue {
 	color: #3b9ff5;
 }
-.text-link:hover {
-	filter: hue-rotate(45deg)
-}
 .ellipsis {
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -95,9 +92,6 @@ i.i-logo.white {
 	transition: all .3s ease-in-out;
 	background-color: #3b9ff5;
 	color: #fff !important;
-}
-.login-button>a:hover {
-	filter: hue-rotate(45deg);
 }
 #login_modal .modal-content {
 	background: transparent;
@@ -327,8 +321,8 @@ button.btn-blue {
 	background-color: #3b9ff5;
 	color: #fff !important;
 }
-button.btn-blue:hover {
-	filter: hue-rotate(45deg);
+button.btn-blue:hover, .login-button>a:hover, .text-link:hover {
+	filter: saturate(.7);
 }
 .btn-generic-container {
 	text-align: center;

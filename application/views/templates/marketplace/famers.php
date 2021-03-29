@@ -1,5 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="farmers_container">
-	<h3><b>Neighboring farmers</b></h3>
+	<h3><b>Farmers nearby</b></h3>
 	<div class="farmers-card-container">
 		<div class="farmers-card-item">
 			<div class="card-top" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
