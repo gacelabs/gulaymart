@@ -1,0 +1,76 @@
+#storefront_page_container {
+	/*width: 890px;*/
+	margin: 0 auto;
+}
+.storefront-top {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 250px;
+	padding: 0;
+	overflow: hidden;
+	position: relative;
+}
+#farm_identity {
+	padding: 20px;
+	background: rgb(0,0,0);
+	background: linear-gradient(0deg, rgba(0,0,0,0.70) 0%, rgba(255,255,255,0) 100%);
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+.grid-list {
+	display: grid;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	grid-gap: 10px;
+	width: inherit;
+}
+.grid-list.half {
+	grid-template-columns: 1fr 70px;
+}
+.farm_name {
+	font-family: 'Roboto-Bold', sans-serif;
+	color: #fff;
+	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
+	margin: 0 0 5px 0;
+}
+.tagline {
+	color: #fff;
+	margin: 0;
+	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
+}
+.profile_photo {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	height: 63px;
+	width: 63px;
+	border: 3px solid #fff;
+	border-radius: 100%;
+	float: right;
+	box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+}
+#storefront_navbar {
+	padding: 0;
+	margin: 0;
+	background-color: #fff;
+}
+#storefront_navbar>li>a {
+	display: block;
+	padding: 15px 0 12px 0;
+	width: 80px;
+	text-align: center;
+	border-bottom: 3px solid transparent;
+	transition: all .3s ease-in-out;
+}
+#storefront_navbar>li>a:hover, #storefront_navbar>li>a.active {
+	border-color: #3b9ff5;
+	color: #3b9ff5;
+	font-family: 'Roboto-Bold', sans-serif;
+}
+#storefront_navbar>li>a:hover {
+	font-family: 'Roboto', sans-serif !important;
+}
