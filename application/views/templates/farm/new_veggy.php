@@ -184,7 +184,7 @@
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
 										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
 									</div>
 								</div>
