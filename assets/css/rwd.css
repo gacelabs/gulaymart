@@ -188,7 +188,7 @@
 }
 
 @media (max-width: 767px) {
-	body.marketplace #content__middle, .my-logo, #search_nav_btns, #content_body_wrapper, #marketplace, body.register #content__middle .col-xs-12, #register_form .btn-theme, div#marketplace {
+	body.marketplace #content__middle, .my-logo, #search_nav_btns, #content_body_wrapper, #marketplace, body.register #content__middle .col-xs-12, #register_form .btn-theme, div#marketplace, #marketplace_nav_body {
 		padding: 0;
 	}
 	#search_nav_btns li.onlogged-out-btn, #search_body .input-group, .nav-avatar-li .nav-avatar-body, #register_welcome h1 {
@@ -199,6 +199,9 @@
 	}
 	body.marketplace {
 		padding-top: 0;
+	}
+	body.logged-in .navbar-btn-list>li {
+		margin-left: 0;
 	}
 	#marketplace_nav_body {
 		padding: 0;
@@ -222,9 +225,6 @@
 	.my-logo i, #search_nav_btns .bottom-nav-item, .nav-avatar-li .nav-avatar-body {
 		font-size: 17px;
 		padding: 7px;
-	}
-	#marketplace_nav_body {
-		padding: 0;
 	}
 	#marketplace_nav_body .panel {
 		border-radius: 0;
