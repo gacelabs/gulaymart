@@ -122,10 +122,12 @@ class Farm extends MY_Controller {
 				case '4':
 					if (isset($product_id) AND $product_id > 0) {
 						// debug($post, 'stop');
+						if (!isset($post['activity'])) $post['activity'] = 0;
 						$dir = str_replace('@', '-', $profile['email_address']);
 						$uploads = files_upload($_FILES, $dir);
 						$ids = [];
 						if ($uploads) {
+							$this->gm_db->remove('products_photo', ['product_id' => $product_id]);
 							foreach ($uploads as $key => $upload) {;
 								$upload['product_id'] = $product_id;
 								if ($key == $post['products_photo']['index']) {
@@ -134,6 +136,8 @@ class Farm extends MY_Controller {
 									$upload['is_main'] = 0;
 								}
 								$ids[] = $this->products->new($upload, 'products_photo');
+								unset($upload['path']);
+								$post['file_photos'][] = $upload;
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
 						}

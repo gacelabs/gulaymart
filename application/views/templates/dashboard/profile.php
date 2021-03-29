@@ -197,11 +197,11 @@
 									</div>
 								<?php endforeach ?>
 							<?php else: ?>
-								<p>No Shipping Address yet. </p>
+								<p>No Shipping Address yet.</p>
 							<?php endif; ?>
 						</div>
 					</div>
-					<form action="api/save_shipping" method="post" data-ajax="1" class="form-validate" id="shipping-form">
+					<form action="api/save_shipping" method="post" data-ajax="1" data-disable="enter" class="form-validate" id="shipping-form">
 						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 						<input type="hidden" name="lat" id="lat" value="" required="required">
 						<input type="hidden" name="lng" id="lng" value="" required="required">

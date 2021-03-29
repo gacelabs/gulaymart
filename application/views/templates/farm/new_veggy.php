@@ -3,9 +3,9 @@
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-				<div class="dash-panel">
+				<div class="dash-panel" id="score-detail-panel">
 					<div class="dash-panel-top">
-						<h3>Product details score</h3>
+						<h3>Product Details Score</h3>
 					</div>
 					<div class="dash-panel-middle">
 						<ul class="spaced-list around">
@@ -16,12 +16,13 @@
 							<li><h3 class="text-capsule"><i class="fa fa-check"></i></h3></li>
 						</ul>
 						<div class="timeline-border"></div>
+						<div class="timeline-border-progress"></div>
 					</div>
 				</div>
 
 				<div class="dash-panel theme score-0">
 					<div class="dash-panel-middle">
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="basic_prod_info">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
 							<input type="hidden" name="pos" value="0">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="input-container">
@@ -70,7 +71,7 @@
 							<p class="zero-gaps">Product attributes</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_attribute">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
 							<div class="input-group">
 								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
@@ -160,7 +161,7 @@
 							<p class="zero-gaps">Pricing</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_price">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
@@ -183,7 +184,7 @@
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
 										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
 									</div>
 								</div>
@@ -195,14 +196,13 @@
 					</div>
 				</div>
 
-
 				<div class="dash-panel theme hide score-3">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
 							<p class="zero-gaps">Short description</p>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_desc">
+						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="form-group">
@@ -220,7 +220,7 @@
 				</div>
 
 				<div class="dash-panel theme hide score-4">
-					<form action="" method="post" class="form-validate" data-ajax="1" enctype="multipart/form-data" id="prod_image">
+					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_image">
 						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">
@@ -244,25 +244,25 @@
 			</div>
 
 			<!-- show after Publish -->
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hidden-xs" id="preview_container" style="position: fixed; right: 0; width: 35%;">
 				<div class="dash-panel">
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">
 							<li><h3>Listing</h3></li>
-							<li><h3><a href="#" target="_new" class="text-link">Product Page</a></h3></li>
+							<li><h3><a href="#" target="_new" class="text-link" id="order-link">Product Page</a></h3></li>
 						</ul>
 						<div class="product-item-info">
-							<div class="product-item-top" style="background-image:url('assets/images/onions.jpg');">
-								<ul class="spaced-list between">
-									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 26 mins</small></kbd></li>
-									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> Organic</small></kbd></li>
-								</ul>
+							<div class="product-item-top" id="order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
+								<!-- <ul class="spaced-list between">
+									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span id="order-duration">00 mins</span></small></kbd></li>
+									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span id="order-type">Organic</span></small></kbd></li>
+								</ul> -->
 							</div>
 							<div class="product-item-middle">
-								<h1 class="product-title">Fresh & Organic Sweet White Onions</h1>
-								<p class="product-price">&#x20b1; 1.00 / kilo</p>
+								<h1 class="product-title" id="order-title">Product name shows here</h1>
+								<p class="product-price">&#x20b1; <span id="order-price">0.00</span> / <span id="order-unit">kilo</span></p>
 							</div>
-							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> For review</h5>
+							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span id="order-status">For review</span></h5>
 						</div>
 					</div>
 					<div class="dash-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
