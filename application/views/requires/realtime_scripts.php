@@ -58,12 +58,12 @@
 						// f_express_fee: "on",
 						// f_express_fee_hidden: 40.00 // if express fee is checked
 					});*/
-					if (oUser == false) {
+					/*if (oUser == false) {
 						realtime.bind('session', 'auth-login', function(object) {
 							if (object.data.device_id == DEVICE_ID) {
 								runAlertBox({
 									type:'confirm',
-									message: 'Session Log-in detected from other browser, do you want to cancel all log-ins?',
+									message: 'Session Log-in detected from other browser, do you want to cancel all other log-in sessions?',
 									callback: function() { 
 										window.location.href = 'sign-out';
 									}
@@ -77,23 +77,23 @@
 									type:'warn',
 									message: 'Log-out request detected from other browser, click ok to reload page.',
 									callback: function() {
-										window.location.reload(true);
+										window.location.href = 'sign-out';
 									}
 								});
 							}
 						});
-					}
+					}*/
 				});
 			},
 			afterConnect: function() {
 				/*realtime.bind('return-delivery', 'returns', function(object) {
 					console.log('received response from portal.toktok.ph', object.data);
 				});*/
-				if (oUser) {
+				/*if (oUser) {
 					realtime.trigger('session', 'auth-login', oUser);
 				} else {
 					realtime.trigger('session', 'auth-logout', {device_id: DEVICE_ID});
-				}
+				}*/
 			}
 		});
 	};

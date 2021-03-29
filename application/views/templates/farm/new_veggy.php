@@ -253,10 +253,10 @@
 						</ul>
 						<div class="product-item-info">
 							<div class="product-item-top" id="order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
-								<ul class="spaced-list between">
+								<!-- <ul class="spaced-list between">
 									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span id="order-duration">00 mins</span></small></kbd></li>
 									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span id="order-type">Organic</span></small></kbd></li>
-								</ul>
+								</ul> -->
 							</div>
 							<div class="product-item-middle">
 								<h1 class="product-title" id="order-title">Product name shows here</h1>
