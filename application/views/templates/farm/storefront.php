@@ -22,14 +22,14 @@
 						<div class="dash-panel-top">
 							<ul class="spaced-list between">
 								<li><h3>Storefront customs</h3></li>
-								<li><button type="submit" class="btn btn-blue btn-sm normal-radius">Apply</button></li>
+								<li><button type="submit" class="btn btn-blue normal-radius">Publish</button></li>
 							</ul>
 						</div>
 						<div class="dash-panel-middle zero-gaps" id="storefront_nav">
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Farm identity</li>
-									<li><i class="fa fa-angle-down"></i></li>
+									<li>FARM IDENTITY</li>
+									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
 									<div class="form-group">
@@ -45,8 +45,8 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Masthead</li>
-									<li><i class="fa fa-angle-down"></i></li>
+									<li>MASTHEAD</li>
+									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
 									<div class="form-group">
@@ -70,8 +70,8 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>About</li>
-									<li><i class="fa fa-angle-down"></i></li>
+									<li>ABOUT</li>
+									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
 									<div class="form-group">
@@ -79,7 +79,7 @@
 									</div>
 									<ul class="spaced-list between">
 										<li><label for="location">Location</label></li>
-										<li data-toggle="tooltip" data-placement="left" title="Add Farm Location"><button type="button" class="btn btn-xs"><i class="fa fa-plus color-blue"></i></button></li>
+										<li data-toggle="tooltip" data-placement="left" title="Add new location"><button type="button" class="btn btn-xs"><i class="fa fa-plus color-blue"></i></button></li>
 									</ul>
 									<div id="location_container">
 										<div class="form-group" data-toggle="modal" data-target="#farm_location_modal">
@@ -92,8 +92,8 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Banner</li>
-									<li><i class="fa fa-angle-down"></i></li>
+									<li>BANNER</li>
+									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
 									<div class="form-group">
@@ -107,8 +107,8 @@
 
 							<div class="custom-item-parent">
 								<ul class="spaced-list between custom-item-btn">
-									<li>Footer</li>
-									<li><i class="fa fa-angle-down"></i></li>
+									<li>FOOTER</li>
+									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
 									<div class="input-group">
@@ -154,10 +154,10 @@
 					
 					<div class="storefront-middle">
 						<ul class="spaced-list around" id="storefront_navbar">
-							<li><a href="javascript:;" class="active">PRODUCTS</a></li>
-							<li><a href="javascript:;">STORIES</a></li>
-							<li><a href="javascript:;">GALLERY</a></li>
-							<li><a href="javascript:;">ABOUT</a></li>
+							<li class="active">PRODUCTS</a></li>
+							<li>STORIES</a></li>
+							<li>GALLERY</a></li>
+							<li>ABOUT</a></li>
 						</ul>
 
 						<div id="storefront_product_container">
