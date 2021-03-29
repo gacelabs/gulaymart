@@ -98,16 +98,16 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 }
 
 var ajaxSuccessResponse = function(response) {
-	console.log(response);
-	var iConfirmed = true;
+	// console.log(response);
+	var bConfirmed = true;
 	if (response && response.type && response.type.length) {
-		iConfirmed = runAlertBox(response, undefined, iConfirmed);
+		bConfirmed = runAlertBox(response, undefined, bConfirmed);
 	}
-	if (iConfirmed) {
+	if (bConfirmed) {
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
-				console.log(response.callback, 'function');
+				// console.log(response.callback, 'function');
 				fn(response.data);
 			}
 		}
@@ -127,12 +127,13 @@ window.mobileAndTabletCheck = function() {
 
 String.prototype.isEmpty = function() {return (this.length === 0 || !this.trim());};
 
-var runAlertBox = function(response, heading, iConfirmed) {
+var runAlertBox = function(response, heading, bConfirmed) {
+	if (bConfirmed == undefined) bConfirmed = false;
 	if (typeof response == 'object') {
 		switch (response.type.toLowerCase()) {
 			case 'confirm': case 'confirmation': 
 				if (heading == undefined) heading = 'Confirmation';
-				iConfirmed = false;
+				bConfirmed = false;
 				$.toast({
 					heading: heading,
 					text: response.message+'<br><br><button class="btn btn-xs btn-danger pull-right" id="toast-cancel" style="padding: 0 10px;">cancel</button><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>',
@@ -224,7 +225,7 @@ var runAlertBox = function(response, heading, iConfirmed) {
 			break;
 			case 'warning': case 'warn':
 				if (heading == undefined) heading = 'Warning';
-				iConfirmed = false;
+				bConfirmed = false;
 				$.toast({
 					heading: heading,
 					text: response.message+'<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>',
@@ -259,7 +260,7 @@ var runAlertBox = function(response, heading, iConfirmed) {
 			break;
 		}
 	}
-	return iConfirmed;
+	return bConfirmed;
 }
 
 function getParameterByName(name, url) {
