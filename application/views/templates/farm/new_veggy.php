@@ -2,7 +2,7 @@
 	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
-			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
 				<div class="dash-panel" id="score-detail-panel">
 					<div class="dash-panel-top">
 						<h3>Product Details Score</h3>
@@ -237,14 +237,14 @@
 						</div>
 						<div class="dash-panel-footer text-right bg-grey">
 							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Publish<i class="fa fa-check icon-right"></i></button>
+							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
 			</div>
 
 			<!-- show after Publish -->
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hidden-xs" id="preview_container" style="position: fixed; right: 0; width: 35%;">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
 				<div class="dash-panel">
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">

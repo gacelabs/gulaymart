@@ -108,8 +108,9 @@
 									<div class="form-group">
 										<label for="banner_section">Select a banner</label>
 										<select name="banner_section" id="banner_section" class="form-control">
+											<option value="steps.png">Step 1 2 3 (Default)</option>
+											<option value="lettuce.png">Lettuce Fact</option>
 											<option value="">Deliver Fast</option>
-											<option value="support.png">Support Local</option>
 										</select>
 									</div>
 								</div>
@@ -171,8 +172,8 @@
 						</ul>
 
 						<div id="storefront_product_container">
-							<img src="assets/images/storefront sample listing.png" class="img-responsive">
-							<img src="" class="banner_section img-responsive hide">
+							<img src="assets/images/storefront-sample-listing.png" class="img-responsive">
+							<img src="assets/images/banner/steps.png" class="banner_section img-responsive">
 						</div>
 					</div>
 

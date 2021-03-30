@@ -23,6 +23,8 @@ $(document).ready(function() {
 		$('#prod_name_checker').trigger('click');
 	});
 
+
+
 	/*$('.input-capsule').click(function() {
 		$('.input-capsule').removeClass('active');
 		$('.input-capsule').find('input').prop('checked', false);
@@ -157,6 +159,13 @@ $(document).ready(function() {
 		}
 	});
 
+});
+
+
+$(window).on('load resize change scroll', function() {
+	var conWidth = $('#score_detail_container').width();
+
+	$('#score-detail-panel').css('width', conWidth);
 });
 
 var setProductScore = function(obj) {

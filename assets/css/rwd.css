@@ -177,7 +177,7 @@
 	#content__top {
 		max-height: 370px;
 	}
-	.center-panel-md {
+	.center-panel-md, .score-detail-scroll {
 		width: 100%;
 	}
 }
