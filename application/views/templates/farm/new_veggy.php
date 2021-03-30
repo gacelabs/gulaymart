@@ -68,7 +68,7 @@
 				<div class="dash-panel theme hide score-1">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Product attributes</p>
+							<label>Product attributes</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
@@ -158,7 +158,7 @@
 				<div class="dash-panel theme hide score-2">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Pricing</p>
+							<label>Pricing</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
@@ -199,7 +199,7 @@
 				<div class="dash-panel theme hide score-3">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Short description</p>
+							<label>Short description</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
@@ -224,7 +224,7 @@
 						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">
-								<p class="zero-gaps">Images</p>
+								<label>Images</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
 							</div>
 							<ul class="inline-list" id="preview_images_list"></ul>
