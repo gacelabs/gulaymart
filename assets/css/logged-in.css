@@ -40,7 +40,7 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 	border-radius: 12px;
 }
 #dash_panel_left {
-	height: calc(100vh - 15px);
+	height: calc(100vh - 50px);
 	overflow-y: auto;
 	background-color: #fff;
 	left: 0;

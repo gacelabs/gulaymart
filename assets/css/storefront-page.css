@@ -39,6 +39,7 @@
 }
 .farm_name {
 	font-family: 'Roboto-Bold', sans-serif;
+	text-transform: capitalize;
 	color: #fff;
 	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
 	margin: 0 0 5px 0;
@@ -47,6 +48,12 @@
 	color: #fff;
 	margin: 0;
 	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
+}
+.tagline::first-letter {
+	text-transform: capitalize !important;
+}
+#tagline {
+	text-transform: none;
 }
 .profile_photo {
 	background-repeat: no-repeat;
@@ -77,4 +84,23 @@
 	border-color: #3b9ff5;
 	color: #3b9ff5;
 	font-family: 'Roboto-Bold', sans-serif;
+}
+img.banner_section {
+	background-color: #fff;
+	padding: 0 20px 20px 20px;
+}
+.storefront-footer {
+	padding: 20px 15px;
+	background-color: #5d5d5d;
+}
+.social_acct>li {
+	margin-right: 10px;
+}
+.social_acct i.fa {
+	color: #fff;
+}
+@media (max-width: 991px) {
+	.storefront-top {
+	    height: 200px;
+	}
 }

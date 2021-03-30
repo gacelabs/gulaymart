@@ -28,6 +28,9 @@ hr.carved {
 .bg-grey {
 	background-color: #f7f7f7;
 }
+.text-sm {
+	font-size: 11px;
+}
 .text-link {
 	color: #799938;
 	cursor: pointer;

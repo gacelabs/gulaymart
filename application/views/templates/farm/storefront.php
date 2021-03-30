@@ -16,12 +16,13 @@
 				</div>
 			</div-->
 
-			<div class="col-lg-3 col-md-4 col-sm-5 hidden-xs" id="storefront_customs_parent">
+			<div class="col-lg-3 col-md-4 col-sm-7 hidden-xs" id="storefront_customs_parent">
 				<div class="dash-panel theme">
 					<form action="" method="post">
 						<div class="dash-panel-top">
-							<ul class="spaced-list between">
-								<li><h3>Storefront customs</h3></li>
+							<h3>Storefront customs</h3>
+							<ul class="spaced-list between" style="margin-top: 15px;">
+								<li class="text-sm"><span class="color-grey"><i class="fa fa-calendar"></i> UPDATED</span><br>March 1, 2021</li>
 								<li><button type="submit" class="btn btn-blue normal-radius">Publish</button></li>
 							</ul>
 						</div>
@@ -34,11 +35,13 @@
 								<div class="custom-item-child">
 									<div class="form-group">
 										<label for="farm_name">Farm name</label>
-										<input type="text" name="farm_name" id="farm_name" class="form-control" placeholder="The Humble Farm" required="required">
+										<input type="text" name="farm_name" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required">
+										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
 									</div>
 									<div class="form-group">
 										<label for="tagline">Tagline</label>
-										<input type="text" name="tagline" id="tagline" class="form-control" placeholder="Your friendly neighborhood farmer" required="required">
+										<input type="text" name="tagline" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" required="required">
+										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
 									</div>
 								</div>
 							</div>
@@ -52,18 +55,18 @@
 									<div class="form-group">
 										<ul class="spaced-list between">
 											<li><label for="cover_image">Cover image</label></li>
-											<li class="text-link">Photos</li>
+											<li class="text-link">Media</li>
 										</ul>
 										<input type="file" name="cover_image" id="cover_image" class="form-control" placeholder="The Humble Farm" required="required">
-										<small class="color-grey"><i class="fa fa-question-circle"></i> Recommended size: </small>
+										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 									</div>
 									<div class="form-group">
 										<ul class="spaced-list between">
 											<li><label for="profile_photo">Profile photo</label></li>
-											<li class="text-link">Photos</li>
+											<li class="text-link">Media</li>
 										</ul>
 										<input type="file" name="profile_photo" id="profile_photo" class="form-control" placeholder="The Humble Farm" required="required">
-										<small class="color-grey"><i class="fa fa-question-circle"></i> Recommended size: </small>
+										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 									</div>
 								</div>
 							</div>
@@ -77,14 +80,20 @@
 									<div class="form-group">
 										<textarea type="text" name="farm_story" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
 									</div>
-									<ul class="spaced-list between">
-										<li><label for="location">Location</label></li>
-										<li data-toggle="tooltip" data-placement="left" title="Add new location"><button type="button" class="btn btn-xs"><i class="fa fa-plus color-blue"></i></button></li>
-									</ul>
+									<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
 									<div id="location_container">
-										<div class="form-group" data-toggle="modal" data-target="#farm_location_modal">
-											<input type="text" name="location" id="location" class="form-control" placeholder="Complete address" required="required">
-											<small class="color-grey"><i class="fa fa-question-circle"></i> Serves as the <b>pick up location</b> of your product.</small>
+										<div class="input-group hide" id="clone_me">
+											<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-xs" id="remove_loc_btn"><i class="fa fa-minus text-danger"></i></button>
+											</span>
+										</div>
+
+										<div class="input-group">
+											<input type="text" name="location" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
+											</span>
 										</div>
 									</div>
 								</div>
@@ -99,7 +108,8 @@
 									<div class="form-group">
 										<label for="banner_section">Select a banner</label>
 										<select name="banner_section" id="banner_section" class="form-control">
-											<option img-file="">Deliver fast</option>
+											<option value="">Deliver Fast</option>
+											<option value="support.png">Support Local</option>
 										</select>
 									</div>
 								</div>
@@ -113,19 +123,19 @@
 								<div class="custom-item-child">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-facebook-square"></i></span>
-										<input type="url" name="social_acct_fb" class="form-control" placeholder="Facebook URL">
+										<input type="url" name="social_acct_fb" class="form-control social-url" placeholder="Facebook URL">
 									</div>
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-instagram"></i></span>
-										<input type="url" name="social_acct_ig" class="form-control" placeholder="Instagram URL">
+										<input type="url" name="social_acct_ig" class="form-control social-url" placeholder="Instagram URL">
 									</div>
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
-										<input type="url" name="social_acct_yt" class="form-control" placeholder="YouTube URL">
+										<input type="url" name="social_acct_yt" class="form-control social-url" placeholder="YouTube URL">
 									</div>
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
-										<input type="url" name="social_acct_msgr" class="form-control" placeholder="Messenger URL">
+										<input type="url" name="social_acct_msgr" class="form-control social-url" placeholder="Messenger URL">
 									</div>
 								</div>
 							</div>
@@ -161,13 +171,28 @@
 						</ul>
 
 						<div id="storefront_product_container">
-							
+							<img src="assets/images/storefront sample listing.png" class="img-responsive">
+							<img src="" class="banner_section img-responsive hide">
 						</div>
 					</div>
 
 					<div class="storefront-footer">
-						<div class="banner_section"></div>
-						<ul class="spaced-list between social_acct"></ul>
+						<div class="row">
+							<div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+								<h4 class="farm_name" style="margin-top: 0;">The Humble Farm</h4>
+								<p class="zero-gaps hidden-xs" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+								<h4 style="color: #fff;margin: 0 0 5px 0;">Connect with us!</h4>
+								<ul class="inline-list social_acct">
+									<li><h4 class="zero-gaps"><i class="fa fa-facebook-square"></i></h4></li>
+									<li><h4 class="zero-gaps"><i class="fa fa-instagram"></i></h4></li>
+									<li><h4 class="zero-gaps"><i class="fa fa-youtube-play"></i></h4></li>
+									<li><h4 class="zero-gaps"><i class="fa fa-comment-o"></i></h4></li>
+								</ul>
+								<p class="zero-gaps visible-xs" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
