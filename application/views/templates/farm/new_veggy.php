@@ -244,7 +244,7 @@
 			</div>
 
 			<!-- show after Publish -->
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hide" id="preview_container">
 				<div class="dash-panel">
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">

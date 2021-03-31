@@ -187,23 +187,32 @@ class Farm extends MY_Controller {
 
 	public function storefront()
 	{
-		$this->render_page([
-			'top' => [
-				'css' => ['storefront', 'storefront-page'],
-			],
-			'middle' => [
-				'body_class' => ['farm', 'storefront'],
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'farm/storefront',
+		$post = $this->input->post();
+		if ($post) {
+			debug($this->accounts->profile);
+			debug($post, 'stop');
+		} else {
+			$this->render_page([
+				'top' => [
+					'css' => ['storefront', 'storefront-page'],
 				],
-			],
-			'bottom' => [
-				'modals' => ['farmer_terms_modal', 'farm_location_modal'],
-				'js' => ['farm', 'storefront'],
-			],
-		]);
+				'middle' => [
+					'body_class' => ['farm', 'storefront'],
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/storefront',
+					],
+				],
+				'bottom' => [
+					'modals' => ['farmer_terms_modal', 'farm_location_modal'],
+					'js' => ['farm', 'storefront'],
+				],
+				'data' => [
+					'farms' => $this->accounts->profile['farms']
+				]
+			]);
+		}
 	}
 
 	public function inventory()

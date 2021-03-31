@@ -90,4 +90,22 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'Unable to save notification settings!', $post);
 	}
 
+	public function agree_terms()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		// debug($post, 'stop');
+		if ($post) {
+			if (isset($post['farmer_terms']) AND isset($post['farmer_policy'])) {
+				if ($post['farmer_terms'] == 'on' AND $post['farmer_policy'] == 'on') {
+					$user_id = $this->accounts->profile['id'];
+					$ok = $this->gm_db->save('users', ['is_agreed_terms' => 1], ['id' => $user_id]);
+					if ($ok) {
+						$this->set_response('success', 'Terms & Policy Accepted!', $post, 'farm/storefront');
+					}
+				}
+			}
+		}
+		$this->set_response('error', 'Unable to Accept Terms & Policy aggreement!', $post);
+	}
+
 }
