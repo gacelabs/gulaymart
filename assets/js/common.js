@@ -185,12 +185,13 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					heading: heading,
 					text: response.message,
 					icon: 'success',
-					loader: true,
+					loader: response.unclose ? false : true,
 					stack: false,
 					position: 'top-center',
 					allowToastClose: true,
 					bgColor: 'darkgreen',
-					textColor: 'white'
+					textColor: 'white',
+					hideAfter: response.unclose ? false : true,
 				});
 			break;
 			case 'error': case 'danger':

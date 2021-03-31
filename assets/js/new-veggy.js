@@ -243,18 +243,10 @@ var failedProductScore = function(obj) {
 }
 
 var redirectNewProduct = function(obj) {
-	runAlertBox({type:'info', message: 'View your product <a href="'+$('#order-link').attr('href')+'"><b>HERE</b></a>'});
+	runAlertBox({type:'success', message: 'Product successfully created, It is now queued up for product review.', unclose: true});
 	$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
 	$('.timeline-border-progress').attr('data-percent', '100');
 	// console.log(obj);
-	switch (obj.activity) {
-		case '0':
-			$('#order-status').text('Drafted');
-		break;
-		case '1':
-			$('#order-status').text('Published');
-		break;
-	}
 	$.each(obj.file_photos, function(i, data) {
 		// console.log(data);
 		if (data.is_main) {
@@ -262,6 +254,7 @@ var redirectNewProduct = function(obj) {
 			$('#order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
 		}
 	});
+	$('#preview_container').removeClass('hide');
 }
 
 var lastScrollTop = 0;

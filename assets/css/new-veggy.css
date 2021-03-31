@@ -185,3 +185,7 @@ h3.text-capsule.score small {
 	padding: 1px;
 	top: 25px;
 }
+
+#preview_container {
+	position: fixed; right: 0; width: 35%;
+}

@@ -97,7 +97,16 @@ class DevBuild extends CI_Controller {
 	private function get_data()
 	{
 		$data = [
-			'users',
+			'users' => [
+				'is_agreed_terms' => [
+					'definition' => [
+						'type' => 'TINYINT',
+						'constraint' => '1',
+						'default' => '0',
+					],
+					'after' => 'is_profile_complete',
+				]
+			],
 			'user_farms',
 			'user_settings',
 			'galleries',
