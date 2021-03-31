@@ -461,4 +461,7 @@
 	#content__top {
 		background-image: none;
 	}
+	.timeline-border-progress[data-percent="100"] {
+		top: 18px;
+	}
 }

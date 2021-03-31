@@ -1,4 +1,4 @@
-<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+<div class="col-lg-10 col-md-9 col-sm-9 hidden-xs left-affix-content" id="dash_panel_right">
 	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
