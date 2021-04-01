@@ -181,48 +181,51 @@ var runAlertBox = function(response, heading, bConfirmed) {
 			break;
 			case 'success':
 				if (heading == undefined) heading = 'Success';
-				$.toast({
+				var oSettings = {
 					heading: heading,
 					text: response.message,
 					icon: 'success',
-					loader: response.unclose ? false : true,
+					loader: (response.unclose == true) ? false : true,
 					stack: false,
 					position: 'top-center',
-					allowToastClose: true,
+					allowToastClose: (response.unclose == true) ? true : false,
 					bgColor: 'darkgreen',
 					textColor: 'white',
-					hideAfter: response.unclose ? false : true,
-				});
+				};
+				if (response.unclose == true) oSettings.hideAfter = false;
+				$.toast(oSettings);
 			break;
 			case 'error': case 'danger':
 				if (heading == undefined) heading = 'Error';
-				$.toast({
+				var oSettings = {
 					heading: heading,
 					text: response.message,
 					icon: 'error',
-					loader: false,
+					loader: (response.unclose == true) ? false : true,
 					stack: false,
 					position: 'top-center',
-					allowToastClose: true,
+					allowToastClose: (response.unclose == true) ? true : false,
 					bgColor: 'red',
 					textColor: 'white',
-					hideAfter: false
-				});
+				};
+				if (response.unclose == true) oSettings.hideAfter = false;
+				$.toast(oSettings);
 			break;
 			case 'info': case 'information':
 				if (heading == undefined) heading = 'Information';
-				$.toast({
+				var oSettings = {
 					heading: heading,
 					text: response.message,
 					icon: 'info',
-					loader: false,
+					loader: (response.unclose == true) ? false : true,
 					stack: false,
 					position: 'top-center',
-					allowToastClose: true,
+					allowToastClose: (response.unclose == true) ? true : false,
 					bgColor: 'blue',
 					textColor: 'white',
-					hideAfter: false
-				});
+				};
+				if (response.unclose == true) oSettings.hideAfter = false;
+				$.toast(oSettings);
 			break;
 			case 'warning': case 'warn':
 				if (heading == undefined) heading = 'Warning';

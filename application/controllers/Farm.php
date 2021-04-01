@@ -241,18 +241,19 @@ class Farm extends MY_Controller {
 		if ($post) {
 			if (check_data_values($post)) {
 				// debug($post, $this->accounts->profile, 'stop');
-				if ($this->products->save($post['products'], ['id' => $id])) {
+				$products = $post['products'];
+				if ($this->products->save($products, ['id' => $id])) {
 					$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
-					if ($this->products->save_location(['location_id' => $post['products']['location_id']], $where)) {
+					if (isset($products['location_id']) AND $this->products->save_location(['location_id' => $products['location_id']], $where)) {
 						$post['products']['id'] = $id;
-						$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 					}
+					$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				}
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
 			$product = $this->products->get(['id' => $id], false, false, true);
-			// debug($product, 'stop');
+			// debug($this->accounts->profile, $product, 'stop');
 			$this->render_page([
 				'middle' => [
 					'body_class' => ['farm', 'new-veggy'],

@@ -965,7 +965,7 @@ function check_data_values($data=false, $is_equal_to='', &$values=[], &$length=0
 						$values[] = $row;
 					}
 				} else {
-					check_data_values($row, $is_equal_to, $values, $length);
+					return check_data_values($row, $is_equal_to, $values, $length);
 				}
 				$length++;
 			}
@@ -1141,4 +1141,68 @@ function str_not_value_echo($search='', $in='', $echo='') {
 	if ((bool)strstr($in, (string)$search) == false) {
 		echo $echo;
 	}
+}
+
+function get_coordinates($data=false, $sensor=0, $region='PH') {
+	if ($data AND (isset($data['city']) AND isset($data['street']) AND isset($data['province']))) {
+		/*$data['city'],$data['street'],$data['province']*/
+		$address = urlencode(implode(',', $data));
+		$url = "http://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$curl_response = curl_exec($ch);
+		curl_close($ch);
+		$response = json_decode($curl_response);
+
+		if ($response->status == 'OK') {
+			$googlemap = $response->results[0];
+			$coordinates = $googlemap->geometry->location;
+			return $coordinates;
+		}
+	}
+	return false;
+}
+
+function get_driving_distance($coordinates=false, $mode='driving', $language='ph') {
+	if ($coordinates) {
+		$origins = $destinations = false;
+		foreach ($coordinates as $key => $coordinate) {
+			if ($key == 0) {
+				$origins = 'origins='.implode(',', $coordinate);
+			} elseif ($key == 1) {
+				$destinations = 'destinations='.implode(',', $coordinate);
+			}
+		}
+		// debug($origins, $destinations);
+
+		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$results = json_decode($response, true);
+
+		// debug($results, 'stop');
+		if ($results['status'] == 'OK') {
+			$rows = $results['rows'][0];
+			$elements = $rows['elements'][0];
+			$distance = $elements['distance']['text'];
+			$duration = $elements['duration']['text'];
+			return [
+				'distance' => str_replace([' km',' m'], ['km','m'], $distance),
+				'duration' => str_replace(['s'], [''], str_replace([' hour',' min'], ['h','m'], $duration)),
+			];
+		}
+	}
+	return ['distance' => false, 'duration' => false];
 }
