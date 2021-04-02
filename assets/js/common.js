@@ -5,19 +5,22 @@ $(document).ready(function() {
 				if ($(e.relatedTarget).data('change-ui').length) {
 					var value = $(e.relatedTarget).data('change-ui');
 					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
+					var field = $(e.relatedTarget).data('field');
+					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'col', value: field}));
 				}
 			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'media_modal':
-				if ($(e.target).find('form input[name="ui"]').length) {
-					$(e.target).find('form input[name="ui"]').remove();
-					var html = $(e.target).find('form .preview_images_list').html();
-					$(e.target).find('form .preview_images_list').html('');
-					html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
-					$(e.target).find('form .preview_images_selected').append(html);
-				}
+				// console.log(e);
+				$(e.target).find('form input[name="ui"]').remove();
+				$(e.target).find('form input[name="col"]').remove();
+				
+				var html = $(e.target).find('form .preview_images_list').html();
+				$(e.target).find('form .preview_images_list').html('');
+				html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
+				$(e.target).find('form .preview_images_selected').append(html);
 			break;
 		}
 	});

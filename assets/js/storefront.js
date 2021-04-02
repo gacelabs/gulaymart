@@ -40,9 +40,9 @@ $(document).ready(function() {
 	$(function() {
 		$('#add_loc_btn').click(function() {
 			var limit = $('#location_container').children('.input-group:visible').length;
-
 			if (limit <= 4) {
-				$('#clone_me').clone().removeClass('hide').appendTo('#location_container');
+				$('#clone_me').clone().removeClass('hide').removeAttr('id').appendTo('#location_container').find('input')
+					.attr({'name':'user_farm_locations[]', 'required':'required'});
 			}
 		});
 
@@ -80,16 +80,22 @@ $(document).ready(function() {
 
 var changeUIImage = function(obj) {
 	// console.log(obj);
-	if (obj.selected != undefined && obj.ui != undefined) {
+	if (obj.selected != undefined && obj.ui != undefined && obj.col != undefined) {
 		// console.log(obj.selected);
+		var selected = '';
 		if (typeof obj.selected == 'object' && Object.keys(obj.selected).length) {
 			if (obj.selected[0] != undefined) {
 				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
+				selected = obj.selected[0].url_path;
 			} else {
 				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
+				selected = obj.selected.url_path;
 			}
 		} else {
 			$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
+			selected = obj.selected;
 		}
+
+		if ($('#'+obj.col).length) $('#'+obj.col).prop('value', selected).val(selected);
 	}
 }
