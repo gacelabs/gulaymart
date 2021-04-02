@@ -8,7 +8,6 @@ class Farm extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('products');
 	}
 
 	public function index()
@@ -130,12 +129,13 @@ class Farm extends MY_Controller {
 					if (isset($product_id) AND $product_id > 0) {
 						// debug($post, 'stop');
 						if (!isset($post['activity'])) $post['activity'] = 0;
-						$dir = str_replace('@', '-', $profile['email_address']);
+						$dir = 'products/'.str_replace('@', '-', $profile['email_address']);
 						$uploads = files_upload($_FILES, $dir);
 						$ids = [];
 						if ($uploads) {
 							$this->gm_db->remove('products_photo', ['product_id' => $product_id]);
-							foreach ($uploads as $key => $upload) {;
+							foreach ($uploads as $key => $upload) {
+								unset($upload['user_id']);
 								$upload['product_id'] = $product_id;
 								if ($key == $post['products_photo']['index']) {
 									$upload['is_main'] = 1;
@@ -143,7 +143,6 @@ class Farm extends MY_Controller {
 									$upload['is_main'] = 0;
 								}
 								$ids[] = $this->products->new($upload, 'products_photo');
-								unset($upload['path']);
 								$post['file_photos'][] = $upload;
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
@@ -212,7 +211,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'modals' => ['farmer_terms_modal', 'farm_location_modal'],
+					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
 					'js' => ['farm', 'storefront'],
 				],
 				'data' => [

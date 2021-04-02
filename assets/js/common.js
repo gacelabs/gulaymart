@@ -5,7 +5,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			if (uploadFile == undefined) uploadFile = false;
 			$('form').removeClass('active-ajaxed-form');
 
-			var uiButtonSubmit = $(form).find('[type=submit]'),
+			var uiButtonSubmit = $(form).find('[type=submit]:visible'),
 			callbackFn = $(form).data('callback'),
 			lastButtonUI = uiButtonSubmit.html(),
 			oSettings = {
@@ -293,4 +293,51 @@ function copyToClipboard(text) {
 	}    
 	document.body.removeChild(textArea);
 	return successful;
+}
+
+var runMediaUploader = function(callback) {
+	if ($('.input_upload_images').length) {
+		$('.input_upload_images').each(function(i, elem) {
+			$(elem).off('change').on('change', function(){
+				var checked = "", uiForm = $(elem).parents('form:first');
+				if ($(elem)[0].files.length == 1) checked = "checked";
+
+				for (var i= 0; i < $(elem)[0].files.length; i++) {
+					var blob_path = window.URL.createObjectURL(elem.files[i]),
+					is_upload = uiForm.data('notmedia') ? 1 : 0;
+					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+uiForm.attr('id')+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
+				}
+				if ($('#order-photo').length && checked != '') {
+					$('#order-photo').removeAttr('style');
+					$('#order-photo').attr({'style': 'background-image: url("'+blob_path+'")'});
+				}
+				$('[data-toggle="tooltip"]').tooltip();
+
+				if (uiForm.parent('.dash-panel[class*=score-]').length) {
+					var position = uiForm.parent('.dash-panel[class*=score-]').length - 1;
+					var iTop = (uiForm.parent('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
+					$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
+				}
+			}).next('.input-group-btn').find('button').on('click', function(e) {
+				$(elem).trigger('click');
+				$(elem).parents('form:first').find('.preview_images_list').html('');
+				$(elem).parents('form:first').find('input:file').attr('required', 'required');
+				$(elem).parents('form:first').find('button:submit').addClass('hide');
+				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+			});
+		});
+
+		$(document.body).on('click', '.preview-image-item', function() {
+			$(this).parents('form:first').find('button:submit').addClass('hide');
+			if ($(this).data('upload')) {
+				$(this).parents('form:first').find('button[value="upload"]').removeClass('hide');
+				$(this).parents('form:first').find('input:file').attr('required', 'required');
+			} else {
+				$(this).parents('form:first').find('button[value="select"]').removeClass('hide');
+				$(this).parents('form:first').find('input:file').removeAttr('required');
+			}
+			$(this).next('input[type="radio"]').prop('checked', true);
+			if (typeof callback == 'function') callback(this);
+		});
+	}
 }

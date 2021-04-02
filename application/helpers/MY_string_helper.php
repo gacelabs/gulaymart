@@ -190,6 +190,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 		// debug($_files, 1);
 		$uploaddir = create_dirs($dir);
 		// debug($uploaddir, 1);
+		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 
 		$array_index = array_keys($_files);
 		$result = FALSE;
@@ -218,7 +220,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 						$file_n_extension = explode('.'.$ext, $pathname);
 						$result[] = [
 							'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-							'path' => $uploadfile,
+							// 'path' => $uploadfile,
+							'user_id' => $profile ? $profile['id'] : 0,
 							'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 							'status' => $status
 						];
@@ -246,7 +249,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 					$file_n_extension = explode('.'.$ext, $pathname);
 					$result = [
 						'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-						'path' => $uploadfile,
+						// 'path' => $uploadfile,
+						'user_id' => $profile ? $profile['id'] : 0,
 						'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 						'status' => $status
 					];
@@ -1116,6 +1120,20 @@ function get_global_values($request=[])
 			$request['measurements'] = $measurements;
 		}
 	}
+
+	/*galleries*/
+	$request['galleries'] = [];
+	if ($ci->db->table_exists('galleries')) {
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
+		$where = " WHERE 1=1 ";
+		if ($profile) {
+			$where .= " AND g.user_id = '".$profile['id']."'";
+		}
+		$galleries = $ci->db->query("SELECT g.* FROM galleries g INNER JOIN users u ON u.id = g.user_id $where");
+		if ($galleries->num_rows() > 0) {
+			$request['galleries'] = $galleries->result_array();
+		}
+	}
 	
 	return $request;
 }
@@ -1211,7 +1229,7 @@ function curl_add_booking($data=false)
 {
 	if ($data) {
 		$data = json_decode('{
-			"referral_code": "PPS8083189",
+			"referral_code": "'.REFERRAL_CODE.'",
 			"f_id": "",
 			"pickupLocation": "Orchids St, San Jose del Monte City, Bulacan, Philippines",
 			"pickupLocationDropoff": "Santa Maria, Bulacan, Philippines",

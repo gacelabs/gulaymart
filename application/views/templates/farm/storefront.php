@@ -67,17 +67,15 @@
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="cover_image">Cover image</label></li>
-												<li class="text-link">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
 											</ul>
-											<input type="file" name="cover_image" id="cover_image" class="form-control" placeholder="The Humble Farm" required="required">
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="profile_photo">Profile photo</label></li>
-												<li class="text-link">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
 											</ul>
-											<input type="file" name="profile_photo" id="profile_photo" class="form-control" placeholder="The Humble Farm" required="required">
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 										</div>
 									</div>

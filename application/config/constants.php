@@ -106,3 +106,4 @@ defined('DEFAULT_OG_IMAGE') OR define('DEFAULT_OG_IMAGE', 'assets/images/logo.pn
 defined('DEVBUILD_PASS') OR define('DEVBUILD_PASS', '1');
 defined('PRODUCTSDATALIMIT') OR define('PRODUCTSDATALIMIT', 4);
 defined('GOOGLEMAP_KEY') OR define('GOOGLEMAP_KEY', 'AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA');
+defined('REFERRAL_CODE') OR define('REFERRAL_CODE', 'PPS8083189');

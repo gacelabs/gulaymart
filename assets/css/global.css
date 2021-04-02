@@ -626,3 +626,30 @@ input:checked + .slider:before {
 label.error {
 	width: 30%;
 }
+
+.preview_images_list, .preview_images_selected {
+	margin-top: 15px;
+}
+.preview_images_list>li, .preview_images_selected>li {
+	margin-right: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+.preview-image-item {
+	background-size: cover;
+	width: 100px;
+	height: 100px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	overflow: hidden;
+	border: 2px solid #ddd;
+	border-radius: 3px;
+}
+#media_modal .input-group input {
+  border-right: none;
+}
+#media_modal .input-group button {
+  border-radius: 4px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}

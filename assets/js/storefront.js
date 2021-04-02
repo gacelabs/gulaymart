@@ -74,4 +74,13 @@ $(document).ready(function() {
 		}
 	});
 
+	runMediaUploader();
+
 });
+
+var changeUIImage = function(data) {
+	console.log(data);
+	if (data.selected != undefined) {
+		$('.storefront-img-bg').removeAttr('style').attr('style', 'background-image: url('+data.selected+');');
+	}
+}

@@ -220,16 +220,16 @@
 				</div>
 
 				<div class="dash-panel theme hide score-4">
-					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_image">
+					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Images</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
 							</div>
-							<ul class="inline-list" id="preview_images_list"></ul>
+							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
-								<input type="file" class="form-control" name="products_photo[]" id="input_upload_images" required="required" multiple>
+								<input type="file" class="form-control input_upload_images" name="products_photo[]" required="required" multiple>
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
 								</span>
