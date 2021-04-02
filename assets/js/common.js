@@ -345,18 +345,20 @@ var runMediaUploader = function(callback) {
 			}).on('click', function(e) {
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr('required', 'required');
+				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
 				$(elem).parents('form:first').attr('data-notmedia', '1');
 				$(elem).parents('form:first').find('button:submit').addClass('hide');
 				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+				$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
 			}).next('.input-group-btn').find('button').on('click', function(e) {
 				$(elem).trigger('click');
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr('required', 'required');
+				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
 				$(elem).parents('form:first').attr('data-notmedia', '1');
 				$(elem).parents('form:first').find('button:submit').addClass('hide');
 				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+				$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
 			});
 		});
 
@@ -365,6 +367,8 @@ var runMediaUploader = function(callback) {
 			var oThis = $(this);
 			// console.log(oThis);
 			if (oThis.next('input:radio').data('upload') == 1) {
+				oThis.parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				oThis.parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
 				oThis.parents('form:first').find('button[value="upload"]').removeClass('hide');
 				oThis.parents('form:first').find('input:file').attr('required', 'required');
 				oThis.parents('form:first').attr('data-notmedia', '1');
