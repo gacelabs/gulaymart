@@ -13,7 +13,7 @@ body {
 	overflow-y: auto;
 }
 .center-panel-md {
-	width: 900px;
+	width: 700px;
 	margin: 0 auto;
 }
 b, label {
@@ -646,10 +646,26 @@ label.error {
 	border-radius: 3px;
 }
 #media_modal .input-group input {
-  border-right: none;
+	border-right: none;
 }
 #media_modal .input-group button {
-  border-radius: 4px !important;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+	border-radius: 4px !important;
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+}
+
+.fade {
+	transform: scale(0);
+	opacity: 1;
+	-webkit-transition: all .25s linear;
+	-o-transition: all .25s linear;
+	transition: all .25s linear;
+}
+.modal.fade.in {
+	transform: scale(1);
+}
+
+.modal-backdrop {
+	opacity: 1;
+	transform: scale(1);
 }

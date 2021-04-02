@@ -7,11 +7,12 @@
 				<div class="center-panel-md">
 					<div class="dash-panel">
 						<div class="dash-panel-top">
-							<h3 style="margin-bottom: 15px;">Welcome to Storefront!</h3>
-							<p>On this page, you can build your very own online store! Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
+							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
+							<p>On this page, you can build your very own online store! Showcase your products in a nice, clean and professional looking e-commerce website.</p>
+							<p>Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
 							<div class="text-center">
-								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;">
-								<button class="btn btn-lg btn-theme normal-radius" data-toggle="modal" data-target="#farmer_terms_modal">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
+								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
+								<button class="btn btn-lg btn-theme normal-radius" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
 							</div>
 						</div>
 					</div>
@@ -23,7 +24,7 @@
 						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
 							<div class="dash-panel-top">
 								<h3>Storefront customs</h3>
-								<ul class="spaced-list between" style="margin-top: 15px;">
+								<ul class="spaced-list between" style="margin-top:15px;">
 									<li class="text-sm">
 										<?php if (count($data['farms'])): ?>
 											<span class="color-grey">
@@ -69,14 +70,14 @@
 												<li><label for="cover_image">Cover image</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 800 x 200 pixels.</small>
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="profile_photo">Profile photo</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 60 x 60 pixels.</small>
 										</div>
 									</div>
 								</div>
@@ -90,7 +91,7 @@
 										<div class="form-group">
 											<textarea type="text" name="farm_story" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
 										</div>
-										<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
+										<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Pick up point of your product.</small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
@@ -98,6 +99,8 @@
 													<button type="button" class="btn btn-xs" id="remove_loc_btn"><i class="fa fa-minus text-danger"></i></button>
 												</span>
 											</div>
+
+
 
 											<div class="input-group">
 												<input type="text" name="location" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
