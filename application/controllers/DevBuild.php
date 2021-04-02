@@ -108,7 +108,105 @@ class DevBuild extends CI_Controller {
 					'after' => 'is_profile_complete',
 				]
 			],
-			'user_farms',
+			'user_farms' => [
+				'tagline' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'name',
+				],
+				'about' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'tagline',
+				],
+				'banner' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'about',
+				],
+				'cover_pic' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'banner',
+				],
+				'profile_pic' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'cover_pic',
+				],
+				'messenger' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'youtube' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'instagram' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'facebook' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'lat' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN lat;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'lng' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN lng;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'address_1' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN address_1;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'address_2' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN address_2;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+			],
+			'user_farm_locations',
 			'user_settings',
 			'galleries' => [
 				'file_path' => [

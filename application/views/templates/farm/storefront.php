@@ -67,16 +67,18 @@
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="cover_image">Cover image</label></li>
-												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg" data-field="cover_pic">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<input type="hidden" id="cover_pic" name="user_farms[cover_pic]" value="" />
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="profile_photo">Profile photo</label></li>
-												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo" data-field="profile_pic">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<input type="hidden" id="profile_pic" name="user_farms[profile_pic]" value="" />
 										</div>
 									</div>
 								</div>
@@ -88,19 +90,19 @@
 									</ul>
 									<div class="custom-item-child">
 										<div class="form-group">
-											<textarea type="text" name="farm_story" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
+											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
 										</div>
 										<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
-												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
+												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input">
 												<span class="input-group-btn">
 													<button type="button" class="btn btn-xs" id="remove_loc_btn"><i class="fa fa-minus text-danger"></i></button>
 												</span>
 											</div>
 
 											<div class="input-group">
-												<input type="text" name="location" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address">
+												<input type="text" name="user_farm_locations[]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
 												<span class="input-group-btn">
 													<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
 												</span>
@@ -117,10 +119,10 @@
 									<div class="custom-item-child">
 										<div class="form-group">
 											<label for="banner_section">Select a banner</label>
-											<select name="banner_section" id="banner_section" class="form-control">
+											<select name="user_farms[banner]" id="banner_section" class="form-control">
 												<option value="steps.png">Step 1 2 3 (Default)</option>
 												<option value="lettuce.png">Lettuce Fact</option>
-												<option value="">Deliver Fast</option>
+												<option value="be-farmer.png">Deliver Fast</option>
 											</select>
 										</div>
 									</div>
@@ -134,19 +136,19 @@
 									<div class="custom-item-child">
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-facebook-square"></i></span>
-											<input type="url" name="social_acct_fb" class="form-control social-url" placeholder="Facebook URL">
+											<input type="url" name="user_farms[facebook]" class="form-control social-url" placeholder="Facebook URL">
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-instagram"></i></span>
-											<input type="url" name="social_acct_ig" class="form-control social-url" placeholder="Instagram URL">
+											<input type="url" name="user_farms[instagram]" class="form-control social-url" placeholder="Instagram URL">
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
-											<input type="url" name="social_acct_yt" class="form-control social-url" placeholder="YouTube URL">
+											<input type="url" name="user_farms[youtube]" class="form-control social-url" placeholder="YouTube URL">
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
-											<input type="url" name="social_acct_msgr" class="form-control social-url" placeholder="Messenger URL">
+											<input type="url" name="user_farms[messenger]" class="form-control social-url" placeholder="Messenger URL">
 										</div>
 									</div>
 								</div>

@@ -97,6 +97,25 @@ class CreateDev {
 		return $table_data;
 	}
 
+	public function create_user_farm_locations_table()
+	{
+		$this->class->load->dbforge();
+		$this->class->dbforge->add_field([
+			'farm_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
+			'lat varchar(100) DEFAULT NULL',
+			'lng varchar(100) DEFAULT NULL',
+		]);
+		$this->class->dbforge->add_key('farm_id');
+		$table_data = $this->class->dbforge->create_table('user_farm_locations', FALSE, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
 	public function create_user_settings_table()
 	{
 		$this->class->load->dbforge();

@@ -195,7 +195,7 @@ class Farm extends MY_Controller {
 	{
 		$post = $this->input->post();
 		if ($post) {
-			debug($this->accounts->profile);
+			// debug($this->accounts->profile);
 			debug($post, 'stop');
 		} else {
 			$this->render_page([
