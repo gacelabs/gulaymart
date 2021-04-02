@@ -218,6 +218,9 @@ class Farm extends MY_Controller {
 	public function inventory()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['../js/DataTables/datatables.min'],
+			],
 			'middle' => [
 				'body_class' => ['farm', 'inventory'],
 				'head' => ['dashboard/nav_top'],
@@ -227,7 +230,7 @@ class Farm extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'js' => ['farm'],
+				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
 			],
 			'data' => [
 				'products' => $this->products->get()

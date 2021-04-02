@@ -15,16 +15,19 @@
 					</div>
 					<div class="dash-panel-middle">
 						<?php if ($data['products']): ?>
-						<table border="1">
-							<tr>
-								<?php foreach ($data['products'][0] as $key => $value): ?>
-									<?php if ($key != 'id'): ?>
-										<th><?php echo fix_title($key);?></th>	
-									<?php else: ?>
-										<th>action</th>	
-									<?php endif ?>
-								<?php endforeach ?>
-							</tr>
+						<table class="render-datatable">
+							<thead>
+								<tr>
+									<?php foreach ($data['products'][0] as $key => $value): ?>
+										<?php if ($key == 'id'): ?>
+											<th>Action</th>	
+										<?php else: ?>
+											<th><?php echo fix_title($key);?></th>	
+										<?php endif ?>
+									<?php endforeach ?>
+								</tr>
+							</thead>
+							<tbody>
 							<?php foreach ($data['products'] as $key => $product): ?>
 								<tr product_id="<?php echo $product['id'];?>">
 									<?php foreach ($product as $index => $value): ?>
@@ -32,13 +35,14 @@
 											<td><?php echo $value;?></td>
 										<?php else: ?>
 											<td>
-												<a href="farm/edit/<?php echo $value;?>">edit</a>
-												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">remove</a>
+												<a href="farm/edit/<?php echo $value;?>">Edit</a>
+												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">Remove</a>
 											</td>
 										<?php endif ?>
 									<?php endforeach ?>
 								</tr>
 							<?php endforeach ?>
+							</tbody>
 						</table>
 						<?php endif ?>
 					</div>

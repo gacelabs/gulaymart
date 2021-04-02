@@ -213,10 +213,13 @@ class Products {
 				unset($product['user_id']);
 				unset($product['farm_id']);
 				unset($product['delivery_option_id']);
+				unset($product['description']);
 				unset($product['old_price']);
+				unset($product['procedure']);
 				unset($product['category_id']);
 				unset($product['subcategory_id']);
 				unset($product['location_id']);
+				unset($product['farm']);
 				unset($product['added']);
 				unset($product['updated']);
 			}

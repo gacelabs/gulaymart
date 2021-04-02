@@ -68,9 +68,9 @@ $(document).ready(function() {
 
 	$('#agree-terms-form').find('input:checkbox').on('change', function(e) {
 		if ($('#agree-terms-form').find('input:checkbox:checked').length == $('#agree-terms-form').find('input:checkbox').length) {
-			$('#agree-terms-form').find('button:submit').removeClass('hide');
+			$('#agree-terms-form').find('button:submit').removeAttr('disabled');
 		} else {
-			$('#agree-terms-form').find('button:submit').addClass('hide');
+			$('#agree-terms-form').find('button:submit').attr('disabled', 'disabled');
 		}
 	});
 

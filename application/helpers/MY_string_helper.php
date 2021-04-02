@@ -1206,3 +1206,70 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 	}
 	return ['distance' => false, 'duration' => false];
 }
+
+function curl_add_booking($data=false)
+{
+	if ($data) {
+		$data = json_decode('{
+			"referral_code": "PPS8083189",
+			"f_id": "",
+			"pickupLocation": "Orchids St, San Jose del Monte City, Bulacan, Philippines",
+			"pickupLocationDropoff": "Santa Maria, Bulacan, Philippines",
+			"f_driver_id": "",
+			"f_sender_name": "Eddie Garcia",
+			"f_sender_mobile": "09172022385",
+			"f_sender_landmark": "Test",
+			"f_sender_address": "Orchids St, San Jose del Monte City, Bulacan, Philippines",
+			"f_sender_address_lat": "14.8072588",
+			"f_sender_address_lng": "121.0366074",
+			"f_order_type_send": "1",
+			"f_sender_date": "",
+			"f_sender_datetime_from": "",
+			"f_sender_datetime_to": "",
+			"f_sen_add_in_city": "",
+			"f_sen_add_in_pro": "",
+			"f_sen_add_in_reg": "",
+			"f_sen_add_in_coun": "",
+			"f_recepient_name": "Eddie Garcia 1",
+			"f_recepient_mobile": "09172022385",
+			"f_recepient_landmark": "Test 1",
+			"f_recepient_address": "Santa Maria, Bulacan, Philippines",
+			"f_recepient_address_lat": "14.847608",
+			"f_recepient_address_lng": "120.9808582",
+			"f_order_type_rec": "1",
+			"f_recepient_date": "",
+			"f_recepient_datetime_from": "",
+			"f_recepient_datetime_to": "",
+			"f_rec_add_in_city": "",
+			"f_rec_add_in_pro": "",
+			"f_rec_add_in_reg": "",
+			"f_rec_add_in_coun": "",
+			"f_collectFrom": "R",
+			"f_recepient_notes": "",
+			"f_cargo": "Food",
+			"f_cargo_others": "Food",
+			"f_is_cod": "false",
+			"f_express_fee": "false",
+			"f_post": "{\"hash\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcmljaW5nIjp7InByaWNlIjoxMTUsImRpc2NvdW50IjowLCJleHByZXNzRmVlIjowLCJjYXNoT25EZWxpdmVyeUZlZSI6MCwiZGlzdGFuY2UiOjExLjg2LCJkdXJhdGlvbiI6MzEsInByb21vQ29kZSI6bnVsbH0sImRpcmVjdGlvbnMiOnsiZGlzdGFuY2UiOjExLjg2LCJkdXJhdGlvbiI6MzEsIm9yaWdpbiI6eyJsYXRpdHVkZSI6MTQuODA3MjU4OCwibG9uZ2l0dWRlIjoxMjEuMDM2NjA3NH0sImRlc3RpbmF0aW9ucyI6W3sibGF0aXR1ZGUiOjE0Ljg0NzYwOCwibG9uZ2l0dWRlIjoxMjAuOTgwODU4Mn1dfSwiaWF0IjoxNjE3MzM1NDI0LCJleHAiOjE2MTczNzg2MjR9.007pn2CetO7bcDp-vxb3SQMPd5qdfPtnaul2f07oWaU\"}",
+			"f_price": 115,
+			"f_distance": "11.86 km",
+			"f_duration": 31
+		}', true);
+		debug($data, 'stop');
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://toktok.ph/app/websiteBooking/validate_website_inputs/');
+		curl_setopt($ch, CURLOPT_POST, 0);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		// receive server response...
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		$output = curl_exec($ch);
+		// echo $output; exit();
+		curl_close($ch);
+		$results = json_decode($output, true);
+
+		debug($results, 'stop');
+		return $results;
+	}
+	return false;
+}
