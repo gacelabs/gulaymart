@@ -78,9 +78,18 @@ $(document).ready(function() {
 
 });
 
-var changeUIImage = function(data) {
-	console.log(data);
-	if (data.selected != undefined) {
-		$('.storefront-img-bg').removeAttr('style').attr('style', 'background-image: url('+data.selected+');');
+var changeUIImage = function(obj) {
+	// console.log(obj);
+	if (obj.selected != undefined && obj.ui != undefined) {
+		// console.log(obj.selected);
+		if (typeof obj.selected == 'object' && Object.keys(obj.selected).length) {
+			if (obj.selected[0] != undefined) {
+				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
+			} else {
+				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
+			}
+		} else {
+			$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
+		}
 	}
 }

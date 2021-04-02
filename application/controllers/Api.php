@@ -118,13 +118,15 @@ class Api extends MY_Controller {
 			$uploads = files_upload($_FILES, $dir);
 			// debug($post, $uploads, 'stop');
 			$index = false;
-			foreach ($post as $table => $row) {
-				if (is_array($row)) {
-					$index = isset($row['index']) ? $row['index'] : false;
-				} else {
-					$index = $row ?: false;
+			if (isset($post['galleries'])) {
+				foreach ($post['galleries'] as $table => $row) {
+					if (is_array($row)) {
+						$index = isset($row['index']) ? $row['index'] : false;
+					} else {
+						$index = $row ?: false;
+					}
+					break;
 				}
-				break;
 			}
 			if ($uploads) {
 				foreach ($uploads as $key => $upload) {
@@ -134,12 +136,13 @@ class Api extends MY_Controller {
 					}
 				}
 			}
+			// debug($uploads, $index, 'stop');
 			if ($index !== false AND isset($uploads[$index])) {
 				$post['selected'] = $uploads[$index];
 				$this->set_response('success', 'Media Upload successful! Image selected', $post, false, 'changeUIImage');
-			} elseif ($uploads) {
+			} elseif ($uploads AND !isset($post['selected'])) {
 				$post['selected'] = $uploads;
-				$this->set_response('success', 'Media Upload successful!', $post);
+				$this->set_response('success', 'Media Upload successful!', $post, false, 'changeUIImage');
 			} else {
 				$this->set_response('success', 'Image selected!', $post, false, 'changeUIImage');
 			}

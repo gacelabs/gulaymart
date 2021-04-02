@@ -1,3 +1,27 @@
+$(document).ready(function() {
+	$('div.modal').on('shown.bs.modal', function(e) { 
+		switch (e.target.id) {
+			case 'media_modal':
+				if ($(e.relatedTarget).data('change-ui').length) {
+					var value = $(e.relatedTarget).data('change-ui');
+					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
+				}
+			break;
+		}
+	}).on('hide.bs.modal', function(e) { 
+		switch (e.target.id) {
+			case 'media_modal':
+				if ($(e.target).find('form input[name="ui"]').length) {
+					$(e.target).find('form input[name="ui"]').remove();
+					var html = $(e.target).find('form .preview_images_list').html();
+					$(e.target).find('form .preview_images_list').html('');
+					html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
+					$(e.target).find('form .preview_images_selected').append(html);
+				}
+			break;
+		}
+	});
+});
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
 	if (typeof $.ajax == 'function') {
@@ -318,10 +342,19 @@ var runMediaUploader = function(callback) {
 					var iTop = (uiForm.parent('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
 					$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
 				}
+			}).on('click', function(e) {
+				$(elem).parents('form:first').find('.preview_images_list').html('');
+				$(elem).parents('form:first').find('input:file').attr('required', 'required');
+				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr('required', 'required');
+				$(elem).parents('form:first').attr('data-notmedia', '1');
+				$(elem).parents('form:first').find('button:submit').addClass('hide');
+				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
 			}).next('.input-group-btn').find('button').on('click', function(e) {
 				$(elem).trigger('click');
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
+				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr('required', 'required');
+				$(elem).parents('form:first').attr('data-notmedia', '1');
 				$(elem).parents('form:first').find('button:submit').addClass('hide');
 				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
 			});
@@ -329,14 +362,19 @@ var runMediaUploader = function(callback) {
 
 		$(document.body).on('click', '.preview-image-item', function() {
 			$(this).parents('form:first').find('button:submit').addClass('hide');
-			if ($(this).data('upload')) {
-				$(this).parents('form:first').find('button[value="upload"]').removeClass('hide');
-				$(this).parents('form:first').find('input:file').attr('required', 'required');
+			var oThis = $(this);
+			// console.log(oThis);
+			if (oThis.next('input:radio').data('upload') == 1) {
+				oThis.parents('form:first').find('button[value="upload"]').removeClass('hide');
+				oThis.parents('form:first').find('input:file').attr('required', 'required');
+				oThis.parents('form:first').attr('data-notmedia', '1');
 			} else {
-				$(this).parents('form:first').find('button[value="select"]').removeClass('hide');
-				$(this).parents('form:first').find('input:file').removeAttr('required');
+				oThis.parents('form:first').find('.preview_images_list li input:radio').removeAttr('checked').removeAttr('required');
+				oThis.parents('form:first').find('button[value="select"]').removeClass('hide');
+				oThis.parents('form:first').find('input:file').removeAttr('required');
+				oThis.parents('form:first').removeAttr('data-notmedia');
 			}
-			$(this).next('input[type="radio"]').prop('checked', true);
+			oThis.next('input[type="radio"]').prop('checked', true);
 			if (typeof callback == 'function') callback(this);
 		});
 	}

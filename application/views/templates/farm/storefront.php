@@ -67,14 +67,14 @@
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="cover_image">Cover image</label></li>
-												<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="profile_photo">Profile photo</label></li>
-												<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
+												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 										</div>
