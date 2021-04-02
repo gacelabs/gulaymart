@@ -190,6 +190,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 		// debug($_files, 1);
 		$uploaddir = create_dirs($dir);
 		// debug($uploaddir, 1);
+		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 
 		$array_index = array_keys($_files);
 		$result = FALSE;
@@ -218,7 +220,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 						$file_n_extension = explode('.'.$ext, $pathname);
 						$result[] = [
 							'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-							'path' => $uploadfile,
+							// 'path' => $uploadfile,
+							'user_id' => $profile ? $profile['id'] : 0,
 							'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 							'status' => $status
 						];
@@ -246,7 +249,8 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 					$file_n_extension = explode('.'.$ext, $pathname);
 					$result = [
 						'name' => ucwords(str_replace('-', ' ', $file_n_extension[0])),
-						'path' => $uploadfile,
+						// 'path' => $uploadfile,
+						'user_id' => $profile ? $profile['id'] : 0,
 						'url_path' => str_replace('//', '/', 'assets/data/files/'.$dir.'/'.$pathname),
 						'status' => $status
 					];
@@ -965,7 +969,7 @@ function check_data_values($data=false, $is_equal_to='', &$values=[], &$length=0
 						$values[] = $row;
 					}
 				} else {
-					check_data_values($row, $is_equal_to, $values, $length);
+					return check_data_values($row, $is_equal_to, $values, $length);
 				}
 				$length++;
 			}
@@ -1116,6 +1120,20 @@ function get_global_values($request=[])
 			$request['measurements'] = $measurements;
 		}
 	}
+
+	/*galleries*/
+	$request['galleries'] = [];
+	if ($ci->db->table_exists('galleries')) {
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
+		$where = " WHERE 1=1 ";
+		if ($profile) {
+			$where .= " AND g.user_id = '".$profile['id']."'";
+		}
+		$galleries = $ci->db->query("SELECT g.* FROM galleries g INNER JOIN users u ON u.id = g.user_id $where");
+		if ($galleries->num_rows() > 0) {
+			$request['galleries'] = $galleries->result_array();
+		}
+	}
 	
 	return $request;
 }
@@ -1141,4 +1159,135 @@ function str_not_value_echo($search='', $in='', $echo='') {
 	if ((bool)strstr($in, (string)$search) == false) {
 		echo $echo;
 	}
+}
+
+function get_coordinates($data=false, $sensor=0, $region='PH') {
+	if ($data AND (isset($data['city']) AND isset($data['street']) AND isset($data['province']))) {
+		/*$data['city'],$data['street'],$data['province']*/
+		$address = urlencode(implode(',', $data));
+		$url = "http://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$curl_response = curl_exec($ch);
+		curl_close($ch);
+		$response = json_decode($curl_response);
+
+		if ($response->status == 'OK') {
+			$googlemap = $response->results[0];
+			$coordinates = $googlemap->geometry->location;
+			return $coordinates;
+		}
+	}
+	return false;
+}
+
+function get_driving_distance($coordinates=false, $mode='driving', $language='ph') {
+	if ($coordinates) {
+		$origins = $destinations = false;
+		foreach ($coordinates as $key => $coordinate) {
+			if ($key == 0) {
+				$origins = 'origins='.implode(',', $coordinate);
+			} elseif ($key == 1) {
+				$destinations = 'destinations='.implode(',', $coordinate);
+			}
+		}
+		// debug($origins, $destinations);
+
+		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$results = json_decode($response, true);
+
+		// debug($results, 'stop');
+		if ($results['status'] == 'OK') {
+			$rows = $results['rows'][0];
+			$elements = $rows['elements'][0];
+			$distance = $elements['distance']['text'];
+			$duration = $elements['duration']['text'];
+			return [
+				'distance' => str_replace([' km',' m'], ['km','m'], $distance),
+				'duration' => str_replace(['s'], [''], str_replace([' hour',' min'], ['h','m'], $duration)),
+			];
+		}
+	}
+	return ['distance' => false, 'duration' => false];
+}
+
+function curl_add_booking($data=false)
+{
+	if ($data) {
+		$data = json_decode('{
+			"referral_code": "'.REFERRAL_CODE.'",
+			"f_id": "",
+			"pickupLocation": "Orchids St, San Jose del Monte City, Bulacan, Philippines",
+			"pickupLocationDropoff": "Santa Maria, Bulacan, Philippines",
+			"f_driver_id": "",
+			"f_sender_name": "Eddie Garcia",
+			"f_sender_mobile": "09172022385",
+			"f_sender_landmark": "Test",
+			"f_sender_address": "Orchids St, San Jose del Monte City, Bulacan, Philippines",
+			"f_sender_address_lat": "14.8072588",
+			"f_sender_address_lng": "121.0366074",
+			"f_order_type_send": "1",
+			"f_sender_date": "",
+			"f_sender_datetime_from": "",
+			"f_sender_datetime_to": "",
+			"f_sen_add_in_city": "",
+			"f_sen_add_in_pro": "",
+			"f_sen_add_in_reg": "",
+			"f_sen_add_in_coun": "",
+			"f_recepient_name": "Eddie Garcia 1",
+			"f_recepient_mobile": "09172022385",
+			"f_recepient_landmark": "Test 1",
+			"f_recepient_address": "Santa Maria, Bulacan, Philippines",
+			"f_recepient_address_lat": "14.847608",
+			"f_recepient_address_lng": "120.9808582",
+			"f_order_type_rec": "1",
+			"f_recepient_date": "",
+			"f_recepient_datetime_from": "",
+			"f_recepient_datetime_to": "",
+			"f_rec_add_in_city": "",
+			"f_rec_add_in_pro": "",
+			"f_rec_add_in_reg": "",
+			"f_rec_add_in_coun": "",
+			"f_collectFrom": "R",
+			"f_recepient_notes": "",
+			"f_cargo": "Food",
+			"f_cargo_others": "Food",
+			"f_is_cod": "false",
+			"f_express_fee": "false",
+			"f_post": "{\"hash\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcmljaW5nIjp7InByaWNlIjoxMTUsImRpc2NvdW50IjowLCJleHByZXNzRmVlIjowLCJjYXNoT25EZWxpdmVyeUZlZSI6MCwiZGlzdGFuY2UiOjExLjg2LCJkdXJhdGlvbiI6MzEsInByb21vQ29kZSI6bnVsbH0sImRpcmVjdGlvbnMiOnsiZGlzdGFuY2UiOjExLjg2LCJkdXJhdGlvbiI6MzEsIm9yaWdpbiI6eyJsYXRpdHVkZSI6MTQuODA3MjU4OCwibG9uZ2l0dWRlIjoxMjEuMDM2NjA3NH0sImRlc3RpbmF0aW9ucyI6W3sibGF0aXR1ZGUiOjE0Ljg0NzYwOCwibG9uZ2l0dWRlIjoxMjAuOTgwODU4Mn1dfSwiaWF0IjoxNjE3MzM1NDI0LCJleHAiOjE2MTczNzg2MjR9.007pn2CetO7bcDp-vxb3SQMPd5qdfPtnaul2f07oWaU\"}",
+			"f_price": 115,
+			"f_distance": "11.86 km",
+			"f_duration": 31
+		}', true);
+		debug($data, 'stop');
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://toktok.ph/app/websiteBooking/validate_website_inputs/');
+		curl_setopt($ch, CURLOPT_POST, 0);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+		// receive server response...
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		$output = curl_exec($ch);
+		// echo $output; exit();
+		curl_close($ch);
+		$results = json_decode($output, true);
+
+		debug($results, 'stop');
+		return $results;
+	}
+	return false;
 }

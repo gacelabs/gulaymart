@@ -108,4 +108,46 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'Unable to Accept Terms & Policy aggreement!', $post);
 	}
 
+	public function media_uploader()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		// debug($post, 'stop');
+		if ($post) {
+			$profile = $this->accounts->profile;
+			$dir = 'medias/'.str_replace('@', '-', $profile['email_address']);
+			$uploads = files_upload($_FILES, $dir);
+			// debug($post, $uploads, 'stop');
+			$index = false;
+			if (isset($post['galleries'])) {
+				foreach ($post['galleries'] as $table => $row) {
+					if (is_array($row)) {
+						$index = isset($row['index']) ? $row['index'] : false;
+					} else {
+						$index = $row ?: false;
+					}
+					break;
+				}
+			}
+			if ($uploads) {
+				foreach ($uploads as $key => $upload) {
+					$gallery = $this->gm_db->get('galleries', $upload);
+					if ($gallery == false) {
+						$this->gm_db->new('galleries', $upload);
+					}
+				}
+			}
+			// debug($uploads, $index, 'stop');
+			if ($index !== false AND isset($uploads[$index])) {
+				$post['selected'] = $uploads[$index];
+				$this->set_response('success', 'Media Upload successful! Image selected', $post, false, 'changeUIImage');
+			} elseif ($uploads AND !isset($post['selected'])) {
+				$post['selected'] = $uploads;
+				$this->set_response('success', 'Media Upload successful!', $post, false, 'changeUIImage');
+			} else {
+				$this->set_response('success', 'Image selected!', $post, false, 'changeUIImage');
+			}
+		}
+		$this->set_response('error', 'Unable to upload images!', $post);
+	}
+
 }

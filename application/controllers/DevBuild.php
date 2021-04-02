@@ -77,13 +77,14 @@ class DevBuild extends CI_Controller {
 					} elseif (isset($row['alter']) AND $this->db->field_exists($column, $table)) {
 						$this->db->query($row['alter']);
 						$is_col_altered = 1;
+					} elseif (isset($row['remove']) AND $this->db->field_exists($column, $table)) {
 					}
 					if (isset($row['alter']) AND isset($is_col_altered) AND $is_col_altered) {
 						echo "Field ".$column." ".$row['altered']['status']." in Table ".$table."! <br>";
 					} elseif (isset($is_col_created) AND $is_col_created) {
 						echo "Field ".$column." in Table ".$table." created! <br>";
-					} else {
-						echo "Field ".$column." in Table ".$table." existing! <br>";
+					/*} else {
+						echo "Field ".$column." in Table ".$table." existing! <br>";*/
 					}
 				}
 			}
@@ -109,7 +110,14 @@ class DevBuild extends CI_Controller {
 			],
 			'user_farms',
 			'user_settings',
-			'galleries',
+			'galleries' => [
+				'file_path' => [
+					'alter' => "ALTER TABLE galleries DROP COLUMN file_path;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				]
+			],
 			'email_session',
 			'user_shippings',
 			'user_profiles',
@@ -165,6 +173,12 @@ class DevBuild extends CI_Controller {
 					],
 					'after' => 'url_path',
 				],
+				'path' => [
+					'alter' => "ALTER TABLE products_photo DROP COLUMN `path`;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				]
 			],
 			'products_attribute' => [
 				'product_id' => [

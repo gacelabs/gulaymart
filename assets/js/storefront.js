@@ -68,10 +68,28 @@ $(document).ready(function() {
 
 	$('#agree-terms-form').find('input:checkbox').on('change', function(e) {
 		if ($('#agree-terms-form').find('input:checkbox:checked').length == $('#agree-terms-form').find('input:checkbox').length) {
-			$('#agree-terms-form').find('button:submit').removeClass('hide');
+			$('#agree-terms-form').find('button:submit').removeAttr('disabled');
 		} else {
-			$('#agree-terms-form').find('button:submit').addClass('hide');
+			$('#agree-terms-form').find('button:submit').attr('disabled', 'disabled');
 		}
 	});
 
+	runMediaUploader();
+
 });
+
+var changeUIImage = function(obj) {
+	// console.log(obj);
+	if (obj.selected != undefined && obj.ui != undefined) {
+		// console.log(obj.selected);
+		if (typeof obj.selected == 'object' && Object.keys(obj.selected).length) {
+			if (obj.selected[0] != undefined) {
+				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
+			} else {
+				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
+			}
+		} else {
+			$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
+		}
+	}
+}

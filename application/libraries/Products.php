@@ -191,6 +191,7 @@ class Products {
 	public function gulay_assemble($product=false, $data_only=true)
 	{
 		if ($product) {
+			$product['price'] = '&#8369;'.$product['price'];
 			$farm = $this->class->gm_db->get('user_farms', [
 				'id' => $product['farm_id'], 'user_id' => $product['user_id']
 			], 'row');
@@ -213,10 +214,13 @@ class Products {
 				unset($product['user_id']);
 				unset($product['farm_id']);
 				unset($product['delivery_option_id']);
+				unset($product['description']);
 				unset($product['old_price']);
+				unset($product['procedure']);
 				unset($product['category_id']);
 				unset($product['subcategory_id']);
 				unset($product['location_id']);
+				unset($product['farm']);
 				unset($product['added']);
 				unset($product['updated']);
 			}

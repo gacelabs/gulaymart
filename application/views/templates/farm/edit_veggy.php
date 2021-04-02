@@ -15,14 +15,13 @@
 								<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 								<input type="text" name="products[name]" placeholder="Name" required="required" value="<?php echo $data['product']['name'];?>">
 								<input type="text" name="products[old_price]" placeholder="Old Price" required="required" value="<?php echo $data['product']['old_price'];?>">
-								<input type="text" name="products[current_price]" placeholder="Price" required="required" value="<?php echo $data['product']['current_price'];?>">
+								<input type="text" name="products[price]" placeholder="Price" required="required" value="<?php echo $data['product']['price'];?>">
 								<textarea name="products[description]" placeholder="Description"><?php echo $data['product']['description'];?></textarea>
-								<input type="text" name="products[procedure]" placeholder="Hydrophonic" value="<?php echo $data['product']['procedure'];?>">
 								<select name="products[measurement]" required="required">
 									<option value="">Measurement</option>
 									<?php if ($this->measurements): ?>
 										<?php foreach ($this->measurements as $key => $measurement): ?>
-											<option value="<?php echo $measurement['value'];?>"<?php in_array_echo($data['product']['measurement'], $measurement['value']], ' selected');?>><?php echo $measurement['label'];?></option>
+											<option value="<?php echo $measurement['value'];?>"<?php in_array_echo($data['product']['measurement'], [$measurement['value']], ' selected');?>><?php echo $measurement['label'];?></option>
 										<?php endforeach ?>
 									<?php endif ?>
 								</select>
@@ -35,14 +34,14 @@
 										<?php endforeach ?>
 									<?php endif ?>
 								</select>
-								<label>Farm</label>
+								<!-- <label>Farm</label>
 								<select name="products[location_id]" required="required">
 									<?php if ($this->farms): ?>
 										<?php foreach ($this->farms as $key => $farm): ?>
 											<option value="<?php echo $farm['location_id'];?>"<?php in_array_echo($data['product']['location_id'], [$farm['location_id']], ' selected');?>><?php echo $farm['name'];?></option>
 										<?php endforeach ?>
 									<?php endif ?>
-								</select>
+								</select> -->
 							</div>
 							<div class="dash-panel-footer">
 								<button>Edit</button>

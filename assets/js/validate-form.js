@@ -8,7 +8,7 @@ jQuery.validator.addMethod("emailExt", function(value, element, param) {
 
 function runFormValidation(forms) {
 	if (forms == undefined) {
-		forms = $(document.body).find('form.form-validate');
+		forms = $(document.body).find('.form-validate');
 	} else {
 		forms = $(forms);
 	}
@@ -37,6 +37,8 @@ function runFormValidation(forms) {
 					element.addClass('error').closest('label').addClass('error');
 				} else if (element.attr('type') == 'radio') {
 					element.addClass('error').parent().addClass('error').siblings().addClass('error');
+				} else {
+					element.addClass('error');
 				}
 			},
 			highlight: function (element, errorClass, validClass) {
