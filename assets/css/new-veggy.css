@@ -82,24 +82,6 @@
 .normal-radius {
 	border-radius: 3px !important;
 }
-#preview_images_list {
-	margin-top: 15px;
-}
-#preview_images_list>li {
-	margin-right: 10px;
-	margin-bottom: 10px;
-	text-align: center;
-}
-.preview-image-item {
-	background-size: cover;
-	width: 100px;
-	height: 100px;
-	background-repeat: no-repeat;
-	background-position: center center;
-	overflow: hidden;
-	border: 2px solid #ddd;
-	border-radius: 3px;
-}
 #new_veggy .nav-tabs {
 	text-align: center;
 }
@@ -142,11 +124,13 @@ h3.text-capsule.score {
 h3.text-capsule.score small {
 	color: white !important;
 }
+.score-detail-container {
+	width: 100%;
+}
 
 #score-detail-panel.score-detail-scroll {
 	position: fixed;
 	z-index: 3;
-	width: 46%;
 	box-shadow: 0px 0px 20px 1px rgb(68 68 68 / 48%);
 }
 
@@ -182,4 +166,8 @@ h3.text-capsule.score small {
 	background: #3b9ff5 !important;
 	padding: 1px;
 	top: 25px;
+}
+
+#preview_container {
+	position: fixed; right: 0; width: 35%;
 }

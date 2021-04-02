@@ -8,7 +8,7 @@ jQuery.validator.addMethod("emailExt", function(value, element, param) {
 
 function runFormValidation(forms) {
 	if (forms == undefined) {
-		forms = $(document.body).find('form.form-validate');
+		forms = $(document.body).find('.form-validate');
 	} else {
 		forms = $(forms);
 	}
@@ -33,13 +33,19 @@ function runFormValidation(forms) {
 			errorPlacement: function(error, element) {
 				if (element.hasClass('chosen-select')) {
 					element.parent('div').find('.chosen-container-single').addClass('error');
+				} else if (element.attr('type') == 'checkbox') {
+					element.addClass('error').closest('label').addClass('error');
 				} else if (element.attr('type') == 'radio') {
 					element.addClass('error').parent().addClass('error').siblings().addClass('error');
+				} else {
+					element.addClass('error');
 				}
 			},
 			highlight: function (element, errorClass, validClass) {
 				if ($(element).hasClass('chosen-select')) {
 					$(element).parent('div').find('.chosen-container-single').addClass('error');
+				} else if ($(element).attr('type') == 'checkbox') {
+					$(element).addClass('error').closest('label').addClass('error');
 				} else if ($(element).attr('type') == 'radio') {
 					$(element).addClass('error').parent().addClass('error').siblings().addClass('error');
 				} else if ($(element).data('error-include-parent') != undefined) {
@@ -51,6 +57,8 @@ function runFormValidation(forms) {
 			unhighlight: function (element, errorClass, validClass) {
 				if ($(element).hasClass('chosen-select')) {
 					$(element).parent('div').find('.chosen-container-single').removeClass('error');
+				} else if ($(element).attr('type') == 'checkbox') {
+					$(element).removeClass('error').closest('label').removeClass('error');
 				} else if ($(element).attr('type') == 'radio') {
 					$(element).removeClass('error').parent().removeClass('error').siblings().removeClass('error');
 				} else if ($(element).data('error-include-parent') != undefined) {

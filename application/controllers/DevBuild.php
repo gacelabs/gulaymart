@@ -77,13 +77,14 @@ class DevBuild extends CI_Controller {
 					} elseif (isset($row['alter']) AND $this->db->field_exists($column, $table)) {
 						$this->db->query($row['alter']);
 						$is_col_altered = 1;
+					} elseif (isset($row['remove']) AND $this->db->field_exists($column, $table)) {
 					}
 					if (isset($row['alter']) AND isset($is_col_altered) AND $is_col_altered) {
 						echo "Field ".$column." ".$row['altered']['status']." in Table ".$table."! <br>";
 					} elseif (isset($is_col_created) AND $is_col_created) {
 						echo "Field ".$column." in Table ".$table." created! <br>";
-					} else {
-						echo "Field ".$column." in Table ".$table." existing! <br>";
+					/*} else {
+						echo "Field ".$column." in Table ".$table." existing! <br>";*/
 					}
 				}
 			}
@@ -97,10 +98,124 @@ class DevBuild extends CI_Controller {
 	private function get_data()
 	{
 		$data = [
-			'users',
-			'user_farms',
+			'users' => [
+				'is_agreed_terms' => [
+					'definition' => [
+						'type' => 'TINYINT',
+						'constraint' => '1',
+						'default' => '0',
+					],
+					'after' => 'is_profile_complete',
+				]
+			],
+			'user_farms' => [
+				'tagline' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'name',
+				],
+				'about' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'tagline',
+				],
+				'banner' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'about',
+				],
+				'cover_pic' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'banner',
+				],
+				'profile_pic' => [
+					'definition' => [
+						'type' => 'TEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'cover_pic',
+				],
+				'messenger' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'youtube' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'instagram' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'facebook' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'ip_address',
+				],
+				'lat' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN lat;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'lng' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN lng;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'address_1' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN address_1;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+				'address_2' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN address_2;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
+			],
+			'user_farm_locations',
 			'user_settings',
-			'galleries',
+			'galleries' => [
+				'file_path' => [
+					'alter' => "ALTER TABLE galleries DROP COLUMN file_path;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				]
+			],
 			'email_session',
 			'user_shippings',
 			'user_profiles',
@@ -156,6 +271,12 @@ class DevBuild extends CI_Controller {
 					],
 					'after' => 'url_path',
 				],
+				'path' => [
+					'alter' => "ALTER TABLE products_photo DROP COLUMN `path`;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				]
 			],
 			'products_attribute' => [
 				'product_id' => [

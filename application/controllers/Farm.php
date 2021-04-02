@@ -8,7 +8,6 @@ class Farm extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('products');
 	}
 
 	public function index()
@@ -18,22 +17,29 @@ class Farm extends MY_Controller {
 
 	public function sales()
 	{
-		$this->render_page([
-			'top' => [
-				'css' => ['sales', 'chart.min'],
-			],
-			'middle' => [
-				'body_class' => ['farm', 'sales'],
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'farm/sales',
+		if ($product_count = $this->products->count()) {
+			$this->render_page([
+				'top' => [
+					'css' => ['sales', 'chart.min'],
 				],
-			],
-			'bottom' => [
-				'js' => ['farm', 'chart.min', 'sales'],
-			],
-		]);
+				'middle' => [
+					'body_class' => ['farm', 'sales'],
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/sales',
+					],
+				],
+				'bottom' => [
+					'js' => ['farm', 'chart.min', 'sales'],
+				],
+				'data' => [
+					'product_count' => $product_count
+				],
+			]);
+		} else {
+			redirect(base_url('farm/new-veggy'));
+		}
 	}
 
 	public function new_veggy()
@@ -123,12 +129,13 @@ class Farm extends MY_Controller {
 					if (isset($product_id) AND $product_id > 0) {
 						// debug($post, 'stop');
 						if (!isset($post['activity'])) $post['activity'] = 0;
-						$dir = str_replace('@', '-', $profile['email_address']);
+						$dir = 'products/'.str_replace('@', '-', $profile['email_address']);
 						$uploads = files_upload($_FILES, $dir);
 						$ids = [];
 						if ($uploads) {
 							$this->gm_db->remove('products_photo', ['product_id' => $product_id]);
-							foreach ($uploads as $key => $upload) {;
+							foreach ($uploads as $key => $upload) {
+								unset($upload['user_id']);
 								$upload['product_id'] = $product_id;
 								if ($key == $post['products_photo']['index']) {
 									$upload['is_main'] = 1;
@@ -136,7 +143,6 @@ class Farm extends MY_Controller {
 									$upload['is_main'] = 0;
 								}
 								$ids[] = $this->products->new($upload, 'products_photo');
-								unset($upload['path']);
 								$post['file_photos'][] = $upload;
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
@@ -187,28 +193,40 @@ class Farm extends MY_Controller {
 
 	public function storefront()
 	{
-		$this->render_page([
-			'top' => [
-				'css' => ['storefront', 'storefront-page'],
-			],
-			'middle' => [
-				'body_class' => ['farm', 'storefront'],
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'farm/storefront',
+		$post = $this->input->post();
+		if ($post) {
+			// debug($this->accounts->profile);
+			debug($post, 'stop');
+		} else {
+			$this->render_page([
+				'top' => [
+					'css' => ['storefront', 'storefront-page'],
 				],
-			],
-			'bottom' => [
-				'modals' => ['farmer_terms_modal', 'farm_location_modal'],
-				'js' => ['farm', 'storefront'],
-			],
-		]);
+				'middle' => [
+					'body_class' => ['farm', 'storefront'],
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/storefront',
+					],
+				],
+				'bottom' => [
+					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
+					'js' => ['farm', 'storefront'],
+				],
+				'data' => [
+					'farms' => $this->accounts->profile['farms']
+				]
+			]);
+		}
 	}
 
 	public function inventory()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['../js/DataTables/datatables.min'],
+			],
 			'middle' => [
 				'body_class' => ['farm', 'inventory'],
 				'head' => ['dashboard/nav_top'],
@@ -218,7 +236,7 @@ class Farm extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'js' => ['farm'],
+				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
 			],
 			'data' => [
 				'products' => $this->products->get()
@@ -232,18 +250,19 @@ class Farm extends MY_Controller {
 		if ($post) {
 			if (check_data_values($post)) {
 				// debug($post, $this->accounts->profile, 'stop');
-				if ($this->products->save($post['products'], ['id' => $id])) {
+				$products = $post['products'];
+				if ($this->products->save($products, ['id' => $id])) {
 					$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
-					if ($this->products->save_location(['location_id' => $post['products']['location_id']], $where)) {
+					if (isset($products['location_id']) AND $this->products->save_location(['location_id' => $products['location_id']], $where)) {
 						$post['products']['id'] = $id;
-						$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 					}
+					$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				}
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
 			$product = $this->products->get(['id' => $id], false, false, true);
-			// debug($product, 'stop');
+			// debug($this->accounts->profile, $product, 'stop');
 			$this->render_page([
 				'middle' => [
 					'body_class' => ['farm', 'new-veggy'],

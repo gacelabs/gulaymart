@@ -15,30 +15,36 @@
 					</div>
 					<div class="dash-panel-middle">
 						<?php if ($data['products']): ?>
-						<table border="1">
-							<tr>
-								<?php foreach ($data['products'][0] as $key => $value): ?>
-									<?php if ($key != 'id'): ?>
-										<th><?php echo fix_title($key);?></th>	
-									<?php else: ?>
-										<th>action</th>	
-									<?php endif ?>
-								<?php endforeach ?>
-							</tr>
-							<?php foreach ($data['products'] as $key => $product): ?>
-								<tr product_id="<?php echo $product['id'];?>">
-									<?php foreach ($product as $index => $value): ?>
-										<?php if ($index != 'id'): ?>
-											<td><?php echo $value;?></td>
+						<table class="render-datatable">
+							<thead>
+								<tr>
+									<?php foreach ($data['products'][0] as $key => $value): ?>
+										<?php if ($key == 'id'): ?>
+											<th>Action</th>	
 										<?php else: ?>
-											<td>
-												<a href="farm/edit/<?php echo $value;?>">edit</a>
-												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">remove</a>
-											</td>
+											<th><?php echo fix_title($key);?></th>	
 										<?php endif ?>
 									<?php endforeach ?>
 								</tr>
+							</thead>
+							<tbody>
+							<?php foreach ($data['products'] as $key => $product): ?>
+								<tr product_id="<?php echo $product['id'];?>">
+									<?php foreach ($product as $index => $value): ?>
+										<td width="<?php echo strlen(fix_title($value))*15;?>px"<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
+											<?php if ($index == 'id'): ?>
+												<a href="farm/edit/<?php echo $value;?>">Edit</a>
+												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">Remove</a>
+											<?php elseif ($index == 'updated'): ?>
+												<?php echo date('M. j, Y', strtotime($value));?>
+											<?php else: ?>
+												<?php echo $value;?>
+											<?php endif ?>
+										</td>
+									<?php endforeach ?>
+								</tr>
 							<?php endforeach ?>
+							</tbody>
 						</table>
 						<?php endif ?>
 					</div>

@@ -33,11 +33,13 @@ class MY_Controller extends CI_Controller {
 
 		// debug($this);
 		$this->load->library('accounts');
+		$this->load->library('products');
 		$this->load->library('smtpemail');
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();
 		$this->device_id = device_id();
+		// debug($this->galleries, 'stop');
 		
 		/*check account logins here*/
 		if ($this->accounts->has_session) {
@@ -86,6 +88,8 @@ class MY_Controller extends CI_Controller {
 			'email_address' => ['required' => TRUE, 'emailExt' => TRUE],
 			'password' => ['required' => TRUE],
 			're_password' => ['required' => TRUE],
+			'farmer_terms' => ['required' => TRUE],
+			'farmer_policy' => ['required' => TRUE],
 		];
 		if ($valids) {
 			foreach ($valids as $field => $variable) {

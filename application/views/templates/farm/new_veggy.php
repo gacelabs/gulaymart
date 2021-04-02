@@ -1,8 +1,8 @@
-<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+<div class="col-lg-10 col-md-9 col-sm-9 hidden-xs left-affix-content" id="dash_panel_right">
 	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="new_veggy">
 		<div class="dash-panel-right-canvas">
-			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
 				<div class="dash-panel" id="score-detail-panel">
 					<div class="dash-panel-top">
 						<h3>Product Details Score</h3>
@@ -68,7 +68,7 @@
 				<div class="dash-panel theme hide score-1">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Product attributes</p>
+							<label>Product attributes</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
@@ -158,7 +158,7 @@
 				<div class="dash-panel theme hide score-2">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Pricing</p>
+							<label>Pricing</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
@@ -199,7 +199,7 @@
 				<div class="dash-panel theme hide score-3">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<p class="zero-gaps">Short description</p>
+							<label>Short description</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
@@ -220,16 +220,16 @@
 				</div>
 
 				<div class="dash-panel theme hide score-4">
-					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_image">
+					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
 						<div class="dash-panel-middle">
 							<div style="margin-bottom:15px;">
-								<p class="zero-gaps">Images</p>
+								<label>Images</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
 							</div>
-							<ul class="inline-list" id="preview_images_list"></ul>
+							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
-								<input type="file" class="form-control" name="products_photo[]" id="input_upload_images" required="required" multiple>
+								<input type="file" class="form-control input_upload_images" name="products_photo[]" required="required" multiple>
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
 								</span>
@@ -237,14 +237,14 @@
 						</div>
 						<div class="dash-panel-footer text-right bg-grey">
 							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Publish<i class="fa fa-check icon-right"></i></button>
+							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
 			</div>
 
 			<!-- show after Publish -->
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hidden-xs" id="preview_container" style="position: fixed; right: 0; width: 35%;">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hide" id="preview_container">
 				<div class="dash-panel">
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">

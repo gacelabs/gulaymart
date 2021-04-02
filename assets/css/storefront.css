@@ -27,3 +27,10 @@
 	height: initial;
 	overflow: unset;
 }
+#location_container .form-control {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+#location_container .input-group-btn {
+	padding-left: 7px;
+}
