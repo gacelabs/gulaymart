@@ -31,14 +31,16 @@
 							<?php foreach ($data['products'] as $key => $product): ?>
 								<tr product_id="<?php echo $product['id'];?>">
 									<?php foreach ($product as $index => $value): ?>
-										<?php if ($index != 'id'): ?>
-											<td><?php echo $value;?></td>
-										<?php else: ?>
-											<td>
+										<td width="<?php echo strlen(fix_title($value))*15;?>px"<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
+											<?php if ($index == 'id'): ?>
 												<a href="farm/edit/<?php echo $value;?>">Edit</a>
 												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">Remove</a>
-											</td>
-										<?php endif ?>
+											<?php elseif ($index == 'updated'): ?>
+												<?php echo date('M. j, Y', strtotime($value));?>
+											<?php else: ?>
+												<?php echo $value;?>
+											<?php endif ?>
+										</td>
 									<?php endforeach ?>
 								</tr>
 							<?php endforeach ?>

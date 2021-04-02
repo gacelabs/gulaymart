@@ -191,6 +191,7 @@ class Products {
 	public function gulay_assemble($product=false, $data_only=true)
 	{
 		if ($product) {
+			$product['price'] = '&#8369;'.$product['price'];
 			$farm = $this->class->gm_db->get('user_farms', [
 				'id' => $product['farm_id'], 'user_id' => $product['user_id']
 			], 'row');

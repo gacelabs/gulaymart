@@ -18,22 +18,29 @@ class Farm extends MY_Controller {
 
 	public function sales()
 	{
-		$this->render_page([
-			'top' => [
-				'css' => ['sales', 'chart.min'],
-			],
-			'middle' => [
-				'body_class' => ['farm', 'sales'],
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'farm/sales',
+		if ($product_count = $this->products->count()) {
+			$this->render_page([
+				'top' => [
+					'css' => ['sales', 'chart.min'],
 				],
-			],
-			'bottom' => [
-				'js' => ['farm', 'chart.min', 'sales'],
-			],
-		]);
+				'middle' => [
+					'body_class' => ['farm', 'sales'],
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/sales',
+					],
+				],
+				'bottom' => [
+					'js' => ['farm', 'chart.min', 'sales'],
+				],
+				'data' => [
+					'product_count' => $product_count
+				],
+			]);
+		} else {
+			redirect(base_url('farm/new-veggy'));
+		}
 	}
 
 	public function new_veggy()

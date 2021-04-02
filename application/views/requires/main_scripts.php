@@ -8,27 +8,32 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#main-obj-script').remove();
-		
+
 		if ($('.render-datatable').length) {
 			$(document.body).find('table').each(function(i, elem) {
 				if ($.fn.dataTable != undefined) $.fn.dataTable.ext.errMode = 'none';
-				var text = $.trim($(elem).find('tr:first th:first small').text());
-				// console.log(text)
-				var blanks = {}, currency = {targets: []};
-				if ($.inArray(text.toLowerCase(), ['photo','']) >= 0) {
-					blanks.orderable = false;
-					blanks.targets = [0];
+				var text = $.trim($(elem).find('tr:first th:first').text());
+				// console.log(text);
+				var blanks = {targets: []}, currency = {targets: []};
+				if ($.inArray(text.toLowerCase(), ['action','activity']) >= 0) {
+					if (blanks.orderable == undefined) blanks.orderable = false;
+					blanks.targets.push(i);
 				}
-				var text2 = $.trim($(elem).find('tr:first th:last small').text());
-				if ($.inArray(text2.toLowerCase(), ['actions','']) >= 0) {
+				var text2 = $.trim($(elem).find('tr:first th:last').text());
+				if ($.inArray(text2.toLowerCase(), ['photo','image','']) >= 0) {
 					var last_cnt = $(elem).find('tr:first th').length - 1;
 					blanks.targets.push(last_cnt);
 				}
-				// console.log(blanks)
+				var text3 = $.trim($(elem).find('tr:first th:last').text()), aaSort = 1, aaSortDir = 'asc';
+				if ($.inArray(text3.toLowerCase(), ['updated']) >= 0) {
+					aaSort = $(elem).find('tr:first th').length - 1;
+					aaSortDir = 'desc';
+				}
+				// console.log(blanks, last_cnt);
 				oSettings = {
 					// stateSave: true,
 					// responsive: true,
-					"aaSorting": [[ 2, "asc" ]],
+					aaSorting: [[ aaSort, aaSortDir ]],
 					columnDefs: [blanks],
 					language: {
 						"search": "",
@@ -73,9 +78,6 @@
 				};
 
 				$(elem).find('tr:first th:not(:first):not(:last)').each(function(j, elemTR) {
-					if ($.trim($(elemTR).text()).toLowerCase().indexOf('updated') >= 0) {
-						oSettings.order = [[j+1, 'desc']];
-					}
 					if ($.trim($(elemTR).text()).toLowerCase().indexOf('price') >= 0 || 
 						$.trim($(elemTR).text()).toLowerCase().indexOf('rate') >= 0 || 
 						$.trim($(elemTR).text()).toLowerCase().indexOf('amount') >= 0) {
@@ -83,6 +85,7 @@
 					}
 				});
 				oSettings.columnDefs.push(currency);
+				console.log(blanks, currency, oSettings);
 				$(elem).DataTable(oSettings);
 			});
 		}

@@ -9,7 +9,7 @@
 				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
 					<ul class="spaced-list between">
 						<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 26 mins</small></kbd></li>
-						<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <?php echo $data['procedure'];?></small></kbd></li>
+						<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> </small></kbd></li>
 					</ul>
 				</div>
 				<div class="product-item-middle">
