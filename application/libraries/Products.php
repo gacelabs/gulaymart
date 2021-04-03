@@ -64,21 +64,21 @@ class Products {
 				if (!is_bool($limit) AND is_numeric($limit)) {
 					$this->class->db->limit($limit);
 				}
-				$this->class->db->where_in(['activity' => 1]);
+				$this->class->db->where(['activity' => 1]);
 			} elseif (is_array($where) OR is_string($where)) {
-				if (is_array($where)) {
-					$where['activity'] = 1;
-				} else {
-					if (strlen(trim($where)) > 0) {
-						$where .= ' AND activity = 1';
-					} else {
-						$where = 'activity = 1';
-					}
-				}
+				$this->class->db->where(['activity' => 1]);
 				if (!is_bool($limit) AND is_numeric($limit)) {
 					$this->class->db->limit($limit);
 				}
-				$this->class->db->where_in($where);
+				if (is_array($where)) {
+					foreach ($where as $field => $row) {
+						if (is_array($row)) {
+							$this->class->db->where_in($field, $row);
+						} else {
+							$this->class->db->where([$field => $row]);
+						}
+					}
+				}
 			}
 			$data = $this->class->db->get('products');
 			if (isset($data) AND $data->num_rows()) {

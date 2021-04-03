@@ -39,7 +39,13 @@ class MY_Model extends CI_Model {
 				$this->db->select($field);
 			}
 			if ($where) {
-				$this->db->where_in($where);
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
 			}
 			$data = $this->db->get($table);
 			// debug($data);
