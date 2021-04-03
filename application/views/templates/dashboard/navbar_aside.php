@@ -25,7 +25,7 @@
 			</div>
 			<div><hr></div>
 			<div class="aside-nav-item">
-				<a href="<?php echo(empty($data['farms']) ? "farm/storefront/" : "farm/") ?>" class="<?php in_array_echo("farm", $middle['body_class'], "active");?>">
+				<a href="<?php echo(empty($this->farms) ? "farm/storefront/" : "farm/") ?>" class="<?php in_array_echo("farm", $middle['body_class'], "active");?>">
 					<i class="fa fa-leaf"></i><span class="hidden-xs">My Farm</span>
 				</a>
 				<?php if ($this->products->count()): ?>
@@ -35,7 +35,7 @@
 						</a>
 					</div>
 				<?php endif ?>
-				<?php if ($data['farms']): ?>
+				<?php if ($this->farms): ?>
 				<div class="aside-nav-child">
 					<a href="farm/new-veggy/" class="<?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
 						<i class="fa fa-pencil"></i><span class="hidden-xs">New veggy</span>
@@ -54,7 +54,7 @@
 						</a>
 					</div>
 				<?php endif ?>
-				<?php if ($data['farms']): ?>
+				<?php if ($this->farms): ?>
 				<div class="aside-nav-child">
 					<a href="farm/settings/" class="<?php in_array_echo("settings", $middle['body_class'], "active");?>">
 						<i class="fa fa-cog"></i><span class="hidden-xs">Settings</span>

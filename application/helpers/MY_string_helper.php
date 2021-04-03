@@ -1083,10 +1083,13 @@ function echo_message($msg_prefix='', $field=false)
 function get_global_values($request=[])
 {
 	$ci =& get_instance();
+	$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 	/*farms*/
 	$request['farms'] = [];
 	if ($ci->db->table_exists('user_farms')) {
-		$farms = $ci->db->query("SELECT uf.* FROM user_farms uf INNER JOIN users u ON u.id = uf.user_id");
+		$where = " WHERE 1=1 ";
+		if ($profile) $where .= " AND uf.user_id = '".$profile['id']."'";
+		$farms = $ci->db->query("SELECT uf.* FROM user_farms uf INNER JOIN users u ON u.id = uf.user_id $where");
 		if ($farms->num_rows() > 0) {
 			$request['farms'] = $farms->result_array();
 		}
@@ -1124,11 +1127,8 @@ function get_global_values($request=[])
 	/*galleries*/
 	$request['galleries'] = [];
 	if ($ci->db->table_exists('galleries')) {
-		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 		$where = " WHERE 1=1 ";
-		if ($profile) {
-			$where .= " AND g.user_id = '".$profile['id']."'";
-		}
+		if ($profile) $where .= " AND g.user_id = '".$profile['id']."'";
 		$galleries = $ci->db->query("SELECT g.* FROM galleries g INNER JOIN users u ON u.id = g.user_id $where");
 		if ($galleries->num_rows() > 0) {
 			$request['galleries'] = $galleries->result_array();

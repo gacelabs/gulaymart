@@ -197,18 +197,17 @@ class Farm extends MY_Controller {
 		if ($store) {
 			$this->render_page([
 				'top' => [
-					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
+					'index_page' => 'yes',
+					'css' => ['storefront', 'storefront-page'],
 				],
 				'middle' => [
 					'body_class' => ['farm', 'storefront'],
-					'head' => [],
 					'body' => [
 						'../static/store',
 					],
 				],
 				'bottom' => [
-					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
-					'js' => ['chosen/new-chosen', 'ImageSelect.jquery', 'farm', 'storefront'],
+					'js' => ['farm', 'storefront'],
 				],
 				'data' => [
 					'farms' => $this->accounts->profile['farms'],
@@ -234,7 +233,14 @@ class Farm extends MY_Controller {
 				],
 				'bottom' => [
 					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
-					'js' => ['chosen/new-chosen', 'ImageSelect.jquery', 'farm', 'storefront'],
+					'js' => [
+						'chosen/new-chosen',
+						'ImageSelect.jquery',
+						'farm',
+						'storefront',
+						'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
+						'markerclustererplus.min',
+					],
 				],
 				'data' => [
 					'farms' => $this->accounts->profile['farms'],

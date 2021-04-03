@@ -100,27 +100,27 @@
 											</div>
 
 											<label style="margin-top:5px;">
-												<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="old"> Use my shipping address.
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="0"> Use my shipping address.
 											</label>
 											<div class="hide" id="same_loc_container">
 												<div class="row">
 													<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 														<div class="col-lg-12">
-															<p class="zero-gaps address_1"><b><?php echo $shipping['address_1'];?></b></p>
+															<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 															<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-															<?php if (is_last($current_profile['shippings'], $key) == false): ?><span>&nbsp;</span><?php endif ?>
-															<input type="hidden" name="user_farm_locations[old][]" value='<?php echo json_encode($shipping);?>'>
+															<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>'>
 														</div>
+														<?php if (is_last($current_profile['shippings'], $key) == false): ?><span>&nbsp;</span><?php endif ?>
 													<?php endforeach ?>
 												</div>
 											</div>
 
 											<label>
-												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="new"> Enter a different address.
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="1"> Enter a different address.
 											</label>
 											<div id="location_list" class="hide">
 												<div class="input-group">
-													<input type="text" name="user_farm_locations[new][]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
+													<input type="text" name="user_farm_locations[1][]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
 													<span class="input-group-btn">
 														<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
 													</span>

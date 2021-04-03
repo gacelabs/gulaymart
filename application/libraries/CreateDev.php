@@ -105,8 +105,23 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'lat varchar(100) DEFAULT NULL',
-			'lng varchar(100) DEFAULT NULL',
+			"lat VARCHAR(100) NULL DEFAULT NULL",
+			"lng VARCHAR(100) NULL DEFAULT NULL",
+			"address_1 VARCHAR(255) NULL DEFAULT NULL",
+			"address_2 VARCHAR(255) NULL DEFAULT NULL",
+			'ip_address' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'null' => TRUE,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'null' => TRUE,
+				'default' => '0',
+			],
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('farm_id');
 		$table_data = $this->class->dbforge->create_table('user_farm_locations', FALSE, [
