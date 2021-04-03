@@ -375,7 +375,7 @@ class Farm extends MY_Controller {
 
 	public function store($name=false)
 	{
-		if ($name) {
+		if ($name != false AND strtolower($name) != 'preview') {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			if ($name == 'preview') {
 				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
@@ -433,7 +433,7 @@ class Farm extends MY_Controller {
 				'data' => $data
 			]);
 		} else {
-			redirect(base_url('farm'));
+			redirect(base_url('/'));
 		}
 	}
 }
