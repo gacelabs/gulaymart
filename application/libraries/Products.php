@@ -272,10 +272,22 @@ class Products {
 
 			$display = false;
 			if ($except_field) {
-				if (!isset($product[$except_field])) {
-					$product[$except_field] = 0;
+				if (is_array($except_field)) {
+					$display = [];
+					foreach ($except_field as $value) {
+						if (!isset($product[$value])) {
+							$product[$value] = 0;
+						} else {
+							$product[$value] = $product[$value];;
+						}
+						$display[$value] = $product[$value];
+					}
+				} else {
+					if (!isset($product[$except_field])) {
+						$product[$except_field] = 0;
+					}
+					$display = $product[$except_field];
 				}
-				$display = $product[$except_field];
 			}
 
 			if ($data_only) {
@@ -295,7 +307,13 @@ class Products {
 			}
 
 			if ($display OR $except_field != false) {
-				$product[$except_field] = $display;
+				if (is_array($display)) {
+					foreach ($display as $field => $value) {
+						$product[$field] = $value;
+					}
+				} else {
+					$product[$except_field] = $display;
+				}
 			}
 			
 			$product['updated'] = $updated;

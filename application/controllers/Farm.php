@@ -388,7 +388,7 @@ class Farm extends MY_Controller {
 				if ($contents) {
 					// debug($contents, 'stop');
 					$productids = json_decode($contents['products'], true);
-					$products = $this->products->get_in(['id' => $productids], 'category_id');
+					$products = $this->products->get_in(['id' => $productids], ['category_id', 'photos']);
 					// debug($products, 'stop');
 					foreach ($products as $key => $product) {
 						$products_html .= $this->load->view('looping/product_item', ['data'=>$product, 'forajax'=>1, 'id'=>$product['category_id']], true);
