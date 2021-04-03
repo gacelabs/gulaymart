@@ -25,19 +25,21 @@
 				</ul>
 
 				<div id="storefront_product_container">
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="product_item_container">
-						<div class="product-item-body">
-							<?php echo $data['contents']['products_html'];?>
+					<?php if (isset($data['contents'])): ?>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="product_item_container">
+							<div class="product-item-body">
+								<?php echo $data['contents']['products_html'];?>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hide" id="stories_item_container">
-						<h1><?php echo $data['contents']['stories']['title'];?></h1>
-						<p><?php echo $data['contents']['stories']['content'];?></p>
-					</div>
-					<?php echo $data['contents']['galleries_html'];?>
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hide" id="about_item_container">
-						<p><?php echo $data['contents']['about'];?></p>
-					</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hide" id="stories_item_container">
+							<h1><?php echo $data['contents']['stories']['title'];?></h1>
+							<p><?php echo $data['contents']['stories']['content'];?></p>
+						</div>
+						<?php echo $data['contents']['galleries_html'];?>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hide" id="about_item_container">
+							<p><?php echo $data['contents']['about'];?></p>
+						</div>
+					<?php endif ?>
 					<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="banner_section img-responsive" style="width: 100%;">
 				</div>
 			</div>

@@ -210,7 +210,7 @@ class DevBuild extends CI_Controller {
 				],
 			],
 			'user_farm_locations',
-			'user_farm_contents:recreate',
+			'user_farm_contents',
 			'user_settings',
 			'galleries' => [
 				'file_path' => [

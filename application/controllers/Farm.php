@@ -375,7 +375,7 @@ class Farm extends MY_Controller {
 
 	public function store($name=false)
 	{
-		if ($name != false AND strtolower($name) != 'preview') {
+		if ($name != false AND (strtolower($name) != 'preview' OR $this->accounts->has_session)) {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			if ($name == 'preview') {
 				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
@@ -384,27 +384,28 @@ class Farm extends MY_Controller {
 			}
 			$data = false;
 			if ($user_farm) {
+				// debug($user_farm, 'stop');
+				$data = [
+					'farm' => $user_farm,
+					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
+				];
 				$contents = $this->gm_db->get('user_farm_contents', ['farm_id' => $user_farm['id']], 'row');
+				// debug($contents, 'stop');
 				$products_html = $galleries_html = '';
 				if ($contents) {
-					// debug($contents, 'stop');
 					$productids = json_decode($contents['products'], true);
-					$products = $this->products->get_in(['id' => $productids], ['category_id', 'photos']);
+					$products = $this->products->get_in(['id' => $productids, 'user_id' => $profile['id']], ['category_id', 'photos']);
 					// debug($products, 'stop');
 					foreach ($products as $key => $product) {
 						$products_html .= $this->load->view('looping/product_item', ['data'=>$product, 'forajax'=>1, 'id'=>$product['category_id']], true);
 					}
 					// debug($products_html, 'stop');
 					$galleriesids = json_decode($contents['galleries'], true);
-					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids]);
+					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids, 'user_id' => $profile['id']]);
 					// debug($galleries, 'stop');
 					$galleries_html = $this->load->view('looping/gallery_item', ['data'=>$galleries, 'title'=> 'Galleries'], true);
 					// debug($galleries_html, 'stop');
-				}
-				$data = [
-					'farm' => $user_farm,
-					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
-					'contents' => [
+					$data['contents'] = [
 						'products_html' => $products_html,
 						'stories' => [
 							'title' => $contents['story_title'],
@@ -412,8 +413,8 @@ class Farm extends MY_Controller {
 						],
 						'galleries_html' => $galleries_html,
 						'about' => $contents['about'],
-					],
-				];
+					];
+				}
 				// debug($data, 'stop');
 			}
 			$this->render_page([
