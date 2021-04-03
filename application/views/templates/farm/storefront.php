@@ -37,7 +37,7 @@
 											</span><br><?php echo date('F j, Y');?>
 										<?php endif ?>
 									</li>
-									<?php if (isset($data['farms'])): ?>
+									<?php if (isset($data['farms']) AND $data['farms']): ?>
 										<li><button type="submit" class="btn btn-blue normal-radius">Re-create</button></li>
 									<?php else: ?>
 										<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
@@ -241,7 +241,7 @@
 											</span><br><?php echo date('F j, Y');?>
 										<?php endif ?>
 									</li>
-									<?php if (isset($data['farm_contents'])): ?>
+									<?php if (isset($data['farm_contents']) AND $data['farm_contents']): ?>
 										<li><button type="submit" class="btn btn-blue normal-radius">Re-Create</button></li>
 									<?php else: ?>
 										<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
