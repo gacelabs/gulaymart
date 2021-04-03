@@ -3,13 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Farm extends MY_Controller {
 
-	public $allowed_methods = [];
+	public $allowed_methods = ['store'];
 
 	public function __construct()
 	{
 		parent::__construct();
 		// debug($this->action, 'stop');
-		if ($this->accounts->profile['is_agreed_terms'] == 0 AND !in_array($this->action, ['storefront'])) {
+		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 AND !in_array($this->action, ['storefront'])) {
 			redirect(base_url('farm/storefront'));
 		}
 	}
