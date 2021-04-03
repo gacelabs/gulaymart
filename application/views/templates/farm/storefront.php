@@ -269,7 +269,7 @@
 													<?php foreach ($data['products'] as $key => $product): ?>
 														<?php 
 														$src = 'https://place-hold.it/50x50.png?text=No+Image&fontsize=7';
-														if ($product['photos']) {
+														if (isset($product['photos']) AND $product['photos']) {
 															$src = base_url($product['photos']['main']['url_path']);
 														}
 														?>

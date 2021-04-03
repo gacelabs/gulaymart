@@ -71,11 +71,11 @@ class Products {
 					$this->class->db->limit($limit);
 				}
 				if (is_array($where)) {
-					foreach ($where as $field => $row) {
-						if (is_array($row)) {
-							$this->class->db->where_in($field, $row);
+					foreach ($where as $field => $wrow) {
+						if (is_array($wrow)) {
+							$this->class->db->where_in($field, $wrow);
 						} else {
-							$this->class->db->where([$field => $row]);
+							$this->class->db->where([$field => $wrow]);
 						}
 					}
 				}

@@ -82,7 +82,6 @@ class DevBuild extends CI_Controller {
 					} elseif (isset($row['alter']) AND $this->db->field_exists($column, $table)) {
 						$this->db->query($row['alter']);
 						$is_col_altered = 1;
-					} elseif (isset($row['remove']) AND $this->db->field_exists($column, $table)) {
 					}
 					if (isset($row['alter']) AND isset($is_col_altered) AND $is_col_altered) {
 						echo "Field ".$column." ".$row['altered']['status']." in Table ".$table."! <br>";
