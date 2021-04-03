@@ -20,7 +20,9 @@ class Basket extends My_Controller {
 			'middle' => [
 				'body' => [
 					'marketplace/navbar',
-					'productpage/top'
+					'productpage/top',
+					'productpage/middle',
+					'productpage/banner'
 				],
 				'footer' => [
 					'static/footer'

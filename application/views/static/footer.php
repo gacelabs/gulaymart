@@ -31,12 +31,12 @@
 			<p style="margin-bottom:5px;"><a href="">Gulaymart 	&copy; 2021</a></p>
 		</div>
 	</div>
-	<div class="container text-center">
+	<!-- <div class="container text-center">
 		<div class="col-lg-6">
 			<h3 style="font-size: 16px;"><b>Facilities and Services</b></h3>
 			<ul class="inline-list right-gap">
 				<li><img src="assets/images/toktok.png" width="75"></li>
-				<!-- <li><img src="assets/images/gcash.png" width="100"></li> -->
+				<li><img src="assets/images/gcash.png" width="100"></li>
 				<li><img src="assets/images/paypal.png" width="100"></li>
 			</ul>
 		</div>
@@ -47,5 +47,5 @@
 				<li><img src="assets/images/digitalocean.png" width="100"></li>
 			</ul>
 		</div>
-	</div>
+	</div> -->
 </div>

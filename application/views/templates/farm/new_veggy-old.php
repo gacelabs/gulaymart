@@ -95,3 +95,20 @@
 		</div>
 	</div>
 </div>
+
+<!-- BS3 Plus and Minus input -->
+<!-- <div id="quantity_input_container">
+	<div class="input-group">
+		<span class="input-group-btn">
+			<button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+				<span class="fa fa-minus"></span>
+			</button>
+		</span>
+		<input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+		<span class="input-group-btn">
+			<button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+				<span class="fa fa-plus"></span>
+			</button>
+		</span>
+	</div>
+</div> -->
