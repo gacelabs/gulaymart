@@ -70,24 +70,16 @@
 												<li><label for="cover_image">Cover image</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg" data-field="cover_pic">Media</li>
 											</ul>
-<<<<<<< HEAD
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 800 x 200 pixels.</small>
-=======
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 											<input type="hidden" id="cover_pic" name="user_farms[cover_pic]" value="" />
->>>>>>> 1510f1a2733c79f3b98d0d839ddafc65acc17208
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
 												<li><label for="profile_photo">Profile photo</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo" data-field="profile_pic">Media</li>
 											</ul>
-<<<<<<< HEAD
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 60 x 60 pixels.</small>
-=======
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
 											<input type="hidden" id="profile_pic" name="user_farms[profile_pic]" value="" />
->>>>>>> 1510f1a2733c79f3b98d0d839ddafc65acc17208
 										</div>
 									</div>
 								</div>
@@ -101,7 +93,8 @@
 										<div class="form-group">
 											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
 										</div>
-										<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Pick up point of your product.</small>
+										<label for="location">Location</label>
+										<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Where to pick up your products?</small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input">
@@ -110,13 +103,25 @@
 												</span>
 											</div>
 
+											<label style="margin-top:5px;">
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc"> Use my shipping address.
+											</label>
+											<div class="hide" id="same_loc_container">
+												<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+													<?php echo $shipping['address_1'];?>
+												<?php endforeach ?>
+											</div>
+											<label>
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc"> Enter a different address.
+											</label>
 
-
-											<div class="input-group">
-												<input type="text" name="user_farm_locations[]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
-												<span class="input-group-btn">
-													<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
-												</span>
+											<div id="location_list" class="hide">
+												<div class="input-group">
+													<input type="text" name="user_farm_locations[]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
+													<span class="input-group-btn">
+														<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -168,9 +173,9 @@
 					</div>
 				</div>
 
-				<div class="col-lg-1 hidden-md hidden-sm hidden-xs"></div>			
+				<div class="col-lg-1 hidden-md hidden-sm hidden-xs"></div>
 
-				<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs" id="storefront_preview_parent">
+				<div class="col-lg-8 col-md-8 col-sm-12 hidden-xs" id="storefront_preview_parent">
 					<div class="cover_image" id="storefront_page_container">
 						<div class="storefront-top">
 							<div class="storefront-img-bg" style="background-image: url(assets/images/storefront-top.jpg);">

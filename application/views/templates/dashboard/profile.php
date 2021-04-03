@@ -2,6 +2,12 @@
 	<div class="dash-panel-right-container">
 		<?php $this->view('static/mobile_note'); ?>
 		<div class="dash-panel-right-canvas">
+			<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom:15px;">
+				<p>You're all set! Enjoy shopping fresh veggies at the <a href="marketplace/" class="btn btn-blue btn-sm normal-radius">Marketplace</a></p>
+			</div>
+			<?php endif ?>
+
 			<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
 					<div class="dash-panel theme">

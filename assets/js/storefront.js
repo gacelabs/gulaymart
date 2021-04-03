@@ -39,9 +39,9 @@ $(document).ready(function() {
 	// clone/ append loc input
 	$(function() {
 		$('#add_loc_btn').click(function() {
-			var limit = $('#location_container').children('.input-group:visible').length;
+			var limit = $('#location_list').children('.input-group:visible').length;
 			if (limit <= 4) {
-				$('#clone_me').clone().removeClass('hide').removeAttr('id').appendTo('#location_container').find('input')
+				$('#clone_me').clone().removeClass('hide').removeAttr('id').appendTo('#location_list').find('input')
 					.attr({'name':'user_farm_locations[]', 'required':'required'});
 			}
 		});
@@ -75,6 +75,19 @@ $(document).ready(function() {
 	});
 
 	runMediaUploader();
+
+	// farm location toggle
+	$(function() {
+		$('.pick-up-loc').click(function() {
+			if ($(this).attr('id') == "diff_loc") {
+				$('#location_list').removeClass('hide');
+				$('#same_loc_container').addClass('hide');
+			} else {
+				$('#location_list').addClass('hide');
+				$('#same_loc_container').removeClass('hide');
+			}
+		})
+	});
 
 });
 

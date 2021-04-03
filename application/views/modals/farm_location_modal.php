@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-farm_location_modal.php
-=======
 <div class="modal fade" id="farm_location_modal" tabindex="-1" role="dialog" aria-labelledby="farm_location_modalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -35,4 +32,3 @@ farm_location_modal.php
 		</div>
 	</div>
 </div>
->>>>>>> 984a7a7a220721ce0e86d01c746587e0f5e2b425

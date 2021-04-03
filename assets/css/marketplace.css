@@ -1,7 +1,7 @@
 body.marketplace {
 	padding-top: 60px;
 }
-#content__top {
+body.marketplace #content__top {
 	position: absolute;
 	width: 100%;
 	left: 0;
@@ -11,7 +11,7 @@ body.marketplace {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
-	height: 55vh;
+	height: 100vh;
 	max-height: 500px;
 	z-index: -1;
 	/*filter: grayscale(1);*/
@@ -28,7 +28,7 @@ body.marketplace {
 	padding: 0;
 	position: fixed;
 	top: 0;
-	z-index: 2;
+	z-index: 3;
 }
 #marketplace_nav_body .panel, #banner_container .panel {
 	margin-bottom: 0
