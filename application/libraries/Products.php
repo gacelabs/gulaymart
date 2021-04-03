@@ -289,6 +289,7 @@ class Products {
 				unset($product['subcategory_id']);
 				unset($product['location_id']);
 				unset($product['farm']);
+				unset($product['photos']);
 				unset($product['added']);
 				unset($product['updated']);
 			}

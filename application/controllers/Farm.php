@@ -8,6 +8,10 @@ class Farm extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		// debug($this->action, 'stop');
+		if ($this->accounts->profile['is_agreed_terms'] == 0 AND !in_array($this->action, ['storefront'])) {
+			redirect(base_url('farm/storefront'));
+		}
 	}
 
 	public function index()
@@ -293,7 +297,7 @@ class Farm extends MY_Controller {
 				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
 			],
 			'data' => [
-				'products' => $this->products->get()
+				'products' => $this->products->get_in()
 			],
 		]);
 	}
