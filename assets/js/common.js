@@ -1,9 +1,15 @@
+var hasLatlong = false, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
 $(document).ready(function() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				var oThisLatLong = undefined;
+				if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {
+					hasLatlong = true;
+					oThisLatLong = {'lat': parseFloat($('#lat').val()), 'lng': parseFloat($('#lng').val())};
+				}
 				$('#shipping-id').remove();
-				resetMap();
+				resetMap(oThisLatLong);
 				$('#address_2').val('');
 			break;
 			case 'media_modal':
@@ -396,7 +402,6 @@ var runMediaUploader = function(callback) {
 	}
 }
 
-var hasLatlong = false, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
 function setDragEvent(marker, infowindow) {
 	google.maps.event.addListener(marker, 'dragend', function() {
 		fnDragEnd(marker);
@@ -559,7 +564,7 @@ function loadMap(oLatLong) {
 }
 
 function initMapLocations() {
-	oLatLong = {'lat':14.68244804236, 'lng': 120.98537670912712};
+	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	navigator.geolocation.getCurrentPosition(function(response) {
 		if (response != undefined) {
 			oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude}; 

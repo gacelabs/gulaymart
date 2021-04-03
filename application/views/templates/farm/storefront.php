@@ -21,7 +21,7 @@
 				<?php /*debug($data['farms'], 'stop');*/ ?>
 				<div class="col-lg-5 col-md-4 col-sm-12 hidden-xs" id="storefront_customs_parent">
 					<div class="dash-panel theme">
-						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
+						<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 							<div class="dash-panel-top">
 								<h3>Storefront Customs</h3>
 								<ul class="spaced-list between" style="margin-top: 15px;">
@@ -176,7 +176,7 @@
 					</div>
 
 					<div class="dash-panel theme">
-						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
+						<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 							<div class="dash-panel-top">
 								<h3>Storefront Contents</h3>
 								<ul class="spaced-list between" style="margin-top: 15px;">

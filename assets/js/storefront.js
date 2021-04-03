@@ -88,8 +88,10 @@ $(document).ready(function() {
 		})
 	});
 
-	$('form').bind('submit', function() {
-		document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
+	$('form.storefront-forms').bind('submit', function(e) {
+		if ($(e.target).find('[name]').hasClass('error') == false) {
+			document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
+		}
 	});
 
 });
@@ -101,14 +103,14 @@ var changeUIImage = function(obj) {
 		var selected = '';
 		if (typeof obj.selected == 'object' && Object.keys(obj.selected).length) {
 			if (obj.selected[0] != undefined) {
-				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
+				$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
 				selected = obj.selected[0].url_path;
 			} else {
-				$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
+				$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
 				selected = obj.selected.url_path;
 			}
 		} else {
-			$(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
+			$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
 			selected = obj.selected;
 		}
 
