@@ -31,8 +31,9 @@ function runFormValidation(forms) {
 		form.validate({
 			ignore: '.ignore',
 			errorPlacement: function(error, element) {
-				if (element.hasClass('chosen-select')) {
+				if (element.hasClass('chosen')) {
 					element.parent('div').find('.chosen-container-single').addClass('error');
+					element.parent('div').find('.chosen-container-multi .chosen-choices').addClass('error');
 				} else if (element.attr('type') == 'checkbox') {
 					element.addClass('error').closest('label').addClass('error');
 				} else if (element.attr('type') == 'radio') {
@@ -42,8 +43,9 @@ function runFormValidation(forms) {
 				}
 			},
 			highlight: function (element, errorClass, validClass) {
-				if ($(element).hasClass('chosen-select')) {
+				if ($(element).hasClass('chosen')) {
 					$(element).parent('div').find('.chosen-container-single').addClass('error');
+					$(element).parent('div').find('.chosen-container-multi .chosen-choices').addClass('error');
 				} else if ($(element).attr('type') == 'checkbox') {
 					$(element).addClass('error').closest('label').addClass('error');
 				} else if ($(element).attr('type') == 'radio') {
@@ -55,8 +57,9 @@ function runFormValidation(forms) {
 				}
 			},
 			unhighlight: function (element, errorClass, validClass) {
-				if ($(element).hasClass('chosen-select')) {
+				if ($(element).hasClass('chosen')) {
 					$(element).parent('div').find('.chosen-container-single').removeClass('error');
+					$(element).parent('div').find('.chosen-container-multi .chosen-choices').removeClass('error');
 				} else if ($(element).attr('type') == 'checkbox') {
 					$(element).removeClass('error').closest('label').removeClass('error');
 				} else if ($(element).attr('type') == 'radio') {

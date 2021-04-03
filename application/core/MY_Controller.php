@@ -9,10 +9,16 @@ class MY_Controller extends CI_Controller {
 	public $ajax_no_entry_for_signed_out = TRUE;
 	public $profile = FALSE;
 	public $action = 'index';
+	public $referrer = FALSE;
 
 	public function __construct()
 	{
 		parent::__construct();
+		$referrer = $this->session->userdata('referrer');
+		if (empty($referrer)) {
+			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
+			$this->session->set_userdata('referrer', $this->referrer);
+		}
 		$this->class_name = strtolower(trim($this->router->class));
 		$this->action = strtolower(trim($this->router->method));
 		// $this->load->library('controllerlist');
@@ -39,6 +45,7 @@ class MY_Controller extends CI_Controller {
 		$this->set_form_valid_fields();
 		$this->set_global_values();
 		$this->device_id = device_id();
+		// debug($this->products->get(), 'stop');
 		// debug($this->galleries, 'stop');
 		
 		/*check account logins here*/
@@ -121,8 +128,9 @@ class MY_Controller extends CI_Controller {
 
 	public function render_page($rawdata=false, $debug=false)
 	{
+		// debug($this->action, 'stop');
 		$body_classes = ($this->accounts->has_session ? ($this->class_name != 'marketplace' ? ['logged-in', $this->class_name] : [$this->class_name]) : [$this->class_name]);
-		$top_css = ($this->accounts->has_session ? ['logged-in'] : []);
+		$top_css = (($this->accounts->has_session AND $this->action != 'store') ? ['logged-in'] : []);
 		$view = [
 			'top' => [
 				'metas' => [

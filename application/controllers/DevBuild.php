@@ -52,6 +52,11 @@ class DevBuild extends CI_Controller {
 				$table = $key;
 			}
 			if (!$this->db->table_exists($table)) {
+				if ((bool)strstr($table, ':recreate')) {
+					$chunks = explode(':', $table);
+					$table = trim($chunks[0]);
+					if ($this->db->table_exists($table)) $this->db->query('DROP TABLE '.$table);
+				}
 				/*create table for the first time*/
 				$method = 'create_'.$table.'_table';
 				if (method_exists($this->createdev, $method)) {
@@ -116,14 +121,6 @@ class DevBuild extends CI_Controller {
 						'null' => true,
 					],
 					'after' => 'name',
-				],
-				'about' => [
-					'definition' => [
-						'type' => 'LONGTEXT',
-						'default' => NULL,
-						'null' => true,
-					],
-					'after' => 'tagline',
 				],
 				'banner' => [
 					'definition' => [
@@ -205,8 +202,15 @@ class DevBuild extends CI_Controller {
 						'status' => 'removed',
 					],
 				],
+				'about' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN about;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
 			],
 			'user_farm_locations',
+			'user_farm_contents',
 			'user_settings',
 			'galleries' => [
 				'file_path' => [

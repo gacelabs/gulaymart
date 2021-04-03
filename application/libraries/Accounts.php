@@ -119,6 +119,7 @@ class Accounts {
 				unset($return['profile']['password']);
 				unset($return['profile']['re_password']);
 				$this->class->session->set_userdata('profile', $return['profile']);
+				$this->profile = $return['profile'];
 				if ($redirect_url != '') {
 					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 				} else {

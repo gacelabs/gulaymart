@@ -57,6 +57,49 @@ class Products {
 		return false;
 	}
 
+	public function get_in($where=true, $except_field=false, $limit=false, $justdata=true, $row=false)
+	{
+		if ($where != false) {
+			if (is_bool($where) AND $where == true) {
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
+				}
+				$this->class->db->where(['activity' => 1]);
+			} elseif (is_array($where) OR is_string($where)) {
+				$this->class->db->where(['activity' => 1]);
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
+				}
+				if (is_array($where)) {
+					foreach ($where as $field => $row) {
+						if (is_array($row)) {
+							$this->class->db->where_in($field, $row);
+						} else {
+							$this->class->db->where([$field => $row]);
+						}
+					}
+				}
+			}
+			$data = $this->class->db->get('products');
+			if (isset($data) AND $data->num_rows()) {
+				$products = $data->result_array();
+				$results = [];
+				foreach ($products as $key => $product) {
+					$product_id = $products[$key]['id'];
+					$products[$key] = $this->gulay_assemble($products[$key], $justdata, $except_field);
+					$products[$key]['id'] = $product_id;
+				}
+				// debug($products, 'stop');
+				if ($row) {
+					return $products[0];
+				} else {
+					return $products;
+				}
+			}
+		}
+		return false;
+	}
+
 	public function get_by_category_pages($where=false)
 	{
 		$clause = ['activity' => 1];
@@ -188,7 +231,7 @@ class Products {
 		return false;
 	}
 
-	public function gulay_assemble($product=false, $data_only=true)
+	public function gulay_assemble($product=false, $data_only=true, $except_field=false)
 	{
 		if ($product) {
 			$product['price'] = '&#8369;'.$product['price'];
@@ -207,8 +250,45 @@ class Products {
 			if ($subcategory) {
 				$product['subcategory'] = $subcategory['label'];
 			}
+
+			$product['photos'] = false;
+			$photos = $this->class->gm_db->get('products_photo', ['product_id' => $product['id'], 'status' => 1]);
+			if ($photos) {
+				foreach ($photos as $key => $photo) {
+					if ($photo['is_main']) {
+						$product['photos']['main'] = $photo;
+						break;
+					}
+				}
+				foreach ($photos as $key => $photo) {
+					if (!$photo['is_main']) {
+						$product['photos']['other'][] = $photo;
+					}
+				}
+			}
+
 			$updated = $product['updated'];
 			$product['activity'] = $product['activity'] ? 'Published' : 'Draft';
+
+			$display = false;
+			if ($except_field) {
+				if (is_array($except_field)) {
+					$display = [];
+					foreach ($except_field as $value) {
+						if (!isset($product[$value])) {
+							$product[$value] = 0;
+						} else {
+							$product[$value] = $product[$value];;
+						}
+						$display[$value] = $product[$value];
+					}
+				} else {
+					if (!isset($product[$except_field])) {
+						$product[$except_field] = 0;
+					}
+					$display = $product[$except_field];
+				}
+			}
 
 			if ($data_only) {
 				unset($product['user_id']);
@@ -221,11 +301,23 @@ class Products {
 				unset($product['subcategory_id']);
 				unset($product['location_id']);
 				unset($product['farm']);
+				unset($product['photos']);
 				unset($product['added']);
 				unset($product['updated']);
 			}
+
+			if ($display OR $except_field != false) {
+				if (is_array($display)) {
+					foreach ($display as $field => $value) {
+						$product[$field] = $value;
+					}
+				} else {
+					$product[$except_field] = $display;
+				}
+			}
 			
 			$product['updated'] = $updated;
+			// debug($product, 'stop');
 		}
 		return $product;
 	}

@@ -150,4 +150,13 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'Unable to upload images!', $post);
 	}
 
+	public function farm_locations()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		if ($post) {
+			$this->set_response('info', 'Location verified!', $post, false, 'setStoreFarmLocation');
+		}
+		$this->set_response('error', 'Unable to set location!', $post);
+	}
+
 }
