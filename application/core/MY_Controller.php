@@ -128,10 +128,9 @@ class MY_Controller extends CI_Controller {
 
 	public function render_page($rawdata=false, $debug=false)
 	{
-		// debug(1, 'stop');
-		$last_segment = $this->uri->segment($this->uri->total_segments());
+		// debug($this->action, 'stop');
 		$body_classes = ($this->accounts->has_session ? ($this->class_name != 'marketplace' ? ['logged-in', $this->class_name] : [$this->class_name]) : [$this->class_name]);
-		$top_css = (($this->accounts->has_session AND $last_segment != 'preview') ? ['logged-in'] : []);
+		$top_css = (($this->accounts->has_session AND $this->action != 'store') ? ['logged-in'] : []);
 		$view = [
 			'top' => [
 				'metas' => [

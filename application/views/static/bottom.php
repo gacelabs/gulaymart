@@ -39,7 +39,9 @@
 			}
 		?>
 
-		<?php $this->view('requires/realtime_scripts'); ?>
+		<?php if ($this->action != 'store'): ?>
+			<?php $this->view('requires/realtime_scripts'); ?>
+		<?php endif ?>
 		
 		<script type="text/javascript" src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 

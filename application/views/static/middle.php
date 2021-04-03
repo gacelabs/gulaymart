@@ -1,6 +1,8 @@
 
 <body class="<?php echo implode(' ', $middle['body_class']);?>">
-	<?php $this->view('requires/fb_scripts'); ?>
+	<?php if ($this->action != 'store'): ?>
+		<?php $this->view('requires/fb_scripts'); ?>
+	<?php endif ?>
 	
 	<div id="content_body_wrapper">
 		<section id="content__top">

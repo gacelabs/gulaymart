@@ -191,31 +191,10 @@ class Farm extends MY_Controller {
 		}
 	}
 
-	public function storefront($store=false)
+	public function storefront()
 	{
 		$post = $this->input->post();
-		if ($store) {
-			$this->render_page([
-				'top' => [
-					'index_page' => 'yes',
-					'css' => ['storefront', 'storefront-page'],
-				],
-				'middle' => [
-					'body_class' => ['farm', 'storefront'],
-					'body' => [
-						'../static/store',
-					],
-				],
-				'bottom' => [
-					'js' => ['farm', 'storefront'],
-				],
-				'data' => [
-					'farms' => $this->accounts->profile['farms'],
-					'products' => $this->products->get(),
-					'galleries' => $this->galleries,
-				]
-			]);
-		} elseif ($post) {
+		if ($post) {
 			// debug($this->accounts->profile);
 			debug($post, 'stop');
 		} else {
@@ -342,5 +321,33 @@ class Farm extends MY_Controller {
 				'js' => ['farm'],
 			],
 		]);
+	}
+
+	public function store($name=false)
+	{
+		if ($name) {
+			$this->render_page([
+				'top' => [
+					'index_page' => 'yes',
+					'css' => ['storefront', 'storefront-page'],
+				],
+				'middle' => [
+					'body_class' => ['farm', 'storefront'],
+					'body' => [
+						'../static/store',
+					],
+				],
+				'bottom' => [
+					'js' => ['farm', 'storefront'],
+				],
+				'data' => [
+					'farms' => $this->accounts->profile['farms'],
+					'products' => $this->products->get(),
+					'galleries' => $this->galleries,
+				]
+			]);
+		} else {
+			redirect(base_url('farm'));
+		}
 	}
 }

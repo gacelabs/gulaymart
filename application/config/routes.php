@@ -9,7 +9,7 @@ $route['sign-in'] = 'Authenticate/sign_in';
 $route['sign-out'] = 'Authenticate/sign_out';
 
 $route['farm/new-veggy'] = 'Farm/new_veggy';
-$route['farm/storefront/(:any)'] = 'Farm/storefront/$1';
+$route['store/(:any)'] = 'Farm/store/$1';
 
 $route['help-center'] = 'Support/help_center';
 $route['support/help-center'] = 'Support/help_center';
