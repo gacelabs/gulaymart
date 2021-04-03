@@ -6,7 +6,11 @@
 	<div class="product-item panel" data-category="<?php echo $id;?>" <?php !isset($forajax) ? str_not_value_echo('all', $id, 'style="display: none;"') : '';?>>
 		<div class="product-item-info">
 			<a href="">
-				<div class="product-item-top" style="background-image: url('assets/images/onions.jpg');">
+				<?php if (isset($data['photos']) AND isset($data['photos']['main'])): ?>
+					<div class="product-item-top" style="background-image: url('<?php echo base_url($data['photos']['main']['url_path']);?>');">
+				<?php else: ?>
+					<div class="product-item-top" style="background-image: url('/assets/images/onions.jpg');">
+				<?php endif ?>
 					<ul class="spaced-list between">
 						<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> 26 mins</small></kbd></li>
 						<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> </small></kbd></li>

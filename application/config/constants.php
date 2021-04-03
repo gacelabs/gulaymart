@@ -98,7 +98,7 @@ defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
 defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
 defined('MONTHS') OR define('MONTHS', serialize([
-'January','February','March','April','May','June','July','August','September','October','November','December'	
+	'January','February','March','April','May','June','July','August','September','October','November','December'
 ]));
 
 defined('PROFILE_INFO_MESSAGE') OR define('PROFILE_INFO_MESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');
@@ -107,3 +107,4 @@ defined('DEVBUILD_PASS') OR define('DEVBUILD_PASS', '1');
 defined('PRODUCTSDATALIMIT') OR define('PRODUCTSDATALIMIT', 4);
 defined('GOOGLEMAP_KEY') OR define('GOOGLEMAP_KEY', 'AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA');
 defined('REFERRAL_CODE') OR define('REFERRAL_CODE', 'PPS8083189');
+defined('LOCATION_KEYS') OR define('LOCATION_KEYS', serialize(['lat','lng','address_1','address_2']));

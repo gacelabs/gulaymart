@@ -1,16 +1,30 @@
-var hasLatlong = false, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
+var hasLatlong = false, autocomplete, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
 $(document).ready(function() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
-				var oThisLatLong = undefined;
-				if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {
-					hasLatlong = true;
-					oThisLatLong = {'lat': parseFloat($('#lat').val()), 'lng': parseFloat($('#lng').val())};
+				if (map != undefined) {
+					$('#shipping-id').remove();
+					var dataLocation = $(e.relatedTarget).next('input:hidden').val();
+					if (dataLocation.length) {
+						var oData = $.parseJSON(dataLocation),
+							oThisLatLong = {lat: parseFloat(oData.lat), lng: parseFloat(oData.lng)};
+						// console.log(oData);
+						resetMap(oThisLatLong);
+						$('#address_1').val(oData.address_1);
+					} else {
+						$('#address_1').val('');
+						$('#address_2').val('');
+					}
+					var i = setInterval(function() {
+						i++;
+						if (i == 5) clearInterval(i);
+						google.maps.event.trigger(map, "contextmenu");
+					}, 1000);
+					// console.log($(e.relatedTarget));
+					var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
+					$(e.target).find('form').prepend(input);
 				}
-				$('#shipping-id').remove();
-				resetMap(oThisLatLong);
-				$('#address_2').val('');
 			break;
 			case 'media_modal':
 				if ($(e.relatedTarget).data('change-ui').length) {
@@ -23,6 +37,9 @@ $(document).ready(function() {
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {
+			case 'farm_location_modal':
+				$(e.target).find('form input[name="loc_input"]').remove();
+			break;
 			case 'media_modal':
 				// console.log(e);
 				$(e.target).find('form input[name="ui"]').remove();
@@ -530,35 +547,8 @@ function loadMap(oLatLong) {
 			});
 			// markers.push(marker);
 			setDragEvent(marker, infowindow);
-
-			var input = $('#search-place').get(0);
-			var autocomplete = new google.maps.places.Autocomplete(input);
-
-			google.maps.event.addListener(autocomplete, 'place_changed', function () {
-				$('#address_1').val('');
-				var place = autocomplete.getPlace();
-				var lat = place.geometry.location.lat();
-				var long = place.geometry.location.lng();
-				
-				google.maps.event.clearListeners(marker, 'dragend');
-				marker.setMap(null);
-				var newMark = new google.maps.Marker({
-					position: {'lat': lat, 'lng': long},
-					map: map,
-					draggable: true,
-					animation: google.maps.Animation.DROP,
-				});
-				fnDragEnd(newMark);
-
-				newMark.setMap(map);
-				marker = newMark;
-				setDragEvent(newMark, infowindow);
-
-				var bounds = new google.maps.LatLngBounds();
-				bounds.extend(newMark.getPosition());
-				map.fitBounds(bounds);
-				map.setZoom(12);
-			});
+			
+			setAutocompleteEvent();
 		}
 	}, 1000);
 }
@@ -584,5 +574,39 @@ function initMapLocations() {
 		$('#shipping-id').remove();
 		resetMap();
 		$('#address_2').val('');
+	});
+}
+
+function setAutocompleteEvent() {
+	var input = $('#search-place').get(0);
+	if (autocomplete != undefined) google.maps.event.clearListeners(autocomplete, 'place_changed');
+	// console.log(autocomplete, google.maps.event);
+	autocomplete = new google.maps.places.Autocomplete(input);
+
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		$('#address_1').val('');
+		var place = autocomplete.getPlace();
+		console.log(place);
+		var lat = place.geometry.location.lat();
+		var long = place.geometry.location.lng();
+		
+		google.maps.event.clearListeners(marker, 'dragend');
+		marker.setMap(null);
+		var newMark = new google.maps.Marker({
+			position: {'lat': lat, 'lng': long},
+			map: map,
+			draggable: true,
+			animation: google.maps.Animation.DROP,
+		});
+		fnDragEnd(newMark);
+
+		newMark.setMap(map);
+		marker = newMark;
+		setDragEvent(newMark, infowindow);
+
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(newMark.getPosition());
+		map.fitBounds(bounds);
+		map.setZoom(12);
 	});
 }

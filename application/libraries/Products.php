@@ -57,6 +57,49 @@ class Products {
 		return false;
 	}
 
+	public function get_in($where=true, $except_field=false, $limit=false, $justdata=true, $row=false)
+	{
+		if ($where != false) {
+			if (is_bool($where) AND $where == true) {
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
+				}
+				$this->class->db->where_in(['activity' => 1]);
+			} elseif (is_array($where) OR is_string($where)) {
+				if (is_array($where)) {
+					$where['activity'] = 1;
+				} else {
+					if (strlen(trim($where)) > 0) {
+						$where .= ' AND activity = 1';
+					} else {
+						$where = 'activity = 1';
+					}
+				}
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					$this->class->db->limit($limit);
+				}
+				$this->class->db->where_in($where);
+			}
+			$data = $this->class->db->get('products');
+			if (isset($data) AND $data->num_rows()) {
+				$products = $data->result_array();
+				$results = [];
+				foreach ($products as $key => $product) {
+					$product_id = $products[$key]['id'];
+					$products[$key] = $this->gulay_assemble($products[$key], $justdata, $except_field);
+					$products[$key]['id'] = $product_id;
+				}
+				// debug($products, 'stop');
+				if ($row) {
+					return $products[0];
+				} else {
+					return $products;
+				}
+			}
+		}
+		return false;
+	}
+
 	public function get_by_category_pages($where=false)
 	{
 		$clause = ['activity' => 1];
@@ -188,7 +231,7 @@ class Products {
 		return false;
 	}
 
-	public function gulay_assemble($product=false, $data_only=true)
+	public function gulay_assemble($product=false, $data_only=true, $except_field=false)
 	{
 		if ($product) {
 			$product['price'] = '&#8369;'.$product['price'];
@@ -227,6 +270,14 @@ class Products {
 			$updated = $product['updated'];
 			$product['activity'] = $product['activity'] ? 'Published' : 'Draft';
 
+			$display = false;
+			if ($except_field) {
+				if (!isset($product[$except_field])) {
+					$product[$except_field] = 0;
+				}
+				$display = $product[$except_field];
+			}
+
 			if ($data_only) {
 				unset($product['user_id']);
 				unset($product['farm_id']);
@@ -240,6 +291,10 @@ class Products {
 				unset($product['farm']);
 				unset($product['added']);
 				unset($product['updated']);
+			}
+
+			if ($display OR $except_field != false) {
+				$product[$except_field] = $display;
 			}
 			
 			$product['updated'] = $updated;

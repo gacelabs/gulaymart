@@ -32,6 +32,28 @@ class MY_Model extends CI_Model {
 		return FALSE;
 	}
 
+	public function get_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($table) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if ($where) {
+				$this->db->where_in($where);
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return FALSE;
+	}
+
 	public function query($string=FALSE, $func='result')
 	{
 		if ($string) {

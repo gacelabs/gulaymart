@@ -1,6 +1,8 @@
 
-<form action="api/save_shipping" method="post" data-ajax="1" data-disable="enter" class="form-validate" id="shipping-form">
-	<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+<form action="<?php echo $url;?>" method="post" data-ajax="1" data-disable="enter" class="form-validate" id="shipping-form">
+	<?php if ($this->action != 'storefront'): ?>
+		<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+	<?php endif ?>
 	<input type="hidden" name="lat" id="lat" value="" required="required">
 	<input type="hidden" name="lng" id="lng" value="" required="required">
 	<div class="dash-panel-middle">
@@ -20,8 +22,8 @@
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="hidden-xs"><b>Step 3</b><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 2. Enter your complete shipping address."></i></span></span>
-					<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter your complete shipping address." required="required">
+					<span class="input-group-addon"><span class="hidden-xs"><b>Step 3</b><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 2. Enter your House/Unit no., Street name, Subdivision name"></i></span></span>
+					<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter your House/Unit no., Street name, Subdivision name" required="required">
 				</div>
 				<div class="form-group">
 					<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1." required="required">
@@ -30,9 +32,9 @@
 		</div>
 	</div>
 	<div class="dash-panel-footer text-right">
-		<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
+		<?php if ((isset($current_profile['profile']) AND $current_profile['profile']) AND $this->action != 'storefront'): ?>
 			<button type="button" class="btn normal-radius" id="reset-to-prev-btn">New Address</button>
 		<?php endif ?>
-		<button type="submit" class="btn btn-theme normal-radius" id="map-submit-btn">Save Address</button>
+		<button type="submit" class="btn btn-theme normal-radius" id="map-submit-btn"><?php if ($this->action != 'storefront'): ?>Save Address<?php else: ?>Set Address<?php endif ?></button>
 	</div>
 </form>

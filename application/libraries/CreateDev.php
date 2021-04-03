@@ -139,8 +139,21 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'lat varchar(100) DEFAULT NULL',
-			'lng varchar(100) DEFAULT NULL',
+			'products longtext',
+			"story_title VARCHAR(50) NULL DEFAULT NULL",
+			'story_content' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true
+			],
+			'galleries longtext',
+			'about' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true
+			],
+			'added datetime DEFAULT CURRENT_TIMESTAMP',
+			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('farm_id');
 		$table_data = $this->class->dbforge->create_table('user_farm_contents', FALSE, [

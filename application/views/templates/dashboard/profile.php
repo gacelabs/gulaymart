@@ -208,7 +208,7 @@
 						</div>
 					</div>
 					
-					<?php $this->view('static/map_location_form'); ?>
+					<?php $this->view('static/map_location_form', ['url' => 'api/save_shipping']); ?>
 				</div>
 			</div>
 			<?php endif; ?>

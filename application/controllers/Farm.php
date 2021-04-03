@@ -195,8 +195,51 @@ class Farm extends MY_Controller {
 	{
 		$post = $this->input->post();
 		if ($post) {
-			// debug($this->accounts->profile);
-			debug($post, 'stop');
+			// debug();
+			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
+			// debug($post, 'stop');
+			if ($profile) {
+				$user_id = $profile['id'];
+				$farm_id = 0;
+				if (isset($post['user_farms'])) {
+					$farm_id = isset($post['user_farms']['id']) ? $post['user_farms']['id'] : 0;
+					$post['user_farms']['user_id'] = $user_id;
+					$post['user_farms']['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
+					if ($farm_id == 0) {
+						$farm_id = $this->gm_db->new('user_farms', $post['user_farms']);
+					} else {
+						unset($post['user_farms']['id']);
+						$this->gm_db->save('user_farms', $post['user_farms'], ['id' => $farm_id]);
+					}
+				}
+				$post['user_farms']['id'] = $farm_id;
+				if (isset($post['farm_loc']) AND isset($post['user_farm_locations']) AND $farm_id > 0) {
+					$index = $post['farm_loc'];
+					if (isset($post['user_farm_locations'][$index])) {
+						$locations = $post['user_farm_locations'][$index];
+						$data = [];
+						foreach ($locations as $key => $location) {
+							$data[] = json_decode($location, true);
+						}
+						$this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
+						foreach ($data as $row) {
+							$row['farm_id'] = $farm_id;
+							$row['active'] = $index;
+							$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
+							$this->gm_db->new('user_farm_locations', $row);
+						}
+					}
+				}
+				if (isset($post['user_farm_contents']) AND $farm_id > 0) {
+					$this->gm_db->remove('user_farm_contents', ['farm_id' => $farm_id]);
+					$post['user_farm_contents']['farm_id'] = $farm_id;
+					$post['user_farm_contents']['products'] = json_encode($post['user_farm_contents']['products']);
+					$post['user_farm_contents']['galleries'] = json_encode($post['user_farm_contents']['galleries']);
+					$this->gm_db->new('user_farm_contents', $post['user_farm_contents']);
+				}
+				$this->set_response('info', 'Storefront Succesfully Created!', $post, false, 'refreshStorePreview');
+			}
+			$this->set_response('error', 'Location verified!', $post);
 		} else {
 			$this->render_page([
 				'top' => [
@@ -223,6 +266,8 @@ class Farm extends MY_Controller {
 				],
 				'data' => [
 					'farms' => $this->accounts->profile['farms'],
+					'farm_locations' => $this->accounts->profile['farm_locations'],
+					'farm_contents' => $this->accounts->profile['farm_contents'],
 					'products' => $this->products->get(),
 					'galleries' => $this->galleries,
 				]
@@ -326,10 +371,50 @@ class Farm extends MY_Controller {
 	public function store($name=false)
 	{
 		if ($name) {
+			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
+			if ($name == 'preview') {
+				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
+			} else {
+				$user_farm = $this->gm_db->get('user_farms', ['name' => $name], 'row');
+			}
+			$data = false;
+			if ($user_farm) {
+				$contents = $this->gm_db->get('user_farm_contents', ['farm_id' => $user_farm['id']], 'row');
+				$products_html = $galleries_html = '';
+				if ($contents) {
+					// debug($contents, 'stop');
+					$productids = json_decode($contents['products'], true);
+					$products = $this->products->get_in(['id' => $productids], 'category_id');
+					// debug($products, 'stop');
+					foreach ($products as $key => $product) {
+						$products_html .= $this->load->view('looping/product_item', ['data'=>$product, 'forajax'=>1, 'id'=>$product['category_id']], true);
+					}
+					// debug($products_html, 'stop');
+					$galleriesids = json_decode($contents['galleries'], true);
+					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids]);
+					// debug($galleries, 'stop');
+					$galleries_html = $this->load->view('looping/gallery_item', ['data'=>$galleries, 'title'=> 'Galleries'], true);
+					// debug($galleries_html, 'stop');
+				}
+				$data = [
+					'farm' => $user_farm,
+					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
+					'contents' => [
+						'products_html' => $products_html,
+						'stories' => [
+							'title' => $contents['story_title'],
+							'content' => $contents['story_content'],
+						],
+						'galleries_html' => $galleries_html,
+						'about' => $contents['about'],
+					],
+				];
+				// debug($data, 'stop');
+			}
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
-					'css' => ['storefront', 'storefront-page'],
+					'css' => ['storefront', 'storefront-page', 'product-item'],
 				],
 				'middle' => [
 					'body_class' => ['farm', 'storefront'],
@@ -338,13 +423,9 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'storefront'],
+					'js' => ['farm', 'isotope.min', 'store'],
 				],
-				'data' => [
-					'farms' => $this->accounts->profile['farms'],
-					'products' => $this->products->get(),
-					'galleries' => $this->galleries,
-				]
+				'data' => $data
 			]);
 		} else {
 			redirect(base_url('farm'));

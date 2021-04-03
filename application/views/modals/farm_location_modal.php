@@ -7,7 +7,7 @@
 				<p class="zero-gaps">Saving your farm's <b>exact location address</b> is important. It will be used as the <b>pick up point</b> of your listed products. Wrong address may result to <b class="text-danger">over charged</b> delivery fee.</p>
 			</div>
 			<div class="modal-body">
-				<?php $this->view('static/map_location_form'); ?>
+				<?php $this->view('static/map_location_form', ['url' => 'api/farm_locations']); ?>
 			</div>
 		</div>
 	</div>
