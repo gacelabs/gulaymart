@@ -268,9 +268,9 @@
 												<select name="user_farm_contents[products][]" id="products_section" class="form-control chosen" multiple="multiple" required="required">
 													<?php foreach ($data['products'] as $key => $product): ?>
 														<?php 
-														$src = 'https://via.placeholder.com/50x50.png?text=No+Image';
+														$src = 'https://place-hold.it/50x50.png?text=No+Image&fontsize=7';
 														if ($product['photos']) {
-															$src = $product['photos']['main']['url_path'];
+															$src = base_url($product['photos']['main']['url_path']);
 														}
 														?>
 														<option<?php in_array_echo($product['id'], $selected_products, ' selected');?> value="<?php echo $product['id'];?>" data-img-src="<?php echo $src;?>"><?php echo $product['name'];?> | <?php echo $product['price'];?></option>
@@ -318,7 +318,7 @@
 												<label><input type="checkbox" class="select-all"<?php str_has_value_echo(count($selected_galleries), count($data['galleries']), ' checked');?>>Select All</label>
 												<select name="user_farm_contents[galleries][]" class="form-control chosen" multiple="multiple" required="required">
 													<?php foreach ($data['galleries'] as $key => $gallery): ?>
-														<option<?php in_array_echo($gallery['id'], $selected_galleries, ' selected');?> value="<?php echo $gallery['id'];?>" data-img-src="<?php echo $gallery['url_path'];?>"><?php echo $gallery['name'];?></option>
+														<option<?php in_array_echo($gallery['id'], $selected_galleries, ' selected');?> value="<?php echo $gallery['id'];?>" data-img-src="<?php echo base_url($gallery['url_path']);?>"><?php echo $gallery['name'];?></option>
 													<?php endforeach ?>
 												</select>
 											<?php else: ?>

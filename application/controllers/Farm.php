@@ -245,6 +245,7 @@ class Farm extends MY_Controller {
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
+			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			$this->render_page([
 				'top' => [
 					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
@@ -272,7 +273,7 @@ class Farm extends MY_Controller {
 					'farms' => $this->accounts->profile['farms'],
 					'farm_locations' => $this->accounts->profile['farm_locations'],
 					'farm_contents' => $this->accounts->profile['farm_contents'],
-					'products' => $this->products->get(),
+					'products' => $this->products->get_in(['user_id' => $profile['id']], ['category_id', 'photos']),
 					'galleries' => $this->galleries,
 				]
 			]);
