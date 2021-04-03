@@ -24,6 +24,9 @@ $(document).ready(function() {
 			break;
 		}
 	});
+
+	if ($('select.chosen').length) $('select.chosen').chosen();
+
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {

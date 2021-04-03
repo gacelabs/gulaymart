@@ -191,16 +191,38 @@ class Farm extends MY_Controller {
 		}
 	}
 
-	public function storefront()
+	public function storefront($store=false)
 	{
 		$post = $this->input->post();
-		if ($post) {
+		if ($store) {
+			$this->render_page([
+				'top' => [
+					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
+				],
+				'middle' => [
+					'body_class' => ['farm', 'storefront'],
+					'head' => [],
+					'body' => [
+						'../static/store',
+					],
+				],
+				'bottom' => [
+					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
+					'js' => ['chosen/new-chosen', 'ImageSelect.jquery', 'farm', 'storefront'],
+				],
+				'data' => [
+					'farms' => $this->accounts->profile['farms'],
+					'products' => $this->products->get(),
+					'galleries' => $this->galleries,
+				]
+			]);
+		} elseif ($post) {
 			// debug($this->accounts->profile);
 			debug($post, 'stop');
 		} else {
 			$this->render_page([
 				'top' => [
-					'css' => ['storefront', 'storefront-page'],
+					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
 				],
 				'middle' => [
 					'body_class' => ['farm', 'storefront'],
@@ -212,10 +234,12 @@ class Farm extends MY_Controller {
 				],
 				'bottom' => [
 					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
-					'js' => ['farm', 'storefront'],
+					'js' => ['chosen/new-chosen', 'ImageSelect.jquery', 'farm', 'storefront'],
 				],
 				'data' => [
-					'farms' => $this->accounts->profile['farms']
+					'farms' => $this->accounts->profile['farms'],
+					'products' => $this->products->get(),
+					'galleries' => $this->galleries,
 				]
 			]);
 		}

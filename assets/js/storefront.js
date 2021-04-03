@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	$('.custom-item-btn').click(function() {
-		$('#storefront_nav').find('div.custom-item-child').removeClass('active');
+		$('.storefront_nav').find('div.custom-item-child').removeClass('active');
 		$('.custom-item-btn').removeClass('active');
 		$('.custom-item-btn').find('.fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-right');
 
@@ -75,6 +75,10 @@ $(document).ready(function() {
 	});
 
 	runMediaUploader();
+
+	$('form').bind('submit', function() {
+		document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
+	});
 
 });
 

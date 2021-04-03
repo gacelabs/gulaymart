@@ -18,11 +18,11 @@
 				</div>
 			<?php else: ?>
 				<?php /*debug($data['farms'], 'stop');*/ ?>
-				<div class="col-lg-3 col-md-4 col-sm-7 hidden-xs" id="storefront_customs_parent">
+				<div class="col-lg-5 col-md-4 col-sm-12 hidden-xs" id="storefront_customs_parent">
 					<div class="dash-panel theme">
 						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
 							<div class="dash-panel-top">
-								<h3>Storefront customs</h3>
+								<h3>Storefront Customs</h3>
 								<ul class="spaced-list between" style="margin-top: 15px;">
 									<li class="text-sm">
 										<?php if (count($data['farms'])): ?>
@@ -35,10 +35,10 @@
 											</span><br><?php echo date('F j, Y');?>
 										<?php endif ?>
 									</li>
-									<li><button type="submit" class="btn btn-blue normal-radius">Publish</button></li>
+									<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
 								</ul>
 							</div>
-							<div class="dash-panel-middle zero-gaps" id="storefront_nav">
+							<div class="dash-panel-middle zero-gaps storefront_nav">
 								<div class="custom-item-parent">
 									<ul class="spaced-list between custom-item-btn">
 										<li>FARM IDENTITY</li>
@@ -66,7 +66,7 @@
 									<div class="custom-item-child">
 										<div class="form-group">
 											<ul class="spaced-list between">
-												<li><label for="cover_image">Cover image</label></li>
+												<li><label>Cover image</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg" data-field="cover_pic">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
@@ -74,7 +74,7 @@
 										</div>
 										<div class="form-group">
 											<ul class="spaced-list between">
-												<li><label for="profile_photo">Profile photo</label></li>
+												<li><label>Profile photo</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo" data-field="profile_pic">Media</li>
 											</ul>
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
@@ -85,14 +85,11 @@
 
 								<div class="custom-item-parent">
 									<ul class="spaced-list between custom-item-btn">
-										<li>ABOUT</li>
+										<li>LOCATIONS</li>
 										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
 									<div class="custom-item-child">
-										<div class="form-group">
-											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"></textarea>
-										</div>
-										<label for="location">Location</label> <small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
+										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input">
@@ -119,7 +116,7 @@
 									<div class="custom-item-child">
 										<div class="form-group">
 											<label for="banner_section">Select a banner</label>
-											<select name="user_farms[banner]" id="banner_section" class="form-control">
+											<select name="user_farms[banner]" id="banner_section" class="form-control chosen">
 												<option value="steps.png">Step 1 2 3 (Default)</option>
 												<option value="lettuce.png">Lettuce Fact</option>
 												<option value="be-farmer.png">Deliver Fast</option>
@@ -155,60 +152,112 @@
 							</div>
 						</form>
 					</div>
-				</div>
-
-				<div class="col-lg-1 hidden-md hidden-sm hidden-xs"></div>			
-
-				<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs" id="storefront_preview_parent">
-					<div class="cover_image" id="storefront_page_container">
-						<div class="storefront-top">
-							<div class="storefront-img-bg" style="background-image: url(assets/images/storefront-top.jpg);">
-								<div id="farm_identity">
-									<ul class="grid-list half">
-										<li class="text-left">
-											<h1 class="farm_name">The Humble Farm</h1>
-											<h4 class="tagline">Your friendly neighborhood farmer</h4>
-										</li>
-										<li class="text-right"><div class="profile_photo" style="background-image: url(assets/images/noavatar.png);"></div></li>
+					<div class="dash-panel theme">
+						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
+							<div class="dash-panel-top">
+								<h3>Storefront Contents</h3>
+								<ul class="spaced-list between" style="margin-top: 15px;">
+									<li class="text-sm">
+										<?php if (count($data['farms'])): ?>
+											<span class="color-grey">
+												<i class="fa fa-calendar"></i> UPDATED
+											</span><br>March 1, 2021
+										<?php else: ?>
+											<span class="color-grey">
+												<i class="fa fa-calendar"></i> TODAY
+											</span><br><?php echo date('F j, Y');?>
+										<?php endif ?>
+									</li>
+									<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
+								</ul>
+							</div>
+							<div class="dash-panel-middle zero-gaps storefront_nav">
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>PRODUCTS</li>
+										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<?php if (isset($data['products']) AND $data['products']): ?>
+												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> What you want to sell </small>
+												<select name="user_farm_contents[products]" id="products_section" class="form-control chosen" multiple="multiple" required="required">
+													<?php foreach ($data['products'] as $key => $product): ?>
+														<?php 
+														$src = 'https://via.placeholder.com/50x50.png?text=No+Image';
+														if ($product['photos']) {
+															$src = $product['photos']['main']['url_path'];
+														}
+														?>
+														<option value="<?php echo $product['id'];?>" data-img-src="<?php echo $src;?>"><?php echo $product['name'];?> | <?php echo $product['price'];?></option>
+													<?php endforeach ?>
+												</select>
+											<?php else: ?>
+												<p><a href="farm/new-veggy">Go here to add your products</a></p>
+											<?php endif ?>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						
-						<div class="storefront-middle">
-							<ul class="spaced-list around" id="storefront_navbar">
-								<li class="active">PRODUCTS</a></li>
-								<li>STORIES</a></li>
-								<li>GALLERY</a></li>
-								<li>ABOUT</a></li>
-							</ul>
 
-							<div id="storefront_product_container">
-								<img src="assets/images/storefront-sample-listing.png" class="img-responsive">
-								<img src="assets/images/banner/steps.png" class="banner_section img-responsive">
-							</div>
-						</div>
-
-						<div class="storefront-footer">
-							<div class="row">
-								<div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
-									<h4 class="farm_name" style="margin-top: 0;">The Humble Farm</h4>
-									<p class="zero-gaps hidden-xs" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
-								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-									<h4 style="color: #fff;margin: 0 0 5px 0;">Connect with us!</h4>
-									<ul class="inline-list social_acct">
-										<li><h4 class="zero-gaps"><i class="fa fa-facebook-square"></i></h4></li>
-										<li><h4 class="zero-gaps"><i class="fa fa-instagram"></i></h4></li>
-										<li><h4 class="zero-gaps"><i class="fa fa-youtube-play"></i></h4></li>
-										<li><h4 class="zero-gaps"><i class="fa fa-comment-o"></i></h4></li>
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>STORIES</li>
+										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
-									<p class="zero-gaps visible-xs" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Story Title: </small>
+											<input type="text" name="user_farm_contents[story_title]" id="story_title" class="input-keyup form-control" placeholder="Title" required="required">
+										</div>
+										<div class="form-group">
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write a story: </small>
+											<textarea type="text" name="user_farm_contents[story_content]" class="form-control" placeholder="What keeps you going?" required="required"></textarea>
+										</div>
+									</div>
+								</div>
+
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>GALLERY</li>
+										<li><i class="fa fa-angle-right"></i></li>
+									</ul>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<?php if (isset($data['galleries']) AND $data['galleries']): ?>
+												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Share your great photos </small>
+												<select name="user_farm_contents[galleries]" class="form-control chosen" multiple="multiple" required="required">
+													<?php foreach ($data['galleries'] as $key => $gallery): ?>
+														<option value="<?php echo $gallery['id'];?>" data-img-src="<?php echo $gallery['url_path'];?>"><?php echo $gallery['name'];?></option>
+													<?php endforeach ?>
+												</select>
+											<?php else: ?>
+												<ul class="spaced-list between">
+													<li><label>Add photos</label></li>
+													<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
+												</ul>
+												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<?php endif ?>
+										</div>
+									</div>
+								</div>
+
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>ABOUT</li>
+										<li><i class="fa fa-angle-right"></i></li>
+									</ul>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<textarea type="text" name="user_farm_contents[about]" class="form-control" placeholder="About your farm." required="required"></textarea>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
+						</form>
 					</div>
 				</div>
+
+				<iframe id="preview-store-page" class="col-lg-7 col-md-8 col-sm-12 hidden-xs" src="farm/storefront/preview" style="position: absolute; height: 120%; border: none; width: 57%;"></iframe>
 			<?php endif ?>
 		</div>
 	</div>

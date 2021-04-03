@@ -207,6 +207,23 @@ class Products {
 			if ($subcategory) {
 				$product['subcategory'] = $subcategory['label'];
 			}
+
+			$product['photos'] = false;
+			$photos = $this->class->gm_db->get('products_photo', ['product_id' => $product['id'], 'status' => 1]);
+			if ($photos) {
+				foreach ($photos as $key => $photo) {
+					if ($photo['is_main']) {
+						$product['photos']['main'] = $photo;
+						break;
+					}
+				}
+				foreach ($photos as $key => $photo) {
+					if (!$photo['is_main']) {
+						$product['photos']['other'][] = $photo;
+					}
+				}
+			}
+
 			$updated = $product['updated'];
 			$product['activity'] = $product['activity'] ? 'Published' : 'Draft';
 
@@ -226,6 +243,7 @@ class Products {
 			}
 			
 			$product['updated'] = $updated;
+			// debug($product, 'stop');
 		}
 		return $product;
 	}

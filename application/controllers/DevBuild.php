@@ -117,14 +117,6 @@ class DevBuild extends CI_Controller {
 					],
 					'after' => 'name',
 				],
-				'about' => [
-					'definition' => [
-						'type' => 'LONGTEXT',
-						'default' => NULL,
-						'null' => true,
-					],
-					'after' => 'tagline',
-				],
 				'banner' => [
 					'definition' => [
 						'type' => 'TEXT',
@@ -205,8 +197,23 @@ class DevBuild extends CI_Controller {
 						'status' => 'removed',
 					],
 				],
+				'about' => [
+					'alter' => "ALTER TABLE user_farms DROP COLUMN about;",
+					'altered' => [
+						'status' => 'removed',
+					],
+				],
 			],
-			'user_farm_locations',
+			'user_farm_locations' => [
+				'address' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+				],
+			],
+			'user_farm_contents',
 			'user_settings',
 			'galleries' => [
 				'file_path' => [

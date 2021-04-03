@@ -14,7 +14,7 @@ class Authenticate extends MY_Controller {
 	{
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		// $referrer = str_replace(base_url('/'), '', $this->agent->referrer());
+		// debug($this->session->userdata('referrer'));
 		$is_ok = $this->accounts->login($post);
 		$to = '/';
 		sleep(1);
@@ -22,12 +22,13 @@ class Authenticate extends MY_Controller {
 			if ($this->accounts->profile['is_profile_complete'] === 0) {
 				$to = 'profile';
 			} else {
-				$to = 'farm/';
+				$to = $this->session->userdata('referrer') ?: 'farm/';
 			}
 		} else {
 			$to = '?error=Invalid credentials';
 		}
 		// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
+		$this->session->unset_userdata('referrer');
 		redirect(base_url($to));
 	}
 
