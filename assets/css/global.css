@@ -13,7 +13,7 @@ body {
 	overflow-y: auto;
 }
 .center-panel-md {
-	width: 900px;
+	width: 700px;
 	margin: 0 auto;
 }
 b, label {
@@ -320,11 +320,11 @@ button.btn-theme, a.btn-theme {
 button.btn-theme:hover, a.btn-theme:hover {
 	background-color: #3b9ff5 !important;
 }
-button.btn-blue {
+button.btn-blue, a.btn-blue {
 	background-color: #3b9ff5;
 	color: #fff !important;
 }
-button.btn-blue:hover, .login-button>a:hover, .text-link:hover {
+button.btn-blue:hover, .login-button>a:hover, .text-link:hover, a.btn-blue:hover {
 	filter: saturate(.7);
 }
 .btn-generic-container {
@@ -646,10 +646,26 @@ label.error {
 	border-radius: 3px;
 }
 #media_modal .input-group input {
-  border-right: none;
+	border-right: none;
 }
 #media_modal .input-group button {
-  border-radius: 4px !important;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+	border-radius: 4px !important;
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+}
+
+.fade {
+	transform: scale(0);
+	opacity: 1;
+	-webkit-transition: all .25s linear;
+	-o-transition: all .25s linear;
+	transition: all .25s linear;
+}
+.modal.fade.in {
+	transform: scale(1);
+}
+
+.modal-backdrop {
+	opacity: 1;
+	transform: scale(1);
 }

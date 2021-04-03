@@ -14,6 +14,8 @@ $route['farm/storefront/(:any)'] = 'Farm/storefront/$1';
 $route['help-center'] = 'Support/help_center';
 $route['support/help-center'] = 'Support/help_center';
 
+$route['products/(:any)'] = 'Basket/index';
+
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
 

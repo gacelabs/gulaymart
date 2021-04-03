@@ -1291,3 +1291,11 @@ function curl_add_booking($data=false)
 	}
 	return false;
 }
+
+function is_last($data=false, $key=false)
+{
+	if ($data AND $key) {
+		return count((array)$data) == $key +1;
+	}
+	return false;
+}

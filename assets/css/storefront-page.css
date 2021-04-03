@@ -1,9 +1,9 @@
 #storefront_page_container {
-	/*width: 890px;*/
+	max-width: 800px;
 	margin: 0 auto;
 }
 .storefront-top {
-	height: 250px;
+	height: 200px;
 	padding: 0;
 	overflow: hidden;
 	position: relative;
@@ -59,8 +59,8 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
-	height: 63px;
-	width: 63px;
+	height: 60px;
+	width: 60px;
 	border: 3px solid #fff;
 	border-radius: 100%;
 	float: right;

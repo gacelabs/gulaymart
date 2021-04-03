@@ -50,7 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
-							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-angle-left icon-left"></i>Log In</button>
+							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>Log In</button>
 						</div>
 					</div>
 				</div>

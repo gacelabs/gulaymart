@@ -7,11 +7,12 @@
 				<div class="center-panel-md">
 					<div class="dash-panel">
 						<div class="dash-panel-top">
-							<h3 style="margin-bottom: 15px;">Welcome to Storefront!</h3>
-							<p>On this page, you can build your very own online store! Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
+							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
+							<p>On this page, you can build your very own online store! Showcase your products in a nice, clean and professional looking e-commerce website.</p>
+							<p>Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
 							<div class="text-center">
-								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;">
-								<button class="btn btn-lg btn-theme normal-radius" data-toggle="modal" data-target="#farmer_terms_modal">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
+								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
+								<button class="btn btn-lg btn-theme normal-radius" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
 							</div>
 						</div>
 					</div>
@@ -69,7 +70,7 @@
 												<li><label>Cover image</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg" data-field="cover_pic">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 800 x 200 pixels.</small>
 											<input type="hidden" id="cover_pic" name="user_farms[cover_pic]" value="" />
 										</div>
 										<div class="form-group">
@@ -77,7 +78,7 @@
 												<li><label>Profile photo</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo" data-field="profile_pic">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
+											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 60 x 60 pixels.</small>
 											<input type="hidden" id="profile_pic" name="user_farms[profile_pic]" value="" />
 										</div>
 									</div>
@@ -89,7 +90,7 @@
 										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
 									<div class="custom-item-child">
-										<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Not necessarily in order. Max 5.</small>
+										<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Where to pick up your products?</small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input">
@@ -98,11 +99,32 @@
 												</span>
 											</div>
 
-											<div class="input-group">
-												<input type="text" name="user_farm_locations[]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
-												<span class="input-group-btn">
-													<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
-												</span>
+											<label style="margin-top:5px;">
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="old"> Use my shipping address.
+											</label>
+											<div class="hide" id="same_loc_container">
+												<div class="row">
+													<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+														<div class="col-lg-12">
+															<p class="zero-gaps address_1"><b><?php echo $shipping['address_1'];?></b></p>
+															<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
+															<?php if (is_last($current_profile['shippings'], $key) == false): ?><span>&nbsp;</span><?php endif ?>
+															<input type="hidden" name="user_farm_locations[old][]" value='<?php echo json_encode($shipping);?>'>
+														</div>
+													<?php endforeach ?>
+												</div>
+											</div>
+
+											<label>
+												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="new"> Enter a different address.
+											</label>
+											<div id="location_list" class="hide">
+												<div class="input-group">
+													<input type="text" name="user_farm_locations[new][]" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required">
+													<span class="input-group-btn">
+														<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -152,6 +174,7 @@
 							</div>
 						</form>
 					</div>
+
 					<div class="dash-panel theme">
 						<form action="farm/storefront" method="post" class="form-validate" data-ajax="1">
 							<div class="dash-panel-top">

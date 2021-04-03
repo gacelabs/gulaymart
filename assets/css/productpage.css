@@ -1,0 +1,52 @@
+body.basket {
+	padding-top: 100px;
+}
+body.basket #search_with_nav_btns .input-group {
+	margin-bottom: 0;
+}
+body.basket #marketplace_nav_body {
+	position: fixed;
+}
+body.basket input[name="search"] {
+	padding-right: 0;
+}
+body.basket .search-form button {
+	padding-left: 5px;
+	background-color: #fff;
+	border-radius: 16px !important;
+	border-bottom-left-radius: 0 !important;
+	border-top-left-radius: 0 !important;
+}
+#main_img_preview {
+	width: 100%;
+	height: 400px;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+.cat-breadcrumb {
+	margin-bottom: 10px;
+}
+.productpage-title {
+	padding: 0;
+	margin: 0 0 20px 0;
+}
+.productpage-price {
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+#quantity_input_container {
+	width: 130px;
+}
+#quantity_input_container button {
+	border-radius: 0 !important;
+}
+
+@media (max-width: 767px) {
+	body.basket {
+		padding-top: 70px;
+	}
+	body.basket div[class*="col-"] {
+		padding: 0;
+	}
+}

@@ -34,3 +34,10 @@
 #location_container .input-group-btn {
 	padding-left: 7px;
 }
+#same_loc_container {
+	font-size: 11px;
+	text-transform: capitalize;
+	padding: 10px;
+	background-color: #efefef;
+	margin-bottom: 15px;
+}
