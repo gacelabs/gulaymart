@@ -394,14 +394,14 @@ class Farm extends MY_Controller {
 				$products_html = $galleries_html = '';
 				if ($contents) {
 					$productids = json_decode($contents['products'], true);
-					$products = $this->products->get_in(['id' => $productids, 'user_id' => $profile['id']], ['category_id', 'photos']);
+					$products = $this->products->get_in(['id' => $productids, 'user_id' => $user_farm['user_id']], ['category_id', 'photos']);
 					// debug($products, 'stop');
 					foreach ($products as $key => $product) {
 						$products_html .= $this->load->view('looping/product_item', ['data'=>$product, 'forajax'=>1, 'id'=>$product['category_id']], true);
 					}
 					// debug($products_html, 'stop');
 					$galleriesids = json_decode($contents['galleries'], true);
-					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids, 'user_id' => $profile['id']]);
+					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids, 'user_id' => $user_farm['user_id']]);
 					// debug($galleries, 'stop');
 					$galleries_html = $this->load->view('looping/gallery_item', ['data'=>$galleries, 'title'=> 'Galleries'], true);
 					// debug($galleries_html, 'stop');
