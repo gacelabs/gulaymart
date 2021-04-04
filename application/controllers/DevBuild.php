@@ -34,12 +34,14 @@ class DevBuild extends CI_Controller {
 			$exists = method_exists($this->gm_db, 'drop_tables');
 			if ($exists == true) {
 				$this->load->library('accounts');
-				if ($this->accounts->has_session) {
-					$this->accounts->logout(true);
-				}
+				if ($this->accounts->has_session) $this->accounts->logout(true);
 				sleep(3);
-				$this->gm_db->drop_tables();
-				echo "All Tables dropped <br>";
+				$return = $this->gm_db->drop_tables();
+				if ($return) {
+					echo "All Tables dropped <br>";
+				} else {
+					echo "All Tables already dropped <br>";
+				}
 				sleep(10);
 			}
 		}
@@ -57,6 +59,7 @@ class DevBuild extends CI_Controller {
 					$table = trim($chunks[0]);
 					if ($this->db->table_exists($table)) $this->db->query('DROP TABLE '.$table);
 				}
+				// debug($table);
 				/*create table for the first time*/
 				$method = 'create_'.$table.'_table';
 				if (method_exists($this->createdev, $method)) {
@@ -72,14 +75,15 @@ class DevBuild extends CI_Controller {
 			}
 			if ($fields) {
 				foreach ($fields as $column => $row) {
-					// debug($row, true);
 					if (!$this->db->field_exists($column, $table) AND !isset($row['alter'])) {
 						$this->load->dbforge();
 						$is_col_created = $this->dbforge->add_column($table, [$column => $row['definition']], (isset($row['after']) ? $row['after'] : NULL));
 						if ($is_col_created AND (isset($row['add_key']) AND strlen(trim($row['add_key'])))) {
+							// debug($row, $column);
 							$this->db->query($row['add_key']);
 						}
 					} elseif (isset($row['alter']) AND $this->db->field_exists($column, $table)) {
+						// debug($row, $column, $table, 'stop');
 						$this->db->query($row['alter']);
 						$is_col_altered = 1;
 					}
@@ -87,8 +91,8 @@ class DevBuild extends CI_Controller {
 						echo "Field ".$column." ".$row['altered']['status']." in Table ".$table."! <br>";
 					} elseif (isset($is_col_created) AND $is_col_created) {
 						echo "Field ".$column." in Table ".$table." created! <br>";
-					/*} else {
-						echo "Field ".$column." in Table ".$table." existing! <br>";*/
+					} else {
+						echo "Field ".$column." in Table ".$table." existing! <br>";
 					}
 				}
 			}
@@ -109,7 +113,6 @@ class DevBuild extends CI_Controller {
 						'constraint' => '1',
 						'default' => '0',
 					],
-					'after' => 'is_profile_complete',
 				]
 			],
 			'user_farms' => [
@@ -119,7 +122,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'name',
 				],
 				'banner' => [
 					'definition' => [
@@ -127,7 +129,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'about',
 				],
 				'cover_pic' => [
 					'definition' => [
@@ -135,7 +136,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'banner',
 				],
 				'profile_pic' => [
 					'definition' => [
@@ -143,7 +143,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'cover_pic',
 				],
 				'messenger' => [
 					'definition' => [
@@ -151,7 +150,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'ip_address',
 				],
 				'youtube' => [
 					'definition' => [
@@ -159,7 +157,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'ip_address',
 				],
 				'instagram' => [
 					'definition' => [
@@ -167,7 +164,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'ip_address',
 				],
 				'facebook' => [
 					'definition' => [
@@ -175,7 +171,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'ip_address',
 				],
 				'lat' => [
 					'alter' => "ALTER TABLE user_farms DROP COLUMN lat;",
@@ -230,13 +225,11 @@ class DevBuild extends CI_Controller {
 						'null' => false,
 					],
 					'add_key' => "ALTER TABLE products ADD INDEX subcategory_id (subcategory_id);",
-					'after' => 'category_id',
 				],
 				'inclusion' => [
 					'definition' => [
 						'type' => 'TEXT',
 					],
-					'after' => 'description',
 				],
 				'activity' => [
 					'alter' => "ALTER TABLE products CHANGE COLUMN activity activity SMALLINT(5) NOT NULL DEFAULT '0' AFTER delivery_option_id;",
@@ -263,7 +256,6 @@ class DevBuild extends CI_Controller {
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'path',
 				],
 				'status' => [
 					'definition' => [
@@ -272,7 +264,6 @@ class DevBuild extends CI_Controller {
 						'default' => '1',
 						'null' => false,
 					],
-					'after' => 'url_path',
 				],
 				'path' => [
 					'alter' => "ALTER TABLE products_photo DROP COLUMN `path`;",
@@ -290,13 +281,11 @@ class DevBuild extends CI_Controller {
 						'null' => false,
 					],
 					'add_key' => "ALTER TABLE products_attribute ADD INDEX product_id (product_id);",
-					'after' => 'id',
 				],
 				'attribute' => [
 					'definition' => [
 						'type' => 'TEXT',
 					],
-					'after' => 'product_id',
 				],
 			],
 		];

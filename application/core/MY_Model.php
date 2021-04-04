@@ -168,18 +168,19 @@ class MY_Model extends CI_Model {
 	public function drop_tables()
 	{
 		if (DROP_ALL_TABLE) {
+			// debug($this->db->database, 'stop');
 			$tables = $this->db->query("SHOW TABLES");
-			if ($tables->num_rows()) {
+			// debug($tables->num_rows(), 'stop');
+			if ($tables->num_rows() > 0) {
 				$tables = $tables->result_array();
 				// debug($tables, 'stop');
 				foreach ($tables as $key => $table) {
-					if (isset($table['Tables_in_gulay_mart_db']) AND $this->db->table_exists($table['Tables_in_gulay_mart_db'])) {
-						$this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_gulay_mart_db']);
-					}
+					$this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
 				}
+				return true;
 			}
 		}
-		return;
+		return false;
 	}
 
 	public function count($table=FALSE, $where=FALSE)
