@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row" id="productpage_middle">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 			<div class="panel productpage-desc">
 				<p style="font-size:11px;" class="color-grey">DESCRIPTION</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -11,32 +11,6 @@
 				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 			</div>
 
-			<div class="panel productpage-farm-info">
-				<p style="font-size:11px;" class="color-grey">SOLD BY</p>
-				<div class="productpage-farm-top" style="background-image: url(assets/images/lettuce-house.jpg);">
-					<ul class="spaced-list between farm-info-list">
-						<li>
-							<h3 class="zero-gaps color-white"><b>The Humble Farm</b></h3>
-							<p class="zero-gaps color-white">Your friendly neighborhood farmer</p>
-						</li>
-						<li><img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true"></li>
-					</ul>
-				</div>
-				<div class="productpage-farm-middle">
-					<div class="row">
-						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-							<p><img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">Farms - <span class="color-grey">Bulacan, Antipolo</span></p>
-							<p class="zero-gaps"><img src="assets/images/icons/tomato.png" class="mini-img-icon" align="left">Products - <span class="color-grey">Lettuce, Onions</span></p>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-							<p><a href="" class="text-link"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 			<div class="panel productpage-feedback">
 				<ul class="spaced-list between">
 					<li><p style="font-size:11px;" class="color-grey">FEEDBACK</p></li>
@@ -144,6 +118,50 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="panel productpage-farm-info">
+				<p style="font-size:11px;" class="color-grey">SOLD BY</p>
+				<div class="productpage-farm-top" style="background-image: url(assets/images/lettuce-house.jpg);">
+					<ul class="spaced-list between farm-info-list">
+						<li>
+							<h3 class="zero-gaps color-white"><b>The Humble Farm</b></h3>
+							<p class="zero-gaps color-white">Your friendly neighborhood farmer</p>
+						</li>
+						<li><img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true"></li>
+					</ul>
+				</div>
+				<div class="productpage-farm-middle">
+					<div class="row">
+						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">SJDM, Bulacan</p>
+								</div>
+							</div>
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Bagong Nayon, Antipolo</p>
+								</div>
+							</div>
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Barangay, Nueva Ecija</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<p class="zero-gaps"><a href="" class="text-link visit-farm-link"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			
 		</div>
 	</div>
 </div>

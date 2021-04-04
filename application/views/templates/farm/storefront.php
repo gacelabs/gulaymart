@@ -58,7 +58,7 @@
 										</div>
 										<div class="form-group">
 											<label for="tagline">Tagline</label>
-											<input type="text" name="user_farms[tagline]" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" required="required" value="<?php isset_echo($data['farms'], 'tagline');?>">
+											<input type="text" name="user_farms[tagline]" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" value="<?php isset_echo($data['farms'], 'tagline');?>">
 											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
 										</div>
 									</div>

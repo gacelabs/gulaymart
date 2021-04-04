@@ -22,55 +22,62 @@
 				<h1 class="productpage-title">Organic Freshly Picked Sweet White Onions</h1>
 
 				<h2 class="productpage-price"><span class="color-grey">&#x20b1;</span> <span class="color-blue">120</span> <span class="color-grey">-</span> <span class="color-blue">200</span></h2>
-				<p><span class="color-grey">UNIT:</span> KILOGRAM</p>
 				<hr>
-				<p class="color-grey">QUANTITY:</p>
 				<form action="" method="post">
-					<div class="productpage-variety">
-						<div class="variety-location">
-							<small class="elem-block" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Bulacan - <span class="max-qty">Max quantity 40</span></small>
-							<div class="input-group">
-								<span class="input-group-addon input-eta"><span class="color-grey">&#x20b1; 120</span></span>
-								<input type="text" class="form-control input-number" value="0" min="0" max="40" name="quant[1]">
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-								</span>
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-								</span>
+					<div class="productpage-basic-grid">
+						<p class="color-grey zero-gaps">UNIT</p>
+						<p>KILOGRAMS</p>
+					</div>
+					<div class="productpage-basic-grid" id="quantity_container">
+						<p class="color-grey zero-gaps">QUANTITY</p>
+						<div class="productpage-variety">
+							<div class="variety-location">
+								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Bulacan - <span class="max-qty">Max quantity 40</span></p>
+								<div class="input-group">
+									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 120</span></span>
+									<input type="text" class="form-control input-number" value="0" min="0" max="40" name="quant[1]">
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
+									</span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
+									</span>
+								</div>
 							</div>
-						</div>
 
-						<div class="variety-location">
-							<small class="elem-block" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Antipolo - <span class="max-qty">Max quantity 20</span></small>
-							<div class="input-group">
-								<span class="input-group-addon input-eta"><span class="color-grey">&#x20b1; 150</span></span>
-								<input type="text" class="form-control input-number" value="0" min="0" max="20" name="quant[1]">
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-								</span>
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-								</span>
+							<div class="variety-location">
+								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Antipolo - <span class="max-qty">Max quantity 20</span></p>
+								<div class="input-group">
+									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 150</span></span>
+									<input type="text" class="form-control input-number" value="0" min="0" max="20" name="quant[1]">
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
+									</span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
+									</span>
+								</div>
 							</div>
-						</div>
 
-						<div class="variety-location">
-							<small class="elem-block" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Nueva Ecija - <span class="max-qty">Max quantity 370</span></small>
-							<div class="input-group">
-								<span class="input-group-addon input-eta"><span class="color-grey">&#x20b1; 200</span></span>
-								<input type="text" class="form-control input-number" value="0" min="0" max="370" name="quant[1]">
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-								</span>
-								<span class="input-group-btn">
-									<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-								</span>
+							<div class="variety-location">
+								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Nueva Ecija - <span class="max-qty">Max quantity 370</span></p>
+								<div class="input-group">
+									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 200</span></span>
+									<input type="text" class="form-control input-number" value="0" min="0" max="370" name="quant[1]">
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
+									</span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
+
 					<div class="add-basket-btn">
-						<button type="button" class="btn btn-lg btn-blue" id="add_product_btn"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
+						<button type="button" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
+						<button type="button" class="btn btn-lg btn-blue" style="width:125px;">Buy Now</button>
 					</div>
 				</form>
 			</div>
@@ -84,11 +91,36 @@
 						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
 					</ul>
 					<div class="productpage-summary-inner active">
-						<p><img src="assets/images/icons/planting.png" class="mini-img-icon" align="left">Traditional soil-based plant.</p>
-						<p><img src="assets/images/icons/ripe.png" class="mini-img-icon" align="left">Riped organically, tasty and juicy.</p>
-						<p><img src="assets/images/icons/shape.png" class="mini-img-icon" align="left">In good shape, smell, texture, and color.</p>
-						<p><img src="assets/images/icons/pick.png" class="mini-img-icon" align="left">Picked same day upon order.</p>
-						<p><img src="assets/images/icons/basket.png" class="mini-img-icon" align="left">Packaged in a regular plastic bag.</p>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/planting.png" class="mini-img-icon" align="left">
+							<div>
+								<p>Traditional soil-based plant.</p>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/ripe.png" class="mini-img-icon" align="left">
+							<div>
+								<p>In good shape, smell, texture, and color.</p>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/shape.png" class="mini-img-icon" align="left">
+							<div>
+								<p>Riped organically, tasty and juicy.</p>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/pick.png" class="mini-img-icon" align="left">
+							<div>
+								<p>Picked same day upon order.</p>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/basket.png" class="mini-img-icon" align="left">
+							<div>
+								<p>Packaged in a regular plastic bag.</p>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="productpage-summary-parent productpage-method">
@@ -97,34 +129,66 @@
 						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
 					</ul>
 					<div class="productpage-summary-inner">
-						<p><img src="assets/images/icons/cash.png" class="mini-img-icon" align="left">Cash On Delivery</p>
-						<p><img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">Wire Transfer - <span class="color-grey">GCash, Paymaya</span></p>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/cash.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Cash On Delivery</p>
+								<small class="color-grey elem-block">Pay to upon deliver</small>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Wire Transfer</p>
+								<small class="color-grey elem-block">GCash, Paymaya</small>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="productpage-summary-parent productpage-delivery">
 					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">AVAILABILITY</p></li>
+						<li><p style="margin-top:0;font-size:11px;" class="color-grey">DELIVERY</p></li>
 						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
 					</ul>
 					<div class="productpage-summary-inner">
-						<p><img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">Farms - <span class="color-grey">Bulacan, Antipolo</span></p>
-						<p><img src="assets/images/icons/today.png" class="mini-img-icon" align="left">Today - <span class="color-grey">Earliest: 30 minutes</span></p>
-						<p><img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">Schedule - <span class="color-grey">For bulk orders</span></p>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Today</p>
+								<small class="color-grey elem-block">Earliest: 30 minutes</small>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Schedule</p>
+								<small class="color-grey elem-block">For bulk orders</small>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="productpage-summary-parent productpage-sold-by">
 					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">SOLD BY</p></li>
+						<li><p style="margin-top:0;font-size:11px;" class="color-grey">FARM LOCATIONS</p></li>
 						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
 					</ul>
 					<div class="productpage-summary-inner" style="margin-top: 5px;">
-						<div class="media">
-							<div class="media-left media-top">
-								<img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true">
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">SJDM, Bulacan</p>
 							</div>
-							<div class="media-body">
-								<p class="media-heading zero-gaps">Ema Margaret</p>
-								<p class="zero-gaps"><a href="" class="text-link"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Bagong Nayon, Antipolo</p>
+							</div>
+						</div>
+						<div class="productpage-summary-grid">
+							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+							<div>
+								<p class="zero-gaps">Barangay, Nueva Ecija</p>
 							</div>
 						</div>
 					</div>
