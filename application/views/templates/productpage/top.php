@@ -29,7 +29,7 @@
 						<p>KILOGRAMS</p>
 					</div>
 					<div class="productpage-basic-grid" id="quantity_container">
-						<p class="color-grey zero-gaps">QUANTITY</p>
+						<p class="color-grey zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
 						<div class="productpage-variety">
 							<div class="variety-location">
 								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Bulacan - <span class="max-qty">Max quantity 40</span></p>

@@ -95,8 +95,16 @@ body.basket .search-form button {
 	width: 220px;
 }
 .productpage-desc-inner {
-	max-height: 400px;
-	overflow-x: auto;
+	
+}
+.productpage-desc-inner>.media {
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+.productpage-desc-inner>.media:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
 }
 .media-object {
 	width: 40px;
@@ -104,7 +112,6 @@ body.basket .search-form button {
 }
 body.basket .panel {
 	border-radius: 0;
-	padding: 15px;
 }
 .notif-dot {
 	position: absolute;
@@ -119,7 +126,6 @@ body.basket #footer_page_container {
 	background-size: cover;
 	background-repeat: no-repeat;
 	padding-top: 15%;
-	margin-bottom: 10px;
 }
 .farm-info-list {
 	width: 100%;
@@ -162,6 +168,12 @@ body.basket #footer_page_container {
 	grid-gap: 5px;
 	margin-top: 10px;
 	vertical-align: middle;
+}
+.panel-heading {
+	padding-bottom: 0;
+}
+.pagination>li>a, .pagination>li>span {
+	font-size: 12px;
 }
 @media (max-width: 991px) {
 	body.basket {
