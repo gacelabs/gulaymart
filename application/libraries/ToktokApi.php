@@ -24,7 +24,10 @@ class ToktokApi {
 		curl_setopt($this->ch, CURLOPT_COOKIESESSION, true);
 		curl_setopt($this->ch, CURLOPT_COOKIEJAR, 'cp_toktok_session_prod');  // could be empty, but cause problems on some hosts
 		curl_setopt($this->ch, CURLOPT_COOKIEFILE, '/d/keep-alive/tmp');  // could be empty, but cause problems on some hosts
-
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, [
+			// 'Content-Type: application/json',
+			'Connection: Keep-Alive'
+		]);
 		$json = curl_exec($this->ch);
 		$this->response = json_decode($json, true);
 		$this->set_response();
@@ -37,16 +40,17 @@ class ToktokApi {
 			$this->endpoint = $list[$method];
 			// debug($this->url.$this->endpoint.'?'.http_build_query($params), 'stop');
 			sleep(3);
-			// if (in_array($method, ['pricing', 'rider'])) {
+			if (in_array($method, ['pricing', 'rider'])) {
+				curl_setopt($this->ch, CURLOPT_POST, false);
 				curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
-			// } elseif ($method == 'post_delivery') {
-			// 	curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint);
-			// 	// curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($params));
-			// 	// $this->curl_custom_postfields($params, $files);
-			// 	curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params));
-			// }
+			} elseif ($method == 'post_delivery') {
+				curl_setopt($this->ch, CURLOPT_POST, true);
+				curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint);
+				curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($params));
+				// $this->curl_custom_postfields($params, $files);
+				// curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params));
+			}
 			curl_setopt($this->ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-			curl_setopt($this->ch, CURLOPT_POST, false);
 			curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($this->ch, CURLOPT_HEADER, 1);
 			$json = curl_exec($this->ch);
@@ -151,7 +155,7 @@ class ToktokApi {
 		// generate safe boundary
 		do {
 			// $boundary = "------WebKitFormBoundary" . /*strtoupper*/(substr(md5(mt_rand() . microtime()), 3, 18));
-			$boundary = "------WebKitFormBoundary" . /*strtoupper*/(substr(hash('sha256', uniqid('', true)), 3, 18));
+			$boundary = "------WebKitFormBoundary" . /*strtoupper*/(substr(hash('sha256', uniqid('', true)), 0, 15));
 		} while (preg_grep("/{$boundary}/", $body));
 
 		// add boundary for each parameters
@@ -162,16 +166,16 @@ class ToktokApi {
 		// add final boundary
 		$body[] = "{$boundary}";
 		$body[] = "";
-		debug($body, 'stop');
+		// debug($body, 'stop');
 
 		// set options
 		return @curl_setopt_array($this->ch, [
 			CURLOPT_POST       => true,
 			CURLOPT_POSTFIELDS => implode("\r\n", $body),
 			CURLOPT_HTTPHEADER => [
-				// "Expect: 100-continue",
+				"Expect: 100-continue",
 				"X-Requested-With: XMLHttpRequest",
-				"Content-Type: multipart/form-data; boundary={$boundary}" // change Content-Type
+				"Content-Type: multipart/form-data; boundary={$boundary}", // change Content-Type
 			],
 		]);
 	}
