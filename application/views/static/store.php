@@ -7,7 +7,7 @@
 					<div id="farm_identity">
 						<ul class="grid-list half">
 							<li class="text-left">
-								<h1 class="farm_name"><a href="store/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
+								<h1 class="farm_name"><a href="store/<?php echo $data['farm']['id'];?>/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
 								<h4 class="tagline"><?php echo $data['farm']['tagline'];?></h4>
 							</li>
 							<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div></li>
