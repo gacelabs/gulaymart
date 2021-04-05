@@ -144,6 +144,13 @@ class DevBuild extends CI_Controller {
 						'null' => true,
 					],
 				],
+				'about' => [
+					'definition' => [
+						'type' => 'LONGTEXT',
+						'default' => NULL,
+						'null' => true,
+					],
+				],
 				'messenger' => [
 					'definition' => [
 						'type' => 'TEXT',
