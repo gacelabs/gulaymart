@@ -360,7 +360,7 @@
 					</div>
 				</div>
 
-				<iframe id="preview-store-page" class="col-lg-7 col-md-8 col-sm-12 hidden-xs" src="store/preview" style="position: absolute; height: 120%; border: none; width: 57%;"></iframe>
+				<iframe id="preview-store-page" class="col-lg-7 col-md-8 col-sm-12 hidden-xs" src="store/0/preview" style="position: absolute; height: 120%; border: none; width: 57%;"></iframe>
 			<?php endif ?>
 		</div>
 	</div>

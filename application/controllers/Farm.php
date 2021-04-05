@@ -373,14 +373,14 @@ class Farm extends MY_Controller {
 		]);
 	}
 
-	public function store($name=false)
+	public function store($id=0, $name=false)
 	{
 		if ($name != false AND (strtolower($name) != 'preview' OR $this->accounts->has_session)) {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			if ($name == 'preview') {
 				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
 			} else {
-				$user_farm = $this->gm_db->get('user_farms', ['name' => str_replace('-', ' ', $name)], 'row');
+				$user_farm = $this->gm_db->get('user_farms', ['id' => $id, 'name' => str_replace('-', ' ', $name)], 'row');
 			}
 			$data = false;
 			// debug($user_farm, 'stop');
