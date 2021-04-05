@@ -9,7 +9,7 @@ class Basket extends My_Controller {
 	{
 		parent::__construct();
 		/*requesting samples to toktok portal*/
-		$this->samples();
+		// $this->samples();
 	}
 
 	public function index()

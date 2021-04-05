@@ -8,7 +8,7 @@
 			</div>
 			<?php endif ?>
 
-			<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
+			<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
 					<div class="dash-panel theme">
 						<ul class="spaced-list between dash-panel-top">
@@ -178,7 +178,7 @@
 			</div>
 
 			<?php if (isset($current_profile['profile']['phone'])) : ?>
-			<div class="col-lg-7 col-md-6 col-sm-6 col-xs-12 shipping-address-panel">
+			<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
 				<div class="dash-panel theme">
 					<ul class="spaced-list between dash-panel-top">
 						<li><h3>Shipping address</h3></li>

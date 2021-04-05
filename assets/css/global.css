@@ -48,6 +48,9 @@ hr.carved {
 	color: #799938;
 	cursor: pointer;
 }
+.text-link:hover {
+	text-decoration: underline;
+}
 .text-link.blue {
 	color: #3b9ff5;
 }
@@ -199,7 +202,7 @@ textarea {
 	outline: none !important;
 	box-shadow: none !important;
 	display: block;
-	padding-right: 60px;
+	padding-right: 15px;
 	margin: 0;
 	border-right: 0 none;
 	border-top-right-radius: 0;
