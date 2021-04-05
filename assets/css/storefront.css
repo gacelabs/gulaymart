@@ -35,9 +35,21 @@
 	padding-left: 7px;
 }
 #same_loc_container {
-	font-size: 11px;
 	text-transform: capitalize;
 	padding: 10px;
 	background-color: #efefef;
 	margin-bottom: 15px;
+}
+.chosen-results {
+	padding: 0 !important;
+}
+.chosen-container {
+	padding: 0 0 5px 0;
+	font-size: 14px;
+}
+.result-selected, .result-selected.highlighted, .active-result:hover, .chosen-container-single>a.chosen-single, .chosen-container-single>a.chosen-single:hover {
+	color: #3b9ff5 !important;
+}
+.active-result {
+	color: #333 !important;
 }

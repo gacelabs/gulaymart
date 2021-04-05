@@ -66,7 +66,7 @@ $(document).ready(function() {
 		$('.social-url').keyup(function() {
 			var val = $(this).val(),
 				id 	 = $(this).data('id');
-			$('#preview-store-page').contents().find('#'+id).attr('href', val);
+			$('#preview-store-page').contents().find(id).attr('href', val);
 		});
 	});
 
