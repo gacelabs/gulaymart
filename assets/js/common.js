@@ -372,50 +372,56 @@ var runMediaUploader = function(callback) {
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 
-				if (uiForm.parent('.dash-panel[class*=score-]').length) {
-					var position = uiForm.parent('.dash-panel[class*=score-]').length - 1;
-					var iTop = (uiForm.parent('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
+				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
+					var position = uiForm.find('[name="pos"]').val();
+					var iTop = (uiForm.parent('.dash-panel.theme.score-'+position).offset().top - ($('nav').height() + $('.dash-panel.score-detail-scroll').height() + 1));
 					$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
 				}
 			}).on('click', function(e) {
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
-				$(elem).parents('form:first').attr('data-notmedia', '1');
-				$(elem).parents('form:first').find('button:submit').addClass('hide');
-				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
-				$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				if ($('body').hasClass('new-veggy') == false) {
+					$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
+					$(elem).parents('form:first').attr('data-notmedia', '1');
+					$(elem).parents('form:first').find('button:submit').addClass('hide');
+					$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+					$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				}
 			}).next('.input-group-btn').find('button').on('click', function(e) {
 				$(elem).trigger('click');
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
-				$(elem).parents('form:first').attr('data-notmedia', '1');
-				$(elem).parents('form:first').find('button:submit').addClass('hide');
-				$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
-				$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				if ($('body').hasClass('new-veggy') == false) {
+					$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
+					$(elem).parents('form:first').attr('data-notmedia', '1');
+					$(elem).parents('form:first').find('button:submit').addClass('hide');
+					$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+					$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				}
 			});
 		});
 
-		$(document.body).on('click', '.preview-image-item', function() {
-			$(this).parents('form:first').find('button:submit').addClass('hide');
-			var oThis = $(this);
-			// console.log(oThis);
-			if (oThis.next('input:radio').data('upload') == 1) {
-				oThis.parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
-				oThis.parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
-				oThis.parents('form:first').find('button[value="upload"]').removeClass('hide');
-				oThis.parents('form:first').find('input:file').attr('required', 'required');
-				oThis.parents('form:first').attr('data-notmedia', '1');
-			} else {
-				oThis.parents('form:first').find('.preview_images_list li input:radio').removeAttr('checked').removeAttr('required');
-				oThis.parents('form:first').find('button[value="select"]').removeClass('hide');
-				oThis.parents('form:first').find('input:file').removeAttr('required');
-				oThis.parents('form:first').removeAttr('data-notmedia');
-			}
-			oThis.next('input[type="radio"]').prop('checked', true);
-			if (typeof callback == 'function') callback(this);
-		});
+		if ($('body').hasClass('new-veggy') == false) {
+			$(document.body).on('click', '.preview-image-item', function() {
+				$(this).parents('form:first').find('button:submit').addClass('hide');
+				var oThis = $(this);
+				// console.log(oThis);
+				if (oThis.next('input:radio').data('upload') == 1) {
+					oThis.parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+					oThis.parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
+					oThis.parents('form:first').find('button[value="upload"]').removeClass('hide');
+					oThis.parents('form:first').find('input:file').attr('required', 'required');
+					oThis.parents('form:first').attr('data-notmedia', '1');
+				} else {
+					oThis.parents('form:first').find('.preview_images_list li input:radio').removeAttr('checked').removeAttr('required');
+					oThis.parents('form:first').find('button[value="select"]').removeClass('hide');
+					oThis.parents('form:first').find('input:file').removeAttr('required');
+					oThis.parents('form:first').removeAttr('data-notmedia');
+				}
+				oThis.next('input[type="radio"]').prop('checked', true);
+				if (typeof callback == 'function') callback(this);
+			});
+		}
 	}
 }
 
