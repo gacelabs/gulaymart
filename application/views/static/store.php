@@ -63,6 +63,12 @@
 			</div>
 		</div>
 	</div>
+
+	<?php
+
+		print_r($data);
+
+	?>
 <?php else: ?>
 	<div class="col-lg-12">
 		<div class="cover_image" id="storefront_page_container">

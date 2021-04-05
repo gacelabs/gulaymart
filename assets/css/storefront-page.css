@@ -87,7 +87,7 @@
 }
 img.banner_section {
 	background-color: #fff;
-	padding: 0 20px 20px 20px;
+	padding: 20px;
 }
 .storefront-footer {
 	padding: 20px 15px;
@@ -99,6 +99,7 @@ img.banner_section {
 .social_acct i.fa {
 	color: #fff;
 }
+
 @media (max-width: 991px) {
 	.storefront-top {
 	    height: 200px;
