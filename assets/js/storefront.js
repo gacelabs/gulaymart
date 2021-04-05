@@ -43,8 +43,8 @@ $(document).ready(function() {
 			if (limit <= 4) {
 				var clone = $('#clone_me').clone();
 				clone.removeClass('hide').removeAttr('id').appendTo('#location_list').find('input:first')
-					.attr({'required':'required', 'id':'location-input-'+limit});
-				$('<input />', {type:'hidden', name:'user_farm_locations[1][]'}).insertAfter(clone.find('input:first'));
+					.attr({'id':'location-input-'+limit});
+				$('<input />', {required:'required', type:'hidden', name:'user_farm_locations[1][]'}).insertAfter(clone.find('input:first'));
 			}
 		});
 
@@ -84,9 +84,11 @@ $(document).ready(function() {
 		$('.pick-up-loc').click(function() {
 			if ($(this).attr('id') == "diff_loc") {
 				$('#location_list').removeClass('hide');
+				$('#location_list').find('input:text[id^="location-input-"]').attr({'required':'required'});
 				$('#same_loc_container').addClass('hide');
 			} else {
 				$('#location_list').addClass('hide');
+				$('#location_list').find('input:text[id^="location-input-"]').removeAttr('required');
 				$('#same_loc_container').removeClass('hide');
 			}
 		})

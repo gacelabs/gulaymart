@@ -146,28 +146,28 @@ class DevBuild extends CI_Controller {
 				],
 				'messenger' => [
 					'definition' => [
-						'type' => 'LONGTEXT',
+						'type' => 'TEXT',
 						'default' => NULL,
 						'null' => true,
 					],
 				],
 				'youtube' => [
 					'definition' => [
-						'type' => 'LONGTEXT',
+						'type' => 'TEXT',
 						'default' => NULL,
 						'null' => true,
 					],
 				],
 				'instagram' => [
 					'definition' => [
-						'type' => 'LONGTEXT',
+						'type' => 'TEXT',
 						'default' => NULL,
 						'null' => true,
 					],
 				],
 				'facebook' => [
 					'definition' => [
-						'type' => 'LONGTEXT',
+						'type' => 'TEXT',
 						'default' => NULL,
 						'null' => true,
 					],
@@ -192,12 +192,6 @@ class DevBuild extends CI_Controller {
 				],
 				'address_2' => [
 					'alter' => "ALTER TABLE user_farms DROP COLUMN address_2;",
-					'altered' => [
-						'status' => 'removed',
-					],
-				],
-				'about' => [
-					'alter' => "ALTER TABLE user_farms DROP COLUMN about;",
 					'altered' => [
 						'status' => 'removed',
 					],

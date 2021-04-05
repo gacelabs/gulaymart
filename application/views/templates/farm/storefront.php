@@ -126,7 +126,7 @@
 														<div class="col-lg-12">
 															<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 															<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-															<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>'>
+															<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>' required="required">
 														</div>
 														<?php if (is_last($current_profile['shippings'], $key) == false): ?><span>&nbsp;</span><?php endif ?>
 													<?php endforeach ?>
@@ -148,7 +148,7 @@
 														}
 														?>
 														<div class="input-group">
-															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
+															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
 															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' />
 															<span class="input-group-btn">
 															<?php if ($key == 0): ?>
@@ -161,7 +161,7 @@
 													<?php endforeach ?>
 												<?php else: ?>
 													<div class="input-group">
-														<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" required="required" readonly="readonly" id="location-input-0">
+														<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0">
 														<input type="hidden" name="user_farm_locations[1][]" />
 														<span class="input-group-btn">
 															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
@@ -217,6 +217,18 @@
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
 											<input type="url" name="user_farms[messenger]" class="form-control social-url" data-id="#storefront-messenger" placeholder="Messenger URL" value="<?php isset_echo($data['farms'], 'messenger');?>">
+										</div>
+									</div>
+								</div>
+
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>ABOUT</li>
+										<li><i class="fa fa-angle-right"></i></li>
+									</ul>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." required="required"><?php isset_echo($data['farms'], 'about');?></textarea>
 										</div>
 									</div>
 								</div>

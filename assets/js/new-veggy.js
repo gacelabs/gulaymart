@@ -152,7 +152,8 @@ var setProductScore = function(obj) {
 	var position = parseInt(data_pos) + 1;
 	if ($('.dash-panel.score-'+(position)).length) {
 		$('.dash-panel.score-'+(position)).removeClass('hide');
-		var iTop = ($('.dash-panel.score-'+position).offset().top - ($('nav').height() + 1));
+		var fromHeight = parseInt($('nav').height()) + 1;
+		var iTop = ($('.dash-panel.score-'+position).offset().top - fromHeight);
 		$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
 	}
 	if ($('.dash-panel.score-'+parseInt(data_pos)).length) {
@@ -165,15 +166,17 @@ var setProductScore = function(obj) {
 			$(elem).find('form').prepend('<input type="hidden" name="product_id" value="'+obj.product_id+'"/>');
 		});
 	}
-
-	if ($('.timeline-border-progress').data('percent') != 100) {
+	var percent_gage = [10, 30, 60, 80, 100];
+	var percent = parseInt($('.timeline-border-progress').attr('data-percent'));
+	// console.log(percent, percent_gage[obj.pos]);
+	if (percent < percent_gage[obj.pos]) {
 		$('.timeline-border-progress').removeAttr('data-percent');
 	}
 	switch (obj.pos) {
 		case '0':
 			$('#order-title').text(obj.products.name);
 			$('#order-link').attr('href', 'view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
-			if ($('.timeline-border-progress').data('percent') != 100) {
+			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '10');
 			}
 		break;
@@ -184,24 +187,24 @@ var setProductScore = function(obj) {
 				.find('form')
 				.prepend('<input type="hidden" name="products_attribute['+i+'][id]" value="'+data.id+'" />');
 			});
-			if ($('.timeline-border-progress').data('percent') != 100) {
+			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '30');
 			}
 		break;
 		case '2':
 			$('#order-price').text(obj.products.price);
 			$('#order-unit').text(obj.products.measurement);
-			if ($('.timeline-border-progress').data('percent') != 100) {
+			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '60');
 			}
 		break;
 		case '3':
-			if ($('.timeline-border-progress').data('percent') != 100) {
+			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '80');
 			}
 		break;
 		case '4':
-			if ($('.timeline-border-progress').data('percent') != 100) {
+			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '100');
 			}
 		break;

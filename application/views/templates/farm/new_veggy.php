@@ -16,7 +16,7 @@
 							<li><h3 class="text-capsule"><i class="fa fa-check"></i></h3></li>
 						</ul>
 						<div class="timeline-border"></div>
-						<div class="timeline-border-progress"></div>
+						<div class="timeline-border-progress" data-percent="0"></div>
 					</div>
 				</div>
 
@@ -237,7 +237,7 @@
 						</div>
 						<div class="dash-panel-footer text-right bg-grey">
 							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="1" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
+							<button value="0" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
