@@ -7,6 +7,8 @@ class ToktokApi {
 	public $connected = false;
 	public $closed = false;
 	public $url = 'https://portal.toktok.ph/';
+	public $portal = 'https://portal.toktok.ph/';
+	public $website = 'https://toktok.ph/';
 	public $endpoint = NULL;
 	public $success = false;
 	public $response = false;
@@ -16,7 +18,7 @@ class ToktokApi {
 		// $ci =& get_instance();
 		// initial request with login data
 		$this->ch = curl_init();
-		curl_setopt($this->ch, CURLOPT_URL, $this->url.'auth/authentication/login');
+		curl_setopt($this->ch, CURLOPT_URL, $this->portal.'auth/authentication/login');
 		curl_setopt($this->ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 		curl_setopt($this->ch, CURLOPT_POST, true);
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, "username=PPS8083189&password=L3n6gARc1a2021");
@@ -40,33 +42,71 @@ class ToktokApi {
 			$this->endpoint = $list[$method];
 			// debug($this->url.$this->endpoint.'?'.http_build_query($params), 'stop');
 			sleep(3);
-			if (in_array($method, ['pricing', 'rider'])) {
-				curl_setopt($this->ch, CURLOPT_POST, false);
-				curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
-			} elseif ($method == 'post_delivery') {
-				curl_setopt($this->ch, CURLOPT_POST, true);
-				curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint);
-				curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($params));
-				// $this->curl_custom_postfields($params, $files);
-				// curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params));
-			}
-			curl_setopt($this->ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-			curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($this->ch, CURLOPT_HEADER, 1);
-			$json = curl_exec($this->ch);
-
-			$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
-			$header = substr($json, 0, $header_size);
-			$body = substr($json, $header_size);
-			// if (!in_array($method, ['pricing', 'rider'])) debug($json, $header, json_decode($body, true));
-
 			try {
+				if (!in_array($method, ['post_delivery', 'view_delivery'])) {
+					curl_setopt($this->ch, CURLOPT_POST, false);
+					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
+				} elseif (in_array($method, ['view_delivery'])) {
+					curl_setopt($this->ch, CURLOPT_POST, true);
+					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'/'.$params);
+				} else {
+					curl_setopt($this->ch, CURLOPT_POST, true);
+					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint);
+					curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($params));
+					// $this->curl_custom_postfields($params, $files);
+					// curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params));
+				}
+				curl_setopt($this->ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+				curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($this->ch, CURLOPT_HEADER, 1);
+				$json = curl_exec($this->ch);
+
+				$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
+				$header = substr($json, 0, $header_size);
+				$body = substr($json, $header_size);
+				// if (!in_array($method, ['pricing', 'rider'])) debug($json, $header, json_decode($body, true));
+
 				$this->response = json_decode($body, true);
 			} catch (Exception $e) { 
 				$this->response = $e;
+				$this->connected = false;
+				$this->stop();
 			}
+		} else {
+			$this->response = '';
+			$this->connected = false;
+			$this->stop();
+			return $this;
 		}
 		return $this->set_response();
+	}
+
+	public function endpoint_list($type='portal')
+	{
+		$this->type = $type;
+		if ($type == 'portal') {
+			$this->url = $this->portal;
+			return [
+				'price_and_directions' => 'app/deliveries/getDeliveryPriceAndDirections/',
+				'post_delivery' => 'app/deliveries/operatorPostDelivery/',
+				'rider' => 'app/driver/fetch_riders_by_mobile_number/',
+				'riders' => 'app/deliveries/getConsumerDriverId/',
+				'check_orders' => 'app/deliveries/deliveries_operator_list_table/',
+				'view_delivery' => 'app/deliveries/view_deliveries/', // LzhmV1VRRGdjOE9HOVhZeWg1S0k5Zz09 makikita sa View button (check_orders)
+			];
+		} elseif ($type == 'website') {
+			$this->url = $this->website;
+			return [
+				'price_and_directions' => 'app/websiteBooking/getDeliveryPriceAndDirections',
+				'validate' => 'app/websiteBooking/validate_website_inputs',
+				'otp' => 'app/websiteBooking/send_otp?mobile_number=',
+				'post_delivery' => 'app/websiteBooking/operatorPostDelivery',
+				'rider_location' => 'app/trackBooking/getDriverLastLocation/', // ?delivery_id=TnRITjBxUHVhQURUdE9ZY3JsMDJ4UT09 makikita sa Click to view and copy delivery link (check_orders)
+				'cancel_reasons' => 'app/trackBooking/get_cancellation_categories/',
+				'confirm_cancel' => 'app/trackBooking/confirmCancelBooking/', // ?deliveryId=769723&categoryId=9 (extracted from deliveryId=view_delivery and categoryId=cancel_reasons)
+			];
+		}
+		return [];
 	}
 
 	public function stop()
@@ -78,29 +118,11 @@ class ToktokApi {
 
 	public function clear()
 	{
-		curl_setopt($this->ch, CURLOPT_COOKIELIST, 'ALL');
-		return $this;
-	}
-
-	public function endpoint_list($type='portal')
-	{
-		if ($type == 'portal') {
-			return [
-				'pricing' => 'app/deliveries/getDeliveryPriceAndDirections/',
-				'post_delivery' => 'app/deliveries/operatorPostDelivery/',
-				'rider' => 'app/driver/fetch_riders_by_mobile_number/',
-				'riders' => 'app/deliveries/getConsumerDriverId/',
-			];
-		} elseif ($type == 'website') {
-			return [
-				'pricing' => 'app/websiteBooking/getDeliveryPriceAndDirections',
-				'validate' => 'app/websiteBooking/validate_website_inputs',
-				'otp' => 'app/websiteBooking/send_otp?mobile_number=',
-				'post_delivery' => 'app/websiteBooking/operatorPostDelivery',
-				'rider' => 'app/driver/fetch_riders_by_mobile_number/',
-			];
+		if ($this->closed == false) {
+			curl_setopt($this->ch, CURLOPT_COOKIELIST, 'ALL');
+			curl_exec($this->ch);
 		}
-		return [];
+		return $this;
 	}
 
 	private function set_response()

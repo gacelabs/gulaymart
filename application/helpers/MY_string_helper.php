@@ -109,7 +109,7 @@ function get_mac_address()
 		$find_mac = "Physical";  
 		$pmac = strpos($mycomsys, $find_mac);  
 		$macaddress = substr($mycomsys, ($pmac+36), 17);  
-	} elseif (strtolower(PHP_OS) == 'LINUX') {
+	} elseif (strtoupper(PHP_OS) == 'LINUX') {
 		@system('ifconfig');
 		$mycomsys = ob_get_contents();
 		ob_clean();
@@ -1233,4 +1233,32 @@ function is_last($data=false, $key=false)
 		return count((array)$data) == $key +1;
 	}
 	return false;
+}
+
+function format_duration($duration=0)
+{
+	if ($duration) {
+		$duration = (float)$duration;
+		if ($duration <= 60) {
+			if ($duration == 60) {
+				$duration = '1 hour';
+			} else {
+				$duration .= ' minutes';
+			}
+		} else {
+			$hours = (float)($duration / 60);
+			$minutes = (float)($duration % 60);
+			if ($hours == 1) {
+				$duration = '1 hour ';
+			} else {
+				$duration .= $hours . ' hours ';
+			}
+			if ($minutes == 1) {
+				$duration .= $minutes . ' minute';
+			} elseif ($minutes > 1) {
+				$duration .= $minutes . ' minutes';
+			}
+		}
+	}
+	return preg_replace('/\s+/', ' ', $duration);
 }
