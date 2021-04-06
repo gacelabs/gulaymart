@@ -40,7 +40,7 @@
 									</li>
 									<?php if (isset($data['farms']) AND $data['farms']): ?>
 										<li class="text-right">
-											<a class="text-link btn btn-default normal-radius icon-left" target="_new" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+											<a class="text-link btn btn-default normal-radius icon-left" id="storefrontTab" target="storefrontTab" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
 											<button type="submit" class="btn btn-blue normal-radius">Update</button>
 										</li>
 									<?php else: ?>
@@ -130,7 +130,7 @@
 											<label style="margin-top:5px;">
 												<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="0"<?php str_has_value_echo(0, $farm_loc, ' checked');?>> Use my shipping address.
 											</label>
-											<div class="hide" id="same_loc_container">
+											<div class="<?php str_not_value_echo(0, $farm_loc, 'hide');?>" id="same_loc_container">
 												<div class="row">
 													<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 														<?php
@@ -145,7 +145,7 @@
 															<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 															<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>' required="required">
 														</div>
-														<?php if (is_last($current_profile['shippings'], $key) == false): ?><span>&nbsp;</span><?php endif ?>
+														<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?><span>&nbsp;</span><?php endif ?>
 													<?php endforeach ?>
 												</div>
 											</div>
@@ -153,10 +153,9 @@
 											<label class="icon-right">
 												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="1"<?php str_has_value_echo(1, $farm_loc, ' checked');?>> Enter a different address.
 											</label>
-											<div id="location_list" class="<?php if (!$farm_locations): ?>hide<?php endif ?>">
+											<div id="location_list" class="<?php str_not_value_echo(1, $farm_loc, 'hide');?>">
 												<?php if ($farm_locations): ?>
 													<?php foreach ($farm_locations as $key => $location): ?>
-														<?php if ($location['active'] == 0) break;?>
 														<?php
 														foreach (array_keys($location) as $value) {
 															if (!in_array($value, unserialize(LOCATION_KEYS))) {

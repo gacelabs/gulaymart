@@ -1,7 +1,5 @@
 var isSucceed = false, timeout = null;
 $(document).ready(function() {
-	initMapLocations();
-
 	$('.email-copy').bind('click', function(e) {
 		var oThis = $(e.target);
 		if (oThis.prop('tagName') != 'DIV') oThis = $(e.target).parent('.email-copy');

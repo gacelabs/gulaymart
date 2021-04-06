@@ -380,7 +380,7 @@ class Farm extends MY_Controller {
 			if ($name == 'preview') {
 				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
 			} else {
-				$user_farm = $this->gm_db->get('user_farms', ['id' => $id, 'name' => str_replace('-', ' ', $name)], 'row');
+				$user_farm = $this->gm_db->get('user_farms', ['id' => $id], 'row');
 			}
 			$data = false;
 			// debug($user_farm, 'stop');

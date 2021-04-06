@@ -157,6 +157,7 @@ var refreshStorePreview = function(obj) {
 		$('form.storefront-forms').each(function(i, elem) {
 			$(elem).find('.farm_id').val(obj.user_farms.id);
 		});
-		document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
+		$('#storefrontTab').attr('href', 'store/'+obj.user_farms.id+'/'+obj.user_farms.name.replace(/\s+/g, '-').toLowerCase().trim());
+		// document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
 	}
 }

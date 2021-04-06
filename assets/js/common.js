@@ -55,7 +55,31 @@ $(document).ready(function() {
 
 	if ($('select.chosen').length) $('select.chosen').chosen();
 
-	initMapLocations();
+	if ($('#map-box').length) {
+		oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
+		if (window.location.host.indexOf('local') < 0) {
+			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
+				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
+					navigator.geolocation.getCurrentPosition(function(response) {
+						if (response != undefined) {
+							runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
+							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+							initMapLocations();
+						}
+					}, function () {
+						runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.'});
+					});
+				} else if (oLocation.state == 'denied') {
+					runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
+				}
+				oLocation.onchange = function() {
+					console.log('Location Permission ' + oLocation.state);
+				}
+			});
+		} else {
+			initMapLocations();
+		}
+	}
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
@@ -283,6 +307,27 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					bgColor: 'blue',
 					textColor: 'white',
 				};
+				if (response && (typeof response.callback == 'function')) {
+					oSettings.beforeShow = function () {
+						$('#toast-ok').off('click').on('click', function(e) {
+							if (response && (typeof response.callback == 'string')) {
+								var fn = eval(response.callback);
+								if (typeof fn == 'function') {
+									fn(response.data);
+								}
+							}
+							if (response && (typeof response.callback == 'function')) {
+								response.callback(response.data);
+							}
+							$('.close-jq-toast-single:visible').trigger('click');
+							setTimeout(function() {
+								if (response && (typeof response.redirect == 'string')) {
+									if (response.redirect) window.location = response.redirect;
+								}
+							}, 300);
+						});
+					}
+				}
 				if (response.unclose == true) oSettings.hideAfter = false;
 				$.toast(oSettings);
 			break;
@@ -560,13 +605,7 @@ function loadMap(oLatLong) {
 }
 
 function initMapLocations() {
-	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
-	navigator.geolocation.getCurrentPosition(function(response) {
-		if (response != undefined) {
-			oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude}; 
-		}
-	});
-	// console.log(oLatLong);
+	console.log(oLatLong);
 	savedAddress1 = $('#address_1').val();
 	savedAddress2 = $('#address_2').val();
 	if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {

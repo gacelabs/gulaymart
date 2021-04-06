@@ -1077,7 +1077,7 @@ function document_title($append='', $replace=' ') {
 	$ci =& get_instance();
 	$title = [];
 	foreach ($ci->uri->rsegments as $key => $value) {
-		if ($value != 'index') {
+		if ($value != 'index' AND !is_numeric($value)) {
 			$title[] = ucwords(preg_replace('/[_]/', $replace, trim($value)));
 		}
 	}
@@ -1085,13 +1085,13 @@ function document_title($append='', $replace=' ') {
 }
 
 function str_has_value_echo($search='', $in='', $echo='') {
-	if ((bool)strstr($in, (string)$search)) {
+	if ($in == $search) {
 		echo $echo;
 	}
 }
 
 function str_not_value_echo($search='', $in='', $echo='') {
-	if ((bool)strstr($in, (string)$search) == false) {
+	if ($in != $search) {
 		echo $echo;
 	}
 }
