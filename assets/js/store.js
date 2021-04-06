@@ -8,4 +8,17 @@ $(document).ready(function() {
 		$('#storefront_product_container').find('[id]').addClass('hide');
 		$(id).removeClass('hide');
 	});
+
+
+	$('.sf-navbar-btn').click(function() {
+		$('.sf-navbar-btn').removeClass('active');
+		$('.toggle-container').addClass('hide');
+		$(this).addClass('active');
+		var coName = $(this).attr('container-name');
+		console.log(coName);
+
+		$('#storefront_product_container').find('div'+coName).removeClass('hide');
+
+	});
+
 });

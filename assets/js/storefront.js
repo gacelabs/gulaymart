@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="popover"]').popover();
+
 	$('.custom-item-btn').click(function() {
 		$('.storefront_nav').find('div.custom-item-child').removeClass('active');
 		$('.custom-item-btn').removeClass('active');
@@ -82,6 +85,7 @@ $(document).ready(function() {
 	// farm location toggle
 	$(function() {
 		$('.pick-up-loc').click(function() {
+			console.log($(this).attr('id'));
 			if ($(this).attr('id') == "diff_loc") {
 				$('#location_list').removeClass('hide');
 				$('#location_list').find('input:text[id^="location-input-"]').attr({'required':'required'});

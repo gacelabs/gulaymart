@@ -259,7 +259,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal'],
+					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal', 'farm_location_help_modal'],
 					'js' => [
 						'chosen/new-chosen',
 						'ImageSelect.jquery',
@@ -284,7 +284,7 @@ class Farm extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['../js/DataTables/datatables.min'],
+				'css' => ['../js/DataTables/datatables.min', 'inventory'],
 			],
 			'middle' => [
 				'body_class' => ['farm', 'inventory'],
@@ -420,10 +420,11 @@ class Farm extends MY_Controller {
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
-					'css' => ['storefront', 'storefront-page', 'product-item'],
+					'css' => ['marketplace', 'storefront', 'storefront-page', 'product-item'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'storefront'],
+					'body_class' => ['farm', 'storefront', 'storepage'],
+					'head' => ['marketplace/navbar'],
 					'body' => [
 						'../static/store',
 					],

@@ -1,4 +1,5 @@
 <div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+
 	<?php $this->view('static/mobile_note'); ?>
 	<div class="dash-panel-right-container" id="storefront">
 		<div class="dash-panel-right-canvas">
@@ -38,7 +39,10 @@
 										<?php endif ?>
 									</li>
 									<?php if (isset($data['farms']) AND $data['farms']): ?>
-										<li><button type="submit" class="btn btn-blue normal-radius">Re-create</button></li>
+										<li class="text-right">
+											<a class="text-link btn btn-default normal-radius icon-left" target="_new" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+											<button type="submit" class="btn btn-blue normal-radius">Update</button>
+										</li>
 									<?php else: ?>
 										<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
 									<?php endif ?>
@@ -53,13 +57,26 @@
 									<div class="custom-item-child">
 										<div class="form-group">
 											<label for="farm_name">Farm name</label>
+											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
 											<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>">
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
 										</div>
 										<div class="form-group">
 											<label for="tagline">Tagline</label>
+											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
 											<input type="text" name="user_farms[tagline]" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" value="<?php isset_echo($data['farms'], 'tagline');?>">
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="custom-item-parent">
+									<ul class="spaced-list between custom-item-btn">
+										<li>ABOUT</li>
+										<li><i class="fa fa-angle-right"></i></li>
+									</ul>
+									<div class="custom-item-child">
+										<div class="form-group">
+											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Tell something about your farm.</small>
+											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"><?php isset_echo($data['farms'], 'about');?></textarea>
 										</div>
 									</div>
 								</div>
@@ -95,7 +112,7 @@
 										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
 									<div class="custom-item-child">
-										<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Where to pick up your products?</small>
+										<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">Help</span></small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly">
@@ -133,7 +150,7 @@
 												</div>
 											</div>
 
-											<label>
+											<label class="icon-right">
 												<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="1"<?php str_has_value_echo(1, $farm_loc, ' checked');?>> Enter a different address.
 											</label>
 											<div id="location_list" class="<?php if (!$farm_locations): ?>hide<?php endif ?>">
@@ -220,147 +237,64 @@
 										</div>
 									</div>
 								</div>
-
-								<div class="custom-item-parent">
-									<ul class="spaced-list between custom-item-btn">
-										<li>ABOUT</li>
-										<li><i class="fa fa-angle-right"></i></li>
-									</ul>
-									<div class="custom-item-child">
-										<div class="form-group">
-											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." required="required"><?php isset_echo($data['farms'], 'about');?></textarea>
-										</div>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-
-					<div class="dash-panel theme">
-						<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
-							<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id');?>">
-							<div class="dash-panel-top">
-								<h3>Storefront Contents</h3>
-								<ul class="spaced-list between" style="margin-top: 15px;">
-									<li class="text-sm">
-										<?php if (isset($data['farm_contents']) AND $data['farm_contents']): ?>
-											<span class="color-grey">
-												<i class="fa fa-calendar"></i> UPDATED
-											</span><br><?php echo date('F j, Y', strtotime($data['farm_contents']['updated']));?>
-										<?php else: ?>
-											<span class="color-grey">
-												<i class="fa fa-calendar"></i> TODAY
-											</span><br><?php echo date('F j, Y');?>
-										<?php endif ?>
-									</li>
-									<?php if (isset($data['farm_contents']) AND $data['farm_contents']): ?>
-										<li><button type="submit" class="btn btn-blue normal-radius">Re-Create</button></li>
-									<?php else: ?>
-										<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
-									<?php endif ?>
-								</ul>
-							</div>
-							<div class="dash-panel-middle zero-gaps storefront_nav">
-								<div class="custom-item-parent">
-									<ul class="spaced-list between custom-item-btn">
-										<li>PRODUCTS</li>
-										<li><i class="fa fa-angle-right"></i></li>
-									</ul>
-									<?php
-									$selected_products = [];
-									if (isset($data['farm_contents']) AND isset($data['farm_contents']['products'])) {
-										$selected_products = $data['farm_contents']['products'];
-									}
-									?>
-									<div class="custom-item-child">
-										<div class="form-group">
-											<?php if (isset($data['products']) AND $data['products']): ?>
-												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> What you want to sell </small>
-												<label><input type="checkbox" class="select-all"<?php str_has_value_echo(count($selected_products), count($data['products']), ' checked');?>>Select All</label>
-												<select name="user_farm_contents[products][]" id="products_section" class="form-control chosen" multiple="multiple" required="required">
-													<?php foreach ($data['products'] as $key => $product): ?>
-														<?php 
-														$src = 'https://place-hold.it/50x50.png?text=No+Image&fontsize=7';
-														if (isset($product['photos']) AND $product['photos']) {
-															$src = base_url($product['photos']['main']['url_path']);
-														}
-														?>
-														<option<?php in_array_echo($product['id'], $selected_products, ' selected');?> value="<?php echo $product['id'];?>" data-img-src="<?php echo $src;?>"><?php echo $product['name'];?> | <?php echo $product['price'];?></option>
-													<?php endforeach ?>
-												</select>
-											<?php else: ?>
-												<p><a href="farm/new-veggy">Go here to add your products</a></p>
-											<?php endif ?>
-										</div>
-									</div>
-								</div>
-
-								<div class="custom-item-parent">
-									<ul class="spaced-list between custom-item-btn">
-										<li>STORIES</li>
-										<li><i class="fa fa-angle-right"></i></li>
-									</ul>
-									<div class="custom-item-child">
-										<div class="form-group">
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Story Title: </small>
-											<input type="text" name="user_farm_contents[story_title]" id="story_title" class="input-keyup form-control" placeholder="Title" required="required" value="<?php isset_echo($data['farm_contents'], 'story_title');?>">
-										</div>
-										<div class="form-group">
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write a story: </small>
-											<textarea type="text" name="user_farm_contents[story_content]" class="form-control" placeholder="What keeps you going?" required="required"><?php isset_echo($data['farm_contents'], 'story_content');?></textarea>
-										</div>
-									</div>
-								</div>
-
-								<div class="custom-item-parent">
-									<ul class="spaced-list between custom-item-btn">
-										<li>GALLERY</li>
-										<li><i class="fa fa-angle-right"></i></li>
-									</ul>
-									<?php
-									$selected_galleries = [];
-									if (isset($data['farm_contents']) AND isset($data['farm_contents']['galleries'])) {
-										$selected_galleries = $data['farm_contents']['galleries'];
-									}
-									?>
-									<div class="custom-item-child">
-										<div class="form-group">
-											<?php if (isset($data['galleries']) AND $data['galleries']): ?>
-												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Share your great photos </small>
-												<label><input type="checkbox" class="select-all"<?php str_has_value_echo(count($selected_galleries), count($data['galleries']), ' checked');?>>Select All</label>
-												<select name="user_farm_contents[galleries][]" class="form-control chosen" multiple="multiple" required="required">
-													<?php foreach ($data['galleries'] as $key => $gallery): ?>
-														<option<?php in_array_echo($gallery['id'], $selected_galleries, ' selected');?> value="<?php echo $gallery['id'];?>" data-img-src="<?php echo base_url($gallery['url_path']);?>"><?php echo $gallery['name'];?></option>
-													<?php endforeach ?>
-												</select>
-											<?php else: ?>
-												<ul class="spaced-list between">
-													<li><label>Add photos</label></li>
-													<li class="text-link" data-toggle="modal" data-target="#media_modal">Media</li>
-												</ul>
-												<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: </small>
-											<?php endif ?>
-										</div>
-									</div>
-								</div>
-
-								<div class="custom-item-parent">
-									<ul class="spaced-list between custom-item-btn">
-										<li>ABOUT</li>
-										<li><i class="fa fa-angle-right"></i></li>
-									</ul>
-									<div class="custom-item-child">
-										<div class="form-group">
-											<textarea type="text" name="user_farm_contents[about]" class="form-control" placeholder="About your farm." required="required"><?php isset_echo($data['farm_contents'], 'about');?></textarea>
-										</div>
-									</div>
-								</div>
 							</div>
 						</form>
 					</div>
 				</div>
 
-				<iframe id="preview-store-page" class="col-lg-7 col-md-8 col-sm-12 hidden-xs" src="store/0/preview" style="position: absolute; height: 120%; border: none; width: 57%;"></iframe>
+				<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs">
+					<div class="cover_image" id="storefront_page_container">
+						<div class="storefront-top">
+							<div class="storefront-img-bg" style="background-image: url(<?php echo(!empty($data['farms']['cover_pic']) ? $data['farms']['cover_pic'] : "assets/images/storefront-top.jpg"); ?>);">
+								<div id="farm_identity">
+									<ul class="grid-list half">
+										<li class="text-left">
+											<h1 class="farm_name"><?php echo(!empty($data['farms']['name']) ? $data['farms']['name'] : "The Humble Farm"); ?></h1>
+											<h4 class="tagline"><?php echo(!empty($data['farms']['tagline']) ? $data['farms']['tagline'] : "Your friendly neighborhood farmer"); ?></h4>
+										</li>
+										<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo(!empty($data['farms']['profile_pic']) ? $data['farms']['profile_pic'] : "assets/images/noavatar.png"); ?>);"></div></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						
+						<div class="storefront-middle">
+							<ul class="spaced-list around" id="storefront_navbar">
+								<li class="sf-navbar-btn active">PRODUCTS</a></li>
+								<li class="sf-navbar-btn">STORIES</a></li>
+								<li class="sf-navbar-btn">GALLERY</a></li>
+								<li class="sf-navbar-btn">ABOUT</a></li>
+							</ul>
+
+							<div id="storefront_product_container">
+								<img src="assets/images/storefront-sample-listing.png" class="img-responsive" style="width: 100%;">
+								<?php if (!empty($data['farms']['banner'])) : ?>
+								<img src="assets/images/banner/<?php echo $data['farms']['banner']; ?>" class="banner_section img-responsive" style="width: 100%;">
+								<?php else: ?>
+								<img src="assets/images/banner/steps.png" class="banner_section img-responsive" style="width: 100%;">
+								<?php endif; ?>
+							</div>
+						</div>
+
+						<div class="storefront-footer">
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+									<h4 class="farm_name" style="margin-top: 0;"><?php echo(!empty($data['farms']['name']) ? $data['farms']['name'] : "The Humble Farm"); ?></h4>
+									<p class="zero-gaps" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+									<h4 style="color: #fff;margin: 0 0 5px 0;">Connect with us!</h4>
+									<ul class="inline-list social_acct">
+										<li><h4 class="zero-gaps"><i class="fa fa-facebook-square"></i></h4></li>
+										<li><h4 class="zero-gaps"><i class="fa fa-instagram"></i></h4></li>
+										<li><h4 class="zero-gaps"><i class="fa fa-youtube-play"></i></h4></li>
+										<li><h4 class="zero-gaps"><i class="fa fa-comment-o"></i></h4></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			<?php endif ?>
 		</div>
 	</div>

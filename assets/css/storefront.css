@@ -53,3 +53,19 @@
 .active-result {
 	color: #333 !important;
 }
+#preview-store-page {
+	width: 100%;
+}
+
+@media (max-width: 991px) {
+	body.storefront #dash_panel_right {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+@media (max-width: 767px) {
+	body.storefront #dash_panel_right {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}

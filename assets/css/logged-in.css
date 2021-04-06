@@ -87,7 +87,7 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 	margin-left: 25px;
 }
 #dash_panel_right {
-	padding: 20px 5px;
+	padding: 20px 0;
 }
 .dash-panel-top {
 	padding: 15px !important;
@@ -112,4 +112,10 @@ body.logged-in .navbar-btn-list .nav-avatar-body {
 }
 .dash-panel-middle, .dash-panel-footer {
 	padding: 15px;
+}
+@media (max-width: 991px) {
+	#dash_panel_right {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 }
