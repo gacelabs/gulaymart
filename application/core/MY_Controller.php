@@ -10,10 +10,12 @@ class MY_Controller extends CI_Controller {
 	public $profile = FALSE;
 	public $action = 'index';
 	public $referrer = FALSE;
+	public $latlng = ['lat' => 14.628538456333938, 'lng' => 120.97507784318562];
 
 	public function __construct()
 	{
 		parent::__construct();
+		// debug($this->latlng, 'stop');
 		$referrer = $this->session->userdata('referrer');
 		if (empty($referrer)) {
 			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());

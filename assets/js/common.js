@@ -55,8 +55,8 @@ $(document).ready(function() {
 
 	if ($('select.chosen').length) $('select.chosen').chosen();
 
+	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
-		oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 		if (window.location.host.indexOf('local') < 0) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
 				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
@@ -64,6 +64,7 @@ $(document).ready(function() {
 						if (response != undefined) {
 							runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
 							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+							simpleAjax('api/save_latlng', oLatLong); /*save current latitude and longitude of user*/
 							initMapLocations();
 						}
 					}, function () {

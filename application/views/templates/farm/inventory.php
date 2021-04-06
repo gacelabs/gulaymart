@@ -33,8 +33,8 @@
 									<?php foreach ($product as $index => $value): ?>
 										<td width="<?php echo strlen(fix_title($value))*15;?>px"<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
 											<?php if ($index == 'id'): ?>
-												<a href="farm/edit/<?php echo $value;?>">Edit</a>
-												<a href="farm/remove/<?php echo $value;?>" data-ajax="1">Remove</a>
+												<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a>
+												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
 											<?php elseif ($index == 'updated'): ?>
 												<?php echo date('M. j, Y', strtotime($value));?>
 											<?php else: ?>

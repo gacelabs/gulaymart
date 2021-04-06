@@ -234,12 +234,10 @@ class Products {
 	public function gulay_assemble($product=false, $data_only=true, $except_field=false)
 	{
 		if ($product) {
-			$product['price'] = '&#8369;'.$product['price'];
-			$farm = $this->class->gm_db->get('user_farms', [
-				'id' => $product['farm_id'], 'user_id' => $product['user_id']
-			], 'row');
-			$product['farm'] = false;
-			if ($farm) $product['farm'] = $farm['name'];
+			// $product['price'] = '&#8369;'.$product['price'];
+			// $farm = $this->class->gm_db->get('user_farms', ['user_id' => $product['user_id']]);
+			// $product['farm'] = false;
+			// if ($farm) $product['farm'] = $farm;
 
 			$product['category'] = false;
 			$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
@@ -267,6 +265,16 @@ class Products {
 				}
 			}
 
+			$products_location = $this->class->gm_db->get('products_location', ['product_id' => $product['id']]);
+			$product['farms'] = false;
+			if ($products_location) {
+				foreach ($products_location as $key => $location) {
+					$farm_location = $this->class->gm_db->get('user_farm_locations', ['farm_id' => $location['farm_id']], 'row');
+					$product['farms'][] = $location;
+				}
+				// debug($product, 'stop');
+			}
+
 			$updated = $product['updated'];
 			$product['activity'] = $product['activity'] ? 'Published' : 'Draft';
 
@@ -292,15 +300,12 @@ class Products {
 
 			if ($data_only) {
 				unset($product['user_id']);
-				unset($product['farm_id']);
-				unset($product['delivery_option_id']);
 				unset($product['description']);
-				unset($product['old_price']);
-				unset($product['procedure']);
+				unset($product['inclusion']);
 				unset($product['category_id']);
 				unset($product['subcategory_id']);
 				unset($product['location_id']);
-				unset($product['farm']);
+				unset($product['farms']);
 				unset($product['photos']);
 				unset($product['added']);
 				unset($product['updated']);

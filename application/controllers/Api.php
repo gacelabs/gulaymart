@@ -159,4 +159,18 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'Unable to set location!', $post);
 	}
 
+	public function save_latlng()
+	{
+		$saved = 'users geolocation not saved';
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		if ($post) {
+			if ($this->accounts->has_session) {
+				$user_id = $this->accounts->profile['id'];
+				$this->gm_db->save('users', $post, ['id' => $user_id]);
+				$saved = 'users geolocation saved';
+			}
+		}
+		echo $saved; exit();
+	}
+
 }

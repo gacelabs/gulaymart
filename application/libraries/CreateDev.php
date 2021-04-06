@@ -490,7 +490,9 @@ class CreateDev {
 		$this->class->dbforge->add_field([
 			'user_id int NOT NULL',
 			'product_id int NOT NULL',
-			'location_id int NOT NULL'
+			'location_id int NOT NULL',
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$table_data = $this->class->dbforge->create_table('products_location', false, [
 			'ENGINE' => 'InnoDB',

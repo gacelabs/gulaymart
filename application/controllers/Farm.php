@@ -282,6 +282,7 @@ class Farm extends MY_Controller {
 
 	public function inventory()
 	{
+		// debug($this->products->get_in(), 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['../js/DataTables/datatables.min', 'inventory'],
@@ -303,10 +304,10 @@ class Farm extends MY_Controller {
 		]);
 	}
 
-	public function edit($id=0)
+	public function save_veggy($id=0, $name='')
 	{
 		$post = $this->input->post();
-		if ($post) {
+		if ($post AND $id > 0) {
 			if (check_data_values($post)) {
 				// debug($post, $this->accounts->profile, 'stop');
 				$products = $post['products'];
@@ -315,14 +316,33 @@ class Farm extends MY_Controller {
 					if (isset($products['location_id']) AND $this->products->save_location(['location_id' => $products['location_id']], $where)) {
 						$post['products']['id'] = $id;
 					}
-					$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				}
+				if (isset($post['products_location'])) {
+					if (isset($post['products_location']['farm_id'])) {
+						$this->gm_db->remove('products_location', ['product_id' => $id]);
+						$farms = $post['products_location']['farm_id'];
+						foreach ($farms as $key => $farm_id) {
+							$location = [
+								'product_id' => $id,
+								'farm_id' => $farm_id,
+								'measurement' => $post['products_location']['measurement'][$farm_id],
+								'price' => $post['products_location']['price'][$farm_id],
+								'stocks' => $post['products_location']['stocks'][$farm_id],
+							];
+							$this->gm_db->new('products_location', $location);
+						}
+					}
+				}
+				$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
-			$product = $this->products->get(['id' => $id], false, false, true);
-			// debug($this->accounts->profile, $product, 'stop');
+			$product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
+			// debug($product, 'stop');
 			$this->render_page([
+				'top' => [
+					'css' => ['../js/chosen/chosen'],
+				],
 				'middle' => [
 					'body_class' => ['farm', 'new-veggy'],
 					'head' => ['dashboard/nav_top'],
@@ -332,7 +352,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['farm'],
+					'js' => ['chosen/new-chosen', 'farm'],
 				],
 				'data' => [
 					'product' => $product
@@ -341,16 +361,16 @@ class Farm extends MY_Controller {
 		}
 	}
 
-	public function remove($id=0, $remove=0)
+	public function remove_veggy($id=0, $name='')
 	{
 		$post = $this->input->post();
 		if ($post) {
 			if (check_data_values($post)) {
 				// debug($post, 'stop');
-				$this->products->save(['activity' => 0], $post);
+				$this->products->save(['activity' => 2], $post);
 				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
 			}
-			$this->set_response('error', 'Unable to save product', $post);
+			$this->set_response('error', remove_multi_space('Unable to save '.$name.' product'), $post);
 		} else {
 			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
 		}

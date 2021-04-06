@@ -1,11 +1,18 @@
 $(document).ready(function() {
-
+	$('[js-event="add-set"]').on('click', function() {
+		var uiParent = $(this).parents('[js-element="address-panel"]').first();
+		if ($(this).is(':checked')) {
+			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
+		} else {
+			uiParent.next('[js-element="products-location-set"]').addClass('hide');
+		}
+	});
 });
 
 var oRemoveAjax = false;
 var removeItem = function(id) {
 	var oSettings = {
-		url: 'farm/remove',
+		url: 'farm/remove_veggy',
 		type: 'post',
 		data: {id: id},
 		dataType: 'jsonp',

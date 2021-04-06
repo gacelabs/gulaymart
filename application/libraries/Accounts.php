@@ -210,6 +210,12 @@ class Accounts {
 			}
 			$request['device_id'] = device_id();
 
+			if (empty($request['lat']) AND empty($request['lng'])) {
+				// debug($this->class->latlng, $request, 'stop');
+				$request['lat'] = $this->class->latlng['lat'];
+				$request['lng'] = $this->class->latlng['lng'];
+			}
+
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			// debug($this->profile, 'stop');

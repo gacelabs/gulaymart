@@ -12,7 +12,7 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
-		// debug($this->products->get_by_category_pages(), 'stop');
+		debug($this->products->get_in(true, 'location_id'), 'stop');
 		$this->render_page([
 			'top' => [
 				'metas' => [
