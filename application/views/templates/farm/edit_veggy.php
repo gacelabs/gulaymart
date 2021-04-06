@@ -41,7 +41,7 @@
 														<p class="zero-gaps"><small class="address_2"><?php echo $farm['address_2'];?></small></p>
 														<label class="switch">
 															<?php 
-															$checked = ''; $measure = $price = $stocks = '';
+															$checked = $measure = $price = $stocks = '';
 															if ($data['product']['farms']) {
 																foreach ($data['product']['farms'] as $farm_loc) {
 																	if ($farm_loc['farm_id'] == $farm['farm_id']) {
