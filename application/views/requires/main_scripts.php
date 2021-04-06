@@ -85,7 +85,7 @@
 					}
 				});
 				oSettings.columnDefs.push(currency);
-				console.log(blanks, currency, oSettings);
+				// console.log(blanks, currency, oSettings);
 				$(elem).DataTable(oSettings);
 			});
 		}
