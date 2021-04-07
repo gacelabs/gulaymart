@@ -48,7 +48,7 @@ class MY_Controller extends CI_Controller {
 		$this->set_global_values();
 		$this->device_id = device_id();
 		// debug($this->products->get(), 'stop');
-		// debug($this->galleries, 'stop');
+		// debug($this, 'stop');
 		
 		/*check account logins here*/
 		if ($this->accounts->has_session) {

@@ -34,10 +34,20 @@ class CreateDev {
 				'constraint' => '32',
 				'null' => TRUE,
 			],
-			're_password' => [
+			'lat' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
 				'null' => TRUE,
+			],
+			'lng' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => NULL,
+			],
+			're_password' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => NULL,
 			],
 			'is_admin' => [
 				'type' => 'TINYINT',
@@ -46,6 +56,11 @@ class CreateDev {
 				'default' => '0',
 			],
 			'is_profile_complete' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+			],
+			'is_agreed_terms' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
 				'default' => '0',
@@ -76,10 +91,51 @@ class CreateDev {
 				'constraint' => '10',
 			],
 			'name text DEFAULT NULL',
-			'lat varchar(100) DEFAULT NULL',
-			'lng varchar(100) DEFAULT NULL',
-			"address_1 VARCHAR(255) NULL DEFAULT NULL",
-			"address_2 VARCHAR(255) NULL DEFAULT NULL",
+			'tagline' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'banner' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'cover_pic' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'profile_pic' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'about' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'messenger' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'youtube' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'instagram' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'facebook' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
@@ -101,6 +157,11 @@ class CreateDev {
 	{
 		$this->class->load->dbforge();
 		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => TRUE
+			],
 			'farm_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
@@ -123,40 +184,9 @@ class CreateDev {
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('farm_id');
 		$table_data = $this->class->dbforge->create_table('user_farm_locations', FALSE, [
-			'ENGINE' => 'InnoDB',
-			'DEFAULT CHARSET' => 'utf8'
-		]);
-		return $table_data;
-	}
-
-	public function create_user_farm_contents_table()
-	{
-		$this->class->load->dbforge();
-		$this->class->dbforge->add_field([
-			'farm_id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-			],
-			'products longtext',
-			"story_title VARCHAR(50) NULL DEFAULT NULL",
-			'story_content' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true
-			],
-			'galleries longtext',
-			'about' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true
-			],
-			'added datetime DEFAULT CURRENT_TIMESTAMP',
-			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-		]);
-		$this->class->dbforge->add_key('farm_id');
-		$table_data = $this->class->dbforge->create_table('user_farm_contents', FALSE, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -209,7 +239,6 @@ class CreateDev {
 				'default' => '0',
 			],
 			'name' => ['type' => 'TEXT'],
-			'file_path' => ['type' => 'TEXT'],
 			'url_path' => ['type' => 'TEXT'],
 			'status' => [
 				'type' => 'TINYINT',
@@ -332,28 +361,9 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'farm_id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-			],
 			'name' => ['type' => 'TINYTEXT', 'null' => true],
 			'description' => ['type' => 'TEXT', 'null' => true],
-			'procedure' => ['type' => 'TEXT', 'null' => true],
-			'stocks' => [
-				'type' => 'INT',
-				'constraint' => '10',
-			],
-			'measurement' => [
-				'type' => 'VARCHAR',
-				'constraint' => '10',
-				'default' => 'kg',
-			],
-			"price decimal(10,2) NOT NULL DEFAULT '0.00'",
-			"old_price decimal(10,2) NOT NULL DEFAULT '0.00'",
-			'delivery_option_id' => [
-				'type' => 'SMALLINT',
-				'default' => '0',
-			],
+			'inclusion' => ['type' => 'TEXT', 'null' => true],
 			'activity' => [
 				'type' => 'SMALLINT',
 				'default' => '0',
@@ -366,21 +376,14 @@ class CreateDev {
 				'type' => 'SMALLINT',
 				'default' => '0',
 			],
-			'location_id' => [
-				'type' => 'INT',
-				'default' => '0',
-			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
-		$this->class->dbforge->add_key('farm_id');
-		$this->class->dbforge->add_key('delivery_option_id');
 		$this->class->dbforge->add_key('activity');
 		$this->class->dbforge->add_key('category_id');
 		$this->class->dbforge->add_key('subcategory_id');
-		$this->class->dbforge->add_key('location_id');
 		$table_data = $this->class->dbforge->create_table('products', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -488,12 +491,27 @@ class CreateDev {
 		$this->class->load->dbforge();
 		sleep(3);
 		$this->class->dbforge->add_field([
-			'user_id int NOT NULL',
-			'product_id int NOT NULL',
-			'location_id int NOT NULL',
-			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
-			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
+			'farm_location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
+			"price decimal(10,2) NOT NULL DEFAULT '0.00'",
+			'measurement' => [
+				'type' => 'VARCHAR',
+				'constraint' => '10',
+				'default' => 'kg',
+			],
+			'stocks' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
 		]);
+		$this->class->dbforge->add_key('product_id');
+		$this->class->dbforge->add_key('farm_location_id');
 		$table_data = $this->class->dbforge->create_table('products_location', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -542,11 +560,33 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
-			"product_id int NOT NULL DEFAULT '0'",
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
 			"name tinytext",
 			"description text",
-			"path longtext",
-			"is_main tinyint(1) NOT NULL DEFAULT '0'",
+			'is_main' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'url_path' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('product_id');
@@ -568,10 +608,20 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'attribute' => [
+				'type' => 'TEXT',
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('product_id');
 		$table_data = $this->class->dbforge->create_table('products_attribute', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'

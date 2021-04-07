@@ -155,38 +155,62 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme hide score-2">
+				<div class="dash-panel theme score-2">
 					<div class="dash-panel-middle">
 						<div style="margin-bottom:15px;">
-							<label>Pricing</label>
+							<label>Product Location Pricing</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
-								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
-										<input type="text" class="form-control" name="products[price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" required="required">
-									</div>
-								</div>
-								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-									<div class="form-group">
-										<select type="text" class="form-control" name="products[measurement]" required="required">
-											<?php if ($this->measurements): ?>
-												<?php foreach ($this->measurements as $key => $measurement): ?>
-													<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
-												<?php endforeach ?>
-											<?php endif ?>
-										</select>
-									</div>
-								</div>
-								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-									<div class="input-group">
-										<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
-										<input type="number" maxlength="3" class="form-control" name="products[stocks]" required="required">
-									</div>
+								<div class="col-lg-12">
+									<?php if ($this->farm_locations): ?>
+										<?php foreach ($this->farm_locations as $farm): ?>
+											<div class="row" id="farmlocation-<?php echo $farm['farm_id'];?>">
+												<div class="col-lg-8 text-left">
+													<p class="zero-gaps address_1"><?php echo $farm['address_1'];?></p>
+													<p class="zero-gaps"><small class="address_2"><?php echo $farm['address_2'];?></small></p>
+												</div>	
+												<div class="col-lg-4 text-right">
+													<label class="switch">
+														<input type="checkbox" name="products_location[farm_id][]" required="required" value="<?php echo $farm['farm_id'];?>" js-event="new-set" />
+														<span class="slider round"></span>
+													</label>
+												</div>
+											</div>
+											<div class="row hide" js-element="pricing-panel">
+												<br>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-group">
+														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
+														<input type="text" class="form-control" name="products_location[price][<?php echo $farm['farm_id'];?>]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" required="required">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="form-group">
+														<select type="text" class="form-control" name="products_location[measurement][<?php echo $farm['farm_id'];?>]" required="required">
+															<?php if ($this->measurements): ?>
+																<?php foreach ($this->measurements as $key => $measurement): ?>
+																	<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
+																<?php endforeach ?>
+															<?php endif ?>
+														</select>
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-group">
+														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+														<input type="number" maxlength="3" class="form-control" name="products_location[stocks][<?php echo $farm['farm_id'];?>]" required="required">
+													</div>
+												</div>
+											</div>
+											<hr>
+										<?php endforeach ?>
+									<?php else: ?>
+										<p>No Farms yet.</p>
+									<?php endif; ?>
 								</div>
 							</div>
 							<div id="price_btn_container" style="text-align:right;">

@@ -10,7 +10,7 @@
 			}
 		?>
 		
-		<?php $this->view('requires/main_scripts'); ?>
+		<?php $this->view('requires/main_scripts', ['data'=>$data]); ?>
 
 		<?php
 			foreach ($bottom['js'] as $value) {
@@ -26,21 +26,21 @@
 		<?php
 			foreach ($bottom['modals'] as $view => $value) {
 				if (is_array($value)) {
-					$this->view('modals/'.$view.'');
+					$this->view('modals/'.$view, ['data'=>$data]);
 				} else {
-					$this->view('modals/'.$value.'');
+					$this->view('modals/'.$value, ['data'=>$data]);
 				}
 			}
 		?>
 
 		<?php
 			if (!$current_profile) {
-				$this->view('modals/login_modal');
+				$this->view('modals/login_modal', ['data'=>$data]);
 			}
 		?>
 
 		<?php if ($this->action != 'store'): ?>
-			<?php $this->view('requires/realtime_scripts'); ?>
+			<?php $this->view('requires/realtime_scripts', ['data'=>$data]); ?>
 		<?php endif ?>
 		
 		<script type="text/javascript" src="<?php echo base_url('assets/js/main.js'); ?>"></script>

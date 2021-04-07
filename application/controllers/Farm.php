@@ -337,7 +337,8 @@ class Farm extends MY_Controller {
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
-			$product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
+			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
+			$product = $this->products->products_by_location(['product_id' => $id], true);
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [
@@ -352,7 +353,12 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['chosen/new-chosen', 'farm'],
+					'js' => [
+						'chosen/new-chosen',
+						'jquery.inputmask.min',
+						'inputmask.binding',
+						'farm',
+					],
 				],
 				'data' => [
 					'product' => $product

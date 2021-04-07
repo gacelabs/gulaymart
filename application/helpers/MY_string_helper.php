@@ -334,19 +334,29 @@ function fix_title($title=FALSE, $replace=' ') {
 	return '';
 }
 
-function nice_url($title=FALSE) {
+function nice_url($title=FALSE, $return=false) {
 	if ($title) {
-		echo strtolower(preg_replace('/\s+/', '-', $title));
+		$echo = strtolower(preg_replace('/\s+/', '-', $title));
 	} else {
-		echo '';
+		$echo = '';
+	}
+	if ($return == false) {
+		echo $echo;
+	} else {
+		return $echo;
 	}
 }
 
-function remove_multi_space($value=FALSE) {
+function remove_multi_space($value=FALSE, $return=false) {
 	if ($value) {
-		echo preg_replace('/\s+/', ' ', $value);
+		$echo = preg_replace('/\s+/', ' ', $value);
 	} else {
-		echo $value;
+		$echo = $value;
+	}
+	if ($return == false) {
+		echo $echo;
+	} else {
+		return $echo;
 	}
 }
 
@@ -1152,12 +1162,68 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			$distance = $elements['distance']['text'];
 			$duration = $elements['duration']['text'];
 			return [
-				'distance' => str_replace([' km',' m'], ['km','m'], $distance),
-				'duration' => str_replace(['s'], [''], str_replace([' hour',' min'], ['h','m'], $duration)),
+				'distance' => $distance,
+				'duration' => $duration,
 			];
 		}
 	}
 	return ['distance' => false, 'duration' => false];
+}
+
+function nearby_farms($data=false)
+{
+	$farms = false;
+	if ($data) {
+		$ci =& get_instance();
+		/*$SQL = "SELECT ufl.farm_id, ufl.lat, ufl.lng, 
+		(
+			6371 * #kilometers
+			#3959 * #miles
+			acos(cos(radians(".$data['lat'].")) * 
+			cos(radians(ufl.lat)) * 
+			cos(radians(ufl.lng) - 
+			radians(".$data['lng'].")) + 
+			sin(radians(".$data['lat'].")) * 
+			sin(radians(ufl.lat)))
+		) AS distance 
+		FROM user_farm_locations ufl
+		HAVING distance < ".KM_DISTANCE_TO_USER." 
+		ORDER BY distance
+		;";
+		$results = $ci->gm_db->query($SQL);*/
+		$results = $ci->gm_db->query('SELECT ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		// debug($results, 'stop');
+		if ($results) {
+			$farms = [];
+			foreach ($results as $key => $row) {
+				$driving_distance = get_driving_distance([
+					['lat' => $data['lat'], 'lng' => $data['lng']],
+					['lat' => $row['lat'], 'lng' => $row['lng']],
+				]);
+				// debug($driving_distance['distance'], 'stop');
+				if ($driving_distance['distance'] AND $driving_distance['duration']) {
+					$distance = (float)$driving_distance['distance'];
+					if ($distance < KM_DISTANCE_TO_USER) {
+						$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+						if ($farm) {
+							$user = $ci->gm_db->get('user_profiles', ['user_id' => $farm['user_id']], 'row');
+							$farm['address'] = $row['address_2'];
+							$farm['username'] = '';
+							if ($user) {
+								$farm['username'] = remove_multi_space($user['firstname'].' '.$user['lastname'], true);
+							}
+							$farm['distance'] = round($driving_distance['distance'], 2).' km';
+							$farm['duration'] = $driving_distance['duration'];
+							$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+							$farms[] = $farm;
+						}
+					}
+				}
+			}
+		}
+	}
+	// debug($farms, 'stop');
+	return $farms;
 }
 
 function curl_add_booking($data=false)

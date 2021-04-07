@@ -7,6 +7,14 @@ $(document).ready(function() {
 			uiParent.next('[js-element="products-location-set"]').addClass('hide');
 		}
 	});
+	$('[js-event="new-set"]').on('click', function() {
+		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
+		if ($(this).is(':checked')) {
+			uiParent.next('[js-element="pricing-panel"]').removeClass('hide');
+		} else {
+			uiParent.next('[js-element="pricing-panel"]').addClass('hide');
+		}
+	});
 });
 
 var oRemoveAjax = false;

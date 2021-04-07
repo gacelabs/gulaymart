@@ -42,15 +42,13 @@
 														<label class="switch">
 															<?php 
 															$checked = $measure = $price = $stocks = '';
-															if ($data['product']['farms']) {
-																foreach ($data['product']['farms'] as $farm_loc) {
-																	if ($farm_loc['farm_id'] == $farm['farm_id']) {
-																		$checked = ' checked';
-																		$measure = $farm_loc['measurement'];
-																		$price = $farm_loc['price'];
-																		$stocks = $farm_loc['stocks'];
-																		break;
-																	}
+															if ($data['product']['farm']) {
+																$farm_loc = $data['product']['farm'];
+																if ($farm_loc['id'] == $farm['farm_id']) {
+																	$checked = ' checked';
+																	$measure = $data['product']['measurement'];
+																	$price = $data['product']['price'];
+																	$stocks = $data['product']['stocks'];
 																}
 															}
 															?>
@@ -69,7 +67,7 @@
 															<?php endif ?>
 														</select>
 														<div class="input-group">
-															<input type="text" name="products_location[price][<?php echo $farm['farm_id'];?>]" placeholder="Price" required="required" value="<?php echo $price;?>">
+															<input type="text" name="products_location[price][<?php echo $farm['farm_id'];?>]" placeholder="Price" required="required" value="<?php echo $price;?>" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'">
 															<input type="number" name="products_location[stocks][<?php echo $farm['farm_id'];?>]" placeholder="Stocks" required="required" value="<?php echo $stocks;?>">
 														</div>
 													</div>

@@ -179,7 +179,7 @@ class Products {
 				'all' => $all,
 				'categories' => $categories,
 			];
-			// debug($products, 'stop');
+			debug($products, 'stop');
 			return $products;
 		}
 	}
@@ -325,5 +325,75 @@ class Products {
 			// debug($product, 'stop');
 		}
 		return $product;
+	}
+
+	public function products_by_location($where=true, $row=false, $limit=false)
+	{
+		if ($where != false) {
+			if (!is_bool($limit) AND is_numeric($limit)) {
+				$this->class->db->limit($limit);
+			}
+			if (is_bool($where) AND $where == true) {
+				$data = $this->class->db->get_where('products_location');
+			} elseif (is_array($where) OR is_string($where)) {
+				$data = $this->class->db->get_where('products_location', $where);
+			}
+			$results = false;
+			if (isset($data) AND $data->num_rows()) {
+				$products_location = $data->result_array();
+				foreach ($products_location as $key => $location) {
+					$product = $this->class->gm_db->get('products', ['id' => $location['product_id'], 'activity' => 1], 'row');
+					if ($product) {
+						$added = $product['added'];
+						$updated = $product['updated'];
+						unset($product['added']); unset($product['updated']);
+
+						$product['category'] = false;
+						$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+						if ($category) $product['category'] = $category['label'];
+
+						$product['subcategory'] = false;
+						$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+						if ($subcategory) {
+							$product['subcategory'] = $subcategory['label'];
+						}
+
+						$product['price'] = $location['price'];
+						$product['measurement'] = $location['measurement'];
+						$product['stocks'] = $location['stocks'];
+
+						$farm = $this->class->gm_db->get('user_farms', ['id' => $location['farm_id']], 'row');
+						$product['farm'] = $farm;
+
+						$farm_location = $this->class->gm_db->get('user_farm_locations', ['farm_id' => $location['farm_id']], 'row');
+						$product['latlng'] = ['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']];
+
+						$photos = $this->class->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
+						$product['photos'] = false;
+						if ($photos) {
+							$product['photos'] = [];
+							foreach ($photos as $key => $photo) {
+								if ($photo['is_main']) {
+									$product['photos']['main'] = $photo;
+									break;
+								}
+							}
+							foreach ($photos as $key => $photo) {
+								if (!$photo['is_main']) {
+									$product['photos']['other'][] = $photo;
+								}
+							}
+						}
+						$product['added'] = $added;
+						$product['updated'] = $updated;
+						$results[] = $product;
+					}
+				}
+				return ($row AND isset($results[0])) ? $results[0] : $results;
+			}
+			// debug($results, 'stop');
+		}
+
+		return false;
 	}
 }

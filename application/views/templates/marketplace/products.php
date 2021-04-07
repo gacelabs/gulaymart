@@ -4,7 +4,10 @@
 			<?php
 				// debug($data['products'], 'stop');
 				if ($data['products']) {
-					$all = $data['products']['all'];
+					foreach ($data['products'] as $key => $product) {
+						$this->view('looping/product_item', ['data'=>$product, 'id'=>$product['category_id']]);
+					}
+					/*$all = $data['products']['all'];
 					foreach ($all['data_page'] as $key => $product) {
 						$this->view('looping/product_item', ['data'=>$product, 'id'=>'all']);
 					}
@@ -14,13 +17,20 @@
 						foreach ($category as $key => $product) {
 							$this->view('looping/product_item', ['data'=>$product, 'id'=>$category_id]);
 						}
-					}
+					}*/
 				}
 				// debug($current_profile);
 			?>
 		</div>
+		<?php if ($data['products']): ?>
+			<?php foreach ($data['products'] as $key => $product): ?>
+				<div class="btn-generic-container"<?php if ($key > 0): ?> style="display: none;"<?php endif ?>>
+					<button value="0" data-selector='data-category="<?php echo $product['category_id'];?>"' data-category="loadmore-<?php echo $product['category_id'];?>">More Veggies</button>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
 		<?php
-		if ($data['products']) {
+		/*if ($data['products']) {
 			$all = $data['products']['all'];
 			if (isset($all['next_page']) AND $all['next_page'] != 0) {
 				$next_page = json_encode($all['next_page']);?>
@@ -37,7 +47,7 @@
 					</div><?php
 				}
 			}
-		}
+		}*/
 		?>
 
 		<div class="hide <?php echo $current_profile ? "in" : ""; ?>" id="bottom_nav_sm">

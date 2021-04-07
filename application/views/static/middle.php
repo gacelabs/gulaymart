@@ -8,7 +8,7 @@
 		<section id="content__top">
 			<?php
 				foreach ($middle['head'] as $value) {
-					$this->view('templates/'.$value);
+					$this->view('templates/'.$value, ['data'=>$data]);
 				}
 			?>
 		</section>
@@ -16,7 +16,7 @@
 		<section <?php str_has_value_echo("marketplace", $this->class_name, "class='container'");?> id="content__middle">
 			<?php
 				foreach ($middle['body'] as $value) {
-					$this->view('templates/'.$value);
+					$this->view('templates/'.$value, ['data'=>$data]);
 				}
 			?>
 		</section>
@@ -24,7 +24,7 @@
 		<section id="content__footer">
 			<?php
 				foreach ($middle['footer'] as $value) {
-					$this->view($value);
+					$this->view($value, ['data'=>$data]);
 				}
 			?>
 		</section>

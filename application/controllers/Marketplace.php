@@ -12,7 +12,8 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
-		debug($this->products->get_in(true, 'location_id'), 'stop');
+		// debug(nearby_farms($this->latlng), $this->products->products_by_location(), 'stop');
+		$famers = nearby_farms($this->latlng);
 		$this->render_page([
 			'top' => [
 				'metas' => [
@@ -30,7 +31,7 @@ class Marketplace extends MY_Controller {
 					'marketplace/banner',
 					'marketplace/category',
 					'marketplace/products',
-					'marketplace/famers'
+					'marketplace/famers',
 				],
 				'footer' => [
 					'templates/marketplace/poster',
@@ -42,9 +43,10 @@ class Marketplace extends MY_Controller {
 				'js' => ['isotope.min', 'marketplace', 'fb-login'],
 			],
 			'data' => [
-				'products' => $this->products->get_by_category_pages()
+				'nearby_farms' => $famers,
+				'products' => $this->products->products_by_location(),
 			],
-		]);
+		]/*, true*/);
 	}
 
 	public function loadmore()

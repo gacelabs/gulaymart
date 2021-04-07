@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-	$('.product-item-inner').masonry({
+	/*$('.product-item-inner').masonry({
 		itemSelector: '.product-item',
 		masonry: {
 			horizontalOrder: true
@@ -35,7 +35,7 @@ $(document).ready(function() {
 			
 		}
 		if (jsonPages.length == i+1) $(evt.target).hide();
-	});
+	});*/
 
 });
 

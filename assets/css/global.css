@@ -691,3 +691,7 @@ label.error {
 div.pac-container {
 	z-index: 99999999999 !important;
 }
+.mini-img-icon {
+	width: 18px;
+	margin-right: 2px;
+}
