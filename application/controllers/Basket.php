@@ -39,8 +39,19 @@ class Basket extends My_Controller {
 		]);
 	}
 
-	public function productpage()
+	public function view($product_id=0, $product_name='')
 	{
+		$post = $this->input->post() ?: $this->input->get();
+		$product = false;
+		if ($post OR $product_id) {
+			// debug($post, 'stop');
+			if ($post) {
+				$product = $this->products->products_with_location($post, true);
+			} else {
+				$product = $this->products->products_with_location(['id' => $product_id], true);
+			}
+		}
+		// debug($product, 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['modal/modals', 'basket/productpage', 'static/store']
@@ -58,45 +69,6 @@ class Basket extends My_Controller {
 			'bottom' => [
 				'modals' => [],
 				'js' => ['basket/productpage', 'plugins/fb-login'],
-			],
-		]);
-	}
-
-	public function view($product_id=0, $product_name='')
-	{
-		$post = $this->input->post() ?: $this->input->get();
-		$product = false;
-		if ($post OR $product_id) {
-			// debug($post, 'stop');
-			if ($post) {
-				$product = $this->products->products_with_location($post, true);
-			} else {
-				$product = $this->products->products_with_location(['id' => $product_id], true);
-			}
-		}
-		// debug($product, 'stop');
-		$this->render_page([
-			'top' => [
-				'metas' => [
-					'description' => APP_NAME.' is your neighborhood veggies supplier.',
-					'name' => 'Product Name - '.APP_NAME,
-				],
-				'index_page' => 'yes',
-				'page_title' => 'Product Name - '.APP_NAME,
-				'css' => ['marketplace', 'basket/productpage'],
-
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'basket'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'basket/basket',
-				],
-			],
-			'bottom' => [
-				'modals' => ['reply_modal'],
-				'js' => ['dashboard/main', 'basket/main'],
 			],
 			'data' => [
 				'product' => $product

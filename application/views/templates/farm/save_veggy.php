@@ -1,11 +1,12 @@
 <?php if ($data['product']): ?>
-<div class="col-lg-10 col-md-9 col-sm-9 left-affix-content" id="dash_panel_right">
-	<?php $this->view('static/mobile_note'); ?>
-	<div class="dash-panel-right-container hidden-xs" id="new_veggy">
-		<div class="dash-panel-right-canvas">
-			<form action="farm/save-veggy/<?php echo $data['product']['id'];?>/<?php echo $data['product']['name'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data">
-				<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
-				<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
+	<div id="dashboard_panel_right">
+		<?php $this->view('global/mobile_note'); ?>
+		
+		<div class="row hidden-xs" id="new_veggy">
+			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
+				<form action="farm/save-veggy/<?php echo $data['product']['id'];?>/<?php echo $data['product']['name'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data">
+					<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
+
 					<div class="dash-panel theme score-0" id="basic_prod_info">
 						<div class="dash-panel-middle">
 							<div class="input-container">
@@ -316,10 +317,10 @@
 							<button value="select" type="submit" class="btn btn-default normal-radius">Save<i class="fa fa-check-circle icon-right"></i></button>
 						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
 				<div class="dash-panel">
 					<?php if ($this->farm_locations): ?>
 						<?php foreach ($this->farm_locations as $index => $location): ?>
@@ -369,5 +370,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 <?php endif ?>

@@ -13,9 +13,12 @@ class Support extends MY_Controller {
 	public function help_center()
 	{
 		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main']
+			],
 			'middle' => [
 				'body_class' => ['support', 'help-center'],
-				'head' => ['dashboard/nav_top'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 				],

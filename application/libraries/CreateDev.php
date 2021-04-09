@@ -414,12 +414,12 @@ class CreateDev {
 		]);
 
 		sleep(5);
-		$categories = [['label' => 'Leafy', 'value' => 'leafy', 'photo' => 'assets/images/leafy.png'],
-		['label' => 'Root', 'value' => 'root', 'photo' => 'assets/images/root.png'],
-		['label' => 'Cruciferous', 'value' => 'cruciferous', 'photo' => 'assets/images/cruciferous.png'],
-		['label' => 'Marrow', 'value' => 'marrow', 'photo' => 'assets/images/marrow.png'],
-		['label' => 'Stem', 'value' => 'stem', 'photo' => 'assets/images/plant-stem.png'],
-		['label' => 'Allium', 'value' => 'allium', 'photo' => 'assets/images/allium.png']];
+		$categories = [['label' => 'Leafy', 'value' => 'leafy', 'photo' => 'assets/images/categories/leafy.png'],
+		['label' => 'Root', 'value' => 'root', 'photo' => 'assets/images/categories/root.png'],
+		['label' => 'Cruciferous', 'value' => 'cruciferous', 'photo' => 'assets/images/categories/cruciferous.png'],
+		['label' => 'Marrow', 'value' => 'marrow', 'photo' => 'assets/images/categories/marrow.png'],
+		['label' => 'Stem', 'value' => 'stem', 'photo' => 'assets/images/categories/stem.png'],
+		['label' => 'Allium', 'value' => 'allium', 'photo' => 'assets/images/categories/allium.png']];
 		$this->class->db->insert_batch('products_category', $categories);
 
 		return $table_data;
@@ -451,35 +451,35 @@ class CreateDev {
 
 		sleep(5);
 		$subcategories = [
-			['cat_id' => 1, 'label' => 'Lettuce', 'value' => 'lettuce', 'photo' => 'assets/images/leafy.png'],
-			['cat_id' => 1, 'label' => 'Spinach', 'value' => 'spinach', 'photo' => 'assets/images/leafy.png'],
-			['cat_id' => 1, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/leafy.png'],
+			['cat_id' => 1, 'label' => 'Lettuce', 'value' => 'lettuce', 'photo' => 'assets/images/categories/leafy.png'],
+			['cat_id' => 1, 'label' => 'Spinach', 'value' => 'spinach', 'photo' => 'assets/images/categories/leafy.png'],
+			['cat_id' => 1, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/leafy.png'],
 
-			['cat_id' => 2, 'label' => 'Carrot', 'value' => 'carrot', 'photo' => 'assets/images/root.png'],
-			['cat_id' => 2, 'label' => 'Potato', 'value' => 'potato', 'photo' => 'assets/images/root.png'],
-			['cat_id' => 2, 'label' => 'Turnip', 'value' => 'turnip', 'photo' => 'assets/images/root.png'],
-			['cat_id' => 2, 'label' => 'Radish', 'value' => 'radish', 'photo' => 'assets/images/root.png'],
-			['cat_id' => 2, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/root.png'],
+			['cat_id' => 2, 'label' => 'Carrot', 'value' => 'carrot', 'photo' => 'assets/images/categories/root.png'],
+			['cat_id' => 2, 'label' => 'Potato', 'value' => 'potato', 'photo' => 'assets/images/categories/root.png'],
+			['cat_id' => 2, 'label' => 'Turnip', 'value' => 'turnip', 'photo' => 'assets/images/categories/root.png'],
+			['cat_id' => 2, 'label' => 'Radish', 'value' => 'radish', 'photo' => 'assets/images/categories/root.png'],
+			['cat_id' => 2, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/root.png'],
 
-			['cat_id' => 3, 'label' => 'Cabbage', 'value' => 'cabbage', 'photo' => 'assets/images/cruciferous.png'],
-			['cat_id' => 3, 'label' => 'Cauliflower', 'value' => 'cauliflower', 'photo' => 'assets/images/cruciferous.png'],
-			['cat_id' => 3, 'label' => 'Broccoli', 'value' => 'broccoli', 'photo' => 'assets/images/cruciferous.png'],
-			['cat_id' => 3, 'label' => 'Brussels Sprout', 'value' => 'brussels-sprout', 'photo' => 'assets/images/cruciferous.png'],
-			['cat_id' => 3, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/cruciferous.png'],
+			['cat_id' => 3, 'label' => 'Cabbage', 'value' => 'cabbage', 'photo' => 'assets/images/categories/cruciferous.png'],
+			['cat_id' => 3, 'label' => 'Cauliflower', 'value' => 'cauliflower', 'photo' => 'assets/images/categories/cruciferous.png'],
+			['cat_id' => 3, 'label' => 'Broccoli', 'value' => 'broccoli', 'photo' => 'assets/images/categories/cruciferous.png'],
+			['cat_id' => 3, 'label' => 'Brussels Sprout', 'value' => 'brussels-sprout', 'photo' => 'assets/images/categories/cruciferous.png'],
+			['cat_id' => 3, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/cruciferous.png'],
 
-			['cat_id' => 4, 'label' => 'Squash', 'value' => 'squash', 'photo' => 'assets/images/marrow.png'],
-			['cat_id' => 4, 'label' => 'Cucumber', 'value' => 'cucumber', 'photo' => 'assets/images/marrow.png'],
-			['cat_id' => 4, 'label' => 'Zucchini', 'value' => 'zucchini', 'photo' => 'assets/images/marrow.png'],
-			['cat_id' => 4, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/marrow.png'],
+			['cat_id' => 4, 'label' => 'Squash', 'value' => 'squash', 'photo' => 'assets/images/categories/marrow.png'],
+			['cat_id' => 4, 'label' => 'Cucumber', 'value' => 'cucumber', 'photo' => 'assets/images/categories/marrow.png'],
+			['cat_id' => 4, 'label' => 'Zucchini', 'value' => 'zucchini', 'photo' => 'assets/images/categories/marrow.png'],
+			['cat_id' => 4, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/marrow.png'],
 
-			['cat_id' => 5, 'label' => 'Celery', 'value' => 'celery', 'photo' => 'assets/images/plant-stem.png'],
-			['cat_id' => 5, 'label' => 'Asparagus', 'value' => 'asparagus', 'photo' => 'assets/images/plant-stem.png'],
-			['cat_id' => 5, 'label' => 'Rosemary', 'value' => 'rosemary', 'photo' => 'assets/images/plant-stem.png'],
-			['cat_id' => 5, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/plant-stem.png'],
+			['cat_id' => 5, 'label' => 'Celery', 'value' => 'celery', 'photo' => 'assets/images/categories/stem.png'],
+			['cat_id' => 5, 'label' => 'Asparagus', 'value' => 'asparagus', 'photo' => 'assets/images/categories/stem.png'],
+			['cat_id' => 5, 'label' => 'Rosemary', 'value' => 'rosemary', 'photo' => 'assets/images/categories/stem.png'],
+			['cat_id' => 5, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/stem.png'],
 
-			['cat_id' => 6, 'label' => 'Onion', 'value' => 'onion', 'photo' => 'assets/images/allium.png'],
-			['cat_id' => 6, 'label' => 'Garlic', 'value' => 'garlic', 'photo' => 'assets/images/allium.png'],
-			['cat_id' => 6, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/allium.png'],
+			['cat_id' => 6, 'label' => 'Onion', 'value' => 'onion', 'photo' => 'assets/images/categories/allium.png'],
+			['cat_id' => 6, 'label' => 'Garlic', 'value' => 'garlic', 'photo' => 'assets/images/categories/allium.png'],
+			['cat_id' => 6, 'label' => 'Other', 'value' => 'other', 'photo' => 'assets/images/categories/allium.png'],
 		];
 		$this->class->db->insert_batch('products_subcategory', $subcategories);
 

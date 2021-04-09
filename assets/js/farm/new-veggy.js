@@ -218,7 +218,6 @@ var failedProductScore = function(obj) {
 }
 
 var redirectNewProduct = function(obj) {
-<<<<<<< HEAD:assets/js/new-veggy.js
 	var sMessage = 'Product successfully created, It is now queued up for product review.';
 	if (obj.updated == 1) {
 		sMessage = 'Product successfully updated.';
@@ -227,11 +226,6 @@ var redirectNewProduct = function(obj) {
 		$('.timeline-border-progress').attr('data-percent', '100');
 	}
 	runAlertBox({type:'success', message: sMessage, unclose: true});
-=======
-	runAlertBox({type:'success', message: 'Product successfully created, It is now queued up for product review.', unclose: true});
-	$('p.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
-	$('.timeline-border-progress').attr('data-percent', '100');
->>>>>>> clean-copy:assets/js/farm/new-veggy.js
 	// console.log(obj);
 	$('.order-title').text(obj.products.name);
 	$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));

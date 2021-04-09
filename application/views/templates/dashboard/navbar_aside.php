@@ -44,6 +44,7 @@
 									<i class="fa fa-pencil"></i>New veggy
 								</a>
 							</div>
+						<?php endif ?>
 					<?php endif ?>
 				<?php endif ?>
 			<?php endif ?>

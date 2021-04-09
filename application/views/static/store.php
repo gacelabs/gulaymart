@@ -34,7 +34,7 @@
 						<?php endif ?>
 						<?php if (isset($data['products'])) {
 							/*foreach ($data['products'] as $key => $product) {
-								$this->view('looping/product_item', ['data'=>$product, 'id'=>$product['category_id']]);
+								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}*/
 						} else {?>
 							<!-- <p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p> -->

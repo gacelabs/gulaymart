@@ -1,6 +1,12 @@
 <div id="products_container">
 	<div id="product_list_container">
-		<?php $this->view('looping/product_card'); ?>
+		<?php
+			if ($data['products']) {
+				foreach ($data['products'] as $key => $product) {
+					$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
+				}
+			}
+		?>
 	</div>
 	<div class="clearfix"></div>
 	<div id="load_more_container">

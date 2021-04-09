@@ -427,12 +427,12 @@ class Farm extends MY_Controller {
 			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
 			// debug($product, 'stop');
 			$this->render_page([
-				'top' => [
-					'css' => ['../js/plugins/chosen/chosen', 'new-veggy', 'product-item'],
+				/*'top' => [
+					'css' => ['../js/plugins/chosen/chosen', 'dashboard/main', 'farm/new-veggy'],
 				],
 				'middle' => [
 					'body_class' => ['farm', 'save-veggy'],
-					'head' => ['dashboard/nav_top'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/save_veggy',
@@ -446,6 +446,26 @@ class Farm extends MY_Controller {
 						'farm/main',
 						'dashboard/main',
 						'farm/new-veggy',
+					],
+				],*/
+				'top' => [
+					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
+				],
+				'middle' => [
+					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/save_veggy',
+					],
+				],
+				'bottom' => [
+					'js' => [
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'farm/main',
+						'farm/new-veggy',
+						'dashboard/main',
 					],
 				],
 				'data' => [
