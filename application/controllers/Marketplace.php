@@ -44,7 +44,7 @@ class Marketplace extends MY_Controller {
 			],
 			'data' => [
 				'nearby_farms' => $famers,
-				'products' => $this->products->products_by_location(),
+				'products' => nearby_products($this->latlng),
 			],
 		]/*, true*/);
 	}

@@ -25,27 +25,25 @@
 			<div id="storefront_product_container">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
 					<div class="product-item-body zero-gaps">
-						<?php if (isset($data['contents'])) : ?>
-							<?php echo $data['contents']['products_html'];?>
-						<?php else: ?>
+						<?php if (isset($data['products'])) {
+							foreach ($data['products'] as $key => $product) {
+								$this->view('looping/product_item', ['data'=>$product, 'id'=>$product['category_id']]);
+							}
+						} else {?>
 							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
-						<?php endif ?>
+						<?php } ?>
 					</div>
 				</div>
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="stories_item_container">
 					stories_item_container
-					<!-- <h1><?php //echo $data['contents']['stories']['title'];?></h1>
-					<p><?php //echo $data['contents']['stories']['content'];?></p> -->
 				</div>
 				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="galleries_item_container">
 					galleries_item_container
-					<!-- <?php //echo $data['contents']['galleries_html'];?> -->
 				</div>
 				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="about_item_container">
 					about_item_container
-					<!-- <p><?php //echo $data['contents']['about'];?></p> -->
 				</div>
 				<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="banner_section img-responsive" style="width: 100%;">
 			</div>

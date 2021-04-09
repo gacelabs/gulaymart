@@ -406,7 +406,7 @@ class Farm extends MY_Controller {
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
 			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
-			$product = $this->products->products_by_location(['id' => $id], true);
+			$product = $this->products->products_with_location(['id' => $id], true);
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [
@@ -487,6 +487,7 @@ class Farm extends MY_Controller {
 				$data = [
 					'farm' => $user_farm,
 					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
+					'products' => nearby_products($this->latlng),
 				];
 				// debug($data, 'stop');
 			}

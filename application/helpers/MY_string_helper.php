@@ -1218,6 +1218,76 @@ function nearby_farms($data=false)
 	return $farms;
 }
 
+function nearby_products($data=false)
+{
+	$products = false;
+	if ($data) {
+		$ci =& get_instance();
+		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		// debug($results, 'stop');
+		if ($results) {
+			$products = [];
+			foreach ($results as $key => $row) {
+				$driving_distance = get_driving_distance([
+					['lat' => $data['lat'], 'lng' => $data['lng']],
+					['lat' => $row['lat'], 'lng' => $row['lng']],
+				]);
+				// debug($driving_distance['distance'], 'stop');
+				if ($driving_distance['distance'] AND $driving_distance['duration']) {
+					$distance = (float)$driving_distance['distance'];
+					if ($distance < KM_DISTANCE_TO_USER) {
+						$products_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
+						if ($products_locations) {
+							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+							foreach ($products_locations as $index => $location) {
+								$product = $ci->gm_db->get('products', ['id' => $location['product_id']], 'row');
+
+								$product['category'] = false;
+								$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+								if ($category) $product['category'] = $category['label'];
+
+								$product['subcategory'] = false;
+								$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+								if ($subcategory) {
+									$product['subcategory'] = $subcategory['label'];
+								}
+
+								$product['photos'] = false;
+								$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
+								if ($photos) {
+									$product['photos'] = [];
+									foreach ($photos as $key => $photo) {
+										if ($photo['is_main']) {
+											$product['photos']['main'] = $photo;
+											break;
+										}
+									}
+									foreach ($photos as $key => $photo) {
+										if (!$photo['is_main']) {
+											$product['photos']['other'][] = $photo;
+										}
+									}
+								}
+
+								$product['distance'] = round($driving_distance['distance'], 2).' km';
+								$product['duration'] = $driving_distance['duration'];
+								$product['price'] = $location['price'];
+								$product['measurement'] = $location['measurement'];
+								$product['stocks'] = $location['stocks'];
+								$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+								$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.nice_url($product['name'], true));
+								$products[] = $product;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	// debug($products, 'stop');
+	return $products;
+}
+
 function curl_add_booking($data=false)
 {
 	if ($data) {

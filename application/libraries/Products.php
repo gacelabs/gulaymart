@@ -327,7 +327,7 @@ class Products {
 		return $product;
 	}
 
-	public function products_by_location($where=true, $row=false, $limit=false)
+	public function products_with_location($where=true, $row=false, $limit=false)
 	{
 		if ($where != false) {
 			if (!is_bool($limit) AND is_numeric($limit)) {
