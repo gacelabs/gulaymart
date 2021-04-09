@@ -3,14 +3,21 @@
 		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme" id="link_panel_top">
 				<ul class="inline-list dashboard-panel-top">
-					<li><a href="transactions/orders/" class="hideshow-btn active"><h4 class="zero-gaps">My Orders</h4></a></li>
-					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_placed"><h4 class="zero-gaps">Placed</h4></a></li>
+					<li><a href="transactions/orders/" class="hideshow-btn active" hideshow-target="order_placed"><h4 class="zero-gaps">Placed</h4></a></li>
 					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_delivery"><h4 class="zero-gaps">On Delivery</h4></a></li>
 					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h4 class="zero-gaps">Received</h4></a></li>
 					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_cancelled"><h4 class="zero-gaps">Cancelled</h4></a></li>
+					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="all_orders"><h4 class="zero-gaps">All Orders</h4></a></li>
 				</ul>
 				<div class="dashboard-panel-middle hideshow-container">
-					<div class="order-list-container">
+					<?php
+						$this->view('templates/transactions/placed');
+						$this->view('templates/transactions/delivery');
+						$this->view('templates/transactions/received');
+						$this->view('templates/transactions/cancelled');
+					?>
+
+					<div class="order-list-container hide" id="all_orders">
 						<div class="order-item">
 							<div class="order-item-top">
 								<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>
@@ -224,13 +231,6 @@
 							</div>
 						</div>
 					</div>
-
-					<?php
-						$this->view('templates/transactions/placed');
-						$this->view('templates/transactions/delivery');
-						$this->view('templates/transactions/received');
-						$this->view('templates/transactions/cancelled');
-					?>
 				</div>
 			</div>
 		</div>

@@ -5,7 +5,7 @@
 			<div class="dashboard-panel theme">
 				<div class="dashboard-panel-top">
 					<ul class="spaced-list between">
-						<li><h3 class="zero-gaps">New Veggie</h3></li>
+						<li><h3 class="zero-gaps">Product Inventory</h3></li>
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">

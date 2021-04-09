@@ -1,4 +1,4 @@
-<div class="order-list-container hide" id="order_placed">
+<div class="order-list-container" id="order_placed">
 	<div class="order-item">
 		<div class="order-item-top">
 			<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>

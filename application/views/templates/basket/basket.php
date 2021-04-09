@@ -1,6 +1,6 @@
 <div id="dashboard_panel_right">
 	<div class="row">
-		<div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme" id="link_panel_top">
 				<ul class="inline-list dashboard-panel-top">
 					<li><a href="basket/" class="hideshow-btn active"><h4 class="zero-gaps">My Basket</h4></a></li>
@@ -78,19 +78,12 @@
 											<hr style="border-color:#aaa;margin:5px 0;">
 											<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b>500</b></h4>
 										</div>
-										<button class="btn btn-contrast btn-block">CHECKOUT<i class="fa fa-angle-right icon-right"></i></button>
+										<button class="btn btn-contrast btn-block"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-					<?php
-						$this->view('templates/transactions/placed');
-						$this->view('templates/transactions/delivery');
-						$this->view('templates/transactions/received');
-						$this->view('templates/transactions/cancelled');
-					?>
 				</div>
 			</div>
 		</div>
