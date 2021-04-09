@@ -1,6 +1,9 @@
 #storefront_nav label {
 	font-family: 'Roboto', sans-serif;
 }
+.storefront_nav .input-group {
+	margin-bottom: 15px;
+}
 .custom-item-btn {
 	padding: 15px 15px 15px 12px !important;
 	border-left: 3px solid transparent;
@@ -57,6 +60,9 @@
 #preview-store-page {
 	width: 100%;
 }
+#farm_location_modal .input-group {
+	margin-bottom: 15px;
+}
 
 @media (max-width: 991px) {
 	body.storefront #dash_panel_right {
@@ -68,5 +74,11 @@
 	body.storefront #dash_panel_right {
 		padding-left: 10px;
 		padding-right: 10px;
+	}
+	#farm_location_modal .dashboard-panel-middle {
+		padding: 0 !important;
+	}
+	#farm_location_modal ..dashboard-panel-footer {
+		margin-top: 15px;
 	}
 }

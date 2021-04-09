@@ -62,6 +62,9 @@
 #global_navbar_btn_list>li:hover {
 	filter: opacity(0.8);
 }
+div.pac-container {
+	z-index: 99999999999 !important;
+}
 body.is-logged #global_navbar_btn_list>li {
 	height: 34px;
 	width: 34px;

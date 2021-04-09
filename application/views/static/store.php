@@ -60,7 +60,7 @@
 						<!-- ETO YUNG GALLERIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
-						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p>
 					<?php endif ?>
 				</div>
 				
@@ -70,7 +70,7 @@
 						<!-- ETO YUNG ABOUT CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
-						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO ABOUT &#8212;</p>
 					<?php endif ?>
 				</div>
 			</div>

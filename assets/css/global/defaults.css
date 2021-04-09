@@ -24,6 +24,31 @@ h1, h2, h3, h4, h5 {
 .btn-lg {
 	border-radius: 4px;
 }
+.preview-image-item {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+}
+.preview_images_selected>li, .preview_images_list>li {
+	padding: 10px;
+	text-align: center;
+}
+.fade {
+	transform: scale(0);
+	opacity: 1;
+	-webkit-transition: all .25s linear;
+	-o-transition: all .25s linear;
+	transition: all .25s linear;
+}
+.modal.fade.in {
+	transform: scale(1);
+}
+.modal-backdrop {
+	opacity: 1;
+	transform: scale(1);
+}
 input {
 	border: none;
 	box-shadow: none !important;

@@ -106,13 +106,6 @@
 	text-align: center;
 	margin: 0 5px 5px 0;
 }
-.preview-image-item {
-	background-position: center center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	height: 100px;
-	width: 100px;
-}
 .new-veggy-status-container {
 	border: 1px solid #ea9a2a;
 	border-radius: 3px;
