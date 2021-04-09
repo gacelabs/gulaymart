@@ -29,16 +29,20 @@
 					<i class="fa fa-leaf"></i><span class="hidden-xs">My Farm</span>
 				</a>
 				<?php if (isset($current_profile['is_agreed_terms']) AND $current_profile['is_agreed_terms']): ?>
-					<div class="aside-nav-child">
-						<a href="farm/sales/" class="<?php in_array_echo("sales", $middle['body_class'], "active");?>">
-							<i class="fa fa-tachometer"></i><span class="hidden-xs">Sales</span>
-						</a>
-					</div>
-					<div class="aside-nav-child">
-						<a href="farm/new-veggy/" class="<?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-							<i class="fa fa-pencil"></i><span class="hidden-xs">New veggy</span>
-						</a>
-					</div>
+					<?php if (!empty($this->farms)): ?>
+						<?php if ($this->products->count()): ?>
+							<div class="aside-nav-child">
+								<a href="farm/sales/" class="<?php in_array_echo("sales", $middle['body_class'], "active");?>">
+									<i class="fa fa-tachometer"></i><span class="hidden-xs">Sales</span>
+								</a>
+							</div>
+						<?php endif ?>
+						<div class="aside-nav-child">
+							<a href="farm/new-veggy/" class="<?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
+								<i class="fa fa-pencil"></i><span class="hidden-xs">New veggy</span>
+							</a>
+						</div>
+					<?php endif ?>
 				<?php endif ?>
 				<div class="aside-nav-child">
 					<a href="farm/storefront" class="<?php in_array_echo("storefront", $middle['body_class'], "active");?>">
@@ -46,16 +50,18 @@
 					</a>
 				</div>
 				<?php if (isset($current_profile['is_agreed_terms']) AND $current_profile['is_agreed_terms']): ?>
-					<div class="aside-nav-child">
-						<a href="farm/inventory" class="<?php in_array_echo("inventory", $middle['body_class'], "active");?>">
-							<i class="fa fa-cubes"></i><span class="hidden-xs">Inventory</span>
-						</a>
-					</div>
-					<div class="aside-nav-child">
-						<a href="farm/settings/" class="<?php in_array_echo("settings", $middle['body_class'], "active");?>">
-							<i class="fa fa-cog"></i><span class="hidden-xs">Settings</span>
-						</a>
-					</div>
+					<?php if (!empty($this->farms) AND $this->products->count()): ?>
+						<div class="aside-nav-child">
+							<a href="farm/inventory" class="<?php in_array_echo("inventory", $middle['body_class'], "active");?>">
+								<i class="fa fa-cubes"></i><span class="hidden-xs">Inventory</span>
+							</a>
+						</div>
+						<div class="aside-nav-child">
+							<a href="farm/settings/" class="<?php in_array_echo("settings", $middle['body_class'], "active");?>">
+								<i class="fa fa-cog"></i><span class="hidden-xs">Settings</span>
+							</a>
+						</div>
+					<?php endif ?>
 				<?php endif ?>
 			</div>
 			<div><hr></div>

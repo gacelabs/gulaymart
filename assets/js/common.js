@@ -410,7 +410,8 @@ var runMediaUploader = function(callback) {
 				for (var i= 0; i < $(elem)[0].files.length; i++) {
 					var blob_path = window.URL.createObjectURL(elem.files[i]),
 					is_upload = uiForm.data('notmedia') ? 1 : 0;
-					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+uiForm.attr('id')+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
+					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
+					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
 				}
 				if ($('#order-photo').length && checked != '') {
 					$('#order-photo').removeAttr('style');
@@ -424,6 +425,24 @@ var runMediaUploader = function(callback) {
 					$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
 				}
 			}).on('click', function(e) {
+				$(elem).parents('form:first').find('.preview_images_selected li').removeClass('error').find('input:radio').removeClass('error');
+				setInterval(function() {
+					if ($(elem).parents('form:first').find('input:file').val() == '') {
+						if ($(elem).parents('form:first').find('.preview_images_selected li input:radio').attr('required') == undefined) {
+							$(elem).parents('form:first').find('.preview_images_selected li input:radio').attr({'required':'required'});
+							$(elem).parents('form:first').find('input:file').removeAttr('required');
+							$(elem).parents('form:first').find('button[value="upload"]').addClass('hide');
+							$(elem).parents('form:first').find('button[value="select"]').removeClass('hide');
+						}
+					} else {
+						if ($(elem).parents('form:first').find('.preview_images_selected li input:radio').attr('required') != undefined) {
+							// clearInterval(filetime);
+							$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+							$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+							$(elem).parents('form:first').find('button[value="select"]').addClass('hide');
+						}
+					}
+				}, 1000);
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
 				if ($('body').hasClass('new-veggy') == false) {
@@ -435,15 +454,6 @@ var runMediaUploader = function(callback) {
 				}
 			}).next('.input-group-btn').find('button').on('click', function(e) {
 				$(elem).trigger('click');
-				$(elem).parents('form:first').find('.preview_images_list').html('');
-				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				if ($('body').hasClass('new-veggy') == false) {
-					$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
-					$(elem).parents('form:first').attr('data-notmedia', '1');
-					$(elem).parents('form:first').find('button:submit').addClass('hide');
-					$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
-					$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
-				}
 			});
 		});
 

@@ -42,7 +42,7 @@ class Farm extends MY_Controller {
 				],
 			]);
 		} else {
-			redirect(base_url('farm/new-veggy'));
+			redirect(base_url('farm/new-veggy/'));
 		}
 	}
 
@@ -102,8 +102,24 @@ class Farm extends MY_Controller {
 				case '2':
 					if (isset($product_id) AND $product_id > 0) {
 						$product = $post['products'];
-						$id = $this->products->save($product, ['id' => $product_id]);
-						if ($id) {
+						$ok = $this->products->save($product, ['id' => $product_id]);
+						if (isset($post['products_location'])) {
+							$this->gm_db->remove('products_location', ['product_id' => $product_id]);
+							foreach ($post['products_location'] as $key => $location) {
+								$location['product_id'] = $product_id;
+								$this->gm_db->new('products_location', $location);
+								$post['products_location'][$key]['duration'] = '';
+								$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']]);
+								if ($farm_location) {
+									$driving_distance = get_driving_distance([
+										['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+										['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+									]);
+									$post['products_location'][$key]['duration'] = $driving_distance['duration'];
+								}
+							}
+						}
+						if ($ok) {
 							if ($passed == 0) {
 								$passed = 1;
 								$message = 'Passed on the 60% score, please continue below.';
@@ -137,6 +153,7 @@ class Farm extends MY_Controller {
 						$uploads = files_upload($_FILES, $dir);
 						$ids = [];
 						if ($uploads) {
+							// $this->gm_db->save('products_photo', ['is_main' => 0], ['product_id' => $product_id]);
 							$this->gm_db->remove('products_photo', ['product_id' => $product_id]);
 							foreach ($uploads as $key => $upload) {
 								unset($upload['user_id']);
@@ -170,7 +187,7 @@ class Farm extends MY_Controller {
 				$this->set_response('success', $message, $post, false, $successFunction);
 			}
 			$this->set_response('error', $message, $post, false, 'failedProductScore');
-		} else {
+		} elseif (!empty($this->farms)) {
 			$this->render_page([
 				'top' => [
 					'css' => ['new-veggy', 'product-item']
@@ -188,10 +205,15 @@ class Farm extends MY_Controller {
 						'jquery.inputmask.min',
 						'inputmask.binding',
 						'farm',
-						'new-veggy'
+						'new-veggy',
 					],
 				],
+				'data' => [
+					'has_products' => $this->products->count()
+				],
 			]);
+		} else {
+			redirect(base_url('farm/storefront/'));
 		}
 	}
 
@@ -199,7 +221,6 @@ class Farm extends MY_Controller {
 	{
 		$post = $this->input->post();
 		if ($post) {
-			// debug();
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			// debug($post, 'stop');
 			if ($profile) {
@@ -225,21 +246,29 @@ class Farm extends MY_Controller {
 						foreach ($locations as $key => $location) {
 							$data[] = json_decode($location, true);
 						}
-						$this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
-						foreach ($data as $row) {
-							$row['farm_id'] = $farm_id;
-							$row['active'] = $index;
-							$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
-							$this->gm_db->new('user_farm_locations', $row);
+						// debug($data, 'stop');
+						if ($index == 0) {
+							$this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
+							foreach ($data as $row) {
+								$row['farm_id'] = $farm_id;
+								$row['active'] = $index;
+								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
+								$this->gm_db->new('user_farm_locations', $row);
+							}
+						} else {
+							foreach ($data as $row) {
+								$row['farm_id'] = $farm_id;
+								$row['active'] = $index;
+								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
+								if (isset($row['id'])) {
+									$farm_location_id = $row['id']; unset($row['id']);
+									$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
+								} else {
+									$this->gm_db->new('user_farm_locations', $row);
+								}
+							}
 						}
 					}
-				}
-				if (isset($post['user_farm_contents']) AND $farm_id > 0) {
-					$this->gm_db->remove('user_farm_contents', ['farm_id' => $farm_id]);
-					$post['user_farm_contents']['farm_id'] = $farm_id;
-					$post['user_farm_contents']['products'] = json_encode($post['user_farm_contents']['products']);
-					$post['user_farm_contents']['galleries'] = json_encode($post['user_farm_contents']['galleries']);
-					$this->gm_db->new('user_farm_contents', $post['user_farm_contents']);
 				}
 				$this->set_response('info', 'Storefront Succesfully Created!', $post, false, 'refreshStorePreview');
 			}
@@ -272,7 +301,6 @@ class Farm extends MY_Controller {
 				'data' => [
 					'farms' => $this->accounts->profile['farms'],
 					'farm_locations' => $this->accounts->profile['farm_locations'],
-					'farm_contents' => $this->accounts->profile['farm_contents'],
 					'products' => $this->products->get_in(['user_id' => $profile['id']], ['category_id', 'photos']),
 					'galleries' => $this->galleries,
 				]
@@ -309,7 +337,7 @@ class Farm extends MY_Controller {
 		$post = $this->input->post();
 		if ($post AND $id > 0) {
 			if (check_data_values($post)) {
-				// debug($post, $this->accounts->profile, 'stop');
+				// debug($post, $_FILES, 'stop');
 				$products = $post['products'];
 				if ($this->products->save($products, ['id' => $id])) {
 					$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
@@ -317,39 +345,79 @@ class Farm extends MY_Controller {
 						$post['products']['id'] = $id;
 					}
 				}
-				if (isset($post['products_location'])) {
-					if (isset($post['products_location']['farm_id'])) {
-						$this->gm_db->remove('products_location', ['product_id' => $id]);
-						$farms = $post['products_location']['farm_id'];
-						foreach ($farms as $key => $farm_id) {
-							$location = [
-								'product_id' => $id,
-								'farm_id' => $farm_id,
-								'measurement' => $post['products_location']['measurement'][$farm_id],
-								'price' => $post['products_location']['price'][$farm_id],
-								'stocks' => $post['products_location']['stocks'][$farm_id],
-							];
-							$this->gm_db->new('products_location', $location);
+				if (isset($post['products_attribute'])) {
+					foreach ($post['products_attribute'] as $key => $attribute) {
+						$attribute['product_id'] = $id;
+						if (!isset($attribute['id'])) {
+							$post['products_attribute'][$key]['id'] = $this->products->new($attribute, 'products_attribute');
+						} else {
+							$this->products->save($attribute, ['id' => $attribute['id']], 'products_attribute');
+							$post['products_attribute'][$key]['id'] = $attribute['id'];
 						}
 					}
 				}
-				$this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
+				if (isset($post['products_location'])) {
+					$products_location = $post['products_location'];
+					// debug($products_location, 'stop');
+					$this->gm_db->remove('products_location', ['product_id' => $id]);
+					foreach ($products_location as $farm_location_id => $location) {
+						$location['product_id'] = $id;
+						$this->gm_db->new('products_location', $location);
+						$post['products_location'][$farm_location_id]['duration'] = '';
+						$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+						if ($farm_location) {
+							$driving_distance = get_driving_distance([
+								['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+								['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+							]);
+							$post['products_location'][$farm_location_id]['duration'] = $driving_distance['duration'];
+						}
+					}
+				}
+				if (isset($post['products_photo'])) {
+					$dir = 'products/'.str_replace('@', '-', $this->accounts->profile['email_address']);
+					$uploads = files_upload($_FILES, $dir);
+					// debug($post, $uploads, 'stop');
+					if ($uploads) {
+						$this->gm_db->remove('products_photo', ['product_id' => $id]);
+						foreach ($uploads as $key => $upload) {
+							unset($upload['user_id']);
+							$upload['product_id'] = $id;
+							if ($key == $post['products_photo']['index']) {
+								$upload['is_main'] = 1;
+							} else {
+								$upload['is_main'] = 0;
+							}
+							$this->products->new($upload, 'products_photo');
+							$post['file_photos'][] = $upload;
+						}
+					}
+					if (isset($post['products_photo']['id'])) {
+						$this->gm_db->save('products_photo', ['is_main' => 0], ['product_id' => $id]);
+						sleep(1);
+						$this->gm_db->save('products_photo', ['is_main' => 1], ['id' => $post['products_photo']['id']]);
+						$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $id]);
+					}
+				}
+				$post['updated'] = 1;
+				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
+				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
 			}
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
 			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
-			$product = $this->products->products_by_location(['product_id' => $id], true);
+			$product = $this->products->products_by_location(['id' => $id], true);
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [
-					'css' => ['../js/chosen/chosen'],
+					'css' => ['../js/chosen/chosen', 'new-veggy', 'product-item'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'new-veggy'],
+					'body_class' => ['farm', 'save-veggy'],
 					'head' => ['dashboard/nav_top'],
 					'body' => [
 						'dashboard/navbar_aside',
-						'farm/edit_veggy',
+						'farm/save_veggy',
 					],
 				],
 				'bottom' => [
@@ -358,6 +426,7 @@ class Farm extends MY_Controller {
 						'jquery.inputmask.min',
 						'inputmask.binding',
 						'farm',
+						'new-veggy',
 					],
 				],
 				'data' => [
@@ -384,19 +453,23 @@ class Farm extends MY_Controller {
 
 	public function settings()
 	{
-		$this->render_page([
-			'middle' => [
-				'body_class' => ['farm', 'settings'],
-				'head' => ['dashboard/nav_top'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'farm/settings',
+		if (!empty($this->farms)) {
+			$this->render_page([
+				'middle' => [
+					'body_class' => ['farm', 'settings'],
+					'head' => ['dashboard/nav_top'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/settings',
+					],
 				],
-			],
-			'bottom' => [
-				'js' => ['farm'],
-			],
-		]);
+				'bottom' => [
+					'js' => ['farm'],
+				],
+			]);
+		} else {
+			redirect(base_url('farm/storefront/'));
+		}
 	}
 
 	public function store($id=0, $name=false)
@@ -415,32 +488,6 @@ class Farm extends MY_Controller {
 					'farm' => $user_farm,
 					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
 				];
-				$contents = $this->gm_db->get('user_farm_contents', ['farm_id' => $user_farm['id']], 'row');
-				// debug($contents, 'stop');
-				$products_html = $galleries_html = '';
-				if ($contents) {
-					$productids = json_decode($contents['products'], true);
-					$products = $this->products->get_in(['id' => $productids, 'user_id' => $user_farm['user_id']], ['category_id', 'photos']);
-					// debug($products, 'stop');
-					foreach ($products as $key => $product) {
-						$products_html .= $this->load->view('looping/product_item', ['data'=>$product, 'forajax'=>1, 'id'=>$product['category_id']], true);
-					}
-					// debug($products_html, 'stop');
-					$galleriesids = json_decode($contents['galleries'], true);
-					$galleries = $this->gm_db->get_in('galleries', ['id' => $galleriesids, 'user_id' => $user_farm['user_id']]);
-					// debug($galleries, 'stop');
-					$galleries_html = $this->load->view('looping/gallery_item', ['data'=>$galleries, 'title'=> 'Galleries'], true);
-					// debug($galleries_html, 'stop');
-					$data['contents'] = [
-						'products_html' => $products_html,
-						'stories' => [
-							'title' => $contents['story_title'],
-							'content' => $contents['story_content'],
-						],
-						'galleries_html' => $galleries_html,
-						'about' => $contents['about'],
-					];
-				}
 				// debug($data, 'stop');
 			}
 			$this->render_page([
@@ -461,7 +508,7 @@ class Farm extends MY_Controller {
 				'data' => $data
 			]);
 		} else {
-			redirect(base_url('/'));
+			redirect(base_url('farm/'));
 		}
 	}
 }

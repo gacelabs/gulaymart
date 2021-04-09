@@ -20,7 +20,7 @@
 								<tr>
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
-											<th>Action</th>	
+											<th>Actions</th>	
 										<?php else: ?>
 											<th><?php echo fix_title($key);?></th>	
 										<?php endif ?>
@@ -31,12 +31,12 @@
 							<?php foreach ($data['products'] as $key => $product): ?>
 								<tr product_id="<?php echo $product['id'];?>">
 									<?php foreach ($product as $index => $value): ?>
-										<td width="<?php echo strlen(fix_title($value))*15;?>px"<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
+										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
 											<?php if ($index == 'id'): ?>
 												<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a>
 												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
 											<?php elseif ($index == 'updated'): ?>
-												<?php echo date('M. j, Y', strtotime($value));?>
+												<?php echo date('M. j, Y | h:i a', strtotime($value));?>
 											<?php else: ?>
 												<?php echo $value;?>
 											<?php endif ?>

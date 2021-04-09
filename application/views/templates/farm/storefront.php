@@ -139,6 +139,11 @@
 																unset($shipping[$value]);
 															}
 														}
+														if ($farm_locations) {
+															$shipping['id'] = $farm_locations[$key]['id'];
+														} else {
+															$shipping['id'] = 0;
+														}
 														?>
 														<div class="col-lg-12">
 															<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>

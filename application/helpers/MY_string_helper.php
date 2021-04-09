@@ -1018,7 +1018,6 @@ function get_global_values($request=[])
 	/*farms*/
 	$request['farms'] = [];
 	$request['farm_locations'] = [];
-	$request['farm_contents'] = [];
 	if ($ci->db->table_exists('user_farms')) {
 		$where = " WHERE 1=1 ";
 		if ($profile) $where .= " AND uf.user_id = '".$profile['id']."'";
@@ -1028,13 +1027,6 @@ function get_global_values($request=[])
 			$farm_locations = $ci->db->query("SELECT ufl.* FROM user_farm_locations ufl INNER JOIN user_farms uf ON uf.id = ufl.farm_id WHERE ufl.farm_id = '".$request['farms']['id']."'");
 			if ($farm_locations->num_rows() > 0) {
 				$request['farm_locations'] = $farm_locations->result_array();
-			}
-			$farm_contents = $ci->db->query("SELECT ufc.* FROM user_farm_contents ufc INNER JOIN user_farms uf ON uf.id = ufc.farm_id WHERE ufc.farm_id = '".$request['farms']['id']."'");
-			if ($farm_contents->num_rows() > 0) {
-				$request['farm_contents'] = $farm_contents->row_array();
-				/*todo here, extract ids*/
-				$request['farm_contents']['products'] = json_decode($request['farm_contents']['products'], true);
-				$request['farm_contents']['galleries'] = json_decode($request['farm_contents']['galleries'], true);
 			}
 		}
 		// debug($request, 'stop');

@@ -9,7 +9,7 @@ class Basket extends My_Controller {
 	{
 		parent::__construct();
 		// INITIALIZING TOKTOK OBJECT
-		$this->load->library('toktokapi');
+		// $this->load->library('toktokapi');
 		// debug($this->toktokapi, 'stop');
 	}
 

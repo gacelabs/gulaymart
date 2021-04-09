@@ -175,7 +175,7 @@ var setProductScore = function(obj) {
 	switch (obj.pos) {
 		case '0':
 			$('#order-title').text(obj.products.name);
-			$('#order-link').attr('href', 'view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
+			$('#order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
 			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '10');
 			}
@@ -224,16 +224,39 @@ var failedProductScore = function(obj) {
 }
 
 var redirectNewProduct = function(obj) {
-	runAlertBox({type:'success', message: 'Product successfully created, It is now queued up for product review.', unclose: true});
-	$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
-	$('.timeline-border-progress').attr('data-percent', '100');
+	var sMessage = 'Product successfully created, It is now queued up for product review.';
+	if (obj.updated == 1) {
+		sMessage = 'Product successfully updated.';
+	} else {
+		$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
+		$('.timeline-border-progress').attr('data-percent', '100');
+	}
+	runAlertBox({type:'success', message: sMessage, unclose: true});
 	// console.log(obj);
+	$('.order-title').text(obj.products.name);
+	$('#order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
+	$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
 	$.each(obj.file_photos, function(i, data) {
-		// console.log(data);
-		if (data.is_main) {
-			$('#order-photo').removeAttr('style');
-			$('#order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
+		if (data.is_main == 1) {
+			// console.log(data);
+			if ($('#order-photo').length) {
+				$('#order-photo').removeAttr('style');
+				$('#order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
+			}
+			if ($('.order-photo').length) {
+				$('.order-photo').removeAttr('style');
+				$('.order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
+			}
 		}
+	});
+	var cnt = 0;
+	$.each(obj.products_location, function(i, data) {
+		if ($('.order-price').eq(cnt).length) {
+			$('.order-price').eq(cnt).text(data.price);
+			$('.order-unit').eq(cnt).text(data.measurement);
+			$('.order-duration').eq(cnt).text(data.duration);
+		}
+		cnt++;
 	});
 	$('#preview_container').removeClass('hide');
 }
