@@ -15,6 +15,51 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
+		$this->basket();
+	}
+
+	public function basket()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'basket'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'basket/basket',
+				],
+			],
+			'bottom' => [
+				'modals' => ['reply_modal'],
+				'js' => ['dashboard/main', 'basket/main'],
+			],
+		]);
+	}
+
+	public function productpage()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['modal/modals', 'basket/productpage', 'static/store']
+			],
+			'middle' => [
+				'body_class' => ['product-page'],
+				'head' => ['../global/global_navbar'],
+				'body' => [
+					'basket/productpage_top',
+					'basket/productpage_middle',
+					'../global/banner_support_locals',
+				],
+				'footer' => ['global/footer']
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => ['basket/productpage', 'plugins/fb-login'],
+			],
+		]);
 	}
 
 	public function view($product_id=0, $product_name='')
@@ -38,21 +83,20 @@ class Basket extends My_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => 'Product Name - '.APP_NAME,
-				'css' => ['marketplace', 'productpage'],
+				'css' => ['marketplace', 'basket/productpage'],
+
 			],
 			'middle' => [
+				'body_class' => ['dashboard', 'basket'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
-					'marketplace/navbar',
-					'productpage/top',
-					'productpage/middle',
-					'productpage/banner'
-				],
-				'footer' => [
-					'static/footer'
+					'dashboard/navbar_aside',
+					'basket/basket',
 				],
 			],
 			'bottom' => [
-				'js' => ['productpage'],
+				'modals' => ['reply_modal'],
+				'js' => ['dashboard/main', 'basket/main'],
 			],
 			'data' => [
 				'product' => $product

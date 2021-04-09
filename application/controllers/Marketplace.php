@@ -12,8 +12,7 @@ class Marketplace extends MY_Controller {
 
 	public function index()
 	{
-		// debug(nearby_farms($this->latlng), $this->products->products_by_location(), 'stop');
-		$famers = nearby_farms($this->latlng);
+		// debug(nearby_farms($this->latlng), nearby_products($this->latlng), 'stop');
 		$this->render_page([
 			'top' => [
 				'metas' => [
@@ -22,28 +21,27 @@ class Marketplace extends MY_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => APP_NAME.' | Veggies grown by community.',
-				'css' => ['marketplace', 'farmer-card', 'product-item'],
+				'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
 			],
 			'middle' => [
 				'body' => [
-					'marketplace/navbar',
+					'../global/global_navbar',
 					'marketplace/carousel',
-					'marketplace/banner',
+					'../global/veggy_nearby',
 					'marketplace/category',
-					'marketplace/products',
-					'marketplace/famers',
+					'marketplace/products_container',
+					'marketplace/famers_container'
 				],
 				'footer' => [
-					'templates/marketplace/poster',
-					'static/footer'
+					'global/footer'
 				],
 			],
 			'bottom' => [
-				'modals' => ['search_popup'],
-				'js' => ['isotope.min', 'marketplace', 'fb-login'],
+				'modals' => [],
+				'js' => ['marketplace/main', 'plugins/fb-login'],
 			],
 			'data' => [
-				'nearby_farms' => $famers,
+				'nearby_farms' => nearby_farms($this->latlng),
 				'products' => nearby_products($this->latlng),
 			],
 		]/*, true*/);

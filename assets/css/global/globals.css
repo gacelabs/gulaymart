@@ -1,0 +1,208 @@
+#global_navbar {
+    background-color: #a8d253;
+    border-bottom: none;
+    /*box-shadow: 0 1px 5px 0px rgb(0 0 0 / 23%);*/
+    left: 0;
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+}
+#global_navbar_grid {
+	display: grid;
+	grid-template-columns: 34px 1fr 1fr;
+	grid-gap: 10px;
+	margin: 0 auto;
+}
+#global_navbar_logo {
+	background-color: #fff;
+	border-radius: 4px;
+	color: #799938;
+	font-size: 17px;
+	height: 34px;
+	padding: 9px 0;
+	text-align: center;
+	width: 34px;
+}
+#global_search_form {
+	margin: 0;
+	padding: 0;
+}
+#global_search_form>.input-group {
+	max-width: 240px;
+}
+#global_search_form input, #global_search_form button {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	padding: 7px 12px;
+}
+#global_navbar_btn_list {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+#global_navbar_btn_list>li {
+	background: #fff;
+	border-radius: 4px;
+	color: #799938;
+	cursor: pointer;
+	display: inline-block;
+	height: 34px;
+	margin: 0;
+	padding: 7px 10px;
+	position: relative;
+	text-align: center;
+	transition: all .3s ease-in-out;
+	vertical-align: top;
+}
+#global_navbar_btn_list>li:hover {
+	filter: opacity(0.8);
+}
+body.is-logged #global_navbar_btn_list>li {
+	height: 34px;
+	width: 34px;
+	margin-left: 7px;
+	padding: 7px 0;
+}
+body.is-logged #global_navbar_btn_list>li:first-child {
+	margin-left: 0;
+}
+#global_navbar_avatar {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	display: inline-block;
+	height: 34px;
+	margin: -7px 0 0;
+	padding: 0;
+	border-radius: 4px;
+	width: 34px;
+}
+.global-navbar-badge {
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 100%;
+	box-shadow: 0px 2px 2px 1px #33333380;
+	font-size: 11px;
+	left: -5px;
+	position: absolute;
+	text-align: center;
+	top: -2px !important;
+	width: 14px;
+	height: 14px;
+}
+.global-navbar-badge.red {
+	background-color: #fff;
+}
+#footer_page_container {
+	background-image: url(../../images/marketplace-bg.png);
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	padding: 30px 0;
+}
+.mobile-note {
+	background-color: #fff;
+	border-radius: 4px;
+	border-top: 2px solid #dc4040;
+	padding: 5px;
+	margin-bottom: 15px;
+}
+.text-capsule {
+	background-color: #aaa;
+	padding: 4px 12px;
+	border-radius: 20px;
+}
+.text-capsule.blue {
+	background-color: #99dcff;
+}
+.status-placed {
+	background-color: #e2e2e2;
+}
+.status-delivery {
+	background-color: #ffe33c;
+}
+.status-received {
+	background-color: #a8d253;
+}
+.status-cancelled {
+	background-color: #ff8e8e;
+}
+@media (max-width: 991px) {
+	body .container {
+		padding: 0;
+	}
+}
+@media (max-width: 767px) {
+	body {
+		padding-top: 38px;
+		background-color: #efefef;
+	}
+	h3 {
+		font-size: 18px;
+	}
+	h4 {
+		font-size: 16px;
+	}
+	.panel {
+		border-radius: 0;
+	}
+	#global_navbar {
+		grid-gap: 10px;
+		grid-template-columns: auto 1fr auto;
+		margin: 0;
+		padding: 5px;
+	}
+	#global_navbar>.container {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	#global_navbar_grid {
+		grid-template-columns: 28px 1fr 28px;
+		grid-gap: 7px;
+	}
+	body.is-logged #global_navbar_grid {
+		grid-template-columns: auto 1fr auto;
+		grid-gap: 12px;
+	}
+	#global_search_form input, #global_search_form button {
+		height: 28px;
+		padding: 4px 12px;
+	}
+	body.is-logged #global_navbar_btn_list>li {
+		margin-left: 4px;
+	}
+	body.is-logged #global_navbar_btn_list>li, #global_navbar_btn_list>li, #global_navbar_logo {
+		height: 28px;
+		padding: 4px 0;
+		width: 28px;
+	}
+	body.is-logged #global_navbar_btn_list>li:last-child, #global_navbar_avatar {
+		height: 28px;
+		margin-top: 0;
+		padding: 0;
+		width: 28px;
+	}
+}
+@media (max-width: 260px) {
+	#global_navbar_grid, li[data-toggle="modal"] {
+		display: block !important;
+		width: 100% !important;
+	}
+	#global_search_form {
+		margin-bottom: 5px;
+	}
+	#global_navbar_btn_list {
+		text-align: center;
+	}
+	#global_navbar_logo {
+		display: none;
+	}
+	#global_search_form>.input-group {
+		max-width: initial;
+	}
+}

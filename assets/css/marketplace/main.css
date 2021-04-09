@@ -1,0 +1,107 @@
+#veggy_categories {
+	border-radius: 4px;
+	display: grid;
+	grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto);
+	grid-gap: 15px;
+	width: 100%;
+	padding: 0 10px;
+}
+.veggy-category-item {
+	display: inline;
+	cursor: pointer;
+	width: 100%;
+}
+.veggy-category-item-inner {
+	display: grid;
+	grid-template-columns: 30px minmax(0, auto);
+	grid-gap: 5px;
+	padding: 10px 0;
+	text-decoration: none !important;
+}
+.veggy-category-item-inner>img {
+	filter: grayscale(1);
+	height: 25px;
+	margin: 0 auto;
+	width: 25px;
+}
+.veggy-category-item-inner p {
+	margin: 0;
+	white-space: nowrap;
+}
+.veggy-category-item-inner i.fa {
+	color: transparent;
+	padding-top: 5px;
+}
+.veggy-category-item-inner:hover p, .veggy-category-item-inner:hover i.fa, .veggy-category-item-inner.active, .veggy-category-item-inner.active i.fa {
+	color: #799938;
+	transition: all .3s ease-in-out;
+}
+.veggy-category-item-inner:hover img, .veggy-category-item-inner.active img {
+	filter: unset;
+}
+#category_container {
+	margin-bottom: 10px;
+}
+#category_container .panel {
+	margin-bottom: 0;
+}
+#products_container, #farmers_container {
+	margin-bottom: 30px;
+}
+#category_container {
+	margin-bottom: 10px;
+}
+#farmer_list_container {
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	margin-left: -10px;
+	margin-right: -10px;
+	margin-top: -2px;
+}
+#marketplace_header_carousel {
+	margin-bottom: 30px;
+}
+#marketplace_header_carousel img {
+	width: 100%;
+}
+
+@media (max-width: 991px) {
+	#veggy_categories {
+		grid-gap: 10px;
+	}
+}
+@media (max-width: 767px) {
+	body.marketplace {
+		padding-top: 40px;
+	}
+	#marketplace_header_carousel {
+		background-color: #fff;
+		padding: 5px;
+		margin: 5px 5px 30px 5px;
+	}
+	#category_container, #farmers_container {
+		padding: 0 10px;
+	}
+	#category_container .panel {
+		display: block;
+		margin: 0 -10px !important;
+	}
+	#category_container h3, #farmers_container h3 {
+		color: #756d6d;
+		font-size: 14px;
+		text-transform: uppercase;
+	}
+	#category_container a.text-link>h3, #farmers_container a.text-link>h3 {
+		color: #2196F3;
+	}
+	#veggy_categories {
+		grid-template-columns: minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px);
+	    grid-gap: 15px;
+		overflow-y: auto;
+		padding: 0;
+	}
+	#farmer_list_container {
+		margin-left: -5px;
+		margin-right: -5px;
+	}
+}

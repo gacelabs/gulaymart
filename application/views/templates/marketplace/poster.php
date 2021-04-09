@@ -6,7 +6,6 @@
 				<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
 				<li data-target="#carousel-example-generic" data-slide-to="1"></li>
 			</ol>
-
 			<div class="carousel-inner" role="listbox" style="border-radius:0;">
 				<div class="item active">
 					<img src="assets/images/carousel/support.png" alt="...">

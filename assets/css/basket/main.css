@@ -1,0 +1,8 @@
+@media (max-width: 767px) {	
+	.tender-amount-grid {
+		display: block;
+	}
+	.tender-amount-grid .order-item-status {
+		margin-bottom: 20px;
+	}
+}

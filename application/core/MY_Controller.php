@@ -163,7 +163,7 @@ class MY_Controller extends CI_Controller {
 			'bottom' => [
 				'modals' => [],
 				'css' => [],
-				'js' => [$this->class_name],
+				'js' => [],
 			],
 		];
 		$data = false;

@@ -24,18 +24,18 @@ class Farm extends MY_Controller {
 		if ($product_count = $this->products->count()) {
 			$this->render_page([
 				'top' => [
-					'css' => ['sales', 'chart.min'],
+					'css' => ['dashboard/main', 'farm/sales', 'chart.min'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'sales'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'sales'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/sales',
 					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'chart.min', 'sales'],
+					'js' => ['plugins/chart.min', 'farm/sales', 'dashboard/main'],
 				],
 				'data' => [
 					'product_count' => $product_count
@@ -205,11 +205,11 @@ class Farm extends MY_Controller {
 		} elseif (!empty($this->farms)) {
 			$this->render_page([
 				'top' => [
-					'css' => ['new-veggy', 'product-item']
+					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
 				],
 				'middle' => [
-					'body_class' => ['farm', 'new-veggy'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/new_veggy',
@@ -217,10 +217,11 @@ class Farm extends MY_Controller {
 				],
 				'bottom' => [
 					'js' => [
-						'jquery.inputmask.min',
-						'inputmask.binding',
-						'farm',
-						'new-veggy',
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'farm/main',
+						'farm/new-veggy',
+						'dashboard/main',
 					],
 				],
 				'data' => [
@@ -292,11 +293,11 @@ class Farm extends MY_Controller {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			$this->render_page([
 				'top' => [
-					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
+					'css' => ['dashboard/main', 'farm/storefront', '../js/plugins/chosen/chosen', 'ImageSelect', 'static/store'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'storefront'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'storefront', 'farm'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/storefront',
@@ -305,12 +306,13 @@ class Farm extends MY_Controller {
 				'bottom' => [
 					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal', 'farm_location_help_modal'],
 					'js' => [
-						'chosen/new-chosen',
-						'ImageSelect.jquery',
-						'farm',
-						'storefront',
+						'plugins/chosen/new-chosen',
+						'plugins/ImageSelect.jquery',
+						'farm/main',
+						'farm/storefront',
 						'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
-						'markerclustererplus.min',
+						'plugins/markerclusterplus.min',
+						'dashboard/main'
 					],
 				],
 				'data' => [
@@ -328,18 +330,18 @@ class Farm extends MY_Controller {
 		// debug($this->products->get_in(), 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['../js/DataTables/datatables.min', 'inventory'],
+				'css' => ['dashboard/main', '../js/plugins/DataTables/datatables.min', 'farm/inventory'],
 			],
 			'middle' => [
-				'body_class' => ['farm', 'inventory'],
-				'head' => ['dashboard/nav_top'],
+				'body_class' => ['dashboard', 'inventory'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 					'farm/inventory',
 				],
 			],
 			'bottom' => [
-				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
+				'js' => ['farm/main', 'plugins/DataTables/datatables.min', 'dashboard/main'],
 			],
 			'data' => [
 				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id']]),
@@ -426,7 +428,7 @@ class Farm extends MY_Controller {
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [
-					'css' => ['../js/chosen/chosen', 'new-veggy', 'product-item'],
+					'css' => ['../js/plugins/chosen/chosen', 'new-veggy', 'product-item'],
 				],
 				'middle' => [
 					'body_class' => ['farm', 'save-veggy'],
@@ -438,11 +440,12 @@ class Farm extends MY_Controller {
 				],
 				'bottom' => [
 					'js' => [
-						'chosen/new-chosen',
-						'jquery.inputmask.min',
-						'inputmask.binding',
-						'farm',
-						'new-veggy',
+						'plugins/chosen/new-chosen',
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'farm/main',
+						'dashboard/main',
+						'farm/new-veggy',
 					],
 				],
 				'data' => [
@@ -469,23 +472,22 @@ class Farm extends MY_Controller {
 
 	public function settings()
 	{
-		if (!empty($this->farms)) {
-			$this->render_page([
-				'middle' => [
-					'body_class' => ['farm', 'settings'],
-					'head' => ['dashboard/nav_top'],
-					'body' => [
-						'dashboard/navbar_aside',
-						'farm/settings',
-					],
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', '../js/plugins/DataTables/datatables.min'],
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'settings'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'farm/settings',
 				],
-				'bottom' => [
-					'js' => ['farm'],
-				],
-			]);
-		} else {
-			redirect(base_url('farm/storefront/'));
-		}
+			],
+			'bottom' => [
+				'js' => ['farm/main', 'dashboard/main'],
+			],
+		]);
 	}
 
 	public function store($id=0, $name=false)
@@ -510,17 +512,20 @@ class Farm extends MY_Controller {
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
-					'css' => ['marketplace', 'storefront', 'storefront-page', 'product-item'],
+					'css' => ['static/store', 'looping/product-card', 'modal/modals'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'storefront', 'storepage'],
-					'head' => ['marketplace/navbar'],
+					'body_class' => ['store'],
+					'head' => ['../global/global_navbar'],
 					'body' => [
 						'../static/store',
 					],
+					'footer' => [
+						'static/footer'
+					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'isotope.min', 'store'],
+					'js' => ['farm/store', 'dashboard/main'],
 				],
 				'data' => $data
 			]);

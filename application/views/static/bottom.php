@@ -3,7 +3,7 @@
 			foreach ($bottom['css'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_URL)) {
 					echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
-				} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
+				} else {
 					echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
 				}
 				echo "\r\n";
@@ -16,7 +16,7 @@
 			foreach ($bottom['js'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_URL)) {
 					echo '<script type="text/javascript" src="'.$value.'"></script>';
-				} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
+				} else {
 					echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
 				}
 				echo "\r\n";

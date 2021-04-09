@@ -1,28 +1,50 @@
 <?php if ($this->categories): ?>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="category_container">
+<div id="category_container">
 	<h3><b>Categories</b></h3>
-	<div class="panel zero-gaps" style="border-radius:12px;">
+	<div class="panel zero-gaps">
 		<div id="veggy_categories">
-			<div class="veggy-category-item">
-				<a href="" class="veggy-category-item-inner active" data-category-group="all">
-					<img src="assets/images/all.png" />
-					<ul class="spaced-list between">
-						<li><p>All</p></li>
-						<li><i class="fa fa-chevron-down icon-right"></i></li>
-					</ul>
-				</a>
-			</div>
-			<?php foreach ($this->categories as $key => $category): ?>
-				<a href="" class="veggy-category-item">
-					<div class="veggy-category-item-inner" data-category-group="<?php echo $category['id'];?>">
-						<img src="<?php echo $category['photo'];?>" />
-						<ul class="spaced-list between">
-							<li><p><?php echo $category['label'];?></p></li>
-							<li><i class="fa fa-chevron-down icon-right"></i></li>
-						</ul>
-					</div>
-				</a>
-			<?php endforeach ?>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("marketplace", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/all.png" />
+					<p>All <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("leafy", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/leafy.png" />
+					<p>Leafy <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("root", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/root.png" />
+					<p>Root <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("cruciferous", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/cruciferous.png" />
+					<p>Cruciferous <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("marrow", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/marrow.png" />
+					<p>Marrow <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("stem", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/stem.png" />
+					<p>Stem <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
+			<a href="" class="veggy-category-item">
+				<div class="veggy-category-item-inner <?php if (in_array("allium", $middle['body_class'])) {echo "active";} ?>">
+					<img src="assets/images/categories/allium.png" />
+					<p>Allium <i class="fa fa-chevron-down"></i></p>
+				</div>
+			</a>
 		</div>
 	</div>
 </div>

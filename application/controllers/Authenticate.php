@@ -36,13 +36,14 @@ class Authenticate extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['register'],
+				'css' => ['static/register', 'modal/modals'],
 			],
 			'middle' => [
 				'body_class' => ['register'],
 				'body' => [
-					'account/register',
+					'../static/register',
 				],
+				'footer' => ['global/footer']
 			],
 			'data' => [
 				'is_login' => 0

@@ -1,54 +1,55 @@
-<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
+<div id="dashboard_panel_right">
 
-	<?php $this->view('static/mobile_note'); ?>
-	<div class="dash-panel-right-container" id="storefront">
-		<div class="dash-panel-right-canvas">
+	<?php $this->view('global/mobile_note'); ?>
+
+	<div class="row hidden-xs" id="storefront">
+		<div class="dashboard-panel-right-canvas">
 			<?php if ($current_profile AND (isset($current_profile['is_agreed_terms']) AND !$current_profile['is_agreed_terms'])): ?>
 				<!-- Hide after AGREED on terms and privacy -->
 				<div class="center-panel-md">
-					<div class="dash-panel">
-						<div class="dash-panel-top">
+					<div class="dashboard-panel">
+						<div class="dashboard-panel-top">
 							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
 							<p>On this page, you can build your very own online store! Showcase your products in a nice, clean and professional looking e-commerce website.</p>
 							<p>Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
 							<div class="text-center">
+								<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
 								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
-								<button class="btn btn-lg btn-theme normal-radius" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
 							</div>
 						</div>
 					</div>
 				</div>
 			<?php else: ?>
 				<?php /*debug($data['farms'], 'stop');*/ ?>
-				<div class="col-lg-5 col-md-4 col-sm-12 hidden-xs" id="storefront_customs_parent">
-					<div class="dash-panel theme">
+				<div class="col-lg-5 col-md-5 col-sm-12 hidden-xs" id="storefront_customs_parent">
+					<div class="dashboard-panel theme">
 						<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 							<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id');?>">
-							<div class="dash-panel-top">
+							<div class="dashboard-panel-top">
 								<h3>Storefront Customs</h3>
 								<ul class="spaced-list between" style="margin-top: 15px;">
 									<li class="text-sm">
 										<?php if (isset($data['farms']) AND $data['farms']): ?>
-											<span class="color-grey">
+											<span class="text-gray">
 												<i class="fa fa-calendar"></i> UPDATED
 											</span><br><?php echo date('F j, Y', strtotime($data['farms']['updated']));?>
 										<?php else: ?>
-											<span class="color-grey">
+											<span class="text-gray">
 												<i class="fa fa-calendar"></i> TODAY
 											</span><br><?php echo date('F j, Y');?>
 										<?php endif ?>
 									</li>
 									<?php if (isset($data['farms']) AND $data['farms']): ?>
 										<li class="text-right">
-											<a class="text-link btn btn-default normal-radius icon-left" id="storefrontTab" target="storefrontTab" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
-											<button type="submit" class="btn btn-blue normal-radius">Update</button>
+											<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+											<button type="submit" class="btn btn-contrast">Update</button>
 										</li>
 									<?php else: ?>
-										<li><button type="submit" class="btn btn-blue normal-radius" data-orig-ui="Update">Create</button></li>
+										<li><button type="submit" class="btn btn-contrast">Create</button></li>
 									<?php endif ?>
 								</ul>
 							</div>
-							<div class="dash-panel-middle zero-gaps storefront_nav">
+							<div class="dashboard-panel-middle zero-gaps storefront_nav">
 								<div class="custom-item-parent">
 									<ul class="spaced-list between custom-item-btn">
 										<li>FARM IDENTITY</li>
@@ -57,12 +58,12 @@
 									<div class="custom-item-child">
 										<div class="form-group">
 											<label for="farm_name">Farm name</label>
-											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
+											<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
 											<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>">
 										</div>
 										<div class="form-group">
 											<label for="tagline">Tagline</label>
-											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
+											<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
 											<input type="text" name="user_farms[tagline]" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" value="<?php isset_echo($data['farms'], 'tagline');?>">
 										</div>
 									</div>
@@ -75,7 +76,7 @@
 									</ul>
 									<div class="custom-item-child">
 										<div class="form-group">
-											<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Tell something about your farm.</small>
+											<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Tell something about your farm.</small>
 											<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"><?php isset_echo($data['farms'], 'about');?></textarea>
 										</div>
 									</div>
@@ -92,7 +93,7 @@
 												<li><label>Cover image</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".storefront-img-bg" data-field="cover_pic">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 800 x 200 pixels.</small>
+											<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Minimum size: 800 x 200 pixels.</small>
 											<input type="hidden" id="cover_pic" name="user_farms[cover_pic]" value="<?php isset_echo($data['farms'], 'cover_pic');?>" required="required" />
 										</div>
 										<div class="form-group">
@@ -100,7 +101,7 @@
 												<li><label>Profile photo</label></li>
 												<li class="text-link" data-toggle="modal" data-target="#media_modal" data-change-ui=".profile_photo" data-field="profile_pic">Media</li>
 											</ul>
-											<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Minimum size: 60 x 60 pixels.</small>
+											<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Minimum size: 60 x 60 pixels.</small>
 											<input type="hidden" id="profile_pic" name="user_farms[profile_pic]" value="<?php isset_echo($data['farms'], 'profile_pic');?>" required="required" />
 										</div>
 									</div>
@@ -112,7 +113,7 @@
 										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
 									<div class="custom-item-child">
-										<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">Help</span></small>
+										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">Help</span></small>
 										<div id="location_container">
 											<div class="input-group hide" id="clone_me">
 												<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly">
@@ -173,7 +174,7 @@
 															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' />
 															<span class="input-group-btn">
 															<?php if ($key == 0): ?>
-																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
+																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
 															<?php else: ?>
 																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-minus text-danger"></i></button>
 															<?php endif ?>
@@ -185,7 +186,7 @@
 														<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0">
 														<input type="hidden" name="user_farm_locations[1][]" />
 														<span class="input-group-btn">
-															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-blue"></i></button>
+															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
 														</span>
 													</div>
 												<?php endif ?>
@@ -223,15 +224,15 @@
 										<li><i class="fa fa-angle-right"></i></li>
 									</ul>
 									<div class="custom-item-child">
-										<div class="input-group">
+										<div class="input-group" style="margin-bottom:10px;">
 											<span class="input-group-addon"><i class="fa fa-facebook-square"></i></span>
 											<input type="url" name="user_farms[facebook]" class="form-control social-url" data-id="#storefront-facebook" placeholder="Facebook URL" value="<?php isset_echo($data['farms'], 'facebook');?>">
 										</div>
-										<div class="input-group">
+										<div class="input-group" style="margin-bottom:10px;">
 											<span class="input-group-addon"><i class="fa fa-instagram"></i></span>
 											<input type="url" name="user_farms[instagram]" class="form-control social-url" data-id="#storefront-instagram" placeholder="Instagram URL" value="<?php isset_echo($data['farms'], 'instagram');?>">
 										</div>
-										<div class="input-group">
+										<div class="input-group" style="margin-bottom:10px;">
 											<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
 											<input type="url" name="user_farms[youtube]" class="form-control social-url" data-id="#storefront-youtube" placeholder="YouTube URL" value="<?php isset_echo($data['farms'], 'youtube');?>">
 										</div>
@@ -246,7 +247,7 @@
 					</div>
 				</div>
 
-				<div class="col-lg-7 col-md-8 col-sm-12 hidden-xs">
+				<div class="col-lg-7 col-md-7 col-sm-12 hidden-xs">
 					<div class="cover_image" id="storefront_page_container">
 						<div class="storefront-top">
 							<div class="storefront-img-bg" style="background-image: url(<?php echo(!empty($data['farms']['cover_pic']) ? $data['farms']['cover_pic'] : "assets/images/storefront-top.jpg"); ?>);">
@@ -272,11 +273,13 @@
 
 							<div id="storefront_product_container">
 								<img src="assets/images/storefront-sample-listing.png" class="img-responsive" style="width: 100%;">
-								<?php if (!empty($data['farms']['banner'])) : ?>
-								<img src="assets/images/banner/<?php echo $data['farms']['banner']; ?>" class="banner_section img-responsive" style="width: 100%;">
-								<?php else: ?>
-								<img src="assets/images/banner/steps.png" class="banner_section img-responsive" style="width: 100%;">
-								<?php endif; ?>
+								<div class="banner-section">
+									<?php if (!empty($data['farms']['banner'])) : ?>
+									<img src="assets/images/banner/<?php echo $data['farms']['banner']; ?>" class="img-responsive" style="width: 100%;">
+									<?php else: ?>
+									<img src="assets/images/banner/steps.png" class="img-responsive" style="width: 100%;">
+									<?php endif; ?>
+								</div>
 							</div>
 						</div>
 

@@ -1,0 +1,56 @@
+#sales_metrics {
+	display: inline-grid;
+	grid-template-columns: 250px 250px 250px 250px 250px 250px;
+	grid-gap: 0;
+	width: 100%;
+	overflow-x: auto;
+}
+#sales_metrics .panel-grid-item {
+	border: 1px solid #ddd;
+}
+#sales_metrics .panel-grid-item:nth-child(2) {
+	border-left: 0;
+	border-right: 0;
+}
+#sales_metrics .panel-grid-item:nth-child(3) {
+	border-right: 0;
+}
+#sales_metrics .panel-grid-item>div {
+	padding: 10px;
+}
+#sales_metrics select {
+	margin: 10px 0 0 0;
+	border: 1px solid #ccc;
+	padding: 5px;
+	font-size: 12px;
+	border-radius: 3px;
+	color: #777;
+	outline: none;
+}
+#sales_metrics select:focus {
+	border-color: #799938;
+}
+#sales_metrics .panel-grid-footer {
+	border-top: 1px solid #eee;
+	margin-top: 10px;
+}
+#sales_metrics_chart {
+	width: 100%;
+}
+.panel-grid-middle {
+	height: 65px;
+}
+@media (max-width: 767px) {
+	#sales_metrics {
+		grid-template-columns: 200px 200px 200px;
+	}
+	#sales_metrics .panel-grid-item {
+		border: 1px solid #ddd !important;
+	}
+	.panel-grid-middle {
+		height: 48px;
+	}
+	#best_selling {
+		margin-bottom: 0;
+	}
+}

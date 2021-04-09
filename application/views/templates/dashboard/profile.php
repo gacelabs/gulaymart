@@ -1,20 +1,20 @@
-<div class="col-lg-10 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
-	<div class="dash-panel-right-container">
-		<?php $this->view('static/mobile_note'); ?>
-		<div class="dash-panel-right-canvas">
-			<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom:15px;">
-				<p>You're all set! Enjoy shopping fresh veggies at the <a href="marketplace/" class="btn btn-blue btn-sm normal-radius">Marketplace</a></p>
-			</div>
-			<?php endif ?>
+<div id="dashboard_panel_right">
+	<?php $this->view('global/mobile_note'); ?>
+	<div class="row">
+		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<h4>You're all set! Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
+			<hr class="carved">
+		</div>
+		<?php endif ?>
 
-			<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+		<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+			<div class="dashboard-panel theme">
+				<ul class="spaced-list between dashboard-panel-top">
+					<li><h4 class="zero-gaps">What's your name?</h4></li>
+				</ul>
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
-					<div class="dash-panel theme">
-						<ul class="spaced-list between dash-panel-top">
-							<li><h3>What's your name?</h3></li>
-						</ul>
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel-middle">
 						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 						<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
 							<input type="hidden" name="id" value="<?php echo $current_profile['profile']['id'];?>">
@@ -32,7 +32,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Your birth month and year will be used to curate contents."></small></h5>
+									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></h5>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -53,13 +53,13 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="" data-original-title="Copied!">
 										<input type="email" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Point of contact for delivery."></small></h5>
-									<div class="form-group">
+									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></h5>
+									<div class="form-group zero-gaps">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
 									</div>
 								</div>
@@ -79,7 +79,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Your birth month and year will be used to curate contents."></small></h5>
+									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></h5>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -100,127 +100,125 @@
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<h5>Registered email</h5>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="top" data-trigger="click" title="" data-original-title="Copied!">
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="" data-original-title="Copied!">
 										<input type="email" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="top" title="Point of contact for delivery."></small></h5>
-									<div class="form-group">
+									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></h5>
+									<div class="form-group zero-gaps">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required">
 									</div>
 								</div>
 							</div>
 						<?php endif ?>
-						</div>
-						<div class="dash-panel-footer text-right">
-							<button type="submit" class="btn btn-theme normal-radius">Submit</button>
-						</div>
+					</div>
+					<div class="dashboard-panel-footer text-right">
+						<button type="submit" class="btn btn-contrast">Update</button>
 					</div>
 				</form>
-
-				<?php if (isset($current_profile['profile']['phone'])) : ?>
-				<form action="api/save_notif" method="post" data-ajax="2" class="form-validate">
-					<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-					<div class="dash-panel theme">
-						<ul class="spaced-list between dash-panel-top">
-							<li><h3>Notify me with</h3></li>
-						</ul>
-						<div class="dash-panel-middle">
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
-									<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-									<ul class="spaced-list between">
-										<li><p>Order status</p></li>
-										<li>
-											<label class="switch">
-												<input type="checkbox" name="notif_email" <?php isset_echo($current_profile['settings'], 'notif_email');?>>
-												<span class="slider round"></span>
-											</label>
-										</li>
-									</ul>
-									<ul class="spaced-list between">
-										<li><p>Messages</p></li>
-										<li>
-											<label class="switch">
-												<input type="checkbox" name="notif_cp" <?php isset_echo($current_profile['settings'], 'notif_cp');?>>
-												<span class="slider round"></span>
-											</label>
-										</li>
-									</ul>
-								<?php else: ?>
-									<ul class="spaced-list between">
-										<li><p>Order status</p></li>
-										<li>
-											<label class="switch">
-												<input type="checkbox" name="notif_email">
-												<span class="slider round"></span>
-											</label>
-										</li>
-									</ul>
-									<ul class="spaced-list between">
-										<li><p>Messages</p></li>
-										<li>
-											<label class="switch">
-												<input type="checkbox" name="notif_cp">
-												<span class="slider round"></span>
-											</label>
-										</li>
-									</ul>
-								<?php endif ?>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-				<?php endif; ?>
 			</div>
 
 			<?php if (isset($current_profile['profile']['phone'])) : ?>
-			<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
-				<div class="dash-panel theme">
-					<ul class="spaced-list between dash-panel-top">
-						<li><h3>Shipping address</h3></li>
-					</ul>
-					<div class="dash-panel-middle">
-						<div class="saved-shipping-container">
-							<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
-								<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
-									<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
-										<div>
-											<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
-											<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-											<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
-										</div>	
-										<div class="text-center">
-											<p class="zero-gaps">Primary</p>
-											<label class="switch">
-												<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
-												<span class="slider round"></span>
-											</label>
-										</div>
-									</div>
-								<?php endforeach ?>
+			<div class="dashboard-panel theme">
+				<ul class="spaced-list between dashboard-panel-top">
+					<li><h4 class="zero-gaps">Notify me with</h4></li>
+				</ul>
+				<div class="dashboard-panel-middle">
+					<form action="api/save_notif" method="post" data-ajax="2" class="form-validate">
+						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
+								<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+								<ul class="spaced-list between">
+									<li><p>Order status</p></li>
+									<li>
+										<label class="switch">
+											<input type="checkbox" name="notif_email" <?php isset_echo($current_profile['settings'], 'notif_email');?>>
+											<span class="slider round"></span>
+										</label>
+									</li>
+								</ul>
+								<ul class="spaced-list between">
+									<li><p>Messages</p></li>
+									<li>
+										<label class="switch">
+											<input type="checkbox" name="notif_cp" <?php isset_echo($current_profile['settings'], 'notif_cp');?>>
+											<span class="slider round"></span>
+										</label>
+									</li>
+								</ul>
 							<?php else: ?>
-								<p>No Shipping Address yet.</p>
-							<?php endif; ?>
+								<ul class="spaced-list between">
+									<li><p>Order status</p></li>
+									<li>
+										<label class="switch">
+											<input type="checkbox" name="notif_email">
+											<span class="slider round"></span>
+										</label>
+									</li>
+								</ul>
+								<ul class="spaced-list between">
+									<li><p>Messages</p></li>
+									<li>
+										<label class="switch">
+											<input type="checkbox" name="notif_cp">
+											<span class="slider round"></span>
+										</label>
+									</li>
+								</ul>
+							<?php endif ?>
+							</div>
 						</div>
-					</div>
-					
-					<?php $this->view('static/map_location_form', ['url' => 'api/save_shipping']); ?>
+					</form>
 				</div>
 			</div>
 			<?php endif; ?>
-			
-			<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-				<hr class="carved">
-				<a href="farm/storefront/" style="background-color:#f8f8f8;padding:30px 0;margin:40px 0 0;">
-					<img src="assets/images/be-farmer.png" class="img-responsive" style="margin:0 auto;">
-				</a>
-			</div>
-			<?php endif; ?>
 		</div>
+
+		<?php if (isset($current_profile['profile']['phone'])) : ?>
+		<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
+			<div class="dashboard-panel theme">
+				<ul class="spaced-list between dashboard-panel-top">
+					<li><h4 class="zero-gaps">Shipping address</h4></li>
+				</ul>
+				<div class="dashboard-panel-middle">
+					<div class="saved-shipping-container">
+						<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+							<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+								<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
+									<div>
+										<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
+										<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
+										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
+									</div>	
+									<div class="text-center">
+										<p class="zero-gaps">Primary</p>
+										<label class="switch">
+											<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
+											<span class="slider round"></span>
+										</label>
+									</div>
+								</div>
+							<?php endforeach ?>
+						<?php else: ?>
+							<p>No Shipping Address yet.</p>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php $this->view('static/map_location_form', ['url' => 'api/save_shipping']); ?>
+			</div>
+		</div>
+		<?php endif; ?>
+		
+		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+		<hr class="carved clearfix">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;">
+			<a href="farm/storefront/">
+				<img src="assets/images/banner/be-farmer.png" class="img-responsive" style="margin:0 auto;">
+			</a>
+		</div>
+		<?php endif; ?>
 	</div>
 </div>
