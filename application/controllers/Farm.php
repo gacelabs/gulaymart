@@ -417,6 +417,7 @@ class Farm extends MY_Controller {
 						$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $id]);
 					}
 				}
+				$post['product_id'] = $id;
 				$post['updated'] = 1;
 				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
@@ -427,27 +428,6 @@ class Farm extends MY_Controller {
 			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
 			// debug($product, 'stop');
 			$this->render_page([
-				/*'top' => [
-					'css' => ['../js/plugins/chosen/chosen', 'dashboard/main', 'farm/new-veggy'],
-				],
-				'middle' => [
-					'body_class' => ['farm', 'save-veggy'],
-					'head' => ['dashboard/navbar'],
-					'body' => [
-						'dashboard/navbar_aside',
-						'farm/save_veggy',
-					],
-				],
-				'bottom' => [
-					'js' => [
-						'plugins/chosen/new-chosen',
-						'plugins/jquery.inputmask.min',
-						'plugins/inputmask.binding',
-						'farm/main',
-						'dashboard/main',
-						'farm/new-veggy',
-					],
-				],*/
 				'top' => [
 					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
 				],
