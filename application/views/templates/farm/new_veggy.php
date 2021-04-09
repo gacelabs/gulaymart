@@ -33,7 +33,7 @@
 										<button class="btn btn-default" type="button" id="prod_name_checker"><i class="fa fa-chevron-right color-theme"></i></button>
 									</span>
 								</div>
-								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 							</div>
 							<div class="input-container hide" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
@@ -59,7 +59,7 @@
 										<?php endforeach ?>
 									<?php endif ?>
 								</div>
-								<div id='basic_btn_container' style='margin-top:15px;text-align:right;display:none;'><button class='btn btn-theme normal-radius'>Next<i class='fa fa-chevron-right icon-right'></i></button></div>
+								<div id='basic_btn_container' style='margin-top:15px;text-align:right;display:none;'><button class='btn btn-theme '>Next<i class='fa fa-chevron-right icon-right'></i></button></div>
 							</div>
 						</form>
 					</div>
@@ -69,12 +69,12 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product attributes</label>
-							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
+							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
 							<div class="input-group">
-								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
+								<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
 								<input type="text" class="form-control" name="products_attribute[0][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="How do you grow your plant?">
 								<div class="input-group-btn">
 									<div class="dropdown">
@@ -92,7 +92,7 @@
 								</div>
 							</div>
 							<div class="input-group">
-								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
+								<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
 								<input type="text" class="form-control" name="products_attribute[1][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Sold ripe or unripe?">
 								<div class="input-group-btn">
 									<div class="dropdown">
@@ -107,7 +107,7 @@
 								</div>
 							</div>
 							<div class="input-group">
-								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
+								<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
 								<input type="text" class="form-control" name="products_attribute[2][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Is the product in good shape?">
 								<div class="input-group-btn">
 									<div class="dropdown">
@@ -122,7 +122,7 @@
 								</div>
 							</div>
 							<div class="input-group">
-								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
+								<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
 								<input type="text" class="form-control" name="products_attribute[3][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="Freshness detail">
 								<div class="input-group-btn">
 									<div class="dropdown">
@@ -137,7 +137,7 @@
 								</div>
 							</div>
 							<div class="input-group">
-								<span class="input-group-addon"><small><i class="fa fa-circle color-grey"></i></small></span>
+								<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
 								<input type="text" class="form-control" name="products_attribute[4][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="How do you package the product?">
 								<div class="input-group-btn">
 									<div class="dropdown">
@@ -159,7 +159,7 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Pricing</label>
-							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
+							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
@@ -190,7 +190,7 @@
 								</div>
 							</div>
 							<div id="price_btn_container" style="text-align:right;">
-								<button class="btn btn-theme normal-radius">Next<i class="fa fa-chevron-right icon-right"></i></button>
+								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>
 						</form>
 					</div>
@@ -200,7 +200,7 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Short description</label>
-							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
+							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
@@ -213,7 +213,7 @@
 								<input type="text" class="form-control" name="products[inclusion]" required="required">
 							</div>
 							<div id="desc_btn_container" style="margin-top:15px;text-align:right;">
-								<button class="btn btn-theme normal-radius">Next<i class="fa fa-chevron-right icon-right"></i></button>
+								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>
 						</form>
 					</div>
@@ -225,7 +225,7 @@
 						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Images</label>
-								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
@@ -236,8 +236,8 @@
 							</div>
 						</div>
 						<div class="dashboard-panel-footer text-right bg-grey">
-							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="0" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
+							<button value="0" name="activity" class="btn btn-default">Draft<i class="fa fa-floppy-o icon-right"></i></button>
+							<button value="0" name="activity" class="btn btn-contrast icon-right">Submit<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
@@ -248,25 +248,30 @@
 				<div class="dashboard-panel">
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
-							<li><h3>Listing</h3></li>
-							<li><h3><a href="#" target="_new" class="text-link" id="order-link">Product Page</a></h3></li>
+							<li><p>Listing</p></li>
+							<li><p><a href="#" target="_new" class="text-link" id="order-link">Product Page</a></p></li>
 						</ul>
-						<div class="product-item-info">
-							<div class="product-item-top" id="order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
-								<!-- <ul class="spaced-list between">
-									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span id="order-duration">00 mins</span></small></kbd></li>
-									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span id="order-type">Organic</span></small></kbd></li>
-								</ul> -->
+						<div class="product-list-card">
+							<div class="product-list-photo" id="order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
 							</div>
-							<div class="product-item-middle">
-								<h1 class="product-title" id="order-title">Product name shows here</h1>
-								<p class="product-price">&#x20b1; <span id="order-price">0.00</span> / <span id="order-unit">kilo</span></p>
+							<div class="product-desc-body">
+								<div class="product-title-container ellipsis-container">
+									<h1 class="zero-gaps" id="order-title">Product name shows here</h1>
+								</div>
 							</div>
-							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span id="order-status">For review</span></h5>
+							<div class="product-list-footer">
+								<ul class="spaced-list between">
+									<li><p class="product-price">₱ 120 / Kilogram</p></li>
+									<li><p class="product-price"><i class="fa fa-clock-o"></i> 30 mins</p></li>
+								</ul>
+							</div>
+						</div>
+						<div class="new-veggy-status-container">
+							<h5 class="zero-gaps text-center"><b>Status:</b> <span id="order-status">For review</span></h5>
 						</div>
 					</div>
-					<div class="dashboard-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
-						<a href="farm/new-veggy" class="btn btn-info normal-radius btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
+					<div class="dashboard-panel-footer visible-xs">
+						<a href="farm/new-veggy" class="btn btn-default btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
 					</div>
 				</div>
 			</div>

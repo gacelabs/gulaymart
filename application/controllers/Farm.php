@@ -173,7 +173,7 @@ class Farm extends MY_Controller {
 		} else {
 			$this->render_page([
 				'top' => [
-					'css' => ['dashboard/main', 'farm/new-veggy']
+					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
 				],
 				'middle' => [
 					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
