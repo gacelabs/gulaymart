@@ -23,7 +23,6 @@ class Products {
 					$this->class->db->limit($limit);
 				}
 			}
-			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
 			$data = $this->class->db->get('products');
 			if (isset($data) AND $data->num_rows()) {
 				$products = $data->result_array();
@@ -47,7 +46,6 @@ class Products {
 	public function get_in($where=true, $except_field=false, $limit=false, $justdata=true, $row=false)
 	{
 		if ($where != false) {
-			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
 			if (!is_bool($limit) AND is_numeric($limit)) {
 				$this->class->db->limit($limit);
 			}
@@ -82,7 +80,7 @@ class Products {
 
 	public function get_by_category_pages($where=false)
 	{
-		if ($this->has_session) $clause = ['user_id' => $this->profile['id']];
+		$clause = [];
 		if ($where != false) $clause = $where + $clause;
 		// debug($clause, 'stop');
 		$data = $this->class->gm_db->get('products', $clause);
@@ -307,7 +305,6 @@ class Products {
 	public function products_with_location($where=true, $row=false, $limit=false)
 	{
 		if ($where != false) {
-			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
 			if (!is_bool($limit) AND is_numeric($limit)) {
 				$this->class->db->limit($limit);
 			}
@@ -324,6 +321,7 @@ class Products {
 					$added = $product['added'];
 					$updated = $product['updated'];
 					unset($product['added']); unset($product['updated']);
+					$product['feedbacks'] = false;
 
 					$product['category'] = false;
 					$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
@@ -336,6 +334,7 @@ class Products {
 					}
 
 					$farm = $this->class->gm_db->get('user_farms', ['user_id' => $product['user_id']], 'row');
+					$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
 					$product['farm'] = $farm;
 
 					$product['latlng'] = [];
@@ -348,10 +347,13 @@ class Products {
 								['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
 								['lat' => $latlng['lat'], 'lng' => $latlng['lng']],
 							]);
+							$address = explode(',', $latlng['address_2']);
 							$product['latlng'][$latlng['id']] = [
 								'id' => $latlng['id'],
 								'lat' => $latlng['lat'],
 								'lng' => $latlng['lng'],
+								'city' => isset($address[0]) ? $address[0] : '',
+								'city_prov' => (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '',
 								'distance' => $driving_distance['distance'],
 								'duration' => $driving_distance['duration'],
 								'price' => ($location ? $location['price'] : 0),

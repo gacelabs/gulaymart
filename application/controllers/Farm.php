@@ -342,7 +342,7 @@ class Farm extends MY_Controller {
 				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
 			],
 			'data' => [
-				'products' => $this->products->get_in(),
+				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id']]),
 				'field_lists' => $this->gm_db->fieldlists('products', unserialize(NON_PRODUCT_KEYS)),
 			],
 		]);
@@ -422,7 +422,7 @@ class Farm extends MY_Controller {
 			$this->set_response('error', 'Unable to save product', $post);
 		} else {
 			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
-			$product = $this->products->products_with_location(['id' => $id], true);
+			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [

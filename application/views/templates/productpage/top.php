@@ -1,199 +1,179 @@
-<div class="container">
-	<div class="row" id="productpage_top">
-		<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
-			<div class="product-imgs-container">
-				<div id="main_img_preview" style="background-image: url(assets/images/onions.jpg);"></div>
-				<div class="img-thumb-container">
-					<ul class="inline-list" id="img_thumb_list">
-						<li><div class="img-thumb-item active" style="background-image: url(assets/images/onions.jpg);"></div></li>
-						<li><div class="img-thumb-item" style="background-image: url(assets/images/veg.jpg);"></div></li>
-						<li><div class="img-thumb-item" style="background-image: url(assets/images/veggies.jpg);"></div></li>
-						<li><div class="img-thumb-item" style="background-image: url(assets/images/veg.jpg);"></div></li>
-						<li><div class="img-thumb-item" style="background-image: url(assets/images/veggies.jpg);"></div></li>
-					</ul>
+<?php if ($data['product']): ?>
+	<?php $product = $data['product']; ?>
+	<div class="container">
+		<div class="row" id="productpage_top">
+			<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+				<div class="product-imgs-container">
+					<?php if ($product['photos']): ?>
+					<div id="main_img_preview" style="background-image: url('<?php echo $product['photos']['main']['url_path'];?>');"></div>
+					<div class="img-thumb-container">
+						<ul class="inline-list" id="img_thumb_list">
+							<li><div class="img-thumb-item active" style="background-image: url('<?php echo $product['photos']['main']['url_path'];?>');"></div></li>
+							<?php foreach ($product['photos']['other'] as $key => $photo): ?>
+								<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
+							<?php endforeach ?>
+						</ul>
+					</div>
+					<?php endif ?>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
-			<div class="productpage-basic-container">
-				<div class="cat-breadcrumb">
-					<p class="color-grey zero-gaps"><a href="">Allium</a> <i class="fa fa-angle-right"></i> <a href="">Onions</a></p>
-				</div>
-				<h1 class="productpage-title">Organic Freshly Picked Sweet White Onions</h1>
-
-				<h2 class="productpage-price"><span class="color-grey">&#x20b1;</span> <span class="color-blue">120</span> <span class="color-grey">-</span> <span class="color-blue">200</span></h2>
-				<hr>
-				<form action="" method="post">
-					<div class="productpage-basic-grid">
-						<p class="color-grey zero-gaps">UNIT</p>
-						<p>KILOGRAMS</p>
+			<div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
+				<div class="productpage-basic-container">
+					<div class="cat-breadcrumb">
+						<p class="color-grey zero-gaps"><a href=""><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href=""><?php echo $product['subcategory'];?></a></p>
 					</div>
-					<div class="productpage-basic-grid" id="quantity_container">
-						<p class="color-grey zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
-						<div class="productpage-variety">
-							<div class="variety-location">
-								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Bulacan - <span class="max-qty">Max quantity 40</span></p>
-								<div class="input-group">
-									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 120</span></span>
-									<input type="text" class="form-control input-number" value="0" min="0" max="40" name="quant[1]">
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-									</span>
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-									</span>
+					<h1 class="productpage-title"><?php echo $product['name'];?></h1>
+					<?php
+						$prices = $measures = $city = $stocks = [];
+						foreach ($product['latlng'] as $location_id => $location) {
+							$prices[] = $location['price'];
+							$measures[] = $location['measurement'];
+							$city[] = $location['city'];
+							$stocks[] = $location['stocks'];
+						}
+						$to_price = end($prices);
+						$from_price = reset($prices);
+						if ($to_price == $from_price) $to_price = '';
+					?>
+					<h2 class="productpage-price">
+						<span class="color-grey">&#x20b1;</span> <span class="color-blue"><?php echo $from_price;?></span> 
+						<?php if ($to_price != ''): ?>
+							<span class="color-grey">-</span> <span class="color-blue"><?php echo $to_price;?></span>
+						<?php endif ?>
+					</h2>
+					<hr>
+					<form action="" method="post">
+						<div class="productpage-basic-grid">
+							<p class="color-grey zero-gaps">UNIT</p>
+							<p><?php echo strtoupper(implode(', ', $measures));?></p>
+						</div>
+						<div class="productpage-basic-grid" id="quantity_container">
+							<p class="color-grey zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
+							<div class="productpage-variety">
+								<?php foreach ($product['latlng'] as $location_id => $location): ?>
+								<div class="variety-location">
+									<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $location['city'];?> - <span class="max-qty">Max quantity <?php echo $location['stocks'];?></span></p>
+									<div class="input-group">
+										<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; <?php echo $location['price'];?></span></span>
+										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $location['stocks'];?>" name="quant[1]">
+										<span class="input-group-btn">
+											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
+										</span>
+										<span class="input-group-btn">
+											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
+										</span>
+									</div>
 								</div>
-							</div>
-
-							<div class="variety-location">
-								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Antipolo - <span class="max-qty">Max quantity 20</span></p>
-								<div class="input-group">
-									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 150</span></span>
-									<input type="text" class="form-control input-number" value="0" min="0" max="20" name="quant[1]">
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-									</span>
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-									</span>
-								</div>
-							</div>
-
-							<div class="variety-location">
-								<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> Nueva Ecija - <span class="max-qty">Max quantity 370</span></p>
-								<div class="input-group">
-									<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; 200</span></span>
-									<input type="text" class="form-control input-number" value="0" min="0" max="370" name="quant[1]">
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
-									</span>
-									<span class="input-group-btn">
-										<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
-									</span>
-								</div>
+								<?php endforeach ?>
 							</div>
 						</div>
-					</div>
 
-					<div class="add-basket-btn">
-						<button type="button" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
-						<button type="button" class="btn btn-lg btn-blue" style="width:125px;">Buy Now</button>
-					</div>
-				</form>
+						<div class="add-basket-btn">
+							<button type="button" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
+							<button type="button" class="btn btn-lg btn-blue" style="width:125px;">Buy Now</button>
+						</div>
+					</form>
+				</div>
 			</div>
-		</div>
 
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="productpage-summary">
-				<div class="productpage-summary-parent productpage-condition">
-					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">PRODUCT CONDITION</p></li>
-						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
-					</ul>
-					<div class="productpage-summary-inner active">
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/planting.png" class="mini-img-icon" align="left">
-							<div>
-								<p>Traditional soil-based plant.</p>
-							</div>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<div class="productpage-summary">
+					<div class="productpage-summary-parent productpage-condition">
+						<ul class="spaced-list between condition-collapser">
+							<li><p style="margin-top:0;font-size:11px;" class="color-grey">PRODUCT CONDITION</p></li>
+							<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
+						</ul>
+						<div class="productpage-summary-inner active">
+							<?php foreach ($product['attribute'] as $key => $attrib): ?>
+								<div class="productpage-summary-grid">
+									<?php
+									switch ($key) {
+										case '0':?>
+											<img src="assets/images/icons/planting.png" class="mini-img-icon" align="left">
+										<?php break;
+										case '1':?>
+											<img src="assets/images/icons/ripe.png" class="mini-img-icon" align="left">
+										<?php break;
+										case '2':?>
+											<img src="assets/images/icons/shape.png" class="mini-img-icon" align="left">
+										<?php break;
+										case '3':?>
+											<img src="assets/images/icons/pick.png" class="mini-img-icon" align="left">
+										<?php break;
+										case '4':?>
+											<img src="assets/images/icons/basket.png" class="mini-img-icon" align="left">
+										<?php break;
+									}
+									?>
+									<div>
+										<p><?php echo $attrib['attribute'];?></p>
+									</div>
+								</div>
+							<?php endforeach ?>
 						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/ripe.png" class="mini-img-icon" align="left">
-							<div>
-								<p>In good shape, smell, texture, and color.</p>
+					</div>
+					<div class="productpage-summary-parent productpage-method">
+						<ul class="spaced-list between condition-collapser">
+							<li><p style="margin-top:0;font-size:11px;" class="color-grey">PAYMENT</p></li>
+							<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
+						</ul>
+						<div class="productpage-summary-inner">
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/cash.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Cash On Delivery</p>
+									<small class="color-grey elem-block">Pay to upon deliver</small>
+								</div>
 							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/shape.png" class="mini-img-icon" align="left">
-							<div>
-								<p>Riped organically, tasty and juicy.</p>
-							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/pick.png" class="mini-img-icon" align="left">
-							<div>
-								<p>Picked same day upon order.</p>
-							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/basket.png" class="mini-img-icon" align="left">
-							<div>
-								<p>Packaged in a regular plastic bag.</p>
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Wire Transfer</p>
+									<small class="color-grey elem-block">GCash, Paymaya</small>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="productpage-summary-parent productpage-method">
-					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">PAYMENT</p></li>
-						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
-					</ul>
-					<div class="productpage-summary-inner">
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/cash.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Cash On Delivery</p>
-								<small class="color-grey elem-block">Pay to upon deliver</small>
+					<div class="productpage-summary-parent productpage-delivery">
+						<ul class="spaced-list between condition-collapser">
+							<li><p style="margin-top:0;font-size:11px;" class="color-grey">DELIVERY</p></li>
+							<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
+						</ul>
+						<div class="productpage-summary-inner">
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Today</p>
+									<small class="color-grey elem-block">Earliest: 30 minutes</small>
+								</div>
 							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Wire Transfer</p>
-								<small class="color-grey elem-block">GCash, Paymaya</small>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="productpage-summary-parent productpage-delivery">
-					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">DELIVERY</p></li>
-						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
-					</ul>
-					<div class="productpage-summary-inner">
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Today</p>
-								<small class="color-grey elem-block">Earliest: 30 minutes</small>
-							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Schedule</p>
-								<small class="color-grey elem-block">For bulk orders</small>
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps">Schedule</p>
+									<small class="color-grey elem-block">For bulk orders</small>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="productpage-summary-parent productpage-sold-by">
-					<ul class="spaced-list between condition-collapser">
-						<li><p style="margin-top:0;font-size:11px;" class="color-grey">FARM LOCATIONS</p></li>
-						<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
-					</ul>
-					<div class="productpage-summary-inner" style="margin-top: 5px;">
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">SJDM, Bulacan</p>
-							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Bagong Nayon, Antipolo</p>
-							</div>
-						</div>
-						<div class="productpage-summary-grid">
-							<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-							<div>
-								<p class="zero-gaps">Barangay, Nueva Ecija</p>
-							</div>
+					<div class="productpage-summary-parent productpage-sold-by">
+						<ul class="spaced-list between condition-collapser">
+							<li><p style="margin-top:0;font-size:11px;" class="color-grey">FARM LOCATIONS</p></li>
+							<li class="visible-sm visible-xs"><i class="fa fa-angle-down color-grey"></i></li>
+						</ul>
+						<div class="productpage-summary-inner" style="margin-top: 5px;">
+							<?php foreach ($product['latlng'] as $location_id => $location): ?>
+								<div class="productpage-summary-grid">
+									<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+									<div>
+										<p class="zero-gaps"><?php echo $location['city_prov'];?></p>
+									</div>
+								</div>
+							<?php endforeach ?>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+<?php endif ?>
