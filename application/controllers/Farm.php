@@ -24,18 +24,18 @@ class Farm extends MY_Controller {
 		if ($product_count = $this->products->count()) {
 			$this->render_page([
 				'top' => [
-					'css' => ['sales', 'chart.min'],
+					'css' => ['dashboard/main', 'farm/sales', 'chart.min'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'sales'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'sales'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/sales',
 					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'chart.min', 'sales'],
+					'js' => ['chart.min', 'farm/sales', 'dashboard/main'],
 				],
 				'data' => [
 					'product_count' => $product_count
@@ -173,11 +173,11 @@ class Farm extends MY_Controller {
 		} else {
 			$this->render_page([
 				'top' => [
-					'css' => ['new-veggy', 'product-item']
+					'css' => ['dashboard/main', 'farm/new-veggy']
 				],
 				'middle' => [
-					'body_class' => ['farm', 'new-veggy'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/new_veggy',
@@ -188,7 +188,9 @@ class Farm extends MY_Controller {
 						'jquery.inputmask.min',
 						'inputmask.binding',
 						'farm',
-						'new-veggy'
+						'farm/new-veggy',
+						'dashboard/main',
+						'common'
 					],
 				],
 			]);
@@ -248,11 +250,11 @@ class Farm extends MY_Controller {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
 			$this->render_page([
 				'top' => [
-					'css' => ['../js/chosen/chosen', 'ImageSelect', 'storefront', 'storefront-page'],
+					'css' => ['dashboard/main', 'farm/storefront', '../js/chosen/chosen', 'ImageSelect', 'static/store'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'storefront'],
-					'head' => ['dashboard/nav_top'],
+					'body_class' => ['dashboard', 'storefront', 'farm'],
+					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
 						'farm/storefront',
@@ -262,11 +264,12 @@ class Farm extends MY_Controller {
 					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal', 'farm_location_help_modal'],
 					'js' => [
 						'chosen/new-chosen',
-						'ImageSelect.jquery',
-						'farm',
-						'storefront',
+						'plugins/ImageSelect.jquery',
+						'farm/farm',
+						'farm/storefront',
 						'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
-						'markerclustererplus.min',
+						'plugins/markerclusterplus.min',
+						'dashboard/main'
 					],
 				],
 				'data' => [
@@ -284,18 +287,18 @@ class Farm extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['../js/DataTables/datatables.min', 'inventory'],
+				'css' => ['dashboard/main', '../js/DataTables/datatables.min', 'farm/inventory'],
 			],
 			'middle' => [
-				'body_class' => ['farm', 'inventory'],
-				'head' => ['dashboard/nav_top'],
+				'body_class' => ['dashboard', 'inventory'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 					'farm/inventory',
 				],
 			],
 			'bottom' => [
-				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
+				'js' => ['farm', 'inventory', 'DataTables/datatables.min', 'dashboard/main'],
 			],
 			'data' => [
 				'products' => $this->products->get_in()
@@ -332,7 +335,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'js' => ['farm'],
+					'js' => ['farm', 'dashboard/main'],
 				],
 				'data' => [
 					'product' => $product
@@ -368,7 +371,7 @@ class Farm extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'js' => ['farm'],
+				'js' => ['farm', 'dashboard/main'],
 			],
 		]);
 	}
@@ -420,17 +423,20 @@ class Farm extends MY_Controller {
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
-					'css' => ['marketplace', 'storefront', 'storefront-page', 'product-item'],
+					'css' => ['static/store', 'looping/product-card', 'modal/modals'],
 				],
 				'middle' => [
-					'body_class' => ['farm', 'storefront', 'storepage'],
-					'head' => ['marketplace/navbar'],
+					'body_class' => ['store'],
+					'head' => ['../global/global_navbar'],
 					'body' => [
 						'../static/store',
 					],
+					'footer' => [
+						'static/footer'
+					],
 				],
 				'bottom' => [
-					'js' => ['farm', 'isotope.min', 'store'],
+					'js' => ['store', 'dashboard/main'],
 				],
 				'data' => $data
 			]);

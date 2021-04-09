@@ -14,31 +14,49 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
+		$this->basket();
+	}
+
+	public function basket()
+	{
 		$this->render_page([
 			'top' => [
-				'metas' => [
-					'description' => APP_NAME.' is your neighborhood veggies supplier.',
-					'name' => 'Product Name -'.APP_NAME,
-				],
-				'index_page' => 'yes',
-				'page_title' => 'Product Name -'.APP_NAME,
-				'css' => ['marketplace', 'productpage'],
+				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
 			],
 			'middle' => [
+				'body_class' => ['dashboard', 'basket'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
-					'marketplace/navbar',
-					'productpage/top',
-					'productpage/middle',
-					'productpage/banner'
-				],
-				'footer' => [
-					'static/footer'
+					'dashboard/navbar_aside',
+					'basket/basket',
 				],
 			],
 			'bottom' => [
-				'js' => ['productpage'],
+				'modals' => ['reply_modal'],
+				'js' => ['dashboard/main', 'basket/main'],
 			],
-			'data' => [
+		]);
+	}
+
+	public function productpage()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['modal/modals', 'basket/productpage', 'static/store']
+			],
+			'middle' => [
+				'body_class' => ['product-page'],
+				'head' => ['../global/global_navbar'],
+				'body' => [
+					'basket/productpage_top',
+					'basket/productpage_middle',
+					'../global/banner_support_locals',
+				],
+				'footer' => ['global/footer']
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => ['basket/productpage', 'fb-login'],
 			],
 		]);
 	}

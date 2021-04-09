@@ -6,7 +6,7 @@
 					<div class="login-top">
 						<ul class="spaced-list between">
 							<li data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></li>
-							<li><a href="register">Register</a></li>
+							<li><a href="register" class="btn btn-sm btn-default text-contrast" style="border:0;">Register</a></li>
 						</ul>
 					</div>
 
@@ -50,7 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
-							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>Log In</button>
+							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to <b>Log In</b></button>
 						</div>
 					</div>
 				</div>

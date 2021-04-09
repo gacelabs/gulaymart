@@ -21,24 +21,23 @@ class Marketplace extends MY_Controller {
 				],
 				'index_page' => 'yes',
 				'page_title' => APP_NAME.' | Veggies grown by community.',
-				'css' => ['marketplace', 'farmer-card', 'product-item'],
+				'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
 			],
 			'middle' => [
 				'body' => [
-					'marketplace/navbar',
+					'../global/global_navbar',
 					'marketplace/carousel',
-					'marketplace/banner',
+					'../global/veggy_nearby',
 					'marketplace/category',
-					'marketplace/products',
-					'marketplace/famers'
+					'marketplace/products_container',
+					'marketplace/famers_container'
 				],
 				'footer' => [
-					'templates/marketplace/poster',
-					'static/footer'
+					'global/footer'
 				],
 			],
 			'bottom' => [
-				'modals' => ['search_popup'],
+				'modals' => [],
 				'js' => ['isotope.min', 'marketplace', 'fb-login'],
 			],
 			'data' => [

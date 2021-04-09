@@ -1,123 +1,236 @@
-<div class="col-lg-7 col-md-9 col-sm-9 col-xs-10 left-affix-content" id="dash_panel_right">
-	<div class="dash-panel-right-container">
-		<div class="dash-panel-right-canvas">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div class="dash-panel theme">
-					<ul class="inline-list dash-panel-top">
-						<li><a href="transactions/orders/" class="hideshow-btn active"><h3>My Orders</h3></a></li>
-						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_placed"><h3>Placed</h3></a></li>
-						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_delivery"><h3>On Delivery</h3></a></li>
-						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h3>Received</h3></a></li>
-						<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_cancelled"><h3>Cancelled</h3></a></li>
-					</ul>
-					<div class="dash-panel-middle hideshow-container" style="padding:0 !important;">
-						<div class="order-list-container">
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+<div id="dashboard_panel_right">
+	<div class="row">
+		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+			<div class="dashboard-panel theme" id="link_panel_top">
+				<ul class="inline-list dashboard-panel-top">
+					<li><a href="transactions/orders/" class="hideshow-btn active"><h4 class="zero-gaps">My Orders</h4></a></li>
+					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_placed"><h4 class="zero-gaps">Placed</h4></a></li>
+					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_delivery"><h4 class="zero-gaps">On Delivery</h4></a></li>
+					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_received"><h4 class="zero-gaps">Received</h4></a></li>
+					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="order_cancelled"><h4 class="zero-gaps">Cancelled</h4></a></li>
+				</ul>
+				<div class="dashboard-panel-middle hideshow-container">
+					<div class="order-list-container">
+						<div class="order-item">
+							<div class="order-item-top">
+								<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>
+								<p class="zero-gaps">PLACED: <b>March 1, 2021 @ 3:30pm</b></p>
+							</div>
+							<div class="order-item-middle">
+								<div class="order-item-list">
+									<div class="order-item-inner">
+										<p class="zero-gaps"><b><a href="">Ema and Ava Farm</a></b></p>
+										<div class="order-item-grid">
+											<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+											<div class="order-info-container">
+												<div class="order-item-title">
+													<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+												</div>
+												<p class="zero-gaps">&#x20b1; <b>50</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+												<p class="product-total">Total &#x20b1; <b>150</b></p>
+											</div>
 										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule">Placed</p>
+									</div>
+
+									<div class="order-item-inner">
+										<p class="zero-gaps"><b><a href="">Mavis and Marcus Plantation</a></b></p>
+										<div class="order-item-grid">
+											<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+											<div class="order-info-container">
+												<div class="order-item-title">
+													<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+												</div>
+												<p class="zero-gaps">&#x20b1; <b>150</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+												<p class="product-total">Total &#x20b1; <b>350</b></p>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule on-delivery">On Delivery</p>
-											<p><small class="color-grey">March 1, 2020 @ 3:36pm</small></p>
-										</div>
+
+								<div class="tender-amount-grid">
+									<div class="order-item-status">
+										<ul class="inline-list">
+											<li class="text-capsule icon-left status-placed">Placed</li>
+										</ul>
 									</div>
-								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-											<p class="text-link hidden-sm hidden-xs">Write A Feedback</p>
+									<div class="tender-amount-parent">
+										<div class="tender-amount-body">
+											<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>
+											<p class="product-amount zero-gaps">+ &#x20b1; <b>350</b></p>
 										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule received">Received</p>
-											<p><small class="color-grey">March 1, 2020 @ 3:54pm</small></p>
-										</div>
-										<p class="text-link visible-sm visible-xs">Write A Feedback</p>
-									</div>
-								</div>
-							</div>
-							<div class="order-item-container">
-								<div style="margin-bottom: 15px;">
-									<p class="zero-gaps"><span class="color-grey">Oder ID:</span> 5g4h3jk</p>
-									<p class="color-grey"><small>March 1, 2021 @ 3:30pm</small></p>
-								</div>
-								<div class="order-item">
-									<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
-									<div class="order-info-container">
-										<div class="order-item-title">
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-										</div>
-										<div class="order-item-qty">
-											<p><span class="color-grey">Qty:</span> 1 <span class="color-grey">/ kilo</span></p>
-										</div>
-										<div class="order-item-price">
-											<p><span class="color-grey">&#x20b1;</span> 100</p>
-										</div>
-										<div class="order-item-status">
-											<p class="text-capsule cancelled">Cancelled</p>
-											<p><small class="color-grey">No riders found.</small></p>
-										</div>
+										<hr style="border-color:#aaa;margin:5px 0;">
+										<h4 class="total-amount text-contrast zero-gaps"><span>&#x20b1;</span> <b>500</b></h4>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<?php
-							$this->view('templates/transactions/placed');
-							$this->view('templates/transactions/delivery');
-							$this->view('templates/transactions/received');
-							$this->view('templates/transactions/cancelled');
-						?>
+						<div class="order-item">
+							<div class="order-item-top">
+								<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>
+								<p class="zero-gaps">PLACED: <b>March 1, 2021 @ 3:30pm</b></p>
+							</div>
+							<div class="order-item-middle">
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Ema and Ava Farm</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>50</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>150</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Mavis and Marcus Plantation</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>150</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>350</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="tender-amount-grid">
+									<div class="order-item-status">
+										<ul class="inline-list">
+											<li class="text-capsule icon-left status-delivery">On Delivery</li>
+											<li class="text-capsule icon-left blue">ETA 30 mins</li>
+										</ul>
+									</div>
+									<div class="tender-amount-parent">
+										<div class="tender-amount-body">
+											<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>
+											<p class="product-amount zero-gaps">+ &#x20b1; <b>350</b></p>
+										</div>
+										<hr style="border-color:#aaa;margin:5px 0;">
+										<h4 class="total-amount text-contrast zero-gaps"><span>&#x20b1;</span> <b>500</b></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="order-item">
+							<div class="order-item-top">
+								<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>
+								<p class="zero-gaps">PLACED: <b>March 1, 2021 @ 3:30pm</b></p>
+							</div>
+							<div class="order-item-middle">
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Ema and Ava Farm</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>50</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>150</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Mavis and Marcus Plantation</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>150</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>350</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="tender-amount-grid">
+									<div class="order-item-status">
+										<ul class="inline-list">
+											<li class="text-capsule icon-left status-received">Received</li>
+											<li class="text-capsule icon-left blue">30 mins</li>
+										</ul>
+									</div>
+									<div class="tender-amount-parent">
+										<div class="tender-amount-body">
+											<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>
+											<p class="product-amount zero-gaps">+ &#x20b1; <b>350</b></p>
+										</div>
+										<hr style="border-color:#aaa;margin:5px 0;">
+										<h4 class="total-amount text-contrast zero-gaps"><span>&#x20b1;</span> <b>500</b></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="order-item">
+							<div class="order-item-top">
+								<p class="zero-gaps">ORDER ID: <a href="" class="text-link order-id">5g4h3jk</a></p>
+								<p class="zero-gaps">PLACED: <b>March 1, 2021 @ 3:30pm</b></p>
+							</div>
+							<div class="order-item-middle">
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Ema and Ava Farm</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>50</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>150</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="order-item-inner">
+									<p class="zero-gaps"><b><a href="">Mavis and Marcus Plantation</a></b></p>
+									<div class="order-item-grid">
+										<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+										<div class="order-info-container">
+											<div class="order-item-title">
+												<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+											</div>
+											<p class="zero-gaps">&#x20b1; <b>150</b> / bundle <span class="qty-divider">x Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
+											<p class="product-total">Total &#x20b1; <b>350</b></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="tender-amount-grid">
+									<div class="order-item-status">
+										<ul class="inline-list">
+											<li class="text-capsule icon-left status-cancelled">Cancelled</li>
+											<li class="text-capsule icon-left blue">By You</li>
+										</ul>
+									</div>
+									<div class="tender-amount-parent">
+										<div class="tender-amount-body">
+											<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>
+											<p class="product-amount zero-gaps">+ &#x20b1; <b>350</b></p>
+										</div>
+										<hr style="border-color:#aaa;margin:5px 0;">
+										<h4 class="total-amount text-contrast zero-gaps"><span>&#x20b1;</span> <b>500</b></h4>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
+
+					<?php
+						$this->view('templates/transactions/placed');
+						$this->view('templates/transactions/delivery');
+						$this->view('templates/transactions/received');
+						$this->view('templates/transactions/cancelled');
+					?>
 				</div>
 			</div>
 		</div>

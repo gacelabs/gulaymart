@@ -25,29 +25,49 @@
 			<div id="storefront_product_container">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
 					<div class="product-item-body zero-gaps">
-						<?php if (isset($data['contents'])) : ?>
-							<?php echo $data['contents']['products_html'];?>
+
+						<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY PORDUCT NA OR WALA PA -->
+						<?php if (isset($data['kunyare'])) : ?>
+							<!-- ETO YUNG PRODUCT CARD -->
+							<?php $this->view('looping/product_card'); ?>
 						<?php else: ?>
 							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 						<?php endif ?>
+
+						<div class="banner-section">
+							<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
+						</div>
 					</div>
 				</div>
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="stories_item_container">
-					stories_item_container
-					<!-- <h1><?php //echo $data['contents']['stories']['title'];?></h1>
-					<p><?php //echo $data['contents']['stories']['content'];?></p> -->
+					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY STORIES NA OR WALA PA -->
+					<?php if (isset($data['kunyare'])) : ?>
+						<!-- ETO YUNG STORIES CARD -->
+						<?php $this->view('looping/product_card'); ?>
+					<?php else: ?>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
+					<?php endif ?>
 				</div>
 				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="galleries_item_container">
-					galleries_item_container
-					<!-- <?php //echo $data['contents']['galleries_html'];?> -->
+					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY GALLERIES NA OR WALA PA -->
+					<?php if (isset($data['kunyare'])) : ?>
+						<!-- ETO YUNG GALLERIES CARD -->
+						<?php $this->view('looping/product_card'); ?>
+					<?php else: ?>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
+					<?php endif ?>
 				</div>
 				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="about_item_container">
-					about_item_container
-					<!-- <p><?php //echo $data['contents']['about'];?></p> -->
+					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY ABOUT NA OR WALA PA -->
+					<?php if (isset($data['kunyare'])) : ?>
+						<!-- ETO YUNG ABOUT CARD -->
+						<?php $this->view('looping/product_card'); ?>
+					<?php else: ?>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
+					<?php endif ?>
 				</div>
-				<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="banner_section img-responsive" style="width: 100%;">
 			</div>
 		</div>
 

@@ -1,27 +1,27 @@
-<div class="col-lg-10 col-md-9 col-sm-9 left-affix-content" id="dash_panel_right">
+<div id="dashboard_panel_right">
 	<?php $this->view('static/mobile_note'); ?>
-	<div class="dash-panel-right-container hidden-xs" id="new_veggy">
-		<div class="dash-panel-right-canvas">
+
+		<div class="row hidden-xs" id="new_veggy">
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
-				<div class="dash-panel" id="score-detail-panel">
-					<div class="dash-panel-top">
-						<h3>Product Details Score</h3>
+				<div class="dashboard-panel" id="score-detail-panel">
+					<div class="dashboard-panel-top">
+						<h3 class="zero-gaps">Product Details Score</h3>
 					</div>
-					<div class="dash-panel-middle">
+					<div class="dashboard-panel-middle">
 						<ul class="spaced-list around">
-							<li><h3 class="text-capsule">10<small style="display:inline;">%</small></h3></li>
-							<li><h3 class="text-capsule">30<small style="display:inline;">%</small></h3></li>
-							<li><h3 class="text-capsule">60<small style="display:inline;">%</small></h3></li>
-							<li><h3 class="text-capsule">80<small style="display:inline;">%</small></h3></li>
-							<li><h3 class="text-capsule"><i class="fa fa-check"></i></h3></li>
+							<li><p class="text-capsule">10<small style="display:inline;">%</small></p></li>
+							<li><p class="text-capsule">30<small style="display:inline;">%</small></p></li>
+							<li><p class="text-capsule">60<small style="display:inline;">%</small></p></li>
+							<li><p class="text-capsule">80<small style="display:inline;">%</small></p></li>
+							<li><p class="text-capsule"><i class="fa fa-check"></i></h3></li>
 						</ul>
 						<div class="timeline-border"></div>
 						<div class="timeline-border-progress" data-percent="0"></div>
 					</div>
 				</div>
 
-				<div class="dash-panel theme score-0">
-					<div class="dash-panel-middle">
+				<div class="dashboard-panel theme score-0">
+					<div class="dashboard-panel-middle">
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
 							<input type="hidden" name="pos" value="0">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
@@ -65,8 +65,8 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme hide score-1">
-					<div class="dash-panel-middle">
+				<div class="dashboard-panel theme hide score-1">
+					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product attributes</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
@@ -155,8 +155,8 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme hide score-2">
-					<div class="dash-panel-middle">
+				<div class="dashboard-panel theme hide score-2">
+					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Pricing</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
@@ -196,8 +196,8 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme hide score-3">
-					<div class="dash-panel-middle">
+				<div class="dashboard-panel theme hide score-3">
+					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Short description</label>
 							<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
@@ -219,10 +219,10 @@
 					</div>
 				</div>
 
-				<div class="dash-panel theme hide score-4">
+				<div class="dashboard-panel theme hide score-4">
 					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
-						<div class="dash-panel-middle">
+						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Images</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
@@ -235,7 +235,7 @@
 								</span>
 							</div>
 						</div>
-						<div class="dash-panel-footer text-right bg-grey">
+						<div class="dashboard-panel-footer text-right bg-grey">
 							<button value="0" name="activity" class="btn btn-default normal-radius">Draft<i class="fa fa-floppy-o icon-right"></i></button>
 							<button value="0" name="activity" class="btn btn-theme normal-radius icon-right">Submit<i class="fa fa-check icon-right"></i></button>
 						</div>
@@ -245,8 +245,8 @@
 
 			<!-- show after Publish -->
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 hide" id="preview_container">
-				<div class="dash-panel">
-					<div class="dash-panel-top">
+				<div class="dashboard-panel">
+					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
 							<li><h3>Listing</h3></li>
 							<li><h3><a href="#" target="_new" class="text-link" id="order-link">Product Page</a></h3></li>
@@ -265,7 +265,7 @@
 							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span id="order-status">For review</span></h5>
 						</div>
 					</div>
-					<div class="dash-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
+					<div class="dashboard-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
 						<a href="farm/new-veggy" class="btn btn-info normal-radius btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
 					</div>
 				</div>

@@ -1,0 +1,191 @@
+body.store {
+	padding-top: 55px;
+}
+#storefront_page_container {
+	margin: 0 auto 30px auto;
+	max-width: 800px;
+}
+.storefront-top {
+	height: 200px;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+}
+.storefront-img-bg {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	width: 100%;
+}
+#farm_identity {
+	background: rgb(0,0,0);
+	background: linear-gradient(0deg, rgba(0,0,0,0.70) 0%, rgba(255,255,255,0) 100%);
+	bottom: 0;
+	left: 0;
+	padding: 20px;
+	position: absolute;
+	width: 100%;
+}
+.grid-list {
+	display: grid;
+	list-style: none;
+	margin: 0;
+	grid-gap: 10px;
+	padding: 0;
+	width: inherit;
+}
+.grid-list.half {
+	grid-template-columns: 1fr 70px;
+}
+.farm_name {
+	color: #fff;
+	font-family: 'Roboto-Bold', sans-serif;
+	margin: 0 0 5px 0;
+	text-transform: capitalize;
+	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
+}
+.tagline {
+	color: #fff;
+	margin: 0;
+	text-shadow: 0px 2px 2px rgb(0 0 0 / 67%);
+}
+.tagline::first-letter {
+	text-transform: capitalize !important;
+}
+#tagline {
+	text-transform: none;
+}
+.profile_photo {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+	border: 3px solid #fff;
+	border-radius: 100%;
+	float: right;
+	height: 60px;
+	width: 60px;
+}
+#storefront_navbar {
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+}
+#storefront_navbar .sf-navbar-btn {
+	border-bottom: 3px solid transparent;
+	cursor: pointer;
+	display: block;
+	padding: 15px 0 12px 0;
+	text-align: center;
+	transition: all .3s ease-in-out;
+	width: 80px;
+}
+#storefront_navbar .sf-navbar-btn:hover, #storefront_navbar .sf-navbar-btn.active {
+	border-color: #3b9ff5;
+	color: #3b9ff5;
+	font-family: 'Roboto-Bold', sans-serif;
+}
+img.banner_section {
+	background-color: #fff;
+	padding: 20px;
+}
+.storefront-footer {
+	clear: both;
+	background-color: #5d5d5d;
+	padding: 20px 15px;
+}
+.social_acct>li {
+	margin-right: 10px;
+}
+.social_acct i.fa {
+	color: #fff;
+}
+body.store .storefront-middle {
+	background-color: #fff;
+}
+.banner-section {
+	padding: 0;
+}
+.banner-section>img {
+	width: 100%;
+}
+@media (max-width: 991px) {
+	body.store .marketplace-navbar-container {
+		background-color: #a8d253;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1;
+	}
+	.storefront-top {
+	    height: 200px;
+	    overflow: initial;
+	}
+	body.store #farm_identity {
+		padding: 10px;
+	}
+	body.store .farm_name {
+		font-size: 20px;
+	}
+	body.store .tagline {
+		font-size: 16px;
+	}
+	body.store #storefront_navbar {
+		margin-bottom: 10px;
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+	body.store #storefront_navbar .sf-navbar-btn {
+		font-size: 12px;
+		padding: 10px 0 7px 0;
+	}
+}
+@media (max-width: 767px) {	
+	body.store {
+		padding-top: 38px;
+	}
+	body.store #storefront_product_container {
+		background-color: #eeefec;
+	}
+	body.store #storefront_navbar {
+		margin-bottom: 0;
+	}
+	body.store #storefront_product_container {
+		padding: 0;
+	}
+	.banner-section {
+		margin-left: -15px;
+		margin-right: -15px;
+	}
+	.storefront-top {
+		height: 150px;
+	}
+	#farm_identity {
+		padding: 10px;
+	}
+	.farm_name {
+		font-size: 20px;
+	}
+	.profile_photo {
+		height: 40px;
+		width: 40px;
+	}
+	.visit-farm-link {
+		background-color: #799938;
+		border-radius: 4px;
+		color: #fff;
+		display: inline-block;
+		margin: 10px auto 0 auto;
+		padding: 5px 10px;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	#poster_container h3 {
+		color: #756d6d;
+		font-size: 14px;
+		text-transform: uppercase;
+	}
+}

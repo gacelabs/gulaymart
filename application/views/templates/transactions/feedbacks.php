@@ -1,10 +1,24 @@
 <div class="notif-list-container hide" id="msg_feedbacks">
-	<div class="notif-item-container">
+	<div class="notif-item">
 		<div class="notif-item-top">
-			<p class="zero-gaps"><i class="fa fa-commenting-o icon-left"></i><b>Ava Francine</b> - <span class="color-grey">March 1, 2020</span> </p>
+			<p class="zero-gaps"><i class="fa fa-commenting-o icon-left"></i><b>Ava Francine</b> - <span class="text-gray">Verified Purchase <i class="fa fa-check-circle"></i></span></p>
 		</div>
 		<div class="notif-item-middle">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			<div class="notif-related-product">
+				<small class="elem-block">FEEDBACK ABOUT</small>
+				<div class="order-item-grid">
+					<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
+					<div class="order-info-container">
+						<div class="order-item-title">
+							<p class="zero-gaps"><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+							<p class="zero-gaps">&#x20b1; <b>50</b> / bundle</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p>
+				<small class="elem-block text-gray">March 1, 2020</small>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse

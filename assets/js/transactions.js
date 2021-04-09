@@ -1,0 +1,1 @@
+//ginawa ko lang to kasi may fload resource error. parang may gumagawa ng js link automatic. paki alis na un.

@@ -13,11 +13,11 @@ class Profile extends MY_Controller {
 					'description' => 'Either you`re a farmer or a customer, '.APP_NAME.' is your best avenue for anything veggies! Sign Up for FREE!',
 					'name' => 'Either you`re a farmer or a customer, '.APP_NAME.' is your best avenue for anything veggies! Sign Up for FREE!',
 				],
-				'css' => ['profile'],
+				'css' => ['dashboard/main', 'dashboard/profile', 'global/shipping-form'],
 			],
 			'middle' => [
 				'body_class' => 'dashboard profile',
-				'head' => ['dashboard/nav_top'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 					'dashboard/profile'
@@ -31,6 +31,7 @@ class Profile extends MY_Controller {
 					'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
 					'markerclustererplus.min',
 					'profile',
+					'dashboard/main'
 				],
 			],
 		]);

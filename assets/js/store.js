@@ -9,7 +9,6 @@ $(document).ready(function() {
 		$(id).removeClass('hide');
 	});
 
-
 	$('.sf-navbar-btn').click(function() {
 		$('.sf-navbar-btn').removeClass('active');
 		$('.toggle-container').addClass('hide');
@@ -18,7 +17,6 @@ $(document).ready(function() {
 		console.log(coName);
 
 		$('#storefront_product_container').find('div'+coName).removeClass('hide');
-
 	});
 
 });

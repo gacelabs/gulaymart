@@ -14,18 +14,18 @@ class Transactions extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['orders']
+				'css' => ['dashboard/main', 'transactions/main', 'transactions/orders']
 			],
 			'middle' => [
-				'body_class' => ['transactions', 'orders'],
-				'head' => ['dashboard/nav_top'],
+				'body_class' => ['dashboard', 'orders'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 					'transactions/orders',
 				],
 			],
 			'bottom' => [
-				'js' => ['hideshow'],
+				'js' => ['hideshow', 'dashboard/main'],
 			],
 		]);
 	}
@@ -34,11 +34,11 @@ class Transactions extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['messages']
+				'css' => ['dashboard/main', 'transactions/main', 'transactions/messages']
 			],
 			'middle' => [
-				'body_class' => ['transactions', 'messages'],
-				'head' => ['dashboard/nav_top'],
+				'body_class' => ['dashboard', 'messages'],
+				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
 					'transactions/messages',
@@ -46,7 +46,7 @@ class Transactions extends MY_Controller {
 			],
 			'bottom' => [
 				'modals' => ['reply_modal'],
-				'js' => ['hideshow', 'readmore.min', 'messages'],
+				'js' => ['hideshow', 'readmore.min', 'messages', 'dashboard/main'],
 			],
 		]);
 	}

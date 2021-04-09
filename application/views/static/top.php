@@ -17,7 +17,8 @@
 
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/globals.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/defaults.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
 	<?php
 	if (count($top['css'])) {
@@ -31,7 +32,6 @@
 		}
 	}
 	?>
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/rwd.css'); ?>">
 	<?php
 	if (count($top['js'])) {
 		foreach ($top['js'] as $value) {
