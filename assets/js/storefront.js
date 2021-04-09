@@ -21,20 +21,20 @@ $(document).ready(function() {
 				id 	 = $(this).attr('id');
 
 			if (id == "tagline" && val.length <= 50) {
-				$('#preview-store-page').contents().find('.'+id).text(val);
+				$('#storefront_page_container').find('.'+id).text(val);
 				$(this).next().css('color', '#aaa');
 			} else if (val.length <= 30) {
-				$('#preview-store-page').contents().find('.'+id).text(val);
+				$('#storefront_page_container').find('.'+id).text(val);
 				$(this).next().css('color', '#aaa');
 			} else {
 				$(this).next().css('color', '#b92525');
 			}
 
 			if (id == "farm_name" && val.length == 0) {
-				$('#preview-store-page').contents().find('.farm_name').text('The Humble Farm');
+				$('#storefront_page_container').find('.farm_name').text('The Humble Farm');
 			}
 			if (id == "tagline" && val.length == 0) {
-				$('#preview-store-page').contents().find('.tagline').text('Your friendly neighborhood farmer');
+				$('#storefront_page_container').find('.tagline').text('Your friendly neighborhood farmer');
 			}
 		});
 	});
@@ -59,8 +59,8 @@ $(document).ready(function() {
 	// banner section
 	$(function() {
 		$('#banner_section').change(function() {
-			$('#preview-store-page').contents().find('.banner_section').removeClass('hide');
-			$('#preview-store-page').contents().find('.banner_section').attr('src', 'assets/images/banner/'+$(this).val());
+			$('#storefront_page_container').find('.banner_section').removeClass('hide');
+			$('#storefront_page_container').find('.banner_section').attr('src', 'assets/images/banner/'+$(this).val());
 		});
 	});
 
@@ -69,7 +69,7 @@ $(document).ready(function() {
 		$('.social-url').keyup(function() {
 			var val = $(this).val(),
 				id 	 = $(this).data('id');
-			$('#preview-store-page').contents().find(id).attr('href', val);
+			$('#storefront_page_container').find(id).attr('href', val);
 		});
 	});
 
@@ -120,14 +120,14 @@ var changeUIImage = function(obj) {
 		var selected = '';
 		if (typeof obj.selected == 'object' && Object.keys(obj.selected).length) {
 			if (obj.selected[0] != undefined) {
-				$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
+				$('#storefront_page_container').find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected[0].url_path+');');
 				selected = obj.selected[0].url_path;
 			} else {
-				$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
+				$('#storefront_page_container').find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected.url_path+');');
 				selected = obj.selected.url_path;
 			}
 		} else {
-			$('#preview-store-page').contents().find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
+			$('#storefront_page_container').find(obj.ui).removeAttr('style').attr('style', 'background-image: url('+obj.selected+');');
 			selected = obj.selected;
 		}
 
@@ -156,8 +156,12 @@ var refreshStorePreview = function(obj) {
 	if ($('form.storefront-forms').find('[name]').hasClass('error') == false) {
 		$('form.storefront-forms').each(function(i, elem) {
 			$(elem).find('.farm_id').val(obj.user_farms.id);
+			$('#storefrontTab').remove();
+			var a_tag = $('<a class="text-link btn btn-default normal-radius icon-left" id="storefrontTab" target="storefrontTab" href="store/'+obj.user_farms.id+'/'+obj.user_farms.name.replace(/\s+/g, '-').toLowerCase().trim()+'"><i class="fa fa-external-link-square"></i> View Store</a>');
+			$(elem).find('button:submit').parent('li').addClass('text-right').prepend(a_tag);
+			setTimeout(function() {
+				$(elem).find('button:submit').text('Update');
+			}, 900);
 		});
-		$('#storefrontTab').attr('href', 'store/'+obj.user_farms.id+'/'+obj.user_farms.name.replace(/\s+/g, '-').toLowerCase().trim());
-		// document.getElementById("preview-store-page").src = document.getElementById("preview-store-page").src;
 	}
 }

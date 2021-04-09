@@ -44,7 +44,7 @@
 											<button type="submit" class="btn btn-blue normal-radius">Update</button>
 										</li>
 									<?php else: ?>
-										<li><button type="submit" class="btn btn-blue normal-radius">Create</button></li>
+										<li><button type="submit" class="btn btn-blue normal-radius" data-orig-ui="Update">Create</button></li>
 									<?php endif ?>
 								</ul>
 							</div>
@@ -210,7 +210,7 @@
 											<label for="banner_section">Select a banner</label>
 											<select name="user_farms[banner]" id="banner_section" class="form-control chosen">
 												<option value="steps.png"<?php str_has_value_echo('steps.png', $banner, ' selected');?>>Step 1 2 3 (Default)</option>
-												<option value="lettuce.png"<?php str_has_value_echo('lettuce.pn', $banner, ' selected');?>>Lettuce Fact</option>
+												<option value="lettuce.png"<?php str_has_value_echo('lettuce.png', $banner, ' selected');?>>Lettuce Fact</option>
 												<option value="be-farmer.png"<?php str_has_value_echo('be-farmer.png', $banner, ' selected');?>>Deliver Fast</option>
 											</select>
 										</div>

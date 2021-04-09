@@ -100,7 +100,9 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				jsonpCallback: 'gmCall',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
-					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					if (uiButtonSubmit.data('orig-ui') == undefined) {
+						uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					}
 					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
 				},
 				success: function(data) {

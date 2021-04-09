@@ -1,5 +1,4 @@
 <?php if (isset($data['category'])): ?>
-	<?php /*debug($data, 'stop');*/ ?>
 	<div class="product-item panel" data-category="<?php echo $id;?>">
 		<div class="product-item-info">
 			<a href="<?php echo $data['product_url'];?>">
