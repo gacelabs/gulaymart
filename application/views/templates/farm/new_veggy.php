@@ -1,5 +1,5 @@
 <div id="dashboard_panel_right">
-	<?php $this->view('static/mobile_note'); ?>
+	<?php $this->view('global/mobile_note'); ?>
 
 		<div class="row hidden-xs" id="new_veggy">
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
