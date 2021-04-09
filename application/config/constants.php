@@ -107,5 +107,6 @@ defined('DEVBUILD_PASS') OR define('DEVBUILD_PASS', '1');
 defined('PRODUCTSDATALIMIT') OR define('PRODUCTSDATALIMIT', 4);
 defined('GOOGLEMAP_KEY') OR define('GOOGLEMAP_KEY', 'AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA');
 defined('REFERRAL_CODE') OR define('REFERRAL_CODE', 'PPS8083189');
-defined('LOCATION_KEYS') OR define('LOCATION_KEYS', serialize(['id','lat','lng','address_1','address_2']));
-defined('KM_DISTANCE_TO_USER') OR define('KM_DISTANCE_TO_USER', 25);
+defined('NON_LOCATION_KEYS') OR define('NON_LOCATION_KEYS', serialize(['id','lat','lng','address_1','address_2']));
+defined('KM_DISTANCE_TO_USER') OR define('KM_DISTANCE_TO_USER', 100);
+defined('NON_PRODUCT_KEYS') OR define('NON_PRODUCT_KEYS', serialize(['user_id', 'category_id', 'subcategory_id', 'added']));

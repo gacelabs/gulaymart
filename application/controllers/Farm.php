@@ -109,7 +109,7 @@ class Farm extends MY_Controller {
 								$location['product_id'] = $product_id;
 								$this->gm_db->new('products_location', $location);
 								$post['products_location'][$key]['duration'] = '';
-								$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']]);
+								$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
 								if ($farm_location) {
 									$driving_distance = get_driving_distance([
 										['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
@@ -164,9 +164,24 @@ class Farm extends MY_Controller {
 									$upload['is_main'] = 0;
 								}
 								$ids[] = $this->products->new($upload, 'products_photo');
-								$post['file_photos'][] = $upload;
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
+							$post['products'] = $this->gm_db->get('products', ['id' => $product_id]);
+							$products_locations = $this->gm_db->get('products_location', ['product_id' => $product_id]);
+							if ($products_locations) {
+								foreach ($products_locations as $key => $location) {
+									$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+									if ($farm_location) {
+										$driving_distance = get_driving_distance([
+											['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+											['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+										]);
+										$products_locations[$key]['duration'] = $driving_distance['duration'];
+									}
+								}
+								$post['products_location'] = $products_locations;
+							}
+							$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $product_id]);
 						}
 						if (count($ids) AND !in_array(false, $ids)) {
 							if ($passed == 0) {
@@ -327,7 +342,8 @@ class Farm extends MY_Controller {
 				'js' => ['farm', 'inventory', 'DataTables/datatables.min'],
 			],
 			'data' => [
-				'products' => $this->products->get_in()
+				'products' => $this->products->get_in(),
+				'field_lists' => $this->gm_db->fieldlists('products', unserialize(NON_PRODUCT_KEYS)),
 			],
 		]);
 	}

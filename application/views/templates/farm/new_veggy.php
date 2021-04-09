@@ -273,20 +273,20 @@
 					<div class="dash-panel-top">
 						<ul class="spaced-list between">
 							<li><h3>Listing</h3></li>
-							<li><h3><a href="#" target="_new" class="text-link" id="order-link">Product Page</a></h3></li>
+							<li><h3><a href="#" target="_new" class="text-link order-link">View Page</a></h3></li>
 						</ul>
 						<div class="product-item-info">
-							<div class="product-item-top" id="order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
-								<!-- <ul class="spaced-list between">
-									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span id="order-duration">00 mins</span></small></kbd></li>
-									<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span id="order-type">Organic</span></small></kbd></li>
-								</ul> -->
+							<div class="product-item-top order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
+								<ul class="spaced-list between">
+									<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span class="order-duration">00 mins</span></small></kbd></li>
+									<!-- <li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span id="order-type">Organic</span></small></kbd></li> -->
+								</ul>
 							</div>
 							<div class="product-item-middle">
-								<h1 class="product-title" id="order-title">Product name shows here</h1>
-								<p class="product-price">&#x20b1; <span id="order-price">0.00</span> / <span id="order-unit">kilo</span></p>
+								<h1 class="product-title order-title">Product name shows here</h1>
+								<p class="product-price">&#x20b1; <span class="order-price">0.00</span> / <span class="order-unit">kilo</span></p>
 							</div>
-							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span id="order-status">For review</span></h5>
+							<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span class="order-status">For review</span></h5>
 						</div>
 					</div>
 					<div class="dash-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">

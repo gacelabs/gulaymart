@@ -194,4 +194,19 @@ class MY_Model extends CI_Model {
 		}
 		return 0;
 	}
+
+	public function fieldlists($table=false, $remove_fields=[])
+	{
+		if ($table) {
+			$lists = $this->db->list_fields($table);
+			foreach ($lists as $key => $field) {
+				if (in_array($field, $remove_fields)) {
+					unset($lists[$key]);
+				}
+			}
+			// debug($lists, 'stop');
+			return $lists;
+		}
+		return false;
+	}
 }

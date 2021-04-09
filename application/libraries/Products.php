@@ -22,22 +22,9 @@ class Products {
 				if (!is_bool($limit) AND is_numeric($limit)) {
 					$this->class->db->limit($limit);
 				}
-				$data = $this->class->db->get_where('products', ['activity' => 1]);
-			} elseif (is_array($where) OR is_string($where)) {
-				if (is_array($where)) {
-					$where['activity'] = 1;
-				} else {
-					if (strlen(trim($where)) > 0) {
-						$where .= ' AND activity = 1';
-					} else {
-						$where = 'activity = 1';
-					}
-				}
-				if (!is_bool($limit) AND is_numeric($limit)) {
-					$this->class->db->limit($limit);
-				}
-				$data = $this->class->db->get_where('products', $where);
 			}
+			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
+			$data = $this->class->db->get('products');
 			if (isset($data) AND $data->num_rows()) {
 				$products = $data->result_array();
 				$results = [];
@@ -60,23 +47,16 @@ class Products {
 	public function get_in($where=true, $except_field=false, $limit=false, $justdata=true, $row=false)
 	{
 		if ($where != false) {
-			if (is_bool($where) AND $where == true) {
-				if (!is_bool($limit) AND is_numeric($limit)) {
-					$this->class->db->limit($limit);
-				}
-				$this->class->db->where(['activity' => 1]);
-			} elseif (is_array($where) OR is_string($where)) {
-				$this->class->db->where(['activity' => 1]);
-				if (!is_bool($limit) AND is_numeric($limit)) {
-					$this->class->db->limit($limit);
-				}
-				if (is_array($where)) {
-					foreach ($where as $field => $wrow) {
-						if (is_array($wrow)) {
-							$this->class->db->where_in($field, $wrow);
-						} else {
-							$this->class->db->where([$field => $wrow]);
-						}
+			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
+			if (!is_bool($limit) AND is_numeric($limit)) {
+				$this->class->db->limit($limit);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->class->db->where_in($field, $wrow);
+					} else {
+						$this->class->db->where([$field => $wrow]);
 					}
 				}
 			}
@@ -102,13 +82,10 @@ class Products {
 
 	public function get_by_category_pages($where=false)
 	{
-		$clause = ['activity' => 1];
-		if ($where != false) {
-			$clause = $where + $clause;
-		}
+		if ($this->has_session) $clause = ['user_id' => $this->profile['id']];
+		if ($where != false) $clause = $where + $clause;
 		// debug($clause, 'stop');
 		$data = $this->class->gm_db->get('products', $clause);
-		// $data = $this->get(['activity' => 1]);
 		$tmp_all = $tmp_by_category = [];
 		if ($data) {
 			$tmp_all = $data;
@@ -330,13 +307,14 @@ class Products {
 	public function products_with_location($where=true, $row=false, $limit=false)
 	{
 		if ($where != false) {
+			if ($this->has_session) $this->class->db->where(['user_id' => $this->profile['id']]);
 			if (!is_bool($limit) AND is_numeric($limit)) {
 				$this->class->db->limit($limit);
 			}
 			if (is_bool($where) AND $where == true) {
-				$products = $this->class->db->where(['activity' => 1])->get('products');
+				$products = $this->class->db->get('products');
 			} elseif (is_array($where) OR is_string($where)) {
-				$products = $this->class->db->where(['activity' => 1])->get_where('products', $where);
+				$products = $this->class->db->get_where('products', $where);
 			}
 			$results = false;
 			if ($products->num_rows()) {

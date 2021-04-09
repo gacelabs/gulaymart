@@ -132,8 +132,8 @@ $(document).ready(function() {
 	runMediaUploader(function(elem) {
 		var url_path = $(elem).next('input[type="radio"]').data('url-path');
 		if (url_path != undefined) {
-			$('#order-photo').removeAttr('style');
-			$('#order-photo').attr({'style': 'background-image: url("'+url_path+'")'});
+			$('.order-photo').removeAttr('style');
+			$('.order-photo').attr({'style': 'background-image: url("'+url_path+'")'});
 		}
 	});
 
@@ -174,8 +174,8 @@ var setProductScore = function(obj) {
 	}
 	switch (obj.pos) {
 		case '0':
-			$('#order-title').text(obj.products.name);
-			$('#order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
+			$('.order-title').text(obj.products.name);
+			$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
 			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '10');
 			}
@@ -192,8 +192,8 @@ var setProductScore = function(obj) {
 			}
 		break;
 		case '2':
-			$('#order-price').text(obj.products.price);
-			$('#order-unit').text(obj.products.measurement);
+			$('.order-price').text(obj.products.price);
+			$('.order-unit').text(obj.products.measurement);
 			if (percent < percent_gage[obj.pos]) {
 				$('.timeline-border-progress').attr('data-percent', '60');
 			}
@@ -234,14 +234,13 @@ var redirectNewProduct = function(obj) {
 	runAlertBox({type:'success', message: sMessage, unclose: true});
 	// console.log(obj);
 	$('.order-title').text(obj.products.name);
-	$('#order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
 	$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
 	$.each(obj.file_photos, function(i, data) {
 		if (data.is_main == 1) {
 			// console.log(data);
-			if ($('#order-photo').length) {
-				$('#order-photo').removeAttr('style');
-				$('#order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
+			if ($('.order-photo').length) {
+				$('.order-photo').removeAttr('style');
+				$('.order-photo').attr({'style': 'background-image: url("'+data.url_path+'")'});
 			}
 			if ($('.order-photo').length) {
 				$('.order-photo').removeAttr('style');

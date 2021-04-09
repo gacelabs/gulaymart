@@ -135,7 +135,7 @@
 													<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 														<?php
 														foreach (array_keys($shipping) as $value) {
-															if (!in_array($value, unserialize(LOCATION_KEYS))) {
+															if (!in_array($value, unserialize(NON_LOCATION_KEYS))) {
 																unset($shipping[$value]);
 															}
 														}
@@ -163,7 +163,7 @@
 													<?php foreach ($farm_locations as $key => $location): ?>
 														<?php
 														foreach (array_keys($location) as $value) {
-															if (!in_array($value, unserialize(LOCATION_KEYS))) {
+															if (!in_array($value, unserialize(NON_LOCATION_KEYS))) {
 																unset($location[$value]);
 															}
 														}

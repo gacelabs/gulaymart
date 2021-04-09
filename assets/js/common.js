@@ -415,12 +415,7 @@ var runMediaUploader = function(callback) {
 					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
 					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
 				}
-				if ($('#order-photo').length && checked != '') {
-					$('#order-photo').removeAttr('style');
-					$('#order-photo').attr({'style': 'background-image: url("'+blob_path+'")'});
-				}
 				$('[data-toggle="tooltip"]').tooltip();
-
 				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
 					var position = uiForm.find('[name="pos"]').val();
 					var iTop = (uiForm.parent('.dash-panel.theme.score-'+position).offset().top - ($('nav').height() + $('.dash-panel.score-detail-scroll').height() + 1));

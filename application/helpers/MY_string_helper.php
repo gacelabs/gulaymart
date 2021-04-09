@@ -1192,7 +1192,7 @@ function nearby_farms($data=false)
 					['lat' => $data['lat'], 'lng' => $data['lng']],
 					['lat' => $row['lat'], 'lng' => $row['lng']],
 				]);
-				// debug($driving_distance['distance'], 'stop');
+				// debug($driving_distance, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (float)$driving_distance['distance'];
 					if ($distance < KM_DISTANCE_TO_USER) {

@@ -336,7 +336,7 @@
 							<div class="dash-panel-top">
 								<ul class="spaced-list between">
 									<li><h6><?php echo $location['address_2'];?></h6></li>
-									<li><h3><a href="basket/view/<?php echo $data['product']['id'].'/'.nice_url($data['product']['name'], true);?>" target="_new" class="text-link order-link">Product Page</a></h3></li>
+									<li><h3><a href="basket/view/<?php echo $data['product']['id'].'/'.nice_url($data['product']['name'], true);?>" target="_new" class="text-link order-link">View Page</a></h3></li>
 								</ul>
 								<div class="product-item-info">
 									<?php if (isset($data['product']['photos']) AND $data['product']['photos']): ?>
