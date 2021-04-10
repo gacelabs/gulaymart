@@ -26,18 +26,12 @@
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
 					<div class="product-item-body zero-gaps">
 						<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY PORDUCT NA OR WALA PA -->
-						<?php if (isset($data['kunyare'])) : ?>
-							<!-- ETO YUNG PRODUCT CARD -->
-							<?php $this->view('looping/product_card'); ?>
-						<?php else: ?>
-							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
-						<?php endif ?>
 						<?php if (isset($data['products'])) {
-							/*foreach ($data['products'] as $key => $product) {
+							foreach ($data['products'] as $key => $product) {
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
-							}*/
+							}
 						} else {?>
-							<!-- <p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p> -->
+							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 						<?php } ?>
 						<div class="banner-section">
 							<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
@@ -60,7 +54,11 @@
 						<!-- ETO YUNG GALLERIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
+<<<<<<< HEAD
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p>
+=======
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERY &#8212;</p>
+>>>>>>> 45197449f61f04580e2cad443bbbf85a04e519c1
 					<?php endif ?>
 				</div>
 				
