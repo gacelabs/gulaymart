@@ -54,11 +54,7 @@
 						<!-- ETO YUNG GALLERIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
-<<<<<<< HEAD
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p>
-=======
-						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERY &#8212;</p>
->>>>>>> 45197449f61f04580e2cad443bbbf85a04e519c1
 					<?php endif ?>
 				</div>
 				
