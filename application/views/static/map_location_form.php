@@ -16,8 +16,8 @@
 			<p style="padding:0 0 0 13px;margin-bottom:15px;"><b class="hidden-xs">Step 2</b><i class="fa fa-question-circle hidden-lg hidden-md hidden-sm" data-toggle="tooltip" data-placement="right" title="Step 2."></i> Drag and point the map marker <i class="fa fa-map-marker text-danger"></i> to your house.</p>
 			<div id="map-box" style="width: 100%; height: 250px; margin-bottom: 15px;"></div>
 			<div class="input-group">
-				<span class="input-group-addon"><span><b class="hidden-xs">Step 3</b><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 2. Enter your House/Unit no., Street name, Subdivision name"></i></span></span>
-				<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter your House/Unit no., Street name, Subdivision name" required="required">
+				<span class="input-group-addon"><span><b class="hidden-xs">Step 3</b><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 2. Enter your House number Street Barangay City (Complete shipping address)"></i></span></span>
+				<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter your complete shipping address." required="required">
 			</div>
 			<div class="form-group zero-gaps">
 				<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1." required="required">

@@ -1,7 +1,7 @@
 <div class="container" id="register_container">
 	<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
 		<div id="register_welcome">
-			<h1><i class="fa fa-leaf my-logo"></i> <b>Gulaymart</b></h1>
+			<h1 style="margin-bottom:20px;"><i class="fa fa-leaf my-logo"></i> <b>Gulaymart</b></h1>
 			<h3>Find the freshest vegetables grown by the framers within your community.</h3>
 		</div>
 	</div>
@@ -19,7 +19,7 @@
 						<input type="password" class="form-control" name="password" placeholder="Password" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" name="re_password" placeholder="Retype" />
+						<input type="password" class="form-control" name="re_password" placeholder="Confirm" />
 					</div>
 					<div class="form-group" style="margin-bottom: 0;">
 						<button class="btn btn-theme btn-lg btn-block">Sign Up</button>

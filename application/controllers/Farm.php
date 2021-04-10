@@ -524,7 +524,7 @@ class Farm extends MY_Controller {
 						'../static/store',
 					],
 					'footer' => [
-						'static/footer'
+						'global/footer'
 					],
 				],
 				'bottom' => [

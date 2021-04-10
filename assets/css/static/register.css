@@ -1,5 +1,8 @@
+body.register {
+	padding-top: 0;
+}
 #register_container {
-	height: calc(100vh - 400px);
+	height: calc(100vh - 200px);
 	margin-top: 80px;
 	max-width: 1000px;
 }

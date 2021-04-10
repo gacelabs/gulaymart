@@ -36,9 +36,11 @@ class Basket extends My_Controller {
 				$basket_session = [];
 				$sessions = $this->gm_db->get('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => 0]);
 				// debug($sessions, 'stop');
-				foreach ($sessions as $key => $session) {
-					$session['rawdata'] = json_decode(base64_decode($session['rawdata']), true);
-					$basket_session[date('F j, Y', $session['at_date']).' @ '.$session['at_time']][$session['location_id']] = $session;
+				if (is_array($sessions)) {
+					foreach ($sessions as $key => $session) {
+						$session['rawdata'] = json_decode(base64_decode($session['rawdata']), true);
+						$basket_session[date('F j, Y', $session['at_date']).' @ '.$session['at_time']][$session['location_id']] = $session;
+					}
 				}
 			}
 		}
@@ -52,7 +54,7 @@ class Basket extends My_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'basket/main',
+					'basket/basket_container',
 				],
 			],
 			'bottom' => [

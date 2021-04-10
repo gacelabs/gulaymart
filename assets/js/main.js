@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
 	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="popover"]').popover();
 
 	$(document.body).on('click', '.resetpass-btn', function(e) {
 		$('form.sign-in-form').addClass('hide');
@@ -156,10 +157,4 @@ $(document).ready(function() {
 			$(elem).DataTable(oSettings);
 		});
 	}
-});
-
-$(window).on('load resize change scroll', function(){
-	var navSticky = $('#bottom_nav_sm').width(),
-	winWidth = $(window).width();
-	$('#bottom_nav_sm').css('left', (winWidth/2)-(navSticky/2)+'px');
 });

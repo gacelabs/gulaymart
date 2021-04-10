@@ -6,7 +6,7 @@
 					<li><a href="basket/" class="hideshow-btn active"><h4 class="zero-gaps">My Basket</h4></a></li>
 				</ul>
 				<?php if ($data['baskets']): ?>
-					<div class="dashboard-panel-middle hideshow-container">
+					<div class="dashboard-panel-middle">
 						<div class="order-list-container">
 							<?php foreach ($data['baskets'] as $timestamp => $baskets): ?>
 								<div class="order-item">
@@ -64,6 +64,8 @@
 							<?php endforeach ?>
 						</div>
 					</div>
+				<?php else : ?>
+					<h4 style="padding:15px;">Fresh veggies at your door in minutes, shop <a href="marketplace/" class="text-link">now!</a></h4>
 				<?php endif ?>
 			</div>
 		</div>
