@@ -488,7 +488,7 @@ function fnDragEnd(marker, isNew) {
 	if (isNew == undefined) isNew = false;
 	var uiInputAddress = $('#address_2');
 	map.setCenter(marker.getPosition());
-	infowindow.open(map, marker);
+	// infowindow.open(map, marker);
 
 	var position = marker.getPosition();
 	$('#lat').attr('value', position.lat());
@@ -562,7 +562,7 @@ function loadMap(oLatLong) {
 			});
 
 			infowindow = new google.maps.InfoWindow({
-				content: '<b>Drag Me!</b>',
+				content: '<b>Drag Me! or Click the Map!</b>',
 			});
 			// maps.push(map); 
 			marker = new google.maps.Marker({
@@ -582,6 +582,7 @@ function loadMap(oLatLong) {
 
 			google.maps.event.addListener(map, "contextmenu", function(event) {
 				map.setCenter(marker.getPosition());
+				infowindow.open(map, marker);
 			});
 
 			google.maps.event.addListener(map, "click", function(event) {

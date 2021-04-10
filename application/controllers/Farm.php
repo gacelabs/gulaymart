@@ -286,7 +286,9 @@ class Farm extends MY_Controller {
 						}
 					}
 				}
-				$this->set_response('info', 'Storefront Succesfully Created!', $post, false, 'refreshStorePreview');
+				$message = 'Storefront Succesfully Created!';
+				if ($this->farms) $message = 'Storefront Succesfully Updated!';
+				$this->set_response('info', $message, $post, false, 'refreshStorePreview');
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
