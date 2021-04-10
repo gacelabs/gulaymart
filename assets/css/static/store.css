@@ -112,6 +112,18 @@ body.store .storefront-middle {
 .banner-section>img {
 	width: 100%;
 }
+#composer_post_container {
+	background-color: #fff;
+	border-radius: 4px;
+	box-shadow: 0px 2px 1px 0px rgb(0 0 0 / 9%);
+	margin: 15px auto;
+	padding: 15px;
+}
+.composer-grid {
+	display: grid;
+	grid-gap: 15px;
+	grid-template-columns: 60px 1fr auto;
+}
 @media (max-width: 991px) {
 	body.store .marketplace-navbar-container {
 		background-color: #a8d253;

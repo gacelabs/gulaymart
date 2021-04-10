@@ -25,8 +25,7 @@
 			<div id="storefront_product_container">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
 					<div class="product-item-body zero-gaps">
-						<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY PORDUCT NA OR WALA PA -->
-						<?php if (isset($data['products'])) {
+						<?php if (isset($data['products']) AND !empty($data['products'])) {
 							foreach ($data['products'] as $key => $product) {
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}
@@ -44,6 +43,28 @@
 						<!-- ETO YUNG STORIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
+
+						<div id="composer_post_container">
+							<form action="" method="post">
+								<div class="composer-grid">
+									<div class="profile_photo hidden-xs" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div>
+									<div class="composer-form-body">
+										<div class="form-group" style="margin-bottom:5px;">
+											<textarea class="form-control" placeholder="Share your farm stories..." rows="2"></textarea>
+										</div>
+										<div class="composer-footer">
+											<ul class="inline-list">
+												<li class="text-link" data-toggle="modal" data-target="#media_modal"><i class="fa fa-picture-o"></i> Media</li>
+											</ul>
+										</div>
+									</div>
+									<div>
+										<button class="btn btn-contrast"><i class="fa fa-send"></i> Post</button>
+									</div>
+								</div>
+							</form>
+						</div>
+
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
 					<?php endif ?>
 				</div>
@@ -54,7 +75,7 @@
 						<!-- ETO YUNG GALLERIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
-						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p>
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p> -->
 					<?php endif ?>
 				</div>
 				

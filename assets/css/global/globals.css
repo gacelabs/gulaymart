@@ -135,6 +135,22 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 .status-cancelled {
 	background-color: #ff8e8e;
 }
+.preview-image-item {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+}
+.preview_images_selected {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.preview_images_selected>li, .preview_images_list>li, .preview-image-item {
+	margin: 0 auto;
+	padding: 10px 0;
+	text-align: center;
+}
 @media (max-width: 991px) {
 	body .container {
 		padding: 0;

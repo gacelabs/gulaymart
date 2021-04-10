@@ -39,12 +39,12 @@
 									<i class="fa fa-tachometer"></i>Sales
 								</a>
 							</div>
-							<div class="aside-nav-child">
-								<a href="farm/new-veggy/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-									<i class="fa fa-pencil"></i>New veggy
-								</a>
-							</div>
 						<?php endif ?>
+						<div class="aside-nav-child">
+							<a href="farm/new-veggy/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
+								<i class="fa fa-pencil"></i>New veggy
+							</a>
+						</div>
 					<?php endif ?>
 				<?php endif ?>
 			<?php endif ?>
@@ -60,12 +60,12 @@
 							<i class="fa fa-cubes"></i>Inventory
 						</a>
 					</div>
-					<div class="aside-nav-child">
-						<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
-							<i class="fa fa-cog"></i>Settings
-						</a>
-					</div>
 				<?php endif ?>
+				<div class="aside-nav-child">
+					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
+						<i class="fa fa-cog"></i>Settings
+					</a>
+				</div>
 			<?php endif ?>
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
 				<i class="fa fa-sign-out" style="background-color:#cacaca;"></i>Sign out

@@ -24,16 +24,11 @@ h1, h2, h3, h4, h5 {
 .btn-lg {
 	border-radius: 4px;
 }
-.preview-image-item {
-	background-position: center center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	height: 100px;
-	width: 100px;
-}
-.preview_images_selected>li, .preview_images_list>li {
-	padding: 10px;
-	text-align: center;
+textarea {
+	box-shadow: none !important;
+	outline: none !important;
+	max-height: 200px;
+	resize: vertical;
 }
 .fade {
 	transform: scale(0);

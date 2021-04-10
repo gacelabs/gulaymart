@@ -525,6 +525,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
+					'modals' => ['media_modal'],
 					'js' => ['farm/store', 'dashboard/main'],
 				],
 				'data' => $data
