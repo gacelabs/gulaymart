@@ -15,11 +15,6 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$this->basket();
-	}
-
-	public function basket()
-	{
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
@@ -37,6 +32,14 @@ class Basket extends My_Controller {
 				'js' => ['dashboard/main', 'basket/main'],
 			],
 		]);
+	}
+
+	public function add($product_id=0)
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		if ($post AND $product_id) {
+			debug($post, 'stop');
+		}
 	}
 
 	public function view($product_id=0, $product_name='')
@@ -122,14 +125,14 @@ class Basket extends My_Controller {
 			'f_rec_add_in_pro' => '',
 			'f_rec_add_in_reg' => '',
 			'f_rec_add_in_coun' => '',
-			'f_collectFrom' => 'S',
+			'f_collectFrom' => 'S', // where to collect the delivery fees // S is SENDER R is RECEPIENT
 			'f_recepient_notes' => 'Please keep hot',
 			'f_cargo' => 'Food',
 			'f_cargo_others' => 'Food',
 			'f_is_cod' => '',
-			'f_recepient_cod' => '',
+			'f_recepient_cod' => '', // if COD is checked real item price will appear here
 			'f_express_fee' => '',
-			'f_express_fee_hidden' => 40.00,
+			'f_express_fee_hidden' => 40.00, // if express fee is checked - toktok fixed 40 pesos fee
 		];
 		// GET RIDER
 		$rider = ['term' => '9614068479', '_type' => 'query', 'q' => '9614068479'];
@@ -171,7 +174,7 @@ class Basket extends My_Controller {
 			$params['f_recepient_datetime_from'] = "02:13:23";
 			$params['f_recepient_datetime_to'] = "03:13:27";
 		}
-		// if COD is checked
+		// if COD is checked matic collect from Recepient
 		if ($params['f_is_cod'] == 'on') {
 			$params['f_collectFrom'] = 'R';
 		}

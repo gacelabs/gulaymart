@@ -42,7 +42,7 @@
 						<?php endif ?>
 					</h2>
 					<hr>
-					<form action="" method="post">
+					<form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter">
 						<div class="productpage-basic-grid">
 							<p class="color-grey zero-gaps">UNIT</p>
 							<p><?php echo strtoupper(implode(', ', $measures));?></p>
@@ -55,12 +55,12 @@
 									<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $location['city'];?> - <span class="max-qty">Max quantity <?php echo $location['stocks'];?></span></p>
 									<div class="input-group">
 										<span class="input-group-addon addon-variety-input"><span class="color-grey">&#x20b1; <?php echo $location['price'];?></span></span>
-										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $location['stocks'];?>" name="quant[1]">
+										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $location['stocks'];?>" name="quantity[<?php echo $location_id;?>]" required="required" />
 										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quant[1]" type="button"><i class="fa fa-minus"></i></button>
+											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="quantity[<?php echo $location_id;?>]" type="button"><i class="fa fa-minus"></i></button>
 										</span>
 										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quant[1]" type="button"><i class="fa fa-plus"></i></button>
+											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="quantity[<?php echo $location_id;?>]" type="button"><i class="fa fa-plus"></i></button>
 										</span>
 									</div>
 								</div>
@@ -69,8 +69,8 @@
 						</div>
 
 						<div class="add-basket-btn">
-							<button type="button" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
-							<button type="button" class="btn btn-lg btn-blue" style="width:125px;">Buy Now</button>
+							<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
+							<a href="basket" class="btn btn-lg btn-blue" style="width:125px;">Buy Now</a>
 						</div>
 					</form>
 				</div>

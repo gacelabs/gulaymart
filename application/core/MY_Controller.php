@@ -131,6 +131,20 @@ class MY_Controller extends CI_Controller {
 				$this->$key = $value;
 			}
 		}
+		/*set minify folders*/
+		foreach (['assets/css/compiled/', 'assets/js/compiled/'] as $path) {
+			if (is_dir(get_root_path($path)) == false) {
+				$folder_chunks = explode('/', $path);
+				if (count($folder_chunks)) {
+					$uploaddir = get_root_path();
+					foreach ($folder_chunks as $key => $folder) {
+						$uploaddir .= $folder.'/';
+						@mkdir($uploaddir);
+					}
+				}
+				@chmod($uploaddir, 0755);
+			}
+		}
 	}
 
 	public function render_page($rawdata=false, $debug=false)

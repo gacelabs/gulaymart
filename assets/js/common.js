@@ -82,6 +82,13 @@ $(document).ready(function() {
 			initMapLocations();
 		}
 	}
+
+	if ($('form').length) {
+		$('form [type=submit]').bind('click', function() {
+			$('[type=submit]', $(this).parents('form')).removeAttr('clicked');
+			$(this).attr('clicked', 1);
+		});
+	}
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
@@ -89,11 +96,16 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 		if (form != undefined && form instanceof HTMLElement) {
 			if (uploadFile == undefined) uploadFile = false;
 			$('form').removeClass('active-ajaxed-form');
-
-			var uiButtonSubmit = $(form).find('[type=submit]:visible'),
+			var isClicked = parseInt($(form).find('[clicked]:visible').attr('clicked'))
+			// console.log(isClicked)
+			var uiButtonSubmit = isClicked ? $(form).find('[clicked]:visible') : false,
 			callbackFn = $(form).data('callback'),
-			lastButtonUI = uiButtonSubmit.html(),
-			oSettings = {
+			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Busy ...';
+			if (uiButtonSubmit) {
+				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Busy ...';
+			}
+
+			var oSettings = {
 				url: form.action,
 				type: form.method,
 				dataType: 'jsonp',
@@ -101,10 +113,12 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				jsonpCallback: 'gmCall',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
-					if (uiButtonSubmit.data('orig-ui') == undefined) {
-						uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					if (uiButtonSubmit) {
+						if (uiButtonSubmit.data('orig-ui') == undefined) {
+							uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+						}
+						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
-					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
 				},
 				success: function(data) {
 					if (data && data.success) {
@@ -115,8 +129,10 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					console.log(status, thrown);
 				},
 				complete: function(xhr, status) {
-					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-					uiButtonSubmit.removeAttr('disabled');
+					if (uiButtonSubmit) {
+						uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+						uiButtonSubmit.removeAttr('disabled');
+					}
 					var fn = eval(callbackFn);
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
@@ -151,7 +167,11 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
 	if (url) {
-		if (ui) var sLastButtonText = ui.html();
+		var sLastButtonText = '', loadingText = 'Busy ...';
+		if (ui) {
+			sLastButtonText = ui.html();
+			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Busy ...';
+		}
 		var oSettings = {
 			url: url,
 			type: 'post',
@@ -161,7 +181,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				if (ui) {
 					ui.addClass('active-ajaxed-btn');
 					ui.attr('data-orig-ui', sLastButtonText);
-					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Fetching ...');
+					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 				}
 			},
 			success: function(data) {

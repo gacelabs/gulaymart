@@ -14,7 +14,7 @@
 			
 			<ul id="global_navbar_btn_list">
 				<?php if ($current_profile) : ?>
-				<li>
+				<li id="nav_basket">
 					<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
 				</li>
 				<?php endif ; ?>
