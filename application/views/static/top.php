@@ -17,32 +17,24 @@
 
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/globals.css'); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/defaults.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
+
 	<?php
+	$this->minify->css([ 'global/defaults.css', 'global/globals.css']);
 	if (count($top['css'])) {
 		foreach ($top['css'] as $value) {
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
-			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
+			} elseif ((bool)strstr($value, '.min') == true) {
 				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
-			}
+			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
+				$this->minify->add_css($value.'.css');
+			} 
 			echo "\r\n";
 		}
+		echo $this->minify->deploy_css(false);
 	}
 	?>
-	<?php
-	if (count($top['js'])) {
-		foreach ($top['js'] as $value) {
-			if (filter_var($value, FILTER_VALIDATE_URL)) {
-				echo '<script type="text/javascript" src="'.$value.'"></script>';
-			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
-				echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
-			}
-			echo "\r\n";
-		}
-	}?>
 	<!-- <link rel="manifest" href="/manifest.json"> -->
 	<script type="text/javascript" id="main-obj-script">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;

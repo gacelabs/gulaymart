@@ -100,7 +100,7 @@ class Api extends MY_Controller {
 					$user_id = $this->accounts->profile['id'];
 					$ok = $this->gm_db->save('users', ['is_agreed_terms' => 1], ['id' => $user_id]);
 					if ($ok) {
-						$this->set_response('success', 'Terms & Policy Accepted!', $post, 'farm/storefront');
+						$this->set_response('success', 'Terms & Policy Accepted!', $post, 'farm/storefront', 'agreementSigned');
 					}
 				}
 			}

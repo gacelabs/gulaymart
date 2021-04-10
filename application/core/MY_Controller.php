@@ -39,6 +39,11 @@ class MY_Controller extends CI_Controller {
 		}
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/
 
+		/*DEPLOY CSS AND JS MINIFIER WHEN IN PRODUCTION ONLY*/
+		$this->load->library('minify');
+		// debug($this->minify, 'stop');
+		if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development') $this->minify->enabled = FALSE;
+
 		// debug($this);
 		$this->load->library('accounts');
 		$this->load->library('products');
@@ -150,7 +155,6 @@ class MY_Controller extends CI_Controller {
 				'index_page' => 'XXX',
 				'page_title' => 'XXX',
 				'css' => $top_css,
-				'js' => [],
 			],
 			'middle' => [
 				'body_class' => $body_classes,
@@ -162,7 +166,6 @@ class MY_Controller extends CI_Controller {
 			],
 			'bottom' => [
 				'modals' => [],
-				'css' => [],
 				'js' => [],
 			],
 		];
@@ -181,7 +184,7 @@ class MY_Controller extends CI_Controller {
 								}
 							}
 							break;
-						case 'css': case 'js':
+						case 'css':
 							foreach ($row as $index => $value) {
 								array_push($view['top'][$key], $value);
 							}

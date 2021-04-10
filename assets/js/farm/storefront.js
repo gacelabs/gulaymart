@@ -165,3 +165,8 @@ var refreshStorePreview = function(obj) {
 		});
 	}
 }
+
+var agreementSigned = function(obj) {
+	alert()
+	$('#agree-terms-form').find('button:submit').attr('disabled', 'disabled');
+}

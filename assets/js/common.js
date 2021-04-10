@@ -3,6 +3,9 @@ $(document).ready(function() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				// console.log($(e.relatedTarget));
+				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
+				$(e.target).find('form').prepend(input);
 				if (map != undefined) {
 					$('#shipping-id').remove();
 					var dataLocation = $(e.relatedTarget).next('input:hidden').val();
@@ -13,17 +16,15 @@ $(document).ready(function() {
 						resetMap(oThisLatLong);
 						$('#address_1').val(oData.address_1);
 					} else {
+						resetMap({lat: parseFloat(oUser.lat), lng: parseFloat(oUser.lng)});
 						$('#address_1').val('');
-						$('#address_2').val('');
+						setTimeout(function() {
+							$('#address_2').val('');
+						}, 500);
 					}
-					var i = setInterval(function() {
-						i++;
-						if (i == 5) clearInterval(i);
+					setTimeout(function() {
 						google.maps.event.trigger(map, "contextmenu");
 					}, 1000);
-					// console.log($(e.relatedTarget));
-					var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
-					$(e.target).find('form').prepend(input);
 				}
 			break;
 			case 'media_modal':
