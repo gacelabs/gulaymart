@@ -128,6 +128,7 @@ class DevBuild extends CI_Controller {
 			'products_measurement',
 			'products_photo',
 			'products_attribute',
+			'baskets',
 		];
 
 		return $data;

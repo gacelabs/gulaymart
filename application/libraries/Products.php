@@ -397,4 +397,31 @@ class Products {
 
 		return false;
 	}
+
+	public function product_by_farm_location($product_id=false, $farm_location_id=false)
+	{
+		if ($product_id != false AND $farm_location_id != false) {
+			$products_location = $this->class->db->get_where('products_location', [
+				'product_id' => $product_id,
+				'farm_location_id' => $farm_location_id,
+			]);
+			if ($products_location->num_rows()) {
+				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
+				$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+				$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
+				$product_photo = $this->class->gm_db->get('products_photo', ['product_id' => $product_id, 'is_main' => 1], 'row');
+
+				$products_location = $products_location->row_array();
+
+				$product['basket_details'] = $products_location;
+				$product['farm_location'] = $farm_location;
+				$product['farm'] = $farm;
+				$product['photo'] = $product_photo;
+
+				// debug($product, 'stop');
+				return $product;
+			}
+		}
+		return false;
+	}
 }

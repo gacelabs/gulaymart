@@ -39,6 +39,11 @@ class MY_Controller extends CI_Controller {
 		}
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/
 
+		/*DEPLOY CSS AND JS MINIFIER WHEN IN PRODUCTION ONLY*/
+		$this->load->library('minify');
+		// debug($this->minify, 'stop');
+		if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development') $this->minify->enabled = FALSE;
+
 		// debug($this);
 		$this->load->library('accounts');
 		$this->load->library('products');
@@ -126,6 +131,20 @@ class MY_Controller extends CI_Controller {
 				$this->$key = $value;
 			}
 		}
+		/*set minify folders*/
+		foreach (['assets/css/compiled/', 'assets/js/compiled/'] as $path) {
+			if (is_dir(get_root_path($path)) == false) {
+				$folder_chunks = explode('/', $path);
+				if (count($folder_chunks)) {
+					$uploaddir = get_root_path();
+					foreach ($folder_chunks as $key => $folder) {
+						$uploaddir .= $folder.'/';
+						@mkdir($uploaddir);
+					}
+				}
+				@chmod($uploaddir, 0755);
+			}
+		}
 	}
 
 	public function render_page($rawdata=false, $debug=false)
@@ -150,7 +169,6 @@ class MY_Controller extends CI_Controller {
 				'index_page' => 'XXX',
 				'page_title' => 'XXX',
 				'css' => $top_css,
-				'js' => [],
 			],
 			'middle' => [
 				'body_class' => $body_classes,
@@ -162,7 +180,6 @@ class MY_Controller extends CI_Controller {
 			],
 			'bottom' => [
 				'modals' => [],
-				'css' => [],
 				'js' => [],
 			],
 		];
@@ -181,7 +198,7 @@ class MY_Controller extends CI_Controller {
 								}
 							}
 							break;
-						case 'css': case 'js':
+						case 'css':
 							foreach ($row as $index => $value) {
 								array_push($view['top'][$key], $value);
 							}

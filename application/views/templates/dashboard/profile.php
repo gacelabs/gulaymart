@@ -3,7 +3,9 @@
 	<div class="row">
 		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<h4>You're all set! Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
+			<h4>You're all set! Selling veggies in Gulaymart is easy, be a veggie <a href="farm/storefront/" class="text-link">seller</a> now!</h4>
+			<h4>Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
+
 			<hr class="carved">
 		</div>
 		<?php endif ?>
@@ -32,7 +34,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></h5>
+									<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -52,13 +54,13 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Registered email</h5>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="" data-original-title="Copied!">
+									<label>Registered email</label>
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
 										<input type="email" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></h5>
+									<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
 									<div class="form-group zero-gaps">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
 									</div>
@@ -79,7 +81,7 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<h5>Birthday <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></h5>
+									<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="form-group">
@@ -99,13 +101,13 @@
 							</div>
 							<div class="row">
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Registered email</h5>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="" data-original-title="Copied!">
+									<label>Registered email</label>
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
 										<input type="email" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
 									</div>
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<h5>Cellphone <small class="fa fa-question-circle color-grey" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></h5>
+									<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
 									<div class="form-group zero-gaps">
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required">
 									</div>
@@ -203,7 +205,7 @@
 								</div>
 							<?php endforeach ?>
 						<?php else: ?>
-							<p>No Shipping Address yet.</p>
+							<p>Follow the <b>steps</b> bellow to save a shipping address.</p>
 						<?php endif; ?>
 					</div>
 				</div>

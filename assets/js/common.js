@@ -3,6 +3,9 @@ $(document).ready(function() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				// console.log($(e.relatedTarget));
+				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
+				$(e.target).find('form').prepend(input);
 				if (map != undefined) {
 					$('#shipping-id').remove();
 					var dataLocation = $(e.relatedTarget).next('input:hidden').val();
@@ -13,17 +16,15 @@ $(document).ready(function() {
 						resetMap(oThisLatLong);
 						$('#address_1').val(oData.address_1);
 					} else {
+						resetMap({lat: parseFloat(oUser.lat), lng: parseFloat(oUser.lng)});
 						$('#address_1').val('');
-						$('#address_2').val('');
+						setTimeout(function() {
+							$('#address_2').val('');
+						}, 500);
 					}
-					var i = setInterval(function() {
-						i++;
-						if (i == 5) clearInterval(i);
+					setTimeout(function() {
 						google.maps.event.trigger(map, "contextmenu");
 					}, 1000);
-					// console.log($(e.relatedTarget));
-					var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
-					$(e.target).find('form').prepend(input);
 				}
 			break;
 			case 'media_modal':
@@ -81,6 +82,13 @@ $(document).ready(function() {
 			initMapLocations();
 		}
 	}
+
+	if ($('form').length) {
+		$('form [type=submit]').bind('click', function() {
+			$('[type=submit]', $(this).parents('form')).removeAttr('clicked');
+			$(this).attr('clicked', 1);
+		});
+	}
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
@@ -88,11 +96,16 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 		if (form != undefined && form instanceof HTMLElement) {
 			if (uploadFile == undefined) uploadFile = false;
 			$('form').removeClass('active-ajaxed-form');
-
-			var uiButtonSubmit = $(form).find('[type=submit]:visible'),
+			var isClicked = parseInt($(form).find('[clicked]:visible').attr('clicked'))
+			// console.log(isClicked)
+			var uiButtonSubmit = isClicked ? $(form).find('[clicked]:visible') : false,
 			callbackFn = $(form).data('callback'),
-			lastButtonUI = uiButtonSubmit.html(),
-			oSettings = {
+			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Busy ...';
+			if (uiButtonSubmit) {
+				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Busy ...';
+			}
+
+			var oSettings = {
 				url: form.action,
 				type: form.method,
 				dataType: 'jsonp',
@@ -100,10 +113,12 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				jsonpCallback: 'gmCall',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
-					if (uiButtonSubmit.data('orig-ui') == undefined) {
-						uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					if (uiButtonSubmit) {
+						if (uiButtonSubmit.data('orig-ui') == undefined) {
+							uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+						}
+						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
-					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
 				},
 				success: function(data) {
 					if (data && data.success) {
@@ -114,8 +129,10 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					console.log(status, thrown);
 				},
 				complete: function(xhr, status) {
-					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-					uiButtonSubmit.removeAttr('disabled');
+					if (uiButtonSubmit) {
+						uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+						uiButtonSubmit.removeAttr('disabled');
+					}
 					var fn = eval(callbackFn);
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
@@ -150,7 +167,11 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
 	if (url) {
-		if (ui) var sLastButtonText = ui.html();
+		var sLastButtonText = '', loadingText = 'Busy ...';
+		if (ui) {
+			sLastButtonText = ui.html();
+			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Busy ...';
+		}
 		var oSettings = {
 			url: url,
 			type: 'post',
@@ -160,7 +181,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				if (ui) {
 					ui.addClass('active-ajaxed-btn');
 					ui.attr('data-orig-ui', sLastButtonText);
-					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Fetching ...');
+					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 				}
 			},
 			success: function(data) {
@@ -488,7 +509,7 @@ function fnDragEnd(marker, isNew) {
 	if (isNew == undefined) isNew = false;
 	var uiInputAddress = $('#address_2');
 	map.setCenter(marker.getPosition());
-	infowindow.open(map, marker);
+	// infowindow.open(map, marker);
 
 	var position = marker.getPosition();
 	$('#lat').attr('value', position.lat());
@@ -500,17 +521,60 @@ function fnDragEnd(marker, isNew) {
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			if (isNew == false) {
-				var arr = results[0].address_components.slice(-4, results[0].address_components.length);
-				var arVal = [];
-				$.each(arr, function(i, row) {
-					arVal.push(row.long_name);
-				});
-				// console.log(arVal);
-				uiInputAddress.attr('value', arVal.join(', '));
-				uiInputAddress.val(arVal.join(', '));
+				// console.log(results);
+				if (results[1]) {
+					var arVal = [];
+					var city = null, province = null, region = null, country = null, countryCode = null;
+					var c, lc, component;
+					for (var r = 0, rl = results.length; r < rl; r += 1) {
+						var result = results[r];
+						if (!city && result.types[0] === 'locality') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'locality') {
+									city = component.long_name;
+									arVal.push(city);
+									break;
+								}
+							}
+						}
+						if (!province && result.types[0] === 'administrative_area_level_2') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_2') {
+									province = component.long_name;
+									arVal.push(province);
+									break;
+								}
+							}
+						}
+						if (!region && result.types[0] === 'administrative_area_level_1') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_1') {
+									region = component.long_name;
+									arVal.push(region);
+									break;
+								}
+							}
+						}
+						if (!country && result.types[0] === 'country') {
+							country = result.address_components[0].long_name;
+							arVal.push(country);
+							countryCode = result.address_components[0].short_name;
+						}
+						if (city && country) {
+							break;
+						}
+					}
+					console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
+					var sValue = arVal.join(', ');
+					uiInputAddress.attr('value', sValue);
+					uiInputAddress.val(sValue);
+				}
 			}
 		} else {
-			console.log(status);
+			// console.log(status);
 			uiInputAddress.attr('value', '');
 			uiInputAddress.val('');
 			$('#address_1').val(savedAddress1);
@@ -562,7 +626,7 @@ function loadMap(oLatLong) {
 			});
 
 			infowindow = new google.maps.InfoWindow({
-				content: '<b>Drag Me!</b>',
+				content: '<b>Drag Me! or Click the Map!</b>',
 			});
 			// maps.push(map); 
 			marker = new google.maps.Marker({
@@ -582,6 +646,7 @@ function loadMap(oLatLong) {
 
 			google.maps.event.addListener(map, "contextmenu", function(event) {
 				map.setCenter(marker.getPosition());
+				infowindow.open(map, marker);
 			});
 
 			google.maps.event.addListener(map, "click", function(event) {

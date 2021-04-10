@@ -204,7 +204,7 @@ class Accounts {
 			}
 			$request['settings'] = $settings_data;
 
-			if ($profile AND $shippings) {
+			if ($profile AND $shippings AND $request['is_profile_complete'] == 0) {
 				$request['is_profile_complete'] = 1;
 				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
 			}

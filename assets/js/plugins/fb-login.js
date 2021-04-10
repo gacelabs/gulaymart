@@ -21,9 +21,7 @@ if (window.location.protocol == 'https') {
 			}
 		}, 1000);
 	}
-
 	$(document).ready(function() {
-		
 		$('.fb-login-btn').off('click').on('click', function(e) {
 			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown'])) {
 				FB.login(function(response) {

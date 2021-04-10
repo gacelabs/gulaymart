@@ -41,9 +41,21 @@ $('.input-number').focusin(function(){
 });
 
 $('.input-number').change(function() {
+	var oThis = $(this);
 
-	minValue =  parseInt($(this).attr('min'));
-	maxValue =  parseInt($(this).attr('max'));
+	var minValue =  parseInt($(this).attr('min'));
+	var maxValue =  parseInt($(this).attr('max'));
+
+	/*preventing changes done in console*/
+	$.each(oSavedData, function(i, data) {
+		// console.log(oThis.is(data.ui));
+		if (oThis.is(data.ui)) {
+			minValue = data.min;
+			maxValue = data.max;
+		}
+	});
+	// console.log(minValue, maxValue);
+
 	valueCurrent = parseInt($(this).val());
 	name = $(this).attr('name');
 	eThis = $(this);	
@@ -97,4 +109,14 @@ $('#img_thumb_list>li').click(function() {
 	$('.img-thumb-item').removeClass('active');
 	$(this).find('.img-thumb-item').addClass('active');
 	$('#main_img_preview').css({'background-image' : 'url('+bg+')'});
+});
+
+/*avoid changing the min and max in the ui console*/
+var oSavedData = {};
+$('.variety-location').find('.input-number').each(function(i, elem) {
+	oSavedData[i] = {
+		ui: elem,
+		min: parseInt($(elem).attr('min')),
+		max: parseInt($(elem).attr('max')),
+	}
 });

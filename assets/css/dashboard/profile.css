@@ -5,6 +5,7 @@
 	border: 1px solid #bbb;
 	border-radius: 3px;
 	margin-bottom: 15px;
+	text-transform: capitalize;
 }
 .saved-shipping-item:last-child {
 	margin-bottom: 0;

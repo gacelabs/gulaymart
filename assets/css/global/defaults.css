@@ -1,3 +1,14 @@
+@font-face {
+	font-family: Roboto-Bold;
+	src: url(../../fonts/Roboto-Bold.ttf);
+}
+body {
+	background-color: #eeefec;
+	color: #555;
+	font-family: 'Roboto', sans-serif;
+	font-weight: normal;
+	padding-top: 54px;
+}
 a {
 	color: inherit;
 }
@@ -30,7 +41,7 @@ textarea {
 	max-height: 200px;
 	resize: vertical;
 }
-.fade {
+.modal.fade {
 	transform: scale(0);
 	opacity: 1;
 	-webkit-transition: all .25s linear;
@@ -49,17 +60,6 @@ input {
 	box-shadow: none !important;
 	outline: none;
 	padding: 7px 12px;
-}
-@font-face {
-	font-family: Roboto-Bold;
-	src: url(../../fonts/Roboto-Bold.ttf);
-}
-body {
-	background-color: #eeefec;
-	color: #444;
-	font-family: 'Roboto', sans-serif;
-	font-weight: normal;
-	padding-top: 54px;
 }
 b, h1, h2, h3, h4, label {
 	font-family: 'Roboto-Bold', sans-serif;

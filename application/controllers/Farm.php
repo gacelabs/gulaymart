@@ -9,7 +9,8 @@ class Farm extends MY_Controller {
 	{
 		parent::__construct();
 		// debug($this->action, 'stop');
-		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 AND !in_array($this->action, ['storefront', 'store'])) {
+		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 
+			AND !in_array($this->action, ['storefront', 'store'])) {
 			redirect(base_url('farm/storefront'));
 		}
 	}
@@ -286,7 +287,9 @@ class Farm extends MY_Controller {
 						}
 					}
 				}
-				$this->set_response('info', 'Storefront Succesfully Created!', $post, false, 'refreshStorePreview');
+				$message = 'Storefront Succesfully Created!';
+				if ($this->farms) $message = 'Storefront Succesfully Updated!';
+				$this->set_response('info', $message, $post, false, 'refreshStorePreview');
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
@@ -521,7 +524,7 @@ class Farm extends MY_Controller {
 						'../static/store',
 					],
 					'footer' => [
-						'static/footer'
+						'global/footer'
 					],
 				],
 				'bottom' => [
