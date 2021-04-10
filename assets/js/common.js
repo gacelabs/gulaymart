@@ -521,17 +521,60 @@ function fnDragEnd(marker, isNew) {
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			if (isNew == false) {
-				var arr = results[0].address_components.slice(-4, results[0].address_components.length);
-				var arVal = [];
-				$.each(arr, function(i, row) {
-					arVal.push(row.long_name);
-				});
-				// console.log(arVal);
-				uiInputAddress.attr('value', arVal.join(', '));
-				uiInputAddress.val(arVal.join(', '));
+				// console.log(results);
+				if (results[1]) {
+					var arVal = [];
+					var city = null, province = null, region = null, country = null, countryCode = null;
+					var c, lc, component;
+					for (var r = 0, rl = results.length; r < rl; r += 1) {
+						var result = results[r];
+						if (!city && result.types[0] === 'locality') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'locality') {
+									city = component.long_name;
+									arVal.push(city);
+									break;
+								}
+							}
+						}
+						if (!province && result.types[0] === 'administrative_area_level_2') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_2') {
+									province = component.long_name;
+									arVal.push(province);
+									break;
+								}
+							}
+						}
+						if (!region && result.types[0] === 'administrative_area_level_1') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_1') {
+									region = component.long_name;
+									arVal.push(region);
+									break;
+								}
+							}
+						}
+						if (!country && result.types[0] === 'country') {
+							country = result.address_components[0].long_name;
+							arVal.push(country);
+							countryCode = result.address_components[0].short_name;
+						}
+						if (city && country) {
+							break;
+						}
+					}
+					console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
+					var sValue = arVal.join(', ');
+					uiInputAddress.attr('value', sValue);
+					uiInputAddress.val(sValue);
+				}
 			}
 		} else {
-			console.log(status);
+			// console.log(status);
 			uiInputAddress.attr('value', '');
 			uiInputAddress.val('');
 			$('#address_1').val(savedAddress1);

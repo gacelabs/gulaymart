@@ -15,6 +15,34 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
+		$basket_session = $this->session->userdata('basket_session');
+		if ($basket_session) {
+			$session = [];
+			foreach ($basket_session as $timestamp => $baskets) {
+				foreach ($baskets as $location_id => $basket) {
+					$basket['user_id'] = $session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['user_id'] = $this->accounts->profile['id'];
+					$session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+					$basket['at_date'] = $timestamp;
+					// debug($basket, 'stop');
+					$id = $this->gm_db->new('baskets', $basket);
+					$session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['id'] = $id;
+				}
+			}
+			$basket_session = $session;
+			$this->session->unset_userdata('basket_session');
+		} else {
+			/*query the baskets in DB*/
+			if ($this->accounts->has_session) {
+				$basket_session = [];
+				$sessions = $this->gm_db->get('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => 0]);
+				// debug($sessions, 'stop');
+				foreach ($sessions as $key => $session) {
+					$session['rawdata'] = json_decode(base64_decode($session['rawdata']), true);
+					$basket_session[date('F j, Y', $session['at_date']).' @ '.$session['at_time']][$session['location_id']] = $session;
+				}
+			}
+		}
+		// debug($basket_session, 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
@@ -24,12 +52,15 @@ class Basket extends My_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'basket/basket',
+					'basket/main',
 				],
 			],
 			'bottom' => [
 				'modals' => ['reply_modal'],
 				'js' => ['dashboard/main', 'basket/main'],
+			],
+			'data' => [
+				'baskets' => $basket_session
 			],
 		]);
 	}
@@ -38,7 +69,41 @@ class Basket extends My_Controller {
 	{
 		$post = $this->input->post() ?: $this->input->get();
 		if ($post AND $product_id) {
-			debug($post, 'stop');
+			// debug($post, 'stop');
+			$session = [];
+			$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
+			foreach ($post['baskets'] as $location_id => $basket) {
+				$product = $this->products->product_by_farm_location($product_id, $location_id);
+				if ($product) {
+					$session[$timestamp][$location_id]['quantity'] = $basket['quantity'];
+					$session[$timestamp][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+					$session[$timestamp][$location_id]['at_time'] = $time;
+					$session[$timestamp][$location_id]['product_id'] = $product['id'];
+					$session[$timestamp][$location_id]['location_id'] = $location_id;
+					$session[$timestamp][$location_id]['rawdata'] = base64_encode(json_encode($product));
+
+					$post['baskets'][$location_id]['product_id'] = $product_id;
+					$post['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+					$post['baskets'][$location_id]['location_id'] = $location_id;
+					$post['baskets'][$location_id]['at_date'] = $timestamp;
+					$post['baskets'][$location_id]['at_time'] = $time;
+					$post['baskets'][$location_id]['rawdata'] = base64_encode(json_encode($product));
+				}
+			}
+			// debug($session, 'stop');
+			/*check if the user is logged in if false save post to session*/
+			if ($this->accounts->has_session == false) {
+				$this->session->set_userdata('referrer', 'basket/');
+				$this->session->set_userdata('basket_session', $session);
+				redirect(base_url('register'));
+			} else {
+				// debug($post['baskets'], 'stop');
+				/*save the add basket session in DB*/
+				foreach ($post['baskets'] as $location_id => $basket) {
+					$this->gm_db->new('baskets', $basket);
+				}
+				redirect(base_url('basket'));
+			}
 		}
 	}
 

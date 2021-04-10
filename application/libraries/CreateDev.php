@@ -629,4 +629,67 @@ class CreateDev {
 		return $table_data;
 	}
 
+	public function create_baskets_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'quantity' => [
+				'type' => 'INT',
+				'default' => '0',
+				'null' => false,
+			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '0',
+				'null' => false,
+			],
+			'rawdata' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_date' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_time' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('product_id');
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('baskets', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
 }
