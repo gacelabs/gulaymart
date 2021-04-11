@@ -82,12 +82,12 @@
 																$item_total = (int)$product['quantity'] * (float)$details['price'];
 																$grand_total += $item_total;
 																?>
-																<p class="product-amount zero-gaps">&#x20b1; <b><?php echo number_format($item_total);?></b></p>
+																<p class="product-amount zero-gaps">&#x20b1; <b js-elem="sub-itemtotal" js-element="itemtotal-<?php echo $product['id'];?>"><?php echo number_format($item_total);?></b></p>
 															<?php endforeach ?>
 														<?php endforeach ?>
 													</div>
 													<hr style="border-color:#aaa;margin:5px 0;">
-													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b><?php echo number_format($grand_total);?></b></h4>
+													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($grand_total);?></b></h4>
 												</div>
 												<button class="btn btn-contrast btn-block"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 											</div>

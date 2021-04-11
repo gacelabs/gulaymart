@@ -41,7 +41,9 @@ class Basket extends My_Controller {
 				}
 			}
 		}
-		// debug($basket_session, 'stop');
+		if (count($basket_session)) {
+			// debug($basket_session, 'stop');
+		}
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
@@ -71,9 +73,29 @@ class Basket extends My_Controller {
 			// debug($post, 'stop');
 			$session = [];
 			$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
+			$this->load->library('toktokapi');
 			foreach ($post['baskets'] as $location_id => $basket) {
 				$product = $this->products->product_by_farm_location($product_id, $location_id);
 				if ($product) {
+					$pricing = [
+						'f_sender_lat' => $farm_location['lat'],
+						'f_sender_lon' => $farm_location['lng'],
+						'f_promo_code' => '',
+						'destinations' => [
+							[
+								'recipient_lat' => $this->latlng['lat'],
+								'recipient_lon' => $this->latlng['lng'],
+							]
+						],
+						'isExpress' => 'false',
+						'isCashOnDelivery' => 'false',
+					];
+					$this->toktokapi->app_request('price_and_directions', $pricing);
+					// debug($this->toktokapi, 'stop');
+					if ($this->toktokapi->success) {
+						$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
+						$post['baskets'][$location_id]['fee'] = $price_and_directions['price'];
+					}
 					$post['baskets'][$location_id]['product_id'] = $product_id;
 					$post['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 					$post['baskets'][$location_id]['location_id'] = $location_id;

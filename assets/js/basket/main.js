@@ -11,11 +11,16 @@ $(document).ready(function() {
 	$('[js-event="qty"]').each(function(i, elem) {
 		oSavedData[i] = {
 			ui: elem,
+			id: $(elem).attr('js-id'),
 			min: parseInt($(elem).attr('min')),
 			max: parseInt($(elem).attr('max')),
+			price: parseFloat($(elem).attr('js-price')),
+			fee: parseFloat($(elem).attr('js-fee')),
 		}
 	});
 
+
+	var iGrandTotal = parseFloat($('[js-element="grandtotal"]').text());
 	$('[js-event="qty"]').bind('input', function() {
 		var oThis = $(this);
 		/*preventing changes done in console*/
@@ -30,7 +35,15 @@ $(document).ready(function() {
 				if (oThis.val() > data.max) {
 					oThis.val(data.max);
 				}
+				var iPrice = Number((parseFloat(data.price) * parseInt(oThis.val()) + parseFloat(data.fee))).toLocaleString();
+				$('[js-element="itemtotal-'+data.id+'"]').text(iPrice);
 			}
 		});
+		var iTotal = 0;
+		$('[js-elem="sub-itemtotal"]').each(function(i, elem) {
+			var x = parseFloat($(elem).text().replace(',', ''));
+			iTotal += x;
+		});
+		$('[js-element="grandtotal"]').text(iTotal.toLocaleString());
 	});
 });
