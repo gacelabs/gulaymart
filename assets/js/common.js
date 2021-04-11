@@ -50,6 +50,7 @@ $(document).ready(function() {
 				$(e.target).find('form .preview_images_list').html('');
 				html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
 				$(e.target).find('form .preview_images_selected').append(html);
+				$(e.target).find('form').find('input:file').prop('value', '').val('');;
 			break;
 		}
 	});
