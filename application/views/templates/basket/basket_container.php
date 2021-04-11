@@ -16,7 +16,9 @@
 									<div class="order-item-middle">
 										<div class="order-item-list">
 											<?php foreach ($baskets as $location_id => $basket): ?>
-												<?php $this->view('looping/basket_item', ['product' => $basket]); ?>
+												<?php foreach ($basket as $key => $product): ?>
+													<?php $this->view('looping/basket_item', ['product' => $product]); ?>
+												<?php endforeach ?>
 											<?php endforeach ?>
 										</div>
 

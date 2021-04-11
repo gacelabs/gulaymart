@@ -16,9 +16,10 @@
 					<li><h4 class="zero-gaps">What's your name?</h4></li>
 				</ul>
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
+					<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 					<div class="dashboard-panel-middle">
-						<?php if ($current_profile): ?>
-							<input type="hidden" name="id" value="<?php echo $current_profile['id'];?>">
+						<?php if ($current_profile['profile']): ?>
+							<input type="hidden" name="id" value="<?php echo $current_profile['profile']['id'];?>">
 						<?php endif ?>
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -96,7 +97,6 @@
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
-								<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
 								<ul class="spaced-list between">
 									<li><p>Order status</p></li>
 									<li>

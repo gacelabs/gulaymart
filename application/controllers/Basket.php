@@ -15,31 +15,28 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$basket_session = $this->session->userdata('basket_session');
-		if ($basket_session) {
-			$session = [];
-			foreach ($basket_session as $timestamp => $baskets) {
-				foreach ($baskets as $location_id => $basket) {
-					$basket['user_id'] = $session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['user_id'] = $this->accounts->profile['id'];
-					$session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-					$basket['at_date'] = $timestamp;
-					// debug($basket, 'stop');
-					$id = $this->gm_db->new('baskets', $basket);
-					$session[date('F j, Y', $timestamp).' @ '.$basket['at_time']][$location_id]['id'] = $id;
-				}
+		$sessions = $this->session->userdata('basket_session');
+		$basket_session = [];
+		if ($sessions) {
+			// debug($sessions, 'stop');
+			foreach ($sessions['baskets'] as $location_id => $basket) {
+				$basket['user_id'] = $sessions['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+				$id = $this->gm_db->new('baskets', $basket);
+				$basket['id'] = $sessions['baskets'][$location_id]['id'] = $id;
+				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+				$basket_session[date('F j, Y', $basket['at_date'])][$location_id][] = $basket;
 			}
-			$basket_session = $session;
+			// debug($basket_session, 'stop');
 			$this->session->unset_userdata('basket_session');
 		} else {
 			/*query the baskets in DB*/
 			if ($this->accounts->has_session) {
-				$basket_session = [];
 				$sessions = $this->gm_db->get('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => 0]);
 				// debug($sessions, 'stop');
 				if (is_array($sessions)) {
 					foreach ($sessions as $key => $session) {
 						$session['rawdata'] = json_decode(base64_decode($session['rawdata']), true);
-						$basket_session[date('F j, Y', $session['at_date']).' @ '.$session['at_time']][$session['location_id']] = $session;
+						$basket_session[date('F j, Y', $session['at_date'])][$session['location_id']][] = $session;
 					}
 				}
 			}
@@ -77,13 +74,6 @@ class Basket extends My_Controller {
 			foreach ($post['baskets'] as $location_id => $basket) {
 				$product = $this->products->product_by_farm_location($product_id, $location_id);
 				if ($product) {
-					$session[$timestamp][$location_id]['quantity'] = $basket['quantity'];
-					$session[$timestamp][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
-					$session[$timestamp][$location_id]['at_time'] = $time;
-					$session[$timestamp][$location_id]['product_id'] = $product['id'];
-					$session[$timestamp][$location_id]['location_id'] = $location_id;
-					$session[$timestamp][$location_id]['rawdata'] = base64_encode(json_encode($product));
-
 					$post['baskets'][$location_id]['product_id'] = $product_id;
 					$post['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 					$post['baskets'][$location_id]['location_id'] = $location_id;
@@ -92,21 +82,23 @@ class Basket extends My_Controller {
 					$post['baskets'][$location_id]['rawdata'] = base64_encode(json_encode($product));
 				}
 			}
-			// debug($session, 'stop');
+			// debug($post['baskets'], 'stop');
 			/*check if the user is logged in if false save post to session*/
 			if ($this->accounts->has_session == false) {
 				$this->session->set_userdata('referrer', 'basket/');
-				$this->session->set_userdata('basket_session', $session);
-				redirect(base_url('register'));
+				$this->session->set_userdata('basket_session', $post);
+				$message = 'Item added to basket, Redirecting to the registration page!';
+				$redirect = base_url('register');
 			} else {
-				// debug($post['baskets'], 'stop');
 				/*save the add basket session in DB*/
-				foreach ($post['baskets'] as $location_id => $basket) {
-					$this->gm_db->new('baskets', $basket);
-				}
-				redirect(base_url('basket'));
+				foreach ($post['baskets'] as $location_id => $basket) $this->gm_db->new('baskets', $basket);
+				$message = 'Item added to basket!';
+				// $redirect = base_url('basket');
+				$redirect = false;
 			}
+			$this->set_response('success', $message, $post, $redirect);
 		}
+		$this->set_response('error', 'No item(s) found', $post, false);
 	}
 
 	public function view($product_id=0, $product_name='')
@@ -146,7 +138,7 @@ class Basket extends My_Controller {
 		]);
 	}
 
-	public function book_delivery()
+	private function book_delivery()
 	{
 		// DELIVERY POSTING
 		$params = [
@@ -253,7 +245,7 @@ class Basket extends My_Controller {
 		debug($this->toktokapi, 'stop');
 	}
 
-	public function check_delivery($driver_id='', $order_status='', $searchstring='D1F2444PJ8')
+	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F2444PJ8')
 	{
 		parse_str('draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=true&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B7%5D%5Bdata%5D=7&columns%5B7%5D%5Bname%5D=&columns%5B7%5D%5Bsearchable%5D=true&columns%5B7%5D%5Borderable%5D=false&columns%5B7%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B7%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B8%5D%5Bdata%5D=8&columns%5B8%5D%5Bname%5D=&columns%5B8%5D%5Bsearchable%5D=true&columns%5B8%5D%5Borderable%5D=false&columns%5B8%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B8%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B9%5D%5Bdata%5D=9&columns%5B9%5D%5Bname%5D=&columns%5B9%5D%5Bsearchable%5D=true&columns%5B9%5D%5Borderable%5D=false&columns%5B9%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B9%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B10%5D%5Bdata%5D=10&columns%5B10%5D%5Bname%5D=&columns%5B10%5D%5Bsearchable%5D=true&columns%5B10%5D%5Borderable%5D=false&columns%5B10%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B10%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B11%5D%5Bdata%5D=11&columns%5B11%5D%5Bname%5D=&columns%5B11%5D%5Bsearchable%5D=true&columns%5B11%5D%5Borderable%5D=false&columns%5B11%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B11%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=DESC&start=0&length=10&search%5Bvalue%5D=&search%5Bregex%5D=false&date_from=03%2F30%2F2021&date_to=04%2F06%2F2021&driver_id=&order_status=&searchstring='.$searchstring, $output);
 		// debug($output, 'stop');
