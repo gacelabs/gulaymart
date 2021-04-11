@@ -564,7 +564,11 @@ function fnDragEnd(marker, isNew) {
 								component = result.address_components[c];
 								if (component.types[0] === 'administrative_area_level_1') {
 									region = component.long_name;
-									arVal.push(region);
+									if (province != region) {
+										arVal.push(region);
+									} else {
+										region = null;
+									}
 									break;
 								}
 							}
