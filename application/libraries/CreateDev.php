@@ -692,4 +692,104 @@ class CreateDev {
 		return $table_data;
 	}
 
+	public function create_attributes_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'name' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'enable' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('attributes', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		sleep(5);
+		$attributes = [['name' => 'Preset 1'],['name' => 'Preset 2'],['name' => 'Preset 3'],['name' => 'Preset 4'],['name' => 'Preset 5']];
+		$this->class->db->insert_batch('attributes', $attributes);
+
+		return $table_data;
+	}
+
+	public function create_attribute_values_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'attribute_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'value' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('attribute_id');
+		$table_data = $this->class->dbforge->create_table('attribute_values', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		$attribute_values = [
+			['attribute_id' => 1, 'value' => 'Home or commercially grown organically.'],
+			['attribute_id' => 1, 'value' => 'Traditional soil-based plant.'],
+			['attribute_id' => 1, 'value' => 'Grown using Hydrophonic technology.'],
+			['attribute_id' => 1, 'value' => 'Utilized Acquaphonic technology.'],
+			['attribute_id' => 1, 'value' => 'Used food-grade formulated plant grower.'],
+
+			['attribute_id' => 2, 'value' => 'Riped organically, tasty and juicy.'],
+			['attribute_id' => 2, 'value' => 'Sold unripe with roots intact.'],
+
+			['attribute_id' => 3, 'value' => 'In good shape, smell, texture, and color.'],
+			['attribute_id' => 3, 'value' => 'Slightly deformed, but presentable.'],
+
+			['attribute_id' => 4, 'value' => 'Picked same day upon order.'],
+			['attribute_id' => 4, 'value' => 'Freshly refrigirated.'],
+
+			['attribute_id' => 5, 'value' => 'Delivered in an eco-friendly pouch.'],
+			['attribute_id' => 5, 'value' => 'Packaged in a regular plastic bag.'],
+		];
+		$this->class->db->insert_batch('attribute_values', $attribute_values);
+
+		return $table_data;
+	}
+
 }

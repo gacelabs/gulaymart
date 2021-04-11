@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$('[js-event="add-set"]').on('click', function() {
-		var uiParent = $(this).parents('[js-element="address-panel"]').first();
+		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
 		} else {

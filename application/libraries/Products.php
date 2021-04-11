@@ -415,8 +415,10 @@ class Products {
 
 				$product['basket_details'] = $products_location;
 				$product['farm_location'] = $farm_location;
+				$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
 				$product['farm'] = $farm;
 				$product['photo'] = $product_photo;
+				$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.nice_url($product['name'], true));
 
 				// debug($product, 'stop');
 				return $product;

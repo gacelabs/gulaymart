@@ -45,8 +45,8 @@
 						<?php endif ?>
 					</h2>
 					<hr>
-					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter"> -->
-					<form action="basket/add/<?php echo $product['id'];?>" method="post">
+					<form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter">
+					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post"> -->
 						<div class="productpage-basic-grid">
 							<p class="text-gray zero-gaps">UNIT</p>
 							<p><?php echo strtoupper(implode(', ', $units));?></p>

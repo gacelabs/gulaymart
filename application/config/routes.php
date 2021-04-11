@@ -8,7 +8,7 @@ $route['sign-up'] = 'Authenticate/sign_up';
 $route['sign-in'] = 'Authenticate/sign_in';
 $route['sign-out'] = 'Authenticate/sign_out';
 
-$route['farm/new-veggy'] = 'Farm/new_veggy';
+$route['farm/my-veggies'] = 'Farm/new_veggy';
 $route['store'] = 'Marketplace';
 $route['store/(:num)/(:any)'] = 'Farm/store/$1/$2';
 $route['farm/save-veggy/(:num)/(:any)'] = 'Farm/save_veggy/$1/$2';
