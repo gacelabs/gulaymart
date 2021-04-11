@@ -32,7 +32,7 @@ class Profile extends MY_Controller {
 				'js' => [
 					'plugins/jquery.inputmask.min',
 					'plugins/inputmask.binding',
-					'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
+					'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
 					'plugins/markerclustererplus.min',
 					'dashboard/profile',
 					'dashboard/main'

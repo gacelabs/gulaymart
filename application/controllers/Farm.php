@@ -354,7 +354,7 @@ class Farm extends MY_Controller {
 				$this->products->save(['activity' => 2], $post);
 				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
 			}
-			$this->set_response('error', remove_multi_space('Unable to save '.$name.' product'), $post);
+			$this->set_response('error', remove_multi_space('Unable to remove '.$name.' product'), $post);
 		} else {
 			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
 		}
@@ -447,7 +447,7 @@ class Farm extends MY_Controller {
 						'plugins/ImageSelect.jquery',
 						'farm/main',
 						'farm/storefront',
-						'https://maps.googleapis.com/maps/api/js?key=AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA&libraries=places',
+						'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
 						'plugins/markerclusterplus.min',
 						'dashboard/main'
 					],
