@@ -73,11 +73,11 @@ class Basket extends My_Controller {
 			// debug($post, 'stop');
 			$session = [];
 			$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
-			$this->load->library('toktokapi');
+			// $this->load->library('toktokapi');
 			foreach ($post['baskets'] as $location_id => $basket) {
 				$product = $this->products->product_by_farm_location($product_id, $location_id);
 				if ($product) {
-					$pricing = [
+					/*$pricing = [
 						'f_sender_lat' => $farm_location['lat'],
 						'f_sender_lon' => $farm_location['lng'],
 						'f_promo_code' => '',
@@ -95,7 +95,7 @@ class Basket extends My_Controller {
 					if ($this->toktokapi->success) {
 						$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
 						$post['baskets'][$location_id]['fee'] = $price_and_directions['price'];
-					}
+					}*/
 					$post['baskets'][$location_id]['product_id'] = $product_id;
 					$post['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 					$post['baskets'][$location_id]['location_id'] = $location_id;
