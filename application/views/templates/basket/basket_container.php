@@ -2,8 +2,9 @@
 	<div class="row">
 		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme" id="link_panel_top">
-				<ul class="inline-list dashboard-panel-top">
+				<ul class="spaced-list between dashboard-panel-top">
 					<li><a href="basket/" class="hideshow-btn active"><h4 class="zero-gaps">My Basket</h4></a></li>
+					<li><button js-event="removeBasketItemBtn" class="btn btn-xs btn-danger hide">Delete</button></li>
 				</ul>
 				<?php if ($data['baskets']): ?>
 					<div class="dashboard-panel-middle">
@@ -49,7 +50,7 @@
 													</div>
 												</div>
 											</div>
-											<div>
+											<div class="zero-gaps">
 												<div class="tender-amount-parent">
 													<div class="tender-amount-body">
 														<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>

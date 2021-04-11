@@ -13,7 +13,7 @@
 		</div>
 
 
-		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 			<h3 style="font-size: 16px;"><b>Help Center</b></h3>
 			<p style="margin-bottom:5px;"><a href="">Become a farmer</a></p>
 			<p style="margin-bottom:5px;"><a href="">How to buy</a></p>
@@ -22,7 +22,7 @@
 			<p style="margin-bottom:5px;"><a href="">Contact Us</a></p>
 		</div>
 
-		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<hr class="visible-xs" style="border-color:transparent;">
 			<h3 style="font-size: 16px;"><b>Let's social</b></h3>
 			<p style="margin-bottom:5px;"><a href="">Facebook</a></p>

@@ -38,6 +38,9 @@ h1, h2, h3, h4, h5 {
 .text-caps {
 	text-transform: capitalize;
 }
+.text-upper {
+	text-transform: uppercase;
+}
 textarea {
 	box-shadow: none !important;
 	outline: none !important;

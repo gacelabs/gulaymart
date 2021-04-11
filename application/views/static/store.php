@@ -31,7 +31,7 @@
 							}
 						} else {?>
 							<?php if ($current_profile) : ?>
-								<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
+								<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">New Veggy</a></h4>
 								<hr class="carved">
 								<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 							<?php endif; ?>

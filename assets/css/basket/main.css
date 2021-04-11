@@ -1,8 +1,48 @@
+body.basket .order-item-middle {
+	padding: 0;
+}
+body.basket .order-item-inner {
+	border-left: 3px solid transparent;
+	padding: 10px 10px 10px 7px;
+	margin-bottom: 0;
+}
+body.basket .order-item-inner.active {
+	background-color: #f8f8f8;
+	border-left: 3px solid #2196F3;
+}
+.add-basket-item-container .order-item-title {
+	font-family: 'Roboto', sans-serif;
+	margin-bottom: 10px;
+}
+.add-basket-item-container .order-item-title .text-link {
+	color: #555;
+}
+.add-basket-item-container .order-item-title .text-link:hover {
+	color: #2196F3;
+}
+.add-basket-item-container .order-item-grid {
+	grid-template-columns: 110px minmax(0, 1fr);
+	margin-top: 5px;
+}
+.add-basket-item-select {
+	margin: 0 auto !important;
+	height: 15px;
+	width: 15px;
+}
 @media (max-width: 767px) {	
-	.tender-amount-grid {
+	.add-basket-item-container .tender-amount-grid {
 		display: block;
 	}
-	.tender-amount-grid .order-item-status {
+	.add-basket-item-container .tender-amount-grid .order-item-status {
+		margin-bottom: 20px;
+	}
+	.add-basket-item-container .order-item-grid {
+		grid-template-columns: 80px minmax(0, 1fr);
+	}
+	body.basket .tender-amount-grid {
+		display: block;
+	}
+	body.basket .tender-amount-grid>div {
 		margin-bottom: 20px;
 	}
 }
