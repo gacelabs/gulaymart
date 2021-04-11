@@ -222,7 +222,7 @@ var redirectNewProduct = function(obj) {
 	if (obj.updated == 1) {
 		sMessage = 'Product successfully updated.';
 	} else {
-		$('h3.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
+		$('p.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
 		$('.timeline-border-progress').attr('data-percent', '100');
 	}
 	runAlertBox({type:'success', message: sMessage, unclose: true});

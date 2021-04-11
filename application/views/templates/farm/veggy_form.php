@@ -14,7 +14,7 @@
 								<li><p class="text-capsule">30<small style="display:inline;">%</small></p></li>
 								<li><p class="text-capsule">60<small style="display:inline;">%</small></p></li>
 								<li><p class="text-capsule">80<small style="display:inline;">%</small></p></li>
-								<li><p class="text-capsule"><i class="fa fa-check"></i></h3></li>
+								<li><p class="text-capsule"><i class="fa fa-check"></i></p></li>
 							</ul>
 							<div class="timeline-border"></div>
 							<div class="timeline-border-progress" data-percent="0"></div>

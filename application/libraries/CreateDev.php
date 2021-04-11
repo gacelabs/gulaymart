@@ -503,7 +503,7 @@ class CreateDev {
 			'measurement' => [
 				'type' => 'VARCHAR',
 				'constraint' => '10',
-				'default' => 'kg',
+				'default' => 'kilogram',
 			],
 			'stocks' => [
 				'type' => 'INT',
@@ -542,7 +542,7 @@ class CreateDev {
 		]);
 
 		sleep(5);
-		$measurements = [['label' => 'Kilo', 'value' => 'kg'],
+		$measurements = [['label' => 'Kilogram', 'value' => 'kilogram'],
 		['label' => 'Bundle', 'value' => 'bundle'],
 		['label' => 'Box', 'value' => 'box']];
 		$this->class->db->insert_batch('products_measurement', $measurements);
