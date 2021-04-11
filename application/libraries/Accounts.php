@@ -186,6 +186,7 @@ class Accounts {
 			if ($profile) {
 				$request['fullname'] = trim($profile['firstname'].' '.$profile['lastname']);
 				$request['firstname'] = $profile['firstname'];
+				$request['lastname'] = $profile['lastname'];
 			}
 			$request['profile'] = $profile;
 

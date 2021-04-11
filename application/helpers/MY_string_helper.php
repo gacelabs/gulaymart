@@ -1029,7 +1029,6 @@ function get_global_values($request=[])
 				$request['farm_locations'] = $farm_locations->result_array();
 			}
 		}
-		// debug($request, 'stop');
 	}
 
 	/*categories*/
@@ -1071,6 +1070,26 @@ function get_global_values($request=[])
 			$request['galleries'] = $galleries->result_array();
 		}
 	}
+
+	/*attributes*/
+	$request['attributes'] = [];
+	if ($ci->db->table_exists('attributes')) {
+		$attributes = $ci->gm_db->get('attributes');
+		$attrs = [];
+		if ($attributes) {
+			foreach ($attributes as $key => $attr) {
+				$values = $ci->gm_db->get('attribute_values', ['attribute_id' => $attr['id']]);
+				if ($values) {
+					$attrs[$key] = [
+						'placeholder' => $attr['name'],
+						'data' => $values,
+					];
+				}
+			}
+			$request['attributes'] = $attrs;
+		}
+	}
+	// debug($request, 'stop');
 	
 	return $request;
 }

@@ -17,103 +17,67 @@
 				</ul>
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
 					<div class="dashboard-panel-middle">
-						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-						<?php if (isset($current_profile['profile']) AND $current_profile['profile']): ?>
-							<input type="hidden" name="id" value="<?php echo $current_profile['profile']['id'];?>">
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="firstname" class="form-control" placeholder="First name" required="required" value="<?php echo $current_profile['profile']['firstname'];?>">
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="lastname" class="form-control" placeholder="Last name" value="<?php echo $current_profile['profile']['lastname'];?>">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<?php $months = unserialize(MONTHS);?>
-										<select name="birth_month" class="form-control" placeholder="Birth Month" required="required">
-											<?php foreach ($months as $id => $month): ?>
-												<option value="<?php echo $id;?>"<?php in_array_echo($current_profile['profile']['birth_month'], [$id], ' selected');?>><?php echo $month;?></option>
-											<?php endforeach ?>
-										</select>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="birth_year" class="form-control" data-inputmask="'mask': '9999'" placeholder="Birth Year" required="required" value="<?php echo $current_profile['profile']['birth_year'];?>">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<label>Registered email</label>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
-										<input type="email" class="form-control copy" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
-									<div class="form-group zero-gaps">
-										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
-									</div>
-								</div>
-							</div>
-						<?php else: ?>
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="firstname" class="form-control" placeholder="First name" required="required">
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="lastname" class="form-control" placeholder="Last name">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<?php $months = unserialize(MONTHS);?>
-										<select name="birth_month" class="form-control" placeholder="Birth Month" required="required">
-											<?php foreach ($months as $id => $month): ?>
-												<option value="<?php echo $id;?>"><?php echo $month;?></option>
-											<?php endforeach ?>
-										</select>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<input type="text" name="birth_year" class="form-control" data-inputmask="'mask': '9999'" placeholder="Birth Year" required="required">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<label>Registered email</label>
-									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
-										<input type="email" class="form-control" placeholder="<?php echo $current_profile['email_address'];?>" disabled>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-									<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
-									<div class="form-group zero-gaps">
-										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required">
-									</div>
-								</div>
-							</div>
+						<?php if ($current_profile): ?>
+							<input type="hidden" name="id" value="<?php echo $current_profile['id'];?>">
 						<?php endif ?>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<input type="text" name="firstname" class="form-control" placeholder="First name" required="required" value="<?php check_value('firstname', [], true);?>">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<input type="text" name="lastname" class="form-control" placeholder="Last name" value="<?php check_value('lastname', [], true);?>">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<?php $months = unserialize(MONTHS);?>
+									<select name="birth_month" class="form-control" placeholder="Birth Month" required="required">
+										<?php foreach ($months as $id => $month): ?>
+											<?php if ($current_profile['profile']): ?>
+												<option value="<?php echo $id;?>"<?php in_array_echo($current_profile['profile']['birth_month'], [$id], ' selected');?>><?php echo $month;?></option>
+											<?php else: ?>
+												<option value="<?php echo $id;?>"><?php echo $month;?></option>
+											<?php endif ?>
+										<?php endforeach ?>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="form-group">
+									<?php if ($current_profile['profile']): ?>
+										<input type="text" name="birth_year" class="form-control" data-inputmask="'mask': '9999'" placeholder="Birth Year" required="required" value="<?php echo $current_profile['profile']['birth_year'];?>">
+									<?php else: ?>
+										<input type="text" name="birth_year" class="form-control" data-inputmask="'mask': '9999'" placeholder="Birth Year" required="required" />
+									<?php endif ?>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Registered email</label>
+								<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
+									<input type="email" class="form-control copy" placeholder="<?php check_value('email_address', [], true);?>" disabled>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
+								<div class="form-group zero-gaps">
+									<?php if ($current_profile['profile']): ?>
+										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
+									<?php else: ?>
+										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" />
+									<?php endif ?>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="dashboard-panel-footer text-right">
 						<button type="submit" class="btn btn-contrast">Update</button>

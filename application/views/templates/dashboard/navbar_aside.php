@@ -41,8 +41,8 @@
 							</div>
 						<?php endif ?>
 						<div class="aside-nav-child">
-							<a href="farm/new-veggy/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-								<i class="fa fa-pencil"></i>New veggy
+							<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
+								<i class="fa fa-pencil"></i>My veggies
 							</a>
 						</div>
 					<?php endif ?>

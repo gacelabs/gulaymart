@@ -43,7 +43,7 @@ class Farm extends MY_Controller {
 				],
 			]);
 		} else {
-			redirect(base_url('farm/new-veggy/'));
+			redirect(base_url('farm/my-veggies/'));
 		}
 	}
 
@@ -213,7 +213,7 @@ class Farm extends MY_Controller {
 					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
-						'farm/new_veggy',
+						'farm/veggy_form',
 					],
 				],
 				'bottom' => [
@@ -226,11 +226,137 @@ class Farm extends MY_Controller {
 					],
 				],
 				'data' => [
-					'has_products' => $this->products->count()
+					'has_products' => $this->products->count(),
+					'product' => [],
+					'is_edit' => false,
 				],
 			]);
 		} else {
 			redirect(base_url('farm/storefront/'));
+		}
+	}
+
+	public function save_veggy($id=0, $name='')
+	{
+		$post = $this->input->post();
+		if ($post AND $id > 0) {
+			if (check_data_values($post)) {
+				// debug($post, $_FILES, 'stop');
+				if (isset($post['products'])) {
+					$products = $post['products'];
+					if ($this->products->save($products, ['id' => $id])) {
+						$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
+						if (isset($products['location_id']) AND $this->products->save_location(['location_id' => $products['location_id']], $where)) {
+							$post['products']['id'] = $id;
+						}
+					}
+				}
+				if (isset($post['products_attribute'])) {
+					foreach ($post['products_attribute'] as $key => $attribute) {
+						$attribute['product_id'] = $id;
+						if (!isset($attribute['id'])) {
+							$post['products_attribute'][$key]['id'] = $this->products->new($attribute, 'products_attribute');
+						} else {
+							$this->products->save($attribute, ['id' => $attribute['id']], 'products_attribute');
+							$post['products_attribute'][$key]['id'] = $attribute['id'];
+						}
+					}
+				}
+				if (isset($post['products_location'])) {
+					$products_location = $post['products_location'];
+					// debug($products_location, 'stop');
+					$this->gm_db->remove('products_location', ['product_id' => $id]);
+					foreach ($products_location as $farm_location_id => $location) {
+						$location['product_id'] = $id;
+						$this->gm_db->new('products_location', $location);
+						$post['products_location'][$farm_location_id]['duration'] = '';
+						$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+						if ($farm_location) {
+							$driving_distance = get_driving_distance([
+								['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+								['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+							]);
+							$post['products_location'][$farm_location_id]['duration'] = $driving_distance['duration'];
+						}
+					}
+				}
+				if (isset($post['products_photo'])) {
+					$dir = 'products/'.str_replace('@', '-', $this->accounts->profile['email_address']);
+					$uploads = files_upload($_FILES, $dir);
+					// debug($post, $uploads, 'stop');
+					if ($uploads) {
+						$this->gm_db->remove('products_photo', ['product_id' => $id]);
+						foreach ($uploads as $key => $upload) {
+							unset($upload['user_id']);
+							$upload['product_id'] = $id;
+							if ($key == $post['products_photo']['index']) {
+								$upload['is_main'] = 1;
+							} else {
+								$upload['is_main'] = 0;
+							}
+							$this->products->new($upload, 'products_photo');
+							$post['file_photos'][] = $upload;
+						}
+					}
+					if (isset($post['products_photo']['id'])) {
+						$this->gm_db->save('products_photo', ['is_main' => 0], ['product_id' => $id]);
+						sleep(1);
+						$this->gm_db->save('products_photo', ['is_main' => 1], ['id' => $post['products_photo']['id']]);
+						$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $id]);
+					}
+				}
+				$post['product_id'] = $id;
+				$post['updated'] = 1;
+				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
+				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
+			}
+			$this->set_response('error', 'Unable to save product', $post);
+		} else {
+			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
+			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
+			// debug($product, 'stop');
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
+				],
+				'middle' => [
+					'body_class' => ['dashboard', 'new-veggy',  'save-veggy', 'static/product-list-card'],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'farm/veggy_form',
+					],
+				],
+				'bottom' => [
+					'js' => [
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'farm/main',
+						'farm/save-veggy',
+						'dashboard/main',
+					],
+				],
+				'data' => [
+					'has_products' => $this->products->count(),
+					'product' => $product,
+					'is_edit' => true,
+				],
+			]);
+		}
+	}
+
+	public function remove_veggy($id=0, $name='')
+	{
+		$post = $this->input->post();
+		if ($post) {
+			if (check_data_values($post)) {
+				// debug($post, 'stop');
+				$this->products->save(['activity' => 2], $post);
+				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
+			}
+			$this->set_response('error', remove_multi_space('Unable to save '.$name.' product'), $post);
+		} else {
+			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
 		}
 	}
 
@@ -351,126 +477,6 @@ class Farm extends MY_Controller {
 				'field_lists' => $this->gm_db->fieldlists('products', unserialize(NON_PRODUCT_KEYS)),
 			],
 		]);
-	}
-
-	public function save_veggy($id=0, $name='')
-	{
-		$post = $this->input->post();
-		if ($post AND $id > 0) {
-			if (check_data_values($post)) {
-				// debug($post, $_FILES, 'stop');
-				$products = $post['products'];
-				if ($this->products->save($products, ['id' => $id])) {
-					$where = ['user_id' => $this->accounts->profile['id'], 'product_id' => $id];
-					if (isset($products['location_id']) AND $this->products->save_location(['location_id' => $products['location_id']], $where)) {
-						$post['products']['id'] = $id;
-					}
-				}
-				if (isset($post['products_attribute'])) {
-					foreach ($post['products_attribute'] as $key => $attribute) {
-						$attribute['product_id'] = $id;
-						if (!isset($attribute['id'])) {
-							$post['products_attribute'][$key]['id'] = $this->products->new($attribute, 'products_attribute');
-						} else {
-							$this->products->save($attribute, ['id' => $attribute['id']], 'products_attribute');
-							$post['products_attribute'][$key]['id'] = $attribute['id'];
-						}
-					}
-				}
-				if (isset($post['products_location'])) {
-					$products_location = $post['products_location'];
-					// debug($products_location, 'stop');
-					$this->gm_db->remove('products_location', ['product_id' => $id]);
-					foreach ($products_location as $farm_location_id => $location) {
-						$location['product_id'] = $id;
-						$this->gm_db->new('products_location', $location);
-						$post['products_location'][$farm_location_id]['duration'] = '';
-						$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
-						if ($farm_location) {
-							$driving_distance = get_driving_distance([
-								['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-								['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-							]);
-							$post['products_location'][$farm_location_id]['duration'] = $driving_distance['duration'];
-						}
-					}
-				}
-				if (isset($post['products_photo'])) {
-					$dir = 'products/'.str_replace('@', '-', $this->accounts->profile['email_address']);
-					$uploads = files_upload($_FILES, $dir);
-					// debug($post, $uploads, 'stop');
-					if ($uploads) {
-						$this->gm_db->remove('products_photo', ['product_id' => $id]);
-						foreach ($uploads as $key => $upload) {
-							unset($upload['user_id']);
-							$upload['product_id'] = $id;
-							if ($key == $post['products_photo']['index']) {
-								$upload['is_main'] = 1;
-							} else {
-								$upload['is_main'] = 0;
-							}
-							$this->products->new($upload, 'products_photo');
-							$post['file_photos'][] = $upload;
-						}
-					}
-					if (isset($post['products_photo']['id'])) {
-						$this->gm_db->save('products_photo', ['is_main' => 0], ['product_id' => $id]);
-						sleep(1);
-						$this->gm_db->save('products_photo', ['is_main' => 1], ['id' => $post['products_photo']['id']]);
-						$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $id]);
-					}
-				}
-				$post['product_id'] = $id;
-				$post['updated'] = 1;
-				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
-				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
-			}
-			$this->set_response('error', 'Unable to save product', $post);
-		} else {
-			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
-			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
-			// debug($product, 'stop');
-			$this->render_page([
-				'top' => [
-					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
-				],
-				'middle' => [
-					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
-					'head' => ['dashboard/navbar'],
-					'body' => [
-						'dashboard/navbar_aside',
-						'farm/save_veggy',
-					],
-				],
-				'bottom' => [
-					'js' => [
-						'plugins/jquery.inputmask.min',
-						'plugins/inputmask.binding',
-						'farm/main',
-						'farm/new-veggy',
-						'dashboard/main',
-					],
-				],
-				'data' => [
-					'product' => $product
-				],
-			]);
-		}
-	}
-
-	public function remove_veggy($id=0, $name='')
-	{
-		$post = $this->input->post();
-		if ($post) {
-			if (check_data_values($post)) {
-				// debug($post, 'stop');
-				$this->products->save(['activity' => 2], $post);
-				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
-			}
-			$this->set_response('error', remove_multi_space('Unable to save '.$name.' product'), $post);
-		} else {
-			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
-		}
 	}
 
 	public function settings()
