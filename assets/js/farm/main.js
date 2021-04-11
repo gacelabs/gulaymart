@@ -4,7 +4,7 @@ $(document).ready(function() {
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
 		} else {
-			uiParent.next('[js-element="products-location-set"]').addClass('hide');
+			uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
 		}
 	});
 	$('[js-event="new-set"]').on('click', function() {
@@ -12,7 +12,7 @@ $(document).ready(function() {
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="pricing-panel"]').removeClass('hide');
 		} else {
-			uiParent.next('[js-element="pricing-panel"]').addClass('hide');
+			uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input').prop('value', '').val('');
 		}
 	});
 });

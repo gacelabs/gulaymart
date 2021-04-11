@@ -9,7 +9,7 @@ function check_value($key, $data=[], $is_profile=false, $is_echo=true)
 		$post = $ci->accounts->profile;
 	}
 
-	if (!$post) $post = $data;
+	if (!$post) $post = (array) $data;
 
 	if (is_array($post) AND count($post)) {
 		$echo = element($key, $post);

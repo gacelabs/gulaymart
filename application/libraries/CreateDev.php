@@ -651,6 +651,12 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
 			'quantity' => [
 				'type' => 'INT',
 				'default' => '0',
@@ -685,6 +691,7 @@ class CreateDev {
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('location_id');
 		$table_data = $this->class->dbforge->create_table('baskets', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
