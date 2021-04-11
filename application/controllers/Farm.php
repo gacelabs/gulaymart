@@ -81,9 +81,9 @@ class Farm extends MY_Controller {
 						if (isset($post['products_attribute'])) {
 							foreach ($post['products_attribute'] as $key => $attribute) {
 								$attribute['product_id'] = $product_id;
-								if (!isset($attribute['id'])) {
+								if (isset($attribute['id']) AND $attribute['id'] == '') {
 									$ids[] = $post['products_attribute'][$key]['id'] = $this->products->new($attribute, 'products_attribute');
-								} else {
+								} elseif (isset($attribute['id']) AND $attribute['id'] != '') {
 									$this->products->save($attribute, ['id' => $attribute['id']], 'products_attribute');
 									$ids[] = $post['products_attribute'][$key]['id'] = $attribute['id'];
 								}
@@ -254,9 +254,9 @@ class Farm extends MY_Controller {
 				if (isset($post['products_attribute'])) {
 					foreach ($post['products_attribute'] as $key => $attribute) {
 						$attribute['product_id'] = $id;
-						if (!isset($attribute['id'])) {
+						if (isset($attribute['id']) AND $attribute['id'] == '') {
 							$post['products_attribute'][$key]['id'] = $this->products->new($attribute, 'products_attribute');
-						} else {
+						} elseif (isset($attribute['id']) AND $attribute['id'] != '') {
 							$this->products->save($attribute, ['id' => $attribute['id']], 'products_attribute');
 							$post['products_attribute'][$key]['id'] = $attribute['id'];
 						}
@@ -369,18 +369,20 @@ class Farm extends MY_Controller {
 			if ($profile) {
 				$user_id = $profile['id'];
 				$farm_id = 0;
+				$first_save = false;
 				if (isset($post['user_farms'])) {
 					$farm_id = isset($post['user_farms']['id']) ? $post['user_farms']['id'] : 0;
 					$post['user_farms']['user_id'] = $user_id;
 					$post['user_farms']['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
 					if ($farm_id == 0) {
+						$first_save = true;
 						$farm_id = $this->gm_db->new('user_farms', $post['user_farms']);
 					} else {
 						unset($post['user_farms']['id']);
 						$this->gm_db->save('user_farms', $post['user_farms'], ['id' => $farm_id]);
 					}
+					$post['user_farms']['id'] = $farm_id;
 				}
-				$post['user_farms']['id'] = $farm_id;
 				if (isset($post['farm_loc']) AND isset($post['user_farm_locations']) AND $farm_id > 0) {
 					$index = $post['farm_loc'];
 					if (isset($post['user_farm_locations'][$index])) {
@@ -413,9 +415,15 @@ class Farm extends MY_Controller {
 						}
 					}
 				}
+
 				$message = 'Storefront Succesfully Created!';
 				if ($this->farms) $message = 'Storefront Succesfully Updated!';
-				$this->set_response('info', $message, $post, false, 'refreshStorePreview');
+					
+				if ($first_save) {
+					$this->set_response('info', $message, $post, 'farm/storefront');
+				} else {
+					$this->set_response('info', $message, $post, false, 'refreshStorePreview');
+				}
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
