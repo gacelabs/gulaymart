@@ -41,13 +41,8 @@
 							</div>
 						<?php endif ?>
 						<div class="aside-nav-child">
-<<<<<<< HEAD
-							<a href="farm/new-veggy/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-								<i class="fa fa-pencil"></i>New Veggy
-=======
 							<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
 								<i class="fa fa-pencil"></i>My veggies
->>>>>>> d79c296a21713e5f369e12cd191484a08dac9aa1
 							</a>
 						</div>
 					<?php endif ?>

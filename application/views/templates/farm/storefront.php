@@ -20,10 +20,12 @@
 		<?php else: ?>
 			<?php /*debug($data['farms'], 'stop');*/ ?>
 
-			<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
-				<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
-				<hr class="carved">
-			</div>
+			<?php if (!empty($this->farms)): ?>
+				<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
+					<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
+					<hr class="carved">
+				</div>
+			<?php endif ?>
 
 			<div class="col-lg-5 col-md-5 col-sm-12 hidden-xs" id="storefront_customs_parent">
 				<div class="dashboard-panel theme">
