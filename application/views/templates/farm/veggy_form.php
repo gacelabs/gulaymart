@@ -84,7 +84,7 @@
 								</div>
 								<div id='basic_btn_container' style='margin-top:15px;text-align:right;<?php if ($data['is_edit'] == false): ?> display:none;<?php endif ?>'>
 									<?php if ($data['is_edit']): ?>
-										<input type="reset" class="btn btn-theme" value="Reset" />
+										<input type="reset" class="btn btn-default icon-left" value="Reset" />
 									<?php endif ?>
 									<button class='btn btn-theme'>Next<i class='fa fa-chevron-right icon-right'></i></button>
 								</div>
@@ -129,7 +129,7 @@
 							<?php endforeach ?>
 							<?php if ($data['is_edit']): ?>
 								<div id='attr_btn_container' style='margin-top:15px;text-align:right;'>
-									<input type="reset" class="btn btn-theme" value="Reset" />
+									<input type="reset" class="btn btn-default icon-left" value="Reset" />
 									<button class='btn btn-theme normal-radius'>Next<i class='fa fa-chevron-right icon-right'></i></button>
 								</div>
 							<?php endif ?>
@@ -140,7 +140,7 @@
 				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-2">
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
-							<label>Pricing</label>
+							<label>Product Pricing (Location based)</label>
 							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
@@ -218,7 +218,7 @@
 							</div>
 							<div id="price_btn_container" style="text-align:right;">
 								<?php if ($data['is_edit']): ?>
-									<input type="reset" class="btn btn-theme" value="Reset" />
+									<input type="reset" class="btn btn-default icon-left" value="Reset" />
 								<?php endif ?>
 								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>
@@ -244,7 +244,7 @@
 							</div>
 							<div id="desc_btn_container" style="margin-top:15px;text-align:right;">
 								<?php if ($data['is_edit']): ?>
-									<input type="reset" class="btn btn-theme" value="Reset" />
+									<input type="reset" class="btn btn-default icon-left" value="Reset" />
 								<?php endif ?>
 								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>

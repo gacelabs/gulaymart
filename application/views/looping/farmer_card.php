@@ -6,7 +6,7 @@
 	<div class="farmer-list-profile-photo" style="background-image: url('<?php echo $farm['profile_pic'];?>')"></div>
 	<div class="farmer-list-footer">
 		<div class="ellipsis-container" style="margin-bottom:5px;">
-			<p class="zero-gaps"><b><?php echo $farm['name'];?></b></p>
+			<p class="zero-gaps text-caps"><b><?php echo $farm['name'];?></b></p>
 		</div>
 		<p class="zero-gaps"><small class="elem-block"><?php echo $farm['username'];?></small></p>
 		<p><small class="elem-block"><i class="fa fa-map-marker"></i> <?php echo $farm['duration'];?> away</small></p>
