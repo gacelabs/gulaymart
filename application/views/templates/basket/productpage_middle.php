@@ -10,7 +10,7 @@
 			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 				<div class="panel productpage-desc">
 					<div class="panel-heading">
-						<p style="font-size:11px;" class="color-grey">DESCRIPTION</p>
+						<p style="font-size:11px;" class="text-gray">DESCRIPTION</p>
 					</div>
 					<div class="panel-body">
 						<p><?php echo $product['description'];?></p>
@@ -21,7 +21,7 @@
 					<div class="panel productpage-feedback">
 						<div class="panel-heading">
 							<ul class="spaced-list between">
-								<li><p style="font-size:11px;" class="color-grey">FEEDBACK</p></li>
+								<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
 								<li><a href="transactions/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
 							</ul>
 						</div>
@@ -35,7 +35,7 @@
 									<div class="media-body">
 										<ul class="spaced-list between">
 											<li><p class="media-heading">Ema Margaret</p></li>
-											<li><small class="color-grey">March 1, 2021</small></li>
+											<li><small class="text-gray">March 1, 2021</small></li>
 										</ul>
 										<p>Media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 										<div class="media">
@@ -45,7 +45,7 @@
 											<div class="media-body">
 												<ul class="spaced-list between">
 													<li><p class="media-heading">Ava Francine</p></li>
-													<li><small class="color-grey">March 1, 2021</small></li>
+													<li><small class="text-gray">March 1, 2021</small></li>
 												</ul>
 												<p>Nested media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 											</div>
@@ -60,7 +60,7 @@
 									<div class="media-body">
 										<ul class="spaced-list between">
 											<li><p class="media-heading">Ema Margaret</p></li>
-											<li><small class="color-grey">March 1, 2021</small></li>
+											<li><small class="text-gray">March 1, 2021</small></li>
 										</ul>
 										<p>Media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 										<div class="media">
@@ -70,7 +70,7 @@
 											<div class="media-body">
 												<ul class="spaced-list between">
 													<li><p class="media-heading">Ava Francine</p></li>
-													<li><small class="color-grey">March 1, 2021</small></li>
+													<li><small class="text-gray">March 1, 2021</small></li>
 												</ul>
 												<p>Nested media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 											</div>
@@ -85,7 +85,7 @@
 									<div class="media-body">
 										<ul class="spaced-list between">
 											<li><p class="media-heading">Ema Margaret</p></li>
-											<li><small class="color-grey">March 1, 2021</small></li>
+											<li><small class="text-gray">March 1, 2021</small></li>
 										</ul>
 										<p>Media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 										<div class="media">
@@ -95,7 +95,7 @@
 											<div class="media-body">
 												<ul class="spaced-list between">
 													<li><p class="media-heading">Ava Francine</p></li>
-													<li><small class="color-grey">March 1, 2021</small></li>
+													<li><small class="text-gray">March 1, 2021</small></li>
 												</ul>
 												<p>Nested media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 											</div>
@@ -110,7 +110,7 @@
 									<div class="media-body">
 										<ul class="spaced-list between">
 											<li><p class="media-heading">Ema Margaret</p></li>
-											<li><small class="color-grey">March 1, 2021</small></li>
+											<li><small class="text-gray">March 1, 2021</small></li>
 										</ul>
 										<p>Media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 										<div class="media">
@@ -120,7 +120,7 @@
 											<div class="media-body">
 												<ul class="spaced-list between">
 													<li><p class="media-heading">Ava Francine</p></li>
-													<li><small class="color-grey">March 1, 2021</small></li>
+													<li><small class="text-gray">March 1, 2021</small></li>
 												</ul>
 												<p>Nested media heading Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
 											</div>
@@ -146,19 +146,25 @@
 
 				<?php if ($farm): ?>
 					<div class="panel productpage-farm-info">
-						<div class="panel-heading">
-							<p style="font-size:11px;" class="color-grey">SOLD BY</p>
+						<div class="panel-heading bg-white">
+							<p style="font-size:11px;" class="text-gray">SOLD BY</p>
 						</div>
-						<div class="productpage-farm-top" style="background-image: url(<?php echo $farm['cover_pic'];?>);">
-							<ul class="spaced-list between farm-info-list">
-								<li>
-									<h3 class="zero-gaps color-white"><b><?php echo $farm['name'];?></b></h3>
-									<p class="zero-gaps color-white"><?php echo $farm['tagline'];?></p>
-								</li>
-								<li><img class="media-object" src="<?php echo $farm['profile_pic'];?>" data-holder-rendered="true"></li>
-							</ul>
+						<div class="storefront-top">
+							<div class="storefront-img-bg" style="background-image: url(<?php echo $farm['cover_pic'];?>);">
+								<div id="farm_identity">
+									<ul class="grid-list half">
+										<li class="text-left">
+											<h1 class="farm_name"><?php echo $farm['name'];?></h1>
+											<h4 class="tagline"><?php echo $farm['tagline'];?></h4>
+										</li>
+										<li class="text-right">
+											<div class="profile_photo" style="background-image: url(<?php echo $farm['profile_pic'];?>);"></div>
+										</li>
+									</ul>
+								</div>
+							</div>
 						</div>
-						<div class="panel-footer">
+						<div class="panel-footer bg-white">
 							<div class="productpage-farm-middle">
 								<div class="row">
 									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">

@@ -67,7 +67,7 @@
 						</div>
 					</div>
 				<?php else : ?>
-					<h4 style="padding:15px;">Fresh veggies at your door in minutes, shop <a href="marketplace/" class="text-link">now!</a></h4>
+					<h4 style="padding:15px;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>
 				<?php endif ?>
 			</div>
 		</div>

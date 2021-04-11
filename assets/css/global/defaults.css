@@ -38,6 +38,7 @@ h1, h2, h3, h4, h5 {
 textarea {
 	box-shadow: none !important;
 	outline: none !important;
+	min-height: 50px;
 	max-height: 200px;
 	resize: vertical;
 }
@@ -68,6 +69,7 @@ hr.carved {
 	border: 0;
 	border-bottom: 1px solid rgb(255 255 255 / 78%);
 	border-top: 1px solid rgb(0 0 0 / 11%);
+	clear: both;
 }
 ul.spaced-list {
 	align-items: stretch;
@@ -99,7 +101,7 @@ ul.inline-list>li {
 .inline-list.right-gap>li {
 	margin-right: 10px;
 }
-.btn-theme {
+.btn-theme, .bg-white.theme {
 	background-color: #a8d253;
 	color: #fff !important;
 	outline: none;
@@ -111,6 +113,9 @@ ul.inline-list>li {
 }
 .btn-theme:hover, .btn-contrast:hover, .text-link:hover {
 	filter: opacity(0.8);
+}
+.bg-white {
+	background-color: #fff;
 }
 .switch {
 	position: relative;

@@ -30,7 +30,11 @@
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}
 						} else {?>
-							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
+							<?php if ($current_profile) : ?>
+								<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
+								<hr class="carved">
+								<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
+							<?php endif; ?>
 						<?php } ?>
 						<div class="banner-section">
 							<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
@@ -40,31 +44,49 @@
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="stories_item_container">
 					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY STORIES NA OR WALA PA -->
 					<?php if (isset($data['kunyare'])) : ?>
-						<!-- ETO YUNG STORIES CARD -->
-						<?php $this->view('looping/product_card'); ?>
-					<?php else: ?>
-
-						<div id="composer_post_container">
-							<form action="" method="post">
-								<div class="composer-grid">
-									<div class="profile_photo hidden-xs" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div>
-									<div class="composer-form-body">
-										<div class="form-group" style="margin-bottom:5px;">
-											<textarea class="form-control" placeholder="Share your farm stories..." rows="2"></textarea>
+						<div class="store-item-body">
+							<div id="composer_post_container">
+								<form action="" method="post">
+									<div class="composer-grid">
+										<div class="profile_photo hidden-xs" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div>
+										<div class="composer-form-body">
+											<div class="form-group" style="margin-bottom:5px;">
+												<textarea class="form-control" placeholder="Share your farm stories..." rows="2"></textarea>
+											</div>
+											<div class="composer-footer">
+												<ul class="inline-list">
+													<li class="text-link" data-toggle="modal" data-target="#media_modal"><i class="fa fa-picture-o"></i> Media</li>
+												</ul>
+											</div>
 										</div>
-										<div class="composer-footer">
-											<ul class="inline-list">
-												<li class="text-link" data-toggle="modal" data-target="#media_modal"><i class="fa fa-picture-o"></i> Media</li>
-											</ul>
+										<div>
+											<button class="btn btn-contrast"><i class="fa fa-send"></i> Post</button>
 										</div>
 									</div>
-									<div>
-										<button class="btn btn-contrast"><i class="fa fa-send"></i> Post</button>
+								</form>
+							</div>
+							<div class="store-item-body-grid">
+								<div class="store-item-body-left">
+									left
+								</div>
+								<div class="store-item-body-right">
+									<div class="store-content-list">
+										<div class="store-content-item">
+											<div class="store-content-top">
+												store-content-top
+											</div>
+											<div class="store-content-middle">
+												store-content-middle
+											</div>
+											<div class="store-content-footer">
+												store-content-footer
+											</div>
+										</div>
 									</div>
 								</div>
-							</form>
+							</div>
 						</div>
-
+					<?php else: ?>
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
 					<?php endif ?>
 				</div>
@@ -75,7 +97,7 @@
 						<!-- ETO YUNG GALLERIES CARD -->
 						<?php $this->view('looping/product_card'); ?>
 					<?php else: ?>
-						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p> -->
+						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO GALLERIES &#8212;</p>
 					<?php endif ?>
 				</div>
 				

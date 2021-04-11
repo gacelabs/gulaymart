@@ -74,6 +74,9 @@ body.store {
 	margin: 0;
 	padding: 0;
 }
+body.store #storefront_navbar {
+	margin-bottom: 15px;
+}
 #storefront_navbar .sf-navbar-btn {
 	border-bottom: 3px solid transparent;
 	cursor: pointer;
@@ -123,6 +126,14 @@ body.store .storefront-middle {
 	display: grid;
 	grid-gap: 15px;
 	grid-template-columns: 60px 1fr auto;
+}
+.store-item-body {
+	margin: 0 -15px;
+	position: relative;
+}
+.store-item-body-grid {
+	display: grid;
+	grid-template-columns: 1fr 500px;
 }
 @media (max-width: 991px) {
 	body.store .marketplace-navbar-container {

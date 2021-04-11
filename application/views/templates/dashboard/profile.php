@@ -3,7 +3,7 @@
 	<div class="row">
 		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<h4>You're all set! Selling veggies in Gulaymart is easy, be a veggie <a href="farm/storefront/" class="text-link">seller</a> now!</h4>
+			<h4>Hoorah! You're all set. <br class="visible-xs"><br class="visible-xs">Selling veggies in Gulaymart is easy, be a <a href="farm/storefront/" class="text-link">veggie seller now!</a></h4>
 			<h4>Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
 
 			<hr class="carved">
