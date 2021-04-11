@@ -104,7 +104,7 @@
 							<?php foreach ($this->attributes as $key => $attribute): ?>
 								<?php
 									$id = $attributevalue = '';
-									if ($data['product']) {
+									if ($data['product'] AND isset($data['product']['attribute'][$key])) {
 										$id = check_value('id', $data['product']['attribute'][$key], false, false);
 										$attributevalue = check_value('attribute', $data['product']['attribute'][$key], false, false);
 									}
