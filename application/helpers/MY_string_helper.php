@@ -1171,21 +1171,41 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			$rows = $results['rows'][0];
 			$elements = $rows['elements'][0];
 			$distance = $elements['distance']['text'];
+			$distanceval = $elements['distance']['value'];
 			$duration = $elements['duration']['text'];
+			$durationval = $elements['duration']['value'];
 			return [
 				'distance' => $distance,
+				'distanceval' => (float)$distanceval,
 				'duration' => $duration,
+				'durationval' => (float)$durationval,
 			];
 		}
 	}
 	return ['distance' => false, 'duration' => false];
 }
 
-function nearby_farms($data=false)
+function float2rat($n, $tolerance = 1.e-6) {
+	$h1=1; $h2=0;
+	$k1=0; $k2=1;
+	$b = 1/$n;
+	do {
+		$b = 1/$b;
+		$a = floor($b);
+		$aux = $h1; $h1 = $a*$h1+$h2; $h2 = $aux;
+		$aux = $k1; $k1 = $a*$k1+$k2; $k2 = $aux;
+		$b = $b-$a;
+	} while (abs($n-$h1/$k1) > $n*$tolerance);
+
+	return "$h1/$k1";
+}
+
+function nearby_farms($data=false, $user_id=false)
 {
 	$farms = false;
 	if ($data) {
 		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 		/*$SQL = "SELECT ufl.farm_id, ufl.lat, ufl.lng, 
 		(
 			6371 * #kilometers
@@ -1214,8 +1234,12 @@ function nearby_farms($data=false)
 				// debug($driving_distance, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (float)$driving_distance['distance'];
-					if ($distance < KM_DISTANCE_TO_USER) {
-						$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+					if ($distance <= KM_DISTANCE_TO_USER) {
+						if ($user_id) {
+							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id'], 'user_id' => $user_id], 'row');
+						} else {
+							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+						}
 						if ($farm) {
 							$user = $ci->gm_db->get('user_profiles', ['user_id' => $farm['user_id']], 'row');
 							$farm['address'] = $row['address_2'];
@@ -1255,7 +1279,7 @@ function nearby_products($data=false, $user_id=false)
 				// debug($driving_distance['distance'], 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (float)$driving_distance['distance'];
-					if ($distance < KM_DISTANCE_TO_USER) {
+					if ($distance <= KM_DISTANCE_TO_USER) {
 						$products_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
 						if ($products_locations) {
 							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');

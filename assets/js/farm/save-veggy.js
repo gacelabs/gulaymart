@@ -1,5 +1,57 @@
 $(document).ready(function() {
 
+	$('.input-capsule [id^="category-"]').click(function() {
+		var uiParent = $(this).parent('li');
+		$('.input-capsule').removeClass('active');
+		$('.input-capsule').find('input').prop('checked', false);
+
+		var catid = $(this).attr('id');
+		$(this).prop('checked', true);
+		uiParent.addClass('active');
+
+		$('#sub_category').removeClass('hide');
+		$('#sub_category').find('ul[class*=category-]').addClass('hide');
+		$('#sub_category').find('ul.'+catid).removeClass('hide');
+	});
+
+	$('.input-capsule [id^="subcategory-"]').click(function() {
+		var uiParent = $(this).parent('li');
+		uiParent.siblings().removeClass('active');
+		uiParent.siblings().find('input').prop('checked', false);
+
+		$(this).prop('checked', true);
+		uiParent.addClass('active');
+	});
+
+	$('#basic_btn_container').find('input:reset').bind('mouseup', function(e) {
+		setTimeout(function() {
+			$(e.target).parents('form:first').find('input:radio, input:checkbox').each(function(i, elem) {
+				if ($(elem).is(':checked')) {
+					$(elem).parent('li').siblings().removeClass('active');
+					$(elem).parent('li').siblings().find('input').prop('checked', false);
+					$(elem).parent('li').addClass('active');
+					if ($(elem).attr('name') == 'products[category_id]') {
+						var catid = $(elem).attr('id');
+						$('#sub_category').removeClass('hide');
+						$('#sub_category').find('ul[class*=category-]').addClass('hide');
+						$('#sub_category').find('ul.'+catid).removeClass('hide');
+					}
+				}
+			});
+		}, 300);
+	});
+
+	$('#price_btn_container').find('input:reset').bind('mouseup', function(e) {
+		setTimeout(function() {
+			$(e.target).parents('form:first').find('input:checkbox').each(function(i, elem) {
+				if ($(elem).is(':checked')) {
+					var uiParent = $(elem).parents('[id*="farmlocation-"]').first();
+					uiParent.next('[js-element]').removeClass('hide');
+				}
+			});
+		}, 300);
+	});
+
 	$('#prod_attribute .dropdown-menu li a').click(function() {
 		var preText = $(this).text();
 		$(this).parents().eq(3).prev('input').addClass('has-value').val('');

@@ -112,7 +112,7 @@
 								<input type="hidden" name="products_attribute[<?php echo $key;?>][id]" value="<?php echo $id;?>" />
 								<div class="input-group">
 									<span class="input-group-addon"><small><i class="fa fa-circle text-gray"></i></small></span>
-									<input type="text" class="form-control" name="products_attribute[<?php echo $key;?>][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 ]*$'" required="required" placeholder="<?php echo $attribute['placeholder']; ?>" value="<?php echo $attributevalue;?>" />
+									<input type="text" class="form-control" name="products_attribute[<?php echo $key;?>][attribute]" data-inputmask="'regex': '^[A-Za-z0-9 -]*$'" required="required" placeholder="<?php echo $attribute['placeholder']; ?>" value="<?php echo $attributevalue;?>" />
 									<div class="input-group-btn">
 										<div class="dropdown">
 											<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

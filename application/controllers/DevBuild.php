@@ -128,7 +128,16 @@ class DevBuild extends CI_Controller {
 			'products_measurement',
 			'products_photo',
 			'products_attribute',
-			'baskets',
+			'baskets' => [
+				'fee' => [
+					'definition' => [
+						'type' => 'INT',
+						'default' => '0',
+						'null' => false,
+					],
+					'after' => 'quantity'
+				]
+			],
 			'attributes',
 			'attribute_values',
 		];

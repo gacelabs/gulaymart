@@ -39,7 +39,29 @@
 														<label for="deliver_now" class="zero-gaps">
 															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now"> Now
 														</label>
-														<small class="text-gray">(ETA: 30 mins)</small>
+														<?php
+															$driving_distance = [];
+															foreach ($baskets as $location_id => $basket): ?>
+															<?php foreach ($basket as $key => $product): ?>
+																<?php
+																	$farm_location = $product['rawdata']['farm_location'];
+																	$driving_distance[$location_id] = get_driving_distance([
+																		['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+																		['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+																	]);
+																?>
+															<?php endforeach ?>
+														<?php endforeach;
+															$ETA = 0;
+															if (count($driving_distance)) {
+																foreach ($driving_distance as $key => $drive) {
+																	$ETA += (float)$drive['durationval'];
+																}
+															}
+														?>
+														<?php if ($ETA > 0): ?>
+															<small class="text-gray">(ETA: <?php echo round($ETA / 60, 1);?> mins)</small>
+														<?php endif ?>
 													</div>
 													<div>
 														<label for="order_schedule">
@@ -53,11 +75,20 @@
 											<div class="zero-gaps">
 												<div class="tender-amount-parent">
 													<div class="tender-amount-body">
-														<p class="product-amount zero-gaps">&#x20b1; <b>150</b></p>
-														<p class="product-amount zero-gaps">+ &#x20b1; <b>350</b></p>
+														<?php
+															$grand_total = 0;
+															foreach ($baskets as $location_id => $basket): ?>
+															<?php foreach ($basket as $key => $product): 
+																$details = $product['rawdata']['basket_details'];
+																$item_total = (int)$product['quantity'] * (float)$details['price'];
+																$grand_total += $item_total;
+																?>
+																<p class="product-amount zero-gaps">&#x20b1; <b js-elem="sub-itemtotal" js-element="itemtotal-<?php echo $product['id'];?>"><?php echo number_format($item_total);?></b></p>
+															<?php endforeach ?>
+														<?php endforeach ?>
 													</div>
 													<hr style="border-color:#aaa;margin:5px 0;">
-													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b>500</b></h4>
+													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($grand_total);?></b></h4>
 												</div>
 												<button class="btn btn-contrast btn-block"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 											</div>

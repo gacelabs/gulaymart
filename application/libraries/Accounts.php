@@ -192,6 +192,20 @@ class Accounts {
 
 			$shippings = $this->class->gm_db->get('user_shippings', ['user_id' => $this->profile['id']]);
 			$request['shippings'] = $shippings;
+			if ($shippings) {
+				foreach ($shippings as $key => $shipping) {
+					if ($shipping['active'] == 1) {
+						$request['lat'] = $this->class->latlng['lat'] = $shipping['lat'];
+						$request['lng'] = $this->class->latlng['lng'] = $shipping['lng'];
+						break;
+					}
+				}
+			}
+			if (empty($request['lat']) AND empty($request['lng'])) {
+				// debug($this->class->latlng, $request, 'stop');
+				$request['lat'] = $this->class->latlng['lat'];
+				$request['lng'] = $this->class->latlng['lng'];
+			}
 			
 			$request = get_global_values($request);
 
@@ -210,12 +224,6 @@ class Accounts {
 				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
 			}
 			$request['device_id'] = device_id();
-
-			if (empty($request['lat']) AND empty($request['lng'])) {
-				// debug($this->class->latlng, $request, 'stop');
-				$request['lat'] = $this->class->latlng['lat'];
-				$request['lng'] = $this->class->latlng['lng'];
-			}
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
