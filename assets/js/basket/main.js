@@ -7,6 +7,24 @@ $(document).ready(function() {
 		}
 	});
 
+	$('[js-event="addBasketItemselect"]').change(function() {
+		$(this).parents('.order-item-grid').toggleClass('active');
+
+		var	prodPrice = $(this).parents('.order-item-grid').find('.product-item-price').text(),
+			prodQty = $(this).parents('.order-item-grid').find('.order-qty-input').val(),
+			shipFee = $(this).parents('.order-item-grid').find('.shipping-fee').text();
+
+		if ($('[js-event="addBasketItemselect"]:checked').length > 0) {
+			$('[js-event="removeBasketItemBtn"]').removeClass('hide');
+		} else {
+			$('[js-event="removeBasketItemBtn"]').addClass('hide');
+		}
+
+		if (this.checked) {
+			$(this).parents('.order-item-grid').find('.selected-product-price').text((parseInt(prodPrice) * prodQty) + parseInt(shipFee));
+		}
+	});
+
 	var oSavedData = {};
 	$('[js-event="qty"]').each(function(i, elem) {
 		oSavedData[i] = {
