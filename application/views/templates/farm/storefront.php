@@ -22,7 +22,7 @@
 
 			<?php if (!empty($this->farms)): ?>
 				<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
-					<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
+					<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
 					<hr class="carved">
 				</div>
 			<?php endif ?>

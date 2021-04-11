@@ -311,7 +311,7 @@
 							</div>
 							<div class="product-desc-body">
 								<div class="product-title-container ellipsis-container">
-									<h1 class="zero-gaps order-title">Product name shows here</h1>
+									<h1 class="zero-gaps order-title">Product name</h1>
 								</div>
 							</div>
 							<div class="product-list-footer">
