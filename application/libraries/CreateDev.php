@@ -724,7 +724,13 @@ class CreateDev {
 		]);
 
 		sleep(5);
-		$attributes = [['name' => 'Preset 1'],['name' => 'Preset 2'],['name' => 'Preset 3'],['name' => 'Preset 4'],['name' => 'Preset 5']];
+		$attributes = [
+			['name' => 'How do you grow your plant?'],
+			['name' => 'Sold ripe or unripe?'],
+			['name' => 'Is the product in good shape?'],
+			['name' => 'Freshness detail'],
+			['name' => 'How do you package the product?']
+		];
 		$this->class->db->insert_batch('attributes', $attributes);
 
 		return $table_data;

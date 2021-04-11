@@ -146,7 +146,7 @@ var setProductScore = function(obj) {
 	var position = parseInt(data_pos) + 1;
 	if ($('.dashboard-panel.score-'+(position)).length) {
 		$('.dashboard-panel.score-'+(position)).removeClass('hide');
-		var fromHeight = parseInt($('nav').height()) + 1;
+		var fromHeight = parseInt($('#dashboard_navbar').height()) + 25;
 		var iTop = ($('.dashboard-panel.score-'+position).offset().top - fromHeight);
 		$("html,body").stop().animate({ scrollTop: iTop, scrollLeft: 0 }, 500);
 	}

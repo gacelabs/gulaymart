@@ -1074,11 +1074,11 @@ function get_global_values($request=[])
 	/*attributes*/
 	$request['attributes'] = [];
 	if ($ci->db->table_exists('attributes')) {
-		$attributes = $ci->gm_db->get('attributes');
+		$attributes = $ci->gm_db->get('attributes', ['enable' => 1]);
 		$attrs = [];
 		if ($attributes) {
 			foreach ($attributes as $key => $attr) {
-				$values = $ci->gm_db->get('attribute_values', ['attribute_id' => $attr['id']]);
+				$values = $ci->gm_db->get('attribute_values', ['attribute_id' => $attr['id'], 'active' => 1]);
 				if ($values) {
 					$attrs[$key] = [
 						'placeholder' => $attr['name'],
@@ -1242,6 +1242,7 @@ function nearby_products($data=false, $user_id=false)
 	$products = false;
 	if ($data) {
 		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
 		// debug($results, 'stop');
 		if ($results) {
