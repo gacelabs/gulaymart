@@ -158,7 +158,7 @@
 				<div class="dashboard-panel theme hide score-2">
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
-							<label>Pricing</label>
+							<label>Product location pricing</label>
 							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
@@ -249,7 +249,7 @@
 						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product. Recommended size: 360 x 360 pixels.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
@@ -285,7 +285,7 @@
 							</div>
 							<div class="product-list-footer">
 								<ul class="spaced-list between">
-									<li><p class="product-price">₱ <span class="order-price">120</span> / <span class="order-unit">Kilogram</span></p></li>
+									<li><p class="product-price">&#x20b1; <span class="order-price">120</span> / <span class="order-unit">Kilogram</span></p></li>
 									<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration">30 mins</span></p></li>
 								</ul>
 							</div>

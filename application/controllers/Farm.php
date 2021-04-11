@@ -209,7 +209,7 @@ class Farm extends MY_Controller {
 					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
 				],
 				'middle' => [
-					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
+					'body_class' => ['dashboard', 'new-veggy'],
 					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
@@ -432,10 +432,10 @@ class Farm extends MY_Controller {
 			// debug($product, 'stop');
 			$this->render_page([
 				'top' => [
-					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
+					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy'],
 				],
 				'middle' => [
-					'body_class' => ['dashboard', 'new-veggy', 'static/product-list-card'],
+					'body_class' => ['dashboard', 'new-veggy'],
 					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',

@@ -205,3 +205,11 @@ p.text-capsule.score small {
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
+body.new-veggy .preview_images_selected {
+	grid-template-columns: 100px 100px 100px 100px;
+	grid-gap: 10px;
+	margin-top: 15px;
+}
+body.new-veggy .preview_images_selected>li {
+	padding: 0;
+}

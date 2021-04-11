@@ -7,8 +7,8 @@
 				<form action="farm/save-veggy/<?php echo $data['product']['id'];?>/<?php echo $data['product']['name'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data">
 					<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 
-					<div class="dash-panel theme score-0" id="basic_prod_info">
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel theme score-0" id="basic_prod_info">
+						<div class="dashboard-panel-middle">
 							<div class="input-container">
 								<label for="product_name">Product name</label>
 								<div class="input-group">
@@ -53,8 +53,8 @@
 						</div>
 					</div>
 
-					<div class="dash-panel theme score-1" id="prod_attribute">
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel theme score-1" id="prod_attribute">
+						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Product attributes</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
@@ -194,10 +194,10 @@
 						</div>
 					</div>
 
-					<div class="dash-panel theme score-2" id="prod_price">
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel theme score-2" id="prod_price">
+						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
-								<label>Product Location Pricing</label>
+								<label>Product location pricing</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
 							</div>
 							<div class="row">
@@ -262,8 +262,8 @@
 						</div>
 					</div>
 
-					<div class="dash-panel theme score-3" id="prod_desc">
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel theme score-3" id="prod_desc">
+						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Short description</label>
 								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
@@ -278,11 +278,11 @@
 						</div>
 					</div>
 
-					<div class="dash-panel theme score-4" id="products_photo">
-						<div class="dash-panel-middle">
+					<div class="dashboard-panel theme score-4" id="products_photo">
+						<div class="dashboard-panel-middle">
 							<div style="margin-bottom:15px;">
 								<label>Images</label>
-								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
+								<small class="color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product. Recommended size: 360 x 360 pixels.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
@@ -292,7 +292,6 @@
 								</span>
 							</div>
 							<?php if (isset($data['product']['photos']) AND $data['product']['photos']): ?>
-								<br>
 								<ul class="inline-list preview_images_selected">
 									<?php foreach ($data['product']['photos'] as $key => $photo): ?>
 										<?php if ($key == 'main'): ?>
@@ -312,7 +311,7 @@
 								</ul>
 							<?php endif ?>
 						</div>
-						<div class="dash-panel-footer text-right bg-grey">
+						<div class="dashboard-panel-footer text-right bg-grey">
 							<button value="upload" type="submit" class="btn btn-default normal-radius hide">Upload & Save<i class="fa fa-upload icon-right"></i></button>
 							<button value="select" type="submit" class="btn btn-default normal-radius">Save<i class="fa fa-check-circle icon-right"></i></button>
 						</div>
@@ -321,7 +320,7 @@
 			</div>
 
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
-				<div class="dash-panel">
+				<div class="dashboard-panel">
 					<?php if ($this->farm_locations): ?>
 						<?php foreach ($this->farm_locations as $index => $location): ?>
 							<?php 
@@ -334,37 +333,48 @@
 								$stocks = $farm_loc['stocks'];
 								$duration = $farm_loc['duration'];
 							} ?>
-							<div class="dash-panel-top">
+							<div class="dashboard-panel-top">
 								<ul class="spaced-list between">
-									<li><h6><?php echo $location['address_2'];?></h6></li>
-									<li><h3><a href="basket/view/<?php echo $data['product']['id'].'/'.nice_url($data['product']['name'], true);?>" target="_new" class="text-link order-link">View Page</a></h3></li>
+									<li><p><?php echo $location['address_2'];?></p></li>
+									<li><p><a href="basket/view/<?php echo $data['product']['id'].'/'.nice_url($data['product']['name'], true);?>" target="_new" class="text-link order-link">View Product</a></p></li>
 								</ul>
-								<div class="product-item-info">
+								<div class="product-list-card">
 									<?php if (isset($data['product']['photos']) AND $data['product']['photos']): ?>
-										<div class="product-item-top order-photo" style="background-image:url('<?php echo $data['product']['photos']['main']['url_path'];?>');">
+										<div class="product-list-photo order-photo" style="background-image:url('<?php echo $data['product']['photos']['main']['url_path'];?>');">
 									<?php else: ?>
-										<div class="product-item-top order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
+										<div class="product-list-photo order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Upload+product+photo');">
 									<?php endif ?>
-									<ul class="spaced-list between">
-										<?php if ($duration != ''): ?>
-											<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span class="order-duration"><?php echo $duration;?></span></small></kbd></li>
-										<?php endif ?>
-										<!-- <li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span class="order-type">Organic</span></small></kbd></li> -->
-									</ul>
+
+									<!--ul class="spaced-list between">
+										<?php //if ($duration != ''): ?>
+											<li><kbd class="product-tags"><small><i class="fa fa-map-marker"></i> <span class="order-duration"><?php //echo $duration;?></span></small></kbd></li>
+										<?php //endif ?>
+										<li><kbd class="product-type"><small><i class="fa fa-pagelines"></i> <span class="order-type">Organic</span></small></kbd></li>
+									</ul>-->
+
 									</div>
-									<div class="product-item-middle">
-										<h1 class="product-title order-title"><?php echo $data['product']['name'];?></h1>
-										<p class="product-price">&#x20b1; <span class="order-price"><?php echo $price;?></span> / <span class="order-unit"><?php echo $measure;?></span></p>
+									<div class="product-desc-body">
+										<div class="product-title-container ellipsis-container">
+											<h1 class="zero-gaps order-title"><?php echo $data['product']['name'];?></h1>
+										</div>
 									</div>
-									<h5 class="text-center" style="border:1px solid #ea9a2a;border-radius:3px;padding:10px;"><b>Status:</b> <span class="order-status">Published</span></h5>
+									<div class="product-list-footer">
+										<ul class="spaced-list between">
+											<li><p class="product-price">&#x20b1; <span class="order-price"><?php echo $price;?></span> / <span class="order-unit">Kilogram</span></p></li>
+											<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration">30 mins</span></p></li>
+										</ul>
+									</div>
+								</div>
+								<div class="new-veggy-status-container">
+									<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status">Published</span></h5>
 								</div>
 							</div>
 						<?php endforeach ?>
 					<?php else: ?>
 						<p>No Farms yet.</p>
 					<?php endif; ?>
-					<div class="dash-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;">
-						<a href="farm/new-veggy" class="btn btn-info normal-radius btn-block" style="width:220px;margin:0 auto;">Create New Veggy</a>
+					<div class="dashboard-panel-footer" style="background-color:#f7f7f7;border-bottom:1px solid #ccc;text-align:center;">
+						<h4 class="zero-gaps">Add a new product <a href="farm/new-veggy" class="btn btn-contrast">New Veggy</a></h4>
 					</div>
 				</div>
 			</div>

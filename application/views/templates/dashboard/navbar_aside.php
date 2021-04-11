@@ -42,7 +42,7 @@
 						<?php endif ?>
 						<div class="aside-nav-child">
 							<a href="farm/new-veggy/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-								<i class="fa fa-pencil"></i>New veggy
+								<i class="fa fa-pencil"></i>New Veggy
 							</a>
 						</div>
 					<?php endif ?>
