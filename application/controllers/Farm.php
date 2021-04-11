@@ -522,7 +522,7 @@ class Farm extends MY_Controller {
 				$data = [
 					'farm' => $user_farm,
 					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
-					'products' => nearby_products($this->latlng),
+					'products' => nearby_products($this->latlng, $user_farm['user_id']),
 				];
 				// debug($data, 'stop');
 			}
