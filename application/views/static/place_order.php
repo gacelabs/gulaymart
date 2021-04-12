@@ -58,7 +58,7 @@
 			</div>
 			<div class="col-lg-4">
 				<div class="price-summary-parent">
-					
+					 
 				</div>
 			</div>
 		</div>

@@ -3,6 +3,7 @@
 	<?php 
 		$product = $data['product'];
 		$farm = $product['farm'];
+		$farm_location = $product['farm_location'];
 		$feedbacks = $product['feedbacks'];
 	?>
 	<div class="container">
@@ -170,14 +171,12 @@
 							<div class="productpage-farm-middle">
 								<div class="row">
 									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-										<?php foreach ($product['latlng'] as $location_id => $location): ?>
-											<div class="productpage-summary-grid">
-												<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-												<div>
-													<p class="zero-gaps"><?php echo $location['city_prov'];?></p>
-												</div>
+										<div class="productpage-summary-grid">
+											<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+											<div>
+												<p class="zero-gaps"><?php echo $farm_location['city_prov'];?></p>
 											</div>
-										<?php endforeach ?>
+										</div>
 									</div>
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 										<p class="zero-gaps"><a href="<?php echo $farm['storefront'];?>" class="text-link visit-farm-link" target="storefrontTab"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>

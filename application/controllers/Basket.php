@@ -8,6 +8,7 @@ class Basket extends My_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('baskets');
 		// INITIALIZING TOKTOK OBJECT
 		// $this->load->library('toktokapi');
 		// debug($this->toktokapi, 'stop');
@@ -19,24 +20,36 @@ class Basket extends My_Controller {
 		$basket_session = [];
 		if ($sessions) {
 			// debug($sessions, 'stop');
-			foreach ($sessions['baskets'] as $location_id => $basket) {
-				$basket['user_id'] = $sessions['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+			foreach ($sessions['baskets'] as $key => $basket) {
+				$basket['user_id'] = $sessions['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 				$id = $this->gm_db->new('baskets', $basket);
-				$basket['id'] = $sessions['baskets'][$location_id]['id'] = $id;
+
+				$basket['id'] = $sessions['baskets']['id'] = $id;
 				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-				$basket_session[date('F j, Y', $basket['at_date'])][$location_id][] = $basket;
+				$driving_distance = get_driving_distance([
+					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+				]);
+				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 			}
 			// debug($basket_session, 'stop');
 			$this->session->unset_userdata('basket_session');
 		} else {
 			/*query the baskets in DB*/
 			if ($this->accounts->has_session) {
-				$sessions = $this->gm_db->get('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => 0]);
+				$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
 				// debug($sessions, 'stop');
 				if (is_array($sessions)) {
-					foreach ($sessions as $key => $session) {
-						$session['rawdata'] = json_decode(base64_decode($session['rawdata']), true);
-						$basket_session[date('F j, Y', $session['at_date'])][$session['location_id']][] = $session;
+					foreach ($sessions as $key => $basket) {
+						$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+						// debug($basket['rawdata'], 'stop');
+						$driving_distance = get_driving_distance([
+							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+							['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+						]);
+						$basket['distance'] = $driving_distance['distanceval'];
+						$basket['duration'] = $driving_distance['durationval'];
+						$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 					}
 				}
 			}
@@ -58,7 +71,12 @@ class Basket extends My_Controller {
 			],
 			'bottom' => [
 				'modals' => ['reply_modal'],
-				'js' => ['dashboard/main', 'basket/main'],
+				'js' => [
+					'plugins/jquery.inputmask.min',
+					'plugins/inputmask.binding',
+					'dashboard/main',
+					'basket/main',
+				],
 			],
 			'data' => [
 				'baskets' => $basket_session
@@ -70,70 +88,73 @@ class Basket extends My_Controller {
 	{
 		$post = $this->input->post() ?: $this->input->get();
 		if ($post AND $product_id) {
-			// debug($post, 'stop');
-			$session = [];
-			$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
-			// $this->load->library('toktokapi');
-			foreach ($post['baskets'] as $location_id => $basket) {
-				$product = $this->products->product_by_farm_location($product_id, $location_id);
+			if (isset($post['baskets'])) {
+				$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
+
+				$product = $this->products->product_by_farm_location($product_id, $post['baskets']['location_id']);
+				// debug($post['baskets'], $product, 'stop');
 				if ($product) {
-					/*$pricing = [
-						'f_sender_lat' => $farm_location['lat'],
-						'f_sender_lon' => $farm_location['lng'],
-						'f_promo_code' => '',
-						'destinations' => [
-							[
-								'recipient_lat' => $this->latlng['lat'],
-								'recipient_lon' => $this->latlng['lng'],
-							]
-						],
-						'isExpress' => 'false',
-						'isCashOnDelivery' => 'false',
-					];
-					$this->toktokapi->app_request('price_and_directions', $pricing);
-					// debug($this->toktokapi, 'stop');
-					if ($this->toktokapi->success) {
-						$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
-						$post['baskets'][$location_id]['fee'] = $price_and_directions['price'];
-					}*/
-					$post['baskets'][$location_id]['product_id'] = $product_id;
-					$post['baskets'][$location_id]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
-					$post['baskets'][$location_id]['location_id'] = $location_id;
-					$post['baskets'][$location_id]['at_date'] = $timestamp;
-					$post['baskets'][$location_id]['at_time'] = $time;
-					$post['baskets'][$location_id]['rawdata'] = base64_encode(json_encode($product));
+					$post['baskets']['product_id'] = $product_id;
+					$post['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+					$post['baskets']['at_date'] = $timestamp;
+					$post['baskets']['at_time'] = $time;
+					$post['baskets']['rawdata'] = base64_encode(json_encode($product));
+
+					$check_basket = $this->gm_db->get('baskets', [
+						'product_id' => $post['baskets']['product_id'],
+						'user_id' => $post['baskets']['user_id'],
+						'location_id' => $post['baskets']['location_id'],
+						'at_date' => $post['baskets']['at_date'],
+					], 'row');
+
+					$post['baskets']['fee'] = 0;
+					if ($check_basket) {
+						$post['baskets']['fee'] = $check_basket['fee'];
+					} else {
+						/*get toktok fee if not existing in baskets table*/
+						$pricing = toktok_price_directions_format([
+							'sender_lat' => $product['farm_location']['lat'],
+							'sender_lng' => $product['farm_location']['lng'],
+							'receiver_lat' => $this->latlng['lat'],
+							'receiver_lng' => $this->latlng['lng'],
+						]);
+						$this->load->library('toktokapi');
+						$this->toktokapi->app_request('price_and_directions', $pricing);
+						if ($this->toktokapi->success) {
+							$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
+							$post['baskets']['fee'] = $price_and_directions['price'];
+						}
+					}
+					// debug($post['baskets'], 'stop');
+					/*check if the user is logged in if false save post to session*/
+					if ($this->accounts->has_session == false) {
+						$this->session->set_userdata('basket_session', $post);
+						$message = 'Item added to basket, Redirecting to the registration / login page!';
+						$redirect = base_url('register');
+					} else {
+						/*save the add basket session in DB*/
+						if ($check_basket) {
+							$quantity = $check_basket['quantity'] + (int)$post['baskets']['quantity'];
+							$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $check_basket['id']]);
+						} else {
+							$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
+						}
+						$message = 'Item added to basket!';
+						$redirect = false;
+					}
+					$this->set_response('success', $message, $post, $redirect);
 				}
 			}
-			// debug($post['baskets'], 'stop');
-			/*check if the user is logged in if false save post to session*/
-			if ($this->accounts->has_session == false) {
-				$this->session->set_userdata('referrer', 'basket/');
-				$this->session->set_userdata('basket_session', $post);
-				$message = 'Item added to basket, Redirecting to the registration page!';
-				$redirect = base_url('register');
-			} else {
-				/*save the add basket session in DB*/
-				foreach ($post['baskets'] as $location_id => $basket) $this->gm_db->new('baskets', $basket);
-				$message = 'Item added to basket!';
-				// $redirect = base_url('basket');
-				$redirect = false;
-			}
-			$this->set_response('success', $message, $post, $redirect);
 		}
 		$this->set_response('error', 'No item(s) found', $post, false);
 	}
 
-	public function view($product_id=0, $product_name='')
+	public function view($product_id=0, $farm_location_id=0, $product_name='')
 	{
-		$post = $this->input->post() ?: $this->input->get();
 		$product = false;
-		if ($post OR $product_id) {
-			// debug($post, 'stop');
-			if ($post) {
-				$product = $this->products->products_with_location($post, true);
-			} else {
-				$product = $this->products->products_with_location(['id' => $product_id], true);
-			}
+		if ($product_id AND $farm_location_id) {
+			// debug($product_id, $farm_location_id, 'stop');
+			$product = $this->products->product_by_farm_location($product_id, $farm_location_id);
 		}
 		// debug($product, 'stop');
 		$this->render_page([
@@ -187,6 +208,77 @@ class Basket extends My_Controller {
 			'data' => [
 			],
 		]);
+	}
+
+	public function delete()
+	{
+		$post = $this->input->post();
+		$get = $this->input->get();
+		if ($post AND isset($post['data'])) {
+			// debug($post, 'stop');
+			foreach ($post['data'] as $key => $row) {
+				$this->baskets->save(['status' => 5], $row); /*cancelled*/
+			}
+			$this->set_response('success', 'Product removed in basket', $post['data'], 'basket/', 'removeOnBasket');
+		} elseif ($get AND isset($get['data'])) {
+			// debug($get, 'stop');
+			$this->set_response('confirm', 'Want to delete selected product(s)?', $get['data'], false, 'removeBasketItem');
+		}
+		$this->set_response('error', remove_multi_space('Unable to delete '.$name.' product'), $post);
+	}
+
+	public function verify()
+	{
+		/*
+		 * status:
+		 * 1 = verified (checkout page)
+		 * 2 = placed
+		 * 3 = on delivery
+		 * 4 = received
+		 * 5 = cancelled
+		*/
+		$post = $this->input->post();
+		if ($post AND isset($post['data'])) {
+			// debug($post, 'stop');
+			$ids = array_keys($post['data']);
+			$baskets = $this->baskets->get_in(['id' => $ids]);
+			// debug($baskets, 'stop');
+			foreach ($post['data'] as $id => $row) {
+				$basket = $this->baskets->get(['id' => $id], true);
+				// debug($basket, 'stop');
+				if ($basket) {
+					$order_type = 1; 
+					if ($post['type'] != 'deliver_now') {
+						$order_type = 2;
+						/*compute date range between the ETA*/
+						$etas = [];
+						foreach ($baskets as $key => $bskt) {
+							$etas[$bskt['location_id']] = (float) $bskt['duration'];
+						}
+						$eta_duration = 0;
+						foreach ($etas as $location_id => $duration) {
+							$eta_duration += $duration;
+						}
+						$eta = $eta_duration;
+					}
+					$this->baskets->save([
+						'quantity' => $row['quantity'],
+						'status' => 1, // verified can be viewed on checkout
+						'order_type' => $order_type,
+					], ['id' => $id]);
+				}
+			}
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding check-out...']);
+			exit();
+		}
+		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
+		exit();
+	}
+
+	public function checkout()
+	{
+		# code...
+>>>>>>> f1a0c7b3076663f1e84f88020068f3bb4dfccc57
 	}
 
 	private function book_delivery()

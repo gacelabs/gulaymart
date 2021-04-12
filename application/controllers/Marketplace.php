@@ -41,8 +41,8 @@ class Marketplace extends MY_Controller {
 				'js' => ['marketplace/main', 'plugins/fb-login'],
 			],
 			'data' => [
-				'nearby_farms' => nearby_farms($this->latlng),
 				'products' => nearby_products($this->latlng),
+				'nearby_farms' => nearby_farms($this->latlng),
 			],
 		]/*, true*/);
 	}

@@ -1182,7 +1182,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			];
 		}
 	}
-	return ['distance' => false, 'duration' => false];
+	return ['distance' => 0, 'distanceval' => 0, 'distance' => 0, 'durationval' => 0];
 }
 
 function float2rat($n, $tolerance = 1.e-6) {
@@ -1294,6 +1294,7 @@ function nearby_products($data=false, $user_id=false)
 								}
 
 								if ($product) {
+									$product['farm_location_id'] = $row['id'];
 									$product['category'] = false;
 									$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
 									if ($category) $product['category'] = $category['label'];
@@ -1327,7 +1328,7 @@ function nearby_products($data=false, $user_id=false)
 									$product['measurement'] = $location['measurement'];
 									$product['stocks'] = $location['stocks'];
 									$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
-									$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.nice_url($product['name'], true));
+									$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.$product['farm_location_id'].'/'.nice_url($product['name'], true));
 									$products[] = $product;
 								}
 							}
