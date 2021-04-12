@@ -1,22 +1,26 @@
 <div class="add-basket-item-container order-item-inner">
-	<p class="zero-gaps text-caps"><?php echo $product['rawdata']['farm']['name'];?></p>
+	<p class="zero-gaps text-caps"><?php echo $basket['rawdata']['farm']['name'];?></p>
 	<div class="order-item-grid">
 		<ul class="spaced-list between">
-			<li><input type="checkbox" class="add-basket-item-select" js-event="addBasketItemselect"></li>
-			<li><div class="order-item-image" style="background-image: url('<?php echo $product['rawdata']['photo']['url_path'];?>');"></div></li>
+			<li><input type="checkbox" class="add-basket-item-select" js-event="addBasketItemselect" data-id="<?php echo $basket['id'];?>" data-price="<?php echo $basket['rawdata']['basket_details']['price'];?>" data-name="<?php echo $basket['rawdata']['name'];?>" data-fee="<?php echo $basket['fee'];?>"></li>
+			<li>
+				<a href="<?php echo $basket['rawdata']['product_url'];?>">
+					<div class="order-item-image" style="background-image: url('<?php echo $basket['rawdata']['photos']['main']['url_path'];?>');"></div>
+				</a>
+			</li>
 		</ul>
 		<div class="order-info-container" js-element="order">
 			<div class="order-item-title">
-				<p><a href="<?php echo $product['rawdata']['product_url'];?>" class="text-link"><?php echo $product['rawdata']['description'];?></a></p>
+				<p><a href="<?php echo $basket['rawdata']['product_url'];?>" class="text-link"><?php echo $basket['rawdata']['description'];?></a></p>
 			</div>
 			<p class="zero-gaps">
-				&#x20b1; <b><?php echo number_format($product['rawdata']['basket_details']['price']);?></b> / <?php echo $product['rawdata']['basket_details']['measurement'];?> 
+				&#x20b1; <b><?php echo number_format($basket['rawdata']['basket_details']['price']);?></b> / <?php echo $basket['rawdata']['basket_details']['measurement'];?> 
 				<span class="qty-divider">x Quantity: 
-					<input type="number" name="order-qty-input" class="order-qty-input" value="<?php echo $product['quantity'];?>" min="1" max="<?php echo $product['rawdata']['basket_details']['stocks'];?>" js-event="qty" js-price="<?php echo $product['rawdata']['basket_details']['price'];?>" js-id="<?php echo $product['id'];?>" js-fee="<?php echo $product['fee'];?>" />
-				</span> + Shipping fee: &#x20b1; <b><?php echo $product['fee'];?></b>
-			</p>
-			<p class="product-total">
-				Total &#x20b1; <b js-element="itemtotal-<?php echo $product['id'];?>"><?php echo number_format(((int)$product['quantity'] * (float)$product['rawdata']['basket_details']['price']) + (int)$product['fee']);?></b>
+					<input type="number" name="order-qty-input" class="order-qty-input" value="<?php echo $basket['quantity'];?>" min="1" max="<?php echo $basket['rawdata']['basket_details']['stocks'];?>" js-event="qty" js-price="<?php echo $basket['rawdata']['basket_details']['price'];?>" js-id="<?php echo $basket['id'];?>" js-fee="<?php echo $basket['fee'];?>" />
+				</span> Total: &#x20b1; <b js-element="itemtotal-<?php echo $basket['id'];?>"><?php echo number_format((int)$basket['quantity'] * (float)$basket['rawdata']['basket_details']['price']);?></b>
+				<?php if ($last_location_id != $basket['location_id']): ?>
+					<em>(Shipping fee &#x20b1; <b><?php echo $basket['fee'];?></b>)</em>
+				<?php endif ?>
 			</p>
 		</div>
 	</div>

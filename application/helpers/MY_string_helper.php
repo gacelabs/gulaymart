@@ -1294,6 +1294,7 @@ function nearby_products($data=false, $user_id=false)
 								}
 
 								if ($product) {
+									$product['farm_location_id'] = $row['id'];
 									$product['category'] = false;
 									$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
 									if ($category) $product['category'] = $category['label'];
@@ -1327,7 +1328,7 @@ function nearby_products($data=false, $user_id=false)
 									$product['measurement'] = $location['measurement'];
 									$product['stocks'] = $location['stocks'];
 									$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
-									$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.nice_url($product['name'], true));
+									$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.$product['farm_location_id'].'/'.nice_url($product['name'], true));
 									$products[] = $product;
 								}
 							}

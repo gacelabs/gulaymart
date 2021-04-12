@@ -212,6 +212,11 @@ var ajaxSuccessResponse = function(response) {
 		bConfirmed = runAlertBox(response, undefined, bConfirmed);
 	}
 	if (bConfirmed) {
+		setTimeout(function() {
+			if (response && (typeof response.redirect == 'string')) {
+				if (response.redirect) window.location = response.redirect;
+			}
+		}, 3000);
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
@@ -219,11 +224,6 @@ var ajaxSuccessResponse = function(response) {
 				fn(response.data);
 			}
 		}
-		setTimeout(function() {
-			if (response && (typeof response.redirect == 'string')) {
-				if (response.redirect) window.location = response.redirect;
-			}
-		}, 3000);
 	}
 }
 

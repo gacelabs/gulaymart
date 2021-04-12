@@ -16,10 +16,12 @@
 									</div>
 									<div class="order-item-middle">
 										<div class="order-item-list">
-											<?php foreach ($baskets as $location_id => $basket): ?>
-												<?php foreach ($basket as $key => $product): ?>
-													<?php $this->view('looping/basket_item', ['product' => $product]); ?>
-												<?php endforeach ?>
+											<?php
+												$last_location_id = 0; 
+												foreach ($baskets as $key => $basket): ?>
+												<?php $this->view('looping/basket_item', ['basket' => $basket, 'last_location_id' => $last_location_id]); 
+												$last_location_id = $basket['location_id'];
+												?>
 											<?php endforeach ?>
 										</div>
 
@@ -27,9 +29,24 @@
 											<div class="order-item-status">
 												<div class="payment-method-list">
 													<p><b class="text-contrast">PAYMENT METHOD</b></p>
-													<ul class="inline-list">
+													<!-- <ul class="inline-list">
 														<li><label><input type="radio" class="zero-gaps" name="payment_method"> Cash On Delivery</label></li>
-													</ul>
+													</ul> -->
+													<div>
+														<label for="payment_method">
+															<input type="checkbox" id="payment_method" class="zero-gaps" name="payment_method" js-event="payment_method" value="cod"> Cash On Delivery
+															<input type="text" class="form-control input-xs" name="cod" disabled="disabled" placeholder="Enter item(s) price here" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" />
+														</label>
+													</div>
+													<p><b class="text-contrast">Rider will Collect Fee From</b></p>
+													<div style="margin-bottom: 10px;">
+														<label class="zero-gaps">
+															<input type="radio" class="zero-gaps" name="collect_from" value="S"> Me
+														</label>
+														<label class="zero-gaps" style="padding-left: 10px !important;">
+															<input type="radio" class="zero-gaps" name="collect_from" value="R"> Receiver
+														</label>
+													</div>
 												</div>
 											</div>
 											<div class="order-item-status">
@@ -37,31 +54,9 @@
 													<p><b class="text-contrast">ORDER SCHEDULE</b></p>
 													<div style="margin-bottom: 10px;">
 														<label for="deliver_now" class="zero-gaps">
-															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now"> Now
+															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now" checked="checked"> Now
 														</label>
-														<?php
-															$driving_distance = [];
-															foreach ($baskets as $location_id => $basket): ?>
-															<?php foreach ($basket as $key => $product): ?>
-																<?php
-																	$farm_location = $product['rawdata']['farm_location'];
-																	$driving_distance[$location_id] = get_driving_distance([
-																		['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-																		['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-																	]);
-																?>
-															<?php endforeach ?>
-														<?php endforeach;
-															$ETA = 0;
-															if (count($driving_distance)) {
-																foreach ($driving_distance as $key => $drive) {
-																	$ETA += (float)$drive['durationval'];
-																}
-															}
-														?>
-														<?php if ($ETA > 0): ?>
-															<small class="text-gray">(ETA: <?php echo round($ETA / 60, 1);?> mins)</small>
-														<?php endif ?>
+														<small class="text-gray">(ETA: 20 mins)</small>
 													</div>
 													<div>
 														<label for="order_schedule">
@@ -76,21 +71,23 @@
 												<div class="tender-amount-parent">
 													<div class="tender-amount-body">
 														<?php
-															$grand_total = 0;
-															foreach ($baskets as $location_id => $basket): ?>
-															<?php foreach ($basket as $key => $product): 
-																$details = $product['rawdata']['basket_details'];
-																$item_total = (int)$product['quantity'] * (float)$details['price'];
-																$grand_total += $item_total;
-																?>
-																<p class="product-amount zero-gaps">&#x20b1; <b js-elem="sub-itemtotal" js-element="itemtotal-<?php echo $product['id'];?>"><?php echo number_format($item_total);?></b></p>
-															<?php endforeach ?>
-														<?php endforeach ?>
+															$fees_per_farm = [];
+															foreach ($baskets as $key => $basket) {
+																$fees_per_farm[$basket['location_id']] = (float) $basket['fee'];
+															}
+															$shipping_fee = 0;
+															foreach ($fees_per_farm as $location_id => $fee) {
+																$shipping_fee += $fee;
+															}
+															$grand_total = $shipping_fee;
+														?>
 													</div>
+													<hr style="border-color:#aaa;margin:5px 0;">
+													<p class="product-amount zero-gaps"><small class="pull-left">Shipping fee</small>+ &#x20b1; <b js-elem="sub-itemtotal" js-check="shipping"><?php echo number_format($shipping_fee);?></b></p>
 													<hr style="border-color:#aaa;margin:5px 0;">
 													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($grand_total);?></b></h4>
 												</div>
-												<button class="btn btn-contrast btn-block"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
+												<button class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 											</div>
 										</div>
 									</div>

@@ -23,52 +23,34 @@
 						<p class="text-gray zero-gaps"><a href=""><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href=""><?php echo $product['subcategory'];?></a></p>
 					</div>
 					<h1 class="productpage-title"><?php echo $product['name'];?></h1>
-					<?php
-						$prices = $measures = $city = $stocks = [];
-						foreach ($product['latlng'] as $location_id => $location) {
-							$prices[] = $location['price'];
-							$measures[] = $location['measurement'];
-							$city[] = $location['city'];
-							$stocks[] = $location['stocks'];
-						}
-
-						$units = array_unique($measures);
-
-						$to_price = end($prices);
-						$from_price = reset($prices);
-						if ($to_price == $from_price) $to_price = '';
-					?>
 					<h2 class="productpage-price">
-						<span class="text-gray">&#x20b1;</span> <span class="text-contrast"><?php echo $from_price;?></span> 
-						<?php if ($to_price != ''): ?>
-							<span class="text-gray">-</span> <span class="text-contrast"><?php echo $to_price;?></span>
-						<?php endif ?>
+						<span class="text-gray">&#x20b1;</span> <span class="text-contrast"><?php echo number_format($product['basket_details']['price']);?></span> 
+						<!-- <span class="text-gray">-</span> <span class="text-contrast"></span> -->
 					</h2>
 					<hr>
-					<form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter">
-					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post"> -->
+					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter"> -->
+					<form action="basket/add/<?php echo $product['id'];?>" method="post">
+						<input type="hidden" name="baskets[location_id]" value="<?php echo $product['basket_details']['farm_location_id'];?>" />
 						<div class="productpage-basic-grid">
 							<p class="text-gray zero-gaps">UNIT</p>
-							<p><?php echo strtoupper(implode(', ', $units));?></p>
+							<p><?php echo strtoupper($product['basket_details']['measurement']);?></p>
 						</div>
 						<div class="productpage-basic-grid" id="quantity_container">
 							<p class="text-gray zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
 							<div class="productpage-variety">
-								<?php foreach ($product['latlng'] as $location_id => $location): ?>
 								<div class="variety-location">
-									<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $location['city'];?> - <span class="max-qty">Max quantity <?php echo $location['stocks'];?></span></p>
+									<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city'];?> - <span class="max-qty">Max quantity <?php echo $product['basket_details']['stocks'];?></span></p>
 									<div class="input-group">
-										<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $location['price'];?></span></span>
-										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $location['stocks'];?>" name="baskets[<?php echo $location_id;?>][quantity]" required="required" />
+										<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
+										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $product['basket_details']['stocks'];?>" name="baskets[quantity]" required="required" />
 										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[<?php echo $location_id;?>][quantity]" type="button"><i class="fa fa-minus"></i></button>
+											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[quantity]" type="button"><i class="fa fa-minus"></i></button>
 										</span>
 										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="baskets[<?php echo $location_id;?>][quantity]" type="button"><i class="fa fa-plus"></i></button>
+											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="baskets[quantity]" type="button"><i class="fa fa-plus"></i></button>
 										</span>
 									</div>
 								</div>
-								<?php endforeach ?>
 							</div>
 						</div>
 
@@ -166,14 +148,12 @@
 							<li class="visible-sm visible-xs"><i class="fa fa-angle-down text-gray"></i></li>
 						</ul>
 						<div class="productpage-summary-inner" style="margin-top: 5px;">
-							<?php foreach ($product['latlng'] as $location_id => $location): ?>
-								<div class="productpage-summary-grid">
-									<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-									<div>
-										<p class="zero-gaps"><?php echo $location['city_prov'];?></p>
-									</div>
+							<div class="productpage-summary-grid">
+								<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+								<div>
+									<p class="zero-gaps"><?php echo $product['farm_location']['city'];?></p>
 								</div>
-							<?php endforeach ?>
+							</div>
 						</div>
 					</div>
 				</div>
