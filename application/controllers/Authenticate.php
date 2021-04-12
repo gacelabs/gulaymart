@@ -18,10 +18,8 @@ class Authenticate extends MY_Controller {
 		$is_ok = $this->accounts->login($post);
 		$to = '/';
 		sleep(1);
-		$basket_session = $this->session->userdata('basket_session');
-		if ($basket_session AND $this->accounts->profile['is_profile_complete'] == 1) {
-			redirect(base_url('basket/'));
-		} else {
+		$is_basket_session = redirect_basket_orders();
+		if ($is_basket_session == false) {
 			if ($is_ok) {
 				if ($this->accounts->profile['is_profile_complete'] === 0) {
 					$to = 'profile';

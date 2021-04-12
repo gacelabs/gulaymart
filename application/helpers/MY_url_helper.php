@@ -130,3 +130,49 @@ function compute_eta($eta=0)
 	}
 	return NULL;
 }
+
+function redirect_basket_orders()
+{
+	$ci =& get_instance();
+	$basket_session = $ci->session->userdata('basket_session');
+	if ($ci->accounts->has_session) {
+		if ($basket_session AND $ci->accounts->profile['is_profile_complete'] == 1) {
+			redirect(base_url('basket/'));
+		}
+	}
+	return false;
+}
+
+function get_session_baskets()
+{
+	$ci =& get_instance();
+	$basket_session = [];
+	$is_userdata = false;
+	$session_baskets = $ci->session->userdata('basket_session');
+	if ($session_baskets) {
+		$is_userdata = true;
+		$ci->session->unset_userdata('basket_session');
+	} elseif ($ci->accounts->has_session) {
+		$session_baskets = $ci->baskets->get_in(['user_id' => $ci->accounts->profile['id'], 'status' => [0, 1]]);
+	}
+	// debug($session_baskets, 'stop');
+	if (is_array($session_baskets)) {
+		foreach ($session_baskets as $key => $basket) {
+			if ($is_userdata) {
+				$basket['user_id'] = $sessions[$key]['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
+				$id = $ci->gm_db->new('baskets', $basket);
+				$basket['id'] = $sessions[$key]['id'] = $id;
+			}
+			$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+			$driving_distance = get_driving_distance([
+				['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+				['lat' => $ci->latlng['lat'], 'lng' => $ci->latlng['lng']],
+			]);
+			$basket['distance'] = $driving_distance['distanceval'];
+			$basket['duration'] = $driving_distance['durationval'];
+			$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
+		}
+	}
+
+	return $basket_session;
+}

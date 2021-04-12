@@ -7,10 +7,7 @@ class Profile extends MY_Controller {
 
 	public function index($id=false)
 	{
-		$basket_session = $this->session->userdata('basket_session');
-		if ($basket_session AND $this->accounts->profile['is_profile_complete'] == 1) {
-			redirect(base_url('basket/'));
-		}
+		$is_basket_session = redirect_basket_orders();
 		$this->render_page([
 			'top' => [
 				'metas' => [

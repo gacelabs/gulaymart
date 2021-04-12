@@ -17,45 +17,7 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$sessions = $this->session->userdata('basket_session');
-		$basket_session = [];
-		if ($sessions) {
-			// debug($sessions, 'stop');
-			foreach ($sessions as $key => $basket) {
-				$basket['user_id'] = $sessions[$key]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
-				$id = $this->gm_db->new('baskets', $basket);
-				$basket['id'] = $sessions[$key]['id'] = $id;
-				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-				$driving_distance = get_driving_distance([
-					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-				]);
-				$basket['distance'] = $driving_distance['distanceval'];
-				$basket['duration'] = $driving_distance['durationval'];
-				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-			}
-			// debug($basket_session, 'stop');
-			$this->session->unset_userdata('basket_session');
-		} else {
-			/*query the baskets in DB*/
-			if ($this->accounts->has_session) {
-				$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
-				// debug($sessions, 'stop');
-				if (is_array($sessions)) {
-					foreach ($sessions as $key => $basket) {
-						$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-						// debug($basket['rawdata'], 'stop');
-						$driving_distance = get_driving_distance([
-							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-							['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-						]);
-						$basket['distance'] = $driving_distance['distanceval'];
-						$basket['duration'] = $driving_distance['durationval'];
-						$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-					}
-				}
-			}
-		}
+		$basket_session = get_session_baskets();
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
 		}
@@ -279,23 +241,7 @@ class Basket extends My_Controller {
 
 	public function checkout()
 	{
-		$basket_session = [];
-		$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
-		// debug($sessions, 'stop');
-		if (is_array($sessions)) {
-			foreach ($sessions as $key => $basket) {
-				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-				// debug($basket['rawdata'], 'stop');
-				$driving_distance = get_driving_distance([
-					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-				]);
-				$basket['distance'] = $driving_distance['distanceval'];
-				$basket['duration'] = $driving_distance['durationval'];
-				// debug($basket, 'stop');
-				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-			}
-		}
+		$basket_session = get_session_baskets();
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
 		}
