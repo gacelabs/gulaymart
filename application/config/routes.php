@@ -19,7 +19,7 @@ $route['support/help-center'] = 'Support/help_center';
 
 $route['products/(:any)'] = 'Basket/productpage';
 
-$route['place-order'] = 'Basket/place_order';
+$route['checkout'] = 'Basket/checkout';
 
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';

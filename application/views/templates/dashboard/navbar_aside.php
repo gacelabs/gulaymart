@@ -42,7 +42,7 @@
 						<?php endif ?>
 						<div class="aside-nav-child">
 							<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-								<i class="fa fa-pencil"></i>My Veggies
+								<i class="fa fa-pencil"></i>My Veggies <?php if(empty($this->products->count())) {echo "<kbd>New</kbd>";} ?>
 							</a>
 						</div>
 					<?php endif ?>
@@ -50,7 +50,7 @@
 			<?php endif ?>
 			<div class="aside-nav-child">
 				<a href="farm/storefront" class="aside-nav-item hidden-xs <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
-					<i class="fa fa-flag-o"></i>Storefront
+					<i class="fa fa-flag-o"></i>Storefront <?php if(empty($this->farms)) {echo "<kbd>New</kbd>";} ?>
 				</a>
 			</div>
 			<?php if (isset($current_profile['is_agreed_terms']) AND $current_profile['is_agreed_terms']): ?>

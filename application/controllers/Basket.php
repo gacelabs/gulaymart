@@ -181,35 +181,6 @@ class Basket extends My_Controller {
 		]);
 	}
 
-	public function place_order()
-	{
-		$this->render_page([
-			'top' => [
-				'index_page' => 'no',
-				'page_title' => APP_NAME.' | Place Order',
-				'css' => ['static/place-order', ],
-			],
-			'middle' => [
-				'body_class' => ['product-page'],
-				'head' => [
-					'../global/global_navbar',
-				],
-				'body' => [
-					'../static/place_order',
-				],
-				'footer' => [
-					'global/footer'
-				],
-			],
-			'bottom' => [
-				'modals' => [],
-				'js' => [],
-			],
-			'data' => [
-			],
-		]);
-	}
-
 	public function delete()
 	{
 		$post = $this->input->post();
@@ -277,8 +248,31 @@ class Basket extends My_Controller {
 
 	public function checkout()
 	{
-		# code...
->>>>>>> f1a0c7b3076663f1e84f88020068f3bb4dfccc57
+		$this->render_page([
+			'top' => [
+				'index_page' => 'no',
+				'page_title' => APP_NAME.' | Checkout',
+				'css' => ['basket/checkout', ],
+			],
+			'middle' => [
+				'body_class' => ['product-page'],
+				'head' => [
+					'../global/global_navbar',
+				],
+				'body' => [
+					'basket/checkout',
+				],
+				'footer' => [
+					'global/footer'
+				],
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => [],
+			],
+			'data' => [
+			],
+		]);
 	}
 
 	private function book_delivery()
