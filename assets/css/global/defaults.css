@@ -294,6 +294,9 @@ label.error {
 .text-white {
 	color: #fff;
 }
+.text-theme {
+	color: #a8d253;
+}
 .text-contrast, .rm-link {
 	color: #2196F3;
 }

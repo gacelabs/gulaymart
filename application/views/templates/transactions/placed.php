@@ -7,12 +7,12 @@
 		<div class="order-item-middle">
 			<div class="order-item-list">
 				<div class="order-item-inner">
-					<p class="zero-gaps"><b><a href="">Ema and Ava Farm</a></b></p>
+					<p class="zero-gaps">Ema and Ava Farm</p>
 					<div class="order-item-grid">
 						<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
 						<div class="order-info-container">
 							<div class="order-item-title">
-								<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+								<p><a href="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
 							</div>
 							<p class="zero-gaps">&#x20b1; <b>50</b> / bundle x <span class="qty-divider">Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
 							<p class="product-total">Total &#x20b1; <b>150</b></p>
@@ -21,12 +21,12 @@
 				</div>
 
 				<div class="order-item-inner">
-					<p class="zero-gaps"><b><a href="">Mavis and Marcus Plantation</a></b></p>
+					<p class="zero-gaps">Mavis and Marcus Plantation</p>
 					<div class="order-item-grid">
 						<div class="order-item-image" style="background-image: url('assets/images/lettuce-house.jpg');"></div>
 						<div class="order-info-container">
 							<div class="order-item-title">
-								<p><a href="" class="text-link">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
+								<p><a href="">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></p>
 							</div>
 							<p class="zero-gaps">&#x20b1; <b>150</b> / bundle x <span class="qty-divider">Quantity: <b>2</b></span> + Shipping fee: &#x20b1; <b>50</b></p>
 							<p class="product-total">Total &#x20b1; <b>350</b></p>

@@ -19,8 +19,11 @@ $route['support/help-center'] = 'Support/help_center';
 
 $route['products/(:any)'] = 'Basket/productpage';
 
+$route['place-order'] = 'Basket/place_order';
+
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
+
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
