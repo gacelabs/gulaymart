@@ -3,6 +3,7 @@
 class MY_Controller extends CI_Controller {
 
 	public $allowed_methods = [];
+	public $not_allowed_methods = [];
 	public $class_name = FALSE;
 	public $device_id = FALSE;
 	public $no_entry_for_signed_out = TRUE;
@@ -35,6 +36,12 @@ class MY_Controller extends CI_Controller {
 		} else {
 			if (in_array($this->action, $this->allowed_methods)) {
 				$this->no_entry_for_signed_out = $this->ajax_no_entry_for_signed_out = FALSE;
+			}
+		}
+		/*now check again if the not allowed methods exists then do not allow it*/
+		if (count($this->not_allowed_methods)) {
+			if (in_array($this->action, $this->not_allowed_methods)) {
+				$this->no_entry_for_signed_out = $this->ajax_no_entry_for_signed_out = TRUE;
 			}
 		}
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/

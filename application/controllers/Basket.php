@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Basket extends My_Controller {
 
 	public $allowed_methods = 'all';
+	public $not_allowed_methods = ['checkout'];
 
 	public function __construct()
 	{
@@ -20,16 +21,17 @@ class Basket extends My_Controller {
 		$basket_session = [];
 		if ($sessions) {
 			// debug($sessions, 'stop');
-			foreach ($sessions['baskets'] as $key => $basket) {
-				$basket['user_id'] = $sessions['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
+			foreach ($sessions as $key => $basket) {
+				$basket['user_id'] = $sessions[$key]['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 				$id = $this->gm_db->new('baskets', $basket);
-
-				$basket['id'] = $sessions['baskets']['id'] = $id;
+				$basket['id'] = $sessions[$key]['id'] = $id;
 				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
 				$driving_distance = get_driving_distance([
 					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
 					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
 				]);
+				$basket['distance'] = $driving_distance['distanceval'];
+				$basket['duration'] = $driving_distance['durationval'];
 				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 			}
 			// debug($basket_session, 'stop');
@@ -234,12 +236,12 @@ class Basket extends My_Controller {
 					}
 					$this->baskets->save([
 						'quantity' => $row['quantity'],
-						'status' => 1, // verified can be viewed on checkout
+						'status' => $row['checked'], // verified can be viewed on checkout
 						'order_type' => $order_type,
 					], ['id' => $id]);
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding check-out...']);
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding to check-out...']);
 			exit();
 		}
 		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
@@ -248,7 +250,51 @@ class Basket extends My_Controller {
 
 	public function checkout()
 	{
-		# code...
+		$basket_session = [];
+		$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
+		// debug($sessions, 'stop');
+		if (is_array($sessions)) {
+			foreach ($sessions as $key => $basket) {
+				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+				// debug($basket['rawdata'], 'stop');
+				$driving_distance = get_driving_distance([
+					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+				]);
+				$basket['distance'] = $driving_distance['distanceval'];
+				$basket['duration'] = $driving_distance['durationval'];
+				// debug($basket, 'stop');
+				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
+			}
+		}
+		if (count($basket_session)) {
+			// debug($basket_session, 'stop');
+		}
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'basket'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'basket/basket_checkout',
+				],
+			],
+			'bottom' => [
+				'modals' => ['reply_modal'],
+				'js' => [
+					'plugins/jquery.inputmask.min',
+					'plugins/inputmask.binding',
+					'dashboard/main',
+					'basket/main',
+				],
+			],
+			'data' => [
+				'baskets' => $basket_session
+			],
+		]);
 	}
 
 	private function book_delivery()

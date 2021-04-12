@@ -40,18 +40,20 @@ $(document).ready(function() {
 
 		$('[js-element="itemtotal-'+this.dataset.id+'"]').parent('.product-amount').remove();
 		if (this.checked) {
-			oOrdersChecked[this.dataset.id] = {id: parseInt(this.dataset.id), quantity: parseInt(uiQtyField.val())};
+			oOrdersChecked[this.dataset.id] = {id: parseInt(this.dataset.id), checked: 1, quantity: parseInt(uiQtyField.val())};
 			// $(this).parents('.order-item-grid').find('.selected-product-price').text((parseInt(prodPrice) * prodQty) + parseInt(shipFee));
 			var iPrice = Number(parseFloat(this.dataset.price)).toLocaleString();
 			$('.tender-amount-body').append('<p class="product-amount zero-gaps">&#x20b1; <b js-elem="sub-itemtotal" js-element="itemtotal-'+this.dataset.id+'">'+iPrice+'</b></p>');
 		} else {
-			delete oOrdersChecked[this.dataset.id];
+			if (oOrdersChecked[this.dataset.id] != undefined) {
+				oOrdersChecked[this.dataset.id].checked = 0;
+			}
 		}
 		uiQtyField.trigger('input');
 	});
 	setTimeout(function() {
 		$('[js-event="addBasketItemselect"]').trigger('change');
-	}, 1000);
+	}, 700);
 
 	var oSavedData = {};
 	$('[js-event="qty"]').each(function(i, elem) {
