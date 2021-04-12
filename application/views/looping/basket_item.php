@@ -9,7 +9,7 @@
 		</ul>
 		<div class="order-info-container" js-element="order">
 			<div class="order-item-title">
-				<p><a href="<?php echo $product['rawdata']['product_url'];?>" class="text-link"><?php echo ucwords($product['rawdata']['name']);?></a></p>
+				<p><a href="<?php echo $basket['rawdata']['product_url'];?>" class="text-link"><?php echo ucwords($basket['rawdata']['name']);?></a></p>
 			</div>
 			<p class="zero-gaps">
 				&#x20b1; <b><?php echo number_format($basket['rawdata']['basket_details']['price']);?></b> / <?php echo $basket['rawdata']['basket_details']['measurement'];?> 
