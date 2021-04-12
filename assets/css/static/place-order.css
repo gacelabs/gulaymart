@@ -1,0 +1,46 @@
+#place_order {
+	margin: 20px auto;
+}
+.order-summary-top {
+	background-color: #fff;
+	margin-bottom: 15px;
+	padding: 10px;
+}
+.order-summary-top, .order-summary-item-body {
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: 1fr 100px 100px;
+}
+.order-summary-top p {
+	font-family: 'Roboto-bold', sans-serif;
+	margin: 0;
+}
+.order-item-image {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    height: 70px;
+    width: 70px;
+}
+.order-summary-item-parent {
+	background-color: #fff;
+	margin-bottom: 20px;
+}
+.order-summary-item-parent:last-child {
+	margin-bottom: 0;
+}
+.order-summary-item-body {
+	border-left: 3px solid #2196F3;	
+	padding: 10px;
+}
+.order-summary-product-info {
+	display: grid;
+	grid-template-columns: 70px 1fr;
+	grid-gap: 10px;
+}
+.order-summary-sold-by {
+	background-color: #e2e2e2;
+	border-left: 3px solid #2196F3;	
+	padding: 10px;
+}

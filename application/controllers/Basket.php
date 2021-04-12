@@ -183,6 +183,35 @@ class Basket extends My_Controller {
 		]);
 	}
 
+	public function place_order()
+	{
+		$this->render_page([
+			'top' => [
+				'index_page' => 'no',
+				'page_title' => APP_NAME.' | Place Order',
+				'css' => ['static/place-order', ],
+			],
+			'middle' => [
+				'body_class' => ['product-page'],
+				'head' => [
+					'../global/global_navbar',
+				],
+				'body' => [
+					'../static/place_order',
+				],
+				'footer' => [
+					'global/footer'
+				],
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => [],
+			],
+			'data' => [
+			],
+		]);
+	}
+
 	public function delete()
 	{
 		$post = $this->input->post();

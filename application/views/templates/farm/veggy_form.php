@@ -260,7 +260,7 @@
 						<div class="dashboard-panel-middle">
 							<div>
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main photo for your product.</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">

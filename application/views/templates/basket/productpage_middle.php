@@ -155,7 +155,9 @@
 								<div id="farm_identity">
 									<ul class="grid-list half">
 										<li class="text-left">
-											<h1 class="farm_name"><?php echo $farm['name'];?></h1>
+											<div class="ellipsis-container">
+												<h1 class="farm_name"><?php echo $farm['name'];?></h1>
+											</div>
 											<h4 class="tagline"><?php echo $farm['tagline'];?></h4>
 										</li>
 										<li class="text-right">

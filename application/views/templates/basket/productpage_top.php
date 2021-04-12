@@ -9,9 +9,11 @@
 					<div class="img-thumb-container">
 						<ul class="inline-list" id="img_thumb_list">
 							<li><div class="img-thumb-item active" style="background-image: url('<?php echo $product['photos']['main']['url_path'];?>');"></div></li>
-							<?php foreach ($product['photos']['other'] as $key => $photo): ?>
-								<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
-							<?php endforeach ?>
+							<?php if (isset($product['photos']['other']) AND $product['photos']['other']): ?>
+								<?php foreach ($product['photos']['other'] as $key => $photo): ?>
+									<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
+								<?php endforeach ?>
+							<?php endif ?>
 						</ul>
 					</div>
 					<?php endif ?>
@@ -55,7 +57,7 @@
 						</div>
 
 						<div class="add-basket-btn">
-							<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left"></i>Add to Basket</button>
+							<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
 							<a href="basket" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;">Buy Now</a>
 						</div>
 					</form>

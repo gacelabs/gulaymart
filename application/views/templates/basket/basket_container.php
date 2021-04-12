@@ -1,6 +1,6 @@
 <div id="dashboard_panel_right">
 	<div class="row">
-		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+		<div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme" id="link_panel_top">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><a href="basket/" class="hideshow-btn active"><h4 class="zero-gaps">My Basket</h4></a></li>
