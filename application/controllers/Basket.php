@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Basket extends My_Controller {
 
 	public $allowed_methods = 'all';
+	public $not_allowed_methods = ['checkout'];
 
 	public function __construct()
 	{
@@ -16,44 +17,7 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$sessions = $this->session->userdata('basket_session');
-		$basket_session = [];
-		if ($sessions) {
-			// debug($sessions, 'stop');
-			foreach ($sessions['baskets'] as $key => $basket) {
-				$basket['user_id'] = $sessions['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
-				$id = $this->gm_db->new('baskets', $basket);
-
-				$basket['id'] = $sessions['baskets']['id'] = $id;
-				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-				$driving_distance = get_driving_distance([
-					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-				]);
-				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-			}
-			// debug($basket_session, 'stop');
-			$this->session->unset_userdata('basket_session');
-		} else {
-			/*query the baskets in DB*/
-			if ($this->accounts->has_session) {
-				$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
-				// debug($sessions, 'stop');
-				if (is_array($sessions)) {
-					foreach ($sessions as $key => $basket) {
-						$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-						// debug($basket['rawdata'], 'stop');
-						$driving_distance = get_driving_distance([
-							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-							['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-						]);
-						$basket['distance'] = $driving_distance['distanceval'];
-						$basket['duration'] = $driving_distance['durationval'];
-						$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-					}
-				}
-			}
-		}
+		$basket_session = get_session_baskets();
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
 		}
@@ -234,12 +198,12 @@ class Basket extends My_Controller {
 					}
 					$this->baskets->save([
 						'quantity' => $row['quantity'],
-						'status' => 1, // verified can be viewed on checkout
+						'status' => $row['checked'], // verified can be viewed on checkout
 						'order_type' => $order_type,
 					], ['id' => $id]);
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding check-out...']);
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding to check-out...']);
 			exit();
 		}
 		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
@@ -248,6 +212,10 @@ class Basket extends My_Controller {
 
 	public function checkout()
 	{
+		$basket_session = get_session_baskets();
+		if (count($basket_session)) {
+			// debug($basket_session, 'stop');
+		}
 		$this->render_page([
 			'top' => [
 				'index_page' => 'no',
@@ -271,6 +239,7 @@ class Basket extends My_Controller {
 				'js' => [],
 			],
 			'data' => [
+				'baskets' => $basket_session
 			],
 		]);
 	}

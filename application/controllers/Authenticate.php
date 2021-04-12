@@ -18,18 +18,21 @@ class Authenticate extends MY_Controller {
 		$is_ok = $this->accounts->login($post);
 		$to = '/';
 		sleep(1);
-		if ($is_ok) {
-			if ($this->accounts->profile['is_profile_complete'] === 0) {
-				$to = 'profile';
+		$is_basket_session = redirect_basket_orders();
+		if ($is_basket_session == false) {
+			if ($is_ok) {
+				if ($this->accounts->profile['is_profile_complete'] === 0) {
+					$to = 'profile';
+				} else {
+					$to = $this->session->userdata('referrer') ?: 'farm/';
+				}
 			} else {
-				$to = $this->session->userdata('referrer') ?: 'farm/';
+				$to = '?error=Invalid credentials';
 			}
-		} else {
-			$to = '?error=Invalid credentials';
+			// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
+			$this->session->unset_userdata('referrer');
+			redirect(base_url($to));
 		}
-		// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
-		$this->session->unset_userdata('referrer');
-		redirect(base_url($to));
 	}
 
 	public function register($id=false)

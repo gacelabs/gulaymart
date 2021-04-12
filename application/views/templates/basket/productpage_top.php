@@ -30,8 +30,8 @@
 						<!-- <span class="text-gray">-</span> <span class="text-contrast"></span> -->
 					</h2>
 					<hr>
-					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter"> -->
-					<form action="basket/add/<?php echo $product['id'];?>" method="post">
+					<form action="basket/add/<?php echo $product['id'];?>" method="post" class="form-validate" data-ajax="1" data-disable="enter">
+					<!-- <form action="basket/add/<?php echo $product['id'];?>" method="post"> -->
 						<input type="hidden" name="baskets[location_id]" value="<?php echo $product['basket_details']['farm_location_id'];?>" />
 						<div class="productpage-basic-grid">
 							<p class="text-gray zero-gaps">UNIT</p>
