@@ -1,18 +1,25 @@
 $(document).ready(function() {
+	var oOrderType = {};
+	$('.order-item-image').click(function() {
+		$(this).parent().prev().find('[js-event="addBasketItemselect"]').trigger('click');
+	});
 	$('[js-event="deliveryDate"]').click(function() {
+		oOrderType['type'] = $(this).val();
 		if ($(this).val() == "deliver_now") {
 			$('input[name="delivery_date"]').attr('disabled', true).attr('value', '').val('');
 		} else {
 			$('input[name="delivery_date"]').removeAttr('disabled').prop('required', true);
+			$('input[name="delivery_date"]').off('change').on('change', function(e) {
+				oOrderType['date'] = $(e.target).val();
+			});
 		}
 	});
-	$('[js-event="payment_method"]').click(function() {
-		if ($(this).is(':checked')) {
-			$('input[name="cod"]').removeAttr('disabled').prop('required', true);
-		} else {
-			$('input[name="cod"]').attr('disabled', true).attr('value', '').val('');
-		}
-	});
+	if ($('[js-event="deliveryDate"]').val() == "deliver_now") {
+		oOrderType['type'] = 'deliver_now';
+	} else if ($('[js-event="deliveryDate"]').val() == "deliver_scheduled") {
+		oOrderType['type'] = 'deliver_scheduled';
+		oOrderType['date'] = $('input[name="delivery_date"]').val();
+	}
 
 	var oOrdersChecked = {};
 	$('[js-event="addBasketItemselect"]').bind('change', function() {
@@ -42,6 +49,9 @@ $(document).ready(function() {
 		}
 		uiQtyField.trigger('input');
 	});
+	setTimeout(function() {
+		$('[js-event="addBasketItemselect"]').trigger('change');
+	}, 1000);
 
 	var oSavedData = {};
 	$('[js-event="qty"]').each(function(i, elem) {
@@ -125,7 +135,10 @@ $(document).ready(function() {
 	$('[js-element="checkout"]').bind('click', function(e) {
 		e.preventDefault();
 		if (Object.keys(oOrdersChecked).length) {
-			simpleAjax('basket/checkout', oOrdersChecked, $(e.target));
+			var oData = {data: oOrdersChecked};
+			$.extend( oData, oOrderType );
+			console.log(oData);
+			simpleAjax('basket/verify', oData, $(e.target));
 		}
 	});
 
@@ -133,7 +146,7 @@ $(document).ready(function() {
 
 var oRemoveAjax = false;
 var removeBasketItem = function(post) {
-	console.log(post);
+	// console.log(post);
 	if (Object.keys(post).length) {
 		var oSettings = {
 			url: 'basket/delete/',
@@ -154,7 +167,7 @@ var removeBasketItem = function(post) {
 }
 
 var removeOnBasket = function(obj) {
-	console.log(obj);
+	// console.log(obj);
 	if (Object.keys(obj).length) {
 		$.each(obj, function(i, data) {
 			var ui = $('[js-event="addBasketItemselect"][data-id="'+data.id+'"]:checked');

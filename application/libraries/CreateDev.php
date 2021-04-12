@@ -662,6 +662,11 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'fee' => [
+				'type' => 'INT',
+				'default' => '0',
+				'null' => false,
+			],
 			'status' => [
 				'type' => 'TINYINT',
 				'constraint' => '2',

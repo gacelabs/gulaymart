@@ -23,8 +23,13 @@ class Basket extends My_Controller {
 			foreach ($sessions['baskets'] as $key => $basket) {
 				$basket['user_id'] = $sessions['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
 				$id = $this->gm_db->new('baskets', $basket);
+
 				$basket['id'] = $sessions['baskets']['id'] = $id;
 				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+				$driving_distance = get_driving_distance([
+					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+					['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+				]);
 				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 			}
 			// debug($basket_session, 'stop');
@@ -32,11 +37,18 @@ class Basket extends My_Controller {
 		} else {
 			/*query the baskets in DB*/
 			if ($this->accounts->has_session) {
-				$sessions = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => 0]);
+				$sessions = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [0, 1]]);
 				// debug($sessions, 'stop');
 				if (is_array($sessions)) {
 					foreach ($sessions as $key => $basket) {
 						$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+						// debug($basket['rawdata'], 'stop');
+						$driving_distance = get_driving_distance([
+							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+							['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+						]);
+						$basket['distance'] = $driving_distance['distanceval'];
+						$basket['duration'] = $driving_distance['durationval'];
 						$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 					}
 				}
@@ -176,7 +188,7 @@ class Basket extends My_Controller {
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
 			foreach ($post['data'] as $key => $row) {
-				$this->baskets->save(['status' => 4], $row); /*cancelled*/
+				$this->baskets->save(['status' => 5], $row); /*cancelled*/
 			}
 			$this->set_response('success', 'Product removed in basket', $post['data'], 'basket/', 'removeOnBasket');
 		} elseif ($get AND isset($get['data'])) {
@@ -186,13 +198,57 @@ class Basket extends My_Controller {
 		$this->set_response('error', remove_multi_space('Unable to delete '.$name.' product'), $post);
 	}
 
+	public function verify()
+	{
+		/*
+		 * status:
+		 * 1 = verified (checkout page)
+		 * 2 = placed
+		 * 3 = on delivery
+		 * 4 = received
+		 * 5 = cancelled
+		*/
+		$post = $this->input->post();
+		if ($post AND isset($post['data'])) {
+			// debug($post, 'stop');
+			$ids = array_keys($post['data']);
+			$baskets = $this->baskets->get_in(['id' => $ids]);
+			// debug($baskets, 'stop');
+			foreach ($post['data'] as $id => $row) {
+				$basket = $this->baskets->get(['id' => $id], true);
+				// debug($basket, 'stop');
+				if ($basket) {
+					$order_type = 1; 
+					if ($post['type'] != 'deliver_now') {
+						$order_type = 2;
+						/*compute date range between the ETA*/
+						$etas = [];
+						foreach ($baskets as $key => $bskt) {
+							$etas[$bskt['location_id']] = (float) $bskt['duration'];
+						}
+						$eta_duration = 0;
+						foreach ($etas as $location_id => $duration) {
+							$eta_duration += $duration;
+						}
+						$eta = $eta_duration;
+					}
+					$this->baskets->save([
+						'quantity' => $row['quantity'],
+						'status' => 1, // verified can be viewed on checkout
+						'order_type' => $order_type,
+					], ['id' => $id]);
+				}
+			}
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding check-out...']);
+			exit();
+		}
+		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
+		exit();
+	}
+
 	public function checkout()
 	{
-		$post = $this->input->post();
-		if ($post) {
-			debug($post, 'stop');
-		}
-		$this->set_response('error', 'Unable to proceed in checkout', $post);
+		# code...
 	}
 
 	private function book_delivery()

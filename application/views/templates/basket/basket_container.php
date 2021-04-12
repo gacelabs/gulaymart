@@ -52,17 +52,28 @@
 											<div class="order-item-status">
 												<div class="order-schedule-list">
 													<p><b class="text-contrast">ORDER SCHEDULE</b></p>
+													<?php
+														$etas = [];
+														foreach ($baskets as $key => $basket) {
+															$etas[$basket['location_id']] = (float) $basket['duration'];
+														}
+														$eta_duration = 0;
+														foreach ($etas as $location_id => $duration) {
+															$eta_duration += $duration;
+														}
+														$eta = $eta_duration;
+													?>
 													<div style="margin-bottom: 10px;">
 														<label for="deliver_now" class="zero-gaps">
 															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now" checked="checked"> Now
 														</label>
-														<small class="text-gray">(ETA: 20 mins)</small>
+														<small class="text-gray">(<?php echo compute_eta($eta);?>)</small>
 													</div>
 													<div>
 														<label for="order_schedule">
-															<input type="radio" id="order_schedule" class="zero-gaps" name="order_schedule" js-event="deliveryDate"> Schedule
+															<input type="radio" id="order_schedule" class="zero-gaps" name="order_schedule" js-event="deliveryDate" value="deliver_scheduled"> Scheduled
 														</label>
-														<small class="text-gray">ETA: Unspecified</small>
+														<small class="text-gray"><!-- ETA: Unspecified --></small>
 														<input type="date" class="form-control" name="delivery_date" min="<?php echo date("Y-m-d"); ?>" disabled="disabled" />
 													</div>
 												</div>

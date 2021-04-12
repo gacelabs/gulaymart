@@ -129,14 +129,24 @@ class DevBuild extends CI_Controller {
 			'products_photo',
 			'products_attribute',
 			'baskets' => [
-				'fee' => [
+				'order_type' => [
 					'definition' => [
-						'type' => 'INT',
-						'default' => '0',
+						'type' => 'TINYINT',
+						'constraint' => '2',
+						'default' => '1',
 						'null' => false,
 					],
-					'after' => 'quantity'
-				]
+					'after' => 'status'
+				],
+				'date_range' => [
+					'definition' => [
+						'type' => 'VARCHAR',
+						'constraint' => '100',
+						'default' => NULL,
+						'null' => true,
+					],
+					'after' => 'order_type'
+				],
 			],
 			'attributes',
 			'attribute_values',

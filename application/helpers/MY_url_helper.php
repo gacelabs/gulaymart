@@ -98,3 +98,35 @@ function toktok_price_directions_format($data=false)
 	];
 	return $pricing;
 }
+
+function compute_eta($eta=0)
+{
+	// $time = gmdate("g:i:s", $eta);
+	$time = gmdate("g:i", $eta);
+	$chunks = array_map('trim', explode(':', $time));
+	$duration = [];
+	foreach ($chunks as $key => $value) {
+		switch ($key) {
+			case '0':
+				if ($value > 0) {
+					$duration[] = $value.' hr'.($value > 1 ? 's' : '');
+				}
+				break;
+			case '1':
+				if ($value > 0) {
+					$duration[] = $value.' min'.($value > 1 ? 's' : '');
+				}
+				break;
+			case '2':
+				if ($value > 0) {
+					$duration[] = $value.' sec'.($value > 1 ? 's' : '');
+				}
+				break;
+		}
+	}
+	// debug($chunks, $duration, 'stop');
+	if (count($duration)) {
+		return 'ETA: '.implode(' ', $duration);
+	}
+	return NULL;
+}
