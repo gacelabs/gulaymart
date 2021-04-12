@@ -12,7 +12,7 @@
 					<div class="input-group">
 						<input type="file" class="form-control input_upload_images" name="galleries[]" required="required" multiple>
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
+							<button class="btn btn-default" type="button">Open<i class="fa fa-folder-open-o icon-right"></i></button>
 						</span>
 					</div>
 					<ul class="inline-list preview_images_selected">

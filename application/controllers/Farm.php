@@ -217,6 +217,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
+					'modals' => ['veggy_form_help_modal'],
 					'js' => [
 						'plugins/jquery.inputmask.min',
 						'plugins/inputmask.binding',
@@ -328,6 +329,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
+					'modals' => ['veggy_form_help_modal'],
 					'js' => [
 						'plugins/jquery.inputmask.min',
 						'plugins/inputmask.binding',
@@ -441,7 +443,7 @@ class Farm extends MY_Controller {
 					],
 				],
 				'bottom' => [
-					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'media_modal', 'farm_location_help_modal'],
+					'modals' => ['farmer_terms_modal', 'farm_location_modal', 'storefront_help_modal', 'media_modal'],
 					'js' => [
 						'plugins/chosen/new-chosen',
 						'plugins/ImageSelect.jquery',

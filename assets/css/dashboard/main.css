@@ -162,6 +162,7 @@
 		z-index: 10;
 	}
 	#dashboard_nav_container {
+		background-color: #fff;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
@@ -207,12 +208,16 @@
 		background-color: #fff;
 		bottom: 38px;
 		box-shadow: -2px -3px 14px 2px rgb(0 0 0 / 15%);
-		right: -1000px;
+		bottom: -500px;
 		transition: all .3s ease-in-out;
 		position: fixed;
+		right: 0;
+		visibility: hidden;
+		z-index: -2;
 	}
 	#navbar_farm_menu_container.active {
-		right: 0;
+		bottom: 38px;
+		visibility: visible;
 	}
 	#navbar_farm_menu_container .aside-nav-item {
 		text-align: left;

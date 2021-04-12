@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5 {
 }
 .center-panel-md {
 	margin: 0 auto;
-	width: 800px;
+	max-width: 800px;
 }
 .carousel-inner img {
 	width: 100%;
@@ -40,6 +40,26 @@ h1, h2, h3, h4, h5 {
 }
 .text-upper {
 	text-transform: uppercase;
+}
+.text-danger {
+	color: #e43232;
+}
+.text-step-basic {
+	background-color: #fff;
+	padding: 15px 15px 15px 11px;
+	border-left: 4px solid #e43232;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0px 1px 6px 1px rgb(0 0 0 / 15%);
+	display: grid;
+	grid-template-columns: 20px 1fr;
+	grid-gap: 10px;
+	margin-bottom: 15px;
+}
+.text-step-basic i.fa {
+	color: #e43232;
 }
 textarea {
 	box-shadow: none !important;
