@@ -4,15 +4,16 @@
 
 	<div class="row hidden-xs" id="storefront">
 		<?php if ($current_profile AND (isset($current_profile['is_agreed_terms']) AND !$current_profile['is_agreed_terms'])): ?>
-			<div class="center-panel-md">
-				<div class="dashboard-panel">
-					<div class="dashboard-panel-top">
-						<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
-						<p>On this page, you can build your very own online store! Showcase your products in a nice, clean and professional looking e-commerce website.</p>
-						<p>Get discovered by the Gulaymart community by sharing your farm stories, posting videos or photos and more!</p>
-						<div class="text-center">
-							<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's get started<i class="fa fa-angle-right icon-right"></i></button>
-							<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
+			<div class="col-lg-12">
+				<div class="center-panel-md">
+					<div class="dashboard-panel">
+						<div class="dashboard-panel-top">
+							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
+							<p>Customize your Farm online store, upload photos and videos, share your stories and more!</p>
+							<div class="zero-gaps">
+								<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's go!<i class="fa fa-angle-right icon-right"></i></button>
+								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -64,7 +65,7 @@
 								<div class="custom-item-child">
 									<div class="form-group">
 										<label for="farm_name">Farm name</label>
-										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters.</small>
+										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters. <span class="text-link" data-toggle="modal" data-target="#farm_identity_help">Need HELP?</span></small>
 										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>">
 									</div>
 									<div class="form-group">
@@ -119,7 +120,7 @@
 									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
-									<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">Help</span></small>
+									<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">Need HELP?</span></small>
 									<div id="location_container">
 										<div class="input-group hide" id="clone_me">
 											<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly">

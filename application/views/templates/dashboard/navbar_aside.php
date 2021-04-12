@@ -61,11 +61,13 @@
 						</a>
 					</div>
 				<?php endif ?>
-				<div class="aside-nav-child">
-					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
-						<i class="fa fa-cog"></i>Settings
-					</a>
-				</div>
+				<?php if (!empty($this->farms)): ?>
+					<div class="aside-nav-child">
+						<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
+							<i class="fa fa-cog"></i>Settings
+						</a>
+					</div>
+				<?php endif ?>
 			<?php endif ?>
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
 				<i class="fa fa-sign-out" style="background-color:#cacaca;"></i>Sign out

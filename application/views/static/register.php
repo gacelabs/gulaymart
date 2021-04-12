@@ -27,15 +27,20 @@
 				</div>
 				<div class="register-footer">
 					<ul class="spaced-list between">
-						<li><a href="<?php echo base_url(); ?>" class="btn btn-default" style="border:none;">Marketplace</a></li>
+						<li><a href="" class="text-link" style="border:none;">Marketplace</a></li>
 						<?php if ($current_profile): ?>
-							<li><a href="<?php echo base_url('dashboard');?>" class="btn btn-default" style="border:none;">Dashboard</a></li>
+							<li><a href="profile/" class="text-link" style="border:none;">Dashboard</a></li>
 						<?php else: ?>
-							<li><p class="btn btn-default" data-toggle="modal" data-target="#login_modal" style="border:none;">Log In</p></li>
+							<li><p class="text-link" data-toggle="modal" data-target="#login_modal" style="border:none;">Log In</p></li>
 						<?php endif ?>
 					</ul>
 				</div>
 			</form>
+			<div>
+			</div>
+		</div>
+		<div class="terms-container">
+			<a href="#"><small>Terms and Use</small></a>
 		</div>
 	</div>
 </div>

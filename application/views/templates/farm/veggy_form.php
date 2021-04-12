@@ -28,14 +28,16 @@
 							<input type="hidden" name="pos" value="0">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="input-container">
-								<label for="product_name">Product name</label>
+								<div>
+									<label for="product_name">Product name</label>
+									<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
+								</div>
 								<div class="input-group">
 									<input type="text" class="form-control" id="product_name" name="products[name]" required="required" placeholder="Example: Fresh & Organic Romaine Lettuce [Per kilo]" value="<?php check_value('name', $data['product']);?>">
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button" id="prod_name_checker"><i class="fa fa-chevron-right color-theme"></i></button>
 									</span>
 								</div>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 							</div>
 							<div class="input-container<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
@@ -95,7 +97,7 @@
 
 				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-1">
 					<div class="dashboard-panel-middle">
-						<div style="margin-bottom:15px;">
+						<div>
 							<label>Product attributes</label>
 							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
@@ -141,13 +143,13 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product Pricing (Location based)</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand.</small>
+							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">Need HELP?</span></small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
-								<div class="col-lg-12">
+								<div class="col-lg-12 text-caps">
 									<?php if ($this->farm_locations): ?>
 										<?php foreach ($this->farm_locations as $location): ?>
 											<div class="row" id="farmlocation-<?php echo $location['id'];?>">
@@ -167,7 +169,7 @@
 												<div class="col-lg-4 text-right">
 													<label class="switch">
 														<?php if ($data['is_edit'] == false): ?>
-															<input type="checkbox" name="products_location[<?php echo $location['id'];?>][farm_location_id]" required="required" value="<?php echo $location['id'];?>" js-event="new-set" />
+															<input type="checkbox" name="products_location[<?php echo $location['id'];?>][farm_location_id]" value="<?php echo $location['id'];?>" js-event="new-set" />
 														<?php else: ?>
 															<input type="checkbox" name="products_location[<?php echo $location['id'];?>][farm_location_id]" value="<?php echo $location['id'];?>" js-event="add-set"<?php echo $checked;?> />
 														<?php endif ?>
@@ -184,7 +186,7 @@
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 													<div class="input-group">
 														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
-														<input type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" required="required" value="<?php echo $price;?>">
+														<input type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" value="<?php echo $price;?>">
 													</div>
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -205,7 +207,7 @@
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 													<div class="input-group">
 														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
-														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" required="required" value="<?php echo $stocks;?>">
+														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" value="<?php echo $stocks;?>">
 													</div>
 												</div>
 											</div>
@@ -228,7 +230,7 @@
 
 				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-3">
 					<div class="dashboard-panel-middle">
-						<div style="margin-bottom:15px;">
+						<div>
 							<label>Short description</label>
 							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
@@ -256,15 +258,15 @@
 					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
 						<div class="dashboard-panel-middle">
-							<div style="margin-bottom:15px;">
+							<div>
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main cover image of your product.</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once (max 5). Then select the main photo for your product.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
 								<input type="file" class="form-control input_upload_images" name="products_photo[]"<?php if ($data['is_edit'] == false): ?> required="required"<?php endif ?> multiple>
 								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
+									<button class="btn btn-default" type="button">Select<i class="fa fa-folder-open-o icon-right"></i></button>
 								</span>
 							</div>
 							<?php if ($data['is_edit']): ?>

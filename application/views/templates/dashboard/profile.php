@@ -169,7 +169,10 @@
 								</div>
 							<?php endforeach ?>
 						<?php else: ?>
-							<p>Follow the <b>steps</b> bellow to save a shipping address.</p>
+							<div class="text-step-basic">
+								<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
+								<p class="zero-gaps">Follow the <b class="text-contrast">Steps</b> bellow to save a shipping address.</p>
+							</div>
 						<?php endif; ?>
 					</div>
 				</div>

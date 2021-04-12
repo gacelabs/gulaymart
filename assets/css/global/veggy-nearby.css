@@ -63,7 +63,7 @@
 		transform: none;
 	}
 	#veggy_nearby_right_container {
-		grid-template-columns: 150px 150px 150px 150px;
+		grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr);
 		white-space: nowrap;
 		overflow-x: auto;
 	}
