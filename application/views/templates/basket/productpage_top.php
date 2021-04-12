@@ -144,20 +144,24 @@
 							</div>
 						</div>
 					</div>
+					<?php if ($product['barns']): ?>
 					<div class="productpage-summary-parent productpage-sold-by">
 						<ul class="spaced-list between condition-collapser">
 							<li><p style="margin-top:0;font-size:11px;" class="text-gray">FARM LOCATIONS</p></li>
 							<li class="visible-sm visible-xs"><i class="fa fa-angle-down text-gray"></i></li>
 						</ul>
 						<div class="productpage-summary-inner" style="margin-top: 5px;">
-							<div class="productpage-summary-grid">
-								<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
-								<div>
-									<p class="zero-gaps"><?php echo $product['farm_location']['city'];?></p>
+							<?php foreach ($product['barns'] as $key => $barn): ?>
+								<div class="productpage-summary-grid">
+									<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
+									<div>
+										<p class="zero-gaps"><?php echo $barn['city'];?></p>
+									</div>
 								</div>
-							</div>
+							<?php endforeach ?>
 						</div>
 					</div>
+					<?php endif ?>
 				</div>
 			</div>
 		</div>
