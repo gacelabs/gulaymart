@@ -673,6 +673,18 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'order_type' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '1',
+				'null' => false,
+			],
+			'date_range' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => NULL,
+				'null' => true,
+			],
 			'rawdata' => [
 				'type' => 'LONGTEXT',
 				'default' => NULL,
@@ -806,6 +818,44 @@ class CreateDev {
 			['attribute_id' => 5, 'value' => 'Packaged in a regular plastic bag.'],
 		];
 		$this->class->db->insert_batch('attribute_values', $attribute_values);
+
+		return $table_data;
+	}
+
+	public function create_basket_for_toktok_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'basket_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
+			'toktok_data' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'queue_status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('basket_id');
+		$table_data = $this->class->dbforge->create_table('basket_for_toktok', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
 
 		return $table_data;
 	}

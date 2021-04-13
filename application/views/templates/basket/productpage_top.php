@@ -58,7 +58,7 @@
 
 						<div class="add-basket-btn">
 							<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
-							<a href="basket" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;">Buy Now</a>
+							<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">Buy Now</a>
 						</div>
 					</form>
 				</div>

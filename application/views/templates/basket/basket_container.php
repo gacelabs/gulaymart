@@ -17,12 +17,15 @@
 									<div class="order-item-middle">
 										<div class="order-item-list">
 											<?php
-												$last_location_id = 0; 
-												foreach ($baskets as $key => $basket): ?>
-												<?php $this->view('looping/basket_item', ['basket' => $basket, 'last_location_id' => $last_location_id]); 
-												$last_location_id = $basket['location_id'];
-												?>
-											<?php endforeach ?>
+												$last_location_id = 0;
+												foreach ($baskets as $key => $basket) {
+													$this->view('looping/basket_item', [
+														'basket' => $basket,
+														'last_location_id' => $last_location_id
+													]);
+													$last_location_id = $basket['location_id'];
+												}
+											?>
 										</div>
 
 										<div class="tender-amount-grid">
@@ -82,23 +85,16 @@
 												<div class="tender-amount-parent">
 													<div class="tender-amount-body">
 														<?php
-															$fees_per_farm = [];
-															foreach ($baskets as $key => $basket) {
-																$fees_per_farm[$basket['location_id']] = (float) $basket['fee'];
-															}
-															$shipping_fee = 0;
-															foreach ($fees_per_farm as $location_id => $fee) {
-																$shipping_fee += $fee;
-															}
-															$grand_total = $shipping_fee;
+															$sub_total = 0;
+															$shipping_fee = compute_summary($baskets, $sub_total);
 														?>
 													</div>
 													<hr style="border-color:#aaa;margin:5px 0;">
 													<p class="product-amount zero-gaps"><small class="pull-left">Shipping fee</small>+ &#x20b1; <b js-elem="sub-itemtotal" js-check="shipping"><?php echo number_format($shipping_fee);?></b></p>
 													<hr style="border-color:#aaa;margin:5px 0;">
-													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($grand_total);?></b></h4>
+													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($sub_total);?></b></h4>
 												</div>
-												<button class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
+												<a href="basket/checkout" class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></a>
 											</div>
 										</div>
 									</div>

@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Basket extends My_Controller {
 
 	public $allowed_methods = 'all';
-	public $not_allowed_methods = ['checkout'];
+	public $not_allowed_methods = ['checkout', 'place_order'];
 
 	public function __construct()
 	{
@@ -50,65 +50,36 @@ class Basket extends My_Controller {
 
 	public function add($product_id=0)
 	{
-		$post = $this->input->post() ?: $this->input->get();
-		if ($post AND $product_id) {
-			if (isset($post['baskets'])) {
-				$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
-
-				$product = $this->products->product_by_farm_location($product_id, $post['baskets']['location_id']);
-				// debug($post['baskets'], $product, 'stop');
-				if ($product) {
-					$post['baskets']['product_id'] = $product_id;
-					$post['baskets']['user_id'] = $this->accounts->has_session ? $this->accounts->profile['id'] : 0;
-					$post['baskets']['at_date'] = $timestamp;
-					$post['baskets']['at_time'] = $time;
-					$post['baskets']['rawdata'] = base64_encode(json_encode($product));
-
-					$check_basket = $this->gm_db->get('baskets', [
-						'product_id' => $post['baskets']['product_id'],
-						'user_id' => $post['baskets']['user_id'],
-						'location_id' => $post['baskets']['location_id'],
-						'at_date' => $post['baskets']['at_date'],
-					], 'row');
-
-					$post['baskets']['fee'] = 0;
-					if ($check_basket) {
-						$post['baskets']['fee'] = $check_basket['fee'];
-					} else {
-						/*get toktok fee if not existing in baskets table*/
-						$pricing = toktok_price_directions_format([
-							'sender_lat' => $product['farm_location']['lat'],
-							'sender_lng' => $product['farm_location']['lng'],
-							'receiver_lat' => $this->latlng['lat'],
-							'receiver_lng' => $this->latlng['lng'],
-						]);
-						$this->load->library('toktokapi');
-						$this->toktokapi->app_request('price_and_directions', $pricing);
-						if ($this->toktokapi->success) {
-							$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
-							$post['baskets']['fee'] = $price_and_directions['price'];
-						}
-					}
-					// debug($post['baskets'], 'stop');
-					/*check if the user is logged in if false save post to session*/
-					if ($this->accounts->has_session == false) {
-						$this->session->set_userdata('basket_session', $post);
-						$message = 'Item added to basket, Redirecting to the registration / login page!';
-						$redirect = base_url('register');
-					} else {
-						/*save the add basket session in DB*/
-						if ($check_basket) {
-							$quantity = $check_basket['quantity'] + (int)$post['baskets']['quantity'];
-							$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $check_basket['id']]);
-						} else {
-							$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
-						}
-						$message = 'Item added to basket!';
-						$redirect = false;
-					}
-					$this->set_response('success', $message, $post, $redirect);
-				}
+		$data = $this->input->post() ?: $this->input->get();
+		$post = add_item_to_basket($data, $product_id);
+		// debug($post, 'stop');
+		if (isset($post['baskets'])) {
+			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
+				$is_verified = 0;
+			} else { /*from checkout button*/
+				$is_verified = 1;
 			}
+			/*check if the user is logged in if false save post to session*/
+			if ($this->accounts->has_session == false) {
+				unset($post['existing']);
+				$this->session->set_userdata('basket_session', $post);
+				$message = 'Item added to basket, Redirecting to the registration / login page!';
+				$redirect = base_url('register');
+			} else {
+				/*save the add basket session in DB*/
+				if (isset($post['existing']) AND isset($post['existing']['quantity'])) {
+					$existing = $post['existing']; unset($post['existing']);
+					$quantity = $existing['quantity'] + (int)$post['baskets']['quantity'];
+					$this->gm_db->save('baskets', ['quantity' => $quantity, 'status' => $is_verified], ['id' => $existing['id']]);
+				} else {
+					$post['baskets']['status'] = $is_verified;
+					$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
+				}
+				$message = $is_verified ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
+				$redirect = $is_verified ? base_url('basket/checkout') : false;
+			}
+			// debug($post, $is_verified, 'stop');
+			$this->set_response('success', $message, $post, $redirect);
 		}
 		$this->set_response('error', 'No item(s) found', $post, false);
 	}
@@ -162,16 +133,8 @@ class Basket extends My_Controller {
 		$this->set_response('error', remove_multi_space('Unable to delete '.$name.' product'), $post);
 	}
 
-	public function verify()
+	public function verify($is_checkout=0)
 	{
-		/*
-		 * status:
-		 * 1 = verified (checkout page)
-		 * 2 = placed
-		 * 3 = on delivery
-		 * 4 = received
-		 * 5 = cancelled
-		*/
 		$post = $this->input->post();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
@@ -203,8 +166,11 @@ class Basket extends My_Controller {
 					], ['id' => $id]);
 				}
 			}
-			echo json_encode(['success' => true,/* 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding to check-out...'*/]);
-			exit();
+			if ($is_checkout == 0) {
+				echo json_encode(['success' => true]); exit();
+			} else {
+				echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified!, Proceeding checkout']); exit();
+			}
 		}
 		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
 		exit();
@@ -215,37 +181,87 @@ class Basket extends My_Controller {
 		$basket_session = get_session_baskets();
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
+			/*reassemble data by farm location*/
+			$items_by_farm = [];
+			foreach ($basket_session as $date => $baskets) {
+				foreach ($baskets as $key => $basket) {
+					$basket['date'] = $date;
+					$items_by_farm[$basket['rawdata']['farm']['name']][] = $basket;
+				}
+			}
+			// debug($items_by_farm, 'stop');
+			$this->render_page([
+				'top' => [
+					'index_page' => 'no',
+					'page_title' => APP_NAME.' | Checkout',
+					'css' => ['basket/checkout', 'modal/modals'],
+				],
+				'middle' => [
+					'body_class' => ['checkout'],
+					'head' => [
+						'../global/global_navbar'
+					],
+					'body' => [
+						'basket/checkout'
+					],
+					'footer' => [
+					],
+				],
+				'bottom' => [
+					'modals' => [],
+					'js' => ['basket/checkout'],
+				],
+				'data' => [
+					'baskets' => $items_by_farm
+				],
+			]);
+		} else {
+			$this->set_response('info', 'No more Orders to Checkout, Shop more!', false, 'marketplace/');
 		}
-		$this->render_page([
-			'top' => [
-				'index_page' => 'no',
-				'page_title' => APP_NAME.' | Checkout',
-				'css' => ['basket/checkout', 'modal/modals'],
-			],
-			'middle' => [
-				'body_class' => ['checkout'],
-				'head' => [
-					'../global/global_navbar'
-				],
-				'body' => [
-					'basket/checkout'
-				],
-				'footer' => [
-				],
-			],
-			'bottom' => [
-				'modals' => [],
-				'js' => ['basket/checkout'],
-			],
-			'data' => [
-				'baskets' => $basket_session
-			],
-		]);
+	}
+
+	/*
+	 * status:
+	 * 1 = verified (checkout page)
+	 * 2 = placed
+	 * 3 = on delivery
+	 * 4 = received
+	 * 5 = cancelled
+	*/
+	public function place_order()
+	{
+		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => 1]);
+		if ($baskets) {
+			// $this->book_delivery();
+			// debug($baskets, 'stop');
+			$grand_total = $sub_total = 0;
+			$shipping_fee = compute_summary($baskets, $sub_total);
+			$grand_total += $sub_total;
+			// debug($grand_total, $shipping_fee, $sub_total, 'stop');
+			foreach ($baskets as $key => $basket) {
+				$toktok_post = toktok_post_delivery_format($basket);
+				$toktok_post['f_recepient_cod'] = $grand_total + $shipping_fee;
+				// debug($toktok_post, 'stop');
+				/*now save to DB for queueing*/
+				$toktok = $this->gm_db->get('basket_for_toktok', ['basket_id' => $basket['id']], 'row');
+				if ($toktok == false) {
+					$this->gm_db->new('basket_for_toktok', [
+						'basket_id' => $basket['id'],
+						'toktok_data' => serialize($toktok_post),
+					]);
+				}
+				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
+			}
+			$this->set_response('success', 'Orders have been placed!', false, 'transactions/orders/');
+		} else {
+			$this->set_response('info', 'No more orders to place', false, 'basket/');
+		}
 	}
 
 	private function book_delivery()
 	{
 		// DELIVERY POSTING
+		$this->load->library('toktokapi');
 		$params = [
 			'f_id' => '',
 			'referral_code' => 'PPS8083189',

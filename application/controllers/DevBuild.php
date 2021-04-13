@@ -128,28 +128,19 @@ class DevBuild extends CI_Controller {
 			'products_measurement',
 			'products_photo',
 			'products_attribute',
+			'attributes',
+			'attribute_values',
 			'baskets' => [
-				'order_type' => [
+				'hash' => [
 					'definition' => [
-						'type' => 'TINYINT',
-						'constraint' => '2',
-						'default' => '1',
-						'null' => false,
-					],
-					'after' => 'status'
-				],
-				'date_range' => [
-					'definition' => [
-						'type' => 'VARCHAR',
-						'constraint' => '100',
+						'type' => 'LONGTEXT',
 						'default' => NULL,
 						'null' => true,
 					],
-					'after' => 'order_type'
+					'after' => 'date_range'
 				],
 			],
-			'attributes',
-			'attribute_values',
+			'basket_for_toktok',
 		];
 
 		return $data;

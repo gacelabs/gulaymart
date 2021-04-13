@@ -25,6 +25,19 @@ class Baskets {
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				// debug($baskets, 'stop');
+				foreach ($baskets as $key => $basket) {
+					if (is_string($basket['rawdata'])) {
+						$basket['rawdata'] = $baskets[$key]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+						$driving_distance = get_driving_distance([
+							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+							['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
+						]);
+						$baskets[$key]['distance'] = $driving_distance['distanceval'];
+						$baskets[$key]['duration'] = $driving_distance['durationval'];
+						$baskets[$key]['distance_text'] = $driving_distance['distance'];
+						$baskets[$key]['duration_text'] = $driving_distance['duration'];
+					}
+				}
 				if ($row) {
 					return $baskets[0];
 				} else {
@@ -54,6 +67,19 @@ class Baskets {
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				// debug($baskets, 'stop');
+				foreach ($baskets as $key => $basket) {
+					if (is_string($basket['rawdata'])) {
+						$basket['rawdata'] = $baskets[$key]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+						$driving_distance = get_driving_distance([
+							['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+							['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
+						]);
+						$baskets[$key]['distance'] = $driving_distance['distanceval'];
+						$baskets[$key]['duration'] = $driving_distance['durationval'];
+						$baskets[$key]['distance_text'] = $driving_distance['distance'];
+						$baskets[$key]['duration_text'] = $driving_distance['duration'];
+					}
+				}
 				if ($row) {
 					return $baskets[0];
 				} else {

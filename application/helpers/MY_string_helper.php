@@ -747,12 +747,12 @@ function do_jsonp_callback($js_function=false, $payload=['type'=>'info', 'messag
 	$callback = $ci->input->get('callback');
 	if ($callback) {
 		if ($js_function) {
-			echo $callback . '('.$js_function.'('.json_encode($payload).'))';
+			echo $callback . '('.$js_function.'('.json_encode($payload).'))'; exit();
 		} else {
-			echo $callback . '('.json_encode($payload).')';
+			echo $callback . '('.json_encode($payload).')'; exit();
 		}
 	}
-	exit();
+	echo json_encode($payload); exit();
 }
 
 function camel_to_dashed($className)

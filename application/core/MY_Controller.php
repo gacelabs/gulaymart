@@ -102,7 +102,11 @@ class MY_Controller extends CI_Controller {
 				'callback' => $callback,
 			]); exit();
 		} else {
-			redirect(base_url($this->class_name.'?'.$type.'='.$message));
+			if (is_string($redirect_url)) {
+				redirect(base_url($redirect_url.'?'.$type.'='.$message));
+			} elseif ($redirect_url == false) {
+				redirect(base_url($this->class_name.'?'.$type.'='.$message));
+			}
 		}
 	}
 

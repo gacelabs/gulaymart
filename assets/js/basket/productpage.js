@@ -75,6 +75,8 @@ $(document).ready(function() {
 			if (oThis.is(data.ui)) {
 				minValue = data.min;
 				maxValue = data.max;
+				oThis.prop('min', minValue).attr('min', minValue);
+				oThis.prop('max', maxValue).attr('max', maxValue);
 			}
 		});
 
@@ -130,6 +132,18 @@ $(document).ready(function() {
 		$('.img-thumb-item').removeClass('active');
 		$(this).find('.img-thumb-item').addClass('active');
 		$('#main_img_preview').css({'background-image' : 'url('+bg+')'});
+	});
+
+	$('#buy_now_btn').bind('click', function(e) {
+		e.preventDefault();
+		if (Object.keys($(e.target).data()).length) {
+			var oData = {
+				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
+			};
+			// console.log($(e.target).attr('href'), oData);
+			$('#add_product_btn').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+			simpleAjax($(e.target).attr('href'), oData, $(e.target), true);
+		}
 	});
 
 });

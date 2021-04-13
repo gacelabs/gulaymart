@@ -163,10 +163,11 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
+var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
+	if (keep_loading == undefined) keep_loading = false;
 	if (url) {
 		var sLastButtonText = '', loadingText = 'Busy ...';
 		if (ui) {
@@ -186,7 +187,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				}
 			},
 			success: function(data) {
-				if (data && data.success) {
+				if (data) {
 					ajaxSuccessResponse(data);
 				}
 			},
@@ -194,7 +195,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				console.log(status, thrown);
 			},
 			complete: function(xhr, status) {
-				if (ui) {
+				if (ui && keep_loading == false) {
 					ui.html(ui.data('orig-ui'));
 					ui.removeAttr('disabled');
 				}

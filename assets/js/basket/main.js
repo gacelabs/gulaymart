@@ -50,7 +50,12 @@ $(document).ready(function() {
 			}
 		}
 		uiQtyField.trigger('input');
-		$('[js-element="checkout"]').trigger('click');
+		if (Object.keys(oOrdersChecked).length) {
+			var oData = {data: oOrdersChecked};
+			$.extend( oData, oOrderType );
+			console.log(oData);
+			simpleAjax('basket/verify', oData);
+		}
 	});
 	setTimeout(function() {
 		$('[js-event="addBasketItemselect"]').trigger('change');
@@ -140,8 +145,8 @@ $(document).ready(function() {
 		if (Object.keys(oOrdersChecked).length) {
 			var oData = {data: oOrdersChecked};
 			$.extend( oData, oOrderType );
-			console.log(oData);
-			simpleAjax('basket/verify', oData, $(e.target));
+			// console.log(oData);
+			simpleAjax('basket/verify/1', oData, $(e.target), true);
 		}
 	});
 });
