@@ -94,7 +94,7 @@
 													<hr style="border-color:#aaa;margin:5px 0;">
 													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($sub_total);?></b></h4>
 												</div>
-												<a href="basket/checkout" class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></a>
+												<button url="basket/checkout" class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 											</div>
 										</div>
 									</div>

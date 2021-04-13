@@ -113,8 +113,7 @@ function toktok_price_directions_format($data=false)
 
 function compute_eta($eta=0)
 {
-	// $time = gmdate("g:i:s", $eta);
-	$time = gmdate("g:i", $eta);
+	$time = gmdate("H:i:s", $eta);
 	$chunks = array_map('trim', explode(':', $time));
 	$duration = [];
 	foreach ($chunks as $key => $value) {
@@ -129,11 +128,11 @@ function compute_eta($eta=0)
 					$duration[] = $value.' min'.($value > 1 ? 's' : '');
 				}
 				break;
-			case '2':
+			/*case '2':
 				if ($value > 0) {
 					$duration[] = $value.' sec'.($value > 1 ? 's' : '');
 				}
-				break;
+				break;*/
 		}
 	}
 	// debug($chunks, $duration, 'stop');
