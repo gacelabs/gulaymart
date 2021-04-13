@@ -30,8 +30,8 @@
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}
 						} else {?>
-							<?php if ($current_profile) : ?>
-								<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">New Veggy</a></h4>
+							<?php if ($current_profile AND empty($data['products'])) : ?>
+								<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
 								<hr class="carved">
 								<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 							<?php endif; ?>
@@ -41,6 +41,7 @@
 						</div>
 					</div>
 				</div>
+				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="stories_item_container">
 					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY STORIES NA OR WALA PA -->
 					<?php if (isset($data['kunyare'])) : ?>

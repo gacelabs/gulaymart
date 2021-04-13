@@ -4,7 +4,7 @@
 
 	<div class="row hidden-xs" id="storefront">
 		<?php if ($current_profile AND (isset($current_profile['is_agreed_terms']) AND !$current_profile['is_agreed_terms'])): ?>
-			<div class="col-lg-12">
+			<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
 				<div class="center-panel-md">
 					<div class="dashboard-panel">
 						<div class="dashboard-panel-top">
@@ -19,9 +19,7 @@
 				</div>
 			</div>
 		<?php else: ?>
-			<?php /*debug($data['farms'], 'stop');*/ ?>
-
-			<?php if (!empty($this->farms)): ?>
+			<?php if ($this->farms AND empty($this->products->count())): ?>
 				<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
 					<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
 					<hr class="carved">

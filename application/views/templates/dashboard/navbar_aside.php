@@ -10,7 +10,7 @@
 		<div class="navbar-aside-divider"><hr></div>
 		<div class="aside-nav-child">
 			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
-				<i class="fa fa-shopping-basket"></i><span class="hidden-xs">Basket</span>
+				<i class="fa fa-shopping-basket"></i><span class="hidden-xs">Basket <?php if(empty($data['baskets'])) {echo "<kbd>New</kbd>";} ?></span>
 			</a>
 		</div>
 		<div class="aside-nav-child">

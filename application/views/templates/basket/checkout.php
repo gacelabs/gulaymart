@@ -20,7 +20,7 @@
 							<?php foreach ($data['baskets'] as $farm_name => $baskets): ?>
 								<div class="checkout-item-container">
 									<div class="checkout-item-top">
-										<p class="zero-gaps text-ellipsis"><span class="text-gray">SOLD BY:</span> <?php echo $farm_name;?></p>
+										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $farm_name;?></p>
 									</div>
 									<div class="checkout-item-middle">
 										<?php
@@ -80,7 +80,7 @@
 												<div class="price-tally-grid">
 													<div>
 														<div class="ellipsis-container">
-															<p class="zero-gaps"><?php echo $farm_name;?></p>
+															<p class="zero-gaps text-caps"><?php echo $farm_name;?></p>
 														</div>
 														<?php
 															$sub_total = 0;
@@ -90,7 +90,7 @@
 														<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo number_format($shipping_fee);?>)</i></small>
 													</div>
 													<div class="text-right">
-														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total);?></b></p>
+														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total)+number_format($shipping_fee);?></b></p>
 													</div>
 												</div>
 											</div>
@@ -99,7 +99,7 @@
 							 	</div>
 							</div>
 							<div class="cta-bottom-container">
-								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-chevron-up"></i></small>
+								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-chevron-right"></i></small>
 								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($grand_total + $shipping_fee);?></b></button>
 							</div>
 						</form>

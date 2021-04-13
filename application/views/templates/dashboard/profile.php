@@ -1,13 +1,19 @@
 <div id="dashboard_panel_right">
 	<?php $this->view('global/mobile_note'); ?>
 	<div class="row">
+
 		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<h4>Hoorah! You're all set. <br class="visible-xs"><br class="visible-xs">Selling veggies in Gulaymart is easy, be a <a href="farm/storefront/" class="text-link">veggie seller now!</a></h4>
-			<h4>Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
-
+			<?php if (empty($this->farms)) : ?>
+				<h4>Hoorah! You're all set. <br class="visible-xs"><br class="visible-xs">Selling veggies in Gulaymart is easy, be a <a href="farm/storefront/" class="text-link">veggie seller now!</a></h4>
+			<?php endif ?>
+			
+			<?php if (empty($data['baskets'])): ?>
+				<h4>Enjoy shopping fresh veggies at <a href="marketplace/" class="text-link">Marketplace</a></h4>
+			<?php endif ?>
 			<hr class="carved">
 		</div>
+		<?php elseif ($this->farms AND $data['baskets']) : ?>
 		<?php endif ?>
 
 		<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">

@@ -151,17 +151,17 @@
 	}
 	.price-summary-middle {
 		background-color: #fff;
-		box-shadow: 0 -8px 8px 0 rgb(0 0 0 / 15%);
-		bottom: -300px;
-		left: 0;
+		box-shadow: 4px 0 8px 0 rgb(0 0 0 / 15%);
+		bottom: 64px;
+		left: -1000px;
+		height: calc(100vh - 102px);
 		position: absolute;
 		transition: all .3s ease-in-out;
-		width: 100%;
+		width: 90%;
 		z-index: -1;
 	}
 	.price-summary-middle.active {
-		bottom: 64px;
-		height: calc(100vh - 125px);
+		left: 0;
 		overflow-y: auto;
 	}
 	.cta-bottom-container {
@@ -175,6 +175,7 @@
 		border-radius: 4px;
 		color: #fff;
 		height: 18px;
+		padding: 1px 0;
 		text-align: center;
 		width: 100%;
 	}
