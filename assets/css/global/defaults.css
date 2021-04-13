@@ -32,6 +32,14 @@ h1, h2, h3, h4, h5 {
 .carousel-inner img {
 	width: 100%;
 }
+.btn-cta {
+	background-color: #ffab00;
+	color: #fff !important;
+	transition: all .3s ease-in-out;
+}
+.btn-cta:hover {
+	background-color: #e69d08;
+}
 .btn-lg {
 	border-radius: 4px;
 }
@@ -327,6 +335,11 @@ label.error {
 }
 .icon-left {
 	margin-right: 10px;
+}
+.text-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .ellipsis-container {
 	display: -webkit-box;

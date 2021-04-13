@@ -1,7 +1,9 @@
 #global_navbar {
-    background-color: #a8d253;
+	background: rgb(168,210,83);
+	background: linear-gradient(45deg, rgba(168,210,83,1) 0%, rgba(117,202,155,1) 100%);
     border-bottom: none;
-    /*box-shadow: 0 1px 5px 0px rgb(0 0 0 / 23%);*/
+	/*background-color: #a8d253;
+    box-shadow: 0 1px 5px 0px rgb(0 0 0 / 23%);*/
     left: 0;
     margin: 0;
     padding-top: 10px;
