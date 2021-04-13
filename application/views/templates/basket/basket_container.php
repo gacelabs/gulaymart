@@ -34,11 +34,11 @@
 													</ul> -->
 													<div>
 														<label for="payment_method">
-															<input type="checkbox" id="payment_method" class="zero-gaps" name="payment_method" js-event="payment_method" value="cod"> Cash On Delivery
-															<input type="text" class="form-control input-xs" name="cod" disabled="disabled" placeholder="Enter item(s) price here" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" />
+															<!-- <input type="checkbox" id="payment_method" class="zero-gaps" name="payment_method" js-event="payment_method" value="cod"> --> Cash On Delivery
+															<!-- <input type="text" class="form-control input-xs" name="cod" disabled="disabled" placeholder="Enter item(s) price here" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" /> -->
 														</label>
 													</div>
-													<p><b class="text-contrast">Rider will Collect Fee From</b></p>
+													<!-- <p><b class="text-contrast">Rider will Collect Fee From</b></p>
 													<div style="margin-bottom: 10px;">
 														<label class="zero-gaps">
 															<input type="radio" class="zero-gaps" name="collect_from" value="S"> Me
@@ -46,7 +46,7 @@
 														<label class="zero-gaps" style="padding-left: 10px !important;">
 															<input type="radio" class="zero-gaps" name="collect_from" value="R"> Receiver
 														</label>
-													</div>
+													</div> -->
 												</div>
 											</div>
 											<div class="order-item-status">

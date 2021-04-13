@@ -7,6 +7,10 @@
 	<div class="farmer-list-footer">
 		<div class="ellipsis-container" style="margin-bottom:5px;">
 			<p class="zero-gaps text-caps"><b><?php echo $farm['name'];?></b></p>
+			<p class="zero-gaps">
+				<img src="assets/images/icons/farms.png" class="mini-img-icon" width="16">
+				<?php echo $farm['city_prov'];?>
+			</p>
 		</div>
 		<p class="zero-gaps"><small class="elem-block"><?php echo $farm['username'];?></small></p>
 		<p><small class="elem-block"><i class="fa fa-map-marker"></i> <?php echo $farm['duration'];?> away</small></p>

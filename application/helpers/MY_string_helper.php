@@ -1250,6 +1250,11 @@ function nearby_farms($data=false, $user_id=false)
 							$farm['distance'] = round($driving_distance['distance'], 2).' km';
 							$farm['duration'] = $driving_distance['duration'];
 							$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+
+							$address = explode(',', $row['address_2']);
+							$farm['city'] = isset($address[0]) ? $address[0] : '';
+							$farm['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+
 							$farms[] = $farm;
 						}
 					}
