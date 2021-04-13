@@ -144,7 +144,6 @@ $(document).ready(function() {
 			simpleAjax('basket/verify', oData, $(e.target));
 		}
 	});
-
 });
 
 var oRemoveAjax = false;

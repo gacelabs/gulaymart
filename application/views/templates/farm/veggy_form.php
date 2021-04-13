@@ -6,7 +6,7 @@
 				<?php if ($data['is_edit'] == false): ?>
 					<div class="dashboard-panel" id="score-detail-panel">
 						<div class="dashboard-panel-top">
-							<h3 class="zero-gaps">Product Details Score</h3>
+							<h4 class="zero-gaps">Product Details Score</h4>
 						</div>
 						<div class="dashboard-panel-middle">
 							<ul class="spaced-list around">

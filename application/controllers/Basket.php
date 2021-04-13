@@ -220,23 +220,22 @@ class Basket extends My_Controller {
 			'top' => [
 				'index_page' => 'no',
 				'page_title' => APP_NAME.' | Checkout',
-				'css' => ['basket/checkout', ],
+				'css' => ['basket/checkout', 'modal/modals'],
 			],
 			'middle' => [
-				'body_class' => ['product-page'],
+				'body_class' => ['checkout'],
 				'head' => [
-					'../global/global_navbar',
+					'../global/global_navbar'
 				],
 				'body' => [
-					'basket/checkout',
+					'basket/checkout'
 				],
 				'footer' => [
-					'global/footer'
 				],
 			],
 			'bottom' => [
 				'modals' => [],
-				'js' => [],
+				'js' => ['basket/checkout'],
 			],
 			'data' => [
 				'baskets' => $basket_session
