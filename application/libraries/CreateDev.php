@@ -52,17 +52,19 @@ class CreateDev {
 			'is_admin' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'is_profile_complete' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
+				'null' => false,
 				'default' => '0',
 			],
 			'is_agreed_terms' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
+				'null' => false,
 				'default' => '0',
 			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
@@ -178,7 +180,7 @@ class CreateDev {
 			'active' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -235,7 +237,7 @@ class CreateDev {
 			'is_admin' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'name' => ['type' => 'TEXT'],
@@ -243,7 +245,7 @@ class CreateDev {
 			'status' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '1',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -272,7 +274,7 @@ class CreateDev {
 			'deleted' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 		]);
@@ -306,7 +308,7 @@ class CreateDev {
 			'active' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',

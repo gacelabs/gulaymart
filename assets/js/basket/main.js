@@ -126,7 +126,7 @@ $(document).ready(function() {
 			jsonpCallback: 'gmCall',
 			beforeSend: function(xhr, settings) {
 				uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
-				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Busy...');
+				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing...');
 			},
 			error: function(xhr, status, thrown) {
 				console.log(status, thrown);
@@ -146,6 +146,7 @@ $(document).ready(function() {
 			var oData = {data: oOrdersChecked};
 			$.extend( oData, oOrderType );
 			// console.log(oData);
+			$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 			simpleAjax('basket/verify/1', oData, $(e.target), true);
 		}
 	});

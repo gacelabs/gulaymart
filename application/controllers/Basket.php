@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Basket extends My_Controller {
 
 	public $allowed_methods = 'all';
-	public $not_allowed_methods = ['checkout', 'place_order'];
+	public $not_allowed_methods = ['index', 'checkout', 'place_order'];
 
 	public function __construct()
 	{
@@ -55,31 +55,40 @@ class Basket extends My_Controller {
 		// debug($post, 'stop');
 		if (isset($post['baskets'])) {
 			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
-				$is_verified = 0;
+				$status = 0;
 			} else { /*from checkout button*/
-				$is_verified = 1;
+				$status = 1;
+			}
+			$existing = false;
+			if (isset($post['existing'])) {
+				$existing = $post['existing'];
+				unset($post['existing']);
 			}
 			/*check if the user is logged in if false save post to session*/
 			if ($this->accounts->has_session == false) {
-				unset($post['existing']);
 				$this->session->set_userdata('basket_session', $post);
 				$message = 'Item added to basket, Redirecting to the registration / login page!';
 				$redirect = base_url('register');
+				$callback = false;
 			} else {
 				/*save the add basket session in DB*/
-				if (isset($post['existing']) AND isset($post['existing']['quantity'])) {
-					$existing = $post['existing']; unset($post['existing']);
+				if ($existing AND isset($existing['quantity'])) {
 					$quantity = $existing['quantity'] + (int)$post['baskets']['quantity'];
-					$this->gm_db->save('baskets', ['quantity' => $quantity, 'status' => $is_verified], ['id' => $existing['id']]);
+					$rawdata = json_decode(base64_decode($existing['rawdata']), true);
+					if (isset($rawdata['basket_details']) AND isset($rawdata['basket_details']['stocks'])) {
+						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
+					}
+					$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $existing['id']]);
 				} else {
-					$post['baskets']['status'] = $is_verified;
 					$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
 				}
-				$message = $is_verified ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
-				$redirect = $is_verified ? base_url('basket/checkout') : false;
+				$message = $status ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
+				$redirect = $status ? base_url('basket/checkout') : false;
+				$callback = $status ? false : 'stockChanged';
+				$post['baskets']['rawdata'] = json_decode(base64_decode($post['baskets']['rawdata']), true);
 			}
-			// debug($post, $is_verified, 'stop');
-			$this->set_response('success', $message, $post, $redirect);
+			// debug($post, $status, 'stop');
+			$this->set_response('success', $message, $post, $redirect, $callback);
 		}
 		$this->set_response('error', 'No item(s) found', $post, false);
 	}

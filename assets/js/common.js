@@ -101,9 +101,12 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			// console.log(isClicked)
 			var uiButtonSubmit = isClicked ? $(form).find('[clicked]:visible') : false,
 			callbackFn = $(form).data('callback'),
-			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Busy ...';
+			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Processing ...',
+			keep_loading = false;
 			if (uiButtonSubmit) {
-				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Busy ...';
+				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Processing ...';
+				keep_loading = (uiButtonSubmit.data('keep-loading') != undefined) ? uiButtonSubmit.data('keep-loading') : false;
+				console.log(keep_loading);
 			}
 
 			var oSettings = {
@@ -130,9 +133,15 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					console.log(status, thrown);
 				},
 				complete: function(xhr, status) {
-					if (uiButtonSubmit) {
+					if (uiButtonSubmit && keep_loading == false) {
 						uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
 						uiButtonSubmit.removeAttr('disabled');
+					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+						$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+						setTimeout(function() {
+							if (uiButtonSubmit) uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+							$('button, a, input:submit').removeClass('disabled').prop('disabled', false).removeAttr('disabled');
+						}, keep_loading);
 					}
 					var fn = eval(callbackFn);
 					if (typeof fn == 'function') {
@@ -169,10 +178,10 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 	if (ui == undefined) ui = false;
 	if (keep_loading == undefined) keep_loading = false;
 	if (url) {
-		var sLastButtonText = '', loadingText = 'Busy ...';
+		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
 			sLastButtonText = ui.html();
-			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Busy ...';
+			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Processing ...';
 		}
 		var oSettings = {
 			url: url,
@@ -198,6 +207,12 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 				if (ui && keep_loading == false) {
 					ui.html(ui.data('orig-ui'));
 					ui.removeAttr('disabled');
+				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+					$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+					setTimeout(function() {
+						if (ui) ui.html(ui.data('orig-ui'));
+						$('button, a, input:submit').removeClass('disabled').prop('disabled', false).removeAttr('disabled');
+					}, keep_loading);
 				}
 			}
 		};

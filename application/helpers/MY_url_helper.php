@@ -120,7 +120,7 @@ function compute_eta($eta=0)
 		switch ($key) {
 			case '0':
 				if ($value > 0) {
-					$duration[] = $value.' hr'.($value > 1 ? 's' : '');
+					$duration[] = (int)$value.' hr'.((int)$value > 1 ? 's' : '');
 				}
 				break;
 			case '1':
@@ -170,18 +170,37 @@ function get_session_baskets()
 	if (is_array($session_baskets)) {
 		foreach ($session_baskets as $key => $basket) {
 			if ($is_userdata) {
-				$basket['user_id'] = $sessions[$key]['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
+				$basket['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
 				$id = $ci->gm_db->new('baskets', $basket);
-				$basket['id'] = $sessions[$key]['id'] = $id;
+				$basket['id'] = $id;
+				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+				$driving_distance = get_driving_distance([
+					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
+					['lat' => $ci->latlng['lat'], 'lng' => $ci->latlng['lng']],
+				]);
+				$basket['distance'] = $driving_distance['distanceval'];
+				$basket['duration'] = $driving_distance['durationval'];
+				$basket['distance_text'] = $driving_distance['distance'];
+				$basket['duration_text'] = $driving_distance['duration'];
+				// debug($basket, 'stop');
 			}
 			$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 		}
 	}
-	// debug($session_baskets, 'stop');
+	// debug($basket_session, 'stop');
+	if ($is_userdata) { /*user is now logged in or registered*/
+		$baskets = $ci->baskets->get_in(['user_id' => ($ci->accounts->has_session ? $ci->accounts->profile['id'] : 0), 'status' => [0, 1]]);
+		if (is_array($baskets)) {
+			foreach ($baskets as $key => $basket) {
+				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
+			}
+		}
+	}
+
 	return $basket_session;
 }
 
-function add_item_to_basket($post, $product_id, $is_checkout=0)
+function add_item_to_basket($post, $product_id)
 {
 	$ci =& get_instance();
 	if ($post) {
@@ -203,11 +222,12 @@ function add_item_to_basket($post, $product_id, $is_checkout=0)
 					'at_date' => $post['baskets']['at_date'],
 				], 'row');
 
-				$post['baskets']['hash'] = '';
-				$post['baskets']['status'] = $is_checkout;
 				$post['baskets']['fee'] = 0;
+				$post['baskets']['status'] = 0;
+				$post['baskets']['hash'] = '';
 				if ($existing) {
 					$post['baskets']['fee'] = $existing['fee'];
+					$post['baskets']['status'] = $existing['status'];
 					$post['baskets']['hash'] = $existing['hash'];
 				} else {
 					/*get toktok fee if not existing in baskets table*/

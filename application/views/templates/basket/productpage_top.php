@@ -37,29 +37,36 @@
 							<p class="text-gray zero-gaps">UNIT</p>
 							<p><?php echo strtoupper($product['basket_details']['measurement']);?></p>
 						</div>
+						<?php $stocks = (int)$product['basket_details']['stocks'];?>
 						<div class="productpage-basic-grid" id="quantity_container">
 							<p class="text-gray zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
-							<div class="productpage-variety">
-								<div class="variety-location">
-									<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city'];?> - <span class="max-qty">Max quantity <?php echo $product['basket_details']['stocks'];?></span></p>
-									<div class="input-group">
-										<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
-										<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $product['basket_details']['stocks'];?>" name="baskets[quantity]" required="required" />
-										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[quantity]" type="button"><i class="fa fa-minus"></i></button>
-										</span>
-										<span class="input-group-btn">
-											<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="baskets[quantity]" type="button"><i class="fa fa-plus"></i></button>
-										</span>
+							<div class="productpage-variety" js-element="variety">
+								<?php if ($stocks > 0): ?>
+									<div class="variety-location">
+										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city'];?> - <span class="max-qty">Max quantity <?php echo $stocks;?></span></p>
+										<div class="input-group">
+											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
+											<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
+											<span class="input-group-btn">
+												<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[quantity]" type="button"><i class="fa fa-minus"></i></button>
+											</span>
+											<span class="input-group-btn">
+												<button class="btn btn-default btn-number dual-btn-right" data-type="plus" data-field="baskets[quantity]" type="button"><i class="fa fa-plus"></i></button>
+											</span>
+										</div>
 									</div>
-								</div>
+								<?php else: ?>
+									<p>NO STOCKS AVAILABLE</p>
+								<?php endif ?>
 							</div>
 						</div>
 
-						<div class="add-basket-btn">
-							<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
-							<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">Buy Now</a>
-						</div>
+						<?php if ($stocks > 0): ?>
+							<div class="add-basket-btn" js-element="basket-btns">
+								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;" data-keep-loading="3000"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
+								<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">Buy Now</a>
+							</div>
+						<?php endif ?>
 					</form>
 				</div>
 			</div>

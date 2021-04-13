@@ -447,6 +447,22 @@ class Products {
 				$product['farm'] = $farm;
 
 				$products_location = $products_location->row_array();
+				/*check here the number of quantity ordered*/
+				$basket = $this->class->gm_db->get('baskets', ['product_id' => $product_id], 'result', 'quantity');
+				if ($basket) {
+					$stocks = $products_location['stocks'];
+					foreach ($basket as $b) {
+						$stocks -= $b['quantity'];
+					}
+					$products_location['stocks'] = ($stocks <= 0) ? 0 : $stocks;
+					if ($stocks <= 0) {
+						/*update product stocks*/
+						$this->class->gm_db->save('products_location',
+							['stocks' => 0],
+							['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
+						);
+					}
+				}
 				$product['basket_details'] = $products_location;
 
 				$product['attribute'] = [];

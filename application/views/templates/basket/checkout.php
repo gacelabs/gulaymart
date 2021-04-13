@@ -85,12 +85,12 @@
 														<?php
 															$sub_total = 0;
 															$shipping_fee = compute_summary($baskets, $sub_total);
-															$grand_total += $sub_total;
+															$grand_total += $sub_total + $shipping_fee;
 														?>
 														<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo number_format($shipping_fee);?>)</i></small>
 													</div>
 													<div class="text-right">
-														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total)+number_format($shipping_fee);?></b></p>
+														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $shipping_fee);?></b></p>
 													</div>
 												</div>
 											</div>
@@ -100,7 +100,7 @@
 							</div>
 							<div class="cta-bottom-container">
 								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-chevron-right"></i></small>
-								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($grand_total + $shipping_fee);?></b></button>
+								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($grand_total);?></b></button>
 							</div>
 						</form>
 					</div>

@@ -141,9 +141,22 @@ $(document).ready(function() {
 				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
 			};
 			// console.log($(e.target).attr('href'), oData);
-			$('#add_product_btn').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+			$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 			simpleAjax($(e.target).attr('href'), oData, $(e.target), true);
 		}
 	});
 
 });
+
+var stockChanged = function(obj) {
+	console.log(obj);
+	if (obj && obj.baskets) {
+		var qty = parseInt(obj.baskets.quantity);
+		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
+		var newQTY = stocks - qty;
+		if (newQTY <= 0) {
+			$('[js-element="variety"]').html('<p>NO STOCKS AVAILABLE</p>');
+			$('[ js-element="basket-btns"]').remove();
+		}
+	}
+};
