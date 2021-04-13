@@ -203,7 +203,7 @@ class Basket extends My_Controller {
 					], ['id' => $id]);
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding to check-out...']);
+			echo json_encode(['success' => true,/* 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified, proceeding to check-out...'*/]);
 			exit();
 		}
 		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);

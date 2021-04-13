@@ -430,6 +430,18 @@ class Products {
 				$farm_location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
 				$product['farm_location'] = $farm_location;
 
+				$product['barns'] = false;
+				$barns = $this->class->gm_db->get('user_farm_locations', ['farm_id' => $farm_location['farm_id']]);
+				if ($barns) {
+					$product['barns'] = [];
+					foreach ($barns as $key => $barn) {
+						$address = explode(',', $barn['address_2']);
+						$barn['city'] = isset($address[0]) ? $address[0] : '';
+						$barn['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+						$product['barns'][] = $barn;
+					}
+				}
+
 				$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
 				$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
 				$product['farm'] = $farm;

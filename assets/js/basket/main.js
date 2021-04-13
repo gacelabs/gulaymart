@@ -50,6 +50,7 @@ $(document).ready(function() {
 			}
 		}
 		uiQtyField.trigger('input');
+		$('[js-element="checkout"]').trigger('click');
 	});
 	setTimeout(function() {
 		$('[js-event="addBasketItemselect"]').trigger('change');
