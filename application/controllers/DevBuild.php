@@ -124,17 +124,7 @@ class DevBuild extends CI_Controller {
 			'products',
 			'products_category',
 			'products_subcategory',
-			'products_location' => [
-				'ending' => [
-					'definition' => [
-						'type' => 'INT',
-						'constraint' => '10',
-						'default' => '0',
-						'null' => false,
-					],
-					'after' => 'stocks'
-				]
-			],
+			'products_location',
 			'products_measurement',
 			'products_photo',
 			'products_attribute',
