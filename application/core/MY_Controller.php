@@ -22,6 +22,11 @@ class MY_Controller extends CI_Controller {
 			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 			$this->session->set_userdata('referrer', $this->referrer);
 		}
+		$latlng = get_cookie('prev_latlng', true);
+		if (!empty($latlng)) {
+			// debug($latlng, 'stop');
+			$this->latlng = unserialize($latlng);
+		}
 		$this->class_name = strtolower(trim($this->router->class));
 		$this->action = strtolower(trim($this->router->method));
 		// $this->load->library('controllerlist');
