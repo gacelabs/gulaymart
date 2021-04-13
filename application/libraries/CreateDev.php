@@ -685,6 +685,11 @@ class CreateDev {
 				'default' => NULL,
 				'null' => true,
 			],
+			'hash' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'rawdata' => [
 				'type' => 'LONGTEXT',
 				'default' => NULL,

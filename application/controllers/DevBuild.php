@@ -130,16 +130,7 @@ class DevBuild extends CI_Controller {
 			'products_attribute',
 			'attributes',
 			'attribute_values',
-			'baskets' => [
-				'hash' => [
-					'definition' => [
-						'type' => 'LONGTEXT',
-						'default' => NULL,
-						'null' => true,
-					],
-					'after' => 'date_range'
-				],
-			],
+			'baskets',
 			'basket_for_toktok',
 		];
 
