@@ -131,7 +131,7 @@ class DevBuild extends CI_Controller {
 			'attributes',
 			'attribute_values',
 			'baskets',
-			'basket_for_toktok',
+			'basket_transactions',
 		];
 
 		return $data;

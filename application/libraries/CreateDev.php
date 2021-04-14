@@ -829,7 +829,7 @@ class CreateDev {
 		return $table_data;
 	}
 
-	public function create_basket_for_toktok_table()
+	public function create_basket_transactions_table()
 	{
 		$this->class->load->dbforge();
 		sleep(3);
@@ -868,7 +868,7 @@ class CreateDev {
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$this->class->dbforge->add_key('location_id');
-		$table_data = $this->class->dbforge->create_table('basket_for_toktok', false, [
+		$table_data = $this->class->dbforge->create_table('basket_transactions', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

@@ -275,14 +275,14 @@ class Basket extends My_Controller {
 					'toktok_data' => base64_encode(json_encode($toktok_post)),
 				];
 				/*now save to DB for queueing*/
-				$toktok = $this->gm_db->get('basket_for_toktok', [
+				$toktok = $this->gm_db->get('basket_transactions', [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
 				], 'row');
 				if ($toktok == false) {
-					$this->gm_db->new('basket_for_toktok', $toktok_data);
+					$this->gm_db->new('basket_transactions', $toktok_data);
 				} else {
-					$this->gm_db->save('basket_for_toktok', $toktok_data, ['id' => $toktok['id']]);
+					$this->gm_db->save('basket_transactions', $toktok_data, ['id' => $toktok['id']]);
 				}
 			}
 			// debug($toktok_data, 'stop');
