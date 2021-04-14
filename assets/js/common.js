@@ -106,7 +106,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			if (uiButtonSubmit) {
 				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Processing ...';
 				keep_loading = (uiButtonSubmit.data('keep-loading') != undefined) ? uiButtonSubmit.data('keep-loading') : false;
-				console.log(keep_loading);
+				// console.log(keep_loading);
 			}
 
 			var oSettings = {
@@ -123,6 +123,9 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 						}
 						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
+					if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+						$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+					}
 				},
 				success: function(data) {
 					if (data && data.success) {
@@ -137,7 +140,6 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 						uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
 						uiButtonSubmit.removeAttr('disabled');
 					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-						$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 						setTimeout(function() {
 							if (uiButtonSubmit) uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
 							$('button, a, input:submit').removeClass('disabled').prop('disabled', false).removeAttr('disabled');
@@ -194,6 +196,9 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					ui.attr('data-orig-ui', sLastButtonText);
 					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 				}
+				if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+					$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+				}
 			},
 			success: function(data) {
 				if (data) {
@@ -208,7 +213,6 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					ui.html(ui.data('orig-ui'));
 					ui.removeAttr('disabled');
 				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-					$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 					setTimeout(function() {
 						if (ui) ui.html(ui.data('orig-ui'));
 						$('button, a, input:submit').removeClass('disabled').prop('disabled', false).removeAttr('disabled');

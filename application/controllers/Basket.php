@@ -187,7 +187,7 @@ class Basket extends My_Controller {
 
 	public function checkout()
 	{
-		$basket_session = get_session_baskets();
+		$basket_session = get_session_baskets(1);
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
 			/*reassemble data by farm location*/
@@ -272,11 +272,11 @@ class Basket extends My_Controller {
 		// DELIVERY POSTING
 		$this->load->library('toktokapi');
 		$params = [
-			'f_id' => '',
-			'referral_code' => 'PPS8083189',
+			'f_id' => 'D1F36MSKT4',
+			// 'referral_code' => 'PPS8083189',
 			'f_post' => '',
-			'pac-input' => 'Harmony Hills I Subdivision, Harmony Hills, 1, San Jose del Monte City, Bulacan, Philippines',
-			'pac-input2' => 'R-Twin Trading, M. Villarica Road, Sta. Rosa, Marilao City, Bulacan, Philippines',
+			'pac-input' => 'Tierra Benita Subdivision, San Jose del Monte City, Bulacan, Philippines',
+			'pac-input2' => 'Our Lady of Fatima University - Valenzuela Campus, MacArthur Highway, Valenzuela, Metro Manila, Philippines',
 			'f_distance' => '',
 			'f_duration' => '',
 			'f_price' => '',
@@ -286,12 +286,12 @@ class Basket extends My_Controller {
 			'f_promo_code' => '',
 			'f_promo_error' => '',
 			'f_some_error' => '',
-			'f_sender_name' => 'Carriza',
-			'f_sender_mobile' => '09123456789',
-			'f_sender_landmark' => 'Aling Nena Store',
-			'f_sender_address' => 'Harmony Hills I Subdivision, Harmony Hills, 1, San Jose del Monte City, Bulacan, Philippines',
-			'f_sender_address_lat' => 14.7884463,
-			'f_sender_address_lng' => 121.0283154,
+			'f_sender_name' => '',
+			'f_sender_mobile' => '',
+			'f_sender_landmark' => '',
+			'f_sender_address' => 'Tierra Benita Subdivision, San Jose del Monte City, Bulacan, Philippines',
+			'f_sender_address_lat' => 14.7860947,
+			'f_sender_address_lng' => 121.0322675,
 			'f_order_type_send' => 1,
 			'f_sender_date' => '',
 			'f_sender_datetime_from' => '',
@@ -300,12 +300,12 @@ class Basket extends My_Controller {
 			'f_sen_add_in_pro' => '',
 			'f_sen_add_in_reg' => '',
 			'f_sen_add_in_coun' => '',
-			'f_recepient_name' => 'Evita Holmes',
-			'f_recepient_mobile' => '09198765432',
-			'f_recepient_landmark' => 'Repair shop',
-			'f_recepient_address' => 'R-Twin Trading, M. Villarica Road, Sta. Rosa, Marilao City, Bulacan, Philippines',
-			'f_recepient_address_lat' => 14.7803604,
-			'f_recepient_address_lng' => 120.9768949,
+			'f_recepient_name' => '',
+			'f_recepient_mobile' => '',
+			'f_recepient_landmark' => '',
+			'f_recepient_address' => 'Our Lady of Fatima University - Valenzuela Campus, MacArthur Highway, Valenzuela, Metro Manila, Philippines',
+			'f_recepient_address_lat' => 14.6778115,
+			'f_recepient_address_lng' => 120.9803312,
 			'f_order_type_rec' => 1,
 			'f_recepient_date' => '',
 			'f_recepient_datetime_from' => '',
@@ -315,13 +315,13 @@ class Basket extends My_Controller {
 			'f_rec_add_in_reg' => '',
 			'f_rec_add_in_coun' => '',
 			'f_collectFrom' => 'S', // where to collect the delivery fees // S is SENDER R is RECEPIENT
-			'f_recepient_notes' => 'Please keep hot',
-			'f_cargo' => 'Food',
-			'f_cargo_others' => 'Food',
+			'f_recepient_notes' => '',
+			'f_cargo' => 'Other',
+			'f_cargo_others' => 'Other',
 			'f_is_cod' => '',
 			'f_recepient_cod' => '', // if COD is checked real item price will appear here
 			'f_express_fee' => '',
-			'f_express_fee_hidden' => 40.00, // if express fee is checked - toktok fixed 40 pesos fee
+			'f_express_fee_hidden' => 40, // if express fee is checked - toktok fixed 40 pesos fee
 		];
 		// GET RIDER
 		$rider = ['term' => '9614068479', '_type' => 'query', 'q' => '9614068479'];
@@ -348,7 +348,8 @@ class Basket extends My_Controller {
 
 			$params['f_post'] = json_encode(['hash' => $hash]);
 			$params['f_distance'] = $price_and_directions['distance']. ' km';
-			$params['f_duration'] = format_duration($price_and_directions['duration']);
+			// $params['f_duration'] = format_duration($price_and_directions['duration']);
+			$params['f_duration'] = $price_and_directions['duration'];
 			$params['f_price'] = $price_and_directions['price'];
 		}
 		// if Sender Order Type is SCHEDULED
@@ -368,20 +369,22 @@ class Basket extends My_Controller {
 			$params['f_collectFrom'] = 'R';
 		}
 
-		debug($params, 'stop'); // check parameters
+		// debug($params, 'stop'); // check parameters
 		$this->toktokapi->app_request('post_delivery', $params);
 		// STOPPING requests
 		$this->toktokapi->stop();
 		debug($this->toktokapi, 'stop');
 	}
 
-	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F2444PJ8')
+	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F36MSKT4')
 	{
+		$this->load->library('toktokapi');
 		parse_str('draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=true&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B7%5D%5Bdata%5D=7&columns%5B7%5D%5Bname%5D=&columns%5B7%5D%5Bsearchable%5D=true&columns%5B7%5D%5Borderable%5D=false&columns%5B7%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B7%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B8%5D%5Bdata%5D=8&columns%5B8%5D%5Bname%5D=&columns%5B8%5D%5Bsearchable%5D=true&columns%5B8%5D%5Borderable%5D=false&columns%5B8%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B8%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B9%5D%5Bdata%5D=9&columns%5B9%5D%5Bname%5D=&columns%5B9%5D%5Bsearchable%5D=true&columns%5B9%5D%5Borderable%5D=false&columns%5B9%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B9%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B10%5D%5Bdata%5D=10&columns%5B10%5D%5Bname%5D=&columns%5B10%5D%5Bsearchable%5D=true&columns%5B10%5D%5Borderable%5D=false&columns%5B10%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B10%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B11%5D%5Bdata%5D=11&columns%5B11%5D%5Bname%5D=&columns%5B11%5D%5Bsearchable%5D=true&columns%5B11%5D%5Borderable%5D=false&columns%5B11%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B11%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=DESC&start=0&length=10&search%5Bvalue%5D=&search%5Bregex%5D=false&date_from=03%2F30%2F2021&date_to=04%2F06%2F2021&driver_id=&order_status=&searchstring='.$searchstring, $output);
 		// debug($output, 'stop');
 
 		// CHECKING ORDER BY ID
 		$this->toktokapi->app_request('check_orders', $output);
+		// debug($this->toktokapi, 'stop');
 		if ($this->toktokapi->success) {
 			$order_tags = [
 				'button' => $this->toktokapi->response['data'][0][11],
@@ -419,6 +422,21 @@ class Basket extends My_Controller {
 			}
 			debug($delivery, $rider_location, 'stop');
 		}
+	}
+
+	private function delivery_active_place($value='San Jose del Monte Cit')
+	{
+		// filter_method: today = 6, yesterday = 7, past 7 days = 8
+		// delivery_origin: toktok = 0, toktok food = 1
+		// searchstring: <place to search>
+		/*GET deliveries today on specific place*/
+		$this->load->library('toktokapi');
+		$this->toktokapi->app_request('active_places', [
+			'filter_method' => '6',
+			'delivery_origin' => '0',
+			'searchstring' => $value
+		]);
+		debug($this->toktokapi, 'stop');
 	}
 
 }

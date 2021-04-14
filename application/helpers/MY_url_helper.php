@@ -154,7 +154,7 @@ function redirect_basket_orders()
 	return false;
 }
 
-function get_session_baskets()
+function get_session_baskets($status=[0,1])
 {
 	$ci =& get_instance();
 	$basket_session = [];
@@ -164,7 +164,7 @@ function get_session_baskets()
 		$is_userdata = true;
 		$ci->session->unset_userdata('basket_session');
 	} elseif ($ci->accounts->has_session) {
-		$session_baskets = $ci->baskets->get_in(['user_id' => $ci->accounts->profile['id'], 'status' => [0, 1]]);
+		$session_baskets = $ci->baskets->get_in(['user_id' => $ci->accounts->profile['id'], 'status' => $status]);
 	}
 	// debug($session_baskets, 'stop');
 	if (is_array($session_baskets)) {

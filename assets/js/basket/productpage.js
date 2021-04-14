@@ -141,7 +141,6 @@ $(document).ready(function() {
 				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
 			};
 			// console.log($(e.target).attr('href'), oData);
-			$('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 			simpleAjax($(e.target).attr('href'), oData, $(e.target), true);
 		}
 	});
