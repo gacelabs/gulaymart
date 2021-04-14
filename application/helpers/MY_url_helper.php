@@ -157,6 +157,7 @@ function redirect_basket_orders()
 function get_session_baskets($status=[0,1])
 {
 	$ci =& get_instance();
+	$ci->load->library('baskets');
 	$basket_session = [];
 	$is_userdata = false;
 	$session_baskets = $ci->session->userdata('basket_session');
@@ -262,9 +263,17 @@ function compute_summary($baskets=false, &$sub_total=0)
 	$shipping_fee = 0;
 	if ($baskets) {
 		$fees_per_farm = [];
-		foreach ($baskets as $key => $basket) {
-			$fees_per_farm[$basket['location_id']] = (float) $basket['fee'];
-			$sub_total += (int)$basket['quantity'] * (float)$basket['rawdata']['basket_details']['price'];
+		foreach ($baskets as $farm => $basket) {
+			// debug($basket, 'stop');
+			if (isset($basket[0])) {
+				foreach ($basket as $key => $row) {
+					$fees_per_farm[$row['location_id']] = (float) $row['fee'];
+					$sub_total += (int)$row['quantity'] * (float) $row['rawdata']['basket_details']['price'];
+				}
+			} else {
+				$fees_per_farm[$basket['location_id']] = (float) $basket['fee'];
+				$sub_total += (int)$basket['quantity'] * (float) $basket['rawdata']['basket_details']['price'];
+			}
 		}
 		foreach ($fees_per_farm as $location_id => $fee) {
 			$shipping_fee += $fee;

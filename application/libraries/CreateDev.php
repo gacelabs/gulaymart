@@ -839,14 +839,17 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
-			'basket_id' => [
+			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
 			],
-			'toktok_data' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true,
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
 			],
 			'queue_status' => [
 				'type' => 'TINYINT',
@@ -854,11 +857,17 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'toktok_data' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$this->class->dbforge->add_key('basket_id');
+		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('location_id');
 		$table_data = $this->class->dbforge->create_table('basket_for_toktok', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'

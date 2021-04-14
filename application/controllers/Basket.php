@@ -17,10 +17,19 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
+		$items_by_farm = [];
 		$basket_session = get_session_baskets();
 		if (count($basket_session)) {
 			// debug($basket_session, 'stop');
+			/*reassemble data by farm location*/
+			foreach ($basket_session as $date => $baskets) {
+				foreach ($baskets as $key => $basket) {
+					$basket['date'] = $date;
+					$items_by_farm[$date][$basket['rawdata']['farm']['name']][] = $basket;
+				}
+			}
 		}
+		// debug($items_by_farm, 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
@@ -43,7 +52,7 @@ class Basket extends My_Controller {
 				],
 			],
 			'data' => [
-				'baskets' => $basket_session
+				'baskets' => $items_by_farm
 			],
 		]);
 	}
@@ -242,23 +251,42 @@ class Basket extends My_Controller {
 		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => 1]);
 		if ($baskets) {
 			// $this->book_delivery();
-			// debug($baskets, 'stop');
-			$grand_total = $sub_total = 0;
-			$shipping_fee = compute_summary($baskets, $sub_total);
-			$grand_total += $sub_total;
-			// debug($grand_total, $shipping_fee, $sub_total, 'stop');
-			foreach ($baskets as $key => $basket) {
-				$toktok_post = toktok_post_delivery_format($basket);
-				$toktok_post['f_recepient_cod'] = $grand_total + $shipping_fee;
-				// debug($toktok_post, 'stop');
-				/*now save to DB for queueing*/
-				$toktok = $this->gm_db->get('basket_for_toktok', ['basket_id' => $basket['id']], 'row');
-				if ($toktok == false) {
-					$this->gm_db->new('basket_for_toktok', [
-						'basket_id' => $basket['id'],
-						'toktok_data' => serialize($toktok_post),
-					]);
+			$items_by_farm = $toktok_temp_data = [];
+			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
+			// debug($items_by_farm, 'stop');
+			foreach ($items_by_farm as $location_id => $items) {
+				$shipping_fee = $items[0]['fee'];
+				$toktok_temp_data[$location_id] = [
+					'user_id' => $this->accounts->profile['id'],
+					'fee' => $shipping_fee,
+					'total_price' => 0,
+				];
+				foreach ($items as $key => $item) {
+					$toktok_temp_data[$location_id]['item'] = $item;
+					$toktok_temp_data[$location_id]['total_price'] += (int)$item['quantity'] * (float) $item['rawdata']['basket_details']['price'];
 				}
+			}
+			foreach ($toktok_temp_data as $location_id => $temp) {
+				$toktok_post = toktok_post_delivery_format($temp['item']);
+				$toktok_post['f_recepient_cod'] = $temp['total_price'] + $temp['fee'];
+				$toktok_data = [
+					'user_id' => $temp['user_id'],
+					'location_id' => $location_id,
+					'toktok_data' => base64_encode(json_encode($toktok_post)),
+				];
+				/*now save to DB for queueing*/
+				$toktok = $this->gm_db->get('basket_for_toktok', [
+					'user_id' => $temp['user_id'],
+					'location_id' => $location_id,
+				], 'row');
+				if ($toktok == false) {
+					$this->gm_db->new('basket_for_toktok', $toktok_data);
+				} else {
+					$this->gm_db->save('basket_for_toktok', $toktok_data, ['id' => $toktok['id']]);
+				}
+			}
+			// debug($toktok_data, 'stop');
+			foreach ($baskets as $key => $basket) {
 				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
 			}
 			$this->set_response('success', 'Orders have been placed!', false, 'transactions/orders/');

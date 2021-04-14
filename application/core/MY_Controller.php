@@ -161,6 +161,7 @@ class MY_Controller extends CI_Controller {
 				@chmod($uploaddir, 0755);
 			}
 		}
+		$this->basket_empty = empty(get_session_baskets());
 	}
 
 	public function render_page($rawdata=false, $debug=false)

@@ -16,16 +16,21 @@
 									</div>
 									<div class="order-item-middle">
 										<div class="order-item-list">
-											<?php
-												$last_location_id = 0;
-												foreach ($baskets as $key => $basket) {
-													$this->view('looping/basket_item', [
-														'basket' => $basket,
-														'last_location_id' => $last_location_id
-													]);
-													$last_location_id = $basket['location_id'];
-												}
-											?>
+											<?php foreach ($baskets as $farm_name => $basket): ?>
+												<div class="add-basket-item-container order-item-inner">
+													<p class="zero-gaps text-caps"><?php echo $farm_name;?> | <em class="text-success">(Delivery Fee &#x20b1; <b><?php echo $basket[0]['fee'];?></b>)</em></p>
+													<?php
+														$last_location_id = 0;
+														foreach ($basket as $key => $basket_data) {
+															$this->view('looping/basket_item', [
+																'basket' => $basket_data,
+																'last_location_id' => $last_location_id
+															]);
+															$last_location_id = $basket_data['location_id'];
+														}
+													?>
+												</div>
+											<?php endforeach ?>
 										</div>
 
 										<div class="tender-amount-grid">
@@ -57,8 +62,10 @@
 													<p><b class="text-contrast">ORDER SCHEDULE</b></p>
 													<?php
 														$etas = [];
-														foreach ($baskets as $key => $basket) {
-															$etas[$basket['location_id']] = (float) $basket['duration'];
+														foreach ($baskets as $farm_name => $basket) {
+															foreach ($basket as $key => $basket_data) {
+																$etas[$basket_data['location_id']] = (float) $basket_data['duration'];
+															}
 														}
 														$eta_duration = 0;
 														foreach ($etas as $location_id => $duration) {
