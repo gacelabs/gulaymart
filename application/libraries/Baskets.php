@@ -15,13 +15,13 @@ class Baskets {
 		$this->profile = $this->class->session->userdata('profile');
 	}
 
-	public function get($where=true, $row=false, $limit=false)
+	public function get($where=true, $row=false, $limit=false, $order_by='location_id')
 	{
 		if ($where != false) {
 			if (!is_bool($limit) AND is_numeric($limit)) {
 				$this->class->db->limit($limit);
 			}
-			$data = $this->class->db->order_by('location_id')->get_where('baskets', $where);
+			$data = $this->class->db->order_by($order_by)->get_where('baskets', $where);
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				// debug($baskets, 'stop');
@@ -48,7 +48,7 @@ class Baskets {
 		return false;
 	}
 
-	public function get_in($where=true, $row=false, $limit=false)
+	public function get_in($where=true, $row=false, $limit=false, $order_by='location_id')
 	{
 		if ($where != false) {
 			if (!is_bool($limit) AND is_numeric($limit)) {
@@ -63,7 +63,7 @@ class Baskets {
 					}
 				}
 			}
-			$data = $this->class->db->order_by('location_id')->get('baskets');
+			$data = $this->class->db->order_by($order_by)->get('baskets');
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				// debug($baskets, 'stop');

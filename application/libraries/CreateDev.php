@@ -851,6 +851,11 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'basket_ids' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'queue_status' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',

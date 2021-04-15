@@ -259,12 +259,16 @@ class Basket extends My_Controller {
 				$toktok_temp_data[$location_id] = [
 					'user_id' => $this->accounts->profile['id'],
 					'fee' => $shipping_fee,
+					'basket_ids' => '',
 					'total_price' => 0,
 				];
+				$basket_ids = [];
 				foreach ($items as $key => $item) {
+					$basket_ids[] = $item['id'];
 					$toktok_temp_data[$location_id]['item'] = $item;
 					$toktok_temp_data[$location_id]['total_price'] += (int)$item['quantity'] * (float) $item['rawdata']['basket_details']['price'];
 				}
+				$toktok_temp_data[$location_id]['basket_ids'] = implode(',', $basket_ids);
 			}
 			foreach ($toktok_temp_data as $location_id => $temp) {
 				$toktok_post = toktok_post_delivery_format($temp['item']);
@@ -272,6 +276,7 @@ class Basket extends My_Controller {
 				$toktok_data = [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
+					'basket_ids' => $temp['basket_ids'],
 					'toktok_data' => base64_encode(json_encode($toktok_post)),
 				];
 				/*now save to DB for queueing*/

@@ -296,3 +296,28 @@ function toktok_rider($rider=['term'=>'9614068479','_type'=>'query','q'=>'961406
 	// return '';
 	return '80109'; /*for now its arturo the rider*/
 }
+
+function get_status_value($status=false)
+{
+	if ($status) {
+		$ci =& get_instance();
+		switch ($status) {
+			case '1': /*verified*/
+				return 'verified';
+			break;
+			case '2': /*placed*/
+				return 'placed';
+			break;
+			case '3': /*otw*/
+				return 'on_delivery';
+			break;
+			case '4': /*received*/
+				return 'received';
+			break;
+			case '5': /*cancelled*/
+				return 'cancelled';
+			break;
+		}
+	}
+	return '';
+}
