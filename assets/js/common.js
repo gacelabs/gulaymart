@@ -740,7 +740,7 @@ function setAutocompleteEvent() {
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		$('#address_1').val('');
 		var place = autocomplete.getPlace();
-		console.log(place);
+		// console.log(place);
 		var lat = place.geometry.location.lat();
 		var long = place.geometry.location.lng();
 		

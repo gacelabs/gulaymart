@@ -104,23 +104,25 @@ class Farm extends MY_Controller {
 					if (isset($product_id) AND $product_id > 0) {
 						$product = $post['products'];
 						$ok = $this->products->save($product, ['id' => $product_id]);
-						if (isset($post['products_location'])) {
-							$this->gm_db->remove('products_location', ['product_id' => $product_id]);
-							foreach ($post['products_location'] as $key => $location) {
-								$location['product_id'] = $product_id;
-								$this->gm_db->new('products_location', $location);
-								$post['products_location'][$key]['duration'] = '';
-								$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
-								if ($farm_location) {
-									$driving_distance = get_driving_distance([
-										['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-										['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-									]);
-									$post['products_location'][$key]['duration'] = $driving_distance['duration'];
+						if ($ok) {
+							if (isset($post['products_location'])) {
+								$this->gm_db->remove('products_location', ['product_id' => $product_id]);
+								foreach ($post['products_location'] as $key => $location) {
+									if (isset($location['farm_location_id']) AND $location['farm_location_id']) {
+										$location['product_id'] = $product_id;
+										$this->gm_db->new('products_location', $location);
+										$post['products_location'][$key]['duration'] = '';
+										$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+										if ($farm_location) {
+											$driving_distance = get_driving_distance([
+												['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+												['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+											]);
+											$post['products_location'][$key]['duration'] = $driving_distance['duration'];
+										}
+									}
 								}
 							}
-						}
-						if ($ok) {
 							if ($passed == 0) {
 								$passed = 1;
 								$message = 'Passed on the 60% score, please continue below.';
