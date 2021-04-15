@@ -63,7 +63,7 @@
 				<div class="text-step-basic">
 					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
 					<div>
-						<p class="zero-gaps">The guidelines above only gives you a better idea to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tool to success. Good luck!</p>
+						<p class="zero-gaps">The guidelines above only gives you a better idea to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tool to succeed. Good luck!</p>
 						<br>
 						<p>- From your Gulaymart team.</p>
 					</div>

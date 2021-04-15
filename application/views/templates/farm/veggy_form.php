@@ -191,7 +191,7 @@
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 													<div class="form-group">
-														<select type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][measurement]" required="required">
+														<select type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][measurement]">
 															<?php if ($this->measurements): ?>
 																<?php foreach ($this->measurements as $key => $measurement): ?>
 																	<?php if ($data['is_edit'] == false): ?>

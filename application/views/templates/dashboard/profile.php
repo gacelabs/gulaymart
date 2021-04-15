@@ -92,7 +92,7 @@
 				</form>
 			</div>
 
-			<?php if (isset($current_profile['profile']['phone'])) : ?>
+			<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']) : ?>
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">Notify me with</h4></li>

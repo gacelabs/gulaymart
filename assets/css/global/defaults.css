@@ -52,6 +52,9 @@ h1, h2, h3, h4, h5 {
 .text-danger {
 	color: #e43232;
 }
+kbd {
+	font-family: 'Roboto', sans-serif;
+}
 .text-step-basic {
 	background-color: #fff;
 	padding: 15px 15px 15px 11px;

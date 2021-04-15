@@ -9,9 +9,10 @@
 					<div class="dashboard-panel">
 						<div class="dashboard-panel-top">
 							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
-							<p>Customize your Farm online store, upload photos and videos, share your stories and more!</p>
-							<div class="zero-gaps">
-								<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Let's go!<i class="fa fa-angle-right icon-right"></i></button>
+							<p class="zero-gaps">This is your first step to becoming a seller on Gulaymart!</p>
+							<p>Customize your farm's online store, upload photos and videos, share your stories and more!</p>
+							<div style="margin-top:15px;">
+								<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Create My Store<i class="fa fa-angle-right icon-right"></i></button>
 								<img src="assets/images/gulaymar-storefront.png" class="img-responsive" style="margin:0 auto;width:100%;">
 							</div>
 						</div>
