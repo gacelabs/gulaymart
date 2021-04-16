@@ -55,6 +55,9 @@ h1, h2, h3, h4, h5 {
 kbd {
 	font-family: 'Roboto', sans-serif;
 }
+.stop {
+	cursor: not-allowed;
+}
 .text-step-basic {
 	background-color: #fff;
 	padding: 15px 15px 15px 11px;

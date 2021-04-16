@@ -143,7 +143,7 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product Pricing (Location based)</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">Need HELP?</span></small>
+							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
@@ -260,7 +260,7 @@
 						<div class="dashboard-panel-middle">
 							<div>
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600</small>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600 pixels.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
@@ -300,13 +300,12 @@
 				</div>
 			</div>
 
-			<!-- show after Publish -->
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="preview_container">
 				<div class="dashboard-panel">
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
 							<li><p>Listing</p></li>
-							<li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li>
+							<li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li>`
 						</ul>
 						<div class="product-list-card">
 							<div class="product-list-photo order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">

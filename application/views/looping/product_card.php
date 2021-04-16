@@ -4,7 +4,7 @@
 			<?php if (isset($data['photos']) AND isset($data['photos']['main'])): ?>
 				<div class="product-list-photo" style="background-image: url(<?php echo base_url($data['photos']['main']['url_path']);?>);"></div>
 			<?php else: ?>
-				<div class="product-list-photo" style="background-image: url(https://place-hold.it/50x50.png?text=No+Image&fontsize=7);"></div>
+				<div class="product-list-photo" style="background-image: url(https://place-hold.it/360x360.png?text=Product+Image+Unavailable&fontsize=14);"></div>
 			<?php endif ?>
 			<div class="product-desc-body">
 				<div class="product-title-container ellipsis-container">

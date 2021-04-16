@@ -1,4 +1,13 @@
+
 <div id="global_navbar">
+	<?php if (empty($current_profile)) : ?>
+	<div id="check_loc">
+		<div class="container">
+			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. CHECK YOUR <span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
+		</div>
+	</div>
+	<?php endif; ?>
+
 	<div class="container">
 		<div id="global_navbar_grid">
 			<a href=""><i class="fa fa-leaf" id="global_navbar_logo"></i></a>

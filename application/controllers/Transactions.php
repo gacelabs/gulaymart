@@ -25,7 +25,7 @@ class Transactions extends MY_Controller {
 		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
 		// debug($baskets, 'stop');
 		$assembled = false;
-		if (count($baskets)) {
+		if (!is_bool($baskets) AND count($baskets)) {
 			$assembled = [];
 			foreach ($baskets as $key => $basket) {
 				$date = date('F j, Y', strtotime($basket['updated']));
@@ -73,6 +73,26 @@ class Transactions extends MY_Controller {
 			'bottom' => [
 				'modals' => ['reply_modal'],
 				'js' => ['hideshow', 'plugins/readmore.min', 'transactions/messages', 'dashboard/main'],
+			],
+		]);
+	}
+
+	public function thankyou()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['static/thankyou']
+			],
+			'middle' => [
+				'body_class' => ['thankyou'],
+				'head' => ['../global/global_navbar'],
+				'body' => [
+					'../static/thankyou'
+				],
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => [],
 			],
 		]);
 	}

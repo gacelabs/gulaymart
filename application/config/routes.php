@@ -21,6 +21,11 @@ $route['products/(:any)'] = 'Basket/productpage';
 
 $route['basket/checkout'] = 'Basket/checkout';
 
+$route['orders/fulfillment'] = 'Basket/index';
+$route['fulfillment'] = 'Basket/index';
+
+$route['orders/thank-you'] = 'transactions/thankyou';
+
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
 

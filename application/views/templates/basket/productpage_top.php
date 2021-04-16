@@ -120,13 +120,13 @@
 									<small class="text-gray elem-block">Pay to upon deliver</small>
 								</div>
 							</div>
-							<div class="productpage-summary-grid">
+							<!-- <div class="productpage-summary-grid">
 								<img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Wire Transfer</p>
 									<small class="text-gray elem-block">GCash, Paymaya</small>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<div class="productpage-summary-parent productpage-delivery">

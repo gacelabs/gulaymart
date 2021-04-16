@@ -53,7 +53,7 @@
 			<?php endif ?>
 			<div class="aside-nav-child">
 				<a href="farm/storefront" class="aside-nav-item hidden-xs <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
-					<i class="fa fa-flag-o"></i>Storefront <?php if(empty($this->farms)) {echo "<kbd>Sell & Earn!</kbd>";} ?>
+					<i class="fa fa-flag-o"></i>Storefront <?php if(empty($this->farms) AND $current_profile['shippings']) {echo "<kbd>Sell & Earn!</kbd>";} ?>
 				</a>
 			</div>
 			<?php if ($this->farms): ?>

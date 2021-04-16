@@ -55,6 +55,6 @@
 			</div>
 		</div>
 	<?php else: ?>
-		<p>No Place Orders found</p>
+		<h4 style="padding:15px;margin:0;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>
 	<?php endif ?>
 </div>
