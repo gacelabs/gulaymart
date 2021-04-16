@@ -310,7 +310,7 @@ function get_status_value($status=false)
 				return 'placed';
 			break;
 			case '3': /*otw*/
-				return 'on_delivery';
+				return 'delivery';
 			break;
 			case '4': /*received*/
 				return 'received';

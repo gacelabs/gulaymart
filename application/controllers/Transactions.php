@@ -28,7 +28,7 @@ class Transactions extends MY_Controller {
 		if (!is_bool($baskets) AND count($baskets)) {
 			$products = [];
 			foreach ($baskets as $key => $basket) {
-				if (isset($products[$basket['product_id']])) {
+				if (isset($products[$basket['product_id']][$basket['status']])) {
 					$basket['quantity'] = $products[$basket['product_id']][$basket['status']]['quantity'] += $basket['quantity'];
 					$basket['id'] = $products[$basket['product_id']][$basket['status']]['id'] .= ','.$basket['id'];
 				}
