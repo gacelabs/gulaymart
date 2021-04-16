@@ -1171,16 +1171,18 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 		if ($results['status'] == 'OK') {
 			$rows = $results['rows'][0];
 			$elements = $rows['elements'][0];
-			$distance = $elements['distance']['text'];
-			$distanceval = $elements['distance']['value'];
-			$duration = $elements['duration']['text'];
-			$durationval = $elements['duration']['value'];
-			return [
-				'distance' => $distance,
-				'distanceval' => (float)$distanceval,
-				'duration' => trim(str_replace('0 mins', '', $duration)),
-				'durationval' => (float)$durationval,
-			];
+			if ($elements['status'] != 'ZERO_RESULTS') {
+				$distance = $elements['distance']['text'];
+				$distanceval = $elements['distance']['value'];
+				$duration = $elements['duration']['text'];
+				$durationval = $elements['duration']['value'];
+				return [
+					'distance' => $distance,
+					'distanceval' => (float)$distanceval,
+					'duration' => trim(str_replace('0 mins', '', $duration)),
+					'durationval' => (float)$durationval,
+				];
+			}
 		}
 	}
 	return ['distance' => 0, 'distanceval' => 0, 'distance' => 0, 'durationval' => 0];
