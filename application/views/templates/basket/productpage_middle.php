@@ -171,7 +171,7 @@
 							<div class="productpage-farm-middle">
 								<div class="row">
 									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-										<div class="productpage-summary-grid">
+										<div class="productpage-summary-grid" style="margin-top:0;">
 											<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
 											<div>
 												<p class="zero-gaps"><?php echo $farm_location['city_prov'];?></p>
