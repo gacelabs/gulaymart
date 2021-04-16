@@ -44,7 +44,7 @@
 
 		$('#check_loc_modal').on('shown.bs.modal', function(e) {
 			var input = $('#check-place').get(0);
-			input.focus().select();
+			input.focus();
 			var i = setInterval(function() {
 				if (typeof google != 'undefined') {
 					clearInterval(i);
