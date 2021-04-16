@@ -26,12 +26,22 @@ class Transactions extends MY_Controller {
 		// debug($baskets, 'stop');
 		$assembled = false;
 		if (!is_bool($baskets) AND count($baskets)) {
-			$assembled = [];
+			$products = [];
 			foreach ($baskets as $key => $basket) {
-				$date = date('F j, Y', strtotime($basket['updated']));
-				$basket['uptime'] = date('g:ia', strtotime($basket['updated']));
-				$status = get_status_value($basket['status']);
-				$assembled[$status][$date][$basket['rawdata']['farm']['name']][] = $basket;
+				if (isset($products[$basket['product_id']])) {
+					$basket['quantity'] = $products[$basket['product_id']][$basket['status']]['quantity'] += $basket['quantity'];
+					$basket['id'] = $products[$basket['product_id']][$basket['status']]['id'] .= ','.$basket['id'];
+				}
+				$products[$basket['product_id']][$basket['status']] = $basket;
+			}
+			// debug($products, 'stop');
+			$assembled = [];
+			foreach ($products as $product_id => $product) {
+				foreach ($product as $status => $basket) {
+					$date = date('F j, Y', strtotime($basket['updated']));
+					$basket['uptime'] = date('g:ia', strtotime($basket['updated']));
+					$assembled[get_status_value($status)][$date][$basket['rawdata']['farm']['name']][] = $basket;
+				}
 			}
 		}
 		// debug($assembled, 'stop');

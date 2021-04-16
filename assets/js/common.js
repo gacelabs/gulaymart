@@ -232,7 +232,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 var ajaxSuccessResponse = function(response) {
 	// console.log(response);
 	var bConfirmed = true;
-	if (response && response.type && response.type.length) {
+	if (response && response.type && response.type.length && response.message.length) {
 		bConfirmed = runAlertBox(response, undefined, bConfirmed);
 	}
 	if (bConfirmed) {

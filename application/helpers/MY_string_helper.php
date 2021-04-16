@@ -1118,10 +1118,11 @@ function str_not_value_echo($search='', $in='', $echo='') {
 }
 
 function get_coordinates($data=false, $sensor=0, $region='PH') {
-	if ($data AND (isset($data['city']) AND isset($data['street']) AND isset($data['province']))) {
+	if ($data AND (isset($data['city']) OR isset($data['street']) OR isset($data['province']))) {
 		/*$data['city'],$data['street'],$data['province']*/
 		$address = urlencode(implode(',', $data));
-		$url = "http://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+		$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+		// debug($url, 'stop');
 		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1132,7 +1133,7 @@ function get_coordinates($data=false, $sensor=0, $region='PH') {
 		$curl_response = curl_exec($ch);
 		curl_close($ch);
 		$response = json_decode($curl_response);
-
+		// debug($response, 'stop');
 		if ($response->status == 'OK') {
 			$googlemap = $response->results[0];
 			$coordinates = $googlemap->geometry->location;

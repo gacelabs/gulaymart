@@ -251,7 +251,6 @@ class Basket extends My_Controller {
 	{
 		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => 1]);
 		if ($baskets) {
-			// $this->book_delivery();
 			$items_by_farm = $toktok_temp_data = [];
 			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
 			// debug($items_by_farm, 'stop');
@@ -267,10 +266,11 @@ class Basket extends My_Controller {
 				foreach ($items as $key => $item) {
 					$basket_ids[] = $item['id'];
 					$toktok_temp_data[$location_id]['item'] = $item;
-					$toktok_temp_data[$location_id]['total_price'] += (int)$item['quantity'] * (float) $item['rawdata']['basket_details']['price'];
+					$toktok_temp_data[$location_id]['total_price']+=(int)$item['quantity']*(float) $item['rawdata']['basket_details']['price'];
 				}
 				$toktok_temp_data[$location_id]['basket_ids'] = implode(',', $basket_ids);
 			}
+			// debug($toktok_temp_data, 'stop');
 			foreach ($toktok_temp_data as $location_id => $temp) {
 				$toktok_post = toktok_post_delivery_format($temp['item']);
 				$toktok_post['f_recepient_cod'] = $temp['total_price'] + $temp['fee'];
@@ -280,11 +280,14 @@ class Basket extends My_Controller {
 					'basket_ids' => $temp['basket_ids'],
 					'toktok_data' => base64_encode(json_encode($toktok_post)),
 				];
+				// debug($toktok_data, 'stop');
 				/*now save to DB for queueing*/
 				$toktok = $this->gm_db->get('basket_transactions', [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
+					'basket_ids' => $temp['basket_ids'],
 				], 'row');
+				// debug($toktok, 'stop');
 				if ($toktok == false) {
 					$this->gm_db->new('basket_transactions', $toktok_data);
 				} else {

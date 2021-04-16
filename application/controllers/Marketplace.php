@@ -37,7 +37,7 @@ class Marketplace extends MY_Controller {
 				],
 			],
 			'bottom' => [
-				'modals' => [],
+				'modals' => ['check_loc_modal'],
 				'js' => ['marketplace/main', 'plugins/fb-login', 'global'],
 			],
 			'data' => [

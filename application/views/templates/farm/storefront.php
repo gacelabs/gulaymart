@@ -47,7 +47,7 @@
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
 									<li class="text-right">
-										<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+										<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab<?php echo $data['farms']['id'];?>" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
 										<button type="submit" class="btn btn-contrast">Update</button>
 									</li>
 								<?php else: ?>

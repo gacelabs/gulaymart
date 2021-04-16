@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
 
-	public $allowed_methods = [];
+	public $allowed_methods = ['fetch_coordinates'];
 
 	public function __construct()
 	{
@@ -171,6 +171,26 @@ class Api extends MY_Controller {
 			}
 		}
 		echo $saved; exit();
+	}
+
+	public function fetch_coordinates()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		// debug($post, 'stop');
+		if ($post) {
+			$coordinates = get_coordinates($post);
+			// debug($coordinates, 'stop');
+			if ($coordinates) {
+				if ($this->accounts->has_session) {
+					$this->accounts->refetch();
+				} else {
+					$this->latlng = (array) $coordinates;
+				}
+				$this->session->set_userdata('prev_latlng', serialize($this->latlng));
+				$this->set_response('success', 'You have set your residing address at '.ucwords($post['city']).'!', $coordinates, '/');
+			}
+		}
+		$this->set_response('error', 'City not existing!', $post);
 	}
 
 }

@@ -16,6 +16,7 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
 		$referrer = $this->session->userdata('referrer');
 		if (empty($referrer)) {
@@ -170,7 +171,14 @@ class MY_Controller extends CI_Controller {
 			$this->basket_count = $baskets == false ? false : count($baskets);
 		
 			$baskets = $this->gm_db->get_not_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
-			$this->order_count = $baskets == false ? false : count($baskets);
+			$products = false;
+			if ($baskets) {
+				$products = [];
+				foreach ($baskets as $key => $basket) {
+					$products[$basket['product_id']] = $basket;
+				}
+			}
+			$this->order_count = $products == false ? false : count($products);
 		}
 	}
 
