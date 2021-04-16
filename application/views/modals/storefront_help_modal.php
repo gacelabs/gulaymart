@@ -84,13 +84,16 @@
 				<h4 class="modal-title">Farm Locations</h4>
 			</div>
 			<div class="modal-body">
-				<p>If you are a farmer that lives in Manila but your farm is located somewhere else, then <b class="text-contrast">LOCATIONS</b> is your option.</p>
+				<p>If you are a farmer that lives in Manila but has a farm located in the province, then <b class="text-contrast">LOCATIONS</b> is your option.</p>
 				<img src="assets/images/helps/storefront-location.gif" class="img-responsive" style="margin-bottom:15px;">
 				<p>The <b>Select a different address</b> option allows you to save a specific location for your farm, which will then be used as the <b>pick up point</b> for your products.</p>
-				<p>For farmers who has multiple farms with different locations, click on the <b><i class="fa fa-plus"></i></b> sign to add more.</p>
+				<p>For farmers who has multiple farms with different locations, click on the <b><i class="fa fa-plus"></i></b> button to add more.</p>
 				<div class="text-step-basic">
 					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
-					<p class="zero-gaps">Wrong address could reflect <b class="text-danger">over charged delivery fees.</b></p>
+					<div>
+						<p class="zero-gaps">Your farm's address will be used as the pick up point for your products.</b></p>
+						<p class="zero-gaps">Wrong address could reflect <b class="text-danger">over charged delivery fees.</b></p>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">

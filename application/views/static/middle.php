@@ -1,4 +1,4 @@
-<body class="<?php echo implode(' ', $middle['body_class']); echo(!empty($current_profile) ? ' is-logged' : ''); echo(empty($current_profile) ? ' check-loc-on' : '');?>">
+<body class="<?php echo implode(' ', $middle['body_class']); echo(!empty($current_profile) ? ' is-logged' : '');?> <?php if (empty($current_profile) AND empty($this->session->userdata('prev_latlng'))) {echo "check-loc-on";}?>">
 	<?php if ($this->action != 'store'): ?>
 		<?php $this->view('requires/fb_scripts'); ?>
 	<?php endif ?>
