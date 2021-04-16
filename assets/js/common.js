@@ -739,7 +739,9 @@ function setAutocompleteEvent() {
 	var input = $('#search-place').get(0);
 	if (autocomplete != undefined) google.maps.event.clearListeners(autocomplete, 'place_changed');
 	// console.log(autocomplete, google.maps.event);
-	autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete = new google.maps.places.Autocomplete(input, {
+		componentRestrictions: {country: "ph"},
+	});
 
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		$('#address_1').val('');
