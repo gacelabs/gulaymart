@@ -22,11 +22,13 @@ class MY_Controller extends CI_Controller {
 			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 			$this->session->set_userdata('referrer', $this->referrer);
 		}
-		$latlng = get_cookie('prev_latlng', true);
+		// $latlng = get_cookie('prev_latlng', true);
+		$latlng = $this->session->userdata('prev_latlng');
 		if (!empty($latlng)) {
 			// debug($latlng, 'stop');
 			$this->latlng = unserialize($latlng);
 		}
+		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));
 		$this->action = strtolower(trim($this->router->method));
 		// $this->load->library('controllerlist');
@@ -136,7 +138,7 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 		}
-		$this->session->set_userdata('valid_fields', $defaults);
+		$this->valid_fields = $defaults;
 	}
 
 	public function set_global_values()
@@ -161,7 +163,15 @@ class MY_Controller extends CI_Controller {
 				@chmod($uploaddir, 0755);
 			}
 		}
-		$this->basket_empty = empty(get_session_baskets());
+		/**/
+		$this->basket_count = $this->order_count = false;
+		if ($this->accounts->has_session) {
+			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
+			$this->basket_count = $baskets == false ? false : count($baskets);
+		
+			$baskets = $this->gm_db->get_not_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
+			$this->order_count = $baskets == false ? false : count($baskets);
+		}
 	}
 
 	public function render_page($rawdata=false, $debug=false)

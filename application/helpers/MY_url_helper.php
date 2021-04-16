@@ -216,11 +216,12 @@ function add_item_to_basket($post, $product_id)
 				$post['baskets']['at_time'] = $time;
 				$post['baskets']['rawdata'] = base64_encode(json_encode($product));
 
-				$existing = $ci->gm_db->get('baskets', [
+				$existing = $ci->gm_db->get_in('baskets', [
 					'product_id' => $post['baskets']['product_id'],
 					'user_id' => $post['baskets']['user_id'],
 					'location_id' => $post['baskets']['location_id'],
 					'at_date' => $post['baskets']['at_date'],
+					'status' => [0,1],
 				], 'row');
 
 				$post['baskets']['fee'] = 0;

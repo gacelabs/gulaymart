@@ -60,6 +60,34 @@ class MY_Model extends CI_Model {
 		return FALSE;
 	}
 
+	public function get_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($table) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if ($where) {
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_not_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return FALSE;
+	}
+
 	public function query($string=FALSE, $func='result')
 	{
 		if ($string) {

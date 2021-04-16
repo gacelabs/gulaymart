@@ -48,7 +48,11 @@ $(document).ready(function() {
 				
 				var html = $(e.target).find('form .preview_images_list').html();
 				$(e.target).find('form .preview_images_list').html('');
-				html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
+				html = $(html).find('input:radio').attr('name', 'selected').removeAttr('data-upload').removeAttr('checked').parent('li');
+				$(html).find('input:radio').each(function(i, elem) {
+					var oThis = $(elem);
+					elem.value = oThis.data('url-path');
+				});
 				$(e.target).find('form .preview_images_selected').append(html);
 				$(e.target).find('form').find('input:file').prop('value', '').val('');;
 			break;

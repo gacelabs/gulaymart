@@ -59,8 +59,8 @@ $(document).ready(function() {
 	// banner section
 	$(function() {
 		$('#banner_section').change(function() {
-			$('#storefront_page_container').find('.banner_section').removeClass('hide');
-			$('#storefront_page_container').find('.banner_section').attr('src', 'assets/images/banner/'+$(this).val());
+			$('#storefront_page_container').find('.banner-section').removeClass('hide');
+			$('#storefront_page_container').find('.banner-section img').attr('src', 'assets/images/banner/'+$(this).val());
 		});
 	});
 

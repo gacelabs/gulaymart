@@ -61,7 +61,7 @@
 											<div class="tender-amount-grid">
 												<div class="order-item-status">
 													<ul class="inline-list">
-														<li class="text-capsule icon-left status-<?php echo $status;?>"><?php echo $status;?></li>
+														<li class="text-capsule icon-left status-<?php echo $status;?>"><?php echo ucwords($status);?></li>
 													</ul>
 												</div>
 												<div class="tender-amount-parent">

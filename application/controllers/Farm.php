@@ -109,16 +109,18 @@ class Farm extends MY_Controller {
 								$this->gm_db->remove('products_location', ['product_id' => $product_id]);
 								foreach ($post['products_location'] as $key => $location) {
 									if (isset($location['farm_location_id']) AND $location['farm_location_id']) {
-										$location['product_id'] = $product_id;
-										$this->gm_db->new('products_location', $location);
-										$post['products_location'][$key]['duration'] = '';
-										$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
-										if ($farm_location) {
-											$driving_distance = get_driving_distance([
-												['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-												['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-											]);
-											$post['products_location'][$key]['duration'] = $driving_distance['duration'];
+										if (!empty($location['price']) AND !empty($location['stocks'])) {
+											$location['product_id'] = $product_id;
+											$this->gm_db->new('products_location', $location);
+											$post['products_location'][$key]['duration'] = '';
+											$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+											if ($farm_location) {
+												$driving_distance = get_driving_distance([
+													['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+													['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+												]);
+												$post['products_location'][$key]['duration'] = $driving_distance['duration'];
+											}
 										}
 									}
 								}
@@ -270,16 +272,18 @@ class Farm extends MY_Controller {
 					// debug($products_location, 'stop');
 					$this->gm_db->remove('products_location', ['product_id' => $id]);
 					foreach ($products_location as $farm_location_id => $location) {
-						$location['product_id'] = $id;
-						$this->gm_db->new('products_location', $location);
-						$post['products_location'][$farm_location_id]['duration'] = '';
-						$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
-						if ($farm_location) {
-							$driving_distance = get_driving_distance([
-								['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-								['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-							]);
-							$post['products_location'][$farm_location_id]['duration'] = $driving_distance['duration'];
+						if (!empty($location['price']) AND !empty($location['stocks'])) {
+							$location['product_id'] = $id;
+							$this->gm_db->new('products_location', $location);
+							$post['products_location'][$farm_location_id]['duration'] = '';
+							$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+							if ($farm_location) {
+								$driving_distance = get_driving_distance([
+									['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+									['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+								]);
+								$post['products_location'][$farm_location_id]['duration'] = $driving_distance['duration'];
+							}
 						}
 					}
 				}

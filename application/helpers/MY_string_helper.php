@@ -1177,7 +1177,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			return [
 				'distance' => $distance,
 				'distanceval' => (float)$distanceval,
-				'duration' => $duration,
+				'duration' => trim(str_replace('0 mins', '', $duration)),
 				'durationval' => (float)$durationval,
 			];
 		}

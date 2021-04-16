@@ -89,6 +89,7 @@ class Basket extends My_Controller {
 					}
 					$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $existing['id']]);
 				} else {
+					$post['baskets']['status'] = $status;
 					$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
 				}
 				$message = $status ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';

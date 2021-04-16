@@ -10,12 +10,28 @@
 		<div class="navbar-aside-divider"><hr></div>
 		<div class="aside-nav-child">
 			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
-				<i class="fa fa-shopping-basket"></i><span class="hidden-xs">Basket <?php if($current_profile['shippings']) {echo "<kbd>Buy now!</kbd>";} ?></span>
+				<i class="fa fa-shopping-basket"></i>
+				<span class="hidden-xs">Basket 
+					<?php 
+					if($current_profile['shippings'] AND $this->basket_count == false) {
+						echo "<kbd>Buy now!</kbd>";
+					} elseif ($this->basket_count !== false) {
+						echo "<kbd>".$this->basket_count."</kbd>";
+					}
+					?>
+				</span>
 			</a>
 		</div>
 		<div class="aside-nav-child">
 			<a href="transactions/orders/" class="aside-nav-item <?php in_array_echo("orders", $middle['body_class'], "active");?>">
-				<i class="fa fa-cart-arrow-down"></i><span class="hidden-xs">Orders</span>
+				<i class="fa fa-cart-arrow-down"></i>
+				<span class="hidden-xs">Orders
+					<?php 
+					if ($this->order_count !== false) {
+						echo "<kbd>".$this->order_count."</kbd>";
+					}
+					?>
+				</span>
 			</a>
 		</div>
 		<div class="aside-nav-child">
