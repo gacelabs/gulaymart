@@ -448,47 +448,49 @@ class Products {
 				$product['farm'] = $farm;
 
 				$products_location = $products_location->row_array();
+				$saved_stocks = $stocks = $products_location['stocks'];
 				/*check here the number of quantity ordered*/
-				$basket = $this->class->gm_db->get('baskets', ['product_id' => $product_id], 'result', 'quantity');
+				$basket = $this->class->gm_db->get_in('baskets', ['product_id' => $product_id, 'status' => [0,1]], 'result', 'quantity');
 				if ($basket) {
-					$stocks = $products_location['stocks'];
 					if ($stocks > 0) {
 						foreach ($basket as $b) {
 							$stocks -= $b['quantity'];
 						}
 					}
-					$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
-					if ($stocks <= 0) {
-						/*update product stocks*/
-						$this->class->gm_db->save('products_location',
-							['stocks' => $stocks],
-							['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
-						);
-
-						// send message to the user has to replenish the needed stocks for delivery
-						$name = $product['name'];
-						$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
-						$datestamp = strtotime(date('Y-m-d'));
-						$content = <<<EOF
-							Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
-						EOF;
-						$check_msgs = $this->class->gm_db->get('messages', [
+				}
+				if ($saved_stocks != $stocks) {
+					/*update product stocks*/
+					$this->class->gm_db->save('products_location',
+						['stocks' => $stocks],
+						['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
+					);
+				}
+				if ($stocks <= 0) {
+					// send message to the user has to replenish the needed stocks for delivery
+					$name = $product['name'];
+					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
+					$datestamp = strtotime(date('Y-m-d'));
+					$content = <<<EOF
+						Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
+					EOF;
+					$check_msgs = $this->class->gm_db->get('messages', [
+						'tab' => 'Notifications', 'type' => 'Inventory',
+						'user_id' => $product['user_id'], 'unread' => 1,
+						'datestamp' => $datestamp,
+						'content' => $content,
+					], 'row');
+					if ($check_msgs) {
+						$this->class->gm_db->save('messages', ['content' => $content], ['id' => $check_msgs['id']]);
+					} else {
+						$this->class->gm_db->new('messages', [
 							'tab' => 'Notifications', 'type' => 'Inventory',
-							'user_id' => $product['user_id'], 'unread' => 1,
-							'datestamp' => $datestamp,
+							'user_id' => $product['user_id'], 'datestamp' => $datestamp,
 							'content' => $content,
-						], 'row');
-						if ($check_msgs) {
-							$this->class->gm_db->save('messages', ['content' => $content], ['id' => $check_msgs['id']]);
-						} else {
-							$this->class->gm_db->new('messages', [
-								'tab' => 'Notifications', 'type' => 'Inventory',
-								'user_id' => $product['user_id'], 'datestamp' => $datestamp,
-								'content' => $content,
-							]);
-						}
+						]);
 					}
 				}
+				$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
+				// debug($products_location, 'stop');
 				$product['basket_details'] = $products_location;
 
 				$product['attribute'] = [];

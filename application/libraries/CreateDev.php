@@ -517,6 +517,12 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
+			'replenished' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
 		]);
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('farm_location_id');

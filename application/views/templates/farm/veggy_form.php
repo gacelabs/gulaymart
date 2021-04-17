@@ -208,6 +208,9 @@
 													<div class="input-group">
 														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
 														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" value="<?php echo $stocks;?>">
+														<?php if ($stocks <= 0): ?>
+															<input type="hidden" name="products_location[<?php echo $location['id'];?>][replenished]" value="1">														
+														<?php endif ?>
 													</div>
 												</div>
 											</div>
