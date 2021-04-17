@@ -7,6 +7,7 @@
 						<li class="text-left">
 							<h1 class="farm_name"><a href="store/<?php echo $data['farm']['id'];?>/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
 							<h4 class="tagline"><?php echo $data['farm']['tagline'];?></h4>
+							<label class="text-white"><?php echo $data['location']['address_2'];?></label>
 						</li>
 						<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div></li>
 					</ul>
@@ -30,11 +31,11 @@
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}
 						} else {?>
-							<?php if ($current_profile AND empty($data['products'])) : ?>
+							<?php if (($current_profile AND $current_profile['id'] == $data['farm']['user_id']) AND empty($data['products'])) : ?>
 								<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
 								<hr class="carved">
-								<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 							<?php endif; ?>
+							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 						<?php } ?>
 					</div>
 					<div class="clearfix"></div>

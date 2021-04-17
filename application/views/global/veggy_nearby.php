@@ -13,7 +13,7 @@
 		</div>
 		<div id="veggy_nearby_right_container">
 			<?php
-				foreach (array_reverse($data['nearby_veggies']) as $key => $veggy) {
+				foreach ($data['nearby_veggies'] as $key => $veggy) {
 					$this->view('looping/veggy_card', ['data'=>$veggy]);
 				}
 			?>

@@ -285,10 +285,10 @@ class Basket extends My_Controller {
 				$toktok = $this->gm_db->get('basket_transactions', [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
-					// 'basket_ids' => $temp['basket_ids'],
 					'queue_status' => 0,
 				], 'row');
-				// debug($toktok, 'stop');
+				// $toktok['toktok_data'] = json_decode(base64_decode($toktok['toktok_data']), true);
+				// debug($toktok, $toktok_data, 'stop');
 				if ($toktok == false) {
 					$this->gm_db->new('basket_transactions', $toktok_data);
 				} else {

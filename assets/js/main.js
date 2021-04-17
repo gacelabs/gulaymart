@@ -57,6 +57,10 @@ $(document).ready(function() {
 	if (oUser && oUser.is_profile_complete == 0) {
 		runAlertBox({type:'info', message: PROFILE_INFO_MESSAGE});
 	} else {
+		function removeUrlParams() {
+			var href = window.location.origin + window.location.pathname;
+			window.history.replaceState({}, document.title, href);
+		}
 		var sSuccessMessage = getParameterByName('success');
 		var sInfoMessage = getParameterByName('info');
 		var sWarnMessage = getParameterByName('warn');
@@ -73,6 +77,7 @@ $(document).ready(function() {
 		} else if ($.trim(sErrorMessage).length) {
 			runAlertBox({type:'error', message: sErrorMessage});
 		}
+		removeUrlParams();
 	}
 	
 	$('#main-obj-script').remove();

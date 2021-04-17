@@ -334,7 +334,7 @@ class Products {
 					}
 
 					$farm = $this->class->gm_db->get('user_farms', ['user_id' => $product['user_id']], 'row');
-					$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+					// $farm['storefront'] = storefront_url($farm);
 					$product['farm'] = $farm;
 
 					$product['location'] = false;
@@ -407,7 +407,7 @@ class Products {
 			]);
 			if ($products_location->num_rows()) {
 				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
-				$product['product_url'] = base_url('basket/view/'.$product_id.'/'.$farm_location_id.'/'.nice_url($product['name'], true));
+				$product['product_url'] = product_url(['id'=>$product_id, 'farm_location_id'=>$farm_location_id, 'name'=>$product['name']]);
 				
 				$added = $product['added'];
 				$updated = $product['updated'];
@@ -443,7 +443,8 @@ class Products {
 				}
 
 				$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
-				$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+				$farm['farm_location_id'] = $farm_location_id;
+				$farm['storefront'] = storefront_url($farm);
 				$product['farm'] = $farm;
 
 				$products_location = $products_location->row_array();

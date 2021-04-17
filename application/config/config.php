@@ -23,7 +23,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-
 $domain = '/';
 if (ENVIRONMENT === 'development') {
 	$domain = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);

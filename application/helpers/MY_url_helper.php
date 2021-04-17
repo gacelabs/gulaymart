@@ -360,3 +360,19 @@ function get_status_value($status=false)
 	}
 	return '';
 }
+
+function storefront_url($farm=false)
+{
+	if ($farm) {
+		return base_url('store/'.$farm['id'].'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
+	}
+	return false;
+}
+
+function product_url($item=false)
+{
+	if ($item) {
+		return base_url('basket/view/'.$item['id'].'/'.$item['farm_location_id'].'/'.nice_url($item['name'], true));
+	}
+	return false;
+}

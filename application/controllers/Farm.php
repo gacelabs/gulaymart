@@ -515,7 +515,7 @@ class Farm extends MY_Controller {
 		]);
 	}
 
-	public function store($id=0, $name=false)
+	public function store($id=0, $farm_location_id=0, $name=false)
 	{
 		if ($name != false AND (strtolower($name) != 'preview' OR $this->accounts->has_session)) {
 			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
@@ -529,8 +529,8 @@ class Farm extends MY_Controller {
 			if ($user_farm) {
 				$data = [
 					'farm' => $user_farm,
-					'locations' => $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']]),
-					'products' => nearby_products($this->latlng, $user_farm['user_id']),
+					'location' => $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row'),
+					'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
 				];
 				// debug($data, 'stop');
 			}
