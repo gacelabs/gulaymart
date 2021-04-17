@@ -35,6 +35,7 @@ class DevBuild extends CI_Controller {
 			if ($exists == true) {
 				$this->load->library('accounts');
 				if ($this->accounts->has_session) $this->accounts->logout(true);
+				delete_cookie('prev_latlng');
 				sleep(3);
 				$return = $this->gm_db->drop_tables();
 				if ($return) {
