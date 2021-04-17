@@ -74,6 +74,9 @@ body.store {
 	margin: 0;
 	padding: 0;
 }
+#product_item_container {
+	padding: 0;
+}
 body.store #storefront_navbar {
 	margin-bottom: 15px;
 }
@@ -110,6 +113,8 @@ body.store .storefront-middle {
 	background-color: #fff;
 }
 .banner-section {
+	clear: both;
+	margin-top: 20px;
 	padding: 0;
 }
 .banner-section>img {

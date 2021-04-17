@@ -13,7 +13,7 @@
 					<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 				</span>
 			</div>
-			<p style="padding:0 0 0 13px;margin-bottom:15px;"><b class="text-contrast hidden-xs">Step 2</b><i class="text-contrast fa fa-question-circle hidden-lg hidden-md hidden-sm" data-toggle="tooltip" data-placement="right" title="Step 2. Drag and point the map marker onto the location."></i> Drag and point the map marker <i class="fa fa-map-marker text-danger"></i> onto the location.</p>
+			<p style="padding:0 0 0 13px;margin-bottom:15px;"><b class="text-contrast hidden-xs">Step 2</b><i class="text-contrast fa fa-question-circle hidden-lg hidden-md hidden-sm" data-toggle="tooltip" data-placement="right" title="Step 2. Drag and point the map marker on the exact location."></i> Drag and point the map marker <i class="fa fa-map-marker text-danger"></i> on the exact location.</p>
 			<div id="map-box" style="width: 100%; height: 250px; margin-bottom: 15px;"></div>
 			<div class="input-group">
 				<span class="input-group-addon"><span><b class="text-contrast hidden-xs">Step 3</b><i class="text-contrast fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 3. Enter the complete address."></i></span></span>

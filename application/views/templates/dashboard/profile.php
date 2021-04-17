@@ -153,7 +153,7 @@
 		<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
-					<li><h4 class="zero-gaps">Shipping address</h4></li>
+					<li><h4 class="zero-gaps">Delivery address</h4></li>
 				</ul>
 				<div class="dashboard-panel-middle">
 					<div class="saved-shipping-container">
@@ -177,7 +177,7 @@
 						<?php else: ?>
 							<div class="text-step-basic">
 								<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
-								<p class="zero-gaps">Follow the <b class="text-contrast">Steps</b> bellow to save a shipping address.</p>
+								<p class="zero-gaps">Follow the <b class="text-contrast">Steps</b> bellow to save a <b>delivery address</b>.</p>
 							</div>
 						<?php endif; ?>
 					</div>

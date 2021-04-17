@@ -1,6 +1,5 @@
-
 <div id="global_navbar">
-	<?php if (empty($current_profile)) : ?>
+	<?php if (empty($current_profile) AND empty($this->session->userdata('prev_latlng'))) : ?>
 	<div id="check_loc">
 		<div class="container">
 			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. CHECK YOUR <span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>

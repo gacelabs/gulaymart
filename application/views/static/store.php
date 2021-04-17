@@ -36,9 +36,10 @@
 								<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 							<?php endif; ?>
 						<?php } ?>
-						<div class="banner-section">
-							<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
-						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="banner-section">
+						<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
 					</div>
 				</div>
 				

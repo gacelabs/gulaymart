@@ -305,10 +305,10 @@
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
 							<li><p>Listing</p></li>
-							<li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li>`
+							<li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li>
 						</ul>
 						<div class="product-list-card">
-							<div class="product-list-photo order-photo" style="background-image:url('https://via.placeholder.com/220x220?text=Product+photo+shows+here');">
+							<div class="product-list-photo order-photo" style="background-image:url('https://place-hold.it/360x360.png?text=Upload+Product+Images&fontsize=14');">
 							</div>
 							<div class="product-desc-body">
 								<div class="product-title-container ellipsis-container">

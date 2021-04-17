@@ -5,12 +5,17 @@
 				<h4 class="modal-title">Check Location</h4>
 			</div>
 			<div class="modal-body">
-				<p class="zero-gaps">As part of Gulaymart's core values to <b>support local farmers</b>, we urge our everyone to filter the products based on their residing address. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
+				<p class="zero-gaps">As part of Gulaymart's core values to <b>support local farmers</b>, we urge everyone to filter the products based on their residing address. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
 				<img src="assets/images/banner/check-location.png" class="img-responsive" style="margin: 20px 0;">
-				<p>Please search the <b class="text-contrast">city</b> where you're living in.</p>
+
+				<div class="text-step-basic">
+					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
+					<p class="zero-gaps">Use the box below to search the <b class="text-contrast">city</b> where you live in.</p>
+				</div>
+
 				<div class="input-group">
-					<span class="input-group-addon" id="basic-addon1"><i class="fa fa-map-marker text-danger"></i></span>
-					<input type="text" class="form-control" id="check-place" placeholder="Search your city..." aria-describedby="basic-addon1">
+					<span class="input-group-addon" id="basic-addon1">My city is</span>
+					<input type="text" class="form-control" id="check-place" placeholder="" aria-describedby="basic-addon1">
 				</div>
 			</div>
 		</div>
