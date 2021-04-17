@@ -453,20 +453,19 @@ class Products {
 				/*check here the number of quantity ordered*/
 				$basket = $this->class->gm_db->get_in('baskets', ['product_id' => $product_id, 'status' => [0,1]], 'result', 'quantity');
 				if ($basket) {
-					if ($stocks > 0) {
+					if ($stocks > 0 /*AND $products_location['replenished'] == 1*/) {
 						foreach ($basket as $b) {
 							$stocks -= $b['quantity'];
 						}
 					}
 				}
-				if ($saved_stocks != $stocks) {
+				$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
+				if ($stocks <= 0) {
 					/*update product stocks*/
 					$this->class->gm_db->save('products_location',
-						['stocks' => $stocks],
+						['stocks' => $stocks, 'replenished' => 0],
 						['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
 					);
-				}
-				if ($stocks <= 0) {
 					// send message to the user has to replenish the needed stocks for delivery
 					$name = $product['name'];
 					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
@@ -490,7 +489,6 @@ class Products {
 						]);
 					}
 				}
-				$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
 				// debug($products_location, 'stop');
 				$product['basket_details'] = $products_location;
 
