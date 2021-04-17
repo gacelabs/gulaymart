@@ -336,7 +336,8 @@ function fix_title($title=FALSE, $replace=' ') {
 
 function nice_url($title=FALSE, $return=false) {
 	if ($title) {
-		$echo = strtolower(preg_replace('/\s+/', '-', $title));
+		$echo = preg_replace('/[^A-Za-z0-9\-]/', ' ', strtolower($title));
+		$echo = strtolower(preg_replace('/\s+/', '-', trim($echo)));
 	} else {
 		$echo = '';
 	}
@@ -1239,11 +1240,16 @@ function nearby_farms($data=false, $user_id=false)
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (float)$driving_distance['distance'];
 					if ($distance <= KM_DISTANCE_TO_USER) {
+						$where = ['id' => $row['farm_id']];
 						if ($user_id) {
-							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id'], 'user_id' => $user_id], 'row');
-						} else {
-							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+							$where['user_id'] = $user_id;
 						}
+						/*if ($profile) { // this is for the storefront ranking, abang lang
+							$where['user_id'] = [$profile['id']];
+							$farm = $ci->gm_db->get_not_in('user_farms', $where, 'row');
+						} else {*/
+							$farm = $ci->gm_db->get('user_farms', $where, 'row');
+						/*}*/
 						if ($farm) {
 							$user = $ci->gm_db->get('user_profiles', ['user_id' => $farm['user_id']], 'row');
 							$farm['address'] = $row['address_2'];
@@ -1293,14 +1299,16 @@ function nearby_products($data=false, $user_id=false)
 						if ($products_locations) {
 							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
 							foreach ($products_locations as $index => $location) {
+								$where = ['id' => $location['product_id']];
 								if ($user_id) {
-									$product = $ci->gm_db->get('products', [
-										'id' => $location['product_id'],
-										'user_id' => $user_id,
-									], 'row');
-								} else {
-									$product = $ci->gm_db->get('products', ['id' => $location['product_id']], 'row');
+									$where['user_id'] = $user_id;
 								}
+								/*if ($profile) { // this for the product ranking, abang lang
+									$where['user_id'] = [$profile['id']];
+									$product = $ci->gm_db->get_not_in('products', $where, 'row');
+								} else {*/
+									$product = $ci->gm_db->get('products', $where, 'row');
+								/*}*/
 
 								if ($product) {
 									$product['farm_location_id'] = $row['id'];
