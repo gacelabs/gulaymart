@@ -9,25 +9,33 @@
 				</ul>
 				<div class="dashboard-panel-middle hideshow-container">
 					<div id="msg_notifications">
-					<?php foreach ($data['messages'] as $key => $message): ?>
-						<div class="notif-item">
-							<div class="notif-item-top">
-								<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y', $message['datestamp']);?></span> </p>
+						<?php if ($data['messages']): ?>
+							<?php foreach ($data['messages'] as $key => $message): ?>
+								<div class="notif-item">
+									<div class="notif-item-top">
+										<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y', $message['datestamp']);?></span> </p>
+									</div>
+									<div class="notif-item-middle">
+										<p>
+											<?php if ($message['unread']): ?><strong><?php endif ?>
+											<?php echo $message['content'];?>
+											<?php if ($message['unread']): ?></strong><?php endif ?>
+										</p>
+									</div>
+									<div class="notif-item-footer<?php if ($message['unread'] == 0): ?> hide<?php endif ?>">
+										<ul class="inline-list">
+											<li><button class="btn btn-default normal-radius">Delete</button></li>
+										</ul>
+									</div>
+								</div>
+							<?php endforeach ?>
+						<?php else: ?>
+							<div class="notif-item">
+								<div class="notif-item-middle">
+									<p>Empty</p>
+								</div>
 							</div>
-							<div class="notif-item-middle">
-								<p>
-									<?php if ($message['unread']): ?><strong><?php endif ?>
-									<?php echo $message['content'];?>
-									<?php if ($message['unread']): ?></strong><?php endif ?>
-								</p>
-							</div>
-							<div class="notif-item-footer<?php if ($message['unread'] == 0): ?> hide<?php endif ?>">
-								<ul class="inline-list">
-									<li><button class="btn btn-default normal-radius">Delete</button></li>
-								</ul>
-							</div>
-						</div>
-					<?php endforeach ?>
+						<?php endif ?>
 					</div>
 
 					<?php
