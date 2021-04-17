@@ -214,7 +214,13 @@ function get_session_baskets($status=[0,1])
 	// debug($basket_session, 'stop');
 	if ($is_userdata) { /*user is now logged in or registered*/
 		$basket_session = []; /*reset*/
-		$baskets = $ci->baskets->get_in(['user_id' => ($ci->accounts->has_session ? $ci->accounts->profile['id'] : 0), 'status' => [0, 1]]);
+		$where = ['status' => [0,1]];
+		if ($ci->accounts->has_session) {
+			$where['user_id'] = $ci->accounts->profile['id'];
+		} else {
+			$where['device_id'] = $ci->device_id;
+		}
+		$baskets = $ci->baskets->get_in($where);
 		if (is_array($baskets)) {
 			foreach ($baskets as $key => $basket) {
 				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;

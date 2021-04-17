@@ -44,9 +44,12 @@ $(document).ready(function() {
 	$('#price_btn_container').find('input:reset').bind('mouseup', function(e) {
 		setTimeout(function() {
 			$(e.target).parents('form:first').find('input:checkbox').each(function(i, elem) {
+				var uiParent = $(elem).parents('[id*="farmlocation-"]').first();
+				// console.log(uiParent, uiParent.next('[js-element]'));
 				if ($(elem).is(':checked')) {
-					var uiParent = $(elem).parents('[id*="farmlocation-"]').first();
 					uiParent.next('[js-element]').removeClass('hide');
+				} else {
+					uiParent.next('[js-element]').addClass('hide');
 				}
 			});
 		}, 300);
