@@ -518,8 +518,8 @@ class CreateDev {
 				'constraint' => '10',
 			],
 			'replenished' => [
-				'type' => 'TINYINT',
-				'constraint' => '1',
+				'type' => 'INT',
+				'constraint' => '10',
 				'default' => '0',
 				'null' => false,
 			],

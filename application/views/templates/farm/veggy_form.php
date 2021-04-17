@@ -158,13 +158,14 @@
 													<p class="zero-gaps"><small class="address_2"><?php echo $location['address_2'];?></small></p>
 												</div>
 												<?php
-												$checked = $price = $measure = $stocks = '';
+												$checked = $price = $measure = $stocks = ''; $replenished = 0;
 												if (isset($data['product']['latlng'][$location['id']])) {
 													$farm_loc = $data['product']['latlng'][$location['id']];
 													$checked = $farm_loc['checked'];
 													$price = $farm_loc['price'];
 													$measure = $farm_loc['measurement'];
 													$stocks = $farm_loc['stocks'];
+													$replenished = $farm_loc['replenished'];
 												}?>
 												<div class="col-lg-4 text-right">
 													<label class="switch">
@@ -209,7 +210,7 @@
 														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
 														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" value="<?php echo $stocks;?>">
 														<?php if ($stocks <= 0): ?>
-															<input type="hidden" name="products_location[<?php echo $location['id'];?>][replenished]" value="1">														
+															<input type="hidden" name="products_location[<?php echo $location['id'];?>][replenished]" value="<?php echo ++$replenished;?>">
 														<?php endif ?>
 													</div>
 												</div>

@@ -360,6 +360,7 @@ class Products {
 								'measurement' => ($location ? $location['measurement'] : ''),
 								'stocks' => ($location ? $location['stocks'] : 0),
 								'checked' => ($location ? 'checked' : ''),
+								'replenished' => ($location ? $location['replenished'] : 0),
 							];
 						}
 					}
