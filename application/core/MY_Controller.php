@@ -170,7 +170,13 @@ class MY_Controller extends CI_Controller {
 			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
 			$this->basket_count = $baskets == false ? false : count($baskets);
 		
-			$baskets = $this->gm_db->get_not_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
+			/*
+			 * status:
+			 * 2 = placed
+			 * 3 = on delivery
+			*/
+			$this->load->library('baskets');
+			$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [2,3]]);
 			$products = false;
 			if ($baskets) {
 				$products = [];
@@ -178,6 +184,7 @@ class MY_Controller extends CI_Controller {
 					$products[$basket['product_id']] = $basket;
 				}
 			}
+			// debug($products, 'stop');
 			$this->order_count = $products == false ? false : count($products);
 		}
 	}

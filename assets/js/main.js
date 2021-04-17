@@ -57,6 +57,10 @@ $(document).ready(function() {
 	if (oUser && oUser.is_profile_complete == 0) {
 		runAlertBox({type:'info', message: PROFILE_INFO_MESSAGE});
 	} else {
+		function removeUrlParams() {
+			var href = window.location.origin + window.location.pathname;
+			window.history.replaceState({}, document.title, href);
+		}
 		var sSuccessMessage = getParameterByName('success');
 		var sInfoMessage = getParameterByName('info');
 		var sWarnMessage = getParameterByName('warn');
@@ -64,14 +68,19 @@ $(document).ready(function() {
 		var sErrorMessage = getParameterByName('error');
 		if ($.trim(sSuccessMessage).length) {
 			runAlertBox({type:'success', message: sSuccessMessage});
+			removeUrlParams();
 		} else if ($.trim(sInfoMessage).length) {
 			runAlertBox({type:'info', message: sInfoMessage});
+			removeUrlParams();
 		} else if ($.trim(sWarnMessage).length) {
 			runAlertBox({type:'warn', message: sWarnMessage});
+			removeUrlParams();
 		} else if ($.trim(sConfirmMessage).length) {
 			runAlertBox({type:'confirm', message: sConfirmMessage});
+			removeUrlParams();
 		} else if ($.trim(sErrorMessage).length) {
 			runAlertBox({type:'error', message: sErrorMessage});
+			removeUrlParams();
 		}
 	}
 	
@@ -156,5 +165,10 @@ $(document).ready(function() {
 			// console.log(blanks, currency, oSettings);
 			$(elem).DataTable(oSettings);
 		});
+	}
+
+	if (window.location.hash) {
+		var hash = window.location.hash;
+		$("html,body").stop().animate({ scrollTop: ($(hash).offset().top - $('#dashboard_navbar').height() - 25), scrollLeft: 0 }, 1000);
 	}
 });

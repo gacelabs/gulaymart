@@ -46,7 +46,6 @@
 				$('#check_loc_modal').modal('show');
 			}, 1000);
 		<?php endif ?>
-
 		$('#check_loc_modal').on('shown.bs.modal', function(e) {
 			var input = $('#check-place').get(0);
 			input.focus();
@@ -99,4 +98,17 @@
 			}, 1000);
 		}).on('hide.bs.modal', function(e) {});
 	});
+	var reloadState = function(data) {
+		// window.location.reload(true);
+		setTimeout(function() {
+			$.ajax({
+				url: '/',
+				success: function(html) {
+					var new_document = document.open('text/html', 'replace');
+					new_document.write(html);
+					new_document.close();
+				}
+			});
+		}, 2000);
+	}
 </script>

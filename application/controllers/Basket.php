@@ -178,11 +178,14 @@ class Basket extends My_Controller {
 						}
 						$eta = $eta_duration;
 					}
-					$this->baskets->save([
-						'quantity' => $row['quantity'],
+					$obj = [
 						'status' => $row['checked'], // verified can be viewed on checkout
 						'order_type' => $order_type,
-					], ['id' => $id]);
+					];
+					if ($row['checked'] == 1) {
+						$obj['quantity'] = $row['quantity'];
+					}
+					$this->baskets->save($obj, ['id' => $id]);
 				}
 			}
 			if ($is_checkout == 0) {
@@ -249,7 +252,7 @@ class Basket extends My_Controller {
 	*/
 	public function place_order()
 	{
-		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1,2]]);
+		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1]]);
 		if ($baskets) {
 			$items_by_farm = $toktok_temp_data = [];
 			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
@@ -285,10 +288,10 @@ class Basket extends My_Controller {
 				$toktok = $this->gm_db->get('basket_transactions', [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
-					// 'basket_ids' => $temp['basket_ids'],
 					'queue_status' => 0,
 				], 'row');
-				// debug($toktok, 'stop');
+				// $toktok['toktok_data'] = json_decode(base64_decode($toktok['toktok_data']), true);
+				// debug($toktok, $toktok_data, 'stop');
 				if ($toktok == false) {
 					$this->gm_db->new('basket_transactions', $toktok_data);
 				} else {
@@ -299,7 +302,7 @@ class Basket extends My_Controller {
 			foreach ($baskets as $key => $basket) {
 				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
 			}
-			$this->set_response('success', 'Orders have been placed!', false, 'transactions/orders/');
+			$this->set_response('success', 'Orders have been placed!', false, 'orders/thank-you/');
 		} else {
 			$this->set_response('info', 'No more orders to place', false, 'basket/');
 		}

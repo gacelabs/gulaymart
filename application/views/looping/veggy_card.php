@@ -7,7 +7,7 @@
 			<div class="veggy-nearby-product-img" style="background-image: url('https://place-hold.it/228x268.png?text=Product+Image+Unavailable&fontsize=14');">
 		<?php endif ?>
 			<div class="veggy-nearby-product-body">
-				<p class="zero-gaps"><i class="fa fa-map-marker"></i> About <?php echo $data['duration'];?></p>
+				<p class="zero-gaps"><i class="fa fa-map-marker"></i><?php if ($data['durationval'] == 0): ?> Right Away<?php else: ?> About <?php echo $data['duration'];?><?php endif ?></p>
 			</div>
 		</div>
 	</a>

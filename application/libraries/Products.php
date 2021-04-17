@@ -334,7 +334,7 @@ class Products {
 					}
 
 					$farm = $this->class->gm_db->get('user_farms', ['user_id' => $product['user_id']], 'row');
-					$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+					// $farm['storefront'] = storefront_url($farm);
 					$product['farm'] = $farm;
 
 					$product['location'] = false;
@@ -360,6 +360,7 @@ class Products {
 								'measurement' => ($location ? $location['measurement'] : ''),
 								'stocks' => ($location ? $location['stocks'] : 0),
 								'checked' => ($location ? 'checked' : ''),
+								'replenished' => ($location ? $location['replenished'] : 0),
 							];
 						}
 					}
@@ -407,7 +408,7 @@ class Products {
 			]);
 			if ($products_location->num_rows()) {
 				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
-				$product['product_url'] = base_url('basket/view/'.$product_id.'/'.$farm_location_id.'/'.nice_url($product['name'], true));
+				$product['product_url'] = product_url(['id'=>$product_id, 'farm_location_id'=>$farm_location_id, 'name'=>$product['name']]);
 				
 				$added = $product['added'];
 				$updated = $product['updated'];
@@ -443,26 +444,52 @@ class Products {
 				}
 
 				$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
-				$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+				$farm['farm_location_id'] = $farm_location_id;
+				$farm['storefront'] = storefront_url($farm);
 				$product['farm'] = $farm;
 
 				$products_location = $products_location->row_array();
+				$saved_stocks = $stocks = $products_location['stocks'];
 				/*check here the number of quantity ordered*/
-				$basket = $this->class->gm_db->get('baskets', ['product_id' => $product_id], 'result', 'quantity');
+				$basket = $this->class->gm_db->get_in('baskets', ['product_id' => $product_id, 'status' => [0,1]], 'result', 'quantity');
 				if ($basket) {
-					$stocks = $products_location['stocks'];
-					foreach ($basket as $b) {
-						$stocks -= $b['quantity'];
-					}
-					$products_location['stocks'] = ($stocks <= 0) ? 0 : $stocks;
-					if ($stocks <= 0) {
-						/*update product stocks*/
-						$this->class->gm_db->save('products_location',
-							['stocks' => 0],
-							['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
-						);
+					if ($stocks > 0 /*AND $products_location['replenished'] == 1*/) {
+						foreach ($basket as $b) {
+							$stocks -= $b['quantity'];
+						}
 					}
 				}
+				$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
+				if ($stocks <= 0) {
+					/*update product stocks*/
+					$this->class->gm_db->save('products_location',
+						['stocks' => $stocks, 'replenished' => 0],
+						['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
+					);
+					// send message to the user has to replenish the needed stocks for delivery
+					$name = $product['name'];
+					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
+					$datestamp = strtotime(date('Y-m-d'));
+					$content = <<<EOF
+						Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
+					EOF;
+					$check_msgs = $this->class->gm_db->get('messages', [
+						'tab' => 'Notifications', 'type' => 'Inventory',
+						'user_id' => $product['user_id'], 'unread' => 1,
+						'datestamp' => $datestamp,
+						'content' => $content,
+					], 'row');
+					if ($check_msgs) {
+						$this->class->gm_db->save('messages', ['content' => $content], ['id' => $check_msgs['id']]);
+					} else {
+						$this->class->gm_db->new('messages', [
+							'tab' => 'Notifications', 'type' => 'Inventory',
+							'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+							'content' => $content,
+						]);
+					}
+				}
+				// debug($products_location, 'stop');
 				$product['basket_details'] = $products_location;
 
 				$product['attribute'] = [];

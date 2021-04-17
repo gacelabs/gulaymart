@@ -1,13 +1,5 @@
 $(document).ready(function() {
-	var oSavedData = {};
-	/*avoid changing the min and max in the ui console*/
-	$('.variety-location').find('.input-number').each(function(i, elem) {
-		oSavedData[i] = {
-			ui: elem,
-			min: parseInt($(elem).attr('min')),
-			max: parseInt($(elem).attr('max')),
-		}
-	});
+	setSavedData();
 
 	//http://jsfiddle.net/laelitenetwork/puJ6G/
 	$('.btn-number').click(function(e){
@@ -147,15 +139,30 @@ $(document).ready(function() {
 
 });
 
+var oSavedData = {};
+function setSavedData() {
+	/*avoid changing the min and max in the ui console*/
+	$('.variety-location').find('.input-number').each(function(i, elem) {
+		oSavedData[i] = {
+			ui: elem,
+			min: parseInt($(elem).attr('min')),
+			max: parseInt($(elem).attr('max')),
+		}
+	});
+}
+
 var stockChanged = function(obj) {
 	console.log(obj);
 	if (obj && obj.baskets) {
 		var qty = parseInt(obj.baskets.quantity);
 		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
-		var newQTY = stocks - qty;
-		if (newQTY <= 0) {
+		var newStocks = stocks - qty;
+		$('[class="max-qty"]').text('Max quantity '+newStocks);
+		$('[name="baskets[quantity]"]').prop('max', newStocks).attr('max', newStocks);
+		if (newStocks <= 0) {
 			$('[js-element="variety"]').html('<p>NO STOCKS AVAILABLE</p>');
 			$('[ js-element="basket-btns"]').remove();
 		}
+		setSavedData();
 	}
 };
