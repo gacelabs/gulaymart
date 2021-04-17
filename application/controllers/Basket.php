@@ -249,7 +249,7 @@ class Basket extends My_Controller {
 	*/
 	public function place_order()
 	{
-		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => 1]);
+		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1,2]]);
 		if ($baskets) {
 			$items_by_farm = $toktok_temp_data = [];
 			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
@@ -285,7 +285,8 @@ class Basket extends My_Controller {
 				$toktok = $this->gm_db->get('basket_transactions', [
 					'user_id' => $temp['user_id'],
 					'location_id' => $location_id,
-					'basket_ids' => $temp['basket_ids'],
+					// 'basket_ids' => $temp['basket_ids'],
+					'queue_status' => 0,
 				], 'row');
 				// debug($toktok, 'stop');
 				if ($toktok == false) {

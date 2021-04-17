@@ -1,8 +1,8 @@
 <div id="products_container">
 	<div id="product_list_container">
 		<?php
-			if ($data['products']) {
-				foreach ($data['products'] as $key => $product) {
+			if ($data['nearby_products']) {
+				foreach ($data['nearby_products'] as $key => $product) {
 					$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 				}
 			}

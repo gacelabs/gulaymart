@@ -1,3 +1,4 @@
+<?php if ($data['nearby_veggies']): ?>
 <div id="veggy_nearby_container">
 	<ul class="spaced-list between">
 		<li><h3><b>Veggies nearby</b></h3></li>
@@ -11,34 +12,12 @@
 			</div>
 		</div>
 		<div id="veggy_nearby_right_container">
-			<div class="veggy-nearby-product-item">
-				<div class="veggy-nearby-product-img" style="background-image: url('assets/images/product-item/veggies.jpg');">
-					<div class="veggy-nearby-product-body">
-						<p class="zero-gaps"><i class="fa fa-map-marker"></i> About 15 mins</p>
-					</div>
-				</div>
-			</div>
-			<div class="veggy-nearby-product-item">
-				<div class="veggy-nearby-product-img" style="background-image: url('assets/images/product-item/veggies.jpg');">
-					<div class="veggy-nearby-product-body">
-						<p class="zero-gaps"><i class="fa fa-map-marker"></i> About 34 mins</p>
-					</div>
-				</div>
-			</div>
-			<div class="veggy-nearby-product-item">
-				<div class="veggy-nearby-product-img" style="background-image: url('assets/images/product-item/veggies.jpg');">
-					<div class="veggy-nearby-product-body">
-						<p class="zero-gaps"><i class="fa fa-map-marker"></i> About 40 mins</p>
-					</div>
-				</div>
-			</div>
-			<div class="veggy-nearby-product-item">
-				<div class="veggy-nearby-product-img" style="background-image: url('assets/images/product-item/veggies.jpg');">
-					<div class="veggy-nearby-product-body">
-						<p class="zero-gaps"><i class="fa fa-map-marker"></i> About 56 mins</p>
-					</div>
-				</div>
-			</div>
+			<?php
+				foreach (array_reverse($data['nearby_veggies']) as $key => $veggy) {
+					$this->view('looping/veggy_card', ['data'=>$veggy]);
+				}
+			?>
 		</div>
 	</div>
 </div>
+<?php endif ?>

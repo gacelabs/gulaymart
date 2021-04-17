@@ -458,8 +458,14 @@ var runMediaUploader = function(callback) {
 				for (var i= 0; i < $(elem)[0].files.length; i++) {
 					var blob_path = window.URL.createObjectURL(elem.files[i]),
 					is_upload = uiForm.data('notmedia') ? 1 : 0;
-					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
-					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
+					var reader = new FileReader();
+					reader.readAsDataURL(elem.files[i]); 
+					reader.onloadend = function() {
+						var base64data = reader.result;                
+						// console.log(base64data);
+						var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
+						uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+base64data+'" /></li>');
+					}
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
@@ -687,6 +693,7 @@ function loadMap(oLatLong) {
 			google.maps.event.addListener(map, "contextmenu", function(event) {
 				map.setCenter(marker.getPosition());
 				infowindow.open(map, marker);
+				map.setZoom(12);
 			});
 
 			google.maps.event.addListener(map, "click", function(event) {

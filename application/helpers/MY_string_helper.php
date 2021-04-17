@@ -1155,7 +1155,6 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			}
 		}
 		// debug($origins, $destinations);
-
 		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language.'&alternatives=true';
 		// debug($url, 'stop');
 
@@ -1176,7 +1175,8 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			if ($elements['status'] != 'ZERO_RESULTS') {
 				$distance = $elements['distance']['text'];
 				$distanceval = $elements['distance']['value'];
-				$duration = $elements['duration']['text'];
+				$duration = str_replace('hours 0 mins', 'hours', $elements['duration']['text']);
+				$duration = str_replace('hour 0 mins', 'hour', $duration);
 				$durationval = $elements['duration']['value'];
 				return [
 					'distance' => $distance,
@@ -1205,6 +1205,33 @@ function float2rat($n, $tolerance = 1.e-6) {
 	return "$h1/$k1";
 }
 
+function nearby_veggies($data=false, $user_id=false)
+{
+	$products = false;
+	if ($data) {
+		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
+		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		// debug($results, 'stop');
+		if ($results) {
+			$products = [];
+			foreach ($results as $key => $row) {
+				$driving_distance = get_driving_distance([
+					['lat' => $data['lat'], 'lng' => $data['lng']],
+					['lat' => $row['lat'], 'lng' => $row['lng']],
+				]);
+				// debug($driving_distance['distance'], 'stop');
+				if ($driving_distance['distance'] AND $driving_distance['duration']) {
+					$duration = (int)$driving_distance['durationval'];
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
+				}
+			}
+		}
+	}
+	// debug($products, 'stop');
+	return $products;
+}
+
 function nearby_farms($data=false, $user_id=false)
 {
 	$farms = false;
@@ -1223,7 +1250,7 @@ function nearby_farms($data=false, $user_id=false)
 			sin(radians(ufl.lat)))
 		) AS distance 
 		FROM user_farm_locations ufl
-		HAVING distance < ".KM_DISTANCE_TO_USER." 
+		HAVING distance < ".METERS_DISTANCE_TO_USER." 
 		ORDER BY distance
 		;";
 		$results = $ci->gm_db->query($SQL);*/
@@ -1238,8 +1265,8 @@ function nearby_farms($data=false, $user_id=false)
 				]);
 				// debug($driving_distance, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (float)$driving_distance['distance'];
-					if ($distance <= KM_DISTANCE_TO_USER) {
+					$distance = (int)$driving_distance['distanceval'];
+					if ($distance <= METERS_DISTANCE_TO_USER) {
 						$where = ['id' => $row['farm_id']];
 						if ($user_id) {
 							$where['user_id'] = $user_id;
@@ -1293,69 +1320,76 @@ function nearby_products($data=false, $user_id=false)
 				]);
 				// debug($driving_distance['distance'], 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (float)$driving_distance['distance'];
-					if ($distance <= KM_DISTANCE_TO_USER) {
-						$products_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
-						if ($products_locations) {
-							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
-							foreach ($products_locations as $index => $location) {
-								$where = ['id' => $location['product_id']];
-								if ($user_id) {
-									$where['user_id'] = $user_id;
-								}
-								/*if ($profile) { // this for the product ranking, abang lang
-									$where['user_id'] = [$profile['id']];
-									$product = $ci->gm_db->get_not_in('products', $where, 'row');
-								} else {*/
-									$product = $ci->gm_db->get('products', $where, 'row');
-								/*}*/
-
-								if ($product) {
-									$product['farm_location_id'] = $row['id'];
-									$product['category'] = false;
-									$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
-									if ($category) $product['category'] = $category['label'];
-
-									$product['subcategory'] = false;
-									$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
-									if ($subcategory) {
-										$product['subcategory'] = $subcategory['label'];
-									}
-
-									$product['photos'] = false;
-									$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
-									if ($photos) {
-										$product['photos'] = [];
-										foreach ($photos as $key => $photo) {
-											if ($photo['is_main']) {
-												$product['photos']['main'] = $photo;
-												break;
-											}
-										}
-										foreach ($photos as $key => $photo) {
-											if (!$photo['is_main']) {
-												$product['photos']['other'][] = $photo;
-											}
-										}
-									}
-
-									$product['distance'] = round($driving_distance['distance'], 2).' km';
-									$product['duration'] = $driving_distance['duration'];
-									$product['price'] = $location['price'];
-									$product['measurement'] = $location['measurement'];
-									$product['stocks'] = $location['stocks'];
-									$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
-									$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.$product['farm_location_id'].'/'.nice_url($product['name'], true));
-									$products[] = $product;
-								}
-							}
-						}
-					}
+					$distance = (int)$driving_distance['distanceval'];
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
 				}
 			}
 		}
 	}
 	// debug($products, 'stop');
+	return $products;
+}
+
+function get_items_by_distance($products, $row, $driving_distance, $user_id, $compare_1, $compare_2)
+{
+	$ci =& get_instance();
+	if ($compare_1 <= $compare_2) {
+		$products_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
+		if ($products_locations) {
+			$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+			foreach ($products_locations as $index => $location) {
+				$where = ['id' => $location['product_id']];
+				if ($user_id) {
+					$where['user_id'] = $user_id;
+				}
+				/*if ($profile) { // this for the product ranking, abang lang
+					$where['user_id'] = [$profile['id']];
+					$product = $ci->gm_db->get_not_in('products', $where, 'row');
+				} else {*/
+					$product = $ci->gm_db->get('products', $where, 'row');
+				/*}*/
+
+				if ($product) {
+					$product['farm_location_id'] = $row['id'];
+					$product['category'] = false;
+					$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+					if ($category) $product['category'] = $category['label'];
+
+					$product['subcategory'] = false;
+					$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+					if ($subcategory) {
+						$product['subcategory'] = $subcategory['label'];
+					}
+
+					$product['photos'] = false;
+					$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
+					if ($photos) {
+						$product['photos'] = [];
+						foreach ($photos as $key => $photo) {
+							if ($photo['is_main']) {
+								$product['photos']['main'] = $photo;
+								break;
+							}
+						}
+						foreach ($photos as $key => $photo) {
+							if (!$photo['is_main']) {
+								$product['photos']['other'][] = $photo;
+							}
+						}
+					}
+
+					$product['distance'] = round($driving_distance['distance'], 2).' km';
+					$product['duration'] = $driving_distance['duration'];
+					$product['price'] = $location['price'];
+					$product['measurement'] = $location['measurement'];
+					$product['stocks'] = $location['stocks'];
+					$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+					$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.$product['farm_location_id'].'/'.nice_url($product['name'], true));
+					$products[] = $product;
+				}
+			}
+		}
+	}
 	return $products;
 }
 
