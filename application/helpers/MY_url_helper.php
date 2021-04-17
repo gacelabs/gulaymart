@@ -173,6 +173,7 @@ function get_session_baskets($status=[0,1])
 		foreach ($session_baskets as $key => $basket) {
 			if ($is_userdata) {
 				$basket['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
+				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
 				$where = [
 					'product_id' => $basket['product_id'],
 					'location_id' => $basket['location_id'],
@@ -193,11 +194,12 @@ function get_session_baskets($status=[0,1])
 						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
 					}
 					$ci->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $id]);
+					$basket['rawdata']['basket_details']['stocks'] -= $quantity;
 				} else {
 					$id = $ci->gm_db->new('baskets', $basket);
+					$basket['rawdata']['basket_details']['stocks'] -= $basket['quantity'];
 				}
 				$basket['id'] = $id;
-				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
 				$driving_distance = get_driving_distance([
 					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
 					['lat' => $ci->latlng['lat'], 'lng' => $ci->latlng['lng']],
@@ -207,11 +209,12 @@ function get_session_baskets($status=[0,1])
 				$basket['distance_text'] = $driving_distance['distance'];
 				$basket['duration_text'] = $driving_distance['duration'];
 				// debug($basket, 'stop');
+			} else {
+				$basket['rawdata']['basket_details']['stocks'] -= $basket['quantity'];
 			}
 			$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 		}
 	}
-	// debug($basket_session, 'stop');
 	if ($is_userdata) { /*user is now logged in or registered*/
 		$basket_session = []; /*reset*/
 		$where = ['status' => [0,1]];
@@ -228,6 +231,7 @@ function get_session_baskets($status=[0,1])
 		}
 	}
 
+	// debug($basket_session, 'stop');
 	return $basket_session;
 }
 
