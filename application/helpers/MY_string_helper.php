@@ -67,7 +67,7 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	if (end($args) == 'stop' OR end($args) == true) exit();
+	if (end($args) == 'stop' OR end($args) === true) exit();
 }
 
 function check_instance($obj=FALSE, $class=NULL)
