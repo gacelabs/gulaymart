@@ -23,8 +23,8 @@ class MY_Controller extends CI_Controller {
 			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 			$this->session->set_userdata('referrer', $this->referrer);
 		}
-		// $latlng = get_cookie('prev_latlng', true);
-		$latlng = $this->session->userdata('prev_latlng');
+		$latlng = get_cookie('prev_latlng', true);
+		// $latlng = $this->session->userdata('prev_latlng');
 		if (!empty($latlng)) {
 			// debug($latlng, 'stop');
 			$this->latlng = unserialize($latlng);

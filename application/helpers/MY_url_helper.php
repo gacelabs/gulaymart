@@ -146,6 +146,7 @@ function redirect_basket_orders()
 {
 	$ci =& get_instance();
 	$basket_session = $ci->session->userdata('basket_session');
+	// debug($basket_session, 'stop');
 	if ($ci->accounts->has_session) {
 		if ($basket_session AND $ci->accounts->profile['is_profile_complete'] == 1) {
 			redirect(base_url('basket/'));
@@ -172,7 +173,29 @@ function get_session_baskets($status=[0,1])
 		foreach ($session_baskets as $key => $basket) {
 			if ($is_userdata) {
 				$basket['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
-				$id = $ci->gm_db->new('baskets', $basket);
+				$where = [
+					'product_id' => $basket['product_id'],
+					'location_id' => $basket['location_id'],
+					'at_date' => $basket['at_date'],
+					'status' => [0,1],
+				];
+				if ($ci->accounts->has_session) {
+					$where['user_id'] = $ci->accounts->profile['id'];
+				} else {
+					$where['device_id'] = $ci->device_id;
+				}
+				$existing = $ci->gm_db->get_in('baskets', $where, 'row');
+				if ($existing) {
+					$id = $existing['id'];
+					$quantity = $existing['quantity'] + (int)$basket['quantity'];
+					$rawdata = json_decode(base64_decode($existing['rawdata']), true);
+					if (isset($rawdata['basket_details']) AND isset($rawdata['basket_details']['stocks'])) {
+						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
+					}
+					$ci->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $id]);
+				} else {
+					$id = $ci->gm_db->new('baskets', $basket);
+				}
 				$basket['id'] = $id;
 				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
 				$driving_distance = get_driving_distance([
@@ -190,6 +213,7 @@ function get_session_baskets($status=[0,1])
 	}
 	// debug($basket_session, 'stop');
 	if ($is_userdata) { /*user is now logged in or registered*/
+		$basket_session = []; /*reset*/
 		$baskets = $ci->baskets->get_in(['user_id' => ($ci->accounts->has_session ? $ci->accounts->profile['id'] : 0), 'status' => [0, 1]]);
 		if (is_array($baskets)) {
 			foreach ($baskets as $key => $basket) {
@@ -215,14 +239,22 @@ function add_item_to_basket($post, $product_id)
 				$post['baskets']['at_date'] = $timestamp;
 				$post['baskets']['at_time'] = $time;
 				$post['baskets']['rawdata'] = base64_encode(json_encode($product));
+				$post['baskets']['device_id'] = $ci->device_id;
 
-				$existing = $ci->gm_db->get_in('baskets', [
+				$where = [
 					'product_id' => $post['baskets']['product_id'],
-					'user_id' => $post['baskets']['user_id'],
 					'location_id' => $post['baskets']['location_id'],
 					'at_date' => $post['baskets']['at_date'],
 					'status' => [0,1],
-				], 'row');
+				];
+				if ($ci->accounts->has_session) {
+					$where['user_id'] = $ci->accounts->profile['id'];
+				} else {
+					$where['device_id'] = $ci->device_id;
+				}
+
+				$existing = $ci->gm_db->get_in('baskets', $where, 'row');
+				// debug($existing, $ci->device_id, 'stop');
 
 				$post['baskets']['fee'] = 0;
 				$post['baskets']['status'] = 0;

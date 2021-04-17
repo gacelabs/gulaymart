@@ -86,6 +86,7 @@ class Accounts {
 							unset($user['re_password']);
 							$this->class->session->set_userdata('profile', $user);
 							$this->profile = $user;
+							$this->has_session = true;
 						}
 						if ($redirect_url != '') {
 							redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
@@ -119,6 +120,7 @@ class Accounts {
 				unset($return['profile']['password']);
 				unset($return['profile']['re_password']);
 				$this->class->session->set_userdata('profile', $return['profile']);
+				$this->has_session = true;
 				$this->profile = $return['profile'];
 				if ($redirect_url != '') {
 					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
@@ -164,10 +166,10 @@ class Accounts {
 		$this->has_session = FALSE;
 
 		$prev_latlng = ['lat' => $profile['lat'], 'lng' => $profile['lng']];
-		$this->class->session->set_userdata('prev_latlng', serialize($prev_latlng));
+		// $this->class->session->set_userdata('prev_latlng', serialize($prev_latlng));
 		// debug($this->class->session->userdata('prev_latlng'), $redirect_url, 'stop');
 		// debug(get_cookie('prev_latlng'), $redirect_url, 'stop');
-		// set_cookie('prev_latlng', serialize($prev_latlng), 7776000); // 90 days
+		set_cookie('prev_latlng', serialize($prev_latlng), 7776000); // 90 days
 		
 		// $this->class->senddata->trigger('session', 'auth-logout', ['device_id' => $profile['device_id']]);
 		// redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
@@ -230,7 +232,11 @@ class Accounts {
 				$request['is_profile_complete'] = 1;
 				$this->class->db->update('users', ['is_profile_complete' => 1], ['id' => $request['id']]);
 			}
-			$request['device_id'] = device_id();
+			$this->device_id = device_id();
+			if (empty($request['device_id'])) {
+				$this->class->db->update('users', ['device_id' => $this->device_id], ['id' => $request['id']]);
+			}
+			$request['device_id'] = $this->device_id;
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;

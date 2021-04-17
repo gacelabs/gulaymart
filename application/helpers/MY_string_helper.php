@@ -1121,7 +1121,7 @@ function get_coordinates($data=false, $sensor=0, $region='PH') {
 	if ($data AND (isset($data['city']) OR isset($data['street']) OR isset($data['province']))) {
 		/*$data['city'],$data['street'],$data['province']*/
 		$address = urlencode(implode(',', $data));
-		$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+		$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
 		// debug($url, 'stop');
 		
 		$ch = curl_init();
@@ -1155,7 +1155,8 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 		}
 		// debug($origins, $destinations);
 
-		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language;
+		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language.'&alternatives=true';
+		// debug($url, 'stop');
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1179,7 +1180,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 				return [
 					'distance' => $distance,
 					'distanceval' => (float)$distanceval,
-					'duration' => trim(str_replace('0 mins', '', $duration)),
+					'duration' => $duration,
 					'durationval' => (float)$durationval,
 				];
 			}

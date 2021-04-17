@@ -186,8 +186,11 @@ class Api extends MY_Controller {
 				} else {
 					$this->latlng = (array) $coordinates;
 				}
-				$this->session->set_userdata('prev_latlng', serialize($this->latlng));
-				$this->set_response('success', 'You have set your residing address at '.ucwords($post['city']).'!', $coordinates, '/');
+				// $this->session->set_userdata('prev_latlng', serialize($this->latlng));
+				set_cookie('prev_latlng', serialize($this->latlng), 7776000); // 90 days
+				$city = remove_multi_space(str_replace('city of', '', strtolower($post['city'])), true);
+				$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
+				$this->set_response('success', 'You have set your residing address at '.ucwords($city).' City!', $coordinates, '/');
 			}
 		}
 		$this->set_response('error', 'City not existing!', $post);

@@ -34,6 +34,12 @@ class CreateDev {
 				'constraint' => '32',
 				'null' => TRUE,
 			],
+			'device_id' => [
+				'type' => 'VARCHAR',
+				'constraint' => '12',
+				'default' => NULL,
+				'null' => true,
+			],
 			'lat' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
@@ -658,6 +664,12 @@ class CreateDev {
 				'constraint' => '10',
 				'default' => '0',
 				'null' => false,
+			],
+			'device_id' => [
+				'type' => 'VARCHAR',
+				'constraint' => '12',
+				'default' => NULL,
+				'null' => true,
 			],
 			'quantity' => [
 				'type' => 'INT',

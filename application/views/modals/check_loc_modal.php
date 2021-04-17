@@ -1,4 +1,4 @@
-<div class="modal fade" id="check_loc_modal" tabindex="-1" role="dialog" aria-labelledby="check_loc_modalLabel" data-keyboard="false"<?php if (empty($this->session->userdata('prev_latlng'))): ?> data-backdrop="static"<?php endif ?>>
+<div class="modal fade" id="check_loc_modal" tabindex="-1" role="dialog" aria-labelledby="check_loc_modalLabel" data-keyboard="false"<?php if (empty(get_cookie('prev_latlng', true))): ?> data-backdrop="static"<?php endif ?>>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -36,7 +36,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		<?php if (empty($this->session->userdata('prev_latlng'))): ?>
+		<?php if (empty(get_cookie('prev_latlng', true))): ?>
 			setTimeout(function() {
 				$('#check_loc_modal').modal('show');
 			}, 1000);
