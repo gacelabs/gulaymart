@@ -22,7 +22,7 @@
 					</div>
 				<?php endif ?>
 
-				<div class="dashboard-panel theme score-0">
+				<div class="dashboard-panel theme score-0" id="score-0">
 					<div class="dashboard-panel-middle">
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
 							<input type="hidden" name="pos" value="0">
@@ -95,7 +95,7 @@
 					</div>
 				</div>
 
-				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-1">
+				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-1" id="score-1">
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Product attributes</label>
@@ -139,7 +139,7 @@
 					</div>
 				</div>
 
-				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-2">
+				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-2" id="score-2">
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product Pricing (Location based)</label>
@@ -228,7 +228,7 @@
 					</div>
 				</div>
 
-				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-3">
+				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-3" id="score-3">
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Short description</label>
@@ -254,7 +254,7 @@
 					</div>
 				</div>
 
-				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-4">
+				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-4" id="score-4">
 					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
 						<div class="dashboard-panel-middle">

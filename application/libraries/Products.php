@@ -467,7 +467,7 @@ class Products {
 
 						// send message to the user has to replenish the needed stocks for delivery
 						$name = $product['name'];
-						$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true));
+						$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
 						$datestamp = strtotime(date('Y-m-d'));
 						$content = <<<EOF
 							Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
@@ -476,9 +476,10 @@ class Products {
 							'tab' => 'Notifications', 'type' => 'Inventory',
 							'user_id' => $product['user_id'], 'unread' => 1,
 							'datestamp' => $datestamp,
+							'content' => $content,
 						], 'row');
 						if ($check_msgs) {
-							$this->class->gm_db->save('messages', ['content' => $conten], ['id' => $check_msgs['id']]);
+							$this->class->gm_db->save('messages', ['content' => $content], ['id' => $check_msgs['id']]);
 						} else {
 							$this->class->gm_db->new('messages', [
 								'tab' => 'Notifications', 'type' => 'Inventory',
