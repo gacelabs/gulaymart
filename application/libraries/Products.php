@@ -452,16 +452,40 @@ class Products {
 				$basket = $this->class->gm_db->get('baskets', ['product_id' => $product_id], 'result', 'quantity');
 				if ($basket) {
 					$stocks = $products_location['stocks'];
-					foreach ($basket as $b) {
-						$stocks -= $b['quantity'];
+					if ($stocks > 0) {
+						foreach ($basket as $b) {
+							$stocks -= $b['quantity'];
+						}
 					}
-					$products_location['stocks'] = ($stocks <= 0) ? 0 : $stocks;
+					$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
 					if ($stocks <= 0) {
 						/*update product stocks*/
 						$this->class->gm_db->save('products_location',
-							['stocks' => 0],
+							['stocks' => $stocks],
 							['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
 						);
+
+						// send message to the user has to replenish the needed stocks for delivery
+						$name = $product['name'];
+						$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true));
+						$datestamp = strtotime(date('Y-m-d'));
+						$content = <<<EOF
+							Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
+						EOF;
+						$check_msgs = $this->class->gm_db->get('messages', [
+							'tab' => 'Notifications', 'type' => 'Inventory',
+							'user_id' => $product['user_id'], 'unread' => 1,
+							'datestamp' => $datestamp,
+						], 'row');
+						if ($check_msgs) {
+							$this->class->gm_db->save('messages', ['content' => $conten], ['id' => $check_msgs['id']]);
+						} else {
+							$this->class->gm_db->new('messages', [
+								'tab' => 'Notifications', 'type' => 'Inventory',
+								'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+								'content' => $content,
+							]);
+						}
 					}
 				}
 				$product['basket_details'] = $products_location;

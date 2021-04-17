@@ -249,7 +249,7 @@ class Basket extends My_Controller {
 	*/
 	public function place_order()
 	{
-		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1,2]]);
+		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1]]);
 		if ($baskets) {
 			$items_by_farm = $toktok_temp_data = [];
 			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
@@ -299,7 +299,7 @@ class Basket extends My_Controller {
 			foreach ($baskets as $key => $basket) {
 				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
 			}
-			$this->set_response('success', 'Orders have been placed!', false, 'transactions/orders/');
+			$this->set_response('success', 'Orders have been placed!', false, 'orders/thank-you/');
 		} else {
 			$this->set_response('info', 'No more orders to place', false, 'basket/');
 		}

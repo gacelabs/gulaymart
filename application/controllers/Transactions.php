@@ -68,6 +68,8 @@ class Transactions extends MY_Controller {
 
 	public function messages()
 	{
+		$messages = $this->gm_db->get('messages', ['user_id' => $this->accounts->profile['id'], 'unread' => 1]);
+		// debug($messages, 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', 'transactions/main', 'transactions/messages']
@@ -84,6 +86,9 @@ class Transactions extends MY_Controller {
 				'modals' => ['reply_modal'],
 				'js' => ['hideshow', 'plugins/readmore.min', 'transactions/messages', 'dashboard/main'],
 			],
+			'data' => [
+				'messages' => $messages
+			]
 		]);
 	}
 

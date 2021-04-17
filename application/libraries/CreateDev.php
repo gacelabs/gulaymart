@@ -893,4 +893,51 @@ class CreateDev {
 		return $table_data;
 	}
 
+	public function create_messages_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			"`tab` enum('Notifications','Inquiries','Feedbacks') NOT NULL DEFAULT 'Notifications'",
+			"`type` enum('System Update','Inventory') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'System Update'",
+			'content' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'unread' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'datestamp' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('messages', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
+
 }

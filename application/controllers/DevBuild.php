@@ -132,6 +132,7 @@ class DevBuild extends CI_Controller {
 			'attribute_values',
 			'baskets',
 			'basket_transactions',
+			'messages',
 		];
 
 		return $data;
