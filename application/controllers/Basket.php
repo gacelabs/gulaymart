@@ -178,11 +178,14 @@ class Basket extends My_Controller {
 						}
 						$eta = $eta_duration;
 					}
-					$this->baskets->save([
-						'quantity' => $row['quantity'],
+					$obj = [
 						'status' => $row['checked'], // verified can be viewed on checkout
 						'order_type' => $order_type,
-					], ['id' => $id]);
+					];
+					if ($row['checked'] == 1) {
+						$obj['quantity'] = $row['quantity'];
+					}
+					$this->baskets->save($obj, ['id' => $id]);
 				}
 			}
 			if ($is_checkout == 0) {
