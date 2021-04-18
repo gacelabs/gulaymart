@@ -133,7 +133,41 @@ class DevBuild extends CI_Controller {
 			'attribute_values',
 			'baskets',
 			'basket_transactions',
-			'messages',
+			'messages' => [
+				'type' => [
+					'alter' => "ALTER TABLE messages CHANGE COLUMN `type` `type` ENUM('System Update','Inventory','Comments') NOT NULL DEFAULT 'System Update' AFTER `tab`",
+					'altered' => [
+						'status' => 'Added ENUM `Comments` on Length/Set'
+					]
+				],
+				'under' => [
+					'definition' => [
+						'type' => 'INT',
+						'constraint' => '10',
+						'default' => '0',
+						'null' => FALSE,
+					],
+					'after' => 'id'
+				],
+				'page_id' => [
+					'definition' => [
+						'type' => 'INT',
+						'constraint' => '10',
+						'default' => '0',
+						'null' => FALSE,
+					],
+					'after' => 'user_id'
+				],
+				'entity_id' => [
+					'definition' => [
+						'type' => 'INT',
+						'constraint' => '10',
+						'default' => '0',
+						'null' => FALSE,
+					],
+					'after' => 'page_id'
+				],
+			],
 		];
 
 		return $data;

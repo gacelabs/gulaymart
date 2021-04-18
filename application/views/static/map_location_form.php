@@ -13,14 +13,14 @@
 					<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 				</span>
 			</div>
-			<p style="padding:0 0 0 13px;margin-bottom:15px;"><b class="text-contrast hidden-xs">Step 2</b><i class="text-contrast fa fa-question-circle hidden-lg hidden-md hidden-sm" data-toggle="tooltip" data-placement="right" title="Step 2. Drag and point the map marker on the exact location spot."></i> Drag and point the map marker <i class="fa fa-map-marker text-danger"></i> on the exact location spot.</p>
+			<p style="padding:0 0 0 13px;margin-bottom:15px;"><b class="text-contrast hidden-xs">Step 2</b><i class="text-contrast fa fa-question-circle hidden-lg hidden-md hidden-sm" data-toggle="tooltip" data-placement="right" title="Step 2. Drag or point the map marker on the exact location spot."></i> Drag or point the map marker <i class="fa fa-map-marker text-danger"></i> on the exact location spot.</p>
 			<div id="map-box" style="width: 100%; height: 250px; margin-bottom: 15px;"></div>
 			<div class="input-group">
 				<span class="input-group-addon"><span><b class="text-contrast hidden-xs">Step 3</b><i class="text-contrast fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 3. Enter the complete address."></i></span></span>
 				<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter the complete address." required="required">
 			</div>
 			<div class="form-group zero-gaps">
-				<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1." required="required">
+				<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1 or Step 2" required="required">
 			</div>
 		</div>
 	</div>

@@ -111,7 +111,7 @@ function toktok_price_directions_format($data=false)
 	return $pricing;
 }
 
-function compute_eta($eta=0)
+function compute_eta($eta=0, $noprefix=false)
 {
 	$time = gmdate("H:i:s", $eta);
 	$chunks = array_map('trim', explode(':', $time));
@@ -137,7 +137,7 @@ function compute_eta($eta=0)
 	}
 	// debug($chunks, $duration, 'stop');
 	if (count($duration)) {
-		return 'ETA: '.implode(' ', $duration);
+		return ($noprefix ? '' : 'ETA: ').implode(' ', $duration);
 	}
 	return NULL;
 }
@@ -365,18 +365,33 @@ function get_status_value($status=false)
 	return '';
 }
 
-function storefront_url($farm=false)
+function storefront_url($farm=false, $echo=false)
 {
+	$return = false;
 	if ($farm) {
-		return base_url('store/'.$farm['id'].'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
+		if (isset($farm['farm_location_id'])) {
+			$return = base_url('store_location/'.$farm['id'].'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
+		} else {
+			$return = base_url('store_farm/'.$farm['id'].'/'.nice_url($farm['name'], true));
+		}
 	}
-	return false;
+	// debug($return, true);
+	if ($echo) {
+		echo $return;
+	} else {
+		return $return;
+	}
 }
 
-function product_url($item=false)
+function product_url($item=false, $echo=false)
 {
+	$return = false;
 	if ($item) {
-		return base_url('basket/view/'.$item['id'].'/'.$item['farm_location_id'].'/'.nice_url($item['name'], true));
+		$return = base_url('basket/view/'.$item['id'].'/'.$item['farm_location_id'].'/'.nice_url($item['name'], true));
 	}
-	return false;
+	if ($echo) {
+		echo $return;
+	} else {
+		return $return;
+	}
 }

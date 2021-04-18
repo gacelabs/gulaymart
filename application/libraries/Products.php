@@ -242,12 +242,17 @@ class Products {
 
 			$products_location = $this->class->gm_db->get('products_location', ['product_id' => $product['id']]);
 			$product['farms'] = false;
+			$product['locations'] = 'None';
 			if ($products_location) {
+				$locations = [];
 				foreach ($products_location as $key => $location) {
 					$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
 					$product['farms'][] = $location;
+					$address = explode(',', $farm_location['address_2']);
+					$locations[] = (isset($address[0])) ? $address[0] : '';
 				}
 				// debug($product, 'stop');
+				$product['locations'] = implode(' | ', $locations);
 			}
 
 			$updated = $product['updated'];
@@ -413,7 +418,31 @@ class Products {
 				$added = $product['added'];
 				$updated = $product['updated'];
 				unset($product['added']); unset($product['updated']);
-				$product['feedbacks'] = false;
+				$feedbacks = $this->class->gm_db->get('messages', [
+					'page_id' => $product_id,
+					'tab' => 'Feedbacks',
+					'type' => 'Comments',
+				]);
+				$feedbacks_data = false;
+				if ($feedbacks) {
+					$feedbacks_data = [];
+					foreach ($feedbacks as $key => $feedback) {
+						if ($feedback['under'] == 0) {
+							$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
+							$feedbacks_data[$feedback['id']]['first'] = $feedback;
+						}
+					}
+					foreach ($feedbacks as $key => $feedback) {
+						if ($feedback['under'] != 0) {
+							if (isset($feedbacks_data[$feedback['under']])) {
+								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
+								$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
+							}
+						}
+					}
+					// debug($feedbacks_data, $feedbacks, 'stop');
+				}
+				$product['feedbacks'] = $feedbacks_data;
 
 				$product['category'] = false;
 				$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
@@ -426,9 +455,19 @@ class Products {
 				}
 
 				$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
-				$address = explode(',', $farm_location['address_2']);
-				$farm_location['city'] = isset($address[0]) ? $address[0] : '';
-				$farm_location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+				if ($farm_location) {
+					$address = explode(',', $farm_location['address_2']);
+					$farm_location['city'] = isset($address[0]) ? $address[0] : '';
+					$farm_location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+					$driving_distance = get_driving_distance([
+						['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
+						['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+					]);
+					$farm_location['distance'] = $driving_distance['distance'];
+					$farm_location['duration'] = $driving_distance['duration'];
+					$farm_location['distanceval'] = $driving_distance['distanceval'];
+					$farm_location['durationval'] = $driving_distance['durationval'];
+				}
 				$product['farm_location'] = $farm_location;
 
 				$product['barns'] = false;
@@ -470,18 +509,14 @@ class Products {
 					$name = $product['name'];
 					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
 					$datestamp = strtotime(date('Y-m-d'));
-					$content = "<<<EOF
-								Product item <a href=".$base_url.">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
-					EOF";
+					$content = "Product item <a href='".$base_url."'>$name</a> is low on stocks [<em>$stocks pcs remaining</em>]";
 					$check_msgs = $this->class->gm_db->get('messages', [
 						'tab' => 'Notifications', 'type' => 'Inventory',
 						'user_id' => $product['user_id'], 'unread' => 1,
 						'datestamp' => $datestamp,
 						'content' => $content,
 					], 'row');
-					if ($check_msgs) {
-						$this->class->gm_db->save('messages', ['content' => $content], ['id' => $check_msgs['id']]);
-					} else {
+					if ($check_msgs == false) {
 						$this->class->gm_db->new('messages', [
 							'tab' => 'Notifications', 'type' => 'Inventory',
 							'user_id' => $product['user_id'], 'datestamp' => $datestamp,

@@ -47,7 +47,7 @@
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
 									<li class="text-right">
-										<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab<?php echo $data['farms']['id'];?>" href="store/<?php echo $data['farms']['id'];?>/<?php nice_url($data['farms']['name']);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+										<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab<?php echo $data['farms']['id'];?>" href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
 										<button type="submit" class="btn btn-contrast">Update</button>
 									</li>
 								<?php else: ?>
@@ -176,8 +176,14 @@
 													}
 													?>
 													<div class="input-group">
-														<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
-														<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' />
+														<?php if ($farm_loc == 1): ?>
+															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
+															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' class="user-farm-locations" />
+														<?php else: ?>
+															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="">
+															<input type="hidden" name="user_farm_locations[1][<?php echo $key;?>]" value='' class="user-farm-locations" />
+															<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
+														<?php endif ?>
 														<span class="input-group-btn">
 														<?php if ($key == 0): ?>
 															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
@@ -190,7 +196,7 @@
 											<?php else: ?>
 												<div class="input-group">
 													<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0">
-													<input type="hidden" name="user_farm_locations[1][]" />
+													<input type="hidden" name="user_farm_locations[1][]" class="user-farm-locations" />
 													<span class="input-group-btn">
 														<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
 													</span>

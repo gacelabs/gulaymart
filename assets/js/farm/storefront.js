@@ -47,7 +47,7 @@ $(document).ready(function() {
 				var clone = $('#clone_me').clone();
 				clone.removeClass('hide').removeAttr('id').appendTo('#location_list').find('input:first')
 					.attr({'id':'location-input-'+limit});
-				$('<input />', {required:'required', type:'hidden', name:'user_farm_locations[1][]'}).insertAfter(clone.find('input:first'));
+				$('<input />', {required:'required', type:'hidden', name:'user_farm_locations[1][]', class:'user-farm-locations'}).insertAfter(clone.find('input:first'));
 			}
 		});
 
@@ -162,6 +162,12 @@ var refreshStorePreview = function(obj) {
 			setTimeout(function() {
 				$(elem).find('button:submit').text('Update');
 			}, 900);
+		});
+		var farm_locations = (obj.user_farm_locations[1] != undefined ? obj.user_farm_locations[1] : false);
+		$('#location_list').find('.user-farm-locations').each(function(i, elem) {
+			if (farm_locations && farm_locations[i] != undefined) {
+				elem.value = farm_locations[i];
+			}
 		});
 	}
 }

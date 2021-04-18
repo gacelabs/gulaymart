@@ -43,7 +43,8 @@
 							<div class="productpage-variety" js-element="variety">
 								<?php if ($stocks > 0): ?>
 									<div class="variety-location">
-										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city'];?> - <span class="max-qty">Max quantity <?php echo $stocks;?></span></p>
+										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-cubes"></i> <span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
+										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city_prov'];?></p>
 										<div class="input-group">
 											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
 											<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
@@ -139,7 +140,7 @@
 								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Today</p>
-									<small class="text-gray elem-block">Earliest: 30 minutes</small>
+									<small class="text-gray elem-block">Earliest: <?php echo compute_eta($product['farm_location']['durationval'], true);?></small>
 								</div>
 							</div>
 							<div class="productpage-summary-grid">
@@ -162,7 +163,7 @@
 								<div class="productpage-summary-grid">
 									<img src="assets/images/icons/farms.png" class="mini-img-icon" align="left">
 									<div>
-										<p class="zero-gaps"><?php echo $barn['city'];?></p>
+										<p class="zero-gaps"><?php echo $barn['city_prov'];?></p>
 									</div>
 								</div>
 							<?php endforeach ?>

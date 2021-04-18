@@ -2,6 +2,7 @@
 		<script type="text/javascript" src="<?php echo base_url('assets/js/jquery-min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.validate.min.js');?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/autosize.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/toast.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/global.js'); ?>"></script>
 

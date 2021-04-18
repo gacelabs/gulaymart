@@ -17,7 +17,7 @@
 										<?php if ($key == 'id'): ?>
 											<th>Actions</th>	
 										<?php else: ?>
-											<th><?php echo fix_title($key);?></th>	
+											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
 									<?php endforeach ?>
 								</tr>

@@ -98,6 +98,7 @@ class Farm extends MY_Controller {
 							$passed = 0;
 							$message = 'Did not Pass on the 30% score, please check your attribute inputs.';
 						}
+						$post['products'] = $this->gm_db->get('products', ['id' => $product_id], 'row');
 					}
 					break;
 				case '2':
@@ -133,6 +134,7 @@ class Farm extends MY_Controller {
 							$passed = 0;
 							$message = 'Did not Pass on the 60% score, product pricing seems to be wrong.';
 						}
+						$post['products'] = $this->gm_db->get('products', ['id' => $product_id], 'row');
 					}
 					break;
 				case '3':
@@ -148,6 +150,7 @@ class Farm extends MY_Controller {
 							$passed = 0;
 							$message = 'Did not Pass on the 80% score, please describe your product.';
 						}
+						$post['products'] = $this->gm_db->get('products', ['id' => $product_id], 'row');
 					}
 					break;
 				case '4':
@@ -171,7 +174,6 @@ class Farm extends MY_Controller {
 								$ids[] = $this->products->new($upload, 'products_photo');
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
-							$post['products'] = $this->gm_db->get('products', ['id' => $product_id]);
 							$products_locations = $this->gm_db->get('products_location', ['product_id' => $product_id]);
 							if ($products_locations) {
 								foreach ($products_locations as $key => $location) {
@@ -198,6 +200,7 @@ class Farm extends MY_Controller {
 							$passed = 0;
 							$message = 'Please check your image inputs.';
 						}
+						$post['products'] = $this->gm_db->get('products', ['id' => $product_id], 'row');
 					}
 					break;
 			}
@@ -395,11 +398,16 @@ class Farm extends MY_Controller {
 					$index = $post['farm_loc'];
 					if (isset($post['user_farm_locations'][$index])) {
 						$locations = $post['user_farm_locations'][$index];
+						$farm_location = isset($post['locations']) ? $post['locations'][$index] : [];
+						// debug($locations, 'stop');
 						$data = [];
 						foreach ($locations as $key => $location) {
-							$data[] = json_decode($location, true);
+							if (isset($farm_location[$key])) $location_id = $farm_location[$key]['id'];
+							$location = json_decode($location, true);
+							if (isset($location_id)) $location['id'] = $location_id;
+							$data[] = $location;
 						}
-						// debug($data, 'stop');
+						// debug($data, $farm_id, 'stop');
 						if ($index == 0) {
 							$this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
 							foreach ($data as $row) {
@@ -414,11 +422,24 @@ class Farm extends MY_Controller {
 								$row['active'] = $index;
 								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
 								if (isset($row['id'])) {
-									$farm_location_id = $row['id']; unset($row['id']);
-									$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
+									$farm_location_id = $row['id'];
+									$check = $this->gm_db->get('user_farm_locations', ['id'=>$farm_location_id, 'active'=>1]);
+									if ($check == false) {
+										$this->gm_db->remove('user_farm_locations', ['id'=>$farm_location_id]);
+										$this->gm_db->new('user_farm_locations', $row);
+									} else {
+										unset($row['id']);
+										$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
+									}
 								} else {
 									$this->gm_db->new('user_farm_locations', $row);
 								}
+							}
+							$user_farm_locations = $this->gm_db->get('user_farm_locations', [
+								'farm_id' => $farm_id
+							], 'result', 'id, lat, lng, address_1, address_2');
+							foreach ($user_farm_locations as $key => $row) {
+								$post['user_farm_locations'][$index][$key] = json_encode($row);
 							}
 						}
 					}
@@ -472,7 +493,6 @@ class Farm extends MY_Controller {
 
 	public function inventory()
 	{
-		// debug($this->products->get_in(), 'stop');
 		$this->render_page([
 			'top' => [
 				'css' => ['dashboard/main', '../js/plugins/DataTables/datatables.min', 'farm/inventory'],
@@ -490,7 +510,7 @@ class Farm extends MY_Controller {
 			],
 			'data' => [
 				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id']]),
-				'field_lists' => $this->gm_db->fieldlists('products', unserialize(NON_PRODUCT_KEYS)),
+				'field_lists' => ['ACTIONS', 'NAME', 'ACTIVITY', 'CATEGORY', 'SUBCATEGORY', 'LOCATIONS', 'UPDATED'],
 			],
 		]);
 	}
@@ -527,10 +547,17 @@ class Farm extends MY_Controller {
 			$data = false;
 			// debug($user_farm, 'stop');
 			if ($user_farm) {
+				if ($farm_location_id) {
+					$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+					$user_farm['farm_location_id'] = $farm_location_id;
+				} else {
+					$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
+				}
 				$data = [
 					'farm' => $user_farm,
-					'location' => $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row'),
+					'location' => $farm_location,
 					'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
+					'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
 				];
 				// debug($data, 'stop');
 			}
@@ -558,5 +585,17 @@ class Farm extends MY_Controller {
 		} else {
 			redirect(base_url('farm/'));
 		}
+	}
+
+	public function store_location($id=0, $farm_location_id=0, $name=false)
+	{
+		// $this->store($id, $name, $farm_location_id);
+		redirect(base_url('store/'.$id.'/'.$farm_location_id.'/'.$name));
+	}
+
+	public function store_farm($id=0, $name=false)
+	{
+		// $this->store($id, $name, $farm_location_id);
+		redirect(base_url('store/'.$id.'/0/'.$name));
 	}
 }

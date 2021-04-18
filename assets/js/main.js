@@ -171,4 +171,7 @@ $(document).ready(function() {
 		var hash = window.location.hash;
 		$("html,body").stop().animate({ scrollTop: ($(hash).offset().top - $('#dashboard_navbar').height() - 25), scrollLeft: 0 }, 1000);
 	}
+	
+	autosize($('textarea'));
+
 });

@@ -13,7 +13,7 @@
 				<div id="thankyou_footer">
 					<ul class="spaced-list between">
 						<li><p class="zero-gaps"><b>Cash On Delivery</b></p></li>
-						<li><p class="zero-gaps">&#x20b1; <b class="text-contrast">500</b></p></li>
+						<li><p class="zero-gaps">&#x20b1; <b class="text-contrast"><?php echo number_format($data['total']);?></b></p></li>
 					</ul>
 					<hr class="carved" style="margin-top:15px;">
 					<div class="thankyou-grid">

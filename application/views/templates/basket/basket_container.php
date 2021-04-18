@@ -18,7 +18,7 @@
 										<div class="order-item-list">
 											<?php foreach ($baskets as $farm_name => $basket): ?>
 												<div class="add-basket-item-container order-item-inner">
-													<p class="zero-gaps text-caps"><?php echo $farm_name;?> | <em class="text-success">(Delivery Fee &#x20b1; <b><?php echo $basket[0]['fee'];?></b>)</em></p>
+													<p class="zero-gaps text-caps"><?php echo $farm_name;?> | <em class="text-success">(Shipping Fee &#x20b1; <b><?php echo $basket[0]['fee'];?></b>)</em></p>
 													<?php
 														$last_location_id = 0;
 														foreach ($basket as $key => $basket_data) {
@@ -77,7 +77,7 @@
 														<label for="deliver_now" class="zero-gaps">
 															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now" checked="checked"> Now
 														</label>
-														<small class="text-gray">(<?php echo compute_eta($eta);?>)</small>
+														<small class="text-gray"><?php echo compute_eta($eta);?></small>
 													</div>
 													<div>
 														<label for="order_schedule">

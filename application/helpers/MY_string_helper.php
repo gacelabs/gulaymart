@@ -961,9 +961,12 @@ function isset_echo($array=false, $key=false, $else='') {
 	if ($key AND is_array($array)) {
 		if (isset($array[$key])) {
 			echo $array[$key];
+		} else {
+			echo $else;
 		}
+	} else {
+		echo $else;
 	}
-	echo $else;
 }
 
 function in_array_echo_key($key=false, $array=false) {
@@ -1010,6 +1013,20 @@ function echo_message($msg_prefix='', $field=false)
 		}
 	}
 	echo trim($msg_prefix);
+}
+
+function echo_profile($field=false, $else='')
+{
+	$msg = '';
+	if ($field) {
+		$ci =& get_instance();
+		if (isset($ci->accounts) AND $ci->accounts->has_session) {
+			$msg .= isset($ci->accounts->profile[$field]) ? ' '.$ci->accounts->profile[$field] : '';
+			echo trim($msg);
+		} else {
+			echo trim($else);
+		}
+	}
 }
 
 function get_global_values($request=[])
@@ -1240,6 +1257,8 @@ function nearby_farms($data=false, $user_id=false)
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
 					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					// $duration = (int)$driving_distance['durationval'];
+					// $farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
 			}
 		}
@@ -1304,7 +1323,7 @@ function nearby_veggies($data=false, $user_id=false)
 				// var_dump($driving_distance);
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$duration = (int)$driving_distance['durationval'];
-					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
+					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, 5);
 				}
 			}
 		}
@@ -1336,6 +1355,8 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
 					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					// $duration = (int)$driving_distance['durationval'];
+					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
 			}
 		}
@@ -1344,7 +1365,7 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 	return $products;
 }
 
-function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2)
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false)
 {
 	$ci =& get_instance();
 	if ($compare_1 <= $compare_2) {
@@ -1402,6 +1423,11 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 					$item['storefront'] = storefront_url($item);
 					$item['product_url'] = product_url($item);
 					$items[] = $item;
+					if (!is_bool($limit) AND is_numeric($limit)) {
+						if (count($items) == $limit) {
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -1510,4 +1536,23 @@ function format_duration($duration=0)
 		}
 	}
 	return preg_replace('/\s+/', ' ', $duration);
+}
+
+function get_fullname($data=false, $else='', $return=false)
+{
+	if ($else != '') {
+		$else .= ' #'.rand();
+	}
+	$fullname = $else;
+	$ci =& get_instance();
+	if (isset($ci->accounts) AND $ci->accounts->has_session AND $data == false) {
+		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
+	} elseif ($data) {
+		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+	}
+	if ($return == false) {
+		echo $fullname;
+	} else {
+		return $fullname;
+	}
 }

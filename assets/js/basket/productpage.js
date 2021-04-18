@@ -152,7 +152,7 @@ function setSavedData() {
 }
 
 var stockChanged = function(obj) {
-	console.log(obj);
+	// console.log(obj);
 	if (obj && obj.baskets) {
 		var qty = parseInt(obj.baskets.quantity);
 		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
@@ -164,5 +164,18 @@ var stockChanged = function(obj) {
 			$('[ js-element="basket-btns"]').remove();
 		}
 		setSavedData();
+	}
+};
+
+var appendComment = function(obj) {
+	// console.log(obj);
+	if (obj.under != undefined) {
+		if (obj.under > 0) {
+			$('[js-element="comment-panel-'+obj.under+'"]').replaceWith(obj.html);
+			runFormValidation($('[js-element="comment-panel-'+obj.under+'"]').find('form'));
+		} else {
+			$(obj.html).insertBefore($('[js-element="comment-panel-0"]'))
+			runFormValidation($('[js-element="comment-panel-'+obj.id+'"]').find('form'));
+		}
 	}
 };

@@ -916,12 +916,8 @@ class CreateDev {
 				'null' => false,
 			],
 			"`tab` enum('Notifications','Inquiries','Feedbacks') NOT NULL DEFAULT 'Notifications'",
-			"`type` enum('System Update','Inventory') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'System Update'",
-			'content' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true,
-			],
+			"`type` enum('System Update','Inventory') NOT NULL DEFAULT 'System Update'",
+			"content LONGTEXT",
 			'unread' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
@@ -940,7 +936,8 @@ class CreateDev {
 		$this->class->dbforge->add_key('id', true);
 		$table_data = $this->class->dbforge->create_table('messages', false, [
 			'ENGINE' => 'InnoDB',
-			'DEFAULT CHARSET' => 'utf8'
+			'DEFAULT CHARACTER SET' => 'utf8mb4',
+			'COLLATE' => 'utf8mb4_general_ci',
 		]);
 
 		return $table_data;

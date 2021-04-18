@@ -228,7 +228,8 @@ var redirectNewProduct = function(obj) {
 	runAlertBox({type:'success', message: sMessage, unclose: true});
 	// console.log(obj);
 	$('.order-title').text(obj.products.name);
-	$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+($.trim(obj.products.name).replace(/\s+/g, '-').toLowerCase()));
+	var nice_prod_name = $.trim(obj.products.name).replace(/[^A-Za-z0-9\-]/, ' ').toLowerCase();
+	$('.order-link').attr('href', 'basket/view/'+obj.product_id+'/'+(nice_prod_name.replace(/\s+/g, '-')));
 	$.each(obj.file_photos, function(i, data) {
 		if (data.is_main == 1) {
 			// console.log(data);
@@ -242,16 +243,31 @@ var redirectNewProduct = function(obj) {
 			}
 		}
 	});
-	var cnt = 0;
-	$.each(obj.products_location, function(i, data) {
-		if ($('.order-price').eq(cnt).length) {
-			$('.order-price').eq(cnt).text(data.price);
-			$('.order-unit').eq(cnt).text(data.measurement);
-			$('.order-duration').eq(cnt).text(data.duration);
-		}
-		cnt++;
-	});
+
+	if (obj.products_location != undefined) {
+		var cnt = 0;
+		$.each(obj.products_location, function(i, data) {
+			if ($('.order-price').eq(cnt).length) {
+				$('.order-price').eq(cnt).text(data.price);
+				$('.order-unit').eq(cnt).text(data.measurement);
+				$('.order-duration').eq(cnt).text(data.duration);
+			}
+			cnt++;
+		});
+	}
 	$('#preview_container').removeClass('hide');
+	setTimeout(function() {
+		var sUrl = 'farm/save-veggy/'+obj.product_id+'/'+(nice_prod_name.replace(/\s+/g, '-'));
+		$.ajax({
+			url: sUrl,
+			success: function(html) {
+				var new_document = document.open('text/html', 'replace');
+				new_document.write(html);
+				new_document.close();
+				window.history.replaceState({}, document.title, sUrl);
+			}
+		});
+	}, 2000);
 }
 
 // var lastScrollTop = 0;

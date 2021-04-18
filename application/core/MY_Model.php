@@ -6,8 +6,8 @@ class MY_Model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('accounts');
-		$this->load->library('smtpemail');
+		// $this->load->library('accounts');
+		// $this->load->library('smtpemail');
 	}
 
 	public function get($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
@@ -15,6 +15,15 @@ class MY_Model extends CI_Model {
 		if ($table) {
 			if ($field) {
 				$this->db->select($field);
+			}
+			if (isset($where['order_by']) AND isset($where['direction'])) {
+				$this->db->order_by($where['order_by'], $where['direction']);
+				unset($where['order_by']);
+				unset($where['direction']);
+			}
+			if (isset($where['limit'])) {
+				$this->db->limit($where['limit']);
+				unset($where['limit']);
 			}
 			if ($where) {
 				$this->db->where($where);
