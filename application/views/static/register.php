@@ -1,4 +1,5 @@
 <div class="container" id="register_container">
+	<?php if (empty($current_profile)): ?>
 	<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
 		<div id="register_welcome">
 			<h1 style="margin-bottom:20px;"><i class="fa fa-leaf my-logo"></i> <b>Gulaymart</b></h1>
@@ -43,4 +44,20 @@
 			<a href="#"><small>Terms and Use</small></a>
 		</div>
 	</div>
+	<?php else: ?>
+	<div style="max-width:290px; margin:20px auto;">
+		<div class="text-step-basic">
+			<p class="text-center"><i class="fa fa-info-circle"></i></p>
+			<div>
+				<p>Howdy<?php echo ", <b>".$current_profile['firstname']; ?></b>!</p>
+				<p>It looks like you've already logged in.</p>
+				<ul class="spaced-list between">
+					<li><small><a href="" class="text-link">Home</a></small></li>
+					<li><small><a href="basket/" class="text-link">Basket</a></small></li>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
 </div>

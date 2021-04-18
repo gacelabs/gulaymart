@@ -21,8 +21,7 @@ $route['products/(:any)'] = 'Basket/productpage';
 
 $route['basket/checkout'] = 'Basket/checkout';
 
-$route['orders/fulfillment'] = 'Fulfillment/index';
-$route['transactions/fulfillment'] = 'Fulfillment/index';
+$route['fulfillment/received'] = 'Fulfillment/index';
 $route['fulfillment'] = 'Fulfillment/index';
 
 $route['orders/thank-you'] = 'transactions/thankyou';

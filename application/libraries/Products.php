@@ -470,9 +470,9 @@ class Products {
 					$name = $product['name'];
 					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
 					$datestamp = strtotime(date('Y-m-d'));
-					$content = <<<EOF
-						Product item <a href="$base_url">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
-					EOF;
+					$content = "<<<EOF
+								Product item <a href=".$base_url.">$name</a> is low on stocks [<em>$stocks pcs remaining</em>]
+					EOF";
 					$check_msgs = $this->class->gm_db->get('messages', [
 						'tab' => 'Notifications', 'type' => 'Inventory',
 						'user_id' => $product['user_id'], 'unread' => 1,

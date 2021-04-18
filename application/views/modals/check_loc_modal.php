@@ -1,11 +1,11 @@
-<div class="modal fade" id="check_loc_modal" tabindex="-1" role="dialog" aria-labelledby="check_loc_modalLabel" data-keyboard="false"<?php if (empty(get_cookie('prev_latlng', true))): ?> data-backdrop="static"<?php endif ?>>
+<div class="modal fade" id="check_loc_modal" tabindex="-1" role="dialog" aria-labelledby="check_loc_modalLabel" <?php if (empty(get_cookie('prev_latlng', true))): ?> data-keyboard="false" data-backdrop="static"<?php endif ?>>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">Check Location</h4>
 			</div>
 			<div class="modal-body">
-				<p class="zero-gaps">As part of Gulaymart's core values to <b>support local farmers</b>, we urge everyone to filter the products based on their residing address. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
+				<p class="zero-gaps">As part of Gulaymart's core values to <b>support local farmers</b>, we urge everyone to filter the products based on your residing city. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
 				<img src="assets/images/banner/check-location.png" class="img-responsive" style="margin: 20px 0;">
 
 				<div class="text-step-basic">
@@ -14,8 +14,15 @@
 				</div>
 
 				<div class="input-group">
-					<span class="input-group-addon" id="basic-addon1">My city is</span>
-					<input type="text" class="form-control" id="check-place" placeholder="" aria-describedby="basic-addon1">
+					<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My city is</span>
+					<input type="text" class="form-control" id="check-place" placeholder="" aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+				</div>
+				<div class="text-center" style="margin-top:20px;background-color:#eaeaea;padding:15px;border-radius:4px;">
+					<p>━ OR ━</p>
+					<ul class="inline-list">
+						<li data-dismiss="modal" data-toggle="modal" data-target="#login_modal"><button class="btn btn-default btn-sm">Log In</button></li>
+						<li><a href="register/" class="btn btn-default btn-sm icon-right">Register</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -41,11 +48,21 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		<?php if (empty(get_cookie('prev_latlng', true))): ?>
-			setTimeout(function() {
+		<?php if (empty(get_cookie('prev_latlng', true)) AND empty($current_profile)): ?>
+			$(window).on('scroll load', function() {
+				if (($('#login_modal').data('bs.modal') || {}).isShown) {
+					return false;
+				} else {
+					$('#check_loc_modal').modal('show');
+				}
+			});
+
+			$('#login_modal').on('hidden.bs.modal', function () {
 				$('#check_loc_modal').modal('show');
-			}, 1000);
+			});
+
 		<?php endif ?>
+
 		$('#check_loc_modal').on('shown.bs.modal', function(e) {
 			var input = $('#check-place').get(0);
 			input.focus();

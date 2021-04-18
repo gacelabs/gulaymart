@@ -43,7 +43,7 @@
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
 							</div>
-							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">
 									<?php $months = unserialize(MONTHS);?>
 									<select name="birth_month" class="form-control" placeholder="Birth Month" required="required">
@@ -57,7 +57,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">
 									<?php if ($current_profile['profile']): ?>
 										<input type="text" name="birth_year" class="form-control" data-inputmask="'mask': '9999'" placeholder="Birth Year" required="required" value="<?php echo $current_profile['profile']['birth_year'];?>">

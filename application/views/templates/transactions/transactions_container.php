@@ -1,6 +1,6 @@
-<div id="dashboard_panel_right">
+<div class="transactions-container" id="dashboard_panel_right">
 	<div class="row">
-		<div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme" id="link_panel_top">
 				<ul class="inline-list dashboard-panel-top">
 					<li><a href="javascript:;" class="hideshow-btn active" hideshow-target="order_placed"><h4 class="zero-gaps">Placed</h4></a></li>

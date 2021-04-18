@@ -125,7 +125,6 @@ body.transactions .tender-amount-parent {
 .notif-related-product {
 	background-color: #efefef;
 	border-radius: 4px;
-	display: inline-block;
 	margin-bottom: 15px;
 	padding: 10px;
 }

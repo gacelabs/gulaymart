@@ -62,8 +62,10 @@
 }
 .aside-nav-item.active {
 	background-color: #a8d253;
-	color: #307ab5;
+	color: #fff;
+	/*color: #307ab5;*/
 	font-family: 'Roboto-bold', sans-serif;
+	text-shadow: 1px 1px 1px rgb(0 0 0 / 25%);
 }
 .aside-nav-item>i {
 	background-color: #799938;
@@ -82,7 +84,8 @@
 	float: left;
 }
 .aside-nav-item kbd {
-	background-color: #c51616;
+	background-color: #ff7575;
+	box-shadow: inset -1px -1px 0 rgb(0 0 0 / 25%);
     font-size: 10px;
     margin-left: 5px;
     vertical-align: middle;

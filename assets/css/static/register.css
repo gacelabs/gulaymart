@@ -58,7 +58,7 @@ body.register {
 }
 @media (max-width: 767px) {
 	body.register {
-		padding-top: 0;
+		padding-top: 0 !important;
 	}
 	#register_welcome {
 		margin: 20px auto;

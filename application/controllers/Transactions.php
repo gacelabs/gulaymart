@@ -54,7 +54,7 @@ class Transactions extends MY_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'transactions/orders',
+					'transactions/transactions_container',
 				],
 			],
 			'bottom' => [
@@ -79,7 +79,7 @@ class Transactions extends MY_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'transactions/messages',
+					'transactions/messages_container',
 				],
 			],
 			'bottom' => [

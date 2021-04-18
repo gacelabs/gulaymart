@@ -1,5 +1,5 @@
 <div id="dashboard_navbar_aside">
-	<h3 class="text-center hidden-xs"><b><?php echo_message('Hello', 'firstname');?></b></h3>
+	<h3 class="text-center hidden-xs"><b><?php echo_message('Hello ', 'firstname');?></b></h3>
 	<div id="dashboard_nav_container">
 		<a href="profile/" class="hidden-xs aside-nav-item <?php in_array_echo("profile", $middle['body_class'], "active");?>">
 			<i class="fa fa-id-badge"></i><span class="hidden-xs">Profile</span>
@@ -8,6 +8,12 @@
 			<i class="fa fa-leaf"></i>
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
+		<div class="aside-nav-child hidden-xs">
+			<a href="fulfillment/received/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
+				<i class="fa fa-exchange"></i>
+				<span class="hidden-xs">Fulfillment <kbd>1</kbd></span>
+			</a>
+		</div>
 		<div class="aside-nav-child">
 			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
 				<i class="fa fa-shopping-basket"></i>
