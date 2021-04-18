@@ -1538,17 +1538,17 @@ function format_duration($duration=0)
 	return preg_replace('/\s+/', ' ', $duration);
 }
 
-function get_fullname($data=false, $else='', $return=false)
+function get_fullname($data=false, $other='', $return=false)
 {
-	if ($else != '') {
-		$else .= ' #'.rand();
+	if ($other != '') {
+		$other .= ' #'.rand();
 	}
-	$fullname = $else;
+	$fullname = $other;
 	$ci =& get_instance();
-	if (isset($ci->accounts) AND $ci->accounts->has_session AND $data == false) {
-		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
-	} elseif ($data) {
+	if ($data) {
 		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
+		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
 	}
 	if ($return == false) {
 		echo $fullname;
