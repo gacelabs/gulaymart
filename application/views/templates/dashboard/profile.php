@@ -17,7 +17,46 @@
 		<?php endif ?>
 
 		<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
-			<div class="dashboard-panel theme">
+
+			<?php if ($current_profile['profile']) : ?>
+			<div class="dashboard-panel">
+				<div class="dashboard-panel-middle">
+					<ul class="spaced-list between panel-inner-header">
+						<li><small><b>ACCOUNT INFORMATION <i class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Will also be used for deliveries."></i></b></small></li>
+						<li><small class="text-contrast" js-target="profile_info_panel">EDIT</small></li>
+					</ul>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-id-badge"></i></div>
+						<div class="text-left"><p class="zero-gaps"><?php echo $current_profile['fullname']; ?></p></div>
+					</div>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-calendar"></i></div>
+						<div class="text-left">
+							<p class="zero-gaps">
+								<?php
+									$month_name = date("F", mktime(0, 0, 0, $current_profile['profile']['birth_month']+1, 10));
+									echo $month_name." ".$current_profile['profile']['birth_year'];
+								?>
+							</p>
+						</div>
+					</div>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-phone"></i></div>
+						<div class="text-left">
+							<p class="zero-gaps"><?php echo $current_profile['profile']['phone']; ?></p>
+						</div>
+					</div>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-envelope-o"></i></div>
+						<div class="text-left">
+							<p class="zero-gaps"><?php echo $current_profile['email_address']; ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="dashboard-panel theme <?php echo(empty($current_profile['profile']['phone']) ? "" : "hide"); ?>" id="profile_info_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">What's your name?</h4></li>
 				</ul>
@@ -151,7 +190,29 @@
 
 		<?php if (isset($current_profile['profile']['phone'])) : ?>
 		<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
-			<div class="dashboard-panel theme">
+
+			<?php if ($current_profile['shippings']) : ?>
+			<div class="dashboard-panel">
+				<div class="dashboard-panel-middle">
+					<ul class="spaced-list between panel-inner-header">
+						<li><small><b>SHIPPING INFORMATION</b></small></li>
+						<li><small class="text-contrast" js-target="shipping_address_panel">EDIT</small></li>
+					</ul>
+					<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-map-marker"></i></div>
+						<div class="text-left" style="padding-top: 0;">
+							<p class="zero-gaps"><?php echo ucwords($shipping['address_1']);?></p>
+							<small class="elem-block address_2"><?php echo $shipping['address_2'];?></small>
+							<small class="elem-block text-gray pull-right"><?php str_has_value_echo('1', $shipping['active'], ' PRIMARY');?></small>
+						</div>
+					</div>
+					<?php endforeach ?>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="dashboard-panel theme <?php echo(empty($current_profile['shippings']) ? "" : "hide"); ?>" id="shipping_address_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">Delivery address</h4></li>
 				</ul>
@@ -160,7 +221,7 @@
 						<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 							<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 								<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
-									<div>
+									<div class="text-left">
 										<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
 										<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
