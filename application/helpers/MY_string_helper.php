@@ -1135,11 +1135,17 @@ function str_not_value_echo($search='', $in='', $echo='') {
 	}
 }
 
-function get_coordinates($data=false, $sensor=0, $region='PH') {
-	if ($data AND (isset($data['city']) OR isset($data['street']) OR isset($data['province']))) {
-		/*$data['city'],$data['street'],$data['province']*/
-		$address = urlencode(implode(',', $data));
-		$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
+function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH') {
+	if ($data) {
+		if ($is_address) {
+			/*$data['city'],$data['street'],$data['province']*/
+			$address = urlencode(implode(',', $data));
+			$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
+		} else {
+			/*$data['lat'],$data['lng']*/
+			$latlng = implode(',', $data);
+			$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&latlng=".$latlng."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
+		}
 		// debug($url, 'stop');
 		
 		$ch = curl_init();
@@ -1154,8 +1160,12 @@ function get_coordinates($data=false, $sensor=0, $region='PH') {
 		// debug($response, 'stop');
 		if ($response->status == 'OK') {
 			$googlemap = $response->results[0];
-			$coordinates = $googlemap->geometry->location;
-			return $coordinates;
+			if ($is_address) {
+				$coordinates = $googlemap->geometry->location;
+				return $coordinates;
+			} else {
+				return isset($response->results[1]) ? $response->results[1] : $response->results[0];
+			}
 		}
 	}
 	return false;

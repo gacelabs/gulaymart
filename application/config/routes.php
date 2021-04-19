@@ -31,6 +31,7 @@ $route['orders/thank-you'] = 'transactions/thankyou';
 
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
+$route['dev-build/fetch-cities'] = 'DevBuild/fetch';
 
 
 $route['404_override'] = '';

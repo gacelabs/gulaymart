@@ -15,5 +15,11 @@
 		<br>
 		<button>Run</button>
 	</form>
+	<br><br>
+	<form action="dev-build/fetch-cities" method="post">
+		<input type="password" name="password" value="" placeholder="Enter dev password" required="required">
+		<br>
+		<button>Fetch Cities</button>
+	</form>
 </body>
 </html>

@@ -258,7 +258,7 @@ var redirectNewProduct = function(obj) {
 	$('#preview_container').removeClass('hide');
 	setTimeout(function() {
 		var sUrl = 'farm/save-veggy/'+obj.product_id+'/'+(nice_prod_name.replace(/\s+/g, '-'));
-		$.ajax({
+		/*$.ajax({
 			url: sUrl,
 			success: function(html) {
 				var new_document = document.open('text/html', 'replace');
@@ -266,7 +266,8 @@ var redirectNewProduct = function(obj) {
 				new_document.close();
 				window.history.replaceState({}, document.title, sUrl);
 			}
-		});
+		});*/
+		window.location.href = sUrl;
 	}, 2000);
 }
 

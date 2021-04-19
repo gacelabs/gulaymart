@@ -28,6 +28,67 @@ class DevBuild extends CI_Controller {
 		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
 	}
 
+	public function fetch()
+	{
+		/*DEFAULT PASSWORD IS 1*/
+		$post = $this->input->post();
+		if ($post) {
+			if (check_data_values($post) AND $post['password'] === DEVBUILD_PASS) {
+				// debug($post, true);
+				$string = @file_get_contents(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'));
+				// debug($string, true);
+				if (!empty($string)) {
+					$json = json_decode($string, true);
+					// debug($json, true);
+					if (isset($json['pickup_dropoff'])) {
+						$chunks = array_chunk($json['pickup_dropoff'], 5);
+						$cnt = 0;
+						again:
+						// debug($chunks[$cnt], true);
+						$fetched = [];
+						foreach ($chunks[$cnt] as $toktok) {
+							$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
+							// debug($google_data, true);
+							sleep(3);
+							if ($google_data) {
+								$tmp = [];
+								foreach ($google_data->address_components as $object) {
+									if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
+										$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+									}
+									if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
+										$tmp['province'] = remove_multi_space(trim($object->long_name), true);
+									}
+									if (isset($tmp['city']) AND isset($tmp['province'])) break;
+								}
+								if (isset($tmp['city']) AND isset($tmp['province'])) {
+									$fetched[] = [
+										'city' => $tmp['city'],
+										'province' => $tmp['province'],
+										'latlng' => json_encode($google_data->geometry->location),
+										'place_id' => $google_data->place_id,
+									];
+								}
+							}
+						}
+						// if ($cnt > 0) debug($fetched, 'stop');
+						foreach ($fetched as $key => $raw) {
+							if ($this->gm_db->count('serviceable_areas', ['city' => $raw['city']]) == 0) {
+								$this->gm_db->new('serviceable_areas', $raw);
+							}
+						}
+						$cnt++;
+						// debug((string)$cnt, true);
+						echo "sleeping for 17 seconds";
+						sleep(17);
+						goto again;
+					}
+				}
+			}
+		}
+		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
+	}
+
 	private function build($drop_all=false)
 	{
 		if ($drop_all) {
@@ -133,41 +194,8 @@ class DevBuild extends CI_Controller {
 			'attribute_values',
 			'baskets',
 			'basket_transactions',
-			'messages' => [
-				'type' => [
-					'alter' => "ALTER TABLE messages CHANGE COLUMN `type` `type` ENUM('System Update','Inventory','Comments') NOT NULL DEFAULT 'System Update' AFTER `tab`",
-					'altered' => [
-						'status' => 'Added ENUM `Comments` on Length/Set'
-					]
-				],
-				'under' => [
-					'definition' => [
-						'type' => 'INT',
-						'constraint' => '10',
-						'default' => '0',
-						'null' => FALSE,
-					],
-					'after' => 'id'
-				],
-				'page_id' => [
-					'definition' => [
-						'type' => 'INT',
-						'constraint' => '10',
-						'default' => '0',
-						'null' => FALSE,
-					],
-					'after' => 'user_id'
-				],
-				'entity_id' => [
-					'definition' => [
-						'type' => 'INT',
-						'constraint' => '10',
-						'default' => '0',
-						'null' => FALSE,
-					],
-					'after' => 'page_id'
-				],
-			],
+			'messages',
+			'serviceable_areas',
 		];
 
 		return $data;

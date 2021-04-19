@@ -909,14 +909,32 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
+			'under' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
 			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',
 				'null' => false,
 			],
+			'page_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'entity_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
 			"`tab` enum('Notifications','Inquiries','Feedbacks') NOT NULL DEFAULT 'Notifications'",
-			"`type` enum('System Update','Inventory') NOT NULL DEFAULT 'System Update'",
+			"`type` enum('System Update','Inventory','Comments') NOT NULL DEFAULT 'System Update'",
 			"content LONGTEXT",
 			'unread' => [
 				'type' => 'TINYINT',
@@ -938,6 +956,44 @@ class CreateDev {
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARACTER SET' => 'utf8mb4',
 			'COLLATE' => 'utf8mb4_general_ci',
+		]);
+
+		return $table_data;
+	}
+
+	public function create_serviceable_areas_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'city' => [
+				'type' => 'TINYTEXT',
+				'null' => true,
+			],
+			'province' => [
+				'type' => 'TINYTEXT',
+				'null' => true,
+			],
+			'latlng' => [
+				'type' => 'TEXT',
+				'null' => true,
+			],
+			'place_id' => [
+				'type' => 'TEXT',
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('serviceable_areas', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
 		]);
 
 		return $table_data;

@@ -38,7 +38,15 @@ class Marketplace extends MY_Controller {
 			],
 			'bottom' => [
 				'modals' => ['check_loc_modal'],
-				'js' => ['marketplace/main', 'plugins/fb-login', 'global'],
+				'js' => [
+					'plugins/jquery.inputmask.min',
+					'plugins/inputmask.binding',
+					'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
+					'plugins/markerclustererplus.min',
+					'marketplace/main', 
+					'plugins/fb-login', 
+					'global',
+				],
 			],
 			'data' => [
 				'nearby_veggies' => nearby_veggies($this->latlng),
