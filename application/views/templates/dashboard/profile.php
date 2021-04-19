@@ -35,7 +35,7 @@
 							<p class="zero-gaps">
 								<?php
 									$month_name = date("F", mktime(0, 0, 0, $current_profile['profile']['birth_month']+1, 10));
-									echo $month_name." ".$current_profile['profile']['birth_year'];
+									echo ucfirst($month_name)." ".$current_profile['profile']['birth_year'];
 								?>
 							</p>
 						</div>

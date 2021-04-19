@@ -52,6 +52,9 @@ h1, h2, h3, h4, h5 {
 .text-danger {
 	color: #e43232;
 }
+.fa-circle.text-danger {
+	color: #ff7575;
+}
 kbd {
 	font-family: 'Roboto', sans-serif;
 }
