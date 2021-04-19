@@ -14,6 +14,33 @@
 	max-height: 350px;
 	overflow-y: auto;
 }
+.panel-inner-header {
+	border-bottom: 1px solid #efefef;
+	margin-bottom: 10px !important;
+	padding-bottom: 10px !important;
+}
+.profile-grid {
+	display: grid;
+	grid-template-columns: 40px 1fr;
+	margin-bottom: 5px;
+}
+.profile-grid:last-child {
+	margin-bottom: 0;
+}
+.profile-grid>div {
+	padding: 10px;
+}
+.profile-grid>div:first-child {
+	background-color: #eee;
+	padding-left: 0;
+	padding-right: 0;
+	border-radius: 3px;
+	height: 40px;
+	width: 40px;
+}
 body.profile #shipping-form .input-group {
 	margin-bottom: 15px;
+}
+[js-target] {
+	cursor: pointer;
 }

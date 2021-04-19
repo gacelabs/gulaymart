@@ -9,7 +9,7 @@
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
 		<div class="aside-nav-child hidden-xs">
-			<a href="fulfillment/received/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
+			<a href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
 				<span class="hidden-xs">Fulfillment <kbd>1</kbd></span>
 			</a>

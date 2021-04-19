@@ -126,7 +126,7 @@ class Basket extends My_Controller {
 				'footer' => ['global/footer']
 			],
 			'bottom' => [
-				'modals' => [],
+				'modals' => ['login_modal'],
 				'js' => ['basket/productpage', 'plugins/fb-login'],
 			],
 			'data' => [
