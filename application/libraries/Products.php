@@ -420,6 +420,7 @@ class Products {
 				unset($product['added']); unset($product['updated']);
 				$feedbacks = $this->class->gm_db->get('messages', [
 					'page_id' => $product_id,
+					'entity_id' => $farm_location_id,
 					'tab' => 'Feedbacks',
 					'type' => 'Comments',
 				]);

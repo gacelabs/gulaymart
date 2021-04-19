@@ -1338,7 +1338,7 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 	if ($data) {
 		$ci =& get_instance();
 		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
-		if ($farm_location_id) {
+		if (is_numeric($farm_location_id) AND $farm_location_id > 0) {
 			$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl WHERE ufl.id = "'.$farm_location_id.'"');
 		} else {
 			$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');

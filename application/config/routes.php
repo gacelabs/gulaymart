@@ -10,6 +10,7 @@ $route['sign-out'] = 'Authenticate/sign_out';
 
 $route['farm/my-veggies'] = 'Farm/new_veggy';
 $route['store'] = 'Marketplace';
+$route['store/(:num)/(:any)'] = 'Farm/store/$1/$2';
 $route['store/(:num)/(:num)/(:any)'] = 'Farm/store/$1/$2/$3';
 $route['store_farm/(:num)/(:any)'] = 'Farm/store_farm/$1/$2';
 $route['store_location/(:num)/(:num)/(:any)'] = 'Farm/store_location/$1/$2/$3';

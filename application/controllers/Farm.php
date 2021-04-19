@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Farm extends MY_Controller {
 
-	public $allowed_methods = ['store'];
+	public $allowed_methods = ['store', 'store_location', 'store_farm'];
 
 	public function __construct()
 	{
@@ -537,30 +537,28 @@ class Farm extends MY_Controller {
 
 	public function store($id=0, $farm_location_id=0, $name=false)
 	{
-		if ($name != false AND (strtolower($name) != 'preview' OR $this->accounts->has_session)) {
-			$profile = $this->accounts->has_session ? $this->accounts->profile : false;
-			if ($name == 'preview') {
-				$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
+		$profile = $this->accounts->has_session ? $this->accounts->profile : false;
+		if ($name == 'preview') {
+			$user_farm = $this->gm_db->get('user_farms', ['user_id' => $profile['id']], 'row');
+		} else {
+			$user_farm = $this->gm_db->get('user_farms', ['id' => $id], 'row');
+		}
+		$data = false;
+		// debug($user_farm, 'stop');
+		if ($user_farm) {
+			if (is_numeric($farm_location_id) AND $farm_location_id > 0) {
+				$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+				$user_farm['farm_location_id'] = $farm_location_id;
 			} else {
-				$user_farm = $this->gm_db->get('user_farms', ['id' => $id], 'row');
+				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
 			}
-			$data = false;
-			// debug($user_farm, 'stop');
-			if ($user_farm) {
-				if ($farm_location_id) {
-					$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
-					$user_farm['farm_location_id'] = $farm_location_id;
-				} else {
-					$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
-				}
-				$data = [
-					'farm' => $user_farm,
-					'location' => $farm_location,
-					'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
-					'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
-				];
-				// debug($data, 'stop');
-			}
+			$data = [
+				'farm' => $user_farm,
+				'location' => $farm_location,
+				'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
+				'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
+			];
+			// debug($data, 'stop');
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
@@ -583,7 +581,7 @@ class Farm extends MY_Controller {
 				'data' => $data
 			]);
 		} else {
-			redirect(base_url('farm/'));
+			show_404();
 		}
 	}
 
