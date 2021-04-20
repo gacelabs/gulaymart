@@ -35,18 +35,16 @@ class DevBuild extends CI_Controller {
 		if ($post) {
 			if (check_data_values($post) AND $post['password'] === DEVBUILD_PASS) {
 				// debug($post, true);
-				$string = @file_get_contents(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'));
+				// $string = @file_get_contents(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'));
+				$string = @file_get_contents(get_root_path('assets/data/deliveries-2021-04-19.json'));
 				// debug($string, true);
 				if (!empty($string)) {
 					$json = json_decode($string, true);
-					// debug($json, true);
 					if (isset($json['pickup_dropoff'])) {
-						$chunks = array_chunk($json['pickup_dropoff'], 5);
-						$cnt = 0;
-						again:
-						// debug($chunks[$cnt], true);
-						$fetched = [];
-						foreach ($chunks[$cnt] as $toktok) {
+						$toktok_data = $json['pickup_dropoff'];
+						$total_count = count($toktok_data);
+						$total_fetched = $total_remaining = 0;
+						foreach ($toktok_data as $key => $toktok) {
 							$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
 							// debug($google_data, true);
 							sleep(3);
@@ -62,26 +60,83 @@ class DevBuild extends CI_Controller {
 									if (isset($tmp['city']) AND isset($tmp['province'])) break;
 								}
 								if (isset($tmp['city']) AND isset($tmp['province'])) {
-									$fetched[] = [
+									$fetched = [
 										'city' => $tmp['city'],
 										'province' => $tmp['province'],
 										'latlng' => json_encode($google_data->geometry->location),
 										'place_id' => $google_data->place_id,
 									];
+									if ($this->gm_db->count('serviceable_areas', $tmp) == 0) {
+										$this->gm_db->new('serviceable_areas', $fetched);
+										++$total_fetched;
+										// if ($total_fetched == 10) break; // for testing only
+									}
 								}
 							}
+							unset($toktok_data[$key]);
+							$total_remaining = (count($toktok_data) - 1 ?: 0);
+							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
+							$json_encoded = json_encode($toktok_data);
+							fwrite($jsonfile, $json_encoded);
+							fclose($jsonfile);
+							sleep(7);
 						}
-						// if ($cnt > 0) debug($fetched, 'stop');
-						foreach ($fetched as $key => $raw) {
-							if ($this->gm_db->count('serviceable_areas', ['city' => $raw['city']]) == 0) {
-								$this->gm_db->new('serviceable_areas', $raw);
-							}
-						}
-						$cnt++;
-						// debug((string)$cnt, true);
-						echo "sleeping for 17 seconds";
-						sleep(17);
-						goto again;
+						$logfile = fopen(get_root_path('assets/data/logs/fetched-cities.log'), "a+");
+						$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
+						$txt .= "Total fetched: " . $total_fetched . " \n";
+						$txt .= "Total records: " . $total_count . " \n";
+						$txt .= "Total remaining: " . $total_remaining . " \n";
+						$txt .= "--------------------------------" . "\n";
+						fwrite($logfile, $txt);
+						fclose($logfile);
+						/*overwrite json file, to avoid re-uploading*/
+						// $jsonfile = fopen(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'), "a+");
+						/*$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
+						fwrite($jsonfile, json_encode($toktok_data));
+						fclose($jsonfile);*/
+
+						/*OLD PROCESS*/
+						// $chunks = array_chunk($json['pickup_dropoff'], 5);
+						// $cnt = 0;
+						// again:
+						// // debug($chunks[$cnt], true);
+						// $fetched = [];
+						// foreach ($chunks[$cnt] as $toktok) {
+						// 	$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
+						// 	// debug($google_data, true);
+						// 	sleep(3);
+						// 	if ($google_data) {
+						// 		$tmp = [];
+						// 		foreach ($google_data->address_components as $object) {
+						// 			if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
+						// 				$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+						// 			}
+						// 			if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
+						// 				$tmp['province'] = remove_multi_space(trim($object->long_name), true);
+						// 			}
+						// 			if (isset($tmp['city']) AND isset($tmp['province'])) break;
+						// 		}
+						// 		if (isset($tmp['city']) AND isset($tmp['province'])) {
+						// 			$fetched[] = [
+						// 				'city' => $tmp['city'],
+						// 				'province' => $tmp['province'],
+						// 				'latlng' => json_encode($google_data->geometry->location),
+						// 				'place_id' => $google_data->place_id,
+						// 			];
+						// 		}
+						// 	}
+						// }
+						// // if ($cnt > 0) debug($fetched, 'stop');
+						// foreach ($fetched as $key => $raw) {
+						// 	if ($this->gm_db->count('serviceable_areas', ['city' => $raw['city']]) == 0) {
+						// 		$this->gm_db->new('serviceable_areas', $raw);
+						// 	}
+						// }
+						// $cnt++;
+						// // debug((string)$cnt, true);
+						// echo "sleeping for 17 seconds";
+						// sleep(17);
+						// goto again;
 					}
 				}
 			}

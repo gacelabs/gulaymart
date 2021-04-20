@@ -34,4 +34,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 assets/data/files/
 assets/css/compiled/
 assets/js/compiled/
-*.json
+assets/data/data.json
+assets/deliveries-2021-04-19.json

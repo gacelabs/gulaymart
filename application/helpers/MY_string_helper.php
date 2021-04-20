@@ -1158,7 +1158,7 @@ function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH')
 		curl_close($ch);
 		$response = json_decode($curl_response);
 		// debug($response, 'stop');
-		if ($response->status == 'OK') {
+		if (!empty($response) AND $response->status == 'OK') {
 			$googlemap = $response->results[0];
 			if ($is_address) {
 				$coordinates = $googlemap->geometry->location;
