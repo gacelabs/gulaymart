@@ -20,7 +20,8 @@
 				<span class="hidden-xs">Basket 
 					<?php 
 					if($current_profile['shippings'] AND $this->basket_count == false) {
-						echo "<kbd>Buy now!</kbd>";
+						echo "<kbd class='hidden-md hidden-sm hidden-xs'>Buy now!</kbd>";
+						echo "<i class='fa fa-circle hidden-lg text-danger'></i>";
 					} elseif ($this->basket_count !== false) {
 						echo "<kbd>".$this->basket_count."</kbd>";
 					}
@@ -56,32 +57,32 @@
 				<?php if ($this->products->count()): ?>
 					<div class="aside-nav-child">
 						<a href="farm/sales/" class="aside-nav-item <?php in_array_echo("sales", $middle['body_class'], "active");?>">
-							<i class="fa fa-tachometer"></i>Sales
+							<i class="fa fa-tachometer"></i><span>Sales</span>
 						</a>
 					</div>
 				<?php endif ?>
 				<div class="aside-nav-child">
 					<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-						<i class="fa fa-pencil"></i>My Veggies <?php if(empty($this->products->count())) {echo "<kbd>Add a product</kbd>";} ?>
+						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Add a product</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";;} ?></span>
 					</a>
 				</div>
 			<?php endif ?>
 			<?php if ($this->farms AND $this->products->count()): ?>
 				<div class="aside-nav-child">
 					<a href="farm/inventory/" class="aside-nav-item <?php in_array_echo("inventory", $middle['body_class'], "active");?>">
-						<i class="fa fa-cubes"></i>Inventory <?php if ($this->products->count() == 1) {echo "<kbd>Product list</kbd>";} ?>
+						<i class="fa fa-cubes"></i><span>Inventory <?php if ($this->products->count() == 1) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Product list</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";} ?></span>
 					</a>
 				</div>
 			<?php endif ?>
 			<div class="aside-nav-child">
 				<a href="farm/storefront" class="aside-nav-item hidden-xs <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
-					<i class="fa fa-flag-o"></i>Storefront <?php if(empty($this->farms) AND $current_profile['shippings']) {echo "<kbd>Sell & Earn!</kbd>";} ?>
+					<i class="fa fa-flag-o"></i><span>Storefront <?php if(empty($this->farms) AND $current_profile['shippings']) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Sell & Earn!</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";} ?></span>
 				</a>
 			</div>
 			<?php if ($this->farms): ?>
 				<div class="aside-nav-child">
 					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
-						<i class="fa fa-cog"></i>Settings
+						<i class="fa fa-cog"></i><span>Settings</span>
 					</a>
 				</div>
 			<?php endif ?>

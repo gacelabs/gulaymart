@@ -18,13 +18,13 @@ class Fulfillment extends My_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'fulfillment/fulfillment_container'
+					'fulfillment/ff_container'
 				],
 				'footer' => [],
 			],
 			'bottom' => [
 				'modals' => [],
-				'js' => [],
+				'js' => ['fulfillment/main'],
 			],
 			'data' => []
 		]);
