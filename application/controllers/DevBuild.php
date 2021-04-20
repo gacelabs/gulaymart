@@ -166,7 +166,7 @@ class DevBuild extends CI_Controller {
 		/*re-create table*/
 		$insertdata = [];
 		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'];
-		foreach ($this->get_data() as $key => $table) {
+		foreach ($this->get_datatables() as $key => $table) {
 			$fields = false;
 			if (is_array($table)) {
 				$fields = $table;
@@ -239,26 +239,26 @@ class DevBuild extends CI_Controller {
 				}
 			}
 		}
-		/*if (count($insertdata)) {
+		if (count($insertdata)) {
 			foreach ($insertdata as $table => $insert) {
 				if (!in_array($table, $not_this_tables)) {
 					if ($insert AND $this->db->table_exists($table)) {
 						// debug($insert, true);
 						foreach ($insert as $key => $row) {
-							if (isset($row['id'])) unset($row['id']);
+							// if (isset($row['id'])) unset($row['id']);
 							$this->gm_db->new($table, $row);
 						}
 					}
 				}
 			}
-		}*/
+		}
 		if (!isset($is_created)) {
 			echo "<br>All Tables and Values created/updated! <br>";
 		}
 		return;
 	}
 
-	private function get_data()
+	private function get_datatables()
 	{
 		$data = [
 			'users',
