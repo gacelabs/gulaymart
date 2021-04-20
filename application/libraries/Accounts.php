@@ -208,10 +208,8 @@ class Accounts {
 						if (!empty($latlng)) {
 							$this->class->latlng = unserialize($latlng);
 						} else {
-							$request['lat'] = $this->class->latlng['lat'] = $shipping['lat'];
-							$request['lng'] = $this->class->latlng['lng'] = $shipping['lng'];
-							$prev_latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
-							set_cookie('prev_latlng', serialize($prev_latlng), 7776000); // 90 days
+							$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
+							set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
 						}
 						break;
 					}
