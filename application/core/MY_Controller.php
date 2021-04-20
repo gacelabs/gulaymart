@@ -73,9 +73,9 @@ class MY_Controller extends CI_Controller {
 		/*check account logins here*/
 		if ($this->accounts->has_session) {
 			/*now allow all pages with session*/
-			$this->accounts->refetch();
+			$results = $this->accounts->refetch();
 			// debug($this->accounts->profile, 'stop');
-			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
+			if ($results AND $this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
 				redirect(base_url('profile/'));
 			}
 		} else {

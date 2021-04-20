@@ -151,19 +151,21 @@ class DevBuild extends CI_Controller {
 			if ($exists == true) {
 				$this->load->library('accounts');
 				if ($this->accounts->has_session) $this->accounts->logout(true);
-				delete_cookie('prev_latlng');
 				sleep(3);
-				$return = $this->gm_db->drop_tables();
+				/*$return = $this->gm_db->drop_tables();
 				if ($return) {
 					echo "All Tables dropped <br>";
 				} else {
 					echo "All Tables already dropped <br>";
 				}
-				sleep(10);
+				sleep(10);*/
 			}
 		}
+		delete_cookie('prev_latlng');
 
 		/*re-create table*/
+		$insertdata = [];
+		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'];
 		foreach ($this->get_data() as $key => $table) {
 			$fields = false;
 			if (is_array($table)) {
@@ -174,7 +176,16 @@ class DevBuild extends CI_Controller {
 				if ((bool)strstr($table, ':recreate')) {
 					$chunks = explode(':', $table);
 					$table = trim($chunks[0]);
-					if ($this->db->table_exists($table)) $this->db->query('DROP TABLE '.$table);
+					if ($this->db->table_exists($table)) {
+						if (!in_array($table, $not_this_tables)) {
+							if ($drop_all) {
+								$insertdata[$table] = $this->gm_db->get($table);
+								if ($insertdata[$table]) {
+									foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
+								}
+							}
+						}
+					}
 				}
 				// debug($table);
 				/*create table for the first time*/
@@ -188,6 +199,13 @@ class DevBuild extends CI_Controller {
 					}
 				} else {
 					echo "Method ".$method." does not exists! <br>";
+				}
+			} elseif ($drop_all) {
+				if (!in_array($table, $not_this_tables)) {
+					$insertdata[$table] = $this->gm_db->get($table);
+					if ($insertdata[$table]) {
+						foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
+					}
 				}
 			}
 			if ($fields) {
@@ -221,8 +239,21 @@ class DevBuild extends CI_Controller {
 				}
 			}
 		}
+		/*if (count($insertdata)) {
+			foreach ($insertdata as $table => $insert) {
+				if (!in_array($table, $not_this_tables)) {
+					if ($insert AND $this->db->table_exists($table)) {
+						// debug($insert, true);
+						foreach ($insert as $key => $row) {
+							if (isset($row['id'])) unset($row['id']);
+							$this->gm_db->new($table, $row);
+						}
+					}
+				}
+			}
+		}*/
 		if (!isset($is_created)) {
-			echo "<br>All Tables and Values already exists! <br>";
+			echo "<br>All Tables and Values created/updated! <br>";
 		}
 		return;
 	}
