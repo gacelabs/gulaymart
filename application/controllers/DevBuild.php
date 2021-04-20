@@ -76,7 +76,7 @@ class DevBuild extends CI_Controller {
 							unset($toktok_data[$key]);
 							$total_remaining = (count($toktok_data) - 1 ?: 0);
 							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
-							$json_encoded = json_encode($toktok_data);
+							$json_encoded = json_encode(['pickup_dropoff'=>$toktok_data]);
 							fwrite($jsonfile, $json_encoded);
 							fclose($jsonfile);
 							sleep(7);
