@@ -212,7 +212,16 @@ class MY_Model extends CI_Model {
 				$tables = $tables->result_array();
 				// debug($tables, 'stop');
 				foreach ($tables as $key => $table) {
-					$this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
+					// $this->db->query('TRUNCATE TABLE '.$table['Tables_in_'.$this->db->database]);
+					$db_table = $table['Tables_in_'.$this->db->database];
+					if (in_array($db_table, ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'])) {
+						// $this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
+					} else {
+						$tabledata = $this->get($db_table);
+						if ($tabledata) {
+							foreach ($tabledata as $key => $row) $this->remove($db_table, $row);
+						}
+					}
 				}
 				return true;
 			}

@@ -204,8 +204,13 @@ class Accounts {
 			if ($shippings) {
 				foreach ($shippings as $key => $shipping) {
 					if ($shipping['active'] == 1) {
-						$request['lat'] = $this->class->latlng['lat'] = $shipping['lat'];
-						$request['lng'] = $this->class->latlng['lng'] = $shipping['lng'];
+						$latlng = get_cookie('prev_latlng', true);
+						if (!empty($latlng)) {
+							$this->class->latlng = unserialize($latlng);
+						} else {
+							$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
+							set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
+						}
 						break;
 					}
 				}
@@ -242,6 +247,9 @@ class Accounts {
 			$this->profile = $request;
 			// debug($this->profile, 'stop');
 			return $this;
+		} else {
+			$this->profile = FALSE;
+			$this->has_session = FALSE;
 		}
 		return FALSE;
 	}
