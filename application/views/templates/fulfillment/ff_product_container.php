@@ -5,7 +5,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
 							<th><small><div class="product-th">PRODUCT</div></small></th>
 							<th><small>QUANITY</small></th>
 							<th><small>DATE ORDERED</small></th>
@@ -16,7 +16,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -25,7 +25,7 @@
 							<td>1 hr/s ago</td>
 						</tr>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -48,7 +48,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
 							<th><small><div class="product-th">PRODUCT</div></small></th>
 							<th><small>QUANITY</small></th>
 							<th><small>DATE ORDERED</small></th>
@@ -59,7 +59,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -68,7 +68,7 @@
 							<td>1 hr/s ago</td>
 						</tr>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -91,7 +91,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
 							<th><small><div class="product-th">PRODUCT</div></small></th>
 							<th><small>QUANITY</small></th>
 							<th><small>DATE ORDERED</small></th>
@@ -102,7 +102,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -111,7 +111,7 @@
 							<td>1 hr/s ago</td>
 						</tr>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -134,7 +134,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
 							<th><small><div class="product-th">PRODUCT</div></small></th>
 							<th><small>QUANITY</small></th>
 							<th><small>DATE ORDERED</small></th>
@@ -145,7 +145,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -154,7 +154,7 @@
 							<td>1 hr/s ago</td>
 						</tr>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -177,7 +177,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
 							<th><small><div class="product-th">PRODUCT</div></small></th>
 							<th><small>QUANITY</small></th>
 							<th><small>DATE ORDERED</small></th>
@@ -188,7 +188,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
@@ -197,7 +197,7 @@
 							<td>1 hr/s ago</td>
 						</tr>
 						<tr>
-							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
 							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
 							<td>3</td>
 							<td>April 01, 2021 <br>10:32 AM</td>
