@@ -49,33 +49,35 @@ class DevBuild extends CI_Controller {
 							// debug($google_data, true);
 							sleep(3);
 							if ($google_data) {
-								$tmp = [];
-								foreach ($google_data->address_components as $object) {
-									if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
-										$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+								if ($this->gm_db->count('serviceable_areas', ['place_id' => $google_data->place_id]) == 0) {
+									$tmp = [];
+									foreach ($google_data->address_components as $object) {
+										if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
+											$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+										}
+										if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
+											$tmp['province'] = remove_multi_space(trim($object->long_name), true);
+										}
+										if (isset($tmp['city']) AND isset($tmp['province'])) break;
 									}
-									if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
-										$tmp['province'] = remove_multi_space(trim($object->long_name), true);
-									}
-									if (isset($tmp['city']) AND isset($tmp['province'])) break;
-								}
-								if (isset($tmp['city']) AND isset($tmp['province'])) {
-									$fetched = [
-										'city' => $tmp['city'],
-										'province' => $tmp['province'],
-										'latlng' => json_encode($google_data->geometry->location),
-										'place_id' => $google_data->place_id,
-									];
-									if ($this->gm_db->count('serviceable_areas', $tmp) == 0) {
-										$this->gm_db->new('serviceable_areas', $fetched);
-										++$total_fetched;
-										// if ($total_fetched == 10) break; // for testing only
+									if (isset($tmp['city']) AND isset($tmp['province'])) {
+										if ($this->gm_db->count('serviceable_areas', $tmp) == 0) {
+											$fetched = [
+												'city' => $tmp['city'],
+												'province' => $tmp['province'],
+												'latlng' => json_encode($google_data->geometry->location),
+												'place_id' => $google_data->place_id,
+											];
+											$this->gm_db->new('serviceable_areas', $fetched);
+											++$total_fetched;
+											// if ($total_fetched == 2) break; // for testing only
+										}
 									}
 								}
 							}
 							unset($toktok_data[$key]);
 							$total_remaining = (count($toktok_data) - 1 ?: 0);
-							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
+							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "w+");
 							$json_encoded = json_encode(['pickup_dropoff'=>$toktok_data]);
 							fwrite($jsonfile, $json_encoded);
 							fclose($jsonfile);
@@ -165,7 +167,7 @@ class DevBuild extends CI_Controller {
 
 		/*re-create table*/
 		$insertdata = [];
-		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'];
+		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values', 'serviceable_areas'];
 		foreach ($this->get_datatables() as $key => $table) {
 			$fields = false;
 			if (is_array($table)) {
