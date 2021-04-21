@@ -3,7 +3,15 @@
 	<ul class="spaced-list between">
 		<li><input type="checkbox" class="add-basket-item-select" js-event="addBasketItemselect" data-id="<?php echo $basket['id'];?>" data-price="<?php echo $basket['rawdata']['basket_details']['price'];?>" data-name="<?php echo $basket['rawdata']['name'];?>" data-fee="<?php echo $basket['fee'];?>"<?php str_has_value_echo('1', $basket['status'], ' checked');?>></li>
 		<li>
-			<div class="order-item-image" style="background-image: url('<?php echo $basket['rawdata']['photos']['main']['url_path'];?>'); cursor: pointer;"></div>
+			<?php
+				$main_photo = 'https://place-hold.it/280x280.png?text=No+Image&fontsize=14';
+				if (!isset($basket['rawdata']['photos']['main']) AND isset($basket['rawdata']['photos']['other'])) {
+					$main_photo = $basket['rawdata']['photos']['other'][0]['url_path'];
+				} elseif (isset($basket['rawdata']['photos']['main'])) {
+					$main_photo = $basket['rawdata']['photos']['main']['url_path'];
+				} 
+			?>
+			<div class="order-item-image" style="background-image: url('<?php echo $main_photo;?>'); cursor: pointer;"></div>
 		</li>
 	</ul>
 	<div class="order-info-container" js-element="order">

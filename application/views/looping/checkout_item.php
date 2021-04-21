@@ -1,6 +1,14 @@
 <div class="checkout-product-item">
 	<div class="checkout-product-info">
-		<div class="checkout-product-image" style="background-image: url('<?php echo $basket['rawdata']['photos']['main']['url_path'];?>');"></div>
+		<?php
+			$main_photo = 'https://place-hold.it/360x360.png?text=No+Image&fontsize=14';
+			if (!isset($basket['rawdata']['photos']['main']) AND isset($basket['rawdata']['photos']['other'])) {
+				$main_photo = $basket['rawdata']['photos']['other'][0]['url_path'];
+			} elseif (isset($basket['rawdata']['photos']['main'])) {
+				$main_photo = $basket['rawdata']['photos']['main']['url_path'];
+			} 
+		?>
+		<div class="checkout-product-image" style="background-image: url('<?php echo $main_photo;?>');"></div>
 		<div class="text-left">
 			<div class="ellipsis-container">
 				<p class="zero-gaps"><?php echo $basket['rawdata']['name'];?></p>
