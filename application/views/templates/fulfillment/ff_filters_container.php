@@ -1,19 +1,32 @@
 <div class="row hidden-xs" id="ff_filters_container">
 	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
 		<div>
-			<small class="elem-block"><b>FARM LOCATIONS</b></small>
 			<div class="ff-navbar-grid">
-				<div class="ff-navbar-pill text-ellipsis active">
-					<img src="assets/images/icons/farms.png" width="15" style="vertical-align:text-top;margin-right:5px;"> All farms
+				<div>
+					<small class="elem-block" style="margin-bottom:5px;"><b>FARM LOCATIONS</b></small>
+					<div class="input-group">
+						<select class="form-control" aria-describedby="basic-addon1">
+							<option selected>All farms</option>
+							<option >Antipolo City</option>
+							<option >SJDM City, Bulacan</option>
+							<option >Malabon City</option>
+						</select>
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">Filter</button>
+						</span>
+					</div>
 				</div>
-				<div class="ff-navbar-pill text-ellipsis">
-					<img src="assets/images/icons/farms.png" width="15" style="vertical-align:text-top;margin-right:5px;"> Antipolo City
-				</div>
-				<div class="ff-navbar-pill text-ellipsis">
-					<img src="assets/images/icons/farms.png" width="15" style="vertical-align:text-top;margin-right:5px;"> SJDM City, Bulacan
-				</div>
-				<div class="ff-navbar-pill text-ellipsis">
-					<img src="assets/images/icons/farms.png" width="15" style="vertical-align:text-top;margin-right:5px;"> Malabon City
+				<div>
+					<small class="elem-block" style="margin-bottom:5px;"><b>ORDER SCHEDULE</b></small>
+					<div class="input-group">
+						<select class="form-control" aria-describedby="basic-addon1">
+							<option selected>Now</option>
+							<option >Scheduled</option>
+						</select>
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">Filter</button>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>

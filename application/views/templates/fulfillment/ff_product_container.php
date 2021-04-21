@@ -1,68 +1,219 @@
 <div class="row hidden-xs" id="ff_product_container">
 	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
-		<div class="ff-container-grid">
-			<div class="ff-container-left">
-				<div id="ff_product_list_body">
-
-					<div class="ff-product-item-label">
-						<div class="text-center">&nbsp;</div>
-						<div>
-							<small class="elem-block text-contrast"><b>PRODUCT</b></small>
-						</div>
-						<div class="text-center">
-							<small class="elem-block text-contrast"><b>QUANTITY</b></small>
-						</div>
-						<div class="text-center">
-							<small class="elem-block text-contrast"><b>DATE ORDERED</b></small>
-						</div>
-						<div class="text-center">
-							<small class="elem-block text-contrast"><b>TIME ORDERED</b></small>
-						</div>
-						<div class="text-center">
-							<small class="elem-block text-contrast"><b>STATUS</b></small>
-						</div>
-						<div class="text-center">
-							<small class="elem-block text-contrast"><b>BUYER</b></small>
-						</div>
-					</div>
-
-					<div class="ff-product-item">
-						<div class="ff-product-item-top">
-							<div class="text-center">
-								<input type="checkbox" class="form-control">
-							</div>
-							<div>
-								<p class="zero-gaps text-ellipsis">Freshly Picked Organic Sweet White Onions</p>
-								<small class="elem-block text-gray">ORDER ID: <a href="" class="text-link">H5J4K12L234LJ</a></small>
-							</div>
-							<div class="text-center">
-								<p class="zero-gaps">3</p>
-							</div>
-							<div class="text-center">
-								<p class="zero-gaps">April 01, 2021</p>
-							</div>
-							<div class="text-center">
-								<p class="zero-gaps">10:32 AM</p>
-							</div>
-							<div class="text-center">
-								<p class="zero-gaps">Placed</p>
-							</div>
-							<div class="text-center">
-								<button class="btn btn-sm"><i class="fa fa-chevron-right"></i></button>
-							</div>
-						</div>
-						<div class="ff-product-item-middle">
-							
-						</div>
-						<div class="ff-product-item-footer">
-							
-						</div>
-					</div>
+		<div class="ff-container-left">
+			<div class="ff-item-container">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th><small><div class="product-th">PRODUCT</div></small></th>
+							<th><small>QUANITY</small></th>
+							<th><small>DATE ORDERED</small></th>
+							<th><small>STATUS</small></th>
+							<th><small>DELIVER WHEN</small></th>
+							<th><small>PLACED SINCE</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="ff-item-footer">
+					<ul class="spaced-list between">
+						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
+						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
+						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
+					</ul>
 				</div>
 			</div>
 
-			<div class="ff-container-right">
-				ff-container-right
+			<div class="ff-item-container">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th><small><div class="product-th">PRODUCT</div></small></th>
+							<th><small>QUANITY</small></th>
+							<th><small>DATE ORDERED</small></th>
+							<th><small>STATUS</small></th>
+							<th><small>DELIVER WHEN</small></th>
+							<th><small>PLACED SINCE</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="ff-item-footer">
+					<ul class="spaced-list between">
+						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
+						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
+						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="ff-item-container">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th><small><div class="product-th">PRODUCT</div></small></th>
+							<th><small>QUANITY</small></th>
+							<th><small>DATE ORDERED</small></th>
+							<th><small>STATUS</small></th>
+							<th><small>DELIVER WHEN</small></th>
+							<th><small>PLACED SINCE</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="ff-item-footer">
+					<ul class="spaced-list between">
+						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
+						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
+						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="ff-item-container">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th><small><div class="product-th">PRODUCT</div></small></th>
+							<th><small>QUANITY</small></th>
+							<th><small>DATE ORDERED</small></th>
+							<th><small>STATUS</small></th>
+							<th><small>DELIVER WHEN</small></th>
+							<th><small>PLACED SINCE</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="ff-item-footer">
+					<ul class="spaced-list between">
+						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
+						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
+						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="ff-item-container">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="fname" class="v-middle zero-gaps" js-event="checkAll" /></th>
+							<th><small><div class="product-th">PRODUCT</div></small></th>
+							<th><small>QUANITY</small></th>
+							<th><small>DATE ORDERED</small></th>
+							<th><small>STATUS</small></th>
+							<th><small>DELIVER WHEN</small></th>
+							<th><small>PLACED SINCE</small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox" name="fname" class="v-middle zero-gaps" /></td>
+							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
+							<td>3</td>
+							<td>April 01, 2021 <br>10:32 AM</td>
+							<td><b>Placed</b></td>
+							<td><b>Now</b></td>
+							<td>1 hr/s ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="ff-item-footer">
+					<ul class="spaced-list between">
+						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
+						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
+						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

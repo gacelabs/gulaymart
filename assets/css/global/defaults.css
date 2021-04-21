@@ -328,6 +328,9 @@ label.error {
 	margin: 0 !important;
 	padding: 0 !important;
 }
+.v-middle {
+	vertical-align: middle;
+}
 .v-center {
 	transform: translateY(-50%);
 	top: 50%;

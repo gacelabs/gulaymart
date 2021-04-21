@@ -11,7 +11,7 @@ class Fulfillment extends My_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main']
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'fulfillment', 'ff-placed'],
@@ -23,7 +23,7 @@ class Fulfillment extends My_Controller {
 				'footer' => [],
 			],
 			'bottom' => [
-				'modals' => [],
+				'modals' => ['ff_invoice_modal'],
 				'js' => ['fulfillment/main'],
 			],
 			'data' => []

@@ -59,7 +59,7 @@
 											</div>
 											<div class="order-item-status">
 												<div class="order-schedule-list">
-													<p><b class="text-contrast">ORDER SCHEDULE</b></p>
+													<p data-toggle="tooltip" data-placement="bottom" title="Choose when you want to receive the order."><b class="text-contrast">DELIVER WHEN</b></p>
 													<?php
 														$etas = [];
 														foreach ($baskets as $farm_name => $basket) {
