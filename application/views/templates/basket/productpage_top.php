@@ -68,7 +68,7 @@
 										</div>
 									</div>
 								<?php else: ?>
-									<p>NO STOCKS AVAILABLE</p>
+									<p class="zero-gaps" style="margin-bottom:5px;">NO STOCKS AVAILABLE</p>
 								<?php endif ?>
 							</div>
 						</div>
@@ -151,7 +151,9 @@
 								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Today</p>
-									<small class="text-gray elem-block">Earliest: <?php echo compute_eta($product['farm_location']['durationval'], true);?></small>
+									<?php if ($product['farm_location']['durationval']): ?>
+										<small class="text-gray elem-block">Earliest: <?php compute_eta($product['farm_location']['durationval'], true, true);?></small>									
+									<?php endif ?>
 								</div>
 							</div>
 							<div class="productpage-summary-grid">

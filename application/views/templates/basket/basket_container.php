@@ -18,17 +18,8 @@
 										<div class="order-item-list">
 											<?php foreach ($baskets as $farm_name => $basket): ?>
 												<div class="add-basket-item-container order-item-inner">
-													<p class="zero-gaps text-caps"><?php echo $farm_name;?> | <em class="text-success">(Shipping Fee &#x20b1; <b><?php echo $basket[0]['fee'];?></b>)</em></p>
-													<?php
-														$last_location_id = 0;
-														foreach ($basket as $key => $basket_data) {
-															$this->view('looping/basket_item', [
-																'basket' => $basket_data,
-																'last_location_id' => $last_location_id
-															]);
-															$last_location_id = $basket_data['location_id'];
-														}
-													?>
+													<p class="zero-gaps text-caps"><?php echo $farm_name;?></p>
+													<?php $this->view('looping/basket_item', ['items' => $basket]);?>
 												</div>
 											<?php endforeach ?>
 										</div>
@@ -77,7 +68,7 @@
 														<label for="deliver_now" class="zero-gaps">
 															<input type="radio" class="zero-gaps" id="deliver_now" js-event="deliveryDate" name="order_schedule" value="deliver_now" checked="checked"> Now
 														</label>
-														<small class="text-gray"><?php echo compute_eta($eta);?></small>
+														<small class="text-gray"><?php compute_eta($eta, false, true);?></small>
 													</div>
 													<div>
 														<label for="order_schedule">
@@ -91,15 +82,9 @@
 											<div class="zero-gaps">
 												<div class="tender-amount-parent">
 													<div class="tender-amount-body">
-														<?php
-															$sub_total = 0;
-															$shipping_fee = compute_summary($baskets, $sub_total);
-														?>
 													</div>
 													<hr style="border-color:#aaa;margin:5px 0;">
-													<p class="product-amount zero-gaps"><small class="pull-left">Shipping fee</small>+ &#x20b1; <b js-elem="sub-itemtotal" js-check="shipping"><?php echo number_format($shipping_fee);?></b></p>
-													<hr style="border-color:#aaa;margin:5px 0;">
-													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal"><?php echo number_format($sub_total);?></b></h4>
+													<h4 class="total-amount text-contrast"><span>&#x20b1;</span> <b js-element="grandtotal">0.00</b></h4>
 												</div>
 												<button url="basket/checkout" class="btn btn-contrast btn-block disabled" js-element="checkout" disabled="disabled"><b>CHECKOUT<i class="fa fa-angle-right icon-right"></i></b></button>
 											</div>

@@ -111,7 +111,7 @@ function toktok_price_directions_format($data=false)
 	return $pricing;
 }
 
-function compute_eta($eta=0, $noprefix=false)
+function compute_eta($eta=0, $noprefix=false, $echo=true)
 {
 	$time = gmdate("H:i:s", $eta);
 	$chunks = array_map('trim', explode(':', $time));
@@ -136,10 +136,15 @@ function compute_eta($eta=0, $noprefix=false)
 		}
 	}
 	// debug($chunks, $duration, 'stop');
+	$return = NULL;
 	if (count($duration)) {
-		return ($noprefix ? '' : 'ETA: ').implode(' ', $duration);
+		$return = ($noprefix ? '' : 'ETA: ').implode(' ', $duration);
 	}
-	return NULL;
+	if ($echo) {
+		echo $return;
+	} else {
+		return $return;
+	}
 }
 
 function redirect_basket_orders()
@@ -160,77 +165,37 @@ function get_session_baskets($status=[0,1])
 	$ci =& get_instance();
 	$ci->load->library('baskets');
 	$basket_session = [];
-	$is_userdata = false;
 	$session_baskets = $ci->session->userdata('basket_session');
 	if ($session_baskets) {
-		$is_userdata = true;
-		$ci->session->unset_userdata('basket_session');
-	} elseif ($ci->accounts->has_session) {
-		$session_baskets = $ci->baskets->get_in(['user_id' => $ci->accounts->profile['id'], 'status' => $status]);
-	}
-	// debug($session_baskets, 'stop');
-	if (is_array($session_baskets)) {
-		foreach ($session_baskets as $key => $basket) {
-			if ($is_userdata) {
+		if (is_array($session_baskets)) {
+			foreach ($session_baskets as $key => $basket) {
+				$existing = $basket['existing'];
+				unset($basket['existing']);
 				$basket['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
-				$basket['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-				$where = [
-					'product_id' => $basket['product_id'],
-					'location_id' => $basket['location_id'],
-					'at_date' => $basket['at_date'],
-					'status' => [0,1],
-				];
-				if ($ci->accounts->has_session) {
-					$where['user_id'] = $ci->accounts->profile['id'];
-				} else {
-					$where['device_id'] = $ci->device_id;
-				}
-				$existing = $ci->gm_db->get_in('baskets', $where, 'row');
-				if ($existing) {
-					$id = $existing['id'];
-					$quantity = $existing['quantity'] + (int)$basket['quantity'];
-					$rawdata = json_decode(base64_decode($existing['rawdata']), true);
-					if (isset($rawdata['basket_details']) AND isset($rawdata['basket_details']['stocks'])) {
-						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
-					}
-					$ci->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $id]);
-					$basket['rawdata']['basket_details']['stocks'] -= $quantity;
-				} else {
+				// debug($basket, json_decode(base64_decode($basket['rawdata']), true), true);
+				if ($existing == 0) {
 					$id = $ci->gm_db->new('baskets', $basket);
-					$basket['rawdata']['basket_details']['stocks'] -= $basket['quantity'];
+				} elseif ($existing == 1) {
+					$id = $basket['id']; unset($basket['id']);
+					$ci->gm_db->save('baskets', $basket, ['id' => $id]);
 				}
-				$basket['id'] = $id;
-				$driving_distance = get_driving_distance([
-					['lat' => $basket['rawdata']['farm_location']['lat'], 'lng' => $basket['rawdata']['farm_location']['lng']],
-					['lat' => $ci->latlng['lat'], 'lng' => $ci->latlng['lng']],
-				]);
-				$basket['distance'] = $driving_distance['distanceval'];
-				$basket['duration'] = $driving_distance['durationval'];
-				$basket['distance_text'] = $driving_distance['distance'];
-				$basket['duration_text'] = $driving_distance['duration'];
-				// debug($basket, 'stop');
-			} else {
-				$basket['rawdata']['basket_details']['stocks'] -= $basket['quantity'];
 			}
+		}
+		$ci->session->unset_userdata('basket_session');
+	}
+	/*get all session basket*/
+	$where = ['status' => $status];
+	if ($ci->accounts->has_session) {
+		$where['user_id'] = $ci->accounts->profile['id'];
+	} else {
+		$where['device_id'] = $ci->device_id;
+	}
+	$baskets = $ci->baskets->get_in($where);
+	if (is_array($baskets)) {
+		foreach ($baskets as $key => $basket) {
 			$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
 		}
 	}
-	if ($is_userdata) { /*user is now logged in or registered*/
-		$basket_session = []; /*reset*/
-		$where = ['status' => [0,1]];
-		if ($ci->accounts->has_session) {
-			$where['user_id'] = $ci->accounts->profile['id'];
-		} else {
-			$where['device_id'] = $ci->device_id;
-		}
-		$baskets = $ci->baskets->get_in($where);
-		if (is_array($baskets)) {
-			foreach ($baskets as $key => $basket) {
-				$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
-			}
-		}
-	}
-
 	// debug($basket_session, 'stop');
 	return $basket_session;
 }

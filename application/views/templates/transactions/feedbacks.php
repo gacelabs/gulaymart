@@ -14,7 +14,13 @@
 				<div class="notif-related-product">
 					<small class="elem-block">FEEDBACK ABOUT</small>
 					<div class="order-item-grid">
-						<div class="order-item-image" style="background-image: url('<?php echo $feedback['photo']['url_path'];?>');"></div>
+						<?php
+							$main_photo = 'https://place-hold.it/280x280.png?text=No+Image&fontsize=14';
+							if ($feedback['photo']) {
+								$main_photo = $feedback['photo']['url_path'];
+							} 
+						?>
+						<div class="order-item-image" style="background-image: url('<?php echo $main_photo;?>');"></div>
 						<div class="order-info-container">
 							<div class="order-item-title">
 								<p class="zero-gaps"><a href="<?php product_url($feedback['product'], true);?>" class="text-link"><?php echo $feedback['product']['name'];?></a></p>

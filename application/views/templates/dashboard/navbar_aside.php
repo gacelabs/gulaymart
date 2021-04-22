@@ -8,12 +8,14 @@
 			<i class="fa fa-leaf"></i>
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
+		<?php if ($this->farms AND $this->products->count()): ?>
 		<div class="aside-nav-child hidden-xs">
 			<a href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
 				<span class="hidden-xs">Fulfillment <kbd>1</kbd></span>
 			</a>
 		</div>
+		<?php endif ?>
 		<div class="aside-nav-child">
 			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
 				<i class="fa fa-shopping-basket"></i>

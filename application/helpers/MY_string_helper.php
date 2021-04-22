@@ -5,7 +5,7 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
-		if ($data !== 'stop' AND $data !== true) {
+		if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
 			$trace = debug_backtrace();
 			try {
 				if (!empty($trace)) {
@@ -1556,7 +1556,13 @@ function get_fullname($data=false, $other='', $return=false)
 	$fullname = $other;
 	$ci =& get_instance();
 	if ($data) {
-		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		if ($ci->accounts->has_session) {
+			if ($data['id'] == $ci->accounts->profile['id']) {
+				$fullname = 'You have sent a message';
+			}
+		} else {
+			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		}
 	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
 		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
 	}

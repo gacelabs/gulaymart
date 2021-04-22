@@ -60,6 +60,42 @@ class Basket extends My_Controller {
 	public function add($product_id=0)
 	{
 		$data = $this->input->post() ?: $this->input->get();
+		$post = $this->baskets->prepare_to_basket($data, $product_id);
+		// debug($post, 'stop');
+		if ($post) {
+			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
+				$post['status'] = 0;
+			} else { /*from checkout button*/
+				$post['status'] = 1;
+			}
+			/*check if the user is logged in if false save post to session*/
+			if ($this->accounts->has_session == false) {
+				$this->session->set_userdata('basket_session', ['baskets'=>$post]);
+				$message = 'Item added to basket, Redirecting to the registration / login page!';
+				$redirect = base_url('register');
+				$callback = false;
+			} else {
+				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
+				$redirect = $post['status'] ? base_url('basket/checkout') : false;
+				$callback = $post['status'] ? false : 'stockChanged';;
+				if ($post['existing'] == 1) {
+					unset($post['existing']);
+					$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
+				} else {
+					unset($post['existing']);
+					$post['id'] = $this->gm_db->new('baskets', $post);
+				}
+				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
+			}
+			// debug($post, 'stop');
+			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback);
+		}
+		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
+	}
+
+	private function addV1($product_id=0)
+	{
+		$data = $this->input->post() ?: $this->input->get();
 		$post = add_item_to_basket($data, $product_id);
 		// debug($post, 'stop');
 		if (isset($post['baskets'])) {

@@ -61,6 +61,7 @@ class MY_Controller extends CI_Controller {
 
 		// debug($this);
 		$this->load->library('accounts');
+		$this->load->library('users');
 		$this->load->library('products');
 		$this->load->library('smtpemail');
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);

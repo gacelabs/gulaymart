@@ -155,9 +155,9 @@ var stockChanged = function(obj) {
 	// console.log(obj);
 	if (obj && obj.baskets) {
 		var qty = parseInt(obj.baskets.quantity);
-		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
+		var stocks = parseInt(obj.baskets.rawdata.details.stocks);
 		var newStocks = stocks - qty;
-		$('[class="max-qty"]').text('Max quantity '+newStocks);
+		$('[class="max-qty"]').text('Maximum of '+newStocks);
 		$('[name="baskets[quantity]"]').prop('max', newStocks).attr('max', newStocks);
 		if (newStocks <= 0) {
 			$('[js-element="variety"]').html('<p>NO STOCKS AVAILABLE</p>');

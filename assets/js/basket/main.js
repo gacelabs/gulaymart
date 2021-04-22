@@ -3,6 +3,9 @@ $(document).ready(function() {
 	$('.order-item-image').click(function() {
 		$(this).parent().prev().find('[js-event="addBasketItemselect"]').trigger('click');
 	});
+	$('[js-event="qty"]').change(function() {
+		$(this).parents('[js-element="order"]').prev().find('[js-event="addBasketItemselect"]').trigger('change');
+	});
 	$('[js-event="deliveryDate"]').click(function() {
 		oOrderType['type'] = $(this).val();
 		if ($(this).val() == "deliver_now") {
@@ -53,7 +56,7 @@ $(document).ready(function() {
 		if (Object.keys(oOrdersChecked).length) {
 			var oData = {data: oOrdersChecked};
 			$.extend( oData, oOrderType );
-			console.log(oData);
+			// console.log(oData);
 			simpleAjax('basket/verify', oData);
 		}
 	});

@@ -3,6 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Fulfillment extends My_Controller {
 
+	public $allowed_methods = [];
+	public $not_allowed_methods = [];
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('baskets');
+		// debug($this->products->count(), 'stop');
+		if (empty($this->farms) AND $this->products->count() == 0) {
+			redirect(base_url('basket/'));
+		}
+		// INITIALIZING TOKTOK OBJECT
+		// $this->load->library('toktokapi');
+		// debug($this->toktokapi, 'stop');
+	}
+
 	public function index() {
 		$this->placed();
 	}

@@ -517,7 +517,7 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'replenished' => [
+			'sold' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',
@@ -992,6 +992,61 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$table_data = $this->class->dbforge->create_table('serviceable_areas', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
+
+	public function create_baskets_merge_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'basket_ids' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'order_details' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'fee' => [
+				'type' => 'DOUBLE',
+				'constraint' => '10,2',
+				'default' => '0.00',
+				'null' => true,
+			],
+			'hash' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'distance' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'duration' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('baskets_merge', false, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
