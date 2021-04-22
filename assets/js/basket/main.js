@@ -4,7 +4,10 @@ $(document).ready(function() {
 		$(this).parent().prev().find('[js-event="addBasketItemselect"]').trigger('click');
 	});
 	$('[js-event="qty"]').change(function() {
-		$(this).parents('[js-element="order"]').prev().find('[js-event="addBasketItemselect"]').trigger('change');
+		var uiCheckBox = $(this).parents('[js-element="order"]').prev().find('[js-event="addBasketItemselect"]');
+		if (uiCheckBox.is(':checked')) {
+			uiCheckBox.trigger('change');
+		}
 	});
 	$('[js-event="deliveryDate"]').click(function() {
 		oOrderType['type'] = $(this).val();
