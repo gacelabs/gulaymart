@@ -17,20 +17,15 @@
 						</div>
 
 						<div class="order-summary-middle">
-							<?php foreach ($data['baskets'] as $farm_name => $baskets): ?>
+							<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
 								<div class="checkout-item-container">
 									<div class="checkout-item-top">
-										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $farm_name;?></p>
+										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $baskets['farm']['name'];?></p>
 									</div>
 									<div class="checkout-item-middle">
 										<?php
-											$last_location_id = 0;
-											foreach ($baskets as $key => $basket) {
-												$this->view('looping/checkout_item', [
-													'basket' => $basket,
-													'last_location_id' => $last_location_id
-												]);
-												$last_location_id = $basket['location_id'];
+											foreach ($baskets['order_details'] as $order_type => $orders) {
+												$this->view('looping/checkout_item', ['items' => $orders, 'farm' => $baskets['farm']]);
 											}
 										?>
 									</div>
@@ -74,23 +69,28 @@
 							 	<div class="price-cta-container">
 						 			<p class="zero-gaps text-center"><b class="text-contrast">SUMMARY</b></p>
 							 		<div class="price-tally-container">
-							 			<?php $grand_total = 0; ?>
-										<?php foreach ($data['baskets'] as $farm_name => $baskets): ?>
+							 			<?php $final_total = 0; ?>
+										<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
+							 				<?php $toktok_pricing = $baskets['toktok_details']['pricing']; ?>
 											<div class="price-tally-per-seller">
 												<div class="price-tally-grid">
 													<div>
 														<div class="ellipsis-container">
-															<p class="zero-gaps text-caps"><?php echo $farm_name;?></p>
+															<p class="zero-gaps text-caps"><?php echo $baskets['farm']['name'];?></p>
 														</div>
-														<?php
-															$sub_total = 0;
-															$shipping_fee = compute_summary($baskets, $sub_total);
-															$grand_total += $sub_total + $shipping_fee;
-														?>
-														<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo number_format($shipping_fee);?>)</i></small>
+														<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo $toktok_pricing['price'];?>)</i></small>
 													</div>
+													<?php
+														$sub_total = 0;
+														foreach ($baskets['order_details'] as $order_type => $orders) {
+															foreach ($orders as $index => $order) {
+																$sub_total += $order['rawdata']['details']['price'] * $order['quantity'];
+															}
+														}
+														$final_total += $sub_total + $toktok_pricing['price'];
+													?>
 													<div class="text-right">
-														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $shipping_fee);?></b></p>
+														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $toktok_pricing['price']);?></b></p>
 													</div>
 												</div>
 											</div>
@@ -100,7 +100,7 @@
 							</div>
 							<div class="cta-bottom-container">
 								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-chevron-right"></i></small>
-								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($grand_total);?></b></button>
+								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($final_total);?></b></button>
 							</div>
 						</form>
 					</div>

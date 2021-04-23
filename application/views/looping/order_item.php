@@ -3,18 +3,10 @@
 	<div class="order-item-list">
 		<?php foreach ($order as $farm => $items): ?>
 			<div class="order-item-inner">
-				<p class="zero-gaps"><?php echo $farm;?> (Shipping fee: &#x20b1; <b><?php echo $items[0]['fee'];?></b>)</p>
+				<p class="zero-gaps"><?php echo $farm;?></p>
 				<div class="order-item-grid">
 				<?php foreach ($items as $key => $item): ?>
-					<?php
-						$main_photo = 'https://place-hold.it/228x268.png?text=No+Image&fontsize=14';
-						if (!isset($item['rawdata']['photos']['main']) AND isset($item['rawdata']['photos']['other'])) {
-							$main_photo = $item['rawdata']['photos']['other'][0]['url_path'];
-						} elseif (isset($item['rawdata']['photos']['main'])) {
-							$main_photo = $item['rawdata']['photos']['main']['url_path'];
-						} 
-					?>
-					<div class="order-item-image" style="background-image: url('<?php echo $main_photo;?>');"></div>
+					<div class="order-item-image" style="background-image: url('<?php identify_main_photo($item['rawdata']);?>');"></div>
 					<div class="order-info-container">
 						<div class="order-item-title">
 							<p><a href="<?php echo $item['rawdata']['product_url'];?>"><?php echo $item['rawdata']['name'];?></a></p>

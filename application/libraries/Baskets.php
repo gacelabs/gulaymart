@@ -15,6 +15,27 @@ class Baskets {
 		$this->profile = $this->class->session->userdata('profile');
 	}
 
+	private function baskets_assemble($baskets=false)
+	{
+		if ($baskets) {
+			foreach ($baskets as $key => $basket) {
+				if (is_string($basket['rawdata'])) {
+					$basket['rawdata'] = $baskets[$key]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
+					// debug($basket, 'stop');
+					$driving_distance = get_driving_distance([
+						['lat' => $basket['rawdata']['farm']['lat'], 'lng' => $basket['rawdata']['farm']['lng']],
+						['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
+					]);
+					$baskets[$key]['distance'] = $driving_distance['distanceval'];
+					$baskets[$key]['duration'] = $driving_distance['durationval'];
+					$baskets[$key]['distance_text'] = $driving_distance['distance'];
+					$baskets[$key]['duration_text'] = $driving_distance['duration'];
+				}
+			}
+		}
+		return $baskets;
+	}
+
 	public function get($where=true, $row=false, $limit=false, $order_by='location_id')
 	{
 		if ($where != false) {
@@ -30,6 +51,35 @@ class Baskets {
 					return $baskets[0];
 				} else {
 					return $baskets;
+				}
+			}
+		}
+		return false;
+	}
+
+	public function get_baskets_merge($where=true, $row=false, $limit=false, $order_by='added')
+	{
+		if ($where != false) {
+			if (!is_bool($limit) AND is_numeric($limit)) {
+				$this->class->db->limit($limit);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->class->db->where_in($field, $wrow);
+					} else {
+						$this->class->db->where([$field => $wrow]);
+					}
+				}
+			}
+			$data = $this->class->db->order_by($order_by)->get('baskets_merge');
+			if (isset($data) AND $data->num_rows()) {
+				$baskets_merge = $data->result_array();
+				// debug($baskets_merge, 'stop');
+				if ($row) {
+					return $baskets_merge[0];
+				} else {
+					return $baskets_merge;
 				}
 			}
 		}
@@ -94,27 +144,6 @@ class Baskets {
 		return false;
 	}
 
-	public function baskets_assemble($baskets=false)
-	{
-		if ($baskets) {
-			foreach ($baskets as $key => $basket) {
-				if (is_string($basket['rawdata'])) {
-					$basket['rawdata'] = $baskets[$key]['rawdata'] = json_decode(base64_decode($basket['rawdata']), true);
-					// debug($basket, 'stop');
-					$driving_distance = get_driving_distance([
-						['lat' => $basket['rawdata']['farm']['lat'], 'lng' => $basket['rawdata']['farm']['lng']],
-						['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
-					]);
-					$baskets[$key]['distance'] = $driving_distance['distanceval'];
-					$baskets[$key]['duration'] = $driving_distance['durationval'];
-					$baskets[$key]['distance_text'] = $driving_distance['distance'];
-					$baskets[$key]['duration_text'] = $driving_distance['duration'];
-				}
-			}
-		}
-		return $baskets;
-	}
-
 	public function prepare_to_basket($data=false, $product_id=0)
 	{
 		if ($data AND isset($data['baskets']) AND $product_id) {
@@ -142,7 +171,7 @@ class Baskets {
 				$quantity += $existing['quantity'];
 				$existing['quantity'] = $quantity;
 				$rawdata = json_decode(base64_decode($existing['rawdata']), true);
-				$rawdata['details']['sub_total'] = (float)$rawdata['details']['price'] * (int)$quantity;
+				// $rawdata['details']['sub_total'] = (float)$rawdata['details']['price'] * (int)$quantity;
 				$existing['rawdata'] = base64_encode(json_encode($rawdata));
 				$basket = $existing;
 				$basket['existing'] = 1;
@@ -155,7 +184,7 @@ class Baskets {
 				if ($details) {
 					$product = $this->class->gm_db->get_in('products', ['id' => $product_id], 'row');
 					if ($product) {
-						$details['sub_total'] = (float)$details['price'] * (int)$quantity;
+						// $details['sub_total'] = (float)$details['price'] * (int)$quantity;
 						$product['farm_location_id'] = $basket['location_id'];
 
 						unset($product['added']); unset($product['updated']);
@@ -190,6 +219,25 @@ class Baskets {
 			}
 			// debug($basket, 'stop');
 			return $basket;
+		}
+		return false;
+	}
+
+	public function new_baskets_merge($data=false)
+	{
+		if ($data) {
+			$this->class->db->insert('baskets_merge', $data);
+			$id = $this->class->db->insert_id();
+			if ($id) return $id;
+		}
+		return false;
+	}
+
+	public function save_baskets_merge($set=false, $where=[])
+	{
+		if ($set) {
+			$this->class->db->update('baskets_merge', $set, $where);
+			return true;
 		}
 		return false;
 	}

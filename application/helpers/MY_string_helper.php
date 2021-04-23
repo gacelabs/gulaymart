@@ -1558,7 +1558,7 @@ function get_fullname($data=false, $other='', $return=false)
 	if ($data) {
 		if ($ci->accounts->has_session) {
 			if ($data['id'] == $ci->accounts->profile['id']) {
-				$fullname = 'You have sent a message';
+				$fullname = $ci->accounts->profile['firstname'];
 			}
 		} else {
 			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
@@ -1570,5 +1570,24 @@ function get_fullname($data=false, $other='', $return=false)
 		echo $fullname;
 	} else {
 		return $fullname;
+	}
+}
+
+function identify_main_photo($product=false, $return=false, &$no_main=true)
+{
+	$main_photo = 'https://place-hold.it/100x100.png?text=No+Image&fontsize=14';
+	if ($product) {
+		if (!isset($product['photos']['main']) AND isset($product['photos']['other'])) {
+			$main_photo = $product['photos']['other'][0]['url_path'];
+		} elseif (isset($product['photos']['main'])) {
+			$main_photo = $product['photos']['main']['url_path'];
+			$no_main = false;
+		}
+	}
+	// debug($no_main, 'stop');
+	if ($return == false) {
+		echo $main_photo;
+	} else {
+		return $main_photo;
 	}
 }

@@ -51,7 +51,7 @@
 													$this->view('looping/reply_item', $reply);
 												}?>
 											<?php else: ?>
-												<?php $this->view('looping/comment_item', ['placeholder'=>'Reply a feedback ...', 'under'=>$id, 'page'=>$product]); ?>
+												<?php $this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]); ?>
 											<?php endif ?>
 										</div>
 									</div>

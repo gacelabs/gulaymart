@@ -3,21 +3,13 @@
 	<?php foreach ($items as $key => $item): ?>
 		<?php
 			$rawdata = $item['rawdata'];
-			$rawdata['product']['farm_location_id'] = $item['location_id'];
+			if (!isset($rawdata['product']['farm_location_id'])) $rawdata['product']['farm_location_id'] = $item['location_id'];
 		?>
 		<div class="order-item-grid">
 			<ul class="spaced-list between">
 				<li><input type="checkbox" class="add-basket-item-select" js-event="addBasketItemselect" data-id="<?php echo $item['id'];?>" data-price="<?php echo $rawdata['details']['price'];?>" data-name="<?php echo $rawdata['product']['name'];?>"<?php str_has_value_echo('1', $item['status'], ' checked');?>></li>
 				<li>
-					<?php
-						$main_photo = 'https://place-hold.it/280x280.png?text=No+Image&fontsize=14';
-						if (!isset($rawdata['product']['photos']['main']) AND isset($rawdata['product']['photos']['other'])) {
-							$main_photo = $rawdata['product']['photos']['other'][0]['url_path'];
-						} elseif (isset($rawdata['product']['photos']['main'])) {
-							$main_photo = $rawdata['product']['photos']['main']['url_path'];
-						} 
-					?>
-					<div class="order-item-image" style="background-image: url('<?php echo $main_photo;?>'); cursor: pointer;"></div>
+					<div class="order-item-image" style="background-image: url('<?php identify_main_photo($rawdata['product']);?>'); cursor: pointer;"></div>
 				</li>
 			</ul>
 			<div class="order-info-container" js-element="order">
@@ -32,6 +24,5 @@
 				</p>
 			</div>
 		</div>
-		
 	<?php endforeach ?>
 <?php endif ?>

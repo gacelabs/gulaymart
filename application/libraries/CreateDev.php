@@ -1009,8 +1009,18 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
+			'order_id' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'basket_ids' => [
 				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'farm' => [
+				'type' => 'LONGTEXT',
 				'default' => NULL,
 				'null' => true,
 			],
@@ -1025,11 +1035,6 @@ class CreateDev {
 				'default' => '0.00',
 				'null' => true,
 			],
-			'hash' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true,
-			],
 			'distance' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
@@ -1039,6 +1044,11 @@ class CreateDev {
 			'duration' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'toktok_post' => [
+				'type' => 'LONGTEXT',
 				'default' => NULL,
 				'null' => true,
 			],

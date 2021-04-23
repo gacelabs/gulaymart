@@ -10,13 +10,13 @@
 		<p><?php echo $content;?></p>
 		<?php 
 			if ($under == 0) {
-				$this->view('looping/comment_item', ['placeholder'=>'Reply a feedback ...', 'under'=>$id, 'page'=>$product]);
+				$this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]);
 			}
 		?>
 	</div>
 	<?php 
 		if ($under > 0) {
-			$this->view('looping/comment_item', ['placeholder'=>'Reply a feedback ...', 'under'=>$id, 'page'=>$product]);
+			$this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]);
 		}
 	?>
 </div>

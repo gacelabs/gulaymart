@@ -397,7 +397,7 @@ class Products {
 				$basket = $this->class->gm_db->get_in('baskets', [
 					'product_id' => $product_id,
 					'status' => [0,1],
-					'at_date' => strtotime(date('Y-m-d'))
+					// 'at_date' => strtotime(date('Y-m-d'))
 				], 'result', 'quantity');
 				if ($basket) {
 					if ($stocks > 0) {

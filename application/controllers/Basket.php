@@ -238,14 +238,37 @@ class Basket extends My_Controller {
 	{
 		$basket_session = get_session_baskets(1);
 		if (count($basket_session)) {
+			// $this->session->unset_userdata('checkout_pricing');
 			// debug($basket_session, 'stop');
-			/*reassemble data by farm location*/
 			$items_by_farm = [];
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
-					$basket['date'] = $date;
-					$items_by_farm[$basket['rawdata']['farm']['name']][] = $basket;
+					$items_by_farm[$basket['location_id']]['farm'] = $basket['rawdata']['farm'];
+					unset($basket['rawdata']['farm']);
+					$checkout_pricing = $this->session->userdata('checkout_pricing');
+					if (empty($checkout_pricing)) {
+						$this->load->library('toktokapi');
+						/*get toktok fee if not existing in baskets table*/
+						$pricing = toktok_price_directions_format([
+							'sender_lat' => $items_by_farm[$basket['location_id']]['farm']['lat'],
+							'sender_lng' => $items_by_farm[$basket['location_id']]['farm']['lng'],
+							'receiver_lat' => $this->latlng['lat'],
+							'receiver_lng' => $this->latlng['lng'],
+						]);
+						$this->toktokapi->app_request('price_and_directions', $pricing);
+						if ($this->toktokapi->success) {
+							$checkout_pricing = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
+							// $checkout_pricing['pricing']['price'];
+							// $checkout_pricing['hash'];
+							$this->session->set_userdata('checkout_pricing', $checkout_pricing);
+						}
+					}
+					$items_by_farm[$basket['location_id']]['order_details'][$basket['order_type']][] = $basket;
+					$items_by_farm[$basket['location_id']]['toktok_details'] = $checkout_pricing;
 				}
+			}
+			if (count($items_by_farm)) {
+				$this->session->set_userdata('place_order_session', $items_by_farm);
 			}
 			// debug($items_by_farm, 'stop');
 			$this->render_page([
@@ -288,59 +311,67 @@ class Basket extends My_Controller {
 	*/
 	public function place_order()
 	{
-		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1]]);
-		if ($baskets) {
-			$items_by_farm = $toktok_temp_data = [];
-			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
-			// debug($items_by_farm, 'stop');
-			foreach ($items_by_farm as $location_id => $items) {
-				$shipping_fee = $items[0]['fee'];
-				$toktok_temp_data[$location_id] = [
-					'user_id' => $this->accounts->profile['id'],
-					'fee' => $shipping_fee,
-					'basket_ids' => '',
-					'total_price' => 0,
-				];
-				$basket_ids = [];
-				foreach ($items as $key => $item) {
-					$basket_ids[] = $item['id'];
-					$toktok_temp_data[$location_id]['item'] = $item;
-					$toktok_temp_data[$location_id]['total_price']+=(int)$item['quantity']*(float) $item['rawdata']['basket_details']['price'];
+		$place_order_session = $this->session->userdata('place_order_session');
+		// debug($place_order_session, 'stop');
+		$place_order = $basket_ids = false;
+		if ($place_order_session) {
+			$place_order = [];
+			$timestamp = strtotime(date('Y-m-d H:i:s'));
+
+			foreach ($place_order_session as $farm_location_id => $session) {
+				$place_order[$farm_location_id]['basket_ids'] = [];
+				$profile = $this->users->get(['id' => $session['farm']['user_id']], true);
+				unset($profile['settings']); unset($profile['shippings']);
+				$session['farm']['profile'] = $profile;
+				$place_order[$farm_location_id]['farm'] = $session['farm'];
+				$final_total = 0;
+				foreach ($session['order_details'] as $order_type => $orders) {
+					foreach ($orders as $key => $order) {
+						$sub_total = $order['quantity'] * $order['rawdata']['details']['price'];
+						$place_order[$farm_location_id]['order_details'][] = [
+							'product_id' => $order['product_id'],
+							'product' => $order['rawdata']['product'],
+							'quantity' => $order['quantity'],
+							'sub_total' => $sub_total,
+							'timestamp' => $timestamp,
+							'status' => 2,
+							'when' => $order_type,
+						];
+						$place_order[$farm_location_id]['basket_ids'][] = $order['id'];
+						$final_total += $sub_total;
+					}
 				}
-				$toktok_temp_data[$location_id]['basket_ids'] = implode(',', $basket_ids);
+				$fee = $session['toktok_details']['pricing']['price'];
+				$session['mobile'] = '80109'; /*test rider id*/
+				$hash = $session['hash'] = $session['toktok_details']['hash']; /*test rider id*/
+
+				$toktok_post = toktok_post_delivery_format($session);
+				$toktok_post['f_recepient_cod'] = $final_total + $fee;
+
+				$basket_ids = $place_order[$farm_location_id]['basket_ids'];
+				$place_order[$farm_location_id]['basket_ids'] = implode(',', $basket_ids);
+				$place_order[$farm_location_id]['order_id'] = strtoupper(substr(md5(implode(',', $basket_ids)), 0, 10));
+				$place_order[$farm_location_id]['fee'] = $fee;
+				$place_order[$farm_location_id]['distance'] = $session['toktok_details']['pricing']['distance'];
+				$place_order[$farm_location_id]['duration'] = $session['toktok_details']['pricing']['duration'];
+
+				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post));
+				$place_order[$farm_location_id]['farm'] = base64_encode(json_encode($place_order[$farm_location_id]['farm']));
+				$place_order[$farm_location_id]['order_details'] = base64_encode(json_encode($place_order[$farm_location_id]['order_details']));
 			}
-			// debug($toktok_temp_data, 'stop');
-			foreach ($toktok_temp_data as $location_id => $temp) {
-				$toktok_post = toktok_post_delivery_format($temp['item']);
-				$toktok_post['f_recepient_cod'] = $temp['total_price'] + $temp['fee'];
-				$toktok_data = [
-					'user_id' => $temp['user_id'],
-					'location_id' => $location_id,
-					'basket_ids' => $temp['basket_ids'],
-					'toktok_data' => base64_encode(json_encode($toktok_post)),
-				];
-				// debug($toktok_data, 'stop');
-				/*now save to DB for queueing*/
-				$toktok = $this->gm_db->get('basket_transactions', [
-					'user_id' => $temp['user_id'],
-					'location_id' => $location_id,
-					'queue_status' => 0,
-				], 'row');
-				// $toktok['toktok_data'] = json_decode(base64_decode($toktok['toktok_data']), true);
-				// debug($toktok, $toktok_data, 'stop');
-				if ($toktok == false) {
-					$this->gm_db->new('basket_transactions', $toktok_data);
-				} else {
-					$this->gm_db->save('basket_transactions', $toktok_data, ['id' => $toktok['id']]);
-				}
+		}
+		if ($place_order AND $basket_ids) {
+			// debug($place_order, 'stop');
+			foreach ($place_order as $data) $this->baskets->new_baskets_merge($data);
+			/*email buyer*/
+			foreach ($basket_ids as $id) {
+				$this->baskets->save(['status' => 2], ['id' => $id]);
 			}
-			// debug($toktok_data, 'stop');
-			foreach ($baskets as $key => $basket) {
-				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
-			}
-			$this->set_response('success', 'Orders have been placed!', false, 'orders/thank-you/');
+			$this->session->unset_userdata('place_order_session');
+			$this->session->set_userdata('typage_session');
+			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
-			$this->set_response('info', 'No more orders to place', false, 'basket/');
+			$this->set_response('info', 'No orders to be place, Redirecting to your basket...', false, 'basket/');
 		}
 	}
 

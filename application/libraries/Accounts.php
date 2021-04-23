@@ -204,13 +204,14 @@ class Accounts {
 			if ($shippings) {
 				foreach ($shippings as $key => $shipping) {
 					if ($shipping['active'] == 1) {
-						$latlng = get_cookie('prev_latlng', true);
+						$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
+						/*$latlng = get_cookie('prev_latlng', true);
 						if (!empty($latlng)) {
 							$this->class->latlng = unserialize($latlng);
 						} else {
 							$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
 							set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
-						}
+						}*/
 						break;
 					}
 				}
