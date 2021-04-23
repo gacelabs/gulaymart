@@ -27,7 +27,8 @@ class Transactions extends MY_Controller {
 			foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
 			$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
 			foreach ($baskets_merge as $key => $merged) {
-				$baskets_merge[$key]['farm'] = json_decode(base64_decode($baskets_merge[$key]['farm']), true);
+				$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
+				$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
 				$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
 				$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 			}

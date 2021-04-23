@@ -20,9 +20,10 @@ class DevBuild extends CI_Controller {
 		$post = $this->input->post();
 		if ($post) {
 			if (check_data_values($post) AND $post['password'] === DEVBUILD_PASS) {
-				/*$drop = ((isset($post['drop']) AND $post['drop']) ? 'true' : 'false');
-				debug($post, $drop, true);*/
-				$this->build((isset($post['drop']) AND $post['drop']) ? true : false);
+				$mode = false;
+				if (isset($post['mode'])) $mode = $post['mode'];
+				// debug($post, $mode, true);
+				$this->build($mode);
 			}
 		}
 		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
@@ -146,70 +147,72 @@ class DevBuild extends CI_Controller {
 		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
 	}
 
-	private function build($drop_all=false)
+	private function build($mode=false)
 	{
-		if ($drop_all) {
+		/*re-create table*/
+		$incremental = [];
+		$insertdata = [];
+		$datatables = $this->get_datatables();
+		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values', 'serviceable_areas'];
+
+		if ($mode != false) {
+			$this->load->library('accounts');
+			if ($this->accounts->has_session) $this->accounts->logout(true);
 			$exists = method_exists($this->gm_db, 'drop_tables');
 			if ($exists == true) {
-				$this->load->library('accounts');
-				if ($this->accounts->has_session) $this->accounts->logout(true);
-				sleep(3);
-				/*$return = $this->gm_db->drop_tables();
-				if ($return) {
-					echo "All Tables dropped <br>";
-				} else {
-					echo "All Tables already dropped <br>";
+				if ($mode == 'drop') {
+					delete_cookie('prev_latlng');
+				} elseif ($mode == 'clear') {
+					foreach ($datatables as $key => $table) {
+						if ($this->db->table_exists($table)) {
+							$incremental[$table] = $this->gm_db->count($table);
+							$insertdata[$table] = $this->gm_db->get($table);
+						}
+					}
 				}
-				sleep(10);*/
+				// debug($incremental, true);
+				$return = $this->gm_db->drop_tables();
+				if (isset($return)) {
+					echo "All Tables ".ucfirst($mode)."ed <br>";
+				}
 			}
 		}
-		delete_cookie('prev_latlng');
+		sleep(10);
 
-		/*re-create table*/
-		$insertdata = [];
-		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values', 'serviceable_areas'];
-		foreach ($this->get_datatables() as $key => $table) {
+		// debug($datatables, 'stop');
+		foreach ($datatables as $key => $table) {
 			$fields = false;
 			if (is_array($table)) {
 				$fields = $table;
 				$table = $key;
 			}
-			if (!$this->db->table_exists($table)) {
-				if ((bool)strstr($table, ':recreate')) {
-					$chunks = explode(':', $table);
-					$table = trim($chunks[0]);
-					if ($this->db->table_exists($table)) {
-						if (!in_array($table, $not_this_tables)) {
-							if ($drop_all) {
-								$insertdata[$table] = $this->gm_db->get($table);
-								if ($insertdata[$table]) {
-									foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
-								}
-							}
-						}
-					}
-				}
-				// debug($table);
-				/*create table for the first time*/
-				$method = 'create_'.$table.'_table';
-				if (method_exists($this->createdev, $method)) {
-					$is_created = $this->createdev->{$method}();
-					if ($is_created) {
-						echo "Table ".$table." created! <br>";
-					} else {
-						echo "Table ".$table." existing! <br>";
-					}
-				} else {
-					echo "Method ".$method." does not exists! <br>";
-				}
-			} elseif ($drop_all) {
-				if (!in_array($table, $not_this_tables)) {
-					$insertdata[$table] = $this->gm_db->get($table);
-					if ($insertdata[$table]) {
-						foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
-					}
-				}
+			// debug($this->db->table_exists($table), $table, 'stop');
+			if ((bool)strstr($table, ':recreate')) {
+				$chunks = explode(':', $table);
+				$table = trim($chunks[0]);
 			}
+			// debug($table);
+			/*create table for the first time*/
+			$method = 'create_'.$table.'_table';
+			// debug($method, $table, 'stop');
+			if (method_exists($this->createdev, $method)) {
+				$autoinc = 0;
+				if (isset($incremental[$table])) $autoinc = $incremental[$table];
+				// debug($method, $autoinc, $table, 'stop');
+				$is_created = $this->createdev->{$method}();
+				sleep(7);
+				if ($is_created) {
+					if ($autoinc) {
+						$this->db->query("ALTER TABLE ".$table." AUTO_INCREMENT = ".$autoinc);
+					}
+					echo "Table ".$table." created! <br>";
+				} else {
+					echo "Table ".$table." existing! <br>";
+				}
+			} else {
+				echo "Method ".$method." does not exists! <br>";
+			}
+
 			if ($fields) {
 				foreach ($fields as $column => $row) {
 					if ((bool)strstr($column, ':change')) {
@@ -241,19 +244,23 @@ class DevBuild extends CI_Controller {
 				}
 			}
 		}
+		
 		if (count($insertdata)) {
 			foreach ($insertdata as $table => $insert) {
-				if (!in_array($table, $not_this_tables)) {
-					if ($insert AND $this->db->table_exists($table)) {
-						// debug($insert, true);
-						foreach ($insert as $key => $row) {
-							// if (isset($row['id'])) unset($row['id']);
-							$this->gm_db->new($table, $row);
+				if (!in_array($table, $not_this_tables) AND $insert) {
+					// debug($insert, true);
+					foreach ($insert as $key => $row) {
+						foreach ($row as $field => $value) {
+							if ($this->db->field_exists($field, $table) == false) {
+								unset($row[$field]);
+							}
 						}
+						if (count($row)) $this->gm_db->new($table, $row);
 					}
 				}
 			}
 		}
+
 		if (!isset($is_created)) {
 			echo "<br>All Tables and Values created/updated! <br>";
 		}

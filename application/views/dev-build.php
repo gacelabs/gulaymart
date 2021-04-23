@@ -9,7 +9,12 @@
 		<input type="password" name="password" value="" placeholder="Enter dev password" required="required">
 		<br>
 		<label>
-			<input type="checkbox" name="drop" value="1">
+			<input type="radio" name="mode" value="clear">
+			Clear All Tables (id incremental and data restored)
+		</label>
+		<br>
+		<label>
+			<input type="radio" name="mode" value="drop">
 			Drop All Tables
 		</label>
 		<br>

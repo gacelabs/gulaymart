@@ -24,11 +24,12 @@ function check_value($key, $data=[], $is_profile=false, $is_echo=true)
 
 function toktok_post_delivery_format($data=false)
 {
+	// debug($data, 'stop');
 	$ci =& get_instance();
 	$pricing = $data['toktok_details']['pricing'];
-	$user = $ci->accounts->profile;
-	$farm = $data['farm'];
-	$shippings = $user['shippings'];
+	$buyer = $ci->accounts->profile;
+	$seller = $data['seller'];
+	$shippings = $buyer['shippings'];
 	$shipping = false;
 	foreach ($shippings as $key => $row) {
 		if ($row['active']) {
@@ -40,7 +41,7 @@ function toktok_post_delivery_format($data=false)
 		'f_id' => '',
 		'referral_code' => REFERRAL_CODE,
 		'f_post' => $data ? $data['hash'] : '',
-		'pac-input' => $farm ? remove_multi_space($farm['address_1'].' '.$farm['address_2'], true) : '',
+		'pac-input' => $seller ? remove_multi_space($seller['address_1'].' '.$seller['address_2'], true) : '',
 		'pac-input2' => $shipping ? remove_multi_space($shipping['address_1'].' '.$shipping['address_2'], true) : '',
 		'f_distance' => $pricing ? $pricing['distance'] : '',
 		'f_duration' => $pricing ? $pricing['duration'] : '',
@@ -51,12 +52,12 @@ function toktok_post_delivery_format($data=false)
 		'f_promo_code' => '',
 		'f_promo_error' => '',
 		'f_some_error' => '',
-		'f_sender_name' => $farm ? remove_multi_space($farm['profile']['firstname'].' '.$farm['profile']['lastname'], true) : '', 
-		'f_sender_mobile' => $farm ? $farm['profile']['phone'] : '',
-		'f_sender_landmark' => $farm ? $farm['name'] : '', 
-		'f_sender_address' => $farm ? remove_multi_space($farm['address_1'].' '.$farm['address_2'], true) : '',
-		'f_sender_address_lat' => $farm ? $farm['lat'] : 0,
-		'f_sender_address_lng' => $farm ? $farm['lng'] : 0,
+		'f_sender_name' => $seller ? remove_multi_space($seller['profile']['firstname'].' '.$seller['profile']['lastname'], true) : '', 
+		'f_sender_mobile' => $seller ? $seller['profile']['phone'] : '',
+		'f_sender_landmark' => $seller ? $seller['name'] : '', 
+		'f_sender_address' => $seller ? remove_multi_space($seller['address_1'].' '.$seller['address_2'], true) : '',
+		'f_sender_address_lat' => $seller ? $seller['lat'] : 0,
+		'f_sender_address_lng' => $seller ? $seller['lng'] : 0,
 		'f_order_type_send' => 1,
 		'f_sender_date' => '',
 		'f_sender_datetime_from' => '',
@@ -65,8 +66,8 @@ function toktok_post_delivery_format($data=false)
 		'f_sen_add_in_pro' => '',
 		'f_sen_add_in_reg' => '',
 		'f_sen_add_in_coun' => '',
-		'f_recepient_name' => $user['fullname'],
-		'f_recepient_mobile' => $user['profile']['phone'],
+		'f_recepient_name' => $buyer['fullname'],
+		'f_recepient_mobile' => $buyer['profile']['phone'],
 		'f_recepient_landmark' => '',
 		'f_recepient_address' => $shipping ? remove_multi_space($shipping['address_1'].' '.$shipping['address_2'], true) : '',
 		'f_recepient_address_lat' => $shipping['lat'],
@@ -359,4 +360,27 @@ function product_url($item=false, $echo=false)
 	} else {
 		return $return;
 	}
+}
+
+function internal_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory')
+{
+	$ci =& get_instance();
+	if ($user_id AND $datestamp AND $content) {
+		// send message to the user has to replenish the needed stocks for delivery
+		$check_msgs = $this->class->gm_db->get('messages', [
+			'tab' => $tab, 'type' => $type,
+			'user_id' => $user_id, 'unread' => 1,
+			'datestamp' => $datestamp,
+			'content' => $content,
+		], 'row');
+		if ($check_msgs == false) {
+			$this->class->gm_db->new('messages', [
+				'tab' => $tab, 'type' => $type,
+				'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+				'content' => $content,
+			]);
+			return true;
+		}
+	}
+	return false;
 }

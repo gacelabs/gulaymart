@@ -20,12 +20,12 @@
 							<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
 								<div class="checkout-item-container">
 									<div class="checkout-item-top">
-										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $baskets['farm']['name'];?></p>
+										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $baskets['seller']['name'];?></p>
 									</div>
 									<div class="checkout-item-middle">
 										<?php
 											foreach ($baskets['order_details'] as $order_type => $orders) {
-												$this->view('looping/checkout_item', ['items' => $orders, 'farm' => $baskets['farm']]);
+												$this->view('looping/checkout_item', ['items' => $orders, 'farm' => $baskets['seller']]);
 											}
 										?>
 									</div>
@@ -76,7 +76,7 @@
 												<div class="price-tally-grid">
 													<div>
 														<div class="ellipsis-container">
-															<p class="zero-gaps text-caps"><?php echo $baskets['farm']['name'];?></p>
+															<p class="zero-gaps text-caps"><?php echo $baskets['seller']['name'];?></p>
 														</div>
 														<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo $toktok_pricing['price'];?>)</i></small>
 													</div>
