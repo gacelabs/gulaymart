@@ -360,12 +360,16 @@ function storefront_url($farm=false, $echo=false)
 {
 	$return = false;
 	if ($farm) {
+		$farm_id = $farm['id'];
+		if (isset($farm['farm_id'])) {
+			$farm_id = $farm['farm_id'];
+		}
 		if (isset($farm['farm_location_id'])) {
-			$return = base_url('store_location/'.$farm['id'].'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
+			$return = base_url('store_location/'.$farm_id.'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
 		} elseif (isset($farm['farm_id']) AND isset($farm['id'])) {
-			$return = base_url('store_location/'.$farm['farm_id'].'/'.$farm['id'].'/'.nice_url($farm['name'], true));
+			$return = base_url('store_location/'.$farm_id.'/'.$farm['id'].'/'.nice_url($farm['name'], true));
 		} else {
-			$return = base_url('store_farm/'.$farm['id'].'/'.nice_url($farm['name'], true));
+			$return = base_url('store_farm/'.$farm_id.'/'.nice_url($farm['name'], true));
 		}
 	}
 	// debug($return, true);
