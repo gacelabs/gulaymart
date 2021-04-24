@@ -92,54 +92,6 @@ class DevBuild extends CI_Controller {
 						$txt .= "--------------------------------" . "\n";
 						fwrite($logfile, $txt);
 						fclose($logfile);
-						/*overwrite json file, to avoid re-uploading*/
-						// $jsonfile = fopen(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'), "a+");
-						/*$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
-						fwrite($jsonfile, json_encode($toktok_data));
-						fclose($jsonfile);*/
-
-						/*OLD PROCESS*/
-						// $chunks = array_chunk($json['pickup_dropoff'], 5);
-						// $cnt = 0;
-						// again:
-						// // debug($chunks[$cnt], true);
-						// $fetched = [];
-						// foreach ($chunks[$cnt] as $toktok) {
-						// 	$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
-						// 	// debug($google_data, true);
-						// 	sleep(3);
-						// 	if ($google_data) {
-						// 		$tmp = [];
-						// 		foreach ($google_data->address_components as $object) {
-						// 			if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
-						// 				$tmp['city'] = remove_multi_space(trim($object->long_name), true);
-						// 			}
-						// 			if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
-						// 				$tmp['province'] = remove_multi_space(trim($object->long_name), true);
-						// 			}
-						// 			if (isset($tmp['city']) AND isset($tmp['province'])) break;
-						// 		}
-						// 		if (isset($tmp['city']) AND isset($tmp['province'])) {
-						// 			$fetched[] = [
-						// 				'city' => $tmp['city'],
-						// 				'province' => $tmp['province'],
-						// 				'latlng' => json_encode($google_data->geometry->location),
-						// 				'place_id' => $google_data->place_id,
-						// 			];
-						// 		}
-						// 	}
-						// }
-						// // if ($cnt > 0) debug($fetched, 'stop');
-						// foreach ($fetched as $key => $raw) {
-						// 	if ($this->gm_db->count('serviceable_areas', ['city' => $raw['city']]) == 0) {
-						// 		$this->gm_db->new('serviceable_areas', $raw);
-						// 	}
-						// }
-						// $cnt++;
-						// // debug((string)$cnt, true);
-						// echo "sleeping for 17 seconds";
-						// sleep(17);
-						// goto again;
 					}
 				}
 			}
@@ -165,8 +117,10 @@ class DevBuild extends CI_Controller {
 				} elseif ($mode == 'clear') {
 					foreach ($datatables as $key => $table) {
 						if ($this->db->table_exists($table)) {
-							$incremental[$table] = $this->gm_db->count($table);
-							$insertdata[$table] = $this->gm_db->get($table);
+							if (!in_array($table, $not_this_tables)) {
+								$incremental[$table] = $this->gm_db->count($table);
+								$insertdata[$table] = $this->gm_db->get($table);
+							}
 						}
 					}
 				}
