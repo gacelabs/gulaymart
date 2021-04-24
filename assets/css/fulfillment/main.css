@@ -42,14 +42,22 @@ button.ff-navbar-pill:focus, button.ff-navbar-pill:hover {
     float: right;
     vertical-align: middle;
 }
-select.ff-navbar-pill, select.ff-navbar-pill option:checked, .order-item select, .order-item select option:checked {
+.ff-product-container .order-item select {
+    font-size: 12px;
+	width: 130px;
+}
+/*select.ff-navbar-pill, .order-item select {
 	font-family: 'Roboto-Bold', sans-serif !important;
 	color: #2196f3;
 }
-
 select.ff-navbar-pill option:not(checked), .order-item select option:not(checked) {
-	font-family: 'Roboto', sans-serif;
 	color: #444;
+}*/
+.order-item select option[value="1"]:not(checked) {
+	color: #799938;
+}
+.order-item select option[value="2"]:not(checked) {
+	color: #ff7575;
 }
 .ff-product-container .order-grid-column.order-labels, .ff-product-container .order-grid-column.order-item {
 	grid-template-columns: minmax(0, 1fr) 150px 150px 150px;
