@@ -14,7 +14,7 @@
 				</div>
 				<div class="text-right">
 					<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
-					<p><small class="elem-block"><b>ACTION</b> <i class="fa fa-question-circle" tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you will be able to fulfill the order."></i></small></p>
+					<p><small class="elem-block"><b>ACTION</b> <i class="fa fa-question-circle" tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you're ready to fulfill the order, otherwise, select the reason to cancel."></i></small></p>
 					<?php else : ?>
 					<p><small class="elem-block"><b>ACTION</b></small></p>
 					<?php endif ; ?>
@@ -43,10 +43,14 @@
 					</div>
 					<div class="text-right">
 						<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
-						<select class="form-control">
+						<select class="form-control" js-event="actionSelect">
 							<option selected disabled>Select</option>
-							<option>Confirm</option>
-							<option>Cancelled</option>
+							<option value="1">Confirm</option>
+							<option value="2">Cancelled</option>
+						</select>
+						<select class="form-control hide" id="cancelled_reason" style="margin-bottom:0;">
+							<option>Out Of Stock</option>
+							<option>Removed Product</option>
 						</select>
 						<?php else : ?>
 							<p class="zero-gaps"><span class="text-capsule bg-theme">Confirmed</span></p>
@@ -74,7 +78,7 @@
 					<p class="zero-gaps"></p>
 				</div>
 				<div class="text-left hidden-xs">
-					<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
+					<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 					<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
 						Available on Pick Up (Status)
 					<?php else : ?>

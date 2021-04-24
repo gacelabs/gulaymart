@@ -3,9 +3,11 @@ $(document).ready(function() {
 	$('[js-event="actionSelect"]').change(function() {
 		var actionVal = $(this).val();
 		if (actionVal == "2") {
-			$('#ff_cancel_select_parent').removeClass('hide');
+			$('#cancelled_reason').removeClass('hide');
+			$('.order-item select').css('color', '#ff7575');
 		} else {
-			$('#ff_cancel_select_parent').addClass('hide');
+			$('#cancelled_reason').addClass('hide');
+			$('.order-item select').css('color', '#799938');
 		}
 	});
 
