@@ -1,220 +1,97 @@
-<div class="row hidden-xs" id="ff_product_container">
+<div class="row hidden-xs ff-product-container">
 	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
-		<div class="ff-container-left">
-			<div class="ff-item-container">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
-							<th><small><div class="product-th">PRODUCT</div></small></th>
-							<th><small>QUANITY</small></th>
-							<th><small>DATE ORDERED</small></th>
-							<th><small>STATUS</small></th>
-							<th><small>DELIVER WHEN</small></th>
-							<th><small>PLACED SINCE</small></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="ff-item-footer">
-					<ul class="spaced-list between">
-						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
-						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
-						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
-					</ul>
+		
+		<div class="order-table-item">
+			<div class="order-grid-column order-labels">
+				<div class="text-left">
+					<p><small class="elem-block"><b>PRODUCT</b></small></p>
+				</div>
+				<div class="text-right hidden-sm hidden-xs">
+					<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
+				</div>
+				<div class="text-right hidden-sm hidden-xs">
+					<p><small class="elem-block"><b>QUANTITY</b></small></p>
+				</div>
+				<div class="text-right">
+					<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
+					<p><small class="elem-block"><b>ACTION</b> <i class="fa fa-question-circle" tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you will be able to fulfill the order."></i></small></p>
+					<?php else : ?>
+					<p><small class="elem-block"><b>ACTION</b></small></p>
+					<?php endif ; ?>
 				</div>
 			</div>
 
-			<div class="ff-item-container">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
-							<th><small><div class="product-th">PRODUCT</div></small></th>
-							<th><small>QUANITY</small></th>
-							<th><small>DATE ORDERED</small></th>
-							<th><small>STATUS</small></th>
-							<th><small>DELIVER WHEN</small></th>
-							<th><small>PLACED SINCE</small></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="ff-item-footer">
-					<ul class="spaced-list between">
-						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
-						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
-						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
-					</ul>
+			<div class="order-item-list">
+				<!-- per order -->
+				<div class="order-grid-column order-item">
+					<div class="media">
+						<div class="media-left media-top">
+							<img class="media-object" src="https://via.placeholder.com/50x50.png?text=50x50">
+						</div>
+						<div class="media-body">
+							<p class="zero-gaps media-heading text-ellipsis"><a href="" class="text-link">Fresh Sweet White Onions</a></p>
+							<div class="ellipsis-container">
+								<p class="zero-gaps">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
+							</div>
+						</div>
+					</div>
+					<div class="text-right hidden-sm hidden-xs">
+						<p class="zero-gaps">&#x20b1; 140 / KILO</p>
+					</div>
+					<div class="text-right hidden-sm hidden-xs">
+						<p class="zero-gaps">3</p>
+					</div>
+					<div class="text-right">
+						<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
+						<select class="form-control">
+							<option selected disabled>Select</option>
+							<option>Confirm</option>
+							<option>Cancelled</option>
+						</select>
+						<?php else : ?>
+							<p class="zero-gaps"><span class="text-capsule bg-theme">Confirmed</span></p>
+						<?php endif ; ?>
+					</div>
+
+					<div class="visible-sm visible-xs">
+						<ul class="spaced-list between">
+							<li><p class="zero-gaps">&#x20b1; 140 / KILO</p></li>
+							<li class="icon-right"><p class="zero-gaps">x 3 QTY</p></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 
-			<div class="ff-item-container">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
-							<th><small><div class="product-th">PRODUCT</div></small></th>
-							<th><small>QUANITY</small></th>
-							<th><small>DATE ORDERED</small></th>
-							<th><small>STATUS</small></th>
-							<th><small>DELIVER WHEN</small></th>
-							<th><small>PLACED SINCE</small></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="ff-item-footer">
-					<ul class="spaced-list between">
-						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
-						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
-						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
-					</ul>
+			<div class="order-grid-footer">
+				<div class="order-footer-farm text-left hidden-xs">
+					<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
+					<p class="zero-gaps"><a href="" class="text-link">Ema Margaret Farm</a></p>
+					<p class="zero-gaps">Bagong Nayon, Antipolo City</p>
 				</div>
-			</div>
-
-			<div class="ff-item-container">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
-							<th><small><div class="product-th">PRODUCT</div></small></th>
-							<th><small>QUANITY</small></th>
-							<th><small>DATE ORDERED</small></th>
-							<th><small>STATUS</small></th>
-							<th><small>DELIVER WHEN</small></th>
-							<th><small>PLACED SINCE</small></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="ff-item-footer">
-					<ul class="spaced-list between">
-						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
-						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
-						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
-					</ul>
+				<div class="order-footer-payment text-left hidden-xs">
+					<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
+					<p class="zero-gaps">Cash On Delivery</p>
+					<p class="zero-gaps"></p>
 				</div>
-			</div>
-
-			<div class="ff-item-container">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="text-center"><input type="checkbox" class="v-middle zero-gaps" js-event="checkAll" /></th>
-							<th><small><div class="product-th">PRODUCT</div></small></th>
-							<th><small>QUANITY</small></th>
-							<th><small>DATE ORDERED</small></th>
-							<th><small>STATUS</small></th>
-							<th><small>DELIVER WHEN</small></th>
-							<th><small>PLACED SINCE</small></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Freshly Picked Organic Sweet White Onions</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-						<tr>
-							<td class="text-center"><input type="checkbox" class="v-middle zero-gaps" /></td>
-							<td><div class="product-th">Hydrophonic Romaine Lettuce</div></td>
-							<td>3</td>
-							<td>April 01, 2021 <br>10:32 AM</td>
-							<td><b>Placed</b></td>
-							<td><b>Now</b></td>
-							<td>1 hr/s ago</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="ff-item-footer">
-					<ul class="spaced-list between">
-						<li><small><b>ORDER TO</b></small><br>Ema Margaret Lettuce Garden Farm<br>Antipolo City</li>
-						<li><small><b>ORDER ID</b></small><br><span class="text-contrast">7GH6JK5R4L</span></li>
-						<li><button class="btn btn-sm btn-contrast" js-event="moreInfoBtn" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button></li>
-					</ul>
+				<div class="text-left hidden-xs">
+					<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
+					<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
+						Available on Pick Up (Status)
+					<?php else : ?>
+						<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
+					<?php endif ; ?>
+				</div>
+				<div class="text-left hidden-xs">
+					<?php if (in_array("ff-placed", $middle['body_class'])) : ?>
+						<p style="margin-bottom:5px;"><small class="elem-block"><b>PROCEED</b></small></p>
+						<button class="btn btn-sm btn-contrast">READY FOR DELIVERY<i class="fa fa-angle-right icon-right"></i></button>
+					<?php else : ?>
+						<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
+						<p class="zero-gaps"><span class="text-capsule status-pickup">For Pick Up</span></p>
+					<?php endif ; ?>
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>

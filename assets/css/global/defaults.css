@@ -144,10 +144,14 @@ ul.inline-list>li {
 .inline-list.right-gap>li {
 	margin-right: 10px;
 }
-.btn-theme, .bg-white.theme {
-	background-color: #a8d253;
+.btn-theme, .bg-white.theme, .bg-theme {
+	background-color: #a8d253 !important;
 	color: #fff !important;
 	outline: none;
+}
+.bt-danger {
+	background-color: #ff7575 !important;
+	color: #fff !important;
 }
 .btn-contrast, .bg-contrast {
 	background-color: #2196F3;

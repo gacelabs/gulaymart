@@ -128,13 +128,14 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 .text-capsule.blue {
 	background-color: #99dcff;
 }
-.status-placed {
+.status-placed, .status-pickup {
 	background-color: #e2e2e2;
 }
 .status-delivery {
 	background-color: #ffe33c;
 }
 .status-received {
+	color: #fff;
 	background-color: #a8d253;
 }
 .status-cancelled {

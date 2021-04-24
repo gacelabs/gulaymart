@@ -11,10 +11,102 @@ class Fulfillment extends My_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag']
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'fulfillment', 'ff-placed'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'fulfillment/ff_container'
+				],
+				'footer' => [],
+			],
+			'bottom' => [
+				'modals' => ['ff_invoice_modal'],
+				'js' => ['fulfillment/main'],
+			],
+			'data' => []
+		]);
+	}
+
+	public function pickup()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'fulfillment', 'ff-pick-up'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'fulfillment/ff_container'
+				],
+				'footer' => [],
+			],
+			'bottom' => [
+				'modals' => ['ff_invoice_modal'],
+				'js' => ['fulfillment/main'],
+			],
+			'data' => []
+		]);
+	}
+
+	public function delivery()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'fulfillment', 'ff-delivery'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'fulfillment/ff_container'
+				],
+				'footer' => [],
+			],
+			'bottom' => [
+				'modals' => ['ff_invoice_modal'],
+				'js' => ['fulfillment/main'],
+			],
+			'data' => []
+		]);
+	}
+
+	public function received()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'fulfillment', 'ff-received'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'fulfillment/ff_container'
+				],
+				'footer' => [],
+			],
+			'bottom' => [
+				'modals' => ['ff_invoice_modal'],
+				'js' => ['fulfillment/main'],
+			],
+			'data' => []
+		]);
+	}
+
+	public function cancelled()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'fulfillment', 'ff-cancelled'],
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',

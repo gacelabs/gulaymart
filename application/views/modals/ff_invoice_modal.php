@@ -14,12 +14,10 @@
 							<div class="zig-zag-bottom zig-zag-top">
 								<div class="zig-body">
 									<div class="zig-top">
-
 										<div class="text-center" style="margin-bottom:15px;">
-											<img src="assets/images/icons/deliver.png" width="80" style="margin-bottom:15px;">
+											<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">
 											<h4>Your order is on its way!</h4>
 										</div>
-
 										<div class="invoice-deliver-info-container">
 											<p><small class="elem-block text-gray">DELIVERS TO</small></p>
 											<div class="zig-top-grid">
@@ -42,7 +40,11 @@
 													<i class="fa fa-phone"></i>
 												</div>
 												<div>
+													<?php if ($current_profile) : ?>
+													<p class="zero-gaps">0999-992-1745</p>
+													<?php else : ?>
 													<p class="zero-gaps">0999-***-****</p>
+													<?php endif; ?>
 													<small class="elem-block text-gray">Not visible to seller</small>
 												</div>
 											</div>
@@ -51,7 +53,7 @@
 									<div class="zig-middle">
 										<div class="invoice-summary-container">
 											<div class="text-center" style="margin:15px 0;">
-												<p class="zero-gaps"><b>ORDER SUMMARY</b></p>
+												<h4 class="zero-gaps">ORDER SUMMARY</h4>
 											</div>
 											<div class="invoice-summary-grid">
 												<div>
@@ -78,7 +80,7 @@
 											<div class="invoice-summary-grid">
 												<div>
 													<p class="text-ellipsis"><b>TOTAL</b></p>
-													<small class="elem-block text-gray">To pay upon delivery</small>
+													<small class="elem-block text-gray">Pay upon delivery</small>
 												</div>
 												<div class="text-right">&#x20b1; <b class="text-contrast">670</b></div>
 											</div>

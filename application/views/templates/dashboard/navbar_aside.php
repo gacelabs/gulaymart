@@ -30,19 +30,19 @@
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="transactions/orders/" class="aside-nav-item <?php in_array_echo("orders", $middle['body_class'], "active");?>">
+			<a href="orders/placed" class="aside-nav-item <?php in_array_echo("orders-active", $middle['body_class'], "active");?>">
 				<i class="fa fa-cart-arrow-down"></i>
 				<span class="hidden-xs">Orders
 					<?php 
-					if ($this->order_count !== false) {
-						echo "<kbd>".$this->order_count."</kbd>";
-					}
+						if ($this->order_count !== false) {
+							echo "<kbd>".$this->order_count."</kbd>";
+						}
 					?>
 				</span>
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="transactions/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages</span>
 			</a>
 		</div>
