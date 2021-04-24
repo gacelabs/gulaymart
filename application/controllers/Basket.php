@@ -17,15 +17,30 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$items_by_farm = [];
-		$basket_session = get_session_baskets();
-		if (count($basket_session)) {
-			// debug($basket_session, 'stop');
+		$items_by_farm = false;
+		$session = get_session_baskets();
+		if (count($session)) {
+			$items_by_farm = [];
+			// debug($session, 'stop');
 			/*reassemble data by farm location*/
-			foreach ($basket_session as $date => $baskets) {
+			foreach ($session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
-					$basket['date'] = $date;
-					$items_by_farm[$date][$basket['rawdata']['farm']['name']][] = $basket;
+					$rawdata = $basket['rawdata'];
+					$farm = $rawdata['farm'];
+					$farm['farm_location_id'] = $basket['location_id'];
+					unset($basket['rawdata']['farm']);
+
+					$profile = $this->users->get(['id' => $farm['user_id']], true);
+					unset($profile['password']); unset($profile['re_password']);
+					unset($profile['settings']);
+					$farm['profile'] = $profile;
+					$items_by_farm[$basket['location_id']]['farm'] = $farm;
+
+					$items_by_farm[$basket['location_id']]['products'][] = $basket;
+					$items_by_farm[$basket['location_id']]['checkout_data'][] = [
+						'id' => $basket['id'],
+						'price' => $rawdata['details']['price']
+					];
 				}
 			}
 		}
@@ -39,7 +54,7 @@ class Basket extends My_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'basket/basket_container',
+					'basket/container',
 				],
 			],
 			'bottom' => [
@@ -179,14 +194,15 @@ class Basket extends My_Controller {
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
 			foreach ($post['data'] as $key => $row) {
-				$this->baskets->save(['status' => 5], $row); /*cancelled*/
+				unset($row['location_id']);
+				// $this->baskets->save(['status' => -1], $row); /*removed*/
 			}
 			$this->set_response('success', 'Product removed in basket', $post['data'], 'basket/', 'removeOnBasket');
 		} elseif ($get AND isset($get['data'])) {
 			// debug($get, 'stop');
-			$this->set_response('confirm', 'Want to delete selected product(s)?', $get['data'], false, 'removeBasketItem');
+			$this->set_response('confirm', 'Want to remove product(s)?', $get['data'], false, 'removeBasketItem');
 		}
-		$this->set_response('error', remove_multi_space('Unable to delete '.$name.' product'), $post);
+		$this->set_response('error', remove_multi_space('Unable to remove '.$name.' product'), $post);
 	}
 
 	public function verify($is_checkout=0)

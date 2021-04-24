@@ -51,8 +51,8 @@
 						</div>
 						<?php $initial_total = 0; ?>
 						<?php foreach ($data['orders'] as $key => $orders): ?>
-							<?php foreach ($orders['order_details'] as $index => $order): ?>
-								<div class="order-item-list">
+							<div class="order-item-list">
+								<?php foreach ($orders['order_details'] as $index => $order): ?>
 									<!-- per order -->
 									<?php
 										$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
@@ -90,8 +90,8 @@
 											</ul>
 										</div>
 									</div>
-								</div>
-							<?php endforeach ?>
+								<?php endforeach ?>
+							</div>
 
 							<?php
 								$farm = $orders['seller'];
