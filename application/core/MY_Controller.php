@@ -177,16 +177,9 @@ class MY_Controller extends CI_Controller {
 			 * 3 = on delivery
 			*/
 			$this->load->library('baskets');
-			$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [2,3]]);
-			$products = false;
-			if ($baskets) {
-				$products = [];
-				foreach ($baskets as $key => $basket) {
-					$products[$basket['location_id']][$basket['status']] = $basket;
-				}
-			}
+			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id']]);
 			// debug($products, 'stop');
-			$this->order_count = $products == false ? false : count($products);
+			$this->order_count = $order_count == false ? false : $order_count;
 		}
 	}
 

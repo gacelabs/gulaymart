@@ -443,8 +443,9 @@ function order_count_by_status($status=false, $user_id=false)
 		if ($baskets) {
 			$products = [];
 			foreach ($baskets as $key => $basket) {
-				$products[$basket['location_id']][$basket['status']] = $basket;
+				$products[$basket['product_id']][$basket['location_id']] = $basket;
 			}
+			// debug($products, 'stop');
 			return $products == false ? 0 : count($products);
 		}
 	}
