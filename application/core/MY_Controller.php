@@ -190,7 +190,7 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function render_page($rawdata=false, $debug=false)
+	public function render_page($rawdata=false, $variable=false)
 	{
 		// debug($rawdata, 'stop');
 		// debug($this->action, 'stop');
@@ -334,7 +334,11 @@ class MY_Controller extends CI_Controller {
 		$page_title = $view['top']['page_title'];
 		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.document_title(), $page_title);
 
-		if ($debug) debug($view, $data, 'stop');
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+		// debug($view, $data, 'stop');
+		if ($variable) {
+			return $this->load->view('main', ['view' => $view, 'data' => $data], true);
+		} else {
+			$this->load->view('main', ['view' => $view, 'data' => $data]);
+		}
 	}
 }

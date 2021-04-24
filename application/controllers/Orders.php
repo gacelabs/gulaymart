@@ -19,12 +19,11 @@ class Orders extends MY_Controller {
 	{
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
+		$baskets_merge = false;
 		if ($status_id > 0) {
-			$baskets_merge = false;
-			$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => $status_id]);
-			if ($baskets) {
-				foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
-				$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id']]);
+			// debug($baskets_merge, 'stop');
+			if ($baskets_merge) {
 				foreach ($baskets_merge as $key => $merged) {
 					$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
 					$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
@@ -179,21 +178,16 @@ class Orders extends MY_Controller {
 
 	public function thankyou()
 	{
-		$typage_session = $this->session->userdata('typage_session');
+		$order_ids = $this->session->userdata('typage_session');
 		// debug(!empty($typage_session), 'stop');
-		if (!empty($typage_session)) {
-			$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
-			if ($baskets) {
-				$basket_ids = [];
-				foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
-				$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
-
+		if (!empty($order_ids)) {
+			$baskets_merge = $this->baskets->get_baskets_merge(['order_id' => $order_ids]);
+			// debug($baskets_merge, 'stop');
+			if ($baskets_merge) {
 				$total = 0;
-				if ($baskets_merge) {
-					foreach ($baskets_merge as $key => $merge) {
-						$toktok_post = json_decode(base64_decode($merge['toktok_post']), true);
-						$total += (float)$toktok_post['f_recepient_cod'];
-					}
+				foreach ($baskets_merge as $key => $merge) {
+					$toktok_post = json_decode(base64_decode($merge['toktok_post']), true);
+					$total += (float)$toktok_post['f_recepient_cod'];
 				}
 				// debug($total, 'stop');
 				$this->session->unset_userdata('typage_session');

@@ -25,7 +25,7 @@
 						echo "<kbd class='hidden-md hidden-sm hidden-xs'>Buy now!</kbd>";
 						echo "<i class='fa fa-circle hidden-lg text-danger'></i>";
 					} elseif ($this->basket_count !== false) {
-						echo "<kbd>".$this->basket_count."</kbd>";
+						echo "<kbd id='nav-basket-count'>".$this->basket_count."</kbd>";
 					}
 					?>
 				</span>

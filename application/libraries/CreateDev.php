@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class CreateDev {
 
-	protected $class = FALSE; 
+	protected $class = false; 
 
 	public function __construct()
 	{
@@ -17,22 +17,22 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'fb_id' => [
 				'type' => 'VARCHAR',
 				'constraint' => '100',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'email_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'password' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'device_id' => [
 				'type' => 'VARCHAR',
@@ -43,7 +43,7 @@ class CreateDev {
 			'lat' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'lng' => [
 				'type' => 'VARCHAR',
@@ -76,7 +76,7 @@ class CreateDev {
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('fb_id');
 		$table_data = $this->class->dbforge->create_table('users', true, [
 			'ENGINE' => 'InnoDB',
@@ -94,7 +94,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id' => [
 				'type' => 'INT',
@@ -149,12 +149,12 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('user_farms', true, [
 			'ENGINE' => 'InnoDB',
@@ -171,7 +171,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'farm_id' => [
 				'type' => 'INT',
@@ -184,7 +184,7 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'active' => [
 				'type' => 'TINYINT',
@@ -216,7 +216,7 @@ class CreateDev {
 			'setting' => [
 				'type' => 'VARCHAR',
 				'constraint' => '20',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'value' => ['type' => 'longtext'],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -238,12 +238,12 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'null' => FALSE,
+				'null' => false,
 			],
 			'is_admin' => [
 				'type' => 'TINYINT',
@@ -262,7 +262,7 @@ class CreateDev {
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('galleries', true, [
 			'ENGINE' => 'InnoDB',
@@ -279,7 +279,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'session_id' => ['type' => 'TEXT'],
 			"past datetime DEFAULT CURRENT_TIMESTAMP",
@@ -290,7 +290,7 @@ class CreateDev {
 				'default' => '0',
 			],
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$table_data = $this->class->dbforge->create_table('email_session', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
@@ -306,7 +306,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id int DEFAULT NULL',
 			"lat VARCHAR(100) NULL DEFAULT NULL",
@@ -316,7 +316,7 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'active' => [
 				'type' => 'TINYINT',
@@ -327,7 +327,7 @@ class CreateDev {
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('user_shippings', true, [
 			'ENGINE' => 'InnoDB',
@@ -344,7 +344,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			"user_id INT NOT NULL DEFAULT '0'",
 			"firstname VARCHAR(50) NULL DEFAULT NULL",
@@ -355,7 +355,7 @@ class CreateDev {
 			"added DATETIME NULL DEFAULT CURRENT_TIMESTAMP",
 			"updated DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$table_data = $this->class->dbforge->create_table('user_profiles', true, [
 			'ENGINE' => 'InnoDB',
@@ -707,9 +707,8 @@ class CreateDev {
 				'default' => '1',
 				'null' => false,
 			],
-			'date_range' => [
-				'type' => 'VARCHAR',
-				'constraint' => '100',
+			'schedule' => [
+				'type' => 'DATE',
 				'default' => NULL,
 				'null' => true,
 			],
@@ -1014,6 +1013,24 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 				'auto_increment' => true
+			],
+			'seller_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'buyer_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
 			],
 			'order_id' => [
 				'type' => 'TINYTEXT',

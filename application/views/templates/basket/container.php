@@ -1,28 +1,29 @@
 <div class="basket-container" id="dashboard_panel_right">
+	<input type="hidden" id="min-date" value="<?php echo date("Y-m-d");?>">
 	<div class="row">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" js-element="baskets-panel">
 			<?php if ($data['baskets']): ?>
 				<!-- per farm location -->
-				<div class="order-table-item">
-					<div class="order-grid-column order-labels">
-						<div class="text-left">
-							<p><small class="elem-block"><b>PRODUCT</b></small></p>
+				<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
+					<div class="order-table-item">
+						<div class="order-grid-column order-labels">
+							<div class="text-left">
+								<p><small class="elem-block"><b>PRODUCT</b></small></p>
+							</div>
+							<div class="text-right hidden-sm hidden-xs">
+								<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
+							</div>
+							<div class="text-right hidden-sm hidden-xs">
+								<p><small class="elem-block"><b>QUANTITY</b></small></p>
+							</div>
+							<div class="text-right hidden-sm hidden-xs">
+								<p><small class="elem-block"><b>WHEN</b> <i class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="top" title="When do you need the product?"></i></small></p>
+							</div>
+							<div class="text-right">
+								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all?" js-element="remove-all"><span class="text-danger">&times;</span></button>
+							</div>
 						</div>
-						<div class="text-right hidden-sm hidden-xs">
-							<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
-						</div>
-						<div class="text-right hidden-sm hidden-xs">
-							<p><small class="elem-block"><b>QUANTITY</b></small></p>
-						</div>
-						<div class="text-right hidden-sm hidden-xs">
-							<p><small class="elem-block"><b>WHEN</b> <i class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="top" title="When do you need the product?"></i></small></p>
-						</div>
-						<div class="text-right">
-							<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all?"><span class="text-danger">&times;</span></button>
-						</div>
-					</div>
 
-					<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
 						<div class="order-item-list">
 							<?php foreach ($baskets['products'] as $index => $item): ?>
 								<!-- per product -->
@@ -56,10 +57,10 @@
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
 										<select class="form-control elem-block" js-event="orderWhenSelect">
-											<option value="1">Today</option>
-											<option value="2">Schedule</option>
+											<option value="1"<?php str_has_value_echo(1, $item['order_type'], ' selected');?>>Today</option>
+											<option value="2"<?php str_has_value_echo(2, $item['order_type'], ' selected');?>>Schedule</option>
 										</select>
-										<input type="date" class="form-control date-input hide" js-element="delivery-date" min="<?php echo date("Y-m-d"); ?>">
+										<input type="date" class="form-control date-input<?php str_has_value_echo(1, $item['order_type'], ' hide');?>" js-element="delivery-date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo $item['schedule'];?>" />
 									</div>
 									<div class="text-right">
 										<button class="btn btn-xs btn-default order-remove-btn" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
@@ -79,10 +80,10 @@
 											</li>
 											<li>
 												<select class="form-control elem-block" js-event="orderWhenSelect">
-													<option value="1">Today</option>
-													<option value="2">Schedule</option>
+													<option value="1"<?php str_has_value_echo(1, $item['order_type'], ' selected');?>>Today</option>
+													<option value="2"<?php str_has_value_echo(2, $item['order_type'], ' selected');?>>Schedule</option>
 												</select>
-												<input type="date" class="form-control date-input hide" min="<?php echo date("Y-m-d"); ?>">
+												<input type="date" class="form-control date-input<?php str_has_value_echo(1, $item['order_type'], ' hide');?>" js-element="delivery-date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo $item['schedule'];?>">
 											</li>
 										</ul>
 									</div>
@@ -90,11 +91,13 @@
 							<?php endforeach ?>
 						</div>
 
+						<?php $farm = $baskets['farm'];?>
+
 						<div class="order-grid-footer" js-element="location-id-<?php echo $location_id;?>">
 							<div class="text-left order-footer-farm hidden-xs">
 								<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-								<p class="zero-gaps"><a href="" class="text-link">Ema Margaret Farm</a></p>
-								<p class="zero-gaps">Bagong Nayon, Antipolo City</p>
+								<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo $farm['name'];?></a></p>
+								<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
 							</div>
 							<div class="text-left order-footer-payment hidden-xs">
 								<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
@@ -102,14 +105,26 @@
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
-								<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>PROCEED</b></small></p>
+								<p class="hidden-xs" style="margin-bottom:3px;">
+									<small class="elem-block">
+										<b>
+										<?php if ($item['status'] == 1): ?>
+											PROCEED
+										<?php else: ?>
+											VERIFY
+										<?php endif ?>
+										</b>
+									</small>
+								</p>
 								<div class="checkout-btn-container">
 									<button class="btn btn-contrast btn-sm" js-element="checkout-data" js-json='<?php echo json_encode($baskets['checkout_data']);?>'>CHECKOUT<i class="fa fa-angle-right icon-right"></i></button>
 								</div>
 							</div>
 						</div>
-					<?php endforeach ?>
-				</div>
+					</div>
+				<?php endforeach ?>
+			<?php else: ?>
+				<h4 style="padding:25px 15px;margin:0;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>
 			<?php endif ?>
 		</div>
 	</div>

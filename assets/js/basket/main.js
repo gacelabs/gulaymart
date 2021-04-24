@@ -1,14 +1,15 @@
 $(document).ready(function() {
-	var oOrderType = {};
 	$('[js-event="orderWhenSelect"]').change(function() {
 		if ($(this).val() == 2) {
 			$(this).next('.date-input').removeClass('hide');
-			oOrderType['type'] = 'deliver_scheduled';
-			oOrderType['date'] = $('[js-element="delivery-date"]').val();
 		} else {
-			oOrderType['type'] = 'deliver_now';
 			$(this).next('.date-input').addClass('hide');
 		}
+	});
+
+	$('[js-element="delivery-date"]').change(function() {
+		$(this).parents('.order-item').find('[js-event="orderWhenSelect"]:not(:visible)').prop('value', 2).val(2).trigger('change');
+		$(this).parents('.order-item').find('[js-element="delivery-date"]:not(:visible)').prop('value', $(this).val()).val($(this).val());
 	});
 
 	$('[js-event="showOrderFooter"]').click(function() {
@@ -16,30 +17,32 @@ $(document).ready(function() {
 		$(this).parents('.order-grid-footer').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
 	});
 
-	if ($('[js-event="orderWhenSelect"]').val() == 2) {
-		oOrderType['type'] = 'deliver_scheduled';
-		oOrderType['date'] = $('[js-element="delivery-date"]').val();
-	} else if ($('[js-event="orderWhenSelect"]').val() == 1) {
-		oOrderType['type'] = 'deliver_now';
-	}
-
 	$('[js-element="checkout-data"]').bind('click', function(e) {
 		e.preventDefault();
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
-			$('[js-event="qty"]').each(function(i, elem) {
+			$(e.target).parents('.order-table-item:first').find('[js-event="qty"]').each(function(i, elem) {
 				$.each(oCheckoutData, function(x, data) {
 					if (data.id == $(elem).attr('js-id')) {
 						oCheckoutData[x].quantity = elem.value;
+						var uiSelect = $(elem).parents('.order-item:first').find('[js-event="orderWhenSelect"]');
+						var iOrderType = uiSelect.val();
+						oCheckoutData[x].order_type = iOrderType;
+
+						if (iOrderType == 2) {
+							var uiInputDate = uiSelect.next('input');
+							uiInputDate.attr('min', $('#min-date').val());
+							oCheckoutData[x].schedule = uiInputDate.val();
+						}
 					}
 				});
 			});
 			// console.log(oCheckoutData);
 			var oData = {data: oCheckoutData};
-			$.extend( oData, oOrderType );
 			// console.log(oData);
-			// $('button, a, input:submit').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
-			// simpleAjax('basket/verify/1', oData, $(e.target), true);
+			$(e.target).parents('.order-table-item').find('[js-event="qty"]').attr('disabled', 'disabled');
+			$(e.target).parents('.order-table-item').find('button, a, input:submit, input:button, input:text, select').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+			simpleAjax('basket/verify/1', oData, $(e.target), true);
 		}
 	});
 
@@ -70,6 +73,37 @@ $(document).ready(function() {
 			}
 		};
 		$.ajax(oSettings);
+	});
+
+	$('[js-element="remove-all"]').bind('click', function(e) {
+		var oToDeleteData = [];
+		$(e.target).parents('.order-table-item:first').find('[js-event="removeBasketItemBtn"]').each(function(i, elem) {
+			oToDeleteData.push({id : $(elem).data('id'), location_id : $(elem).data('location')});
+		});
+		console.log(oToDeleteData);
+
+		var uiButtonSubmit = $(e.target);
+		var lastButtonUI = uiButtonSubmit.html();
+		var oSettings = {
+			url: 'basket/delete/',
+			type: 'get',
+			data: {data: oToDeleteData},
+			dataType: 'jsonp',
+			jsonpCallback: 'gmCall',
+			beforeSend: function(xhr, settings) {
+				uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
+			},
+			error: function(xhr, status, thrown) {
+				console.log(status, thrown);
+			},
+			complete: function(xhr, status) {
+				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+				uiButtonSubmit.removeAttr('disabled');
+			}
+		};
+		if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
+		oRemoveAjax = $.ajax(oSettings);
 	});
 });
 
@@ -106,8 +140,21 @@ var removeOnBasket = function(obj) {
 				uiParent.remove();
 			}
 		});
+
+		$('.order-table-item').each(function(i, elem) {
+			if ($(elem).find('[js-element*="item-id-"]').length == 0) {
+				$(elem).remove();
+				var iCnt = $('[js-element*="item-id-"]').length;
+				if (iCnt == 0) {
+					$('#nav-basket-count').remove();
+				} else {
+					$('#nav-basket-count').text(iCnt);
+				}
+			}
+		});
+		
 		if ($('[js-element*="item-id-"]').length == 0) {
-			$('[js-element="baskets-panel"]').html('')
+			$('[js-element="baskets-panel"]').html('<h4 style="padding:25px 15px;margin:0;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>');
 		}
 	}
 }
@@ -125,8 +172,10 @@ var runQtyDefaults = function(ui) {
 	});
 
 	ui.bind('input, change', function() {
-		var oThis = $(this), iVal = parseInt(oThis.val());
+		var oThis = $(this), iVal = parseInt(oThis.val()),
+		uiItems = oThis.parents('.order-item:first');
 		oThis.val(iVal); /*no decimals allowed*/
+		uiItems.find('[js-event="qty"]').prop('value', iVal).val(iVal);
 		/*preventing changes done in console*/
 		$.each(oSavedData, function(i, data) {
 			// console.log(oThis.is(data.ui));
@@ -135,13 +184,12 @@ var runQtyDefaults = function(ui) {
 				oThis.attr('max', data.max);
 				if (oThis.val() < data.min) {
 					oThis.val(data.min);
+					uiItems.find('[js-event="qty"]').prop('value', data.min).val(data.min);
 				}
 				if (oThis.val() > data.max) {
 					oThis.val(data.max);
+					uiItems.find('[js-event="qty"]').prop('value', data.max).val(data.max);
 				}
-				// var iPrice = Number(parseFloat(data.price) * parseInt(oThis.val())).toLocaleString();
-				// $('[js-element="itemtotal-'+data.id+'"]').text(iPrice);
-				$('[js-event="qty"]').prop('value', iVal).val(iVal);
 			}
 		});
 	});

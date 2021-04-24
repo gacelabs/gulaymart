@@ -34,23 +34,24 @@
 			<div class="order-table-item">
 				<?php if ($data['orders']): ?>
 					<!-- per farm location -->
-					<div class="order-table-item">
-						<div class="order-grid-column order-labels">
-							<div class="text-left">
-								<p><small class="elem-block"><b>PRODUCT</b></small></p>
+					<?php $initial_total = 0; ?>
+					<?php foreach ($data['orders'] as $key => $orders): ?>
+						<div class="order-table-item">
+							<div class="order-grid-column order-labels">
+								<div class="text-left">
+									<p><small class="elem-block"><b>PRODUCT</b></small></p>
+								</div>
+								<div class="text-right hidden-sm hidden-xs">
+									<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
+								</div>
+								<div class="text-right hidden-sm hidden-xs">
+									<p><small class="elem-block"><b>QUANTITY</b></small></p>
+								</div>
+								<div class="text-right">
+									<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Cancel all?"><span class="text-danger">&times;</span></button>
+								</div>
 							</div>
-							<div class="text-right hidden-sm hidden-xs">
-								<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
-							</div>
-							<div class="text-right hidden-sm hidden-xs">
-								<p><small class="elem-block"><b>QUANTITY</b></small></p>
-							</div>
-							<div class="text-right">
-								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Cancel all?"><span class="text-danger">&times;</span></button>
-							</div>
-						</div>
-						<?php $initial_total = 0; ?>
-						<?php foreach ($data['orders'] as $key => $orders): ?>
+
 							<div class="order-item-list">
 								<?php foreach ($orders['order_details'] as $index => $order): ?>
 									<!-- per order -->
@@ -122,8 +123,8 @@
 									</div>
 								</div>
 							</div>
-						<?php endforeach ?>
-					</div>
+						</div>
+					<?php endforeach ?>
 				<?php endif ?>
 			</div>
 		</div>
