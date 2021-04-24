@@ -43,7 +43,7 @@ class ToktokApi {
 			// debug($this->url.$this->endpoint.'?'.http_build_query($params), 'stop');
 			sleep(3);
 			try {
-				if (!in_array($method, ['post_delivery', 'view_delivery'])) {
+				if (!in_array($method, ['post_delivery', 'view_delivery', 'fetch_riders'])) {
 					curl_setopt($this->ch, CURLOPT_POST, false);
 					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
 				} elseif (in_array($method, ['view_delivery'])) {
@@ -90,9 +90,11 @@ class ToktokApi {
 				'price_and_directions' => 'app/deliveries/getDeliveryPriceAndDirections/',
 				'post_delivery' => 'app/deliveries/operatorPostDelivery/',
 				'rider' => 'app/driver/fetch_riders_by_mobile_number/',
-				'riders' => 'app/deliveries/getConsumerDriverId/',
+				'fetch_riders' => 'sys/toktok_riders/rider_summary_list_table?start=0&length=100&reg_status=1&order[0][column]=0',
+				'rider_ids' => 'app/deliveries/getConsumerDriverId/',
 				'check_orders' => 'app/deliveries/deliveries_operator_list_table/',
 				'view_delivery' => 'app/deliveries/view_deliveries/', // LzhmV1VRRGdjOE9HOVhZeWg1S0k5Zz09 makikita sa View button (check_orders)
+				'active_places' => 'sys/pickup_dropoff_point/map_pickup_dropoff_point_list',
 			];
 		} elseif ($type == 'website') {
 			$this->url = $this->website;

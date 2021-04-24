@@ -242,12 +242,17 @@ class Products {
 
 			$products_location = $this->class->gm_db->get('products_location', ['product_id' => $product['id']]);
 			$product['farms'] = false;
+			$product['locations'] = 'None';
 			if ($products_location) {
+				$locations = [];
 				foreach ($products_location as $key => $location) {
 					$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
 					$product['farms'][] = $location;
+					$address = explode(',', $farm_location['address_2']);
+					$locations[] = (isset($address[0])) ? $address[0] : '';
 				}
 				// debug($product, 'stop');
+				$product['locations'] = implode(' | ', $locations);
 			}
 
 			$updated = $product['updated'];
@@ -334,10 +339,10 @@ class Products {
 					}
 
 					$farm = $this->class->gm_db->get('user_farms', ['user_id' => $product['user_id']], 'row');
-					$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
+					// $farm['storefront'] = storefront_url($farm);
 					$product['farm'] = $farm;
 
-					$product['latlng'] = [];
+					$product['location'] = false;
 					$farm_location = $this->class->gm_db->get('user_farm_locations', ['farm_id' => $farm['id']]);
 					if ($farm_location) {
 						foreach ($farm_location as $latlng) {
@@ -360,6 +365,7 @@ class Products {
 								'measurement' => ($location ? $location['measurement'] : ''),
 								'stocks' => ($location ? $location['stocks'] : 0),
 								'checked' => ($location ? 'checked' : ''),
+								'replenished' => ($location ? $location['replenished'] : 0),
 							];
 						}
 					}
@@ -395,6 +401,161 @@ class Products {
 			// debug($results, 'stop');
 		}
 
+		return false;
+	}
+
+	public function product_by_farm_location($product_id=false, $farm_location_id=false)
+	{
+		if ($product_id != false AND $farm_location_id != false) {
+			$products_location = $this->class->db->get_where('products_location', [
+				'product_id' => $product_id,
+				'farm_location_id' => $farm_location_id,
+			]);
+			if ($products_location->num_rows()) {
+				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
+				$product['product_url'] = product_url(['id'=>$product_id, 'farm_location_id'=>$farm_location_id, 'name'=>$product['name']]);
+				
+				$added = $product['added'];
+				$updated = $product['updated'];
+				unset($product['added']); unset($product['updated']);
+				$feedbacks = $this->class->gm_db->get('messages', [
+					'page_id' => $product_id,
+					'entity_id' => $farm_location_id,
+					'tab' => 'Feedbacks',
+					'type' => 'Comments',
+				]);
+				$feedbacks_data = false;
+				if ($feedbacks) {
+					$feedbacks_data = [];
+					foreach ($feedbacks as $key => $feedback) {
+						if ($feedback['under'] == 0) {
+							$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
+							$feedbacks_data[$feedback['id']]['first'] = $feedback;
+						}
+					}
+					foreach ($feedbacks as $key => $feedback) {
+						if ($feedback['under'] != 0) {
+							if (isset($feedbacks_data[$feedback['under']])) {
+								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
+								$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
+							}
+						}
+					}
+					// debug($feedbacks_data, $feedbacks, 'stop');
+				}
+				$product['feedbacks'] = $feedbacks_data;
+
+				$product['category'] = false;
+				$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
+				if ($category) $product['category'] = $category['label'];
+
+				$product['subcategory'] = false;
+				$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
+				if ($subcategory) {
+					$product['subcategory'] = $subcategory['label'];
+				}
+
+				$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
+				if ($farm_location) {
+					$address = explode(',', $farm_location['address_2']);
+					$farm_location['city'] = isset($address[0]) ? $address[0] : '';
+					$farm_location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+					$driving_distance = get_driving_distance([
+						['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
+						['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+					]);
+					$farm_location['distance'] = $driving_distance['distance'];
+					$farm_location['duration'] = $driving_distance['duration'];
+					$farm_location['distanceval'] = $driving_distance['distanceval'];
+					$farm_location['durationval'] = $driving_distance['durationval'];
+				}
+				$product['farm_location'] = $farm_location;
+
+				$product['barns'] = false;
+				$barns = $this->class->gm_db->get('user_farm_locations', ['farm_id' => $farm_location['farm_id']]);
+				if ($barns) {
+					$product['barns'] = [];
+					foreach ($barns as $key => $barn) {
+						$address = explode(',', $barn['address_2']);
+						$barn['city'] = isset($address[0]) ? $address[0] : '';
+						$barn['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+						$product['barns'][] = $barn;
+					}
+				}
+
+				$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
+				$farm['farm_location_id'] = $farm_location_id;
+				$farm['storefront'] = storefront_url($farm);
+				$product['farm'] = $farm;
+
+				$products_location = $products_location->row_array();
+				$saved_stocks = $stocks = $products_location['stocks'];
+				/*check here the number of quantity ordered*/
+				$basket = $this->class->gm_db->get_in('baskets', ['product_id' => $product_id, 'status' => [0,1]], 'result', 'quantity');
+				if ($basket) {
+					if ($stocks > 0 /*AND $products_location['replenished'] == 1*/) {
+						foreach ($basket as $b) {
+							$stocks -= $b['quantity'];
+						}
+					}
+				}
+				$products_location['stocks'] = ($stocks <= 0) ? 1 : $stocks; /*set it to 1 always*/
+				if ($stocks <= 0) {
+					/*update product stocks*/
+					$this->class->gm_db->save('products_location',
+						['stocks' => $stocks, 'replenished' => 0],
+						['product_id' => $product_id, 'farm_location_id' => $farm_location_id]
+					);
+					// send message to the user has to replenish the needed stocks for delivery
+					$name = $product['name'];
+					$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
+					$datestamp = strtotime(date('Y-m-d'));
+					$content = "Product item <a href='".$base_url."'>$name</a> is low on stocks [<em>$stocks pcs remaining</em>]";
+					$check_msgs = $this->class->gm_db->get('messages', [
+						'tab' => 'Notifications', 'type' => 'Inventory',
+						'user_id' => $product['user_id'], 'unread' => 1,
+						'datestamp' => $datestamp,
+						'content' => $content,
+					], 'row');
+					if ($check_msgs == false) {
+						$this->class->gm_db->new('messages', [
+							'tab' => 'Notifications', 'type' => 'Inventory',
+							'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+							'content' => $content,
+						]);
+					}
+				}
+				// debug($products_location, 'stop');
+				$product['basket_details'] = $products_location;
+
+				$product['attribute'] = [];
+				$attributes = $this->class->gm_db->get('products_attribute', ['product_id' => $product_id]);
+				if ($attributes) {
+					$product['attribute'] = $attributes;
+				}
+
+				$product['photos'] = false;
+				$photos = $this->class->gm_db->get('products_photo', ['product_id' => $product_id, 'status' => 1]);
+				if ($photos) {
+					foreach ($photos as $key => $photo) {
+						if ($photo['is_main']) {
+							$product['photos']['main'] = $photo;
+							break;
+						}
+					}
+					foreach ($photos as $key => $photo) {
+						if (!$photo['is_main']) {
+							$product['photos']['other'][] = $photo;
+						}
+					}
+				}
+				// debug($product, 'stop');
+				$product['added'] = $added;
+				$product['updated'] = $updated;
+
+				return $product;
+			}
+		}
 		return false;
 	}
 }

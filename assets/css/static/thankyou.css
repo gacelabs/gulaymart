@@ -1,0 +1,66 @@
+#thankyou_top {
+	background-color: #fff;
+	border-bottom: none;
+	border-radius: 4px;
+	padding: 15px;
+}
+#thankyou_top img {
+	max-width: 220px;
+}
+.thankyou-middle {
+	margin: 20px auto;
+	max-width: 800px;
+}
+#thankyou_middle {
+	background: rgb(44,115,255);
+	background: linear-gradient(45deg, rgba(44,115,255,1) 0%, rgba(42,212,204,1) 100%);
+	border-radius: 4px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	box-shadow: 0 -6px 10px -2px rgb(0 0 0 / 25%);
+	padding: 15px;
+}
+#thankyou_middle a {
+	border: 2px solid #fff;
+	border-radius: 100px;
+	padding: 4px 12px;
+}
+#thankyou_footer {
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 15px;
+}
+.thankyou-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+	position: relative;
+}
+.thankyou-grid>div {
+	text-align: center;
+}
+.thankyou-grid>div>span {
+	background: rgb(168,210,83);
+	background: linear-gradient(45deg, rgba(168,210,83,1) 0%, rgba(117,202,155,1) 100%);
+	padding: 15px;
+	border-radius: 100px;
+}
+.thankyou-grid img {
+	height: 70px;
+	width: 70px;
+}
+@media (max-width: 767px) {
+	.thankyou-grid {
+		grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr) minmax(170px, 1fr);
+		overflow-y: auto;
+	}
+	.thankyou-grid>div {
+		white-space: nowrap;
+	}
+	.thankyou-grid>div>span {
+		padding: 10px;
+	}
+	.thankyou-grid img {
+		height: 50px;
+		width: 50px;
+	}
+}

@@ -1,7 +1,7 @@
 <?php /*debug($data, 'stop');*/ ?>
 <div id="dashboard_panel_right">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-lg-12" id="inventory_col">
 			<div class="dashboard-panel theme">
 				<div class="dashboard-panel-top">
 					<ul class="spaced-list between">
@@ -9,7 +9,7 @@
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">
-					<table class="render-datatable">
+					<table class="table table-bordered table-striped render-datatable" id="inventory_table">
 						<?php if ($data['products']): ?>
 							<thead>
 								<tr>
@@ -17,7 +17,7 @@
 										<?php if ($key == 'id'): ?>
 											<th>Actions</th>	
 										<?php else: ?>
-											<th><?php echo fix_title($key);?></th>	
+											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
 									<?php endforeach ?>
 								</tr>
@@ -28,10 +28,14 @@
 									<?php foreach ($product as $index => $value): ?>
 										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
 											<?php if ($index == 'id'): ?>
-												<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a>
+												<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
 												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
 											<?php elseif ($index == 'updated'): ?>
 												<?php echo date('M. j, Y | h:i a', strtotime($value));?>
+											<?php elseif ($index == 'name'): ?>
+												<div class="inventory-name-block">
+													<?php echo ucwords($value);?>
+												</div>
 											<?php else: ?>
 												<?php echo $value;?>
 											<?php endif ?>
@@ -47,7 +51,7 @@
 										<?php if ($value == 'id'): ?>
 											<th>Actions</th>	
 										<?php else: ?>
-											<th><?php echo fix_title($value);?></th>	
+												<th><?php echo fix_title($value);?></th>	
 										<?php endif ?>
 									<?php endforeach ?>
 								</tr>

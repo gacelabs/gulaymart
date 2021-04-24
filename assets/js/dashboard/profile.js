@@ -58,7 +58,7 @@ $(document).ready(function() {
 });
 
 function updateSavedObjects(data) {
-	console.log(data);
+	// console.log(data);
 	if (typeof data == 'object') {
 		savedAddress1 = data.address_1;
 		savedAddress2 = data.address_2;

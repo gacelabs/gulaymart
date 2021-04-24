@@ -34,6 +34,8 @@ function runFormValidation(forms) {
 				if (element.hasClass('chosen')) {
 					element.parent('div').find('.chosen-container-single').addClass('error');
 					element.parent('div').find('.chosen-container-multi .chosen-choices').addClass('error');
+				} else if (element.attr('type') == 'hidden') {
+					element.parents('.form-group').addClass('error');
 				} else if (element.attr('type') == 'checkbox') {
 					element.addClass('error').closest('label').addClass('error');
 				} else if (element.attr('type') == 'radio') {
@@ -46,6 +48,8 @@ function runFormValidation(forms) {
 				if ($(element).hasClass('chosen')) {
 					$(element).parent('div').find('.chosen-container-single').addClass('error');
 					$(element).parent('div').find('.chosen-container-multi .chosen-choices').addClass('error');
+				} else if ($(element).attr('type') == 'hidden') {
+					$(element).parents('.form-group').addClass('error');
 				} else if ($(element).attr('type') == 'checkbox') {
 					$(element).addClass('error').closest('label').addClass('error');
 				} else if ($(element).attr('type') == 'radio') {
@@ -60,6 +64,8 @@ function runFormValidation(forms) {
 				if ($(element).hasClass('chosen')) {
 					$(element).parent('div').find('.chosen-container-single').removeClass('error');
 					$(element).parent('div').find('.chosen-container-multi .chosen-choices').removeClass('error');
+				} else if ($(element).attr('type') == 'hidden') {
+					$(element).parents('.form-group').removeClass('error');
 				} else if ($(element).attr('type') == 'checkbox') {
 					$(element).removeClass('error').closest('label').removeClass('error');
 				} else if ($(element).attr('type') == 'radio') {

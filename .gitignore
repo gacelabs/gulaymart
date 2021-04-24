@@ -32,3 +32,10 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 assets/data/files/
+assets/css/compiled/
+assets/js/compiled/
+assets/data/data.json
+assets/deliveries-2021-04-19.json
+assets/data/endpoints-1
+assets/data/endpoints-2.php
+assets/data/toktok-script.js

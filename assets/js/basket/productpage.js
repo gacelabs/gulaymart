@@ -1,100 +1,181 @@
-//http://jsfiddle.net/laelitenetwork/puJ6G/
-$('.btn-number').click(function(e){
-	e.preventDefault();
+$(document).ready(function() {
+	setSavedData();
 
-	fieldName = $(this).attr('data-field');
-	type      = $(this).attr('data-type');
-
-	var input = $(this).parents().eq(1).find("input[name='"+fieldName+"']");
-	var currentVal = parseInt(input.val());
-
-	if (!isNaN(currentVal)) {
-		if(type == 'minus') {
-
-			if(currentVal > input.attr('min')) {
-				input.val(currentVal - 1).change();
-			} 
-			if(parseInt(input.val()) == input.attr('min')) {
-				$(this).attr('disabled', true);
-			}
-
-		} else if(type == 'plus') {
-
-			if(currentVal < input.attr('max')) {
-				input.val(currentVal + 1).change();
-			}
-			if(parseInt(input.val()) == input.attr('max')) {
-				$(this).attr('disabled', true);
-				$('.max-qty').removeClass('text-danger');
-			}
-
-		}
-	} else {
-		input.val(0);
-	}
-	$('.max-qty').removeClass('text-danger');
-});
-
-$('.input-number').focusin(function(){
-	$(this).data('oldValue', $(this).val());
-	$('.max-qty').removeClass('text-danger');
-});
-
-$('.input-number').change(function() {
-
-	minValue =  parseInt($(this).attr('min'));
-	maxValue =  parseInt($(this).attr('max'));
-	valueCurrent = parseInt($(this).val());
-	name = $(this).attr('name');
-	eThis = $(this);	
-
-
-	if(valueCurrent >= minValue) {
-		$(this).parents('.variety-location').find(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled');
-	} else {
-		$(this).val($(this).data('oldValue'));
-		$('.max-qty').removeClass('text-danger');
-	}
-	if(valueCurrent <= maxValue) {
-		$(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled');
-	} else {
-		$(this).parents('.variety-location').find('.elem-block .max-qty').addClass('text-danger');
-		$(this).val($(this).data('oldValue'));
-	}
-
-});
-
-$(".input-number").keydown(function (e) {
-	if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-		(e.keyCode == 65 && e.ctrlKey === true) || 
-		(e.keyCode >= 35 && e.keyCode <= 39)) {
-		return;
-	}
-
-	if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+	//http://jsfiddle.net/laelitenetwork/puJ6G/
+	$('.btn-number').click(function(e){
 		e.preventDefault();
+		var oThis = $(this);
+
+		fieldName = oThis.attr('data-field');
+		type      = oThis.attr('data-type');
+
+		var input = oThis.parents().eq(1).find("input[name='"+fieldName+"']");
+		var currentVal = parseInt(input.val());
+
+		var minValue =  parseInt(input.attr('min'));
+		var maxValue =  parseInt(input.attr('max'));
+		/*preventing changes done in console*/
+		$.each(oSavedData, function(i, data) {
+			if (oThis.parents('.variety-location').find('.input-number:visible').is(data.ui)) {
+				minValue = data.min;
+				maxValue = data.max;
+			}
+		});
+		// console.log(minValue, maxValue, currentVal);
+
+		if (!isNaN(currentVal)) {
+			if(type == 'minus') {
+
+				if(currentVal > minValue) {
+					input.val(currentVal - 1).change();
+				} 
+				if(parseInt(input.val()) == minValue) {
+					oThis.attr('disabled', true);
+				}
+
+			} else if(type == 'plus') {
+
+				if(currentVal < maxValue) {
+					input.val(currentVal + 1).change();
+				}
+				if(parseInt(input.val()) == maxValue) {
+					oThis.attr('disabled', true);
+					$('.max-qty').removeClass('text-danger');
+				}
+
+			}
+		} else {
+			input.val(0);
+		}
+		$('.max-qty').removeClass('text-danger');
+	});
+
+	$('.input-number').focusin(function(){
+		$(this).data('oldValue', $(this).val());
+		$('.max-qty').removeClass('text-danger');
+	});
+
+	$('.input-number').change(function() {
+		var oThis = $(this);
+
+		var minValue =  parseInt($(this).attr('min'));
+		var maxValue =  parseInt($(this).attr('max'));
+
+		/*preventing changes done in console*/
+		$.each(oSavedData, function(i, data) {
+			// console.log(oThis.is(data.ui));
+			if (oThis.is(data.ui)) {
+				minValue = data.min;
+				maxValue = data.max;
+				oThis.prop('min', minValue).attr('min', minValue);
+				oThis.prop('max', maxValue).attr('max', maxValue);
+			}
+		});
+
+		valueCurrent = parseInt($(this).val());
+		name = $(this).attr('name');
+		eThis = $(this);
+		// console.log(minValue, maxValue, valueCurrent);
+
+		if(valueCurrent >= minValue) {
+			$(this).parents('.variety-location').find(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled');
+		} else {
+			$(this).val($(this).data('oldValue'));
+			$('.max-qty').removeClass('text-danger');
+		}
+		if(valueCurrent <= maxValue) {
+			$(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled');
+		} else {
+			$(this).parents('.variety-location').find('.elem-block .max-qty').addClass('text-danger');
+			$(this).val($(this).data('oldValue'));
+		}
+	});
+
+	$(".input-number").keydown(function (e) {
+		if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+			(e.keyCode == 65 && e.ctrlKey === true) || 
+			(e.keyCode >= 35 && e.keyCode <= 39)) {
+			return;
+		}
+
+		if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+			e.preventDefault();
+		}
+
+		$('.max-qty').removeClass('text-danger');
+	});
+
+	// collapse summary
+	$('.condition-collapser').click(function() {
+		$(this).next('.productpage-summary-inner').toggleClass('active');
+	});
+
+	$('#add_product_btn').click(function(e) {
+		e.stopPropagation();
+		$('#nav_basket').find('.notif-dot').remove();	
+		$('#nav_basket').append('<i class="fa fa-circle text-success notif-dot"></i>');	
+	});
+
+	// thubmnail preview
+	$('#img_thumb_list>li').click(function() {
+		var imgSrc = $(this).find('div.img-thumb-item').css('background-image'),
+			bg = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
+
+		$('.img-thumb-item').removeClass('active');
+		$(this).find('.img-thumb-item').addClass('active');
+		$('#main_img_preview').css({'background-image' : 'url('+bg+')'});
+	});
+
+	$('#buy_now_btn').bind('click', function(e) {
+		e.preventDefault();
+		if (Object.keys($(e.target).data()).length) {
+			var oData = {
+				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
+			};
+			// console.log($(e.target).attr('href'), oData);
+			simpleAjax($(e.target).attr('href'), oData, $(e.target), 3000);
+		}
+	});
+
+});
+
+var oSavedData = {};
+function setSavedData() {
+	/*avoid changing the min and max in the ui console*/
+	$('.variety-location').find('.input-number').each(function(i, elem) {
+		oSavedData[i] = {
+			ui: elem,
+			min: parseInt($(elem).attr('min')),
+			max: parseInt($(elem).attr('max')),
+		}
+	});
+}
+
+var stockChanged = function(obj) {
+	// console.log(obj);
+	if (obj && obj.baskets) {
+		var qty = parseInt(obj.baskets.quantity);
+		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
+		var newStocks = stocks - qty;
+		$('[class="max-qty"]').text('Max quantity '+newStocks);
+		$('[name="baskets[quantity]"]').prop('max', newStocks).attr('max', newStocks);
+		if (newStocks <= 0) {
+			$('[js-element="variety"]').html('<p>NO STOCKS AVAILABLE</p>');
+			$('[ js-element="basket-btns"]').remove();
+		}
+		setSavedData();
 	}
+};
 
-	$('.max-qty').removeClass('text-danger');
-});
-
-// collapse summary
-$('.condition-collapser').click(function() {
-	$(this).next('.productpage-summary-inner').toggleClass('active');
-});
-
-$('#add_product_btn').click(function(e) {
-	e.stopPropagation();
-	$('#nav_basket').find('.notif-dot').remove();	
-	$('#nav_basket').append('<i class="fa fa-circle text-success notif-dot"></i>');	
-});
-
-// thubmnail preview
-$('#img_thumb_list>li').click(function() {
-	var imgSrc = $(this).find('div.img-thumb-item').css('background-image'),
-		bg = imgSrc.replace('url(','').replace(')','').replace(/\"/gi, "");
-
-	$('.img-thumb-item').removeClass('active');
-	$(this).find('.img-thumb-item').addClass('active');
-	$('#main_img_preview').css({'background-image' : 'url('+bg+')'});
-});
+var appendComment = function(obj) {
+	// console.log(obj);
+	if (obj.under != undefined) {
+		if (obj.under > 0) {
+			$('[js-element="comment-panel-'+obj.under+'"]').replaceWith(obj.html);
+			runFormValidation($('[js-element="comment-panel-'+obj.under+'"]').find('form'));
+		} else {
+			$(obj.html).insertBefore($('[js-element="comment-panel-0"]'))
+			runFormValidation($('[js-element="comment-panel-'+obj.id+'"]').find('form'));
+		}
+	}
+};

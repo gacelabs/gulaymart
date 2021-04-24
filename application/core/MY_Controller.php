@@ -3,6 +3,7 @@
 class MY_Controller extends CI_Controller {
 
 	public $allowed_methods = [];
+	public $not_allowed_methods = [];
 	public $class_name = FALSE;
 	public $device_id = FALSE;
 	public $no_entry_for_signed_out = TRUE;
@@ -15,12 +16,20 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
 		$referrer = $this->session->userdata('referrer');
 		if (empty($referrer)) {
 			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
 			$this->session->set_userdata('referrer', $this->referrer);
 		}
+		$latlng = get_cookie('prev_latlng', true);
+		// $latlng = $this->session->userdata('prev_latlng');
+		if (!empty($latlng)) {
+			// debug($latlng, 'stop');
+			$this->latlng = unserialize($latlng);
+		}
+		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));
 		$this->action = strtolower(trim($this->router->method));
 		// $this->load->library('controllerlist');
@@ -37,7 +46,18 @@ class MY_Controller extends CI_Controller {
 				$this->no_entry_for_signed_out = $this->ajax_no_entry_for_signed_out = FALSE;
 			}
 		}
+		/*now check again if the not allowed methods exists then do not allow it*/
+		if (count($this->not_allowed_methods)) {
+			if (in_array($this->action, $this->not_allowed_methods)) {
+				$this->no_entry_for_signed_out = $this->ajax_no_entry_for_signed_out = TRUE;
+			}
+		}
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/
+
+		/*DEPLOY CSS AND JS MINIFIER WHEN IN PRODUCTION ONLY*/
+		$this->load->library('minify');
+		// debug($this->minify, 'stop');
+		if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development') $this->minify->enabled = FALSE;
 
 		// debug($this);
 		$this->load->library('accounts');
@@ -53,9 +73,9 @@ class MY_Controller extends CI_Controller {
 		/*check account logins here*/
 		if ($this->accounts->has_session) {
 			/*now allow all pages with session*/
-			$this->accounts->refetch();
+			$results = $this->accounts->refetch();
 			// debug($this->accounts->profile, 'stop');
-			if ($this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
+			if ($results AND $this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
 				redirect(base_url('profile/'));
 			}
 		} else {
@@ -85,7 +105,11 @@ class MY_Controller extends CI_Controller {
 				'callback' => $callback,
 			]); exit();
 		} else {
-			redirect(base_url($this->class_name.'?'.$type.'='.$message));
+			if (is_string($redirect_url)) {
+				redirect(base_url($redirect_url.'?'.$type.'='.$message));
+			} elseif ($redirect_url == false) {
+				redirect(base_url($this->class_name.'?'.$type.'='.$message));
+			}
 		}
 	}
 
@@ -115,7 +139,7 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 		}
-		$this->session->set_userdata('valid_fields', $defaults);
+		$this->valid_fields = $defaults;
 	}
 
 	public function set_global_values()
@@ -125,6 +149,43 @@ class MY_Controller extends CI_Controller {
 			foreach ($data as $key => $value) {
 				$this->$key = $value;
 			}
+		}
+		/*set minify folders*/
+		foreach (['assets/css/compiled/', 'assets/js/compiled/'] as $path) {
+			if (is_dir(get_root_path($path)) == false) {
+				$folder_chunks = explode('/', $path);
+				if (count($folder_chunks)) {
+					$uploaddir = get_root_path();
+					foreach ($folder_chunks as $key => $folder) {
+						$uploaddir .= $folder.'/';
+						@mkdir($uploaddir);
+					}
+				}
+				@chmod($uploaddir, 0755);
+			}
+		}
+		/**/
+		$this->basket_count = $this->order_count = false;
+		if ($this->accounts->has_session) {
+			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
+			$this->basket_count = $baskets == false ? false : count($baskets);
+		
+			/*
+			 * status:
+			 * 2 = placed
+			 * 3 = on delivery
+			*/
+			$this->load->library('baskets');
+			$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [2,3]]);
+			$products = false;
+			if ($baskets) {
+				$products = [];
+				foreach ($baskets as $key => $basket) {
+					$products[$basket['product_id']] = $basket;
+				}
+			}
+			// debug($products, 'stop');
+			$this->order_count = $products == false ? false : count($products);
 		}
 	}
 
@@ -150,7 +211,6 @@ class MY_Controller extends CI_Controller {
 				'index_page' => 'XXX',
 				'page_title' => 'XXX',
 				'css' => $top_css,
-				'js' => [],
 			],
 			'middle' => [
 				'body_class' => $body_classes,
@@ -162,7 +222,6 @@ class MY_Controller extends CI_Controller {
 			],
 			'bottom' => [
 				'modals' => [],
-				'css' => [],
 				'js' => [],
 			],
 		];
@@ -181,7 +240,7 @@ class MY_Controller extends CI_Controller {
 								}
 							}
 							break;
-						case 'css': case 'js':
+						case 'css':
 							foreach ($row as $index => $value) {
 								array_push($view['top'][$key], $value);
 							}

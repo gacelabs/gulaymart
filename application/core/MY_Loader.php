@@ -84,7 +84,7 @@ class MY_Loader extends CI_Loader {
 		 *	then stop the timer it won't be accurate.
 		 */
 		ob_start();
-		if ((defined('ENVIRONMENT') AND ENVIRONMENT == 'development') AND !strpos($_ci_path, 'sitemap')) {
+		if ((defined('ENVIRONMENT') AND ENVIRONMENT == 'development' AND (bool)strstr($_SERVER['HTTP_HOST'], 'local')) AND !strpos($_ci_path, 'sitemap')) {
 			echo '<!-- TEMPLATE START : '.(str_replace('/', '\\', $_ci_path)).' -->';
 		}
 
@@ -99,7 +99,7 @@ class MY_Loader extends CI_Loader {
 		{
 			include($_ci_path); // include() vs include_once() allows for multiple views with the same name
 		}
-		if ((defined('ENVIRONMENT') AND ENVIRONMENT == 'development') AND !strpos($_ci_path, 'sitemap')) {
+		if ((defined('ENVIRONMENT') AND ENVIRONMENT == 'development' AND (bool)strstr($_SERVER['HTTP_HOST'], 'local')) AND !strpos($_ci_path, 'sitemap')) {
 			echo '<!-- TEMPLATE END : '.(str_replace('/', '\\', $_ci_path)).' -->';
 		}
 

@@ -13,7 +13,8 @@ RewriteRule (.*) index.php/$1
 
 <IfModule mod_env.c>
     SetEnv CI_ENV development
+    #SetEnv CI_ENV production
 </IfModule>
 
-php_value max_execution_time 700
+php_value max_execution_time 0
 php_value memory_limit 1000M

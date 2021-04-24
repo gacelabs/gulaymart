@@ -8,9 +8,12 @@ $route['sign-up'] = 'Authenticate/sign_up';
 $route['sign-in'] = 'Authenticate/sign_in';
 $route['sign-out'] = 'Authenticate/sign_out';
 
-$route['farm/new-veggy'] = 'Farm/new_veggy';
+$route['farm/my-veggies'] = 'Farm/new_veggy';
 $route['store'] = 'Marketplace';
 $route['store/(:num)/(:any)'] = 'Farm/store/$1/$2';
+$route['store/(:num)/(:num)/(:any)'] = 'Farm/store/$1/$2/$3';
+$route['store_farm/(:num)/(:any)'] = 'Farm/store_farm/$1/$2';
+$route['store_location/(:num)/(:num)/(:any)'] = 'Farm/store_location/$1/$2/$3';
 $route['farm/save-veggy/(:num)/(:any)'] = 'Farm/save_veggy/$1/$2';
 $route['farm/remove-veggy/(:num)/(:any)'] = 'Farm/remove_veggy/$1/$2';
 
@@ -19,8 +22,16 @@ $route['support/help-center'] = 'Support/help_center';
 
 $route['products/(:any)'] = 'Basket/productpage';
 
+$route['basket/checkout'] = 'Basket/checkout';
+
+$route['fulfillment'] = 'Fulfillment/index';
+
+$route['orders/thank-you'] = 'transactions/thankyou';
+
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
+$route['dev-build/fetch-cities'] = 'DevBuild/fetch';
+
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

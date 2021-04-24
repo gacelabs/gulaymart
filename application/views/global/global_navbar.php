@@ -1,8 +1,17 @@
 <div id="global_navbar">
+	<?php if (empty($current_profile)) : ?>
+	<div id="check_loc">
+		<div class="container">
+			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. CHECK YOUR <span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
+		</div>
+	</div>
+	<?php endif; ?>
+
 	<div class="container">
 		<div id="global_navbar_grid">
 			<a href=""><i class="fa fa-leaf" id="global_navbar_logo"></i></a>
 
+			<?php if (!in_array("checkout", $middle['body_class'])) : ?>
 			<form action="" method="post" name="search" class="form-validate" id="global_search_form">
 				<div class="input-group">
 					<input type="text" class="form-control" name="search" placeholder="Search veggies...">
@@ -14,7 +23,7 @@
 			
 			<ul id="global_navbar_btn_list">
 				<?php if ($current_profile) : ?>
-				<li>
+				<li id="nav_basket">
 					<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
 				</li>
 				<?php endif ; ?>
@@ -31,6 +40,7 @@
 					<?php endif ; ?>
 				</li>
 			</ul>
+			<?php endif ; ?>
 		</div>
 	</div>
 </div>

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
 
-	public $allowed_methods = [];
+	public $allowed_methods = ['fetch_coordinates'];
 
 	public function __construct()
 	{
@@ -100,7 +100,7 @@ class Api extends MY_Controller {
 					$user_id = $this->accounts->profile['id'];
 					$ok = $this->gm_db->save('users', ['is_agreed_terms' => 1], ['id' => $user_id]);
 					if ($ok) {
-						$this->set_response('success', 'Terms & Policy Accepted!', $post, 'farm/storefront');
+						$this->set_response('success', 'Terms & Policy Accepted!', $post, 'farm/storefront', 'agreementSigned');
 					}
 				}
 			}
@@ -171,6 +171,29 @@ class Api extends MY_Controller {
 			}
 		}
 		echo $saved; exit();
+	}
+
+	public function fetch_coordinates()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		// debug($post, 'stop');
+		if ($post) {
+			$coordinates = get_coordinates($post);
+			// debug($coordinates, 'stop');
+			if ($coordinates) {
+				if ($this->accounts->has_session) {
+					$this->accounts->refetch();
+				} else {
+					$this->latlng = (array) $coordinates;
+				}
+				// $this->session->set_userdata('prev_latlng', serialize($this->latlng));
+				set_cookie('prev_latlng', serialize($this->latlng), 7776000); // 90 days
+				$city = remove_multi_space(str_replace('city of', '', strtolower($post['city'])), true);
+				$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
+				$this->set_response('success', 'You have set your residing address at '.ucwords($city).' City!', $coordinates, false, 'reloadState');
+			}
+		}
+		$this->set_response('error', 'City not existing!', $post);
 	}
 
 }

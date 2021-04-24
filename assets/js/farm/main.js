@@ -1,18 +1,37 @@
 $(document).ready(function() {
 	$('[js-event="add-set"]').on('click', function() {
-		var uiParent = $(this).parents('[js-element="address-panel"]').first();
+		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
+			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
 		} else {
-			uiParent.next('[js-element="products-location-set"]').addClass('hide');
+			uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
+			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', false);
 		}
 	});
+
+	$('[js-event="add-set"]').each(function() {
+		if ($(this).is(':checked')) {
+			var uiParent = $(this).parents('[id*="farmlocation-"]').first();
+			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
+		}
+	});
+
 	$('[js-event="new-set"]').on('click', function() {
 		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="pricing-panel"]').removeClass('hide');
+			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
 		} else {
-			uiParent.next('[js-element="pricing-panel"]').addClass('hide');
+			uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input').prop('value', '').val('');
+			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', false);
+		}
+	});
+
+	$('[js-event="new-set"]').each(function() {
+		if ($(this).is(':checked')) {
+			var uiParent = $(this).parents('[id*="farmlocation-"]').first();
+			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
 		}
 	});
 });

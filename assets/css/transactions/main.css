@@ -78,9 +78,6 @@
 	height: 80px;
 	width: 80px;
 }
-.order-item-title {
-	font-family: 'Roboto-bold', sans-serif;
-}
 .order-qty-input {
 	font-family: 'Roboto-bold', sans-serif;
 	border: 1px solid #ccc;
@@ -128,7 +125,6 @@ body.transactions .tender-amount-parent {
 .notif-related-product {
 	background-color: #efefef;
 	border-radius: 4px;
-	display: inline-block;
 	margin-bottom: 15px;
 	padding: 10px;
 }

@@ -34,6 +34,12 @@ class CreateDev {
 				'constraint' => '32',
 				'null' => TRUE,
 			],
+			'device_id' => [
+				'type' => 'VARCHAR',
+				'constraint' => '12',
+				'default' => NULL,
+				'null' => true,
+			],
 			'lat' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
@@ -52,17 +58,19 @@ class CreateDev {
 			'is_admin' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'is_profile_complete' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
+				'null' => false,
 				'default' => '0',
 			],
 			'is_agreed_terms' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
+				'null' => false,
 				'default' => '0',
 			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
@@ -178,7 +186,7 @@ class CreateDev {
 			'active' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -235,7 +243,7 @@ class CreateDev {
 			'is_admin' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'name' => ['type' => 'TEXT'],
@@ -243,7 +251,7 @@ class CreateDev {
 			'status' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '1',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -272,7 +280,7 @@ class CreateDev {
 			'deleted' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 		]);
@@ -306,7 +314,7 @@ class CreateDev {
 			'active' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
-				'null' => TRUE,
+				'null' => false,
 				'default' => '0',
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
@@ -503,11 +511,17 @@ class CreateDev {
 			'measurement' => [
 				'type' => 'VARCHAR',
 				'constraint' => '10',
-				'default' => 'kg',
+				'default' => 'kilogram',
 			],
 			'stocks' => [
 				'type' => 'INT',
 				'constraint' => '10',
+			],
+			'replenished' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
 			],
 		]);
 		$this->class->dbforge->add_key('product_id');
@@ -542,7 +556,7 @@ class CreateDev {
 		]);
 
 		sleep(5);
-		$measurements = [['label' => 'Kilo', 'value' => 'kg'],
+		$measurements = [['label' => 'Kilogram', 'value' => 'kilogram'],
 		['label' => 'Bundle', 'value' => 'bundle'],
 		['label' => 'Box', 'value' => 'box']];
 		$this->class->db->insert_batch('products_measurement', $measurements);
@@ -626,6 +640,362 @@ class CreateDev {
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+		return $table_data;
+	}
+
+	public function create_baskets_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'device_id' => [
+				'type' => 'VARCHAR',
+				'constraint' => '12',
+				'default' => NULL,
+				'null' => true,
+			],
+			'quantity' => [
+				'type' => 'INT',
+				'default' => '0',
+				'null' => false,
+			],
+			'fee' => [
+				'type' => 'INT',
+				'default' => '0',
+				'null' => false,
+			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '0',
+				'null' => false,
+			],
+			'order_type' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '1',
+				'null' => false,
+			],
+			'date_range' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => NULL,
+				'null' => true,
+			],
+			'hash' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'rawdata' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_date' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_time' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('product_id');
+		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('location_id');
+		$table_data = $this->class->dbforge->create_table('baskets', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		return $table_data;
+	}
+
+	public function create_attributes_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'name' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'enable' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('attributes', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		sleep(5);
+		$attributes = [
+			['name' => 'How do you grow your plant?'],
+			['name' => 'Sold ripe or unripe?'],
+			['name' => 'Is the product in good shape?'],
+			['name' => 'Freshness detail'],
+			['name' => 'How do you package the product?']
+		];
+		$this->class->db->insert_batch('attributes', $attributes);
+
+		return $table_data;
+	}
+
+	public function create_attribute_values_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'attribute_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'value' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('attribute_id');
+		$table_data = $this->class->dbforge->create_table('attribute_values', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		$attribute_values = [
+			['attribute_id' => 1, 'value' => 'Home or commercially grown organically.'],
+			['attribute_id' => 1, 'value' => 'Traditional soil-based plant.'],
+			['attribute_id' => 1, 'value' => 'Grown using Hydrophonic technology.'],
+			['attribute_id' => 1, 'value' => 'Utilized Acquaphonic technology.'],
+			['attribute_id' => 1, 'value' => 'Used food-grade formulated plant grower.'],
+
+			['attribute_id' => 2, 'value' => 'Riped organically, tasty and juicy.'],
+			['attribute_id' => 2, 'value' => 'Sold unripe with roots intact.'],
+
+			['attribute_id' => 3, 'value' => 'In good shape, smell, texture, and color.'],
+			['attribute_id' => 3, 'value' => 'Slightly deformed, but presentable.'],
+
+			['attribute_id' => 4, 'value' => 'Picked same day upon order.'],
+			['attribute_id' => 4, 'value' => 'Freshly refrigirated.'],
+
+			['attribute_id' => 5, 'value' => 'Delivered in an eco-friendly pouch.'],
+			['attribute_id' => 5, 'value' => 'Packaged in a regular plastic bag.'],
+		];
+		$this->class->db->insert_batch('attribute_values', $attribute_values);
+
+		return $table_data;
+	}
+
+	public function create_basket_transactions_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'basket_ids' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'queue_status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'toktok_data' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('location_id');
+		$table_data = $this->class->dbforge->create_table('basket_transactions', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
+
+	public function create_messages_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'under' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'page_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'entity_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			"`tab` enum('Notifications','Inquiries','Feedbacks') NOT NULL DEFAULT 'Notifications'",
+			"`type` enum('System Update','Inventory','Comments') NOT NULL DEFAULT 'System Update'",
+			"content LONGTEXT",
+			'unread' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'datestamp' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('messages', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARACTER SET' => 'utf8mb4',
+			'COLLATE' => 'utf8mb4_general_ci',
+		]);
+
+		return $table_data;
+	}
+
+	public function create_serviceable_areas_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'city' => [
+				'type' => 'TINYTEXT',
+				'null' => true,
+			],
+			'province' => [
+				'type' => 'TINYTEXT',
+				'null' => true,
+			],
+			'latlng' => [
+				'type' => 'TEXT',
+				'null' => true,
+			],
+			'place_id' => [
+				'type' => 'TEXT',
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('serviceable_areas', false, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
 		return $table_data;
 	}
 

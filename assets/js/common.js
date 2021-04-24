@@ -3,6 +3,9 @@ $(document).ready(function() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				// console.log($(e.relatedTarget));
+				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
+				$(e.target).find('form').prepend(input);
 				if (map != undefined) {
 					$('#shipping-id').remove();
 					var dataLocation = $(e.relatedTarget).next('input:hidden').val();
@@ -13,17 +16,15 @@ $(document).ready(function() {
 						resetMap(oThisLatLong);
 						$('#address_1').val(oData.address_1);
 					} else {
+						resetMap({lat: parseFloat(oUser.lat), lng: parseFloat(oUser.lng)});
 						$('#address_1').val('');
-						$('#address_2').val('');
+						setTimeout(function() {
+							$('#address_2').val('');
+						}, 500);
 					}
-					var i = setInterval(function() {
-						i++;
-						if (i == 5) clearInterval(i);
+					setTimeout(function() {
 						google.maps.event.trigger(map, "contextmenu");
 					}, 1000);
-					// console.log($(e.relatedTarget));
-					var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
-					$(e.target).find('form').prepend(input);
 				}
 			break;
 			case 'media_modal':
@@ -47,8 +48,13 @@ $(document).ready(function() {
 				
 				var html = $(e.target).find('form .preview_images_list').html();
 				$(e.target).find('form .preview_images_list').html('');
-				html = $(html).find('input:radio').removeAttr('data-upload').removeAttr('checked').parent('li');
+				html = $(html).find('input:radio').attr('name', 'selected').removeAttr('data-upload').removeAttr('checked').parent('li');
+				$(html).find('input:radio').each(function(i, elem) {
+					var oThis = $(elem);
+					elem.value = oThis.data('url-path');
+				});
 				$(e.target).find('form .preview_images_selected').append(html);
+				$(e.target).find('form').find('input:file').prop('value', '').val('');;
 			break;
 		}
 	});
@@ -81,6 +87,13 @@ $(document).ready(function() {
 			initMapLocations();
 		}
 	}
+
+	if ($('form').length) {
+		$('form [type=submit]').bind('click', function() {
+			$('[type=submit]', $(this).parents('form')).removeAttr('clicked');
+			$(this).attr('clicked', 1);
+		});
+	}
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
@@ -88,11 +101,19 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 		if (form != undefined && form instanceof HTMLElement) {
 			if (uploadFile == undefined) uploadFile = false;
 			$('form').removeClass('active-ajaxed-form');
-
-			var uiButtonSubmit = $(form).find('[type=submit]:visible'),
+			var isClicked = parseInt($(form).find('[clicked]:visible').attr('clicked'))
+			// console.log(isClicked)
+			var uiButtonSubmit = isClicked ? $(form).find('[clicked]:visible') : false,
 			callbackFn = $(form).data('callback'),
-			lastButtonUI = uiButtonSubmit.html(),
-			oSettings = {
+			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Processing ...',
+			keep_loading = false;
+			if (uiButtonSubmit) {
+				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Processing ...';
+				keep_loading = (uiButtonSubmit.data('keep-loading') != undefined) ? uiButtonSubmit.data('keep-loading') : false;
+				// console.log(keep_loading);
+			}
+
+			var oSettings = {
 				url: form.action,
 				type: form.method,
 				dataType: 'jsonp',
@@ -100,10 +121,15 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				jsonpCallback: 'gmCall',
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
-					if (uiButtonSubmit.data('orig-ui') == undefined) {
-						uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					if (uiButtonSubmit) {
+						if (uiButtonSubmit.data('orig-ui') == undefined) {
+							uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+						}
+						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
-					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
+					if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+						$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+					}
 				},
 				success: function(data) {
 					if (data && data.success) {
@@ -114,8 +140,15 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					console.log(status, thrown);
 				},
 				complete: function(xhr, status) {
-					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-					uiButtonSubmit.removeAttr('disabled');
+					if (uiButtonSubmit && keep_loading == false) {
+						uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+						uiButtonSubmit.removeAttr('disabled');
+					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+						setTimeout(function() {
+							if (uiButtonSubmit) uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+							$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+						}, keep_loading);
+					}
 					var fn = eval(callbackFn);
 					if (typeof fn == 'function') {
 						fn(form, xhr, uploadFile);
@@ -145,12 +178,17 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
+var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
+	if (keep_loading == undefined) keep_loading = false;
 	if (url) {
-		if (ui) var sLastButtonText = ui.html();
+		var sLastButtonText = '', loadingText = 'Processing ...';
+		if (ui) {
+			sLastButtonText = ui.html();
+			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Processing ...';
+		}
 		var oSettings = {
 			url: url,
 			type: 'post',
@@ -160,11 +198,14 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				if (ui) {
 					ui.addClass('active-ajaxed-btn');
 					ui.attr('data-orig-ui', sLastButtonText);
-					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Fetching ...');
+					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
+				}
+				if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+					$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 				}
 			},
 			success: function(data) {
-				if (data && data.success) {
+				if (data) {
 					ajaxSuccessResponse(data);
 				}
 			},
@@ -172,9 +213,14 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 				console.log(status, thrown);
 			},
 			complete: function(xhr, status) {
-				if (ui) {
+				if (ui && keep_loading == false) {
 					ui.html(ui.data('orig-ui'));
 					ui.removeAttr('disabled');
+				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+					setTimeout(function() {
+						if (ui) ui.html(ui.data('orig-ui'));
+						$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+					}, keep_loading);
 				}
 			}
 		};
@@ -186,10 +232,15 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui) {
 var ajaxSuccessResponse = function(response) {
 	// console.log(response);
 	var bConfirmed = true;
-	if (response && response.type && response.type.length) {
+	if (response && response.type && response.type.length && response.message.length) {
 		bConfirmed = runAlertBox(response, undefined, bConfirmed);
 	}
 	if (bConfirmed) {
+		setTimeout(function() {
+			if (response && (typeof response.redirect == 'string')) {
+				if (response.redirect) window.location = response.redirect;
+			}
+		}, 3000);
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
@@ -197,11 +248,6 @@ var ajaxSuccessResponse = function(response) {
 				fn(response.data);
 			}
 		}
-		setTimeout(function() {
-			if (response && (typeof response.redirect == 'string')) {
-				if (response.redirect) window.location = response.redirect;
-			}
-		}, 3000);
 	}
 }
 
@@ -412,8 +458,14 @@ var runMediaUploader = function(callback) {
 				for (var i= 0; i < $(elem)[0].files.length; i++) {
 					var blob_path = window.URL.createObjectURL(elem.files[i]),
 					is_upload = uiForm.data('notmedia') ? 1 : 0;
-					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
-					uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+blob_path+'" /></li>');
+					var reader = new FileReader();
+					reader.readAsDataURL(elem.files[i]); 
+					reader.onloadend = function() {
+						var base64data = reader.result;                
+						// console.log(base64data);
+						var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
+						uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+base64data+'" /></li>');
+					}
 				}
 				$('[data-toggle="tooltip"]').tooltip();
 				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
@@ -442,11 +494,13 @@ var runMediaUploader = function(callback) {
 				}, 1000);
 				$(elem).parents('form:first').find('.preview_images_list').html('');
 				$(elem).parents('form:first').find('input:file').attr('required', 'required');
-				if ($('body').hasClass('new-veggy') == false) {
+				if ($('body').hasClass('save-veggy') || $('#media_modal:visible').length) {
 					$(elem).parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
 					$(elem).parents('form:first').attr('data-notmedia', '1');
-					$(elem).parents('form:first').find('button:submit').addClass('hide');
-					$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+					if ($(elem).parents('form:first').find('button[value="select"]').length) {
+						$(elem).parents('form:first').find('button:submit').addClass('hide');
+						$(elem).parents('form:first').find('button[value="upload"]').removeClass('hide');
+					}
 					$(elem).parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
 				}
 			}).next('.input-group-btn').find('button').on('click', function(e) {
@@ -454,27 +508,36 @@ var runMediaUploader = function(callback) {
 			});
 		});
 
-		if ($('body').hasClass('new-veggy') == false) {
-			$(document.body).on('click', '.preview-image-item', function() {
-				$(this).parents('form:first').find('button:submit').addClass('hide');
-				var oThis = $(this);
-				// console.log(oThis);
+		$(document.body).on('click', '.preview-image-item', function() {
+			var oThis = $(this);
+			if (oThis.parents('ul').hasClass('preview_images_list')) {
+				oThis.parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
+				oThis.parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
+				oThis.parents('form:first').find('input:file').attr({'required':'required'});
+			} else if (oThis.parents('ul').hasClass('preview_images_selected')) {
+				oThis.parents('form:first').find('.preview_images_selected li input:radio').attr({'required':'required'});
+				oThis.parents('form:first').find('.preview_images_list').html('');
+				oThis.parents('form:first').find('input:file').removeAttr('required').prop('value', '').val('');
+			}
+			/*for the media modal*/
+			if ($('#media_modal:visible').length) {
+				if ($('body').hasClass('save-veggy') == false) {
+					$(this).parents('form:first').find('button:submit').addClass('hide');
+				}
 				if (oThis.next('input:radio').data('upload') == 1) {
-					oThis.parents('form:first').find('.preview_images_selected li input:radio').removeAttr('checked').removeAttr('required');
-					oThis.parents('form:first').find('.preview_images_list li input:radio').attr({'required':'required'});
 					oThis.parents('form:first').find('button[value="upload"]').removeClass('hide');
-					oThis.parents('form:first').find('input:file').attr('required', 'required');
 					oThis.parents('form:first').attr('data-notmedia', '1');
 				} else {
-					oThis.parents('form:first').find('.preview_images_list li input:radio').removeAttr('checked').removeAttr('required');
 					oThis.parents('form:first').find('button[value="select"]').removeClass('hide');
 					oThis.parents('form:first').find('input:file').removeAttr('required');
 					oThis.parents('form:first').removeAttr('data-notmedia');
 				}
-				oThis.next('input[type="radio"]').prop('checked', true);
-				if (typeof callback == 'function') callback(this);
-			});
-		}
+			}
+
+			oThis.next('input[type="radio"]').prop('checked', true);
+			if (typeof callback == 'function') callback(this);
+		});
+
 	}
 }
 
@@ -500,17 +563,64 @@ function fnDragEnd(marker, isNew) {
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			if (isNew == false) {
-				var arr = results[0].address_components.slice(-4, results[0].address_components.length);
-				var arVal = [];
-				$.each(arr, function(i, row) {
-					arVal.push(row.long_name);
-				});
-				// console.log(arVal);
-				uiInputAddress.attr('value', arVal.join(', '));
-				uiInputAddress.val(arVal.join(', '));
+				// console.log(results);
+				if (results[1]) {
+					var arVal = [];
+					var city = null, province = null, region = null, country = null, countryCode = null;
+					var c, lc, component;
+					for (var r = 0, rl = results.length; r < rl; r += 1) {
+						var result = results[r];
+						if (!city && result.types[0] === 'locality') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'locality') {
+									city = component.long_name;
+									arVal.push(city);
+									break;
+								}
+							}
+						}
+						if (!province && result.types[0] === 'administrative_area_level_2') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_2') {
+									province = component.long_name;
+									arVal.push(province);
+									break;
+								}
+							}
+						}
+						if (!region && result.types[0] === 'administrative_area_level_1') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+								if (component.types[0] === 'administrative_area_level_1') {
+									region = component.long_name;
+									if (province != region) {
+										arVal.push(region);
+									} else {
+										region = null;
+									}
+									break;
+								}
+							}
+						}
+						if (!country && result.types[0] === 'country') {
+							country = result.address_components[0].long_name;
+							arVal.push(country);
+							countryCode = result.address_components[0].short_name;
+						}
+						if (city && country) {
+							break;
+						}
+					}
+					console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
+					var sValue = arVal.join(', ');
+					uiInputAddress.attr('value', sValue);
+					uiInputAddress.val(sValue);
+				}
 			}
 		} else {
-			console.log(status);
+			// console.log(status);
 			uiInputAddress.attr('value', '');
 			uiInputAddress.val('');
 			$('#address_1').val(savedAddress1);
@@ -583,6 +693,7 @@ function loadMap(oLatLong) {
 			google.maps.event.addListener(map, "contextmenu", function(event) {
 				map.setCenter(marker.getPosition());
 				infowindow.open(map, marker);
+				map.setZoom(12);
 			});
 
 			google.maps.event.addListener(map, "click", function(event) {
@@ -635,12 +746,14 @@ function setAutocompleteEvent() {
 	var input = $('#search-place').get(0);
 	if (autocomplete != undefined) google.maps.event.clearListeners(autocomplete, 'place_changed');
 	// console.log(autocomplete, google.maps.event);
-	autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete = new google.maps.places.Autocomplete(input, {
+		componentRestrictions: {country: "ph"},
+	});
 
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
 		$('#address_1').val('');
 		var place = autocomplete.getPlace();
-		console.log(place);
+		// console.log(place);
 		var lat = place.geometry.location.lat();
 		var long = place.geometry.location.lng();
 		

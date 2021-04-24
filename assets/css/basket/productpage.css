@@ -29,24 +29,28 @@ body.basket .search-form button {
 	padding: 15px 0;
 }
 #main_img_preview {
-	width: 100%;
+	background-position: center center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	box-shadow: 0 0 2px 0 rgb(0 0 0 / 15%);
 	height: auto;
 	padding-top: 100%;
-	background-position: center center;
-	background-size: cover;
-	background-repeat: no-repeat;
+	width: 100%;
 }
 .cat-breadcrumb {
+	font-size: 11px;
 	margin-bottom: 10px;
 	text-transform: uppercase;
-	font-size: 11px;
 }
 .productpage-title {
-	padding: 0;
+	font-size: 28px;
 	margin: 0 0 10px 0;
-	font-size: 26px;
+	text-transform: capitalize;
+	padding: 0;
 }
 .productpage-price {
+	font-family: 'Roboto', sans-serif;
+	font-weight: normal;
 	padding: 0;
 	margin: 0 0 10px 0;
 }
@@ -133,7 +137,7 @@ body.basket #footer_page_container {
 	margin: 0;
 }
 #img_thumb_list {
-	margin-top: 5px;
+	margin-top: 8px;
 	white-space: nowrap;
 	overflow-y: auto;
 }
@@ -152,7 +156,7 @@ body.basket #footer_page_container {
 	width: 60px;
 }
 .img-thumb-item.active, #img_thumb_list>li:hover .img-thumb-item {
-	border: 2px solid #444;
+	border: 2px solid #2196F3;
 	opacity: 1;
 }
 .add-basket-btn, .variety-location {
@@ -178,6 +182,12 @@ body.basket #footer_page_container {
 }
 .pagination>li>a, .pagination>li>span {
 	font-size: 12px;
+}
+#productpage_middle .ellipsis-container {
+	margin-bottom: 10px;
+}
+#productpage_middle .profile_photo {
+	transform: translateY(10%);
 }
 @media (max-width: 991px) {
 	body.basket {
@@ -229,6 +239,11 @@ body.basket #footer_page_container {
 		width: 35px;
 		height: 35px;
 	}
+	#main_img_preview {
+		box-shadow: none;
+		border-top: 1px solid #efefef;
+		border-bottom: 1px solid #efefef;
+	}
 	.product-imgs-container {
 		margin-left: -15px;
 		margin-right: -15px;
@@ -243,12 +258,12 @@ body.basket #footer_page_container {
 	#img_thumb_list {
 		padding-bottom: 10px;
 	}
-	.add-basket-btn>button {
-		margin: 10px auto 0 auto;
+	.add-basket-btn .btn {
+		margin: 0 auto;
 		display: inline-block;
 		font-size: 15px;
 	}
-	#quantity_container {
+	#quantity_container, .productpage-basic-grid {
 		grid-template-columns: 65px 1fr;
 	}
 	.productpage-variety .input-group {
@@ -261,5 +276,19 @@ body.basket #footer_page_container {
 	.productpage-farm-top {
 		margin-left: -15px;
 		margin-right: -15px;
+	}
+	.productpage-title {
+		font-size: 20px;
+	}
+	.productpage-price {
+		font-size: 18px;
+	}
+	.tagline {
+		font-family: 'Roboto', sans-serif;
+		font-weight: normal;
+	}
+	#productpage_middle .ellipsis-container {
+		height: 45px;
+		margin-bottom: 10px;
 	}
 }

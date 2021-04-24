@@ -7,6 +7,9 @@
 						<li class="text-left">
 							<h1 class="farm_name"><a href="store/<?php echo $data['farm']['id'];?>/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
 							<h4 class="tagline"><?php echo $data['farm']['tagline'];?></h4>
+							<?php if (isset($data['farm']['farm_location_id']) AND $data['farm']['farm_location_id']): ?>
+								<label class="text-white"><?php echo $data['location']['address_2'];?></label>
+							<?php endif ?>
 						</li>
 						<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div></li>
 					</ul>
@@ -25,24 +28,73 @@
 			<div id="storefront_product_container">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
 					<div class="product-item-body zero-gaps">
-						<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY PORDUCT NA OR WALA PA -->
-						<?php if (isset($data['products'])) {
+						<?php if (isset($data['products']) AND !empty($data['products'])) {
 							foreach ($data['products'] as $key => $product) {
 								$this->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']]);
 							}
 						} else {?>
+							<?php if ($current_profile AND $current_profile['id'] == $data['farm']['user_id']) : ?>
+								<?php if (isset($data['products_no_location_count']) AND $data['products_no_location_count']): ?>
+									<h4 class="zero-gaps">Set your products <a href="farm/inventory" class="btn btn-contrast">Inventory</a></h4>
+								<?php elseif (empty($data['products'])): ?>
+									<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
+								<?php endif ?>
+								<hr class="carved">
+							<?php endif; ?>
 							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 						<?php } ?>
-						<div class="banner-section">
-							<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
-						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="banner-section">
+						<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
 					</div>
 				</div>
+				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="stories_item_container">
 					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY STORIES NA OR WALA PA -->
 					<?php if (isset($data['kunyare'])) : ?>
-						<!-- ETO YUNG STORIES CARD -->
-						<?php $this->view('looping/product_card'); ?>
+						<div class="store-item-body">
+							<div id="composer_post_container">
+								<form action="" method="post">
+									<div class="composer-grid">
+										<div class="profile_photo hidden-xs" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div>
+										<div class="composer-form-body">
+											<div class="form-group" style="margin-bottom:5px;">
+												<textarea class="form-control" placeholder="Share your farm stories..." rows="2"></textarea>
+											</div>
+											<div class="composer-footer">
+												<ul class="inline-list">
+													<li class="text-link" data-toggle="modal" data-target="#media_modal"><i class="fa fa-picture-o"></i> Media</li>
+												</ul>
+											</div>
+										</div>
+										<div>
+											<button class="btn btn-contrast"><i class="fa fa-send"></i> Post</button>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="store-item-body-grid">
+								<div class="store-item-body-left">
+									left
+								</div>
+								<div class="store-item-body-right">
+									<div class="store-content-list">
+										<div class="store-content-item">
+											<div class="store-content-top">
+												store-content-top
+											</div>
+											<div class="store-content-middle">
+												store-content-middle
+											</div>
+											<div class="store-content-footer">
+												store-content-footer
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					<?php else: ?>
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO STORIES &#8212;</p>
 					<?php endif ?>

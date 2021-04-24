@@ -1,0 +1,41 @@
+#inventory_table_filter {
+	margin-bottom: 15px;
+}
+#inventory_table_filter input, [name="inventory_table_length"] {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: none !important;
+	font-family: 'Roboto', sans-serif;
+	font-weight: normal;
+    height: 34px;
+    margin: 0 5px 0 0;
+    outline: none;
+    padding: 6px 12px;
+}
+.inventory-name-block {
+	white-space: normal !important;
+	min-width: 200px;
+}
+table.dataTable thead th, table.dataTable tfoot th {
+	font-family: 'Roboto-bold', sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: left;
+	text-transform: uppercase;
+}
+table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
+	border-color: #ccc;
+}
+@media (max-width: 767px) {
+	#inventory_col .dashboard-panel-middle {
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+	#inventory_table_length, #inventory_table_filter, #inventory_table_info {
+		text-align: left;
+	}
+	#inventory_table_filter {
+		margin-bottom: 10px;
+	}
+}

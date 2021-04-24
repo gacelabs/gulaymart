@@ -5,7 +5,7 @@
 			<div class="dashboard-panel theme">
 				<div class="dashboard-panel-top">
 					<ul class="spaced-list between">
-						<li><h3 class="zero-gaps">Farm Settings</h3></li>
+						<li><h4 class="zero-gaps">Farm Settings</h4></li>
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">
@@ -17,7 +17,7 @@
 			<div class="dashboard-panel theme">
 				<div class="dashboard-panel-top">
 					<ul class="spaced-list between">
-						<li><h3 class="zero-gaps">Product Settings</h3></li>
+						<li><h4 class="zero-gaps">Product Settings</h4></li>
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">

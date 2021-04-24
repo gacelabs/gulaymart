@@ -6,8 +6,8 @@ class MY_Model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('accounts');
-		$this->load->library('smtpemail');
+		// $this->load->library('accounts');
+		// $this->load->library('smtpemail');
 	}
 
 	public function get($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
@@ -15,6 +15,15 @@ class MY_Model extends CI_Model {
 		if ($table) {
 			if ($field) {
 				$this->db->select($field);
+			}
+			if (isset($where['order_by']) AND isset($where['direction'])) {
+				$this->db->order_by($where['order_by'], $where['direction']);
+				unset($where['order_by']);
+				unset($where['direction']);
+			}
+			if (isset($where['limit'])) {
+				$this->db->limit($where['limit']);
+				unset($where['limit']);
 			}
 			if ($where) {
 				$this->db->where($where);
@@ -42,6 +51,34 @@ class MY_Model extends CI_Model {
 				foreach ($where as $key => $row) {
 					if (is_array($row)) {
 						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return FALSE;
+	}
+
+	public function get_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($table) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if ($where) {
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_not_in($key, $row);
 					} else {
 						$this->db->where([$key => $row]);
 					}
@@ -175,7 +212,16 @@ class MY_Model extends CI_Model {
 				$tables = $tables->result_array();
 				// debug($tables, 'stop');
 				foreach ($tables as $key => $table) {
-					$this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
+					// $this->db->query('TRUNCATE TABLE '.$table['Tables_in_'.$this->db->database]);
+					$db_table = $table['Tables_in_'.$this->db->database];
+					if (in_array($db_table, ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'])) {
+						// $this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
+					} else {
+						$tabledata = $this->get($db_table);
+						if ($tabledata) {
+							foreach ($tabledata as $key => $row) $this->remove($db_table, $row);
+						}
+					}
 				}
 				return true;
 			}

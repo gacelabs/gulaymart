@@ -67,7 +67,7 @@ function debug()
 		}
 	}
 	echo "</pre>";
-	if (end($args) == 'stop' OR end($args) == true) exit();
+	if (end($args) == 'stop' OR end($args) === true) exit();
 }
 
 function check_instance($obj=FALSE, $class=NULL)
@@ -336,7 +336,8 @@ function fix_title($title=FALSE, $replace=' ') {
 
 function nice_url($title=FALSE, $return=false) {
 	if ($title) {
-		$echo = strtolower(preg_replace('/\s+/', '-', $title));
+		$echo = preg_replace('/[^A-Za-z0-9\-]/', ' ', strtolower($title));
+		$echo = strtolower(preg_replace('/\s+/', '-', trim($echo)));
 	} else {
 		$echo = '';
 	}
@@ -747,12 +748,12 @@ function do_jsonp_callback($js_function=false, $payload=['type'=>'info', 'messag
 	$callback = $ci->input->get('callback');
 	if ($callback) {
 		if ($js_function) {
-			echo $callback . '('.$js_function.'('.json_encode($payload).'))';
+			echo $callback . '('.$js_function.'('.json_encode($payload).'))'; exit();
 		} else {
-			echo $callback . '('.json_encode($payload).')';
+			echo $callback . '('.json_encode($payload).')'; exit();
 		}
 	}
-	exit();
+	echo json_encode($payload); exit();
 }
 
 function camel_to_dashed($className)
@@ -960,9 +961,12 @@ function isset_echo($array=false, $key=false, $else='') {
 	if ($key AND is_array($array)) {
 		if (isset($array[$key])) {
 			echo $array[$key];
+		} else {
+			echo $else;
 		}
+	} else {
+		echo $else;
 	}
-	echo $else;
 }
 
 function in_array_echo_key($key=false, $array=false) {
@@ -1011,6 +1015,20 @@ function echo_message($msg_prefix='', $field=false)
 	echo trim($msg_prefix);
 }
 
+function echo_profile($field=false, $else='')
+{
+	$msg = '';
+	if ($field) {
+		$ci =& get_instance();
+		if (isset($ci->accounts) AND $ci->accounts->has_session) {
+			$msg .= isset($ci->accounts->profile[$field]) ? ' '.$ci->accounts->profile[$field] : '';
+			echo trim($msg);
+		} else {
+			echo trim($else);
+		}
+	}
+}
+
 function get_global_values($request=[])
 {
 	$ci =& get_instance();
@@ -1029,7 +1047,6 @@ function get_global_values($request=[])
 				$request['farm_locations'] = $farm_locations->result_array();
 			}
 		}
-		// debug($request, 'stop');
 	}
 
 	/*categories*/
@@ -1071,6 +1088,26 @@ function get_global_values($request=[])
 			$request['galleries'] = $galleries->result_array();
 		}
 	}
+
+	/*attributes*/
+	$request['attributes'] = [];
+	if ($ci->db->table_exists('attributes')) {
+		$attributes = $ci->gm_db->get('attributes', ['enable' => 1]);
+		$attrs = [];
+		if ($attributes) {
+			foreach ($attributes as $key => $attr) {
+				$values = $ci->gm_db->get('attribute_values', ['attribute_id' => $attr['id'], 'active' => 1]);
+				if ($values) {
+					$attrs[$key] = [
+						'placeholder' => $attr['name'],
+						'data' => $values,
+					];
+				}
+			}
+			$request['attributes'] = $attrs;
+		}
+	}
+	// debug($request, 'stop');
 	
 	return $request;
 }
@@ -1098,11 +1135,18 @@ function str_not_value_echo($search='', $in='', $echo='') {
 	}
 }
 
-function get_coordinates($data=false, $sensor=0, $region='PH') {
-	if ($data AND (isset($data['city']) AND isset($data['street']) AND isset($data['province']))) {
-		/*$data['city'],$data['street'],$data['province']*/
-		$address = urlencode(implode(',', $data));
-		$url = "http://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region;
+function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH') {
+	if ($data) {
+		if ($is_address) {
+			/*$data['city'],$data['street'],$data['province']*/
+			$address = urlencode(implode(',', $data));
+			$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&address=".$address."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
+		} else {
+			/*$data['lat'],$data['lng']*/
+			$latlng = implode(',', $data);
+			$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&latlng=".$latlng."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
+		}
+		// debug($url, 'stop');
 		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1113,11 +1157,15 @@ function get_coordinates($data=false, $sensor=0, $region='PH') {
 		$curl_response = curl_exec($ch);
 		curl_close($ch);
 		$response = json_decode($curl_response);
-
-		if ($response->status == 'OK') {
+		// debug($response, 'stop');
+		if (!empty($response) AND $response->status == 'OK') {
 			$googlemap = $response->results[0];
-			$coordinates = $googlemap->geometry->location;
-			return $coordinates;
+			if ($is_address) {
+				$coordinates = $googlemap->geometry->location;
+				return $coordinates;
+			} else {
+				return isset($response->results[1]) ? $response->results[1] : $response->results[0];
+			}
 		}
 	}
 	return false;
@@ -1134,8 +1182,8 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			}
 		}
 		// debug($origins, $destinations);
-
-		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language;
+		$url = "https://maps.googleapis.com/maps/api/distancematrix/json?key=".GOOGLEMAP_KEY."&".$origins."&".$destinations."&mode=".$mode."&language=".$language.'&alternatives=true';
+		// debug($url, 'stop');
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1151,22 +1199,45 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 		if ($results['status'] == 'OK') {
 			$rows = $results['rows'][0];
 			$elements = $rows['elements'][0];
-			$distance = $elements['distance']['text'];
-			$duration = $elements['duration']['text'];
-			return [
-				'distance' => $distance,
-				'duration' => $duration,
-			];
+			if ($elements['status'] != 'ZERO_RESULTS') {
+				$distance = $elements['distance']['text'];
+				$distanceval = $elements['distance']['value'];
+				$duration = str_replace('hours 0 mins', 'hours', $elements['duration']['text']);
+				$duration = str_replace('hour 0 mins', 'hour', $duration);
+				$durationval = $elements['duration']['value'];
+				return [
+					'distance' => (float)$distanceval > 0 ? $distance : 'right away',
+					'distanceval' => (float)$distanceval,
+					'duration' => (float)$durationval > 0 ? $duration : 'right away',
+					'durationval' => (float)$durationval,
+				];
+			}
 		}
 	}
-	return ['distance' => false, 'duration' => false];
+	return ['distance' => 0, 'distanceval' => 0, 'distance' => 0, 'durationval' => 0];
 }
 
-function nearby_farms($data=false)
+function float2rat($n, $tolerance = 1.e-6) {
+	$h1=1; $h2=0;
+	$k1=0; $k2=1;
+	$b = 1/$n;
+	do {
+		$b = 1/$b;
+		$a = floor($b);
+		$aux = $h1; $h1 = $a*$h1+$h2; $h2 = $aux;
+		$aux = $k1; $k1 = $a*$k1+$k2; $k2 = $aux;
+		$b = $b-$a;
+	} while (abs($n-$h1/$k1) > $n*$tolerance);
+
+	return "$h1/$k1";
+}
+
+function nearby_farms($data=false, $user_id=false)
 {
 	$farms = false;
 	if ($data) {
 		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
 		/*$SQL = "SELECT ufl.farm_id, ufl.lat, ufl.lng, 
 		(
 			6371 * #kilometers
@@ -1179,11 +1250,11 @@ function nearby_farms($data=false)
 			sin(radians(ufl.lat)))
 		) AS distance 
 		FROM user_farm_locations ufl
-		HAVING distance < ".KM_DISTANCE_TO_USER." 
+		HAVING distance < ".METERS_DISTANCE_TO_USER." 
 		ORDER BY distance
 		;";
 		$results = $ci->gm_db->query($SQL);*/
-		$results = $ci->gm_db->query('SELECT ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
 		// debug($results, 'stop');
 		if ($results) {
 			$farms = [];
@@ -1194,22 +1265,10 @@ function nearby_farms($data=false)
 				]);
 				// debug($driving_distance, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (float)$driving_distance['distance'];
-					if ($distance < KM_DISTANCE_TO_USER) {
-						$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
-						if ($farm) {
-							$user = $ci->gm_db->get('user_profiles', ['user_id' => $farm['user_id']], 'row');
-							$farm['address'] = $row['address_2'];
-							$farm['username'] = '';
-							if ($user) {
-								$farm['username'] = remove_multi_space($user['firstname'].' '.$user['lastname'], true);
-							}
-							$farm['distance'] = round($driving_distance['distance'], 2).' km';
-							$farm['duration'] = $driving_distance['duration'];
-							$farm['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
-							$farms[] = $farm;
-						}
-					}
+					$distance = (int)$driving_distance['distanceval'];
+					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					// $duration = (int)$driving_distance['durationval'];
+					// $farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
 			}
 		}
@@ -1218,12 +1277,82 @@ function nearby_farms($data=false)
 	return $farms;
 }
 
-function nearby_products($data=false)
+function get_farms_by_distance($farms, $row, $driving_distance, $user_id, $compare_1, $compare_2)
+{
+	$ci =& get_instance();
+	if ($compare_1 <= $compare_2) {
+		$where = ['id' => $row['farm_id']];
+		if ($user_id) {
+			$where['user_id'] = $user_id;
+		}
+		/*if ($profile) { // this is for the storefront ranking, abang lang
+			$where['user_id'] = [$profile['id']];
+			$farm = $ci->gm_db->get_not_in('user_farms', $where, 'row');
+		} else {*/
+			$farm = $ci->gm_db->get('user_farms', $where, 'row');
+		/*}*/
+		if ($farm) {
+			$farm['farm_location_id'] = $row['id'];
+			$user = $ci->gm_db->get('user_profiles', ['user_id' => $farm['user_id']], 'row');
+			$farm['address'] = $row['address_2'];
+			$farm['username'] = '';
+			if ($user) {
+				$farm['username'] = remove_multi_space($user['firstname'].' '.$user['lastname'], true);
+			}
+			$farm['distance'] = $driving_distance['distance'];
+			$farm['duration'] = $driving_distance['duration'];
+			$farm['distanceval'] = $driving_distance['distanceval'];
+			$farm['durationval'] = $driving_distance['durationval'];
+			$farm['storefront'] = storefront_url($farm);
+
+			$address = explode(',', $row['address_2']);
+			$farm['city'] = isset($address[0]) ? $address[0] : '';
+			$farm['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+
+			$farms[] = $farm;
+		}
+	}
+	return $farms;
+}
+
+function nearby_veggies($data=false, $user_id=false)
+{
+	$veggies = false;
+	if ($data) {
+		$ci =& get_instance();
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
+		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		// debug($results, 'stop');
+		if ($results) {
+			$veggies = [];
+			foreach ($results as $key => $row) {
+				$driving_distance = get_driving_distance([
+					['lat' => $data['lat'], 'lng' => $data['lng']],
+					['lat' => $row['lat'], 'lng' => $row['lng']],
+				]);
+				// var_dump($driving_distance);
+				if ($driving_distance['distance'] AND $driving_distance['duration']) {
+					$duration = (int)$driving_distance['durationval'];
+					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, 5);
+				}
+			}
+		}
+	}
+	// debug($veggies, 'stop');
+	return $veggies;
+}
+
+function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 {
 	$products = false;
 	if ($data) {
 		$ci =& get_instance();
-		$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		$profile = $ci->accounts->has_session ? $ci->accounts->profile : false;
+		if (is_numeric($farm_location_id) AND $farm_location_id > 0) {
+			$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl WHERE ufl.id = "'.$farm_location_id.'"');
+		} else {
+			$results = $ci->gm_db->query('SELECT ufl.id, ufl.farm_id, ufl.address_2, ufl.lat, ufl.lng FROM user_farm_locations ufl');
+		}
 		// debug($results, 'stop');
 		if ($results) {
 			$products = [];
@@ -1234,58 +1363,86 @@ function nearby_products($data=false)
 				]);
 				// debug($driving_distance['distance'], 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (float)$driving_distance['distance'];
-					if ($distance < KM_DISTANCE_TO_USER) {
-						$products_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
-						if ($products_locations) {
-							$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
-							foreach ($products_locations as $index => $location) {
-								$product = $ci->gm_db->get('products', ['id' => $location['product_id']], 'row');
-
-								$product['category'] = false;
-								$category = $ci->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
-								if ($category) $product['category'] = $category['label'];
-
-								$product['subcategory'] = false;
-								$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');
-								if ($subcategory) {
-									$product['subcategory'] = $subcategory['label'];
-								}
-
-								$product['photos'] = false;
-								$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
-								if ($photos) {
-									$product['photos'] = [];
-									foreach ($photos as $key => $photo) {
-										if ($photo['is_main']) {
-											$product['photos']['main'] = $photo;
-											break;
-										}
-									}
-									foreach ($photos as $key => $photo) {
-										if (!$photo['is_main']) {
-											$product['photos']['other'][] = $photo;
-										}
-									}
-								}
-
-								$product['distance'] = round($driving_distance['distance'], 2).' km';
-								$product['duration'] = $driving_distance['duration'];
-								$product['price'] = $location['price'];
-								$product['measurement'] = $location['measurement'];
-								$product['stocks'] = $location['stocks'];
-								$product['storefront'] = base_url('store/'.$farm['id'].'/'.nice_url($farm['name'], true));
-								$product['product_url'] = base_url('basket/view/'.$product['id'].'/'.nice_url($product['name'], true));
-								$products[] = $product;
-							}
-						}
-					}
+					$distance = (int)$driving_distance['distanceval'];
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					// $duration = (int)$driving_distance['durationval'];
+					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
 			}
 		}
 	}
 	// debug($products, 'stop');
 	return $products;
+}
+
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false)
+{
+	$ci =& get_instance();
+	if ($compare_1 <= $compare_2) {
+		$items_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
+		if ($items_locations) {
+			$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+			foreach ($items_locations as $index => $location) {
+				$where = ['id' => $location['product_id']];
+				if ($user_id) {
+					$where['user_id'] = $user_id;
+				}
+				/*if ($profile) { // this for the item ranking, abang lang
+					$where['user_id'] = [$profile['id']];
+					$item = $ci->gm_db->get_not_in('products', $where, 'row');
+				} else {*/
+					$item = $ci->gm_db->get('products', $where, 'row');
+				/*}*/
+
+				if ($item) {
+					$item['farm_location_id'] = $row['id'];
+					$item['category'] = false;
+					$category = $ci->gm_db->get('products_category', ['id' => $item['category_id']], 'row');
+					if ($category) $item['category'] = $category['label'];
+
+					$item['subcategory'] = false;
+					$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $item['subcategory_id']], 'row');
+					if ($subcategory) {
+						$item['subcategory'] = $subcategory['label'];
+					}
+
+					$item['photos'] = false;
+					$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
+					if ($photos) {
+						$item['photos'] = [];
+						foreach ($photos as $key => $photo) {
+							if ($photo['is_main']) {
+								$item['photos']['main'] = $photo;
+								break;
+							}
+						}
+						foreach ($photos as $key => $photo) {
+							if (!$photo['is_main']) {
+								$item['photos']['other'][] = $photo;
+							}
+						}
+					}
+
+					$item['distance'] = $driving_distance['distance'];
+					$item['duration'] = $driving_distance['duration'];
+					$item['distanceval'] = $driving_distance['distanceval'];
+					$item['durationval'] = $driving_distance['durationval'];
+					$item['price'] = $location['price'];
+					$item['measurement'] = $location['measurement'];
+					$item['stocks'] = $location['stocks'];
+					$item['storefront'] = storefront_url($item);
+					$item['product_url'] = product_url($item);
+					$items[] = $item;
+					if (!is_bool($limit) AND is_numeric($limit)) {
+						if (count($items) == $limit) {
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return $items;
 }
 
 function curl_add_booking($data=false)
@@ -1389,4 +1546,23 @@ function format_duration($duration=0)
 		}
 	}
 	return preg_replace('/\s+/', ' ', $duration);
+}
+
+function get_fullname($data=false, $other='', $return=false)
+{
+	if ($other != '') {
+		$other .= ' #'.rand();
+	}
+	$fullname = $other;
+	$ci =& get_instance();
+	if ($data) {
+		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
+		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
+	}
+	if ($return == false) {
+		echo $fullname;
+	} else {
+		return $fullname;
+	}
 }

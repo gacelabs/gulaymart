@@ -4,7 +4,7 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="media_modalLabel">Media</h4>
-				<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once. Then select one for the Cover Image.</small>
+				<small class="elem-block color-grey"><i class="fa fa-exclamation-circle"></i> You can upload multiple images at once. Then select which one to use.</small>
 			</div>
 			<form action="api/media_uploader" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="galleries" data-notmedia="1">
 				<div class="modal-body">
@@ -12,7 +12,7 @@
 					<div class="input-group">
 						<input type="file" class="form-control input_upload_images" name="galleries[]" required="required" multiple>
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Select<i class="fa fa-picture-o icon-right"></i></button>
+							<button class="btn btn-default" type="button">Open<i class="fa fa-folder-open-o icon-right"></i></button>
 						</span>
 					</div>
 					<ul class="inline-list preview_images_selected">

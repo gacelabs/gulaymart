@@ -28,6 +28,124 @@ class DevBuild extends CI_Controller {
 		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
 	}
 
+	public function fetch()
+	{
+		/*DEFAULT PASSWORD IS 1*/
+		$post = $this->input->post();
+		if ($post) {
+			if (check_data_values($post) AND $post['password'] === DEVBUILD_PASS) {
+				// debug($post, true);
+				// $string = @file_get_contents(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'));
+				$string = @file_get_contents(get_root_path('assets/data/deliveries-2021-04-19.json'));
+				// debug($string, true);
+				if (!empty($string)) {
+					$json = json_decode($string, true);
+					if (isset($json['pickup_dropoff'])) {
+						$toktok_data = $json['pickup_dropoff'];
+						$total_count = count($toktok_data);
+						$total_fetched = $total_remaining = 0;
+						foreach ($toktok_data as $key => $toktok) {
+							$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
+							// debug($google_data, true);
+							sleep(3);
+							if ($google_data) {
+								if ($this->gm_db->count('serviceable_areas', ['place_id' => $google_data->place_id]) == 0) {
+									$tmp = [];
+									foreach ($google_data->address_components as $object) {
+										if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
+											$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+										}
+										if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
+											$tmp['province'] = remove_multi_space(trim($object->long_name), true);
+										}
+										if (isset($tmp['city']) AND isset($tmp['province'])) break;
+									}
+									if (isset($tmp['city']) AND isset($tmp['province'])) {
+										if ($this->gm_db->count('serviceable_areas', $tmp) == 0) {
+											$fetched = [
+												'city' => $tmp['city'],
+												'province' => $tmp['province'],
+												'latlng' => json_encode($google_data->geometry->location),
+												'place_id' => $google_data->place_id,
+											];
+											$this->gm_db->new('serviceable_areas', $fetched);
+											++$total_fetched;
+											// if ($total_fetched == 2) break; // for testing only
+										}
+									}
+								}
+							}
+							unset($toktok_data[$key]);
+							$total_remaining = (count($toktok_data) - 1 ?: 0);
+							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "w+");
+							$json_encoded = json_encode(['pickup_dropoff'=>$toktok_data]);
+							fwrite($jsonfile, $json_encoded);
+							fclose($jsonfile);
+							sleep(7);
+						}
+						$logfile = fopen(get_root_path('assets/data/logs/fetched-cities.log'), "a+");
+						$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
+						$txt .= "Total fetched: " . $total_fetched . " \n";
+						$txt .= "Total records: " . $total_count . " \n";
+						$txt .= "Total remaining: " . $total_remaining . " \n";
+						$txt .= "--------------------------------" . "\n";
+						fwrite($logfile, $txt);
+						fclose($logfile);
+						/*overwrite json file, to avoid re-uploading*/
+						// $jsonfile = fopen(get_root_path('assets/data/deliveries-'.date('Y-m-d').'.json'), "a+");
+						/*$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "a+");
+						fwrite($jsonfile, json_encode($toktok_data));
+						fclose($jsonfile);*/
+
+						/*OLD PROCESS*/
+						// $chunks = array_chunk($json['pickup_dropoff'], 5);
+						// $cnt = 0;
+						// again:
+						// // debug($chunks[$cnt], true);
+						// $fetched = [];
+						// foreach ($chunks[$cnt] as $toktok) {
+						// 	$google_data = get_coordinates(['lat' => $toktok['sender_lat'], 'lng' => $toktok['sender_lon']], false);
+						// 	// debug($google_data, true);
+						// 	sleep(3);
+						// 	if ($google_data) {
+						// 		$tmp = [];
+						// 		foreach ($google_data->address_components as $object) {
+						// 			if (!isset($tmp['city']) AND in_array('locality', $object->types)) {
+						// 				$tmp['city'] = remove_multi_space(trim($object->long_name), true);
+						// 			}
+						// 			if (!isset($tmp['province']) AND in_array('administrative_area_level_1', $object->types)) {
+						// 				$tmp['province'] = remove_multi_space(trim($object->long_name), true);
+						// 			}
+						// 			if (isset($tmp['city']) AND isset($tmp['province'])) break;
+						// 		}
+						// 		if (isset($tmp['city']) AND isset($tmp['province'])) {
+						// 			$fetched[] = [
+						// 				'city' => $tmp['city'],
+						// 				'province' => $tmp['province'],
+						// 				'latlng' => json_encode($google_data->geometry->location),
+						// 				'place_id' => $google_data->place_id,
+						// 			];
+						// 		}
+						// 	}
+						// }
+						// // if ($cnt > 0) debug($fetched, 'stop');
+						// foreach ($fetched as $key => $raw) {
+						// 	if ($this->gm_db->count('serviceable_areas', ['city' => $raw['city']]) == 0) {
+						// 		$this->gm_db->new('serviceable_areas', $raw);
+						// 	}
+						// }
+						// $cnt++;
+						// // debug((string)$cnt, true);
+						// echo "sleeping for 17 seconds";
+						// sleep(17);
+						// goto again;
+					}
+				}
+			}
+		}
+		echo "<br>DONE!<br><br><button onclick='history.back();'>Back</button>"; exit();
+	}
+
 	private function build($drop_all=false)
 	{
 		if ($drop_all) {
@@ -36,18 +154,21 @@ class DevBuild extends CI_Controller {
 				$this->load->library('accounts');
 				if ($this->accounts->has_session) $this->accounts->logout(true);
 				sleep(3);
-				$return = $this->gm_db->drop_tables();
+				/*$return = $this->gm_db->drop_tables();
 				if ($return) {
 					echo "All Tables dropped <br>";
 				} else {
 					echo "All Tables already dropped <br>";
 				}
-				sleep(10);
+				sleep(10);*/
 			}
 		}
+		delete_cookie('prev_latlng');
 
 		/*re-create table*/
-		foreach ($this->get_data() as $key => $table) {
+		$insertdata = [];
+		$not_this_tables = ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values', 'serviceable_areas'];
+		foreach ($this->get_datatables() as $key => $table) {
 			$fields = false;
 			if (is_array($table)) {
 				$fields = $table;
@@ -57,7 +178,16 @@ class DevBuild extends CI_Controller {
 				if ((bool)strstr($table, ':recreate')) {
 					$chunks = explode(':', $table);
 					$table = trim($chunks[0]);
-					if ($this->db->table_exists($table)) $this->db->query('DROP TABLE '.$table);
+					if ($this->db->table_exists($table)) {
+						if (!in_array($table, $not_this_tables)) {
+							if ($drop_all) {
+								$insertdata[$table] = $this->gm_db->get($table);
+								if ($insertdata[$table]) {
+									foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
+								}
+							}
+						}
+					}
 				}
 				// debug($table);
 				/*create table for the first time*/
@@ -71,6 +201,13 @@ class DevBuild extends CI_Controller {
 					}
 				} else {
 					echo "Method ".$method." does not exists! <br>";
+				}
+			} elseif ($drop_all) {
+				if (!in_array($table, $not_this_tables)) {
+					$insertdata[$table] = $this->gm_db->get($table);
+					if ($insertdata[$table]) {
+						foreach ($insertdata[$table] as $row) $this->gm_db->remove($table, $row);
+					}
 				}
 			}
 			if ($fields) {
@@ -104,13 +241,26 @@ class DevBuild extends CI_Controller {
 				}
 			}
 		}
+		if (count($insertdata)) {
+			foreach ($insertdata as $table => $insert) {
+				if (!in_array($table, $not_this_tables)) {
+					if ($insert AND $this->db->table_exists($table)) {
+						// debug($insert, true);
+						foreach ($insert as $key => $row) {
+							// if (isset($row['id'])) unset($row['id']);
+							$this->gm_db->new($table, $row);
+						}
+					}
+				}
+			}
+		}
 		if (!isset($is_created)) {
-			echo "<br>All Tables and Values already exists! <br>";
+			echo "<br>All Tables and Values created/updated! <br>";
 		}
 		return;
 	}
 
-	private function get_data()
+	private function get_datatables()
 	{
 		$data = [
 			'users',
@@ -128,6 +278,12 @@ class DevBuild extends CI_Controller {
 			'products_measurement',
 			'products_photo',
 			'products_attribute',
+			'attributes',
+			'attribute_values',
+			'baskets',
+			'basket_transactions',
+			'messages',
+			'serviceable_areas',
 		];
 
 		return $data;
