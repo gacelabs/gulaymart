@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Transactions extends MY_Controller {
+class Orders extends MY_Controller {
 
 	public $allowed_methods = ['comment'];
 	public $not_allowed_methods = [];
@@ -20,24 +20,12 @@ class Transactions extends MY_Controller {
 		$this->orders();
 	}
 
-	public function orders()
+	public function placed()
 	{
-		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
-		if ($baskets) {
-			foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
-			$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
-			foreach ($baskets_merge as $key => $merged) {
-				$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
-				$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
-				$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
-				$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
-			}
-			debug($baskets_merge, 'stop');
-		}
 		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
 		// debug($baskets, 'stop');
 		$assembled = false;
-		if ($baskets) {
+		if (!is_bool($baskets) AND count($baskets)) {
 			$products = [];
 			foreach ($baskets as $key => $basket) {
 				if (isset($products[$basket['product_id']][$basket['status']])) {
@@ -56,25 +44,89 @@ class Transactions extends MY_Controller {
 				}
 			}
 		}
-		debug($assembled, 'stop');
+		// debug($assembled, 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'transactions/main', 'transactions/orders']
+				'css' => ['dashboard/main', 'global/order-table', 'orders/main']
 			],
 			'middle' => [
-				'body_class' => ['dashboard', 'orders'],
+				'body_class' => ['dashboard', 'orders-active', 'orders-placed'],
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'transactions/transactions_container',
+					'orders/orders_container',
 				],
 			],
 			'bottom' => [
-				'js' => ['hideshow', 'dashboard/main'],
+				'js' => ['orders/main'],
 			],
 			'data' => [
 				'orders' => $assembled
 			]
+		]);
+	}
+
+	public function delivery()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'orders/main', 'global/order-table', 'global/zigzag', 'modal/invoice-modal']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'orders-active', 'orders-delivery'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'orders/orders_container',
+				],
+			],
+			'bottom' => [
+				'modals' => ['ff_invoice_modal'],
+				'js' => [],
+			],
+			'data' => []
+		]);
+	}
+
+	public function received()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'orders/main', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'orders-active', 'orders-received'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'orders/orders_container',
+				],
+			],
+			'bottom' => [
+				'js' => [],
+			],
+			'data' => []
+		]);
+	}
+
+	public function cancelled()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['dashboard/main', 'orders/main', 'global/order-table']
+			],
+			'middle' => [
+				'body_class' => ['dashboard', 'orders-active', 'orders-cancelled'],
+				'head' => ['dashboard/navbar'],
+				'body' => [
+					'dashboard/navbar_aside',
+					'orders/orders_container',
+				],
+			],
+			'bottom' => [
+				'js' => [],
+			],
+			'data' => []
 		]);
 	}
 
@@ -107,14 +159,14 @@ class Transactions extends MY_Controller {
 		// debug($data_messages, 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'transactions/main', 'transactions/messages']
+				'css' => ['dashboard/main', 'orders/main', 'orders/messages']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'messages'],
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'transactions/messages_container',
+					'orders/messages_container',
 				],
 			],
 			'bottom' => [
@@ -129,45 +181,40 @@ class Transactions extends MY_Controller {
 
 	public function thankyou()
 	{
-		$typage_session = $this->session->userdata('typage_session');
-		if (!$typage_session) {
-			$this->session->unset_userdata('typage_session');
-			$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
-			if ($baskets) {
-				$basket_ids = [];
-				foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
-				$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
-
-				$total = 0;
-				if ($baskets_merge) {
-					foreach ($baskets_merge as $key => $merge) {
-						$toktok_post = json_decode(base64_decode($merge['toktok_post']), true);
-						$total += (float)$toktok_post['f_recepient_cod'];
-					}
-				}
-				// debug($total, 'stop');
-				$this->render_page([
-					'top' => [
-						'css' => ['static/thankyou']
-					],
-					'middle' => [
-						'body_class' => ['thankyou'],
-						'head' => ['../global/global_navbar'],
-						'body' => [
-							'../static/thankyou'
-						],
-					],
-					'bottom' => [
-						'modals' => [],
-						'js' => [],
-					],
-					'data' => [
-						'total' => (float)$total
-					]
-				]);
+		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
+		// debug($baskets, 'stop');
+		if (!is_bool($baskets) AND count($baskets)) {
+			$total = 0;
+			$fees = [];
+			foreach ($baskets as $key => $basket) {
+				$price = $basket['quantity'] *  $basket['rawdata']['basket_details']['price'];
+				$total += $price;
+				$fees[$basket['location_id']] = $basket['fee'];
 			}
+			foreach ($fees as $location_id => $value) $total += (float)$value;
+			// debug($total, $fees, 'stop');
+			$this->render_page([
+				'top' => [
+					'css' => ['static/thankyou']
+				],
+				'middle' => [
+					'body_class' => ['thankyou'],
+					'head' => ['../global/global_navbar'],
+					'body' => [
+						'../static/thankyou'
+					],
+				],
+				'bottom' => [
+					'modals' => [],
+					'js' => [],
+				],
+				'data' => [
+					'total' => $total
+				]
+			]);
+		} else {
+			redirect(base_url('transactions/'));
 		}
-		$this->set_response('info', 'Orders already been Placed.', false, 'transactions/');
 	}
 
 	public function comment()

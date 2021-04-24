@@ -32,7 +32,7 @@ class Basket extends My_Controller {
 		// debug($items_by_farm, 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
+				'css' => ['dashboard/main', 'basket/main', 'global/order-table', 'global/plus-minus-input', 'basket/main']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'basket'],
@@ -47,6 +47,7 @@ class Basket extends My_Controller {
 				'js' => [
 					'plugins/jquery.inputmask.min',
 					'plugins/inputmask.binding',
+					'plugins/plus_minus_input',
 					'dashboard/main',
 					'basket/main',
 				],

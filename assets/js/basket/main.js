@@ -1,4 +1,19 @@
 $(document).ready(function() {
+
+	$('[js-event="orderWhenSelect"]').change(function() {
+		if ($(this).val() == 2) {
+			$(this).next('.date-input').removeClass('hide');
+		} else {
+			$(this).next('.date-input').addClass('hide');
+		}
+	});
+
+	$('[js-event="showOrderFooter"]').click(function() {
+		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
+		$(this).parents('.order-grid-footer').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
+	});
+
+
 	var oOrderType = {};
 	$('.order-item-image').click(function() {
 		$(this).parent().prev().find('[js-event="addBasketItemselect"]').trigger('click');

@@ -25,13 +25,22 @@ $route['products/(:any)'] = 'Basket/productpage';
 $route['basket/checkout'] = 'Basket/checkout';
 
 $route['fulfillment'] = 'Fulfillment/index';
+$route['fulfillment/pick-up'] = 'Fulfillment/pickup';
+$route['fulfillment/delivery'] = 'Fulfillment/delivery';
+$route['fulfillment/received'] = 'Fulfillment/received';
+$route['fulfillment/cancelled'] = 'Fulfillment/cancelled';
 
-$route['orders/thank-you'] = 'transactions/thankyou';
+$route['orders'] = 'Orders/index';
+$route['orders/pick-up'] = 'Orders/pickup';
+$route['orders/delivery'] = 'Orders/delivery';
+$route['orders/received'] = 'Orders/received';
+$route['orders/cancelled'] = 'Orders/cancelled';
+
+$route['orders/thank-you'] = 'Orders/thankyou';
 
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
 $route['dev-build/fetch-cities'] = 'DevBuild/fetch';
-
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
