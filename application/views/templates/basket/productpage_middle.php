@@ -23,7 +23,7 @@
 					<div class="panel-heading">
 						<ul class="spaced-list between">
 							<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
-							<li><a href="transactions/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
+							<li><a href="orders/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
 						</ul>
 					</div>
 					

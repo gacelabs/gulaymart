@@ -7,7 +7,7 @@
 			<div id="thankyou_middle">
 				<div style="margin-bottom:20px;text-align:center;">
 					<h1 class="text-white" style="margin-bottom:15px;">THANK YOU!</h1>
-					<a href="transactions/orders/" class="btn btn-theme">View Purchase</a>
+					<a href="orders/placed" class="btn btn-theme">View Purchase</a>
 				</div>
 
 				<div id="thankyou_footer">

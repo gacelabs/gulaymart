@@ -96,3 +96,6 @@
 		margin-bottom: 15px;
 	}
 }
+.dashboard-panel-middle.hideshow-container {
+	background-color: #fff !important;
+}

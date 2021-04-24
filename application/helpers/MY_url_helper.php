@@ -331,12 +331,39 @@ function get_status_value($status=false)
 	return '';
 }
 
+function get_status_dbvalue($status=false)
+{
+	if ($status) {
+		$ci =& get_instance();
+		switch (strtolower(trim($status))) {
+			case 'verified': /*verified*/
+				return 1;
+			break;
+			case 'placed': /*placed*/
+				return 2;
+			break;
+			case 'on+delivery': /*otw*/
+				return 3;
+			break;
+			case 'received': /*received*/
+				return 4;
+			break;
+			case 'cancelled': /*cancelled*/
+				return 5;
+			break;
+		}
+	}
+	return 0;
+}
+
 function storefront_url($farm=false, $echo=false)
 {
 	$return = false;
 	if ($farm) {
 		if (isset($farm['farm_location_id'])) {
 			$return = base_url('store_location/'.$farm['id'].'/'.$farm['farm_location_id'].'/'.nice_url($farm['name'], true));
+		} elseif (isset($farm['farm_id']) AND isset($farm['id'])) {
+			$return = base_url('store_location/'.$farm['farm_id'].'/'.$farm['id'].'/'.nice_url($farm['name'], true));
 		} else {
 			$return = base_url('store_farm/'.$farm['id'].'/'.nice_url($farm['name'], true));
 		}
@@ -362,19 +389,19 @@ function product_url($item=false, $echo=false)
 	}
 }
 
-function internal_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory')
+function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory')
 {
 	$ci =& get_instance();
 	if ($user_id AND $datestamp AND $content) {
 		// send message to the user has to replenish the needed stocks for delivery
-		$check_msgs = $this->class->gm_db->get('messages', [
+		$check_msgs = $ci->class->gm_db->get('messages', [
 			'tab' => $tab, 'type' => $type,
 			'user_id' => $user_id, 'unread' => 1,
 			'datestamp' => $datestamp,
 			'content' => $content,
 		], 'row');
 		if ($check_msgs == false) {
-			$this->class->gm_db->new('messages', [
+			$ci->class->gm_db->new('messages', [
 				'tab' => $tab, 'type' => $type,
 				'user_id' => $product['user_id'], 'datestamp' => $datestamp,
 				'content' => $content,
@@ -383,4 +410,21 @@ function internal_message($user_id=false, $datestamp=false, $content=false, $tab
 		}
 	}
 	return false;
+}
+
+function order_count_by_status($status=false, $user_id=false)
+{
+	$ci =& get_instance();
+	if ($status !== false AND $user_id !== false) {
+		$baskets = $ci->baskets->get_in(['user_id' => $user_id, 'status' => $status]);
+		$products = false;
+		if ($baskets) {
+			$products = [];
+			foreach ($baskets as $key => $basket) {
+				$products[$basket['location_id']][$basket['status']] = $basket;
+			}
+			return $products == false ? 0 : count($products);
+		}
+	}
+	return 0;
 }

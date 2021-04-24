@@ -325,6 +325,12 @@ class Basket extends My_Controller {
 				unset($profile['password']); unset($profile['re_password']);
 				unset($profile['settings']); unset($profile['shippings']);
 				$session['seller']['profile'] = $profile;
+
+				$address = explode(',', $session['seller']['address_2']);
+				$session['seller']['city'] = isset($address[0]) ? $address[0] : '';
+				$session['seller']['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+				$session['seller']['farm_location_id'] = $farm_location_id;
+				
 				$place_order[$farm_location_id]['seller'] = $session['seller'];
 
 				$buyer = $this->accounts->profile;
@@ -338,10 +344,16 @@ class Basket extends My_Controller {
 				foreach ($session['order_details'] as $order_type => $orders) {
 					foreach ($orders as $key => $order) {
 						$sub_total = $order['quantity'] * $order['rawdata']['details']['price'];
+						$product = $order['rawdata']['product'];
+						$product['farm_location_id'] = $farm_location_id;
 						$place_order[$farm_location_id]['order_details'][] = [
+							'product' => $product,
 							'product_id' => $order['product_id'],
-							'product' => $order['rawdata']['product'],
+							'farm_location_id' => $farm_location_id,
 							'quantity' => $order['quantity'],
+							'price' => $order['rawdata']['details']['price'],
+							'measurement' => $order['rawdata']['details']['measurement'],
+							'stocks' => $order['rawdata']['details']['stocks'],
 							'sub_total' => $sub_total,
 							'timestamp' => $timestamp,
 							'status' => 2,
@@ -381,7 +393,7 @@ class Basket extends My_Controller {
 				$this->baskets->save(['status' => 2], ['id' => $id]);
 			}
 			$this->session->unset_userdata('place_order_session');
-			$this->session->set_userdata('typage_session');
+			$this->session->set_userdata('typage_session', 1);
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
 			$this->set_response('info', 'No orders to be place, Redirecting to your basket...', false, 'basket/');
@@ -545,7 +557,7 @@ class Basket extends My_Controller {
 		}
 	}
 
-	private function delivery_active_place($value='San Jose del Monte Cit')
+	private function delivery_active_place($value='San Jose del Monte City')
 	{
 		// filter_method: today = 6, yesterday = 7, past 7 days = 8
 		// delivery_origin: toktok = 0, toktok food = 1

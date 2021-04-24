@@ -182,7 +182,7 @@ class MY_Controller extends CI_Controller {
 			if ($baskets) {
 				$products = [];
 				foreach ($baskets as $key => $basket) {
-					$products[$basket['product_id']] = $basket;
+					$products[$basket['location_id']][$basket['status']] = $basket;
 				}
 			}
 			// debug($products, 'stop');

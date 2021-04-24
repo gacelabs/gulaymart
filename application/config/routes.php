@@ -30,11 +30,11 @@ $route['fulfillment/delivery'] = 'Fulfillment/delivery';
 $route['fulfillment/received'] = 'Fulfillment/received';
 $route['fulfillment/cancelled'] = 'Fulfillment/cancelled';
 
-$route['orders'] = 'Orders/index';
-$route['orders/pick-up'] = 'Orders/pickup';
-$route['orders/delivery'] = 'Orders/delivery';
-$route['orders/received'] = 'Orders/received';
-$route['orders/cancelled'] = 'Orders/cancelled';
+$route['orders/placed'] = 'Orders/index/placed';
+$route['orders/pick-up'] = 'Orders/index/pick_up';
+$route['orders/delivery'] = 'Orders/index/on+delivery';
+$route['orders/received'] = 'Orders/index/received';
+$route['orders/cancelled'] = 'Orders/index/cancelled';
 
 $route['orders/thank-you'] = 'Orders/thankyou';
 

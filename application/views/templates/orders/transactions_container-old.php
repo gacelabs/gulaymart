@@ -13,19 +13,19 @@
 					<?php
 						$placed = false;
 						if ($data['orders'] AND isset($data['orders']['placed'])) $placed = $data['orders']['placed'];
-						$this->view('templates/transactions/placed', ['placed' => $placed]);
+						$this->view('templates/orders/placed', ['placed' => $placed]);
 
 						$delivery = false;
 						if ($data['orders'] AND isset($data['orders']['delivery'])) $delivery = $data['orders']['delivery'];
-						$this->view('templates/transactions/delivery', ['delivery' => $delivery]);
+						$this->view('templates/orders/delivery', ['delivery' => $delivery]);
 
 						$received = false;
 						if ($data['orders'] AND isset($data['orders']['received'])) $received = $data['orders']['received'];
-						$this->view('templates/transactions/received', ['received' => $received]);
+						$this->view('templates/orders/received', ['received' => $received]);
 
 						$cancelled = false;
 						if ($data['orders'] AND isset($data['orders']['cancelled'])) $cancelled = $data['orders']['cancelled'];
-						$this->view('templates/transactions/cancelled', ['cancelled' => $cancelled]);
+						$this->view('templates/orders/cancelled', ['cancelled' => $cancelled]);
 					?>
 
 					<div class="order-list-container hide" id="all_orders">

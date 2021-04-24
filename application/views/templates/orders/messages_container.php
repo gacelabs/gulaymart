@@ -35,10 +35,10 @@
 						</div>
 						<?php
 							if (isset($data['messages']['Inquiries'])) {
-								$this->view('templates/transactions/inquiries', ['inquiries' => $data['messages']['Inquiries']]);
+								$this->view('templates/orders/inquiries', ['inquiries' => $data['messages']['Inquiries']]);
 							}
 							if (isset($data['messages']['Feedbacks'])) {
-								$this->view('templates/transactions/feedbacks', ['feedbacks' => $data['messages']['Feedbacks']]);
+								$this->view('templates/orders/feedbacks', ['feedbacks' => $data['messages']['Feedbacks']]);
 							}
 						?>
 					<?php else: ?>

@@ -138,6 +138,7 @@ class ToktokApi {
 			$this->connected = true;
 			$this->success = $this->response['success'];
 		}
+		$this->log_activities();
 		return $this;
 	}
 
@@ -202,5 +203,15 @@ class ToktokApi {
 				"Content-Type: multipart/form-data; boundary={$boundary}", // change Content-Type
 			],
 		]);
+	}
+
+	private function log_activities()
+	{
+		$logfile = fopen(get_root_path('assets/data/logs/toktok-api.log'), "a+");
+		$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
+		$txt .= "Response: " . json_encode($this) . " \n";
+		$txt .= "--------------------------------" . "\n";
+		fwrite($logfile, $txt);
+		fclose($logfile);
 	}
 }

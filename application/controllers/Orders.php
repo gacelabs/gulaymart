@@ -15,55 +15,53 @@ class Orders extends MY_Controller {
 		// debug($this->toktokapi, 'stop');
 	}
 
-	public function index()
+	public function index($status='placed')
 	{
-		$this->orders();
-	}
-
-	public function placed()
-	{
-		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
-		// debug($baskets, 'stop');
-		$assembled = false;
-		if (!is_bool($baskets) AND count($baskets)) {
-			$products = [];
-			foreach ($baskets as $key => $basket) {
-				if (isset($products[$basket['product_id']][$basket['status']])) {
-					$basket['quantity'] = $products[$basket['product_id']][$basket['status']]['quantity'] += $basket['quantity'];
-					$basket['id'] = $products[$basket['product_id']][$basket['status']]['id'] .= ','.$basket['id'];
-				}
-				$products[$basket['product_id']][$basket['status']] = $basket;
-			}
-			// debug($products, 'stop');
-			$assembled = [];
-			foreach ($products as $product_id => $product) {
-				foreach ($product as $status => $basket) {
-					$date = date('F j, Y', strtotime($basket['updated']));
-					$basket['uptime'] = date('g:ia', strtotime($basket['updated']));
-					$assembled[get_status_value($status)][$date][$basket['rawdata']['farm']['name']][] = $basket;
+		$status_id = get_status_dbvalue($status);
+		// debug($status_id, 'stop');
+		if ($status_id > 0) {
+			$baskets_merge = false;
+			$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status' => $status_id]);
+			if ($baskets) {
+				foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
+				$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
+				foreach ($baskets_merge as $key => $merged) {
+					$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
+					$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
+					$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
+					$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 				}
 			}
-		}
-		// debug($assembled, 'stop');
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'global/order-table', 'orders/main']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'orders-active', 'orders-placed'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'orders/orders_container',
+			// debug($baskets_merge, 'stop');
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'global/order-table', 'orders/main']
 				],
-			],
-			'bottom' => [
-				'js' => ['orders/main'],
-			],
-			'data' => [
-				'orders' => $assembled
-			]
-		]);
+				'middle' => [
+					'body_class' => ['dashboard', 'orders-active', 'orders-'.$status],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'orders/container',
+					],
+				],
+				'bottom' => [
+					'js' => ['orders/main'],
+				],
+				'data' => [
+					'orders' => $baskets_merge,
+					'status' => $status,
+					'counts' => [
+						'placed' => order_count_by_status(2, $this->accounts->profile['id']),
+						'on+delivery' => order_count_by_status(3, $this->accounts->profile['id']),
+						'received' => order_count_by_status(4, $this->accounts->profile['id']),
+						'cancelled' => order_count_by_status(5, $this->accounts->profile['id']),
+					],
+				]
+			]);
+		} else {
+			show_404();
+		}
 	}
 
 	public function delivery()
@@ -77,7 +75,7 @@ class Orders extends MY_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'orders/orders_container',
+					'orders/container',
 				],
 			],
 			'bottom' => [
@@ -99,7 +97,7 @@ class Orders extends MY_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'orders/orders_container',
+					'orders/container',
 				],
 			],
 			'bottom' => [
@@ -120,7 +118,7 @@ class Orders extends MY_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'orders/orders_container',
+					'orders/container',
 				],
 			],
 			'bottom' => [
@@ -171,7 +169,7 @@ class Orders extends MY_Controller {
 			],
 			'bottom' => [
 				'modals' => ['reply_modal'],
-				'js' => ['hideshow', 'plugins/readmore.min', 'transactions/messages', 'dashboard/main'],
+				'js' => ['hideshow', 'plugins/readmore.min', 'orders/messages', 'dashboard/main'],
 			],
 			'data' => [
 				'messages' => $data_messages
@@ -181,39 +179,46 @@ class Orders extends MY_Controller {
 
 	public function thankyou()
 	{
-		$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
-		// debug($baskets, 'stop');
-		if (!is_bool($baskets) AND count($baskets)) {
-			$total = 0;
-			$fees = [];
-			foreach ($baskets as $key => $basket) {
-				$price = $basket['quantity'] *  $basket['rawdata']['basket_details']['price'];
-				$total += $price;
-				$fees[$basket['location_id']] = $basket['fee'];
-			}
-			foreach ($fees as $location_id => $value) $total += (float)$value;
-			// debug($total, $fees, 'stop');
-			$this->render_page([
-				'top' => [
-					'css' => ['static/thankyou']
-				],
-				'middle' => [
-					'body_class' => ['thankyou'],
-					'head' => ['../global/global_navbar'],
-					'body' => [
-						'../static/thankyou'
+		$typage_session = $this->session->userdata('typage_session');
+		// debug(!empty($typage_session), 'stop');
+		if (!empty($typage_session)) {
+			$baskets = $this->baskets->get(['user_id' => $this->accounts->profile['id'], 'status >' => 1]);
+			if ($baskets) {
+				$basket_ids = [];
+				foreach ($baskets as $key => $basket) $basket_ids[] = $basket['id'];
+				$baskets_merge = $this->baskets->get_baskets_merge(['basket_ids' => implode(',', $basket_ids)]);
+
+				$total = 0;
+				if ($baskets_merge) {
+					foreach ($baskets_merge as $key => $merge) {
+						$toktok_post = json_decode(base64_decode($merge['toktok_post']), true);
+						$total += (float)$toktok_post['f_recepient_cod'];
+					}
+				}
+				// debug($total, 'stop');
+				$this->session->unset_userdata('typage_session');
+				$this->render_page([
+					'top' => [
+						'css' => ['static/thankyou']
 					],
-				],
-				'bottom' => [
-					'modals' => [],
-					'js' => [],
-				],
-				'data' => [
-					'total' => $total
-				]
-			]);
+					'middle' => [
+						'body_class' => ['thankyou'],
+						'head' => ['../global/global_navbar'],
+						'body' => [
+							'../static/thankyou'
+						],
+					],
+					'bottom' => [
+						'modals' => [],
+						'js' => [],
+					],
+					'data' => [
+						'total' => $total
+					]
+				]);
+			}
 		} else {
-			redirect(base_url('transactions/'));
+			$this->set_response('info', 'Orders already been Placed.', [], 'orders/placed');
 		}
 	}
 
