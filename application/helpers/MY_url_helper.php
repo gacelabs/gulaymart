@@ -461,3 +461,21 @@ function order_count_by_status($where=false)
 	}
 	return 0;
 }
+
+function fulfillment_count_by_status($where=false)
+{
+	$ci =& get_instance();
+	if ($where !== false) {
+		$fulfillments = $ci->gm_db->get_in('baskets_merge', $where);
+		$products = false;
+		if ($fulfillments) {
+			$fulfilled = [];
+			foreach ($fulfillments as $key => $fulfillment) {
+				$fulfilled[] = $fulfillment;
+			}
+			// debug($fulfilled, 'stop');
+			return $fulfilled == false ? 0 : count($fulfilled);
+		}
+	}
+	return 0;
+}

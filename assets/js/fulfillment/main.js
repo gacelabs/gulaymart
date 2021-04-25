@@ -82,7 +82,6 @@ var runOrdersToFulfillments = function(realtime) {
 	console.log('Listening from Orders activity!');
 	// console.log(realtime);
 	realtime.bind('remove-item', 'fulfilled-items', function(object) {
-		// console.log('received response from remove-item:fulfilled-items', object.data);
 		var oData = object.data;
 		if (oData.all == 0) {
 			removeOnFulfillment(oData.data);

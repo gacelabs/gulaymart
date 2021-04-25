@@ -59,128 +59,13 @@ class Fulfillment extends My_Controller {
 				'orders' => $baskets_merge,
 				'status' => $status,
 				'counts' => [
-					'placed' => order_count_by_status(['location_id' => $farm['farm_location_ids'], 'status' => 2]),
-					'for+pick+up' => order_count_by_status(['location_id' => $farm['farm_location_ids'], 'status' => 6]),
-					'on+delivery' => order_count_by_status(['location_id' => $farm['farm_location_ids'], 'status' => 3]),
-					'received' => order_count_by_status(['location_id' => $farm['farm_location_ids'], 'status' => 4]),
-					'cancelled' => order_count_by_status(['location_id' => $farm['farm_location_ids'], 'status' => 5]),
+					'placed' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
+					'for+pick+up' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
+					'on+delivery' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
+					'received' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
+					'cancelled' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
 				],
 			]
-		]);
-	}
-
-	public function placed()
-	{
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-placed'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
-				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
-			],
-			'data' => []
-		]);
-	}
-
-	public function pickup()
-	{
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-pick-up'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
-				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
-			],
-			'data' => []
-		]);
-	}
-
-	public function delivery()
-	{
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-delivery'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
-				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
-			],
-			'data' => []
-		]);
-	}
-
-	public function received()
-	{
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-received'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
-				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
-			],
-			'data' => []
-		]);
-	}
-
-	public function cancelled()
-	{
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-cancelled'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
-				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
-			],
-			'data' => []
 		]);
 	}
 
