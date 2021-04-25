@@ -53,10 +53,10 @@ button.ff-navbar-pill:focus, button.ff-navbar-pill:hover {
 select.ff-navbar-pill option:not(checked), .order-item select option:not(checked) {
 	color: #444;
 }*/
-.order-item select option[value="1"]:not(checked) {
+.order-item select option[value="6"]:not(checked) {
 	color: #799938;
 }
-.order-item select option[value="2"]:not(checked) {
+.order-item select option[value="5"]:not(checked) {
 	color: #ff7575;
 }
 .ff-product-container .order-grid-column.order-labels, .ff-product-container .order-grid-column.order-item {

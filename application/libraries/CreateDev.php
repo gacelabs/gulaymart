@@ -1032,6 +1032,13 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '2',
+				'null' => false,
+			],
+			"reason enum('None','Out Of Stock','Removed Product') NOT NULL DEFAULT 'None'",
 			'order_id' => [
 				'type' => 'TINYTEXT',
 				'default' => NULL,

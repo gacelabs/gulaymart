@@ -56,7 +56,7 @@ class Basket extends My_Controller {
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'basket/container',
+					'basket/b_container',
 				],
 			],
 			'bottom' => [
@@ -385,6 +385,7 @@ class Basket extends My_Controller {
 				$place_order[$farm_location_id]['duration'] = $session['toktok_details']['pricing']['duration'];
 
 				$place_order[$farm_location_id]['location_id'] = $farm_location_id;
+				$place_order[$farm_location_id]['status'] = 2;
 				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post));
 				$place_order[$farm_location_id]['seller'] = base64_encode(json_encode($place_order[$farm_location_id]['seller']));
 				$place_order[$farm_location_id]['seller_id'] = $seller['user_id'];

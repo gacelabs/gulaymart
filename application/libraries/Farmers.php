@@ -223,6 +223,7 @@ class Farmers {
 				if ($farm_locations) {
 					$farms[$key]['farm_locations'] = [];
 					foreach ($farm_locations as $location) {
+						$farms[$key]['farm_location_ids'][] = $location['id'];
 						$location['products'] = false;
 						$products_location = $this->class->gm_db->get('products_location', ['farm_location_id' => $location['id']]);
 						if ($products_location) {
@@ -264,6 +265,9 @@ class Farmers {
 								}
 							}
 						}
+						$address = explode(',', $location['address_2']);
+						$location['city'] = isset($address[0]) ? $address[0] : '';
+						$location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
 						$farms[$key]['farm_locations'][$location['id']] = $location;
 					}
 				}

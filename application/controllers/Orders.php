@@ -21,7 +21,7 @@ class Orders extends MY_Controller {
 		// debug($status_id, 'stop');
 		$baskets_merge = false;
 		if ($status_id > 0) {
-			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id']]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id]);
 			// debug($baskets_merge, 'stop');
 			if ($baskets_merge) {
 				foreach ($baskets_merge as $key => $merged) {
@@ -41,7 +41,7 @@ class Orders extends MY_Controller {
 					'head' => ['dashboard/navbar'],
 					'body' => [
 						'dashboard/navbar_aside',
-						'orders/container',
+						'orders/o_container',
 					],
 				],
 				'bottom' => [
@@ -51,10 +51,10 @@ class Orders extends MY_Controller {
 					'orders' => $baskets_merge,
 					'status' => $status,
 					'counts' => [
-						'placed' => order_count_by_status(2, $this->accounts->profile['id']),
-						'on+delivery' => order_count_by_status(3, $this->accounts->profile['id']),
-						'received' => order_count_by_status(4, $this->accounts->profile['id']),
-						'cancelled' => order_count_by_status(5, $this->accounts->profile['id']),
+						'placed' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'on+delivery' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
 				]
 			]);
@@ -238,6 +238,16 @@ class Orders extends MY_Controller {
 
 			$post['html'] = $html;
 			$this->set_response('success', false, $post, false, 'appendComment');
+		}
+		$this->set_response('error', 'Unable to post comment, try again later.', $post);
+	}
+
+	public function delete()
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		debug($post, 'stop');
+		if ($post) {
+
 		}
 		$this->set_response('error', 'Unable to post comment, try again later.', $post);
 	}

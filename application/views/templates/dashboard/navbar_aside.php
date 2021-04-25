@@ -12,7 +12,13 @@
 		<div class="aside-nav-child hidden-xs">
 			<a href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
-				<span class="hidden-xs">Fulfillment <kbd>1</kbd></span>
+				<span class="hidden-xs">Fulfillment 
+					<?php 
+						if ($this->fulfill_count !== false) {
+							echo "<kbd>".$this->fulfill_count."</kbd>";
+						}
+					?>
+				</span>
 			</a>
 		</div>
 		<?php endif ?>

@@ -317,14 +317,17 @@ function get_status_value($status=false)
 			case '2': /*placed*/
 				return 'placed';
 			break;
-			case '3': /*otw*/
-				return 'delivery';
+			case '3': /*on delivery*/
+				return 'on+delivery';
 			break;
 			case '4': /*received*/
 				return 'received';
 			break;
 			case '5': /*cancelled*/
 				return 'cancelled';
+			break;
+			case '6': /*for pick up*/
+				return 'for+pick+up';
 			break;
 		}
 	}
@@ -342,7 +345,7 @@ function get_status_dbvalue($status=false)
 			case 'placed': /*placed*/
 				return 2;
 			break;
-			case 'on+delivery': /*otw*/
+			case 'on+delivery': /*on delivery*/
 				return 3;
 			break;
 			case 'received': /*received*/
@@ -350,6 +353,9 @@ function get_status_dbvalue($status=false)
 			break;
 			case 'cancelled': /*cancelled*/
 				return 5;
+			break;
+			case 'for+pick+up': /*for pick up*/
+				return 6;
 			break;
 		}
 	}
@@ -438,11 +444,11 @@ function send_gm_email($user_id=false, $content=false, $subject='Email Notificat
 	return false;
 }
 
-function order_count_by_status($status=false, $user_id=false)
+function order_count_by_status($where=false)
 {
 	$ci =& get_instance();
-	if ($status !== false AND $user_id !== false) {
-		$baskets = $ci->baskets->get_in(['user_id' => $user_id, 'status' => $status]);
+	if ($where !== false) {
+		$baskets = $ci->baskets->get_in($where);
 		$products = false;
 		if ($baskets) {
 			$products = [];
