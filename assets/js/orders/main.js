@@ -146,11 +146,11 @@ var removeOnAllOrder = function(obj) {
 	if (iCnt == 0) {
 		$('#nav-order-count').remove();
 		$('.trans-navbar-pill.active').find('kbd').text(0);
-		$('[js-element="orders-panel"]').find('.no-records-ui').removeClass('hide');
+		$('[js-element="orders-panel"]').find('.no-records-ui').fadeIn('slow').removeClass('hide');
 	} else {
 		$('#nav-order-count').text(iCnt);
 		$('.trans-navbar-pill.active').find('kbd').text(iCnt);
-		$('[js-element="orders-panel"]').find('.no-records-ui').addClass('hide');
+		$('[js-element="orders-panel"]').find('.no-records-ui').fadeOut('slow').addClass('hide');
 	}
 }
 

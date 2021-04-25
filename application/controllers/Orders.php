@@ -197,15 +197,15 @@ class Orders extends MY_Controller {
 								$order_details[$index]['status'] = 5;
 							}
 							// debug($order_details, 'stop');
-							$this->gm_db->save('baskets_merge', 
+							/*$this->gm_db->save('baskets_merge', 
 								['order_details' => base64_encode(json_encode($order_details)), 'status' => 5], 
 								['id' => $row['merge_id']]
-							);
+							);*/
 						}
 						$basket_ids = explode(',', $merge['basket_ids']);
 						if (count($basket_ids)) {
 							foreach ($basket_ids as $basket_id) {
-								$this->baskets->save(['status' => 5], ['id' => $basket_id]);
+								// $this->baskets->save(['status' => 5], ['id' => $basket_id]);
 							}
 						}
 					}
@@ -223,17 +223,17 @@ class Orders extends MY_Controller {
 								}
 							}
 							// debug($order_details, 'stop');
-							$this->gm_db->save('baskets_merge', 
+							/*$this->gm_db->save('baskets_merge', 
 								['order_details' => base64_encode(json_encode($order_details))], 
 								['id' => $row['merge_id']]
-							);
+							);*/
 						}
 					}
 					$basket = $this->gm_db->get('baskets', ['id' => $row['basket_id']], 'row');
 					// debug($basket, 'stop');
 					if ($basket) {
 						if ($basket['product_id'] == $row['product_id']) {
-							$this->baskets->save(['status' => 5], ['id' => $row['basket_id']]);
+							// $this->baskets->save(['status' => 5], ['id' => $row['basket_id']]);
 						}
 					}
 				}
@@ -242,7 +242,7 @@ class Orders extends MY_Controller {
 				if ($basket_count == 0) {
 					/*now set all merged basket to cancelled*/
 					foreach ($post['data'] as $key => $row) {
-						$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
+						// $this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
 					}
 				}
 			}
