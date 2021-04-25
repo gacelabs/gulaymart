@@ -3,6 +3,7 @@
 
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+			<?php if ($data['orders']): ?>
 			<div class="trans-navbar-container">
 				<small class="elem-block"><b>FILTER STATUS</b></small>
 				<div class="trans-navbar-grid">
@@ -28,6 +29,12 @@
 					</div>
 				</div>
 			</div>
+			<?php else: ?>
+				<div style="text-align:center;background-color:#fff;padding:40px 10px;">
+					<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+					<p class="zero-gaps">Find the freshest veggies grown by your community at <button class="btn btn-sm btn-contrast">Marketplace</button></p>
+				</div>
+			<?php endif; ?>
 		</div>
 
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

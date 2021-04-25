@@ -33,13 +33,13 @@
 						<div class="panel-heading" role="tab" id="headingTwo">
 							<h4 class="panel-title">
 								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-									Specially product
+									Specialty product
 								</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 							<div class="panel-body">
-								If you have a specially product whether it's lettuce, microgreens, herbs, root crops, or others, it's a good idea to have this in your farm's name and potentially build a household brand.
+								If you have a specialty product whether it's lettuce, microgreens, herbs, root crops, or others, it's a good idea to have this in your farm's name and potentially build a household brand.
 							</div>
 						</div>
 					</div>
@@ -54,7 +54,7 @@
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 							<div class="panel-body">
-								For farms that's already have a brand name, never forget to add this on your farms name. The more people see your brand name, the more your farm will be noticed.
+								For farms that already have a brand name, never forget to include it in your farm's name. The more people see your brand, the more customers will get familiar to you.
 							</div>
 						</div>
 					</div>
@@ -63,7 +63,7 @@
 				<div class="text-step-basic">
 					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
 					<div>
-						<p class="zero-gaps">The guidelines above only gives you a better idea to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tool to succeed. Good luck!</p>
+						<p class="zero-gaps">The guidelines above are just suggestions to kickstart your creative mind to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tools to succeed. Good luck!</p>
 						<br>
 						<p>- From your Gulaymart team.</p>
 					</div>
@@ -86,12 +86,12 @@
 			<div class="modal-body">
 				<p>If you are a farmer that lives in Manila but has a farm located in the province, then <b class="text-contrast">LOCATIONS</b> is your option.</p>
 				<img src="assets/images/helps/storefront-location.gif" class="img-responsive" style="margin-bottom:15px;">
-				<p>The <b>Select a different address</b> option allows you to save a specific location for your farm, which will then be used as the <b>pick up point</b> for your products.</p>
+				<p>The <b>Enter a different address</b> option allows you to save a specific location for your farm, which will then be used as the <b>pick up point</b> for your products.</p>
 				<p>For farmers who has multiple farms with different locations, click on the <b><i class="fa fa-plus"></i></b> button to add more.</p>
 				<div class="text-step-basic">
 					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
 					<div>
-						<p class="zero-gaps">Your farm's address will be used as the pick up point for your products.</b></p>
+						<p class="zero-gaps">The <b>farm's address</b> will be used as the pick up point for your products.</b></p>
 						<p class="zero-gaps">Wrong address could reflect <b class="text-danger">over charged delivery fees.</b></p>
 					</div>
 				</div>
