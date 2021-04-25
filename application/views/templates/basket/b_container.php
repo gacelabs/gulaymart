@@ -2,6 +2,14 @@
 	<input type="hidden" id="min-date" value="<?php echo date("Y-m-d");?>">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" js-element="baskets-panel">
+
+			<?php if (empty($data['baskets'])): ?>
+			<div style="text-align:center;background-color:#fff;padding:40px 10px;">
+				<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+				<p class="zero-gaps">Find the freshest veggies grown by your community at <button class="btn btn-sm btn-contrast">Marketplace</button></p>
+			</div>
+			<?php endif; ?>
+
 			<?php if ($data['baskets']): ?>
 				<!-- per farm location -->
 				<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
@@ -123,8 +131,6 @@
 						</div>
 					</div>
 				<?php endforeach ?>
-			<?php else: ?>
-				<h4 style="padding:25px 15px;margin:0;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>
 			<?php endif ?>
 		</div>
 	</div>
