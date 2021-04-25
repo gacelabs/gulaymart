@@ -130,7 +130,7 @@
 								<div>
 									<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
 									<p class="zero-gaps"><i>Delivery Fee:</i> <?php echo number_format($orders['fee']);?> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>
-									<p style="border-top:1px solid #888;display:inline-block;padding:0 0 0 35px;margin:0;">&#x20b1; <b><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
+									<p style="border-top:1px solid #888;display:inline-block;padding:0 0 0 35px;margin:0;">&#x20b1; <b js-element="item-finaltotal"><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
 								</div>
 							</div>
 						</div>

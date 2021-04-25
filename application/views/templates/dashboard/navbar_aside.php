@@ -15,7 +15,7 @@
 				<span class="hidden-xs">Fulfillment 
 					<?php 
 						if ($this->fulfill_count !== false) {
-							echo "<kbd id='nav-fullfill-count'>".$this->fulfill_count."</kbd>";
+							echo "<kbd id='nav-fulfill-count'>".$this->fulfill_count."</kbd>";
 						}
 					?>
 				</span>

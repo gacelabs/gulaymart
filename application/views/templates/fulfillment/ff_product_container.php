@@ -1,10 +1,10 @@
 <div class="row hidden-xs ff-product-container">
-	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
+	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs" js-element="fulfill-panel">
 		<?php if ($data['orders']): ?>
 			<!-- per farm location -->
 			<?php foreach ($data['orders'] as $key => $orders): ?>
 				<?php $initial_total = 0; ?>
-				<div class="order-table-item">
+				<div class="order-table-item" data-merge-id="<?php echo $orders['id'];?>">
 					<div class="order-grid-column order-labels">
 						<div class="text-left">
 							<p><small class="elem-block"><b>PRODUCT</b></small></p>

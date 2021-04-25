@@ -69,17 +69,11 @@ var removeOnFulfillment = function(obj) {
 
 		$('.order-table-item').each(function(i, elem) {
 			if ($(elem).find('[js-element*="item-id-"]:not(.removed-product)').length == 0) {
-				$(elem).addClass('removed-product');
-				var iCnt = $('.order-table-item:not(.removed-product)').length;
-				if (iCnt == 0) {
-					$('#nav-order-count').remove();
-					$('.trans-navbar-pill.active').find('kbd').remove();
-				} else {
-					$('#nav-order-count').text(iCnt);
-					$('.trans-navbar-pill.active').find('kbd').text(iCnt);
-				}
+				$(elem).addClass('removed-product').fadeOut('slow');
 			}
 		});
+
+		removeOnAllOrder(obj);
 	}
 }
 
@@ -91,7 +85,28 @@ var runFulfilllmentsRealtime = function(realtime) {
 		if (oData.all == 0) {
 			removeOnFulfillment(oData.data);
 		} else if (oData.all == 1) {
-
+			removeOnAllOrder(oData);
 		}
 	});
+}
+
+var removeOnAllOrder = function(obj) {
+	console.log(obj);
+	if (obj.all != undefined) {
+		$.each(obj.data, function(i, data) {
+			if (Object.keys(data).length == 1) {
+				$('[data-merge-id="'+data.merge_id+'"]').addClass('removed-product').fadeOut('fast');
+			}
+		});
+	}
+	var iCnt = $('.order-table-item:not(.removed-product)').length;
+	if (iCnt == 0) {
+		$('#nav-fulfill-count').remove();
+		$('.ff-navbar-pill.active').find('kbd').text(0);
+		$('[js-element="fulfill-panel"]').find('.no-records-ui').removeClass('hide');
+	} else {
+		$('#nav-fulfill-count').text(iCnt);
+		$('.ff-navbar-pill.active').find('kbd').text(iCnt);
+		$('[js-element="fulfill-panel"]').find('.no-records-ui').addClass('hide');
+	}
 }
