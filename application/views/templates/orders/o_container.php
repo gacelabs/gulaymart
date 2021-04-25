@@ -45,9 +45,11 @@
 							<div class="text-right hidden-sm hidden-xs">
 								<p><small class="elem-block"><b>QUANTITY</b></small></p>
 							</div>
+							<?php if ($data['status'] != 'cancelled'): ?>
 							<div class="text-right">
 								<button class="btn btn-xs btn-default order-remove-btn" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>'><span class="text-danger">&times;</span></button>
 							</div>
+							<?php endif ?>
 						</div>
 
 						<div class="order-item-list">
@@ -71,7 +73,7 @@
 										'sub_total'=>$order['sub_total'],
 									]);
 								?>
-								<div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+								<div class="order-grid-column order-item<?php if ($details['status'] != 5): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 									<div class="media">
 										<div class="media-left media-top">
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">

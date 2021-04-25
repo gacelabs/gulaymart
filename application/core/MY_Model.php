@@ -236,10 +236,15 @@ class MY_Model extends CI_Model {
 	{
 		if ($table) {
 			if ($where) {
-				return $this->db->from($table)->where($where)->count_all_results();
-			} else {
-				return $this->db->from($table)->count_all_results();
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
 			}
+			return $this->db->from($table)->count_all_results();
 		}
 		return 0;
 	}

@@ -162,7 +162,14 @@ class Products {
 	public function count($where=false)
 	{
 		if (!is_bool($where)) {
-			return $this->class->db->from('products')->where($where)->count_all_results();
+			foreach ($where as $key => $row) {
+				if (is_array($row)) {
+					$this->db->where_in($key, $row);
+				} else {
+					$this->db->where([$key => $row]);
+				}
+			}
+			return $this->class->db->from('products')->count_all_results();
 		} else {
 			if ($this->has_session) {
 				return $this->class->db->from('products')->where(['user_id' => $this->profile['id']])->count_all_results();

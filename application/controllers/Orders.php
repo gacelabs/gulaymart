@@ -237,13 +237,13 @@ class Orders extends MY_Controller {
 						}
 					}
 				}
-				/*check here if all baskets have placed order status*/
-				$basket_count = $this->baskets->count(['status' => 2, 'user_id' => $this->accounts->profile['id']]);
-				if ($basket_count == 0) {
-					/*now set all merged basket to cancelled*/
-					foreach ($post['data'] as $key => $row) {
-						$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
-					}
+			}
+			/*check here if all baskets have placed order status*/
+			$basket_count = $this->baskets->count(['status' => 2, 'user_id' => $this->accounts->profile['id']]);
+			if ($basket_count == 0) {
+				/*now set all merged basket to cancelled*/
+				foreach ($post['data'] as $key => $row) {
+					$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
 				}
 			}
 			$senddata = $this->senddataapi->trigger('remove-item', 'fulfilled-items', ['all'=>$all, 'data'=>$post['data']]);

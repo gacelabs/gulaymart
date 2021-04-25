@@ -44,7 +44,7 @@
 									'basket_id'=>$order['basket_id'],
 								]);
 							?>
-							<div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+							<div class="order-grid-column order-item<?php if ($details['status'] != 5): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 								<div class="media">
 									<div class="media-left media-top">
 										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
@@ -74,7 +74,15 @@
 											<option value="Removed Product">Removed Product</option>
 										</select>
 									<?php else : ?>
-										<p class="zero-gaps"><span class="text-capsule bg-theme">Confirmed</span></p>
+										<p class="zero-gaps">
+											<span class="text-capsule bg-theme">
+												<?php if ($data['status'] == 'cancelled'): ?>
+													Removed
+												<?php else: ?>
+													Confirmed
+												<?php endif ?>
+											</span>
+										</p>
 									<?php endif ; ?>
 								</div>
 
@@ -103,6 +111,7 @@
 							<p class="zero-gaps">Cash On Delivery</p>
 							<p class="zero-gaps"></p>
 						</div>
+						<?php if ($data['status'] != 'cancelled'): ?>
 						<div class="text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 							<?php if ($data['status'] == 'placed') : ?>
@@ -111,6 +120,7 @@
 								<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 							<?php endif ; ?>
 						</div>
+						<?php endif ?>
 						<div class="text-left hidden-xs">
 							<?php if ($data['status'] == 'placed') : ?>
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>PROCEED</b></small></p>

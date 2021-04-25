@@ -172,10 +172,10 @@ class MY_Controller extends CI_Controller {
 			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
 			$this->basket_count = $baskets == false ? false : count($baskets);
 
-			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id']]);
+			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status' => [2,3,4]]);
 			$this->order_count = $order_count == false ? false : $order_count;
 
-			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id']]);
+			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status' => [2,6,3,4]]);
 			$this->fulfill_count = $fulfill_count == false ? false : $fulfill_count;
 		}
 		// debug($products, 'stop');

@@ -118,11 +118,16 @@ class Baskets {
 
 	public function count($where=false)
 	{
-		if ($where == false) {
-			return $this->class->db->from('baskets')->count_all_results();
-		} else {
-			return $this->class->db->from('baskets')->where($where)->count_all_results();
+		if ($where != false) {
+			foreach ($where as $key => $row) {
+				if (is_array($row)) {
+					$this->db->where_in($key, $row);
+				} else {
+					$this->db->where([$key => $row]);
+				}
+			}
 		}
+		return $this->class->db->from('baskets')->count_all_results();
 	}
 
 	public function new($new=false)
