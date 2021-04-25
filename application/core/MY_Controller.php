@@ -64,6 +64,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('users');
 		$this->load->library('products');
 		$this->load->library('smtpemail');
+		$this->load->library('senddataapi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();
@@ -305,7 +306,7 @@ class MY_Controller extends CI_Controller {
 							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);
 							break;
 						case 'title': 
-							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
+							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.(ucwords(urldecode(document_title()))), $meta_value);
 							break;
 						case 'description': case 'name':
 							$view['top']['metas'][$key] = str_replace('XXX', APP_DESCRIPTION, $meta_value);
@@ -322,7 +323,7 @@ class MY_Controller extends CI_Controller {
 		if ((bool)strstr($index_page, 'XXX')) $view['top']['index_page'] = str_replace('XXX', 'no', $index_page);
 		/*set default to page_title*/
 		$page_title = $view['top']['page_title'];
-		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.document_title(), $page_title);
+		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.(ucwords(urldecode(document_title()))), $page_title);
 
 		// debug($view, $data, 'stop');
 		if ($variable) {

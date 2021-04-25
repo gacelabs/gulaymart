@@ -1,49 +1,48 @@
 
-<div class="order-item-middle">
-	<div class="order-item-list">
-		<?php foreach ($order as $farm => $items): ?>
-			<div class="order-item-inner">
-				<p class="zero-gaps"><?php echo $farm;?></p>
-				<div class="order-item-grid">
-				<?php foreach ($items as $key => $item): ?>
-					<div class="order-item-image" style="background-image: url('<?php identify_main_photo($item['rawdata']);?>');"></div>
-					<div class="order-info-container">
-						<div class="order-item-title">
-							<p><a href="<?php echo $item['rawdata']['product_url'];?>"><?php echo $item['rawdata']['name'];?></a></p>
-						</div>
-						<p class="zero-gaps">&#x20b1; <b><?php echo $item['rawdata']['basket_details']['price'];?></b> / <?php echo $item['rawdata']['basket_details']['measurement'];?> x <span class="qty-divider">Quantity: <b><?php echo $item['quantity'];?></b></span></p>
-						<p class="product-total">Total &#x20b1; <b><?php echo $item['quantity'] * $item['rawdata']['basket_details']['price'];?></b></p>
-					</div>
-				<?php endforeach ?>
-				</div>
+<?php
+	$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
+	$product = $order['product'];
+	if ($product['photos'] AND isset($product['photos']['main'])) {
+		$photo_url = $product['photos']['main']['url_path'];
+	}
+	$details = $order; unset($details['product']);
+	$details['merge_id'] = $orders['id'];
+	$details['basket_ids'] = $orders['basket_ids'];
+	$json = json_encode([
+		'product_id'=>$order['product_id'],
+		'location_id'=>$order['farm_location_id'],
+		'merge_id'=>$orders['id'],
+		'basket_id'=>$order['basket_id'],
+	]);
+?>
+<div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' removed-product');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+	<div class="media">
+		<div class="media-left media-top">
+			<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
+		</div>
+		<div class="media-body">
+			<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+			<div class="ellipsis-container">
+				<p class="zero-gaps"><?php echo $product['description'];?></p>
 			</div>
-		<?php endforeach ?>
+		</div>
 	</div>
+	<div class="text-right hidden-sm hidden-xs">
+		<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p>
+	</div>
+	<div class="text-right hidden-sm hidden-xs">
+		<p class="zero-gaps"><?php echo $order['quantity'];?></p>
+	</div>
+	<?php if ($details['status'] == 2): ?>
+		<div class="text-right">
+			<button class="btn btn-xs btn-default order-remove-btn" js-element="remove-product" data-json='<?php echo $json;?>'><span class="text-danger">&times;</span></button>
+		</div>
+	<?php endif ?>
 
-	<div class="tender-amount-grid">
-		<div class="order-item-status">
-			<ul class="inline-list">
-				<li class="text-capsule icon-left status-<?php echo $status_class;?>"><?php echo ucwords(strtolower($large_status));?></li>
-			</ul>
-		</div>
-		<div class="tender-amount-parent">
-			<div class="tender-amount-body">
-				<?php $total_amount = $shipping_fee = 0; ?>
-				<?php foreach ($order as $farm => $items): ?>
-					<?php $shipping_fee += $items[0]['fee'];?>
-					<?php foreach ($items as $key => $item): ?>
-						<?php
-							$sub_total = $item['quantity'] * $item['rawdata']['basket_details']['price'];;
-							$total_amount += $sub_total;
-						?>
-						<p class="product-amount zero-gaps">&#x20b1; <b><?php echo number_format($sub_total);?></b></p>
-					<?php endforeach ?>
-				<?php endforeach ?>
-				<hr style="border-color:#aaa;margin:5px 0;">
-				<p class="product-amount zero-gaps"><small class="pull-left">Shipping fee</small>+ &#x20b1; <b><?php echo number_format($shipping_fee);?></b></p>
-			</div>
-			<hr style="border-color:#aaa;margin:5px 0;">
-			<h4 class="total-amount text-contrast zero-gaps"><span>&#x20b1;</span> <b><?php echo number_format($total_amount + $shipping_fee);?></b></h4>
-		</div>
+	<div class="visible-sm visible-xs">
+		<ul class="spaced-list between">
+			<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p></li>
+			<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
+		</ul>
 	</div>
 </div>

@@ -58,3 +58,40 @@ $(document).ready(function() {
 	})
 
 });
+
+var removeOnFulfillment = function(obj) {
+	// console.log(obj);
+	if (Object.keys(obj).length) {
+		$.each(obj, function(i, data) {
+			var uiParent = $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').parent('.order-item-list');
+			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('removed-product').find('[js-element="selectItems"]').html('<p class="zero-gaps">Cancelled</p><p class="zero-gaps">Removed by buyer</p>');
+		});
+
+		$('.order-table-item').each(function(i, elem) {
+			if ($(elem).find('[js-element*="item-id-"]:not(.removed-product)').length == 0) {
+				$(elem).addClass('removed-product');
+				var iCnt = $('.order-table-item:not(.removed-product)').length;
+				if (iCnt == 0) {
+					$('#nav-order-count').remove();
+					$('.trans-navbar-pill.active').find('kbd').remove();
+				} else {
+					$('#nav-order-count').text(iCnt);
+					$('.trans-navbar-pill.active').find('kbd').text(iCnt);
+				}
+			}
+		});
+	}
+}
+
+var runFulfilllmentsRealtime = function(realtime) {
+	// console.log(realtime);
+	realtime.bind('remove-item', 'fulfilled-items', function(object) {
+		// console.log('received response from remove-item:fulfilled-items', object.data);
+		var oData = object.data;
+		if (oData.all == 0) {
+			removeOnFulfillment(oData.data);
+		} else if (oData.all == 1) {
+
+		}
+	});
+}

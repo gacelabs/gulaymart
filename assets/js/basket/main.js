@@ -154,7 +154,7 @@ var removeOnBasket = function(obj) {
 		});
 		
 		if ($('[js-element*="item-id-"]').length == 0) {
-			$('[js-element="baskets-panel"]').html('<h4 style="padding:25px 15px;margin:0;">Fresh veggies at your doorstep in minutes, <a href="marketplace/" class="text-link">shop now!</a></h4>');
+			$('[js-element="baskets-panel"]').find('.no-records-ui').removeClass('hide');
 		}
 	}
 }

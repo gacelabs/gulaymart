@@ -27,7 +27,7 @@ class Basket extends My_Controller {
 				foreach ($baskets as $key => $basket) {
 					$rawdata = $basket['rawdata'];
 					$farm = $rawdata['farm'];
-					$farm['farm_location_id'] = $basket['location_id'];
+					$basket['rawdata']['product']['farm_location_id'] = $farm['farm_location_id'] = $basket['location_id'];
 					unset($basket['rawdata']['farm']);
 
 					$profile = $this->users->get(['id' => $farm['user_id']], true);
@@ -362,6 +362,7 @@ class Basket extends My_Controller {
 							'status' => 2,
 							'when' => $order_type,
 							'schedule' => $order['schedule'],
+							'basket_id' => $order['id'],
 						];
 						$place_order[$farm_location_id]['basket_ids'][] = $order['id'];
 						$all_basket_ids[] = $order['id'];

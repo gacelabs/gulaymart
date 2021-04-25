@@ -184,4 +184,10 @@ class Fulfillment extends My_Controller {
 		]);
 	}
 
+	public function delete($all=0)
+	{
+		$response = $this->senddataapi->trigger('remove-item', 'ordered-items', ['all'=>$all/*, 'data'=>$post['data']*/]);
+		// debug($response, 'stop');
+	}
+
 }

@@ -29,24 +29,30 @@
 							<!-- per order -->
 							<?php
 								$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
-								if ($order['product']['photos'] AND isset($order['product']['photos']['main'])) {
-									$photo_url = $order['product']['photos']['main']['url_path'];
+								$product = $order['product'];
+								if ($product['photos'] AND isset($product['photos']['main'])) {
+									$photo_url = $product['photos']['main']['url_path'];
 								}
 								$initial_total += (float)$order['sub_total'];
 								$details = $order; unset($details['product']);
 								$details['merge_id'] = $orders['id'];
 								$details['basket_ids'] = $orders['basket_ids'];
-								$json = json_encode($details);
+								$json = json_encode([
+									'product_id'=>$order['product_id'],
+									'location_id'=>$order['farm_location_id'],
+									'merge_id'=>$orders['id'],
+									'basket_id'=>$order['basket_id'],
+								]);
 							?>
-							<div class="order-grid-column order-item">
+							<div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' removed-product');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 								<div class="media">
 									<div class="media-left media-top">
 										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 									</div>
 									<div class="media-body">
-										<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($order['product'], true);?>" class="text-link"><?php echo $order['product']['name'];?></a></p>
+										<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
 										<div class="ellipsis-container">
-											<p class="zero-gaps"><?php echo $order['product']['description'];?></p>
+											<p class="zero-gaps"><?php echo $product['description'];?></p>
 										</div>
 									</div>
 								</div>
@@ -64,8 +70,8 @@
 											<option value="5">Cancelled</option>
 										</select>
 										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;">
-											<option>Out Of Stock</option>
-											<option>Removed Product</option>
+											<option value="Out Of Stock">Out Of Stock</option>
+											<option value="Removed Product">Removed Product</option>
 										</select>
 									<?php else : ?>
 										<p class="zero-gaps"><span class="text-capsule bg-theme">Confirmed</span></p>
@@ -118,5 +124,9 @@
 				</div>
 			<?php endforeach ?>
 		<?php endif ?>
+		<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
+			<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="/" class="btn btn-sm btn-contrast">Marketplace</a></p>
+		</div>
 	</div>
 </div>

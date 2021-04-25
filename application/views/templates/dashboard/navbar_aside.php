@@ -15,7 +15,7 @@
 				<span class="hidden-xs">Fulfillment 
 					<?php 
 						if ($this->fulfill_count !== false) {
-							echo "<kbd>".$this->fulfill_count."</kbd>";
+							echo "<kbd id='nav-fullfill-count'>".$this->fulfill_count."</kbd>";
 						}
 					?>
 				</span>
@@ -43,7 +43,7 @@
 				<span class="hidden-xs">Orders
 					<?php 
 						if ($this->order_count !== false) {
-							echo "<kbd>".$this->order_count."</kbd>";
+							echo "<kbd id='nav-order-count'>".$this->order_count."</kbd>";
 						}
 					?>
 				</span>

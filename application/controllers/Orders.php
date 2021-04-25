@@ -242,13 +242,75 @@ class Orders extends MY_Controller {
 		$this->set_response('error', 'Unable to post comment, try again later.', $post);
 	}
 
-	public function delete()
+	public function delete($all=0)
 	{
-		$post = $this->input->post() ?: $this->input->get();
-		debug($post, 'stop');
-		if ($post) {
-
+		$post = $this->input->post();
+		$get = $this->input->get();
+		if ($post AND isset($post['data'])) {
+			// debug($post, 'stop');
+			$callback = 'removeOnOrder';
+			if ($all) {
+				$callback = 'removeOnAllOrder';
+				foreach ($post['data'] as $key => $row) {
+					$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
+					if ($merge) {
+						$order_details = json_decode(base64_decode($merge['order_details']), true);
+						if ($order_details) {
+							/*modify the status of the product*/
+							foreach ($order_details as $index => $detail) {
+								$order_details[$index]['status'] = 5;
+							}
+							// debug($order_details, 'stop');
+							/*$this->gm_db->save('baskets_merge', 
+								['order_details' => base64_encode(json_encode($order_details)), 'status' => 5], 
+								['id' => $row['merge_id']]
+							);*/
+						}
+						$basket_ids = explode(',', $merge['basket_ids']);
+						if (count($basket_ids)) {
+							foreach ($basket_ids as $basket_id) {
+								// $this->baskets->save(['status' => 5], ['id' => $basket_id]);
+							}
+						}
+					}
+				}
+			} else {
+				foreach ($post['data'] as $key => $row) {
+					$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
+					if ($merge) {
+						$order_details = json_decode(base64_decode($merge['order_details']), true);
+						if ($order_details) {
+							/*modify the status of the product*/
+							foreach ($order_details as $index => $detail) {
+								if ($detail['product_id'] == $row['product_id']) {
+									$order_details[$index]['status'] = 5;
+								}
+							}
+							// debug($order_details, 'stop');
+							/*$this->gm_db->save('baskets_merge', 
+								['order_details' => base64_encode(json_encode($order_details)), 'status' => 5], 
+								['id' => $row['merge_id']]
+							);*/
+						}
+					}
+					$basket = $this->gm_db->get('baskets', ['id' => $row['basket_id']], 'row');
+					// debug($basket, 'stop');
+					if ($basket) {
+						if ($basket['product_id'] == $row['product_id']) {
+							// $this->baskets->save(['status' => 5], ['id' => $row['basket_id']]);
+						}
+					}
+				}
+			}
+			$response = $this->senddataapi->trigger('remove-item', 'fulfilled-items', ['all'=>$all, 'data'=>$post['data']]);
+			// debug($response, 'stop');
+			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
+		} elseif ($get AND isset($get['data'])) {
+			// debug($get, 'stop');
+			$callback = 'removeOrderItem';
+			if ($all) $callback = 'removeAllOrderItem';
+			$this->set_response('confirm', 'Want to remove product(s)?', $get['data'], false, $callback);
 		}
-		$this->set_response('error', 'Unable to post comment, try again later.', $post);
+		$this->set_response('error', remove_multi_space('Unable to remove product(s)'), $post);
 	}
 }
