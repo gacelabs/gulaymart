@@ -164,9 +164,9 @@ class Products {
 		if (!is_bool($where)) {
 			foreach ($where as $key => $row) {
 				if (is_array($row)) {
-					$this->db->where_in($key, $row);
+					$this->class->db->where_in($key, $row);
 				} else {
-					$this->db->where([$key => $row]);
+					$this->class->db->where([$key => $row]);
 				}
 			}
 			return $this->class->db->from('products')->count_all_results();

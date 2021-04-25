@@ -191,9 +191,9 @@ class Farmers {
 		if ($where != false) {
 			foreach ($where as $key => $row) {
 				if (is_array($row)) {
-					$this->db->where_in($key, $row);
+					$this->class->db->where_in($key, $row);
 				} else {
-					$this->db->where([$key => $row]);
+					$this->class->db->where([$key => $row]);
 				}
 			}
 		}
