@@ -175,23 +175,30 @@
 														}
 													}
 													?>
-													<div class="input-group">
-														<?php if ($farm_loc == 1): ?>
+													<?php if ($farm_loc == 1): ?>
+														<div class="input-group">
 															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
 															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' class="user-farm-locations" />
-														<?php else: ?>
-															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="">
-															<input type="hidden" name="user_farm_locations[1][<?php echo $key;?>]" value='' class="user-farm-locations" />
-															<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
-														<?php endif ?>
-														<span class="input-group-btn">
+															<span class="input-group-btn">
+															<?php if ($key == 0): ?>
+																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
+															<?php else: ?>
+																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-minus text-danger"></i></button>
+															<?php endif ?>
+															</span>
+														</div>
+													<?php else: ?>
 														<?php if ($key == 0): ?>
-															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
-														<?php else: ?>
-															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-minus text-danger"></i></button>
+															<div class="input-group">
+																<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="">
+																<input type="hidden" name="user_farm_locations[1][<?php echo $key;?>]" value='' class="user-farm-locations" />
+																<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
+																<span class="input-group-btn">
+																	<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
+																</span>
+															</div>
 														<?php endif ?>
-														</span>
-													</div>
+													<?php endif ?>
 												<?php endforeach ?>
 											<?php else: ?>
 												<div class="input-group">
