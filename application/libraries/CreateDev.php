@@ -712,6 +712,7 @@ class CreateDev {
 				'default' => NULL,
 				'null' => true,
 			],
+			"reason enum('None','Out Of Stock','Removed Product') NOT NULL DEFAULT 'None'",
 			'rawdata' => [
 				'type' => 'LONGTEXT',
 				'default' => NULL,
@@ -1038,7 +1039,6 @@ class CreateDev {
 				'default' => '2',
 				'null' => false,
 			],
-			"reason enum('None','Out Of Stock','Removed Product') NOT NULL DEFAULT 'None'",
 			'order_id' => [
 				'type' => 'TINYTEXT',
 				'default' => NULL,

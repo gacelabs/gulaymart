@@ -64,12 +64,13 @@ var removeOnFulfillment = function(obj) {
 	if (Object.keys(obj).length) {
 		$.each(obj, function(i, data) {
 			var uiParent = $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').parent('.order-item-list');
-			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('removed-product').find('[js-element="selectItems"]').html('<p class="zero-gaps">Cancelled</p><p class="zero-gaps">Removed by buyer</p>');
+			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('was-cancelled').find('[js-element="selectItems"]').html('<p class="zero-gaps">Cancelled</p><p class="zero-gaps">Removed by buyer</p>');
 		});
 
 		$('.order-table-item').each(function(i, elem) {
-			if ($(elem).find('[js-element*="item-id-"]:not(.removed-product)').length == 0) {
-				$(elem).addClass('removed-product').fadeOut('slow');
+			if ($(elem).find('[js-element*="item-id-"]:not(.was-cancelled)').length == 0) {
+				// $(elem).addClass('was-cancelled').fadeOut('slow');
+				$(elem).addClass('was-cancelled').find('a,select,button,input:button,input:submit').prop('disabled', true).attr('disabled', 'disabled');
 			}
 		});
 
@@ -77,7 +78,8 @@ var removeOnFulfillment = function(obj) {
 	}
 }
 
-var runFulfilllmentsRealtime = function(realtime) {
+var runOrdersToFulfillments = function(realtime) {
+	console.log('Listening from Orders activity!');
 	// console.log(realtime);
 	realtime.bind('remove-item', 'fulfilled-items', function(object) {
 		// console.log('received response from remove-item:fulfilled-items', object.data);
@@ -91,15 +93,18 @@ var runFulfilllmentsRealtime = function(realtime) {
 }
 
 var removeOnAllOrder = function(obj) {
-	console.log(obj);
-	if (obj.all != undefined) {
+	// console.log(obj);
+	if (obj && obj.all != undefined) {
 		$.each(obj.data, function(i, data) {
 			if (Object.keys(data).length == 1) {
-				$('[data-merge-id="'+data.merge_id+'"]').addClass('removed-product').fadeOut('fast');
+				// $('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').fadeOut('fast');
+				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element*="item-id-"]').removeClass('was-cancelled');
+				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').find('a,select,button,input:button,input:submit').prop('disabled', true).attr('disabled', 'disabled');
+				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element="selectItems"]').html('<p class="zero-gaps">Cancelled</p><p class="zero-gaps">Removed by buyer</p>');
 			}
 		});
 	}
-	var iCnt = $('.order-table-item:not(.removed-product)').length;
+	var iCnt = $('.order-table-item:not(.was-cancelled)').length;
 	if (iCnt == 0) {
 		$('#nav-fulfill-count').remove();
 		$('.ff-navbar-pill.active').find('kbd').text(0);

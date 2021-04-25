@@ -33,7 +33,7 @@ $(document).ready(function() {
 	});
 
 	$('[js-element="remove-all"]').bind('click', function(e) {
-		if ($(e.target).parents('.order-table-item:first').hasClass('removed-product')) {
+		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
 			$(e.target).parents('.order-table-item:first').fadeOut().remove();
 			removeOnAllOrder();
 		} else {
@@ -113,8 +113,8 @@ var removeOnOrder = function(obj) {
 	if (Object.keys(obj).length) {
 		$.each(obj, function(i, data) {
 			var uiParent = $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').parent('.order-item-list');
-			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('removed-product').find('[js-element="remove-product"]').remove();
-			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').fadeOut('slow');
+			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('was-cancelled').find('[js-element="remove-product"]').hide();
+			// $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').fadeOut('slow');
 			var subTotal = $('[js-element="farm-'+data.merge_id+'-'+data.location_id+'"]').find('[js-element="item-subtotal"]').text();
 			subTotal = parseFloat(subTotal.replace(',', ''));
 			subTotal -= parseFloat(data.sub_total);
@@ -126,8 +126,8 @@ var removeOnOrder = function(obj) {
 		});
 
 		$('.order-table-item').each(function(i, elem) {
-			if ($(elem).find('[js-element*="item-id-"]:not(.removed-product)').length == 0) {
-				$(elem).addClass('removed-product').fadeOut('slow');
+			if ($(elem).find('[js-element*="item-id-"]:not(.was-cancelled)').length == 0) {
+				$(elem).addClass('was-cancelled')/*.fadeOut('slow')*/;
 			}
 		});
 
@@ -137,12 +137,17 @@ var removeOnOrder = function(obj) {
 
 var removeOnAllOrder = function(obj) {
 	// console.log(obj);
-	$.each(obj, function(i, data) {
-		if (Object.keys(data).length == 1) {
-			$('[data-merge-id="'+data.merge_id+'"]').addClass('removed-product').fadeOut('fast');
-		}
-	});
-	var iCnt = $('.order-table-item:not(.removed-product)').length;
+	if (obj != undefined) {
+		$.each(obj, function(i, data) {
+			if (Object.keys(data).length == 1) {
+				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element*="item-id-"]').removeClass('was-cancelled');
+				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled')/*.fadeOut('fast')*/;
+				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').find('[js-element="remove-product"]').hide();
+			}
+		});
+	}
+
+	var iCnt = $('.order-table-item:not(.was-cancelled)').length;
 	if (iCnt == 0) {
 		$('#nav-order-count').remove();
 		$('.trans-navbar-pill.active').find('kbd').text(0);
@@ -154,7 +159,8 @@ var removeOnAllOrder = function(obj) {
 	}
 }
 
-var runOrdersRealtime = function(realtime) {
+var runFulfillmentsToOrders = function(realtime) {
+	console.log('Listening from Fulfillments activity!');
 	// console.log(realtime);
 	realtime.bind('remove-item', 'ordered-items', function(object) {
 		console.log('received response from remove-item:ordered-items', object.data);

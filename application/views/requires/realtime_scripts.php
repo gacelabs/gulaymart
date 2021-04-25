@@ -5,51 +5,17 @@
 		realtime = new SendData({
 			afterInit: function() {
 				realtime.connect(function() {
-					console.log('gulaymart.com ready to communicate!');
-					/*if (oUser == false) {
-						realtime.bind('session', 'auth-login', function(object) {
-							if (object.data.device_id == DEVICE_ID) {
-								runAlertBox({
-									type:'confirm',
-									message: 'Session Log-in detected from other browser, do you want to cancel all other log-in sessions?',
-									callback: function() { 
-										window.location.href = 'sign-out';
-									}
-								});
-							}
-						});
-					} else {
-						realtime.bind('session', 'auth-logout', function(object) {
-							if (object.data.device_id == DEVICE_ID) {
-								runAlertBox({
-									type:'warn',
-									message: 'Log-out request detected from other browser, click ok to reload page.',
-									callback: function() {
-										window.location.href = 'sign-out';
-									}
-								});
-							}
-						});
-					}*/
+					// console.log('gulaymart.com ready to communicate!');
 					/*realtime.trigger('add-delivery', 'deliveries', {});*/
 					if (oUser) {
 						/*communicate from orders tab to fulfillment tab*/
-						if (typeof runFulfilllmentsRealtime == 'function') runFulfilllmentsRealtime(realtime);
+						if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 						/*communicate from fulfillment tab to orders tab*/
-						if (typeof runOrdersRealtime == 'function') runOrdersRealtime(realtime);
+						if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 					}
 				});
 			},
-			afterConnect: function() {
-				/*realtime.bind('return-delivery', 'returns', function(object) {
-					console.log('received response from portal.toktok.ph', object.data);
-				});*/
-				/*if (oUser) {
-					realtime.trigger('session', 'auth-login', oUser);
-				} else {
-					realtime.trigger('session', 'auth-logout', {device_id: DEVICE_ID});
-				}*/
-			}
+			afterConnect: function() {}
 		});
 	};
 	(function(d, s, id) {
