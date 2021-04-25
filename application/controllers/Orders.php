@@ -51,10 +51,10 @@ class Orders extends MY_Controller {
 					'orders' => $baskets_merge,
 					'status' => $status,
 					'counts' => [
-						'placed' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 2]),
-						'on+delivery' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 3]),
-						'received' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 4]),
-						'cancelled' => order_count_by_status(['user_id' => $this->accounts->profile['id'], 'status' => 5]),
+						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
 				]
 			]);

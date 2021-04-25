@@ -444,25 +444,7 @@ function send_gm_email($user_id=false, $content=false, $subject='Email Notificat
 	return false;
 }
 
-function order_count_by_status($where=false)
-{
-	$ci =& get_instance();
-	if ($where !== false) {
-		$baskets = $ci->baskets->get_in($where);
-		$products = false;
-		if ($baskets) {
-			$products = [];
-			foreach ($baskets as $key => $basket) {
-				$products[$basket['product_id']][$basket['location_id']] = $basket;
-			}
-			// debug($products, 'stop');
-			return $products == false ? 0 : count($products);
-		}
-	}
-	return 0;
-}
-
-function fulfillment_count_by_status($where=false)
+function count_by_status($where=false)
 {
 	$ci =& get_instance();
 	if ($where !== false) {

@@ -59,11 +59,11 @@ class Fulfillment extends My_Controller {
 				'orders' => $baskets_merge,
 				'status' => $status,
 				'counts' => [
-					'placed' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
-					'for+pick+up' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
-					'on+delivery' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
-					'received' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
-					'cancelled' => fulfillment_count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
+					'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
+					'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
+					'on+delivery' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
+					'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
+					'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
 				],
 			]
 		]);
