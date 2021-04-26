@@ -7,8 +7,8 @@
 		<input type="hidden" name="lng" id="lng" value="" required="required">
 		<div class="dash-panel-middle">
 			<div class="input-group">
-				<span class="input-group-addon"><span class="hidden-xs"><b class="text-contrast">Step 1</b></span><i class="text-contrast fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 1. Search a landmark."></i></span>
-				<input type="text" class="form-control" id="search-place" placeholder="Search a landmark.">
+				<span class="input-group-addon"><span class="hidden-xs"><b class="text-contrast">Step 1</b></span><i class="text-contrast fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Step 1. Search a nearest landmark."></i></span>
+				<input type="text" class="form-control" id="search-place" placeholder="Search a nearest landmark.">
 				<span class="input-group-btn">
 					<button class="btn btn-default normal-radius" id="undo-btn" type="button"><i class="fa fa-undo"></i></button>
 				</span>

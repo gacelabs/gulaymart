@@ -24,7 +24,7 @@
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
-								Gulaymart's core values is to serve the people within your community, so having even just the City or Barangay included in your farm's name tells the customers you are just around the corner and able to deliver in minutes.
+								Gulaymart's core values is to serve the people within your community, so having even just the City or Barangay included in your farm's name is like telling your customers that you are just around the corner and can deliver fresh veggies in minutes.
 							</div>
 						</div>
 					</div>
@@ -39,7 +39,7 @@
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 							<div class="panel-body">
-								If you have a specialty product whether it's lettuce, microgreens, herbs, root crops, or others, it's a good idea to have this in your farm's name and potentially build a household brand.
+								If you have a specialty product whether it's lettuce, microgreens, herbs, root crops, or what have you, it's a good idea to have this in your farm's name and potentially build a household brand.
 							</div>
 						</div>
 					</div>
@@ -54,7 +54,7 @@
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 							<div class="panel-body">
-								For farms that already have a brand name, never forget to include it in your farm's name. The more people see your brand, the more customers will get familiar to you.
+								For farms with registered brand name, feel free to use it. The more people see your brand, the more customers will trust you.
 							</div>
 						</div>
 					</div>
@@ -65,7 +65,7 @@
 					<div>
 						<p class="zero-gaps">The guidelines above are just suggestions to kickstart your creative mind to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tools to succeed. Good luck!</p>
 						<br>
-						<p>- From your Gulaymart team.</p>
+						<p>Your Gulaymart team.</p>
 					</div>
 				</div>
 			</div>
@@ -84,7 +84,7 @@
 				<h4 class="modal-title">Farm Locations</h4>
 			</div>
 			<div class="modal-body">
-				<p>If you are a farmer that lives in Manila but has a farm located in the province, then <b class="text-contrast">LOCATIONS</b> is your option.</p>
+				<p>If you are a farmer that lives in Manila but has a farm located in the province, then <b class="text-contrast">LOCATIONS</b> is the right option for you.</p>
 				<img src="assets/images/helps/storefront-location.gif" class="img-responsive" style="margin-bottom:15px;">
 				<p>The <b>Enter a different address</b> option allows you to save a specific location for your farm, which will then be used as the <b>pick up point</b> for your products.</p>
 				<p>For farmers who has multiple farms with different locations, click on the <b><i class="fa fa-plus"></i></b> button to add more.</p>

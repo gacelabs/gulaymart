@@ -71,7 +71,7 @@
 				<?php endif ?>
 				<div class="aside-nav-child">
 					<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Add a product</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";;} ?></span>
+						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<i class='fa fa-circle text-danger'></i>";} ?></span>
 					</a>
 				</div>
 			<?php endif ?>

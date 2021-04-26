@@ -59,6 +59,7 @@
 			<div class="dashboard-panel theme <?php echo(empty($current_profile['profile']['phone']) ? "" : "hide"); ?>" id="profile_info_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">What's your name?</h4></li>
+					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
 				</ul>
 				<form action="api/save_info" method="post" data-ajax="1" class="form-validate">
 					<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
@@ -196,7 +197,7 @@
 				<div class="dashboard-panel-middle">
 					<ul class="spaced-list between panel-inner-header">
 						<li><small><b>SHIPPING INFORMATION</b></small></li>
-						<li><small class="text-contrast" js-target="shipping_address_panel">EDIT</small></li>
+						<li><small class="text-contrast" js-target="shipping_address_panel">EDIT/ ADD</small></li>
 					</ul>
 					<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 					<div class="profile-grid">
@@ -215,6 +216,7 @@
 			<div class="dashboard-panel theme <?php echo(empty($current_profile['shippings']) ? "" : "hide"); ?>" id="shipping_address_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">Delivery address</h4></li>
+					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
 				</ul>
 				<div class="dashboard-panel-middle">
 					<div class="saved-shipping-container">
