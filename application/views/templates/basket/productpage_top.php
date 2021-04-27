@@ -46,8 +46,7 @@
 							<div class="productpage-variety" js-element="variety">
 								<?php if ($stocks > 0): ?>
 									<div class="variety-location">
-										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-cubes"></i> <span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
-										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city_prov'];?></p>
+										<p><span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
 										<div class="input-group">
 											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
 											<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
@@ -64,11 +63,33 @@
 								<?php endif ?>
 							</div>
 						</div>
+						<div class="productpage-basic-grid" style="margin-bottom: 15px;">
+							<p class="text-gray zero-gaps">FROM</p>
+							<p class="zero-gaps"><?php echo $product['farm_location']['city_prov'];?></p>
+						</div>
 
 						<?php if ($stocks > 0): ?>
 							<div class="add-basket-btn" js-element="basket-btns">
-								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;" data-keep-loading="3000"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
-								<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">Buy Now</a>
+								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" data-keep-loading="3000">
+									<ul class="spaced-list between text-left">
+										<li><i class="fa fa-calendar icon-left"></i></li>
+										<li><p class="zero-gaps">Add to Basket</p><small style="vertical-align:top;font-size:10px;">SCHEDULED DELIVERY</small></li>
+									</ul>
+								</button>
+								<button type="button" class="btn btn-lg btn-contrast" id="add_product_btn" data-keep-loading="3000">
+									<a href="basket/add/<?php echo $product['id'];?>" style="text-decoration:none;" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
+										<ul class="spaced-list between text-left">
+											<li><i class="fa fa-clock-o icon-left text-white"></i></li>
+											<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+										</ul>
+									</a>
+								</button>
+								<!-- <a href="basket/add/<?php //echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php //echo $product['basket_details']['farm_location_id'];?>">
+									<ul class="spaced-list between">
+										<li><p class="zero-gaps">Buy Now</p>
+										<small class="elem-block" style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+									</ul>
+								</a> -->
 							</div>
 						<?php endif ?>
 					</form>
@@ -152,7 +173,7 @@
 								<img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Schedule</p>
-									<small class="text-gray elem-block">For bulk orders</small>
+									<small class="text-gray elem-block">Add To Basket</small>
 								</div>
 							</div>
 						</div>
