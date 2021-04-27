@@ -277,3 +277,6 @@ body.check-loc-on #global_navbar>.container {
 	border-right: 2px dashed red;
 	border-bottom: 2px dashed red;
 }
+a.stop {
+	pointer-events: none !important;
+}

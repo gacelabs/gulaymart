@@ -39,10 +39,15 @@ class Basket extends My_Controller {
 					$farm['city'] = isset($address[0]) ? $address[0] : '';
 					$farm['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
 
-					$items_by_farm[$basket['location_id']]['farm'] = $farm;
+					$location_and_sched = $basket['location_id'].'|'.$basket['order_type'].'|'.$basket['schedule'];
+					$items_by_farm[$location_and_sched]['farm'] = $farm;
 
-					$items_by_farm[$basket['location_id']]['products'][] = $basket;
-					$items_by_farm[$basket['location_id']]['checkout_data'][] = ['id' => $basket['id']];
+					$items_by_farm[$location_and_sched]['products'][] = $basket;
+					$items_by_farm[$location_and_sched]['checkout_data'][] = [
+						'id' => $basket['id'],
+						'order_type' => $basket['order_type'],
+						'schedule' => $basket['schedule'],
+					];
 				}
 			}
 		}
@@ -79,7 +84,7 @@ class Basket extends My_Controller {
 	{
 		$data = $this->input->post() ?: $this->input->get();
 		$post = $this->baskets->prepare_to_basket($data, $product_id);
-		// debug($post, 'stop');
+		// debug($data, $post, 'stop');
 		if ($post) {
 			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
 				$post['status'] = 0;
@@ -93,7 +98,7 @@ class Basket extends My_Controller {
 				$redirect = base_url('register');
 				$callback = false;
 			} else {
-				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
+				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
 				$redirect = $post['status'] ? base_url('basket/checkout') : false;
 				$callback = $post['status'] ? false : 'stockChanged';;
 				if ($post['existing'] == 1) {
@@ -106,55 +111,9 @@ class Basket extends My_Controller {
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 			}
 			// debug($post, 'stop');
-			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback);
+			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
 		}
 		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
-	}
-
-	private function addV1($product_id=0)
-	{
-		$data = $this->input->post() ?: $this->input->get();
-		$post = add_item_to_basket($data, $product_id);
-		// debug($post, 'stop');
-		if (isset($post['baskets'])) {
-			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
-				$status = 0;
-			} else { /*from checkout button*/
-				$status = 1;
-			}
-			$existing = false;
-			if (isset($post['existing'])) {
-				$existing = $post['existing'];
-				unset($post['existing']);
-			}
-			/*check if the user is logged in if false save post to session*/
-			if ($this->accounts->has_session == false) {
-				$this->session->set_userdata('basket_session', $post);
-				$message = 'Item added to basket, Redirecting to the registration / login page!';
-				$redirect = base_url('register');
-				$callback = false;
-			} else {
-				/*save the add basket session in DB*/
-				if ($existing AND isset($existing['quantity'])) {
-					$quantity = $existing['quantity'] + (int)$post['baskets']['quantity'];
-					$rawdata = json_decode(base64_decode($existing['rawdata']), true);
-					if (isset($rawdata['basket_details']) AND isset($rawdata['basket_details']['stocks'])) {
-						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
-					}
-					$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $existing['id']]);
-				} else {
-					$post['baskets']['status'] = $status;
-					$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
-				}
-				$message = $status ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
-				$redirect = $status ? base_url('basket/checkout') : false;
-				$callback = $status ? false : 'stockChanged';
-				$post['baskets']['rawdata'] = json_decode(base64_decode($post['baskets']['rawdata']), true);
-			}
-			// debug($post, $status, 'stop');
-			$this->set_response('success', $message, $post, $redirect, $callback);
-		}
-		$this->set_response('error', 'No item(s) found', $post, false);
 	}
 
 	public function view($product_id=0, $farm_location_id=0, $product_name='')
@@ -216,6 +175,7 @@ class Basket extends My_Controller {
 		$post = $this->input->post();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
+			$basket_ids = [];
 			foreach ($post['data'] as $key => $row) {
 				$id = $row['id']; unset($row['id']);
 				$basket = $this->baskets->get(['id' => $id], true);
@@ -224,24 +184,37 @@ class Basket extends My_Controller {
 					$row['status'] = 1;
 					if ($row['order_type'] == 1) $row['schedule'] = NULL;
 					$this->baskets->save($row, ['id' => $id]);
+					$basket_ids[] = $id;
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified!, Proceeding checkout']); exit();
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout']); exit();
 		} else {
 			echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
 			exit();
 		}
 	}
 
-	public function checkout()
+	public function checkout($base64_basket_ids=false)
 	{
-		$basket_session = get_session_baskets(1);
+		if ($base64_basket_ids) {
+			$where = ['id' => json_decode(base64_decode($base64_basket_ids), true), 'status' => 1];
+			// $baskets = $this->baskets->get_in($where);
+			$baskets = get_session_baskets($where);
+			// debug($where, $baskets, 'stop');
+			$this->checkout_handler($baskets);
+		} else {
+			redirect(base_url('basket/?info=Nothing+to+Checkout'));
+		}
+	}
+
+	private function checkout_handler($basket_session=false)
+	{
 		// debug($basket_session, 'stop');
-		if (count($basket_session)) {
-			// $this->session->unset_userdata('checkout_pricing');
+		if ($basket_session) {
 			$items_by_farm = [];
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
+					// $this->session->unset_userdata('checkout_pricing_'.$basket['location_id']);
 					$items_by_farm[$basket['location_id']]['seller'] = $basket['rawdata']['farm'];
 					unset($basket['rawdata']['farm']);
 					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['location_id']);
@@ -436,12 +409,10 @@ class Basket extends My_Controller {
 			foreach ($all_basket_ids as $id) {
 				$this->baskets->save(['status' => 2], ['id' => $id]);
 			}
-			$this->session->unset_userdata('place_order_session');
-			if (!is_bool($farm_location_ids)) {
-				foreach ($farm_location_ids as $value) {
-					$this->session->unset_userdata('checkout_pricing_'.$value);
-				}
+			foreach ($farm_location_ids as $location_id) {
+				$this->session->unset_userdata('checkout_pricing_'.$location_id);
 			}
+			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {

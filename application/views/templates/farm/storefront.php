@@ -152,12 +152,11 @@
 														$shipping['id'] = 0;
 													}
 													?>
-													<div class="col-lg-12">
+													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="margin-bottom: 5px;"<?php endif ?>>
 														<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 														<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>' required="required">
 													</div>
-													<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?><span>&nbsp;</span><?php endif ?>
 												<?php endforeach ?>
 											</div>
 										</div>

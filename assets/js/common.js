@@ -93,6 +93,10 @@ $(document).ready(function() {
 			$('[type=submit]', $(this).parents('form')).removeAttr('clicked');
 			$(this).attr('clicked', 1);
 		});
+		$('form a').bind('click', function() {
+			$('a', $(this).parents('form')).removeAttr('clicked');
+			$(this).attr('clicked', 1);
+		});
 	}
 });
 
@@ -128,7 +132,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
 					if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-						$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+						$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 					}
 				},
 				success: function(data) {
@@ -146,7 +150,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
 						setTimeout(function() {
 							if (uiButtonSubmit) uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-							$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+							$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
 						}, keep_loading);
 					}
 					var fn = eval(callbackFn);
@@ -167,7 +171,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			}
 
 			oSettings.data = formData;
-			// console.log(oSettings);
+			console.log(oSettings);
 			if (oFormAjax != false && oFormAjax.readyState !== 4) oFormAjax.abort();
 			oFormAjax = $.ajax(oSettings);
 		} else {
@@ -201,7 +205,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 				}
 				if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-					$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+					$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 				}
 			},
 			success: function(data) {
@@ -219,7 +223,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
 					setTimeout(function() {
 						if (ui) ui.html(ui.data('orig-ui'));
-						$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+						$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
 					}, keep_loading);
 				}
 			}

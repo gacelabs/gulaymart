@@ -70,7 +70,7 @@ var removeOnFulfillment = function(obj) {
 		$('.order-table-item').each(function(i, elem) {
 			if ($(elem).find('[js-element*="item-id-"]:not(.was-cancelled)').length == 0) {
 				// $(elem).addClass('was-cancelled').fadeOut('slow');
-				$(elem).addClass('was-cancelled').find('a,select,button,input:button,input:submit').prop('disabled', true).attr('disabled', 'disabled');
+				$(elem).addClass('was-cancelled').find('a,select,button,input:button,input:submit').remove();
 			}
 		});
 
@@ -98,7 +98,7 @@ var removeOnAllOrder = function(obj) {
 			if (Object.keys(data).length == 1) {
 				// $('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').fadeOut('fast');
 				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element*="item-id-"]').removeClass('was-cancelled');
-				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').find('a,select,button,input:button,input:submit').prop('disabled', true).attr('disabled', 'disabled');
+				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').find('a,select,button,input:button,input:submit').remove();
 				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element="selectItems"]').html('<p class="zero-gaps">Cancelled</p><p class="zero-gaps">Removed by buyer</p>');
 			}
 		});

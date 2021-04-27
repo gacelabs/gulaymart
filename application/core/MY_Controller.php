@@ -16,6 +16,7 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
 		$referrer = $this->session->userdata('referrer');
@@ -96,7 +97,7 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false)
+	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false, $unclose=false)
 	{
 		if ($this->input->is_ajax_request()) {
 			echo do_jsonp_callback('ajaxSuccessResponse', [
@@ -105,6 +106,7 @@ class MY_Controller extends CI_Controller {
 				'data' => $data,
 				'redirect' => $redirect_url,
 				'callback' => $callback,
+				'unclose' => $unclose,
 			]); exit();
 		} else {
 			if (is_string($redirect_url)) {
