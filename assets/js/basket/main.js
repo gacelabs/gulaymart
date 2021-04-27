@@ -21,22 +21,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
-			$(e.target).parents('.order-table-item:first').find('[js-event="qty"]').each(function(i, elem) {
-				$.each(oCheckoutData, function(x, data) {
-					if (data.id == $(elem).attr('js-id')) {
-						oCheckoutData[x].quantity = elem.value;
-						var uiSelect = $(elem).parents('.order-item:first').find('[js-event="orderWhenSelect"]');
-						var iOrderType = uiSelect.val();
-						oCheckoutData[x].order_type = iOrderType;
-
-						if (iOrderType == 2) {
-							var uiInputDate = uiSelect.next('input');
-							uiInputDate.attr('min', $('#min-date').val());
-							oCheckoutData[x].schedule = uiInputDate.val();
-						}
-					}
-				});
-			});
 			// console.log(oCheckoutData);
 			var oData = {data: oCheckoutData};
 			// console.log(oData);

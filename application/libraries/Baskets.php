@@ -154,15 +154,23 @@ class Baskets {
 		if ($data AND isset($data['baskets']) AND $product_id) {
 			$basket = $data['baskets'];
 			$quantity = $basket['quantity'];
+			$order_type = $data['order_type'];
 
 			$basket['product_id'] = $product_id;
-			$timestamp = strtotime(date('Y-m-d')); $time = date('g:ia');
+			$timestamp = strtotime(date('Y-m-d')); $time = strtotime(date('g:ia'));
 			$basket['at_date'] = $timestamp;
 			$basket['at_time'] = $time;
 			$basket['device_id'] = $this->class->device_id;
 			$basket['status'] = 0;
+			$basket['order_type'] = $order_type;
 
-			$where = ['product_id' => $product_id, 'location_id' => $basket['location_id'], 'at_date' => $timestamp, 'status' => [0,1]];
+			$where = [
+				'product_id' => $product_id,
+				'location_id' => $basket['location_id'],
+				'at_date' => $timestamp,
+				'status' => [0,1],
+				'order_type' => $order_type,
+			];
 			$user_id = 0;
 			if ($this->has_session) {
 				$user_id = $where['user_id'] = $this->profile['id'];

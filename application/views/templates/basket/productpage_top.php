@@ -75,14 +75,13 @@
 										<li><i class="fa fa-calendar icon-left"></i></li>
 										<li><p class="zero-gaps">Add to Basket</p><small style="vertical-align:top;font-size:10px;">SCHEDULED DELIVERY</small></li>
 									</ul>
+									<input type="hidden" name="order_type" value="2" />
 								</button>
-								<button type="button" class="btn btn-lg btn-contrast" id="add_product_btn" data-keep-loading="3000">
-									<a href="basket/add/<?php echo $product['id'];?>" style="text-decoration:none;" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
-										<ul class="spaced-list between text-left">
-											<li><i class="fa fa-clock-o icon-left text-white"></i></li>
-											<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
-										</ul>
-									</a>
+								<button href="basket/add/<?php echo $product['id'];?>" type="button" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
+									<ul class="spaced-list between text-left">
+										<li><i class="fa fa-clock-o icon-left text-white"></i></li>
+										<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+									</ul>
 								</button>
 								<!-- <a href="basket/add/<?php //echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php //echo $product['basket_details']['farm_location_id'];?>">
 									<ul class="spaced-list between">

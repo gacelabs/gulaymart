@@ -39,11 +39,15 @@ class Basket extends My_Controller {
 					$farm['city'] = isset($address[0]) ? $address[0] : '';
 					$farm['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
 
-					$location_and_sched = $basket['location_id'].'|'.$basket['schedule'];
+					$location_and_sched = $basket['location_id'].'|'.$basket['order_type'].'|'.$basket['schedule'];
 					$items_by_farm[$location_and_sched]['farm'] = $farm;
 
 					$items_by_farm[$location_and_sched]['products'][] = $basket;
-					$items_by_farm[$location_and_sched]['checkout_data'][] = ['id' => $basket['id']];
+					$items_by_farm[$location_and_sched]['checkout_data'][] = [
+						'id' => $basket['id'],
+						'order_type' => $basket['order_type'],
+						'schedule' => $basket['schedule'],
+					];
 				}
 			}
 		}
@@ -80,7 +84,7 @@ class Basket extends My_Controller {
 	{
 		$data = $this->input->post() ?: $this->input->get();
 		$post = $this->baskets->prepare_to_basket($data, $product_id);
-		// debug($post, 'stop');
+		// debug($data, $post, 'stop');
 		if ($post) {
 			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
 				$post['status'] = 0;
@@ -151,9 +155,9 @@ class Basket extends My_Controller {
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
 			foreach ($post['data'] as $key => $row) {
-				$checkout_pricing = $this->session->userdata('checkout_pricing_'.$row['id']);
+				$checkout_pricing = $this->session->userdata('checkout_pricing_'.$row['location_id']);
 				if ($checkout_pricing) {
-					$this->session->unset_userdata('checkout_pricing_'.$row['id']);
+					$this->session->unset_userdata('checkout_pricing_'.$row['location_id']);
 				}
 				unset($row['location_id']);
 				$this->baskets->save(['status' => -1], $row); /*removed*/
@@ -210,10 +214,10 @@ class Basket extends My_Controller {
 			$items_by_farm = [];
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
-					// $this->session->unset_userdata('checkout_pricing_'.$basket['id']);
+					// $this->session->unset_userdata('checkout_pricing_'.$basket['location_id']);
 					$items_by_farm[$basket['location_id']]['seller'] = $basket['rawdata']['farm'];
 					unset($basket['rawdata']['farm']);
-					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['id']);
+					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['location_id']);
 					if (empty($checkout_pricing)) {
 						$this->load->library('toktokapi');
 						/*get toktok fee if not existing in baskets table*/
@@ -229,7 +233,7 @@ class Basket extends My_Controller {
 							// $checkout_pricing['pricing']['price'];
 							// $checkout_pricing['hash'];
 							unset($checkout_pricing['directions']);
-							$this->session->set_userdata('checkout_pricing_'.$basket['id'], $checkout_pricing);
+							$this->session->set_userdata('checkout_pricing_'.$basket['location_id'], $checkout_pricing);
 						}
 					}
 					$items_by_farm[$basket['location_id']]['order_details'][$basket['order_type']][] = $basket;
@@ -404,7 +408,9 @@ class Basket extends My_Controller {
 
 			foreach ($all_basket_ids as $id) {
 				$this->baskets->save(['status' => 2], ['id' => $id]);
-				$this->session->unset_userdata('checkout_pricing_'.$id);
+			}
+			foreach ($farm_location_ids as $location_id) {
+				$this->session->unset_userdata('checkout_pricing_'.$location_id);
 			}
 			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);

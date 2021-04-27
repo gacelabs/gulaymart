@@ -4,11 +4,12 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" js-element="baskets-panel">
 			<?php if ($data['baskets']): ?>
 				<!-- per farm location -->
-				<?php foreach ($data['baskets'] as $location_by_sched => $baskets): ?>
+				<?php foreach ($data['baskets'] as $location_by_order_type => $baskets): ?>
 					<?php
-						$key_data = explode('|', $location_by_sched);
+						$key_data = explode('|', $location_by_order_type);
 						$location_id = $key_data[0];
-						$sched = $key_data[1];
+						$order_type = $key_data[1];
+						$schedule = $key_data[2];
 					?>
 					<div class="order-table-item">
 						<div class="order-grid-column order-labels">
@@ -61,7 +62,12 @@
 										</div>
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
-										Today
+										<?php if ($order_type == 1): ?>
+											Today
+										<?php else: ?>
+											<p>Scheduled</p>
+											<p><?php echo date('F j, Y', $item['at_date']) ?></p>
+										<?php endif ?>
 									</div>
 									<div class="text-right">
 										<button class="btn btn-xs btn-default order-remove-btn" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
