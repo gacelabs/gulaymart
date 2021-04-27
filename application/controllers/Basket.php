@@ -215,15 +215,16 @@ class Basket extends My_Controller {
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
 					// $this->session->unset_userdata('checkout_pricing_'.$basket['location_id']);
-					$items_by_farm[$basket['location_id']]['seller'] = $basket['rawdata']['farm'];
+					$farm = $basket['rawdata']['farm'];
 					unset($basket['rawdata']['farm']);
+					$seller = $items_by_farm[$basket['location_id']]['seller'] = $farm;
 					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['location_id']);
 					if (empty($checkout_pricing)) {
 						$this->load->library('toktokapi');
 						/*get toktok fee if not existing in baskets table*/
 						$pricing = toktok_price_directions_format([
-							'sender_lat' => $items_by_farm[$basket['location_id']]['seller']['lat'],
-							'sender_lng' => $items_by_farm[$basket['location_id']]['seller']['lng'],
+							'sender_lat' => $seller['lat'],
+							'sender_lng' => $seller['lng'],
 							'receiver_lat' => $this->latlng['lat'],
 							'receiver_lng' => $this->latlng['lng'],
 						]);

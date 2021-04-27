@@ -139,7 +139,7 @@ function compute_eta($eta=0, $noprefix=false, $echo=true)
 	// debug($chunks, $duration, 'stop');
 	$return = NULL;
 	if (count($duration)) {
-		$return = ($noprefix ? '' : 'ETA: ').implode(' ', $duration);
+		$return = ($noprefix ? '' : '(ETA: ').implode(' ', $duration).($noprefix ? '' : ')');
 	}
 	if ($echo) {
 		echo $return;
@@ -198,7 +198,7 @@ function get_session_baskets($where=false)
 	$baskets = $ci->baskets->get_in($where);
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
-			$date = date('F j, Y', $basket['at_date']).'|'.$basket['order_type'];
+			$date = date('F j, Y', $basket['at_date']);
 			$basket_session[$date][] = $basket;
 		}
 	}

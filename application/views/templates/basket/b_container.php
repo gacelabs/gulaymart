@@ -95,9 +95,9 @@
 							<div class="text-left hidden-xs">
 								<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
 								<?php if ($order_type == 1): ?>
-								<p class="zero-gaps">Today <span class="text-gray"><i>(ETA: 40 mins)</i></span></p>
+									<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 								<?php else: ?>
-								<input type="date" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+								<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>">
 								<?php endif; ?>
 							</div>
 							<div class="order-footer-total">
@@ -105,9 +105,9 @@
 								<div class="text-left hidden-lg hidden-md hidden-sm">
 									<p class="zero-gaps hidden-xs"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
 									<?php if ($order_type == 1): ?>
-									<p class="zero-gaps">Today <span class="text-gray"><i>(ETA: 40 mins)</i></span></p>
+										<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 									<?php else: ?>
-									<input type="date" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+									<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>">
 									<?php endif; ?>
 								</div>
 								<div>
