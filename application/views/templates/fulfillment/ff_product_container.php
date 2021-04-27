@@ -103,7 +103,7 @@
 					<div class="order-grid-footer">
 						<div class="order-footer-farm text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-							<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo $farm['name'];?></a></p>
+							<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 							<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
 						</div>
 						<div class="order-footer-payment text-left hidden-xs">
@@ -115,7 +115,7 @@
 						<div class="text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 							<?php if ($data['status'] == 'placed') : ?>
-								Available on Pick Up (Status)
+								Available upon Pick Up (Status)
 							<?php else : ?>
 								<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 							<?php endif ; ?>
