@@ -139,7 +139,7 @@ function compute_eta($eta=0, $noprefix=false, $echo=true)
 	// debug($chunks, $duration, 'stop');
 	$return = NULL;
 	if (count($duration)) {
-		$return = ($noprefix ? '' : 'ETA: ').implode(' ', $duration);
+		$return = ($noprefix ? '' : '(ETA: ').implode(' ', $duration).($noprefix ? '' : ')');
 	}
 	if ($echo) {
 		echo $return;

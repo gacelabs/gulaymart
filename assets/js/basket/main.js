@@ -25,6 +25,8 @@ $(document).ready(function() {
 				$.each(oCheckoutData, function(x, data) {
 					if (data.id == $(elem).attr('js-id')) {
 						oCheckoutData[x].quantity = elem.value;
+						var uiLocation = $(elem).parents('.order-table-item:first').find('[js-element*="location-id-"]');
+						oCheckoutData[x].schedule = uiLocation.find('[js-element="schedule-value"]:visible').val();
 					}
 				});
 			});
