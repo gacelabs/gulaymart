@@ -65,7 +65,7 @@
 								<div class="text-right" js-element="selectItems">
 									<?php if ($details['status'] == 2) : ?>
 										<select class="form-control" js-event="actionSelect">
-											<option selected value="2">Placed</option>
+											<option selected disabled>Select Action</option>
 											<option value="6">Confirm</option>
 											<option value="5">Cancelled</option>
 										</select>
