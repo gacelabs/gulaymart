@@ -161,7 +161,7 @@ function redirect_basket_orders()
 	return false;
 }
 
-function get_session_baskets($status=[0,1])
+function get_session_baskets($where=false)
 {
 	$ci =& get_instance();
 	$ci->load->library('baskets');
@@ -185,16 +185,21 @@ function get_session_baskets($status=[0,1])
 		$ci->session->unset_userdata('basket_session');
 	}
 	/*get all session basket*/
-	$where = ['status' => $status];
-	if ($ci->accounts->has_session) {
-		$where['user_id'] = $ci->accounts->profile['id'];
+	if (is_array($where)) {
+		if (!isset($where['status'])) $where['status'] = [0,1];
+		if ($ci->accounts->has_session) {
+			$where['user_id'] = $ci->accounts->profile['id'];
+		} else {
+			$where['device_id'] = $ci->device_id;
+		}
 	} else {
-		$where['device_id'] = $ci->device_id;
+		$where = ['status' => [0,1]];
 	}
 	$baskets = $ci->baskets->get_in($where);
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
-			$basket_session[date('F j, Y', $basket['at_date'])][] = $basket;
+			$date = date('F j, Y', $basket['at_date']).'|'.$basket['schedule'];
+			$basket_session[$date][] = $basket;
 		}
 	}
 	// debug($basket_session, 'stop');

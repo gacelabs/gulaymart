@@ -4,7 +4,12 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" js-element="baskets-panel">
 			<?php if ($data['baskets']): ?>
 				<!-- per farm location -->
-				<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
+				<?php foreach ($data['baskets'] as $location_by_sched => $baskets): ?>
+					<?php
+						$key_data = explode('|', $location_by_sched);
+						$location_id = $key_data[0];
+						$sched = $key_data[1];
+					?>
 					<div class="order-table-item">
 						<div class="order-grid-column order-labels">
 							<div class="text-left">

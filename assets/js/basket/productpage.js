@@ -133,7 +133,7 @@ $(document).ready(function() {
 				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
 			};
 			// console.log($(e.target).attr('href'), oData);
-			simpleAjax($(e.target).attr('href'), oData, $(e.target), 3000);
+			simpleAjax($(e.target).attr('href'), oData, $(e.target), 12000);
 		}
 	});
 

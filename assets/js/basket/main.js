@@ -41,7 +41,7 @@ $(document).ready(function() {
 			var oData = {data: oCheckoutData};
 			// console.log(oData);
 			$(e.target).parents('.order-table-item').find('[js-event="qty"]').attr('disabled', 'disabled');
-			$(e.target).parents('.order-table-item').find('button, a, input:submit, input:button, input:text, select').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+			$(e.target).parents('.order-table-item').find('a,select,button,input:button,input:submit, input:button, input:text, select').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
 			simpleAjax('basket/verify/1', oData, $(e.target), true);
 		}
 	});
