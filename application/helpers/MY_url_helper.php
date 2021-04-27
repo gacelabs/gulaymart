@@ -195,7 +195,7 @@ function get_session_baskets($where=false)
 	} else {
 		$where = ['status' => [0,1]];
 	}
-	$baskets = $ci->baskets->get_in($where);
+	$baskets = $ci->baskets->get_in($where, false, false, 'added:DESC');
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
 			$date = date('F j, Y', $basket['at_date']);

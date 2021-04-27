@@ -22,7 +22,7 @@
 					</div>
 					<div>
 						<a href="orders/cancelled">
-							<div class="trans-navbar-pill <?php in_array_echo("orders-cancelled", $middle['body_class'], "active");?>">Cancelled <kbd><?php echo $data['counts']['cancelled'];?></kbd></div>
+							<div class="trans-navbar-pill cancelled<?php in_array_echo("orders-cancelled", $middle['body_class'], " active");?>">Cancelled <kbd><?php echo $data['counts']['cancelled'];?></kbd></div>
 						</a>
 					</div>
 				</div>
@@ -73,7 +73,7 @@
 										'sub_total'=>$order['sub_total'],
 									]);
 								?>
-								<div class="order-grid-column order-item<?php if ($details['status'] != 5): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+								<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 									<div class="media">
 										<div class="media-left media-top">
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
