@@ -16,9 +16,6 @@
 							<div class="text-right hidden-sm hidden-xs">
 								<p><small class="elem-block"><b>QUANTITY</b></small></p>
 							</div>
-							<div class="text-right hidden-sm hidden-xs">
-								<p><small class="elem-block"><b>DELIVER DATE</b></small></p>
-							</div>
 							<div class="text-right">
 								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all?" js-element="remove-all"><span class="text-danger">&times;</span></button>
 							</div>
@@ -55,9 +52,6 @@
 											<input type="button" value="-" class="minus" js-element="qty-btns"><input type="number" step="1" min="1" max="<?php echo $details['stocks'];?>" name="quantity" value="<?php echo $item['quantity'];?>" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" js-event="qty" js-id="<?php echo $item['id'];?>" js-price="<?php echo $details['price'];?>" /><input type="button" value="+" class="plus" js-element="qty-btns">
 										</div>
 									</div>
-									<div class="text-right hidden-sm hidden-xs">
-										Today
-									</div>
 									<div class="text-right">
 										<button class="btn btn-xs btn-default order-remove-btn" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
 									</div>
@@ -92,24 +86,39 @@
 								<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
 								<p class="zero-gaps">Cash On Delivery</p>
 							</div>
+							<div class="text-left hidden-xs">
+								<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
+								<?php if ("today" == "today"): ?>
+								<p class="zero-gaps">Today <span class="text-gray"><i>(ETA: 40 mins)</i></span></p>
+								<?php else: ?>
+								<input type="date" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+								<?php endif; ?>
+							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
 								<div class="text-left hidden-lg hidden-md hidden-sm">
-									<small class="elem-block"><b>DELIVER DATE:</b></small>Today
+									<p class="zero-gaps hidden-xs"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
+									<?php if ("todayx" == "today"): ?>
+									<p class="zero-gaps">Today <span class="text-gray"><i>(ETA: 40 mins)</i></span></p>
+									<?php else: ?>
+									<input type="date" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+									<?php endif; ?>
 								</div>
-								<p class="hidden-xs" style="margin-bottom:3px;">
-									<small class="elem-block">
-										<b>
-										<?php if ($item['status'] == 1): ?>
-											PROCEED
-										<?php else: ?>
-											VERIFY
-										<?php endif ?>
-										</b>
-									</small>
-								</p>
-								<div class="checkout-btn-container">
-									<button class="btn btn-contrast btn-sm" js-element="checkout-data" js-json='<?php echo json_encode($baskets['checkout_data']);?>'>CHECKOUT<i class="fa fa-angle-right icon-right"></i></button>
+								<div>
+									<p class="hidden-xs" style="margin-bottom:3px;">
+										<small class="elem-block">
+											<b>
+											<?php if ($item['status'] == 1): ?>
+												PROCEED
+											<?php else: ?>
+												VERIFY
+											<?php endif ?>
+											</b>
+										</small>
+									</p>
+									<div class="checkout-btn-container">
+										<button class="btn btn-contrast btn-sm" js-element="checkout-data" js-json='<?php echo json_encode($baskets['checkout_data']);?>'>CHECKOUT<i class="fa fa-angle-right icon-right"></i></button>
+									</div>
 								</div>
 							</div>
 						</div>
