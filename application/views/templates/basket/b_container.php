@@ -22,7 +22,7 @@
 								<p><small class="elem-block"><b>QUANTITY</b></small></p>
 							</div>
 							<div class="text-right hidden-sm hidden-xs">
-								<p><small class="elem-block"><b>WHEN</b> <i class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="top" title="When do you need the product?"></i></small></p>
+								<p><small class="elem-block"><b>DELIVER DATE</b></small></p>
 							</div>
 							<div class="text-right">
 								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all?" js-element="remove-all"><span class="text-danger">&times;</span></button>
@@ -46,7 +46,7 @@
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 										</div>
 										<div class="media-body">
-											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
 											<div class="ellipsis-container">
 												<p class="zero-gaps"><?php echo $product['description'];?></p>
 											</div>
@@ -61,11 +61,7 @@
 										</div>
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
-										<select class="form-control elem-block" js-event="orderWhenSelect">
-											<option value="1"<?php str_has_value_echo(1, $item['order_type'], ' selected');?>>Today</option>
-											<option value="2"<?php str_has_value_echo(2, $item['order_type'], ' selected');?>>Schedule</option>
-										</select>
-										<input type="date" class="form-control date-input<?php str_has_value_echo(1, $item['order_type'], ' hide');?>" js-element="delivery-date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo $item['schedule'];?>" />
+										Today
 									</div>
 									<div class="text-right">
 										<button class="btn btn-xs btn-default order-remove-btn" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
@@ -83,13 +79,6 @@
 													</li>
 												</ul>
 											</li>
-											<li>
-												<select class="form-control elem-block" js-event="orderWhenSelect">
-													<option value="1"<?php str_has_value_echo(1, $item['order_type'], ' selected');?>>Today</option>
-													<option value="2"<?php str_has_value_echo(2, $item['order_type'], ' selected');?>>Schedule</option>
-												</select>
-												<input type="date" class="form-control date-input<?php str_has_value_echo(1, $item['order_type'], ' hide');?>" js-element="delivery-date" min="<?php echo date("Y-m-d"); ?>" value="<?php echo $item['schedule'];?>">
-											</li>
 										</ul>
 									</div>
 								</div>
@@ -101,7 +90,7 @@
 						<div class="order-grid-footer" js-element="location-id-<?php echo $location_id;?>">
 							<div class="text-left order-footer-farm hidden-xs">
 								<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-								<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo $farm['name'];?></a></p>
+								<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 								<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
 							</div>
 							<div class="text-left order-footer-payment hidden-xs">
@@ -110,6 +99,9 @@
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
+								<div class="text-left hidden-lg hidden-md hidden-sm">
+									<small class="elem-block"><b>DELIVER DATE:</b></small>Today
+								</div>
 								<p class="hidden-xs" style="margin-bottom:3px;">
 									<small class="elem-block">
 										<b>

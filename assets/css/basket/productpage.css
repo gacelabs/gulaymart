@@ -121,6 +121,7 @@ body.basket .panel {
 	position: absolute;
     top: -3px;
     left: -3px;
+    color: #ff3535 !important;
 }
 body.basket #footer_page_container {
 	margin-top: 20px;
@@ -161,6 +162,10 @@ body.basket #footer_page_container {
 }
 .add-basket-btn, .variety-location {
 	margin-bottom: 15px;
+}
+.add-basket-btn .btn {
+	margin-right: 5px;
+	padding: 8px 12px;
 }
 .productpage-basic-grid {
 	display: grid;

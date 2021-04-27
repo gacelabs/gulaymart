@@ -32,7 +32,8 @@
 	}
 	.order-footer-total {
 		display: grid;
-		grid-template-columns: 22px 1fr;
+		grid-template-columns: 22px auto 1fr;
+		grid-gap: 10px;
 	}
 	.order-footer-farm, .order-footer-payment {
 		margin-bottom: 15px;
