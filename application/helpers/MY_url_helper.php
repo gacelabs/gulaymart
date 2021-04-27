@@ -198,7 +198,7 @@ function get_session_baskets($where=false)
 	$baskets = $ci->baskets->get_in($where);
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
-			$date = date('F j, Y', $basket['at_date']).'|'.$basket['order_type'];
+			$date = date('F j, Y', $basket['at_date']);
 			$basket_session[$date][] = $basket;
 		}
 	}

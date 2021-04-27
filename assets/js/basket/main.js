@@ -21,6 +21,13 @@ $(document).ready(function() {
 		e.preventDefault();
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
+			$(e.target).parents('.order-table-item:first').find('[js-event="qty"]').each(function(i, elem) {
+				$.each(oCheckoutData, function(x, data) {
+					if (data.id == $(elem).attr('js-id')) {
+						oCheckoutData[x].quantity = elem.value;
+					}
+				});
+			});
 			// console.log(oCheckoutData);
 			var oData = {data: oCheckoutData};
 			// console.log(oData);
