@@ -20,7 +20,7 @@
 							<?php foreach ($data['baskets'] as $location_id => $baskets): ?>
 								<div class="checkout-item-container">
 									<div class="checkout-item-top">
-										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo $baskets['seller']['name'];?></p>
+										<p class="zero-gaps text-ellipsis text-caps"><span class="text-gray">SOLD BY:</span> <?php echo ucwords($baskets['seller']['name']);?></p>
 									</div>
 									<div class="checkout-item-middle">
 										<?php
@@ -41,7 +41,11 @@
 								<button class="btn btn-block btn-cta"><b>PLACE ORDER NOW<i class="fa fa-chevron-right icon-right"></i></b></button>
 							</div>
 							<div class="price-summary-middle">
-						 		<small class="text-gray elem-block" style="margin-bottom:5px;">DELIVERS TO:</small>
+								<ul class="spaced-list between" style="margin-bottom:5px;">
+									<li><small class="elem-block text-gray">DELIVERS TO:</small></li>
+									<li><small class="elem-block"><b>TODAY</b></small></li>
+								</ul>
+						 		
 							 	<div class="summary-shipping-address">
 									<div class="summary-grid">
 										<i class="fa fa-id-badge text-contrast text-center"></i>
@@ -99,7 +103,7 @@
 							 	</div>
 							</div>
 							<div class="cta-bottom-container">
-								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-chevron-right"></i></small>
+								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-angle-right"></i></small>
 								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($final_total);?></b></button>
 							</div>
 						</form>
