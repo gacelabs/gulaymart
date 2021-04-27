@@ -42,7 +42,13 @@ class Baskets {
 			if (!is_bool($limit) AND is_numeric($limit)) {
 				$this->class->db->limit($limit);
 			}
-			$data = $this->class->db->order_by($order_by)->get_where('baskets', $where);
+			$direction = '';
+			if ((bool)strstr(strtolower($order_by), ':desc')) {
+				$chunck = explode(':', $order_by);
+				$order_by = $chunck[0];
+				$direction = $chunck[1];
+			}
+			$data = $this->class->db->order_by($order_by, $direction)->get_where('baskets', $where);
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				$baskets = $this->baskets_assemble($baskets);
@@ -72,7 +78,13 @@ class Baskets {
 					}
 				}
 			}
-			$data = $this->class->db->order_by($order_by)->get('baskets_merge');
+			$direction = '';
+			if ((bool)strstr(strtolower($order_by), ':desc')) {
+				$chunck = explode(':', $order_by);
+				$order_by = $chunck[0];
+				$direction = $chunck[1];
+			}
+			$data = $this->class->db->order_by($order_by, $direction)->get('baskets_merge');
 			if (isset($data) AND $data->num_rows()) {
 				$baskets_merge = $data->result_array();
 				// debug($baskets_merge, 'stop');
@@ -101,7 +113,13 @@ class Baskets {
 					}
 				}
 			}
-			$data = $this->class->db->order_by($order_by)->get('baskets');
+			$direction = '';
+			if ((bool)strstr(strtolower($order_by), ':desc')) {
+				$chunck = explode(':', $order_by);
+				$order_by = $chunck[0];
+				$direction = $chunck[1];
+			}
+			$data = $this->class->db->order_by($order_by, $direction)->get('baskets');
 			if (isset($data) AND $data->num_rows()) {
 				$baskets = $data->result_array();
 				// debug($baskets, 'stop');

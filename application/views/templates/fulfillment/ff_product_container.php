@@ -44,7 +44,7 @@
 									'basket_id'=>$order['basket_id'],
 								]);
 							?>
-							<div class="order-grid-column order-item<?php if ($details['status'] != 5): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+							<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 								<div class="media">
 									<div class="media-left media-top">
 										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
@@ -63,7 +63,7 @@
 									<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 								</div>
 								<div class="text-right" js-element="selectItems">
-									<?php if ($data['status'] == 'placed') : ?>
+									<?php if ($details['status'] == 2) : ?>
 										<select class="form-control" js-event="actionSelect">
 											<option selected value="2">Placed</option>
 											<option value="6">Confirm</option>
@@ -75,13 +75,15 @@
 										</select>
 									<?php else : ?>
 										<p class="zero-gaps">
-											<span class="text-capsule bg-theme">
-												<?php if ($data['status'] == 'cancelled'): ?>
-													Removed
-												<?php else: ?>
+											<?php if ($details['status'] == 5): ?>
+												<span class="text-capsule bg-danger">
+													Removed by buyer
+												</span>
+											<?php else: ?>
+												<span class="text-capsule bg-theme">
 													Confirmed
-												<?php endif ?>
-											</span>
+												</span>
+											<?php endif ?>
 										</p>
 									<?php endif ; ?>
 								</div>
@@ -123,7 +125,7 @@
 						<?php endif ?>
 						<div class="text-left hidden-xs">
 							<?php if ($data['status'] == 'placed') : ?>
-								<p style="margin-bottom:5px;"><small class="elem-block"><b>PROCEED</b></small></p>
+								<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
 								<button class="btn btn-sm btn-contrast">READY FOR DELIVERY<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>

@@ -143,20 +143,39 @@ var removeOnAllOrder = function(obj) {
 				$('[data-merge-id="'+data.merge_id+'"]').find('[js-element*="item-id-"]').removeClass('was-cancelled');
 				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled')/*.fadeOut('fast')*/;
 				$('[data-merge-id="'+data.merge_id+'"]').addClass('was-cancelled').find('[js-element="remove-product"]').hide();
+				setTimeout(function() {
+					runAlertBox({type:'info', message: 'Order added to Cancelled Orders', unclose:true});
+					if (Object.keys(obj).length == 1) {
+						$('[data-merge-id="'+data.merge_id+'"]').fadeOut('slow');
+						setTimeout(function() {
+							$('[data-merge-id="'+data.merge_id+'"]').remove();
+						}, 1000);
+					}
+				}, 3000);
 			}
 		});
 	}
 
-	var iCnt = $('.order-table-item:not(.was-cancelled)').length;
+	var iCnt = $('.order-table-item:not(.was-cancelled)').length,
+	iInitCancelCnt = parseInt($('.trans-navbar-pill.cancelled').find('kbd').text()),
+	iFinalCancelCnt = $('.order-table-item.was-cancelled').length;
 	if (iCnt == 0) {
 		$('#nav-order-count').remove();
 		$('.trans-navbar-pill.active').find('kbd').text(0);
 		$('[js-element="orders-panel"]').find('.no-records-ui').fadeIn('slow').removeClass('hide');
+		setTimeout(function() {
+			runAlertBox({type:'info', message: 'Order added to Cancelled Orders', unclose:true});
+			$('.order-table-item.was-cancelled').fadeOut('slow');
+			setTimeout(function() {
+				$('.order-table-item.was-cancelled').remove();
+			}, 1000);
+		}, 3000);
 	} else {
 		$('#nav-order-count').text(iCnt);
 		$('.trans-navbar-pill.active').find('kbd').text(iCnt);
 		$('[js-element="orders-panel"]').find('.no-records-ui').fadeOut('slow').addClass('hide');
 	}
+	$('.trans-navbar-pill.cancelled').find('kbd').text(iInitCancelCnt+iFinalCancelCnt);
 }
 
 var runFulfillmentsToOrders = function(realtime) {

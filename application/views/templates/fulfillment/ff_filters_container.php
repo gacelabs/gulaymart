@@ -41,7 +41,7 @@
 					<a href="fulfillment/received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">Received <kbd class="pull-right"><?php echo $data['counts']['received'];?></kbd></a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/cancelled" class="ff-navbar-pill <?php in_array_echo("ff-cancelled", $middle['body_class'], "active");?>">Cancelled <kbd class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd></a>
+					<a href="fulfillment/cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">Cancelled <kbd class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd></a>
 				</div>
 			</div>
 		</div>
