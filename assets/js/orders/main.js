@@ -195,7 +195,7 @@ var changeOnFulfillmentRealtime = function(obj) {
 		} else {
 			$('[js-element="item-id-'+obj.merge_id+'-'+obj.product_id+'"]').removeClass('was-cancelled').find('[js-element="remove-product"]').hide();
 			$('[data-merge-id="'+obj.merge_id+'"]').removeClass('was-cancelled').find('[js-element="remove-all"]').hide();
-			$('[js-element="farm-'+obj.merge_id+'-'+obj.location_id+'"]').find('[js-data="confirmed"]').show();
+			$('[js-element="farm-'+obj.merge_id+'-'+obj.location_id+'"]').find('[js-data="confirmed"]').removeClass('hide');
 		}
 
 		$('.order-table-item.was-cancelled').each(function(i, elem) {

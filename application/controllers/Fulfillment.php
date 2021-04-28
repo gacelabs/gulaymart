@@ -133,4 +133,20 @@ class Fulfillment extends My_Controller {
 		$this->set_response('error', remove_multi_space('Unable to change product(s) status'), $post);
 	}
 
+	public function trash()
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		// debug($post, 'stop');
+		if ($post AND isset($post['id'])) {
+			$count = $this->gm_db->count('baskets_merge', ['id' => $post['id'], 'status' => 5]);
+			if ($count == 0) {
+				$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $post['id']]);
+				$this->set_response('success', 'Order moved to Cancelled Fulfillments!', $post, 'fulfillment/cancelled');
+			} else {
+				$this->set_response('info', 'Order Already moved to Cancelled Fulfillments!', $post, false);
+			}
+		}
+		$this->set_response('error', remove_multi_space('Unable to moved product(s)'), $post);
+	}
+
 }

@@ -3,7 +3,10 @@
 		<?php if ($data['orders']): ?>
 			<!-- per farm location -->
 			<?php foreach ($data['orders'] as $key => $orders): ?>
-				<?php $initial_total = 0; ?>
+				<?php
+					$initial_total = 0;
+					$status_array = [];
+				?>
 				<div class="order-table-item" data-merge-id="<?php echo $orders['id'];?>">
 					<div class="order-grid-column order-labels">
 						<div class="text-left">
@@ -51,6 +54,8 @@
 									'basket_id'=>$order['basket_id'],
 									'sub_total'=>$order['sub_total'],
 								]);
+
+								$status_array[] = $details['status'];
 							?>
 							<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 								<div class="media">
@@ -122,25 +127,31 @@
 							<p class="zero-gaps">Cash On Delivery</p>
 							<p class="zero-gaps"></p>
 						</div>
+						<?php if ($data['status'] == 'placed' AND in_array(5, $status_array) AND count($orders['order_details']) == count($status_array)): ?>
+							<div class="text-left hidden-xs">
+								<button class="btn btn-sm btn-danger" js-element="move-trash" data-merge-id="<?php echo $orders['id'];?>">MOVE TO CANCELLED<i class="fa fa-trash icon-right"></i></button>
+							</div>
+						<?php else: ?>
 						<?php if ($data['status'] != 'cancelled'): ?>
-						<div class="text-left hidden-xs">
-							<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
-							<?php if ($data['status'] == 'placed') : ?>
-								Available upon Pick Up (Status)
-							<?php else : ?>
-								<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
-							<?php endif ; ?>
-						</div>
+							<div class="text-left hidden-xs">
+								<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
+								<?php if ($data['status'] == 'placed') : ?>
+									Available upon Pick Up (Status)
+								<?php else : ?>
+									<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
+								<?php endif ; ?>
+							</div>
+							<?php endif ?>
+							<div class="text-left hidden-xs">
+								<?php if ($data['status'] == 'placed') : ?>
+									<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
+									<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge-id="<?php echo $orders['id'];?>">READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
+								<?php else : ?>
+									<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
+									<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
+								<?php endif ; ?>
+							</div>
 						<?php endif ?>
-						<div class="text-left hidden-xs">
-							<?php if ($data['status'] == 'placed') : ?>
-								<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
-								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge-id="<?php echo $orders['id'];?>">READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
-							<?php else : ?>
-								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
-							<?php endif ; ?>
-						</div>
 					</div>
 				</div>
 			<?php endforeach ?>
