@@ -1,14 +1,15 @@
 <div class="messages-container" id="dashboard_panel_right">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="dashboard-panel theme" id="link_panel_top">
-				<ul class="inline-list dashboard-panel-top">
-					<li><a href="javascript:;" class="hideshow-btn active" hideshow-target="msg_notifications"><h4 class="zero-gaps">Notifications</h4></a></li>
-					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="msg_inquiries"><h4 class="zero-gaps">Inquiries</h4></a></li>
-					<li><a href="javascript:;" class="hideshow-btn" hideshow-target="msg_feedbacks"><h4 class="zero-gaps">Feedbacks</h4></a></li>
-				</ul>
 
-				<div class="dashboard-panel-middle hideshow-container">
+			<div class="messages-nav-grid">
+				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications</div>
+				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries</div>
+				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks</div>
+			</div>
+
+			<div id="link_panel_top">
+				<div class="hideshow-container">
 					<?php if ($data['messages']): ?>
 						<div id="msg_notifications">
 							<?php if (isset($data['messages']['Notifications'])): ?>
@@ -32,6 +33,7 @@
 									</div>
 								<?php endforeach ?>
 							<?php endif ?>
+
 						</div>
 						<?php
 							if (isset($data['messages']['Inquiries'])) {

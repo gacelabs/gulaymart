@@ -1,6 +1,6 @@
 #sales_metrics {
 	display: inline-grid;
-	grid-template-columns: 250px 250px 250px 250px 250px 250px;
+	grid-template-columns: repeat(6, 1fr);
 	grid-gap: 0;
 	width: 100%;
 	overflow-x: auto;
@@ -38,7 +38,7 @@
 	width: 100%;
 }
 .panel-grid-middle {
-	height: 65px;
+	height: 50px;
 }
 @media (max-width: 767px) {
 	#sales_metrics {
@@ -48,7 +48,7 @@
 		border: 1px solid #ddd !important;
 	}
 	.panel-grid-middle {
-		height: 48px;
+		height: 45px;
 	}
 	#best_selling {
 		margin-bottom: 0;

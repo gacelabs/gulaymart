@@ -95,6 +95,7 @@
 						<div class="order-item-list">
 							<?php foreach ($orders['order_details'] as $index => $order): ?>
 								<!-- per order -->
+
 								<?php
 									$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 									$product = $order['product'];
@@ -120,9 +121,9 @@
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 										</div>
 										<div class="media-body">
-											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
 											<div class="ellipsis-container">
-												<p class="zero-gaps"><?php echo $product['description'];?></p>
+												<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
 											</div>
 										</div>
 									</div>
@@ -144,6 +145,19 @@
 											<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 										</ul>
 									</div>
+								</div>
+
+								<div class="order-deliver-note">
+									<small class="elem-block">DELIVERY SCHEDULE:
+										<?php
+
+											if($order['when'] == 1) {
+												echo " <b>SAME DAY</b>";
+											} else {
+												echo " <b>".strtoupper($order['schedule']."</b>");
+											}
+										?>
+									</small>
 								</div>
 							<?php endforeach ?>
 						</div>

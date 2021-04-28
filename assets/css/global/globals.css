@@ -188,6 +188,13 @@ body.check-loc-on #global_navbar>.container {
 	background: rgb(168,210,83);
 	background: linear-gradient(45deg, rgba(168,210,83,1) 0%, rgba(117,202,155,1) 100%);
 }
+.order-deliver-note {
+	background-color: #9eebff;
+	margin: 10px -10px -10px -10px;
+	padding: 5px 10px;
+	color: #111;
+	font-size: 12px;
+}
 @media (max-width: 991px) {
 	body .container {
 		padding: 0;

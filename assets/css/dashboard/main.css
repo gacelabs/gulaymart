@@ -206,10 +206,9 @@
 	#dashboard_navbar_aside, #dashboard_panel_right {
 		float: initial;
 	}
-	#dashboard_panel_right .dashboard-panel {
+	#dashboard_panel_right .row>.col-xs-12 {
 		border-radius: 0;
-		margin-left: -15px;
-		margin-right: -15px;
+		padding: 0;
 	}
 	.dashboard-panel-footer {
 		border-radius: 0;
@@ -217,7 +216,6 @@
 	body.basket #link_panel_top, body.basket #link_panel_top .dashboard-panel-middle, 
 	body.orders #link_panel_top, body.orders #link_panel_top .dashboard-panel-middle {
 		margin-bottom: 0;
-		padding-bottom: 0 !important;
 	}
 	#navbar_farm_menu_container {
 		background-color: #fff;

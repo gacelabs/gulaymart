@@ -63,9 +63,9 @@
 										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 									</div>
 									<div class="media-body">
-										<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+										<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
 										<div class="ellipsis-container">
-											<p class="zero-gaps"><?php echo $product['description'];?></p>
+											<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
 										</div>
 									</div>
 								</div>
@@ -109,6 +109,18 @@
 									</ul>
 								</div>
 							</div>
+
+							<div class="order-deliver-note">
+								<small class="elem-block">DELIVERY SCHEDULE:
+									<?php
+										if($order['when'] == 1) {
+											echo " <b>SAME DAY</b>";
+										} else {
+											echo " <b>".strtoupper($order['schedule']."</b>");
+										}
+									?>
+								</small>
+							</div>
 						<?php endforeach ?>
 					</div>
 
@@ -120,7 +132,7 @@
 						<div class="order-footer-farm text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
 							<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
-							<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
+							<p class="zero-gaps"><?php echo ucwords($farm['city_prov']);?></p>
 						</div>
 						<div class="order-footer-payment text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>

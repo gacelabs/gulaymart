@@ -41,7 +41,8 @@
 				</div>
 			</div>
 			<ul class="spaced-list between" style="margin-top:15px;">
-				<li><a href="marketplace/" class="text-link"><i class="fa fa-angle-left"></i> Marketplace</a></li>
+				<li><a href="marketplace/" class="text-link">Marketplace</a></li>
+				<li><a href="basket/" class="text-link">Basket</a></li>
 			</ul>
 		</div>
 	</div>
