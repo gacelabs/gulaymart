@@ -63,7 +63,7 @@
 										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 									</div>
 									<div class="media-body">
-										<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+										<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
 										<div class="ellipsis-container">
 											<p class="zero-gaps"><?php echo $product['description'];?></p>
 										</div>
@@ -76,7 +76,7 @@
 									<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 								</div>
 								<div class="text-right" js-element="selectItems">
-									<?php if (in_array($details['status'], [2,6])) : ?>
+									<?php if (in_array($details['status'], [2,6]) AND $data['status'] == 'placed') : ?>
 										<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(6, $details['status'], ' style="color: rgb(121, 153, 56);"');?>>
 											<option selected disabled>Select Action</option>
 											<option value="6"<?php str_has_value_echo(6, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
