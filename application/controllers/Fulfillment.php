@@ -11,7 +11,7 @@ class Fulfillment extends My_Controller {
 		parent::__construct();
 		$this->load->library('baskets');
 		// debug($this->products->count(), 'stop');
-		if (empty($this->farms) AND $this->products->count() == 0) {
+		if (count_by_status(['seller_id' => $this->accounts->profile['id']]) == 0) {
 			redirect(base_url('basket/'));
 		}
 		$this->load->library('farmers');
