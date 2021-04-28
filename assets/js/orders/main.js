@@ -112,7 +112,6 @@ var removeOnOrder = function(obj) {
 	// console.log(obj);
 	if (Object.keys(obj).length) {
 		$.each(obj, function(i, data) {
-			var uiParent = $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').parent('.order-item-list');
 			$('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').addClass('was-cancelled').find('[js-element="remove-product"]').hide();
 			// $('[js-element="item-id-'+data.merge_id+'-'+data.product_id+'"]').fadeOut('slow');
 			var subTotal = $('[js-element="farm-'+data.merge_id+'-'+data.location_id+'"]').find('[js-element="item-subtotal"]').text();
@@ -181,7 +180,32 @@ var removeOnAllOrder = function(obj) {
 var runFulfillmentsToOrders = function(realtime) {
 	console.log('Listening from Fulfillments activity!');
 	// console.log(realtime);
-	realtime.bind('remove-item', 'ordered-items', function(object) {
-		console.log('received response from remove-item:ordered-items', object.data);
+	realtime.bind('change-order-status', 'ordered-items', function(object) {
+		// console.log('received response from change-order-status:ordered-items', object.data);
+		var oData = object.data;
+		changeOnFulfillmentRealtime(oData.data);
 	});
+}
+
+var changeOnFulfillmentRealtime = function(obj) {
+	if (Object.keys(obj).length) {
+		console.log(obj);
+		if (obj.status == 5) {
+			removeOnOrder([obj]);
+		} else {
+			$('[js-element="item-id-'+obj.merge_id+'-'+obj.product_id+'"]').removeClass('was-cancelled').find('[js-element="remove-product"]').hide();
+			$('[data-merge-id="'+obj.merge_id+'"]').removeClass('was-cancelled').find('[js-element="remove-all"]').hide();
+			$('[js-element="farm-'+obj.merge_id+'-'+obj.location_id+'"]').find('[js-data="confirmed"]').show();
+		}
+
+		$('.order-table-item.was-cancelled').each(function(i, elem) {
+			setTimeout(function() {
+				runAlertBox({type:'info', message: 'Order added to Cancelled Orders', unclose:true});
+				$('.order-table-item.was-cancelled').fadeOut('slow');
+				setTimeout(function() {
+					$('.order-table-item.was-cancelled').remove();
+				}, 1000);
+			}, 3000);
+		});
+	}
 }

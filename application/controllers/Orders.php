@@ -28,6 +28,9 @@ class Orders extends MY_Controller {
 					$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
 					$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
 					$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
+					/*foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
+						$baskets_merge[$key]['order_details'][$index]['status'] = 2;
+					}*/
 					$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 				}
 			}
@@ -52,6 +55,7 @@ class Orders extends MY_Controller {
 					'status' => $status,
 					'counts' => [
 						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
 						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
 						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
 						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
@@ -205,7 +209,11 @@ class Orders extends MY_Controller {
 						$basket_ids = explode(',', $merge['basket_ids']);
 						if (count($basket_ids)) {
 							foreach ($basket_ids as $basket_id) {
-								$this->baskets->save(['status' => 5], ['id' => $basket_id]);
+								$this->baskets->save([
+									'status' => 5,
+									'cancel_by' => $this->accounts->profile['id'],
+									'reason' => 'Removed by buyer',
+								], ['id' => $basket_id]);
 							}
 						}
 					}
@@ -233,7 +241,11 @@ class Orders extends MY_Controller {
 					// debug($basket, 'stop');
 					if ($basket) {
 						if ($basket['product_id'] == $row['product_id']) {
-							$this->baskets->save(['status' => 5], ['id' => $row['basket_id']]);
+							$this->baskets->save([
+								'status' => 5,
+								'cancel_by' => $this->accounts->profile['id'],
+								'reason' => 'Removed by buyer',
+							], ['id' => $row['basket_id']]);
 						}
 					}
 				}

@@ -24,7 +24,7 @@
 						</div>
 					</div>
 
-					<div class="order-item-list">
+					<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
 						<?php foreach ($orders['order_details'] as $index => $order): ?>
 							<!-- per order -->
 							<?php
@@ -37,11 +37,19 @@
 								$details = $order; unset($details['product']);
 								$details['merge_id'] = $orders['id'];
 								$details['basket_ids'] = $orders['basket_ids'];
+
+								$reason = '';
+								if ($details['status'] == 5) {
+									$data_product = $this->gm_db->get('baskets', ['id' => $order['basket_id']], 'row');
+									$reason = $data_product['reason'];
+								}
+
 								$json = json_encode([
 									'product_id'=>$order['product_id'],
 									'location_id'=>$order['farm_location_id'],
 									'merge_id'=>$orders['id'],
 									'basket_id'=>$order['basket_id'],
+									'sub_total'=>$order['sub_total'],
 								]);
 							?>
 							<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
@@ -63,13 +71,14 @@
 									<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 								</div>
 								<div class="text-right" js-element="selectItems">
-									<?php if ($details['status'] == 2) : ?>
-										<select class="form-control" js-event="actionSelect">
+									<?php if (in_array($details['status'], [2,6])) : ?>
+										<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(6, $details['status'], ' style="color: rgb(121, 153, 56);"');?>>
 											<option selected disabled>Select Action</option>
-											<option value="6">Confirm</option>
-											<option value="5">Cancelled</option>
+											<option value="6"<?php str_has_value_echo(6, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
+											<option value="5">Cancelled</option> <!-- cancelled -->
 										</select>
-										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;">
+										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
+											<option value="None">Select Reason</option>
 											<option value="Out Of Stock">Out Of Stock</option>
 											<option value="Removed Product">Removed Product</option>
 										</select>
@@ -77,10 +86,10 @@
 										<p class="zero-gaps">
 											<?php if ($details['status'] == 5): ?>
 												<small class="text-capsule status-cancelled">
-													Removed by buyer
+													<?php echo $reason;?>
 												</small>
 											<?php else: ?>
-												<small class="text-capsule bg-theme">
+												<small class="text-capsule bg-theme" js-data="confirmed">
 													Confirmed
 												</small>
 											<?php endif ?>
@@ -126,7 +135,7 @@
 						<div class="text-left hidden-xs">
 							<?php if ($data['status'] == 'placed') : ?>
 								<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
-								<button class="btn btn-sm btn-contrast">READY FOR DELIVERY<i class="fa fa-angle-right icon-right"></i></button>
+								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge-id="<?php echo $orders['id'];?>">READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>

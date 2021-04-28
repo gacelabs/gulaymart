@@ -110,6 +110,7 @@ class Basket extends My_Controller {
 				}
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 			}
+			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
 			// debug($post, 'stop');
 			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
 		}
@@ -214,6 +215,14 @@ class Basket extends My_Controller {
 			$items_by_farm = [];
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
+					$scheduled_value = 'SCHEDULED';
+					if ($basket['order_type'] == 2) {
+						if (!is_null($basket['schedule'])) {
+							$scheduled_value .= ' | '.date('F j, Y', strtotime($basket['schedule']));
+						} else {
+							continue;
+						}
+					}
 					// $this->session->unset_userdata('checkout_pricing_'.$basket['location_id']);
 					$farm = $basket['rawdata']['farm'];
 					unset($basket['rawdata']['farm']);
@@ -237,14 +246,16 @@ class Basket extends My_Controller {
 							$this->session->set_userdata('checkout_pricing_'.$basket['location_id'], $checkout_pricing);
 						}
 					}
+					$type_name = $basket['order_type'] == 1 ? 'TODAY' : $scheduled_value;
+					$items_by_farm[$basket['location_id']]['order_type'] = ['id'=>$basket['order_type'], 'type_name'=>$type_name];
 					$items_by_farm[$basket['location_id']]['order_details'][$basket['order_type']][] = $basket;
 					$items_by_farm[$basket['location_id']]['toktok_details'] = $checkout_pricing;
 				}
 			}
+			// debug($items_by_farm, 'stop');
 			if (count($items_by_farm)) {
 				$this->session->set_userdata('place_order_session', $items_by_farm);
 			}
-			// debug($items_by_farm, 'stop');
 			$this->render_page([
 				'top' => [
 					'index_page' => 'no',

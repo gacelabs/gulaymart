@@ -1214,7 +1214,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			}
 		}
 	}
-	return ['distance' => 0, 'distanceval' => 0, 'distance' => 0, 'durationval' => 0];
+	return ['distance' => 0, 'distanceval' => 0, 'duration' => 0, 'durationval' => 0];
 }
 
 function float2rat($n, $tolerance = 1.e-6) {

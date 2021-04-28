@@ -31,6 +31,9 @@ class Fulfillment extends My_Controller {
 				$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
 				$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
 				$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
+				/*foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
+					$baskets_merge[$key]['order_details'][$index]['status'] = 2;
+				}*/
 				$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 			}
 		}
@@ -69,10 +72,65 @@ class Fulfillment extends My_Controller {
 		]);
 	}
 
-	public function delete($all=0)
+	public function change_status($all=0)
 	{
-		$response = $this->senddataapi->trigger('remove-item', 'ordered-items', ['all'=>$all/*, 'data'=>$post['data']*/]);
-		// debug($response, 'stop');
+		$post = $this->input->post() ?: $this->input->get();
+		// debug($post, 'stop');
+		if ($post AND isset($post['data'])) {
+			$row = $post['data'];
+			$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
+			if ($merge) {
+				$order_details = json_decode(base64_decode($merge['order_details']), true);
+				if ($order_details) {
+					/*modify the status of the product*/
+					foreach ($order_details as $index => $detail) {
+						if ($detail['product_id'] == $row['product_id']) {
+							$order_details[$index]['status'] = $row['status'];
+						}
+					}
+					// debug($order_details, 'stop');
+					$this->gm_db->save('baskets_merge', 
+						['order_details' => base64_encode(json_encode($order_details))], 
+						['id' => $row['merge_id']]
+					);
+				}
+
+				$basket = $this->gm_db->get('baskets', ['id' => $row['basket_id']], 'row');
+				// debug($basket, 'stop');
+				if ($basket) {
+					if ($basket['product_id'] == $row['product_id']) {
+						$this->baskets->save([
+							'status' => $row['status'],
+							'cancel_by' => $this->accounts->profile['id'],
+							'reason' => $row['reason'],
+						], ['id' => $row['basket_id']]);
+					}
+				}
+
+				$basket_ids = explode(',', $merge['basket_ids']);
+				$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post['data']]);
+				// debug($response, 'stop');
+				$this->set_response('success', 'Product status on Order(s) changed', $post['data'], false, 'changeOnFulfillment');
+			}
+		}
+		$this->set_response('error', remove_multi_space('Unable to change product(s) status'), $post);
+	}
+
+	public function ready()
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		// debug($post, 'stop');
+		if ($post AND isset($post['id'])) {
+			$count = $this->gm_db->count('baskets_merge', ['id' => $post['id'], 'status' => 6]);
+			if ($count == 0) {
+				/*set status for pick-up this will now also send to toktok post delivery*/
+				$this->gm_db->save('baskets_merge', ['status' => 6], ['id' => $post['id']]);
+				$this->set_response('success', 'Order is now Set For Pick Up!', $post, 'fulfillment/for-pick-up');
+			} else {
+				$this->set_response('info', 'Order Already set For Pick Up!', $post, false);
+			}
+		}
+		$this->set_response('error', remove_multi_space('Unable to change product(s) status'), $post);
 	}
 
 }

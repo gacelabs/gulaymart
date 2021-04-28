@@ -9,7 +9,7 @@
 						$key_data = explode('|', $location_by_order_type);
 						$location_id = $key_data[0];
 						$order_type = $key_data[1];
-						$schedule = $key_data[2];
+						$schedule = (!is_null($key_data[2]) AND $key_data[2] == '0000-00-00') ? '' : $key_data[2];
 					?>
 					<div class="order-table-item">
 						<div class="order-grid-column order-labels">
@@ -44,7 +44,7 @@
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 										</div>
 										<div class="media-body">
-											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
+											<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
 											<div class="ellipsis-container">
 												<p class="zero-gaps"><?php echo $product['description'];?></p>
 											</div>

@@ -281,3 +281,6 @@ body.check-loc-on #global_navbar>.container {
 a.stop {
 	pointer-events: none !important;
 }
+[js-element="schedule-value"].error {
+	background-position: right calc(0.375em + 2.1875rem) center !important;
+}

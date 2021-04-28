@@ -97,6 +97,62 @@ class MY_Model extends CI_Model {
 		return FALSE;
 	}
 
+	public function get_or_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($where != false) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->db->or_where_in($field, $wrow);
+					} else {
+						$this->db->where([$field => $wrow]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
+	public function get_or_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($where != false) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->db->or_where_not_in($field, $wrow);
+					} else {
+						$this->db->where([$field => $wrow]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
 	public function query($string=FALSE, $func='result')
 	{
 		if ($string) {

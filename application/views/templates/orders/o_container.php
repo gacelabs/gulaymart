@@ -16,6 +16,16 @@
 						</a>
 					</div>
 					<div>
+						<a href="orders/for-pick-up">
+							<div class="trans-navbar-pill <?php in_array_echo("orders-for+pick+up", $middle['body_class'], "active");?>">
+								For Pick Up
+								<?php if($data['counts']['for+pick+up']): ?>
+								<kbd><?php echo $data['counts']['for+pick+up'];?></kbd>
+								<?php endif; ?>
+							</div>
+						</a>
+					</div>
+					<div>
 						<a href="orders/delivery">
 							<div class="trans-navbar-pill <?php in_array_echo("orders-on+delivery", $middle['body_class'], "active");?>">
 								On Delivery
@@ -65,7 +75,17 @@
 							<div class="text-right hidden-sm hidden-xs">
 								<p><small class="elem-block"><b>QUANTITY</b></small></p>
 							</div>
-							<?php if ($data['status'] != 'cancelled'): ?>
+							<?php
+								$forpickup = false;
+								$status_array = [];
+								foreach ($orders['order_details'] as $order) {
+									if ($order['status'] == 6) {
+										$forpickup = true;
+										break;
+									}
+								}
+							?>
+							<?php if ($data['status'] != 'cancelled' AND $forpickup == false): ?>
 							<div class="text-right">
 								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>'><span class="text-danger">&times;</span></button>
 							</div>
@@ -92,6 +112,7 @@
 										'basket_id'=>$order['basket_id'],
 										'sub_total'=>$order['sub_total'],
 									]);
+									$status_array[] = $details['status'];
 								?>
 								<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 									<div class="media">
@@ -144,7 +165,10 @@
 							</div>
 							<div class="text-left hidden-xs">
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status']));?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
+								<p class="zero-gaps">
+									<span class="text-capsule status-<?php echo strtolower(urldecode($data['status']));?>"><?php echo ucwords(urldecode($data['status']));?></span>
+									<span class="text-capsule bg-theme<?php if (in_array(6, $status_array) AND count($orders['order_details']) == count($status_array)): ?><?php else: ?> hide<?php endif ?>" js-data="confirmed">Confirmed</span>
+								</p>
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>

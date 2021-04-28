@@ -43,7 +43,7 @@
 							<div class="price-summary-middle">
 								<ul class="spaced-list between" style="margin-bottom:5px;">
 									<li><small class="elem-block text-gray">DELIVERS TO:</small></li>
-									<li><small class="elem-block"><b>TODAY</b></small></li>
+									<li><small class="elem-block"><b><?php echo $baskets['order_type']['type_name'];?></b></small></li>
 								</ul>
 						 		
 							 	<div class="summary-shipping-address">
@@ -78,20 +78,25 @@
 							 				<?php $toktok_pricing = $baskets['toktok_details']['pricing']; ?>
 											<div class="price-tally-per-seller">
 												<div class="price-tally-grid">
-													<div>
-														<div class="ellipsis-container">
-															<p class="zero-gaps text-caps"><?php echo $baskets['seller']['name'];?></p>
-														</div>
-													</div>
 													<?php
 														$sub_total = 0;
+														$products_array = [];
 														foreach ($baskets['order_details'] as $order_type => $orders) {
 															foreach ($orders as $index => $order) {
-																$sub_total += $order['rawdata']['details']['price'] * $order['quantity'];
+																$total = $order['rawdata']['details']['price'] * $order['quantity'];
+																$sub_total += $total;
+																$products_array[] = $order['rawdata']['product']['name']/*.' &#x20b1; '.number_format($total).' x '.$order['quantity']*/;
 															}
 														}
 														$final_total += $sub_total + $toktok_pricing['price'];
 													?>
+													<div>
+														<div class="ellipsis-container">
+															<?php foreach ($products_array as $product_name): ?>
+																<p class="zero-gaps text-caps"><?php echo $product_name;?></p>
+															<?php endforeach ?>
+														</div>
+													</div>
 													<div class="text-right">
 														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $toktok_pricing['price']);?></b></p>
 													</div>

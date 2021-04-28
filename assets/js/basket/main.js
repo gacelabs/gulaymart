@@ -21,21 +21,32 @@ $(document).ready(function() {
 		e.preventDefault();
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
-			$(e.target).parents('.order-table-item:first').find('[js-event="qty"]').each(function(i, elem) {
+			var uiOrderItemParent = $(e.target).parents('.order-table-item:first');
+			$('[js-element="schedule-value"]').removeClass('error');
+			uiOrderItemParent.find('[js-event="qty"]').each(function(i, elem) {
 				$.each(oCheckoutData, function(x, data) {
 					if (data.id == $(elem).attr('js-id')) {
 						oCheckoutData[x].quantity = elem.value;
 						var uiLocation = $(elem).parents('.order-table-item:first').find('[js-element*="location-id-"]');
-						oCheckoutData[x].schedule = uiLocation.find('[js-element="schedule-value"]:visible').val();
+						var uiDateInput = uiLocation.find('[js-element="schedule-value"]:visible');
+						oCheckoutData[x].schedule = uiDateInput.val();
+						if (oCheckoutData[x].schedule == '' && data.order_type == '2') {
+							uiDateInput.addClass('error');
+						}
 					}
 				});
 			});
-			// console.log(oCheckoutData);
-			var oData = {data: oCheckoutData};
-			// console.log(oData);
-			$(e.target).parents('.order-table-item').find('[js-event="qty"]').attr('disabled', 'disabled');
-			$(e.target).parents('.order-table-item').find('a,select,button,input:button,input:submit, input:button, input:text, select').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
-			simpleAjax('basket/verify/1', oData, $(e.target), true);
+
+			var uiOrdersLocation = uiOrderItemParent.find('[js-element*="location-id-"]');
+			if (uiOrdersLocation.find('[js-element="schedule-value"]:visible').hasClass('error')) {
+				runAlertBox({type:'error', message: 'Select Delivery Date', unclose:true});
+			} else {
+				var oData = {data: oCheckoutData};
+				// console.log(oData);
+				$(e.target).parents('.order-table-item').find('[js-event="qty"]').attr('disabled', 'disabled');
+				$(e.target).parents('.order-table-item').find('a,select,button,input:button,input:submit, input:button, input:text, select').addClass('disabled').prop('disabled', true).attr('disabled', 'disabled');
+				simpleAjax('basket/verify/1', oData, $(e.target), true);
+			}
 		}
 	});
 
