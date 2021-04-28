@@ -39,32 +39,10 @@ $(document).ready(function() {
 		} else {
 			var oToDeleteData = [];
 			$(e.target).parents('.order-table-item:first').find('[js-element="remove-all"]').each(function(i, elem) {
-				oToDeleteData.push($(elem).data());
+				oToDeleteData.push({merge_id: $(elem).data('merge_id')});
 			});
 			// console.log(oToDeleteData);
-
-			var uiButtonSubmit = $(e.target);
-			var lastButtonUI = uiButtonSubmit.html();
-			var oSettings = {
-				url: 'orders/delete/1',
-				type: 'get',
-				data: {data: oToDeleteData},
-				dataType: 'jsonp',
-				jsonpCallback: 'gmCall',
-				beforeSend: function(xhr, settings) {
-					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
-					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
-				},
-				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
-				},
-				complete: function(xhr, status) {
-					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-					uiButtonSubmit.removeAttr('disabled');
-				}
-			};
-			if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
-			oRemoveAjax = $.ajax(oSettings);
+			simpleAjax('orders/delete/1', {data:oToDeleteData}, $(e.target));
 		}
 	});
 
