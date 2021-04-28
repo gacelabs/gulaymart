@@ -35,7 +35,11 @@
 					}
 					?>
 				</span>
-				<?php echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".$this->basket_count."</kbd>"; ?>
+				<?php
+					if ($this->basket_count) {
+						echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".$this->basket_count."</kbd>";
+					}
+				?>
 			</a>
 		</div>
 		<div class="aside-nav-child">
@@ -89,7 +93,7 @@
 				</a>
 			</div>
 			<?php if ($this->farms): ?>
-				<div class="aside-nav-child">
+				<div class="aside-nav-child hidden-xs">
 					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
 						<i class="fa fa-cog"></i><span>Settings</span>
 					</a>

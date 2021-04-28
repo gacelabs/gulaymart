@@ -32,7 +32,7 @@
 					<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 						<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id');?>">
 						<div class="dashboard-panel-top">
-							<h3>Storefront Customs</h3>
+							<h4>Storefront Customs</h4>
 							<ul class="spaced-list between" style="margin-top: 15px;">
 								<li class="text-sm">
 									<?php if (isset($data['farms']) AND $data['farms']): ?>

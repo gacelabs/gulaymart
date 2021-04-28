@@ -519,7 +519,7 @@ class Farm extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', '../js/plugins/DataTables/datatables.min'],
+				'css' => ['dashboard/main', 'farm/settings'],
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'settings'],

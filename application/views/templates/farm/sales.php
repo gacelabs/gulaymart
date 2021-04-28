@@ -5,7 +5,7 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
-					<li><h3 class="zero-gaps">Sales Metrics</h3></li>
+					<li><h4 class="zero-gaps">Sales Metrics</h4></li>
 				</ul>
 				<div class="dashboard-panel-middle" id="sales_metrics">
 					<div class="panel-grid-item">
@@ -16,7 +16,7 @@
 							</ul>
 						</div>
 						<div class="panel-grid-middle">
-							<h3 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 5,492</h3>
+							<h4 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 5,492</h4>
 						</div>
 						<div class="panel-grid-footer">
 							<ul class="spaced-list between">
@@ -33,7 +33,7 @@
 							</ul>
 						</div>
 						<div class="panel-grid-middle">
-							<h3 class="zero-gaps"><i class="fa fa-line-chart text-gray"></i> 1,083</h3>
+							<h4 class="zero-gaps"><i class="fa fa-line-chart text-gray"></i> 1,083</h4>
 						</div>
 						<div class="panel-grid-footer">
 							<ul class="spaced-list between">
@@ -50,7 +50,7 @@
 							</ul>
 						</div>
 						<div class="panel-grid-middle">
-							<h3 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 376</h3>
+							<h4 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 376</h4>
 						</div>
 						<div class="panel-grid-footer">
 							<ul class="spaced-list between">
@@ -84,7 +84,7 @@
 							</ul>
 						</div>
 						<div class="panel-grid-middle">
-							<h3 class="zero-gaps"><i class="fa fa-line-chart text-gray"></i> 5,492</h3>
+							<h4 class="zero-gaps"><i class="fa fa-line-chart text-gray"></i> 5,492</h4>
 						</div>
 						<div class="panel-grid-footer">
 							<ul class="spaced-list between">
@@ -101,7 +101,7 @@
 							</ul>
 						</div>
 						<div class="panel-grid-middle">
-							<h3 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 5,492</h3>
+							<h4 class="zero-gaps"><span class="text-gray">&#x20b1;</span> 5,492</h4>
 						</div>
 						<div class="panel-grid-footer">
 							<ul class="spaced-list between">
