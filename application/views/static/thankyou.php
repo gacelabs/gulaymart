@@ -42,10 +42,6 @@
 			</div>
 			<ul class="spaced-list between" style="margin-top:15px;">
 				<li><a href="marketplace/" class="text-link"><i class="fa fa-angle-left"></i> Marketplace</a></li>
-				<li class="text-right">
-					<a href="javascript:;" class="text-danger">Cancel</a>
-					<small class="elem-block text-gray">Allowed: 60 seconds</small>
-				</li>
 			</ul>
 		</div>
 	</div>

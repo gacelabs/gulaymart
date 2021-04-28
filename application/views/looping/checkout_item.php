@@ -10,7 +10,7 @@
 				<div class="checkout-product-image" style="background-image: url('<?php identify_main_photo($rawdata['product']);?>');"></div>
 				<div class="text-left">
 					<div class="ellipsis-container">
-						<p class="zero-gaps"><?php echo $rawdata['product']['name'];?></p>
+						<p class="zero-gaps"><?php echo ucwords($rawdata['product']['name']);?></p>
 					</div>
 					<p class="text-gray zero-gaps"><i class="fa fa-map-marker"></i> <?php echo $farm['address_2'];?></p>
 					<div class="visible-sm visible-xs">

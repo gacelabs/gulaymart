@@ -194,6 +194,12 @@
 		padding: 7px 0;
 		width: 28px;
 	}
+	.aside-nav-item .nav-basket-count {
+		position: absolute;
+		top: 3px;
+		right: 8px;
+		font-size: 8px;
+	}
 	.text-great-user {
 		margin: 5px 0;
 	}

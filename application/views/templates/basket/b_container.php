@@ -93,21 +93,21 @@
 								<p class="zero-gaps">Cash On Delivery</p>
 							</div>
 							<div class="text-left hidden-xs">
-								<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
+								<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>DELIVER DATE</b></small></p>
 								<?php if ($order_type == 1): ?>
 									<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 								<?php else: ?>
-								<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>">
+								<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
 								<?php endif; ?>
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
 								<div class="text-left hidden-lg hidden-md hidden-sm">
-									<p class="zero-gaps hidden-xs"><small class="elem-block"><b>DELIVER DATE:</b></small></p>
+									<p class="zero-gaps hidden-xs"><small class="elem-block"><b>DELIVER DATE</b></small></p>
 									<?php if ($order_type == 1): ?>
 										<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 									<?php else: ?>
-									<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>">
+									<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
 									<?php endif; ?>
 								</div>
 								<div>
@@ -133,7 +133,7 @@
 			<?php endif ?>
 			<div class="no-records-ui<?php if (!empty($data['baskets'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
 				<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
-				<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="/" class="btn btn-sm btn-contrast">Marketplace</a></p>
+				<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
 			</div>
 		</div>
 	</div>

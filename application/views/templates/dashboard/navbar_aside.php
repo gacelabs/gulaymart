@@ -35,6 +35,7 @@
 					}
 					?>
 				</span>
+				<?php echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".$this->basket_count."</kbd>"; ?>
 			</a>
 		</div>
 		<div class="aside-nav-child">

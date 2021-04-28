@@ -17,7 +17,7 @@
 						</div>
 						<div class="text-right">
 							<?php if ($data['status'] == 'placed') : ?>
-							<p><small class="elem-block"><b>ACTION</b> <i class="fa fa-question-circle" tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you're ready to fulfill the order, otherwise, select the reason to cancel."></i></small></p>
+							<p><small class="elem-block"><b tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you're ready to fulfill the order, otherwise, select the reason to cancel.">ACTION <i class="fa fa-question-circle"></i></b></small></p>
 							<?php else : ?>
 							<p><small class="elem-block"><b>ACTION</b></small></p>
 							<?php endif ; ?>
@@ -76,13 +76,13 @@
 									<?php else : ?>
 										<p class="zero-gaps">
 											<?php if ($details['status'] == 5): ?>
-												<span class="text-capsule bg-danger">
+												<small class="text-capsule status-cancelled">
 													Removed by buyer
-												</span>
+												</small>
 											<?php else: ?>
-												<span class="text-capsule bg-theme">
+												<small class="text-capsule bg-theme">
 													Confirmed
-												</span>
+												</small>
 											<?php endif ?>
 										</p>
 									<?php endif ; ?>
@@ -129,7 +129,7 @@
 								<button class="btn btn-sm btn-contrast">READY FOR DELIVERY<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-								<p class="zero-gaps"><span class="text-capsule status-pickup"><?php echo ucwords(urldecode($data['status']));?></span></p>
+								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
 							<?php endif ; ?>
 						</div>
 					</div>
@@ -138,7 +138,7 @@
 		<?php endif ?>
 		<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
 			<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
-			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="/" class="btn btn-sm btn-contrast">Marketplace</a></p>
+			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
 		</div>
 	</div>
 </div>

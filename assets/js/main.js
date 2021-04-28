@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
 	$('[data-toggle="tooltip"]').tooltip();
-	$('[data-toggle="popover"]').popover();
+	$('[data-toggle="popover"]').popover({
+		'trigger': 'hover'
+	});
 
 	$(document.body).on('click', '.resetpass-btn', function(e) {
 		$('form.sign-in-form').addClass('hide');

@@ -135,11 +135,12 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 	background-color: #ffe33c;
 }
 .status-received {
-	color: #fff;
 	background-color: #a8d253;
+	color: #fff;
 }
 .status-cancelled {
 	background-color: #ff8e8e;
+	color: #fff;
 }
 .preview-image-item {
 	background-position: center center;
