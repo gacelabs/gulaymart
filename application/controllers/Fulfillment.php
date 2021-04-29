@@ -56,7 +56,7 @@ class Fulfillment extends My_Controller {
 		// debug($farm, 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table']
+				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table', 'print.min']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'fulfillment', 'ff-'.$status],
@@ -69,7 +69,7 @@ class Fulfillment extends My_Controller {
 			],
 			'bottom' => [
 				'modals' => ['ff_invoice_modal'],
-				'js' => ['fulfillment/main'],
+				'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'fulfillment/main', 'fulfillment/ff-'.clean_string_name(urldecode($status))],
 			],
 			'data' => [
 				'farm' => $farm,

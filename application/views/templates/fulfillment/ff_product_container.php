@@ -31,7 +31,7 @@
 						<?php foreach ($orders['order_details'] as $index => $order): ?>
 							<!-- per order -->
 							<?php
-								if ($order['status'] == 5 AND $data['status'] != 'placed') continue;
+								if ($order['status'] == 5 AND !in_array($data['status'], ['placed','cancelled'])) continue;
 								$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 								$product = $order['product'];
 								if ($product['photos'] AND isset($product['photos']['main'])) {
@@ -146,7 +146,7 @@
 								<?php if ($data['status'] == 'placed') : ?>
 									Available upon Pick Up (Status)
 								<?php else : ?>
-									<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
+									<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 								<?php endif ; ?>
 							</div>
 						<?php endif ?>
@@ -156,7 +156,7 @@
 								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge_id="<?php echo $orders['id'];?>" data-default-html='READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i>'>READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
+								<p class="zero-gaps"><span class="text-capsule status-<?php echo clean_string_name(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
 							<?php endif ; ?>
 						</div>
 					</div>

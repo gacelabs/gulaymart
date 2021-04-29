@@ -96,7 +96,7 @@
 							<?php foreach ($orders['order_details'] as $index => $order): ?>
 								<!-- per order -->
 								<?php
-									if ($order['status'] == 5 AND $data['status'] != 'placed') continue;
+									if ($order['status'] == 5 AND !in_array($data['status'], ['placed','cancelled'])) continue;
 									$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 									$product = $order['product'];
 									if ($product['photos'] AND isset($product['photos']['main'])) {
@@ -140,7 +140,7 @@
 									<div class="text-right hidden-sm hidden-xs">
 										<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 									</div>
-									<?php if ($details['status'] == 2): ?>
+									<?php if ($details['status'] == 2 AND in_array($data['status'], ['placed'])): ?>
 										<div class="text-right">
 											<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove" js-element="remove-product" data-json='<?php echo $json;?>' data-loading-text=""><span class="text-danger">&times;</span></button>
 										</div>

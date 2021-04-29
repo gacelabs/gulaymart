@@ -35,6 +35,12 @@ $(document).ready(function() {
 					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'col', value: field}));
 				}
 			break;
+			case 'ff_invoice_modal':
+				// console.log($(e.relatedTarget).data('basket-merge-id'));
+				var merge_id = $(e.relatedTarget).data('basket-merge-id');
+				$(e.target).find('p[js-data="loader"]').removeClass('hide');
+				simpleAjax('api/set_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true}, $(e.relatedTarget));
+			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {
@@ -55,6 +61,10 @@ $(document).ready(function() {
 				});
 				$(e.target).find('form .preview_images_selected').append(html);
 				$(e.target).find('form').find('input:file').prop('value', '').val('');;
+			break;
+			case 'ff_invoice_modal':
+				$(e.target).find('p[js-data="loader"]').addClass('hide');
+				$(e.target).find('[js-element="to-print"]').addClass('hide');
 			break;
 		}
 	});

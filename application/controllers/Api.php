@@ -196,4 +196,27 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'City not existing!', $post);
 	}
 
+	public function set_html($view=false)
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		// debug($view, $post, 'stop');
+		if ($post AND $view) {
+			if (isset($post['table'])) {
+				$table = $post['table'];
+				if (isset($post['data'])) {
+					$data = $post['data'];
+					$row = 'result';
+					if (isset($post['row'])) $row = 'row';
+					$results = $this->gm_db->get_in($table, $data, $row);
+					// debug($results, 'stop');
+					if ($results) {
+						$html = $this->load->view('static/'.$view, $results, true);
+						$this->set_response('error', false, ['html'=>$html], false, 'renderHTML');
+					}
+				}
+			}
+		}
+		$this->set_response('error', false, $post);
+	}
+
 }
