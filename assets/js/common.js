@@ -458,19 +458,30 @@ var runMediaUploader = function(callback) {
 			$(elem).off('change').on('change', function(){
 				var checked = "", uiForm = $(elem).parents('form:first');
 				if ($(elem)[0].files.length == 1) checked = "checked";
-
+				
+				var arUis = [], arImageUi = [];
 				for (var i= 0; i < $(elem)[0].files.length; i++) {
 					var blob_path = window.URL.createObjectURL(elem.files[i]),
 					is_upload = uiForm.data('notmedia') ? 1 : 0;
-					var reader = new FileReader();
-					reader.readAsDataURL(elem.files[i]); 
-					reader.onloadend = function() {
-						var base64data = reader.result;                
-						// console.log(base64data);
-						var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
-						uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+base64data+'" /></li>');
-					}
+					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
+					var sImageUi = '<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="BLOB_FILE" /></li>';
+					arImageUi.push(sImageUi);
+					var filePromise = new Promise(resolve => {
+						var reader = new FileReader();
+						reader.readAsDataURL(elem.files[i]);
+						reader.onload = () => resolve(reader.result);
+					});
+					filePromise.then(fileContents => { arUis.push(fileContents); });
 				}
+				// console.log(arUis, arImageUi);
+				setTimeout(function() {
+					$.each(arImageUi, function(i, ui) {
+						var li = $(ui);
+						var uiVal = li.find('[data-url-path]').attr('data-url-path', arUis[i]);
+						uiForm.find('.preview_images_list').append(uiVal.parents('li'));
+					});
+				}, 300);
+
 				$('[data-toggle="tooltip"]').tooltip();
 				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
 					var position = uiForm.find('[name="pos"]').val();

@@ -398,7 +398,7 @@ class Farm extends MY_Controller {
 					$index = $post['farm_loc'];
 					if (isset($post['user_farm_locations'][$index])) {
 						$locations = $post['user_farm_locations'][$index];
-						$farm_location = isset($post['locations']) ? $post['locations'][$index] : [];
+						$farm_location = isset($post['locations'][$index]) ? $post['locations'][$index] : [];
 						// debug($locations, 'stop');
 						$data = [];
 						foreach ($locations as $key => $location) {

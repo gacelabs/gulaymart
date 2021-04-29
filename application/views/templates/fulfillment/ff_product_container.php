@@ -139,11 +139,6 @@
 							<p class="zero-gaps">Cash On Delivery</p>
 							<p class="zero-gaps"></p>
 						</div>
-						<?php if ($data['status'] == 'placed' AND in_array(5, $status_array) AND count($orders['order_details']) == count($status_array)): ?>
-							<div class="text-left hidden-xs">
-								<button class="btn btn-sm btn-danger" js-element="move-trash" data-merge-id="<?php echo $orders['id'];?>">MOVE TO CANCELLED<i class="fa fa-trash icon-right"></i></button>
-							</div>
-						<?php else: ?>
 						<?php if ($data['status'] != 'cancelled'): ?>
 							<div class="text-left hidden-xs">
 								<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
@@ -153,17 +148,16 @@
 									<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 								<?php endif ; ?>
 							</div>
-							<?php endif ?>
-							<div class="text-left hidden-xs">
-								<?php if ($data['status'] == 'placed') : ?>
-									<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
-									<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge-id="<?php echo $orders['id'];?>">READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
-								<?php else : ?>
-									<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-									<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
-								<?php endif ; ?>
-							</div>
 						<?php endif ?>
+						<div class="text-left hidden-xs">
+							<?php if ($data['status'] == 'placed') : ?>
+								<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
+								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge-id="<?php echo $orders['id'];?>">READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
+							<?php else : ?>
+								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
+								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
+							<?php endif ; ?>
+						</div>
 					</div>
 				</div>
 			<?php endforeach ?>
