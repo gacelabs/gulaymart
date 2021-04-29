@@ -98,9 +98,6 @@ class Basket extends My_Controller {
 				$redirect = base_url('register');
 				$callback = false;
 			} else {
-				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
-				$redirect = $post['status'] ? base_url('basket/checkout') : false;
-				$callback = $post['status'] ? false : 'stockChanged';;
 				if ($post['existing'] == 1) {
 					unset($post['existing']);
 					$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
@@ -108,6 +105,21 @@ class Basket extends My_Controller {
 					unset($post['existing']);
 					$post['id'] = $this->gm_db->new('baskets', $post);
 				}
+				$other_orders = $this->gm_db->get('baskets', [
+					'user_id' => $post['user_id'],
+					'order_type' => $post['order_type'],
+					'at_date' => $post['at_date'],
+				]);
+				// debug($other_orders, 'stop');
+				$hash = '';
+				$basket_ids = [$post['id']];
+				if ($other_orders) {
+					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
+				}
+				$hash = (base64_encode(json_encode($basket_ids)));
+				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
+				$redirect = $post['status'] ? base_url('basket/checkout/'.$hash) : false;
+				$callback = $post['status'] ? false : 'stockChanged';;
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 			}
 			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');

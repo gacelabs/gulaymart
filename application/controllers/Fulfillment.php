@@ -31,9 +31,16 @@ class Fulfillment extends My_Controller {
 				$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
 				$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
 				$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
-				/*foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
-					$baskets_merge[$key]['order_details'][$index]['status'] = 2;
-				}*/
+				foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
+					// $baskets_merge[$key]['order_details'][$index]['status'] = 2;
+					if (!isset($baskets_merge[$key]['order_type'])) {
+						$baskets_merge[$key]['order_type'] = $details['when'];
+						$baskets_merge[$key]['schedule'] = '';
+						if ($details['when'] == 2) {
+							$baskets_merge[$key]['schedule'] = date('F j, Y', strtotime($details['schedule']));
+						}
+					}
+				}
 				$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 			}
 		}
