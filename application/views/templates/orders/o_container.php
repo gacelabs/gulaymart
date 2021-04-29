@@ -121,7 +121,9 @@
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 										</div>
 										<div class="media-body">
-											<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
+											<div class="ellipsis-container" style="height:20px;margin:0;-webkit-line-clamp:1;">
+												<p class="zero-gaps media-heading"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
+											</div>
 											<div class="ellipsis-container">
 												<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
 											</div>

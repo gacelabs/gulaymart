@@ -24,8 +24,8 @@ class Marketplace extends MY_Controller {
 				'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
 			],
 			'middle' => [
+				'head' => ['../global/global_navbar'],
 				'body' => [
-					'../global/global_navbar',
 					'marketplace/carousel',
 					'../global/veggy_nearby',
 					'marketplace/category',

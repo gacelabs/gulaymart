@@ -23,7 +23,6 @@
 					<div class="panel-heading">
 						<ul class="spaced-list between">
 							<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
-							<li><a href="orders/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
 						</ul>
 					</div>
 					
@@ -57,7 +56,10 @@
 									</div>
 								<?php endforeach ?>
 							<?php endif ?>
-							<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+							<div style="margin-left:-15px;margin-right:-15px;">
+								<hr style="margin-bottom:10px;border-color:#d0d0d0;">
+								<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+							</div>
 						</div>
 					</div>
 
