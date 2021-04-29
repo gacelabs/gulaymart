@@ -122,8 +122,10 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 }
 .text-capsule {
 	background-color: #aaa;
-	padding: 4px 12px;
 	border-radius: 20px;
+	display: inline-block;
+	margin-bottom: 3px;
+	padding: 4px 12px;
 }
 .text-capsule.blue {
 	background-color: #99dcff;

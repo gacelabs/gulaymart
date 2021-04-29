@@ -49,7 +49,7 @@
 							 	<div class="summary-shipping-address">
 									<div class="summary-grid">
 										<i class="fa fa-id-badge text-contrast text-center"></i>
-										<p class="zero-gaps"><?php echo $current_profile['fullname'];?></p>
+										<p class="zero-gaps"><?php echo ucwords($current_profile['fullname']);?></p>
 									</div>
 									<div class="summary-grid">
 										<i class="fa fa-map-marker text-contrast text-center"></i>
@@ -57,7 +57,7 @@
 											<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
 												<?php if ($shipping['active'] == 1): ?>
 													<div>
-														<p class="zero-gaps"><?php echo $shipping['address_1'];?></p>
+														<p class="zero-gaps"><?php echo ucwords($shipping['address_1']);?></p>
 														<small class="text-gray elem-block"><?php echo $shipping['address_2'];?></small>
 													</div>
 													<?php break; ?>
@@ -92,9 +92,7 @@
 													?>
 													<div>
 														<div class="ellipsis-container">
-															<?php foreach ($products_array as $product_name): ?>
-																<p class="zero-gaps text-caps"><?php echo $product_name;?></p>
-															<?php endforeach ?>
+															<p class="zero-gaps text-caps"><?php echo ucwords(implode(', ', $products_array));?></p>
 														</div>
 													</div>
 													<div class="text-right">

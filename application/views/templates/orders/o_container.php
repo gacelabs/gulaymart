@@ -92,17 +92,17 @@
 							<?php endif ?>
 						</div>
 
-						<div class="order-item-list">
+						<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
 							<?php foreach ($orders['order_details'] as $index => $order): ?>
 								<!-- per order -->
-
 								<?php
+									if ($order['status'] == 5 AND $data['status'] != 'placed') continue;
 									$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 									$product = $order['product'];
 									if ($product['photos'] AND isset($product['photos']['main'])) {
 										$photo_url = $product['photos']['main']['url_path'];
 									}
-									$initial_total += (float)$order['sub_total'];
+									if ($order['status'] != 5) $initial_total += (float)$order['sub_total'];
 									$details = $order; unset($details['product']);
 									$details['merge_id'] = $orders['id'];
 									$details['basket_ids'] = $orders['basket_ids'];
@@ -115,7 +115,7 @@
 									]);
 									$status_array[] = $details['status'];
 								?>
-								<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+								<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket_id="<?php echo $order['basket_id'];?>">
 									<div class="media">
 										<div class="media-left media-top">
 											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
@@ -131,6 +131,13 @@
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
 										<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo ucfirst($order['measurement']);?></p>
+										<?php if ($details['status'] == 5): ?>
+											<?php if ($order['cancel_by'] == $current_profile['id']): ?>
+												<p class="zero-gaps"><small class="text-capsule status-cancelled">Removed by You</small></p>
+											<?php elseif ($order['cancel_by'] > 0 AND $order['cancel_by'] != $current_profile['id']): ?>
+												<p class="zero-gaps"><small class="text-capsule status-cancelled"><?php echo $order['reason'];?></small></p>
+											<?php endif ?>
+										<?php endif ?>
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
 										<p class="zero-gaps"><?php echo $order['quantity'];?></p>
@@ -148,20 +155,19 @@
 										</ul>
 									</div>
 								</div>
-
-								<div class="order-deliver-note">
-									<small class="elem-block">DELIVERY SCHEDULE:
-										<?php
-
-											if($order['when'] == 1) {
-												echo " <b>SAME DAY</b>";
-											} else {
-												echo " <b>".strtoupper($order['schedule']."</b>");
-											}
-										?>
-									</small>
-								</div>
 							<?php endforeach ?>
+
+							<div class="order-deliver-note">
+								<small class="elem-block">DELIVERY SCHEDULE:
+									<?php
+										if ($orders['order_type'] == 1) {
+											echo " <b>SAME DAY</b>";
+										} else {
+											echo " <b>".strtoupper($orders['schedule']."</b>");
+										}
+									?>
+								</small>
+							</div>
 						</div>
 
 						<?php
@@ -188,10 +194,10 @@
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
-								<p class="hidden-lg hidden-md hidden-sm text-center" style="padding-top:3px;margin:0;"><span class="text-capsule status-placed">Placed</span></p>
+								<p class="hidden-lg hidden-md hidden-sm text-center" style="margin:0;"><span class="text-capsule status-placed">Placed</span></p>
 								<div>
 									<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
-									<p class="zero-gaps"><i>Delivery Fee:</i> <?php echo number_format($orders['fee']);?> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>
+									<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo number_format($orders['fee']);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>
 									<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
 								</div>
 							</div>

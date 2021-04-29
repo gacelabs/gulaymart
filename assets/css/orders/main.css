@@ -65,6 +65,9 @@
 		display: block;
 		text-align: right;
 	}
+	.orders-container .order-grid-column.order-item {
+		display: block;
+	}
 	.orders-container .order-grid-column.order-item .spaced-list>li {
 		display: inline-block;
 	}
