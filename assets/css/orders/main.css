@@ -58,6 +58,9 @@
 	.orders-container .order-grid-column.order-labels {
 		grid-template-columns: minmax(0, 1fr) 25px;
 	}
+	.orders-container .order-grid-column.order-item {
+		display: block;
+	}
 	.orders-container .order-grid-column.order-item .spaced-list {
 		display: block;
 		text-align: right;

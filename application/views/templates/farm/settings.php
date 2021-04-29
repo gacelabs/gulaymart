@@ -69,17 +69,5 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-			<div class="dashboard-panel theme">
-				<div class="dashboard-panel-top">
-					<ul class="spaced-list between">
-						<li><h4 class="zero-gaps">Product Settings</h4></li>
-					</ul>
-				</div>
-				<div class="dashboard-panel-middle">
-					
-				</div>
-			</div>
-		</div>
 	</div>
 </div>

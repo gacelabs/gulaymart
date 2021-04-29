@@ -20,12 +20,10 @@
 					</div>
 				</div>
 
-				<?php if ($can_comment): ?>
 					<div class="panel productpage-feedback">
 						<div class="panel-heading">
 							<ul class="spaced-list between">
 								<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
-								<li><a href="orders/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
 							</ul>
 						</div>
 						
@@ -58,8 +56,16 @@
 											</div>
 										</div>
 									<?php endforeach ?>
+								<?php else: ?>
+									Be the first to make a feedback. Buy Now!
 								<?php endif ?>
-								<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+
+								<?php if ($can_comment): ?>
+								<div style="margin-left:-15px;margin-right:-15px;">
+									<hr style="margin-bottom:10px;border-color:#d0d0d0;">
+									<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+								</div>
+								<?php endif ?>
 							</div>
 						</div>
 
@@ -77,7 +83,6 @@
 							</div> -->
 						<?php endif ?>
 					</div>
-				<?php endif ?>
 
 				<?php if ($farm): ?>
 					<div class="panel productpage-farm-info">

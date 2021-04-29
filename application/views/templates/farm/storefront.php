@@ -36,13 +36,13 @@
 							<ul class="spaced-list between" style="margin-top: 15px;">
 								<li class="text-sm">
 									<?php if (isset($data['farms']) AND $data['farms']): ?>
-										<span class="text-gray">
+										<small class="text-gray">
 											<i class="fa fa-calendar"></i> UPDATED
-										</span><br><?php echo date('F j, Y', strtotime($data['farms']['updated']));?>
+										</small><br><?php echo date('F j, Y', strtotime($data['farms']['updated']));?>
 									<?php else: ?>
-										<span class="text-gray">
+										<small class="text-gray">
 											<i class="fa fa-calendar"></i> TODAY
-										</span><br><?php echo date('F j, Y');?>
+										</small><br><?php echo date('F j, Y');?>
 									<?php endif ?>
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
