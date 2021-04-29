@@ -328,7 +328,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					bgColor: 'darkgreen',
 					textColor: 'white',
 				};
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'error': case 'danger':
@@ -344,7 +348,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					bgColor: 'red',
 					textColor: 'white',
 				};
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'info': case 'information':
@@ -381,7 +389,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 						});
 					}
 				}
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'warning': case 'warn':

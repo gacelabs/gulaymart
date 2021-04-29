@@ -92,9 +92,7 @@
 													?>
 													<div>
 														<div class="ellipsis-container">
-															<?php foreach ($products_array as $product_name): ?>
-																<p class="zero-gaps text-caps"><?php echo ucwords($product_name);?></p>
-															<?php endforeach ?>
+															<p class="zero-gaps text-caps"><?php echo ucwords(implode(', ', $products_array));?></p>
 														</div>
 													</div>
 													<div class="text-right">

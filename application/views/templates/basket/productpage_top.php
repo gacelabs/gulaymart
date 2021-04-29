@@ -5,20 +5,19 @@
 			<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
 				<div class="product-imgs-container">
 					<?php if ($product['photos']): ?>
-					<?php $no_main = true;?>
-					<div id="main_img_preview" style="background-image: url('<?php identify_main_photo($product, false, $no_main);?>');"></div>
-					<div class="img-thumb-container">
-						<ul class="inline-list" id="img_thumb_list">
-							<li><div class="img-thumb-item active" style="background-image: url('<?php identify_main_photo($product);?>');"></div></li>
-							<?php if (isset($product['photos']['other']) AND $product['photos']['other']): ?>
-								<?php foreach ($product['photos']['other'] as $key => $photo): ?>
-									<?php if ($no_main AND $key != 0): ?>
-									<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
-									<?php endif ?>
-								<?php endforeach ?>
-							<?php endif ?>
-						</ul>
-					</div>
+						<?php $no_main = true;?>
+						<div id="main_img_preview" style="background-image: url('<?php identify_main_photo($product, false, $no_main);?>');"></div>
+						<div class="img-thumb-container">
+							<ul class="inline-list" id="img_thumb_list">
+								<li><div class="img-thumb-item active" style="background-image: url('<?php identify_main_photo($product);?>');"></div></li>
+								<?php if (isset($product['photos']['other']) AND $product['photos']['other']): ?>
+									<?php foreach ($product['photos']['other'] as $key => $photo): ?>
+										<?php if ($no_main AND $key == 0) continue;?>
+										<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
+									<?php endforeach ?>
+								<?php endif ?>
+							</ul>
+						</div>
 					<?php endif ?>
 				</div>
 			</div>

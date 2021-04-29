@@ -37,6 +37,13 @@ class Orders extends MY_Controller {
 								$baskets_merge[$key]['schedule'] = date('F j, Y', strtotime($details['schedule']));
 							}
 						}
+						$basket = $this->gm_db->get('baskets', ['id' => $details['basket_id']], 'row');
+						$baskets_merge[$key]['order_details'][$index]['cancel_by'] = '';
+						$baskets_merge[$key]['order_details'][$index]['reason'] = '';
+						if ($basket) {
+							$baskets_merge[$key]['order_details'][$index]['cancel_by'] = $basket['cancel_by'];
+							$baskets_merge[$key]['order_details'][$index]['reason'] = $basket['reason'];
+						}
 					}
 					$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 				}
@@ -195,24 +202,35 @@ class Orders extends MY_Controller {
 		$get = $this->input->get();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
-			$callback = 'removeOnOrder';
-			if ($all) {
-				$callback = 'removeOnAllOrder';
-				foreach ($post['data'] as $key => $row) {
-					$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
-					if ($merge) {
-						$order_details = json_decode(base64_decode($merge['order_details']), true);
-						if ($order_details) {
-							/*modify the status of the product*/
-							foreach ($order_details as $index => $detail) {
+			$basket_ids = [];
+			foreach ($post['data'] as $key => $row) {
+				$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
+				if ($merge) {
+					$order_details = json_decode(base64_decode($merge['order_details']), true);
+					if ($order_details) {
+						/*modify the status of the product*/
+						foreach ($order_details as $index => $detail) {
+							if ($all == 0) {
+								if ($detail['product_id'] == $row['product_id']) {
+									$order_details[$index]['status'] = 5;
+								}
+							} else {
 								$order_details[$index]['status'] = 5;
 							}
-							// debug($order_details, 'stop');
-							$this->gm_db->save('baskets_merge', 
-								['order_details' => base64_encode(json_encode($order_details)), 'status' => 5], 
-								['id' => $row['merge_id']]
-							);
 						}
+						// debug($order_details, 'stop');
+						$this->gm_db->save('baskets_merge', 
+							['order_details' => base64_encode(json_encode($order_details))], 
+							['id' => $row['merge_id']]
+						);
+					}
+					if ($all == 0) {
+						$this->baskets->save([
+							'status' => 5,
+							'cancel_by' => $this->accounts->profile['id'],
+							'reason' => 'Removed by buyer',
+						], ['id' => $row['basket_id']]);
+					} else {
 						$basket_ids = explode(',', $merge['basket_ids']);
 						if (count($basket_ids)) {
 							foreach ($basket_ids as $basket_id) {
@@ -225,44 +243,17 @@ class Orders extends MY_Controller {
 						}
 					}
 				}
-			} else {
-				foreach ($post['data'] as $key => $row) {
-					$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
-					if ($merge) {
-						$order_details = json_decode(base64_decode($merge['order_details']), true);
-						if ($order_details) {
-							/*modify the status of the product*/
-							foreach ($order_details as $index => $detail) {
-								if ($detail['product_id'] == $row['product_id']) {
-									$order_details[$index]['status'] = 5;
-								}
-							}
-							// debug($order_details, 'stop');
-							$this->gm_db->save('baskets_merge', 
-								['order_details' => base64_encode(json_encode($order_details))], 
-								['id' => $row['merge_id']]
-							);
-						}
-					}
-					$basket = $this->gm_db->get('baskets', ['id' => $row['basket_id']], 'row');
-					// debug($basket, 'stop');
-					if ($basket) {
-						if ($basket['product_id'] == $row['product_id']) {
-							$this->baskets->save([
-								'status' => 5,
-								'cancel_by' => $this->accounts->profile['id'],
-								'reason' => 'Removed by buyer',
-							], ['id' => $row['basket_id']]);
-						}
-					}
-				}
 			}
-			/*check here if all baskets have placed order status*/
-			$basket_count = $this->baskets->count(['status' => 2, 'user_id' => $this->accounts->profile['id']]);
-			if ($basket_count == 0) {
-				/*now set all merged basket to cancelled*/
-				foreach ($post['data'] as $key => $row) {
-					$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
+			$callback = 'removeOnOrder';
+			if ($all) { /*do this when all items was deleted*/
+				$callback = 'removeOnAllOrder';
+				/*check here if all baskets have placed order status*/
+				$basket_count = $this->baskets->count(['status' => 2, 'id' => $basket_ids, 'user_id' => $this->accounts->profile['id']]);
+				if ($basket_count == 0) {
+					/*now set all merged basket to cancelled*/
+					foreach ($post['data'] as $key => $row) {
+						$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
+					}
 				}
 			}
 			$senddata = $this->senddataapi->trigger('remove-item', 'fulfilled-items', ['all'=>$all, 'data'=>$post['data']]);
