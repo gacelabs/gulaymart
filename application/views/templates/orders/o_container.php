@@ -147,19 +147,19 @@
 									</div>
 								</div>
 
-								<div class="order-deliver-note">
-									<small class="elem-block">DELIVERY SCHEDULE:
-										<?php
-
-											if($order['when'] == 1) {
-												echo " <b>SAME DAY</b>";
-											} else {
-												echo " <b>".strtoupper($order['schedule']."</b>");
-											}
-										?>
-									</small>
-								</div>
 							<?php endforeach ?>
+							<div class="order-deliver-note">
+								<small class="elem-block">DELIVERY SCHEDULE:
+									<?php
+
+										if($order['when'] == 1) {
+											echo " <b>SAME DAY</b>";
+										} else {
+											echo " <b>".strtoupper($order['schedule']."</b>");
+										}
+									?>
+								</small>
+							</div>
 						</div>
 
 						<?php
@@ -186,7 +186,7 @@
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
-								<p class="hidden-lg hidden-md hidden-sm text-center" style="padding-top:3px;margin:0;"><span class="text-capsule status-placed">Placed</span></p>
+								<p class="hidden-lg hidden-md hidden-sm text-center" style="margin:0;"><span class="text-capsule status-placed">Placed</span></p>
 								<div>
 									<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
 									<p class="zero-gaps"><i>Delivery Fee:</i> <?php echo number_format($orders['fee']);?> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>

@@ -110,18 +110,18 @@
 								</div>
 							</div>
 
-							<div class="order-deliver-note">
-								<small class="elem-block">DELIVERY SCHEDULE:
-									<?php
-										if($order['when'] == 1) {
-											echo " <b>SAME DAY</b>";
-										} else {
-											echo " <b>".strtoupper($order['schedule']."</b>");
-										}
-									?>
-								</small>
-							</div>
 						<?php endforeach ?>
+						<div class="order-deliver-note">
+							<small class="elem-block">DELIVERY SCHEDULE:
+								<?php
+									if($order['when'] == 1) {
+										echo " <b>SAME DAY</b>";
+									} else {
+										echo " <b>".strtoupper($order['schedule']."</b>");
+									}
+								?>
+							</small>
+						</div>
 					</div>
 
 					<?php
