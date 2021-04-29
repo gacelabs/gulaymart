@@ -152,10 +152,10 @@
 						<?php endif ?>
 						<div class="text-left hidden-xs">
 							<?php if ($data['status'] == 'placed') : ?>
-								<p style="margin-bottom:5px;" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
+								<p class="zero-gaps" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
 								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge_id="<?php echo $orders['id'];?>" data-default-html='READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i>'>READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
-								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
+								<p class="zero-gaps"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 								<p class="zero-gaps"><span class="text-capsule status-<?php echo strtolower(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
 							<?php endif ; ?>
 						</div>
