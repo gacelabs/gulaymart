@@ -394,48 +394,20 @@ class Basket extends My_Controller {
 				$farm_location_ids[] = $farm_location_id;
 			}
 		}
+
 		// debug($place_order, 'stop');
 		if ($place_order AND $all_basket_ids) {
+			$merge_ids = [];
 			foreach ($place_order as $data) {
-				$this->baskets->new_baskets_merge($data);
+				$merge_ids[] = $this->baskets->new_baskets_merge($data);
 			}
-			// debug($place_order, $all_basket_ids, 'stop');
 
 			/*email and add notification here*/
-			$html = $this->render_page([
-				'top' => [
-					'css' => ['static/thankyou']
-				],
-				'middle' => [
-					'body_class' => ['thankyou'],
-					'head' => ['../global/global_navbar'],
-					'body' => [
-						'../static/thankyou'
-					],
-				],
-				'bottom' => [
-					'modals' => [],
-					'js' => [],
-				],
-				'data' => ['total'=>$final_total]
-			], true);
-			send_gm_email($this->accounts->profile['id'], $html, 'Your Order(s) have been Placed, Thank you!');
+			notify_placed_orders($final_total, $merge_ids, $seller_ids, $this->accounts->profile);
 
-			$html = '<p>Order(s) have been placed, <a href="orders/placed/">Check here</a></p>';
-			send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
-			/*message sellers*/
-			$html = '<p>Order(s) from '.$this->accounts->profile['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
-			foreach ($seller_ids as $key => $seller_id) {
-				send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
-			}
 			// debug($place_order, $all_basket_ids, 'stop');
-
-			foreach ($all_basket_ids as $id) {
-				$this->baskets->save(['status' => 2], ['id' => $id]);
-			}
-			foreach ($farm_location_ids as $location_id) {
-				$this->session->unset_userdata('checkout_pricing_'.$location_id);
-			}
+			foreach ($all_basket_ids as $id) $this->baskets->save(['status' => 2], ['id' => $id]);
+			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
 			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');

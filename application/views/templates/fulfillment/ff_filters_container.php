@@ -45,7 +45,7 @@
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
+					<a href="fulfillment/on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
 						On Delivery
 						<?php if ($data['counts']['on+delivery']): ?>
 						<kbd class="pull-right"><?php echo $data['counts']['on+delivery'];?></kbd>

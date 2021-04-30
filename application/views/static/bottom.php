@@ -35,12 +35,14 @@
 		?>
 
 		<?php
-			if (!$current_profile) {
-				$this->view('modals/login_modal', ['data'=>$data]);
+			if (!isset($data['for_email'])) {
+				if (!$current_profile) {
+					$this->view('modals/login_modal', ['data'=>$data]);
+				}
 			}
 		?>
 
-		<?php if ($this->action != 'store'): ?>
+		<?php if (!isset($data['for_email']) AND $this->action != 'store'): ?>
 			<?php $this->view('requires/realtime_scripts', ['data'=>$data]); ?>
 		<?php endif ?>
 

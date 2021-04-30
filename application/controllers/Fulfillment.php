@@ -167,26 +167,34 @@ class Fulfillment extends My_Controller {
 						['id' => $post['merge_id']]
 					);
 				}
-			}
 
-			$status_value = 6;
-			if (count($post['data']) == count($cancelled)) $status_value = 5;
+				$status_value = 6;
+				if (count($post['data']) == count($cancelled)) $status_value = 5;
 
-			$count = $this->gm_db->count('baskets_merge', ['id' => $post['merge_id'], 'status' => $status_value]);
-			if ($count == 0) {
-				// set status for pick-up this will now also send to toktok post delivery
-				$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
-				$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post]);
-				$redirect = 'fulfillment/for-pick-up';
-				if ($status_value == 5) {
-					$redirect = 'fulfillment/cancelled';
+				$count = $this->gm_db->count('baskets_merge', ['id' => $post['merge_id'], 'status' => $status_value]);
+				if ($count == 0) {
+					// set status for pick-up this will now also send to toktok post delivery
+					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
+					
+					$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post]);
+					$redirect = 'fulfillment/for-pick-up';
+					$action = 'Ready for Pick Up';
+					if ($status_value == 5) {
+						$redirect = 'fulfillment/cancelled';
+						$action = 'Cancelled';
+					}
+
+					$buyer = json_decode(base64_decode($merge['buyer']), true);
+					$seller = json_decode(base64_decode($merge['seller']), true);
+					notify_invoice_orders($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
+
+					$this->set_response('success', 'Order is now Set For Pick Up!', $post, $redirect);
+				} else {
+					$this->set_response('info', 'Order Already set For Pick Up!', $post, false);
 				}
-				$this->set_response('success', 'Order is now Set For Pick Up!', $post, $redirect);
-			} else {
-				$this->set_response('info', 'Order Already set For Pick Up!', $post, false);
 			}
 		}
-		$this->set_response('error', remove_multi_space('Unable to change product(s) status'), $post);
+		$this->set_response('error', remove_multi_space('Unable to set Order for pick up'), $post);
 	}
 
 }

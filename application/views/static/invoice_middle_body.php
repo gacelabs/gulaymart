@@ -1,15 +1,41 @@
 <?php
+	$is_data_set = false;
+	if (isset($data)) {
+		// debug($data, true);
+		$id = $data['id'];
+		$fee = $data['fee'];
+		$status = $data['status'];
+		$order_id = $data['order_id'];
+		$seller = $data['seller'];
+		$buyer = $data['buyer'];
+		$order_details = $data['order_details'];
+		$is_data_set = true;
+	}
 	$seller = json_decode(base64_decode($seller), true);
 	$buyer = json_decode(base64_decode($buyer), true);
 	$order_details = json_decode(base64_decode($order_details), true);
+	// debug($status, true);
 ?>
-<div js-element="to-print" id="zig-wrapper" js-id="<?php echo $id;?>" class="hide">
+<div js-element="to-print" id="zig-wrapper" js-id="<?php echo $id;?>"<?php if ($is_data_set == false): ?> class="hide"<?php endif ?>>
 	<div class="zig-zag-bottom zig-zag-top">
 		<div class="zig-body">
 			<div class="zig-top">
 				<div class="text-center" style="margin-bottom:15px;">
 					<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">
-					<h4>Your order is on its way!</h4>
+					<?php switch ($status) {
+						case 3:
+							echo "<h4>Your order is now On Delivery!</h4>";
+							break;
+						case 4:
+							echo "<h4>Order Received!</h4>";
+							break;
+						case 5:
+							echo "<h4>Your order was Cancelled!</h4>";
+							break;
+						default:
+							echo "<h4>Your order is Ready for pick up!</h4>";
+							break;
+					}?>
 				</div>
 
 				<div class="invoice-deliver-info-container">
@@ -41,7 +67,7 @@
 							<i class="fa fa-phone"></i>
 						</div>
 						<div>
-							<?php if ($current_profile['id'] == $buyer['id']) : ?>
+							<?php if ($current_profile AND ($current_profile['id'] == $buyer['id'])) : ?>
 								<p class="zero-gaps"><?php echo $buyer['profile']['phone'];?></p>
 								<small class="elem-block text-gray">Not visible to seller</small>
 							<?php else : ?>
@@ -94,9 +120,11 @@
 						<small class="elem-block"><b>ORDER ID</b></small>
 						<p class="text-contrast zero-gaps"><?php echo $order_id;?></p>
 					</li>
-					<li class="text-right">
-						<button class="btn btn-sm" js-element="print-action" data-html2canvas-ignore>Print<i class="fa fa-print icon-right"></i></button>
-					</li>
+					<?php if ($is_data_set == false): ?>
+						<li class="text-right">
+							<button class="btn btn-sm" js-element="print-action" data-html2canvas-ignore>Print<i class="fa fa-print icon-right"></i></button>
+						</li>
+					<?php endif ?>
 				</ul>
 				<div style="margin-top:20px;text-align: center;">
 					<p class="zero-gaps"><small><span class="text-gray">BY:</span> <a href="gulaymart.com" class="text-theme"><i class="fa fa-leaf"></i> GULAYMART</a></small></p>
@@ -111,10 +139,10 @@
 <div class="text-step-basic" style="margin:0;">
 	<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
 	<div>
-		<?php if ($current_profile['id'] == $buyer['id']): ?>
-		<p class="zero-gaps">Invoice was sent to your email.</p>
+		<?php if ($current_profile AND ($current_profile['id'] == $buyer['id'])): ?>
+			<p class="zero-gaps">Invoice was sent to your email.</p>
 		<?php else: ?>
-		<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
+			<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
 		<?php endif; ?>
 	</div>
 </div>

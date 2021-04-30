@@ -11,8 +11,8 @@
 							<li><button class="close" data-dismiss="modal" aria-label="Close">&times;</button></li>
 						</ul>
 					</div>
+					<p class="zero-gaps text-center hide" js-data="loader"><span class="spinner-border spinner-border-sm"></span> LOADING ...</p>
 					<div class="more-info-middle" js-element="invoice-body">
-						<p class="zero-gaps hide" js-data="loader"><span class="spinner-border spinner-border-sm"></span> LOADING ...</p>
 						<div id="zig-wrapper" class="hide" js-element="to-print">
 							<div class="zig-zag-bottom zig-zag-top">
 								<div class="zig-body">
@@ -114,4 +114,3 @@
 	</div>
 </div>
 <?php endif ?>
-<canvas id="canvas"></canvas>

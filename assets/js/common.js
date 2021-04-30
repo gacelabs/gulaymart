@@ -39,7 +39,7 @@ $(document).ready(function() {
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
-				simpleAjax('api/set_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
+				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
@@ -64,7 +64,7 @@ $(document).ready(function() {
 			break;
 			case 'ff_invoice_modal':
 				$(e.target).find('p[js-data="loader"]').addClass('hide');
-				$(e.target).find('[js-element="to-print"]').addClass('hide');
+				$(e.target).find('[js-element="invoice-body"]').html('');
 			break;
 		}
 	});

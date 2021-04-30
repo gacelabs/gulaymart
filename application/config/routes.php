@@ -26,13 +26,13 @@ $route['basket/checkout'] = 'Basket/checkout';
 
 $route['fulfillment/placed'] = 'Fulfillment/index/placed';
 $route['fulfillment/for-pick-up'] = 'Fulfillment/index/for+pick+up';
-$route['fulfillment/delivery'] = 'Fulfillment/index/on+delivery';
+$route['fulfillment/on-delivery'] = 'Fulfillment/index/on+delivery';
 $route['fulfillment/received'] = 'Fulfillment/index/received';
 $route['fulfillment/cancelled'] = 'Fulfillment/index/cancelled';
 
 $route['orders/placed'] = 'Orders/index/placed';
 $route['orders/for-pick-up'] = 'Orders/index/for+pick+up';
-$route['orders/delivery'] = 'Orders/index/on+delivery';
+$route['orders/on-delivery'] = 'Orders/index/on+delivery';
 $route['orders/received'] = 'Orders/index/received';
 $route['orders/cancelled'] = 'Orders/index/cancelled';
 
