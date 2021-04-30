@@ -130,7 +130,7 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 .text-capsule.blue {
 	background-color: #99dcff;
 }
-.status-placed, .status-pickup {
+.status-placed, .status-pickup, .status-forpickup {
 	background-color: #e2e2e2;
 }
 .status-delivery {

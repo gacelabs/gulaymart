@@ -3,7 +3,7 @@
 	$buyer = json_decode(base64_decode($buyer), true);
 	$order_details = json_decode(base64_decode($order_details), true);
 ?>
-<div id="zig-wrapper" js-element="to-print" js-id="<?php echo $id;?>" class="hide">
+<div js-element="to-print" id="zig-wrapper" js-id="<?php echo $id;?>" class="hide">
 	<div class="zig-zag-bottom zig-zag-top">
 		<div class="zig-body">
 			<div class="zig-top">
@@ -11,6 +11,7 @@
 					<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">
 					<h4>Your order is on its way!</h4>
 				</div>
+
 				<div class="invoice-deliver-info-container">
 					<p><small class="elem-block text-gray">DELIVERS TO</small></p>
 					<div class="zig-top-grid">
@@ -41,11 +42,11 @@
 						</div>
 						<div>
 							<?php if ($current_profile['id'] == $buyer['id']) : ?>
-							<p class="zero-gaps"><?php echo $buyer['profile']['phone'];?></p>
+								<p class="zero-gaps"><?php echo $buyer['profile']['phone'];?></p>
+								<small class="elem-block text-gray">Not visible to seller</small>
 							<?php else : ?>
-							<p class="zero-gaps"><?php echo substr($buyer['profile']['phone'], 0, 4);?>-***-****</p>
+								<p class="zero-gaps"><?php echo substr($buyer['profile']['phone'], 0, 4);?>-***-****</p>
 							<?php endif; ?>
-							<small class="elem-block text-gray">Not visible to seller</small>
 						</div>
 					</div>
 				</div>
@@ -61,7 +62,7 @@
 							<?php if ($details['status'] == 5) continue; ?>
 							<div class="invoice-summary-grid">
 								<div>
-									<p class="text-ellipsis"><?php echo $details['product']['name'];?></p>
+									<p class="text-ellipsis"><?php echo ucwords($details['product']['name']);?></p>
 									<small class="elem-block text-gray">QTY <?php echo $details['quantity'];?> - <?php echo $details['measurement'];?></small>
 								</div>
 								<div class="text-right">&#x20b1; <?php echo number_format($details['price'] * $details['quantity']);?></div>
@@ -102,5 +103,18 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+
+<hr class="carved">
+
+<div class="text-step-basic" style="margin:0;">
+	<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
+	<div>
+		<?php if ($current_profile['id'] == $buyer['id']): ?>
+		<p class="zero-gaps">Invoice was sent to your email.</p>
+		<?php else: ?>
+		<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
+		<?php endif; ?>
 	</div>
 </div>

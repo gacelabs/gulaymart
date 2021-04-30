@@ -146,7 +146,7 @@
 								<?php if ($data['status'] == 'placed') : ?>
 									Available upon Pick Up (Status)
 								<?php else : ?>
-									<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
+									<button class="btn btn-xs btn-contrast" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 								<?php endif ; ?>
 							</div>
 						<?php endif ?>
@@ -155,8 +155,8 @@
 								<p class="zero-gaps" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
 								<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge_id="<?php echo $orders['id'];?>" data-default-html='READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i>'>READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
 							<?php else : ?>
-								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
-								<p class="zero-gaps"><span class="text-capsule status-<?php echo clean_string_name(urldecode($data['status'])); ?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
+								<p class="zero-gaps"><small class="elem-block"><b>ORDER STATUS</b></small></p>
+								<p class="zero-gaps"><span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($data['status'])));?>"><?php echo ucwords(urldecode($data['status']));?></span></p>
 							<?php endif ; ?>
 						</div>
 					</div>

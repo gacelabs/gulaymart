@@ -51,7 +51,7 @@ class Orders extends MY_Controller {
 			// debug($baskets_merge, 'stop');
 			$this->render_page([
 				'top' => [
-					'css' => ['dashboard/main', 'global/order-table', 'orders/main']
+					'css' => ['dashboard/main', 'global/order-table', 'orders/main', 'global/zigzag', 'modal/invoice-modal',]
 				],
 				'middle' => [
 					'body_class' => ['dashboard', 'orders-active', 'orders-'.$status],
@@ -62,6 +62,7 @@ class Orders extends MY_Controller {
 					],
 				],
 				'bottom' => [
+					'modals' => ['ff_invoice_modal'],
 					'js' => ['orders/main'],
 				],
 				'data' => [

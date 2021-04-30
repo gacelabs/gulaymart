@@ -100,7 +100,7 @@
 	}
 	.order-footer-total {
 		display: grid;
-		grid-template-columns: 22px auto auto;
+		grid-template-columns: 22px 95px auto;
 		grid-gap: 10px;
 	}
 	.order-footer-farm, .order-footer-payment {
