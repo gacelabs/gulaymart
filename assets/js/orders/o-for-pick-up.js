@@ -19,23 +19,20 @@ var renderHTML = function(obj) {
 		var printableWin = window.open(obj.printable_link);
 		window.onafterprint = function(e){
 			$(window).off('mousemove', window.onafterprint);
-			$(window).off('touchmove', window.onafterprint);
-			$(window).off('click', window.onafterprint);
 			oThis.html(oThis.attr('prev-ui'));
 			printableWin.close();
 		};
 		setTimeout(function(){
 			$(window).one('mousemove', window.onafterprint);
-			$(window).one('touchmove', window.onafterprint);
-			$(window).one('click', window.onafterprint);
 		});
 		printableWin.print();
 
-		/*html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
+		/*console.log(document.querySelector('[js-element="to-print"]'));
+		html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
 			oThis.html(oThis.attr('prev-ui'));
 			canvas.toBlob(function(blob) {
 				var url = URL.createObjectURL(blob);
-				// console.log(url);
+				console.log(url);
 				printJS({printable:url, type:'image'});
 			});
 		});*/

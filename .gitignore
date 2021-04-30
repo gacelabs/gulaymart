@@ -41,3 +41,4 @@ assets/data/endpoints-2.php
 assets/data/toktok-script.js
 *.json
 assets/data/logs/toktok-api.log
+assets/data/logs/

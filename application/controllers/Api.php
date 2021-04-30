@@ -211,7 +211,46 @@ class Api extends MY_Controller {
 					// debug($results, 'stop');
 					if ($results) {
 						$html = $this->load->view('static/'.$view, $results, true);
-						$this->set_response('error', false, ['html'=>$html], false, 'renderHTML');
+						$object = ['html'=>$html,'identifier'=>''];
+						if (isset($post['identifier'])) {
+							$object['identifier'] = $post['identifier'];
+						}
+						$this->set_response('error', false, $object, false, 'renderHTML');
+					}
+				}
+			}
+		}
+		$this->set_response('error', false, $post);
+	}
+
+	public function set_invoice_html($view=false)
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		// debug($view, $post, 'stop');
+		if ($post AND $view) {
+			if (isset($post['table'])) {
+				$table = $post['table'];
+				if (isset($post['data'])) {
+					$data = $post['data'];
+					$row = 'result';
+					if (isset($post['row'])) $row = 'row';
+					$results = $this->gm_db->get_in($table, $data, $row);
+					// debug($results, 'stop');
+					if ($results) {
+						$html = $this->load->view('static/'.$view, $results, true);
+						$object = ['html'=>$html,'identifier'=>''];
+						if (isset($post['identifier'])) {
+							$object['identifier'] = $post['identifier'];
+						}
+						$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
+						// debug($printable, 'stop');
+						create_dirs('invoices');
+						$filename = 'assets/data/files/invoices/'.$results['order_id'].'-invoice.html';
+						$handle = fopen($filename, "w+");
+						fwrite($handle, $printable);
+						fclose($handle);
+						$object['printable_link'] = base_url($filename);
+						$this->set_response('error', false, $object, false, 'renderHTML');
 					}
 				}
 			}

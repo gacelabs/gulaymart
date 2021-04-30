@@ -26,7 +26,7 @@
 						</a>
 					</div>
 					<div>
-						<a href="orders/delivery">
+						<a href="orders/on-delivery">
 							<div class="trans-navbar-pill <?php in_array_echo("orders-on+delivery", $middle['body_class'], "active");?>">
 								On Delivery
 								<?php if($data['counts']['on+delivery']): ?>
@@ -179,6 +179,7 @@
 
 						<?php
 							$farm = $orders['seller'];
+							$nospace_status = str_replace(" ", "", strtolower(urldecode($data['status'])));
 						?>
 
 						<div class="order-grid-footer" js-element="farm-<?php echo $orders['id'];?>-<?php echo $farm['farm_location_id'];?>">
@@ -195,15 +196,15 @@
 							<div class="text-left hidden-xs">
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 								<p class="zero-gaps">
-									<span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($data['status'])));?>"><?php echo ucwords(urldecode($data['status']));?></span>
-									<span class="text-capsule bg-theme<?php if (in_array(6, $status_array) AND count($orders['order_details']) == count($status_array)): ?><?php else: ?> hide<?php endif ?>" js-data="confirmed">Confirmed</span>
+									<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($data['status']));?></span>
+									<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 								</p>
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
 								<p class="zero-gaps hidden-lg hidden-md hidden-sm text-left" style="font-size:11px;">
-									<span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($data['status'])));?>"><?php echo ucwords(urldecode($data['status']));?></span>
-									<span class="text-capsule bg-theme<?php if (in_array(6, $status_array) AND count($orders['order_details']) == count($status_array)): ?><?php else: ?> hide<?php endif ?>" js-data="confirmed">Confirmed</span>
+									<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($data['status']));?></span>
+									<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 								</p>
 								<div>
 									<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>

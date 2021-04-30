@@ -1196,7 +1196,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 		$results = json_decode($response, true);
 
 		// debug($results, 'stop');
-		if ($results['status'] == 'OK') {
+		if (isset($results['status']) == 'OK') {
 			$rows = $results['rows'][0];
 			$elements = $rows['elements'][0];
 			if ($elements['status'] != 'ZERO_RESULTS') {

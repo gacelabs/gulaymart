@@ -466,3 +466,67 @@ function count_by_status($where=false)
 	}
 	return 0;
 }
+
+function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
+{
+	$html = file_get_contents(base_url('support/view_thankyou_page/'.$final_total));
+	// debug($html, 'stop');
+	/*create_dirs('placed_orders');
+	$all_orders_id = strtoupper(substr(md5(implode(',', $merge_ids)), 0, 10));
+	$filename = 'assets/data/files/placed_orders/'.$all_orders_id.'-placed.html';
+	$handle = fopen($filename, "w+");
+	fwrite($handle, $html);
+	fclose($handle);*/
+	
+	/*message buyer*/
+	send_gm_email($buyer['id'], $html, 'Your Order have been Placed, Thank you!');
+	$html = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	
+	/*message sellers*/
+	$html = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
+	foreach ($seller_ids as $seller_id) {
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	}
+	/*LOGS FOR TRACKING*/
+	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
+	$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	$txt .= "Basket Merge IDs: " . implode(',', $merge_ids) . " \n";
+	$txt .= "Price total: " . $final_total . " \n";
+	$txt .= "Buyer ID: " . $buyer['id'] . " \n";
+	$txt .= "Seller IDs: " . implode(',', $seller_ids) . " \n";
+	$txt .= "--------------------------------" . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
+function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for+pick+up')
+{
+	$html = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
+	// debug($printable, 'stop');
+	/*create_dirs('invoices');
+	$filename = 'assets/data/files/invoices/'.$merge['order_id'].'-invoice.html';
+	$handle = fopen($filename, "w+");
+	fwrite($handle, $printable);
+	fclose($handle);*/
+	
+	/*message buyer*/
+	send_gm_email($buyer['id'], $html, 'Your Order is '.$action.', Thank you!');
+	$html = '<p>Order is '.$action.', <a href="orders/'.$status.'/">Check here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	
+	/*message sellers*/
+	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
+	foreach ($seller_ids as $seller_id) {
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	}
+	/*LOGS FOR TRACKING*/
+	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");
+	$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	$txt .= "Order ID: " . $merge['order_id'] . " \n";
+	$txt .= "Buyer ID: " . $buyer['id'] . " \n";
+	$txt .= "Seller IDs: " . implode(',', $seller_ids) . " \n";
+	$txt .= "--------------------------------" . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
