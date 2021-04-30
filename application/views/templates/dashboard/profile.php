@@ -139,49 +139,45 @@
 				<div class="dashboard-panel-middle">
 					<form action="api/save_notif" method="post" data-ajax="2" class="form-validate">
 						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-						<div class="row">
-							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
-								<ul class="spaced-list between">
-									<li><p>Order status</p></li>
-									<li>
-										<label class="switch">
-											<input type="checkbox" name="notif_email" <?php isset_echo($current_profile['settings'], 'notif_email');?>>
-											<span class="slider round"></span>
-										</label>
-									</li>
-								</ul>
-								<ul class="spaced-list between">
-									<li><p>Messages</p></li>
-									<li>
-										<label class="switch">
-											<input type="checkbox" name="notif_cp" <?php isset_echo($current_profile['settings'], 'notif_cp');?>>
-											<span class="slider round"></span>
-										</label>
-									</li>
-								</ul>
-							<?php else: ?>
-								<ul class="spaced-list between">
-									<li><p>Order status</p></li>
-									<li>
-										<label class="switch">
-											<input type="checkbox" name="notif_email">
-											<span class="slider round"></span>
-										</label>
-									</li>
-								</ul>
-								<ul class="spaced-list between">
-									<li><p>Messages</p></li>
-									<li>
-										<label class="switch">
-											<input type="checkbox" name="notif_cp">
-											<span class="slider round"></span>
-										</label>
-									</li>
-								</ul>
-							<?php endif ?>
-							</div>
-						</div>
+						<?php if (isset($current_profile['settings']) AND $current_profile['settings']): ?>
+							<ul class="spaced-list between">
+								<li><p>Order status</p></li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" name="notif_email" <?php isset_echo($current_profile['settings'], 'notif_email');?>>
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+							<ul class="spaced-list between">
+								<li><p>Messages</p></li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" name="notif_cp" <?php isset_echo($current_profile['settings'], 'notif_cp');?>>
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+						<?php else: ?>
+							<ul class="spaced-list between">
+								<li><p>Order status</p></li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" name="notif_email">
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+							<ul class="spaced-list between">
+								<li><p>Messages</p></li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" name="notif_cp">
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+						<?php endif ?>
 					</form>
 				</div>
 			</div>
