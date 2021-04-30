@@ -158,15 +158,22 @@
 							<?php endforeach ?>
 
 							<div class="order-deliver-note">
-								<small class="elem-block">DELIVERY SCHEDULE:
-									<?php
-										if ($orders['order_type'] == 1) {
-											echo " <b>SAME DAY</b>";
-										} else {
-											echo " <b>".strtoupper($orders['schedule']."</b>");
-										}
-									?>
-								</small>
+								<ul class="spaced-list between">
+									<li>
+										<small class="elem-block">DELIVERY SCHEDULE:
+											<?php
+												if ($orders['order_type'] == 1) {
+													echo " <b>SAME DAY</b>";
+												} else {
+													echo " <b>".strtoupper($orders['schedule']."</b>");
+												}
+											?>
+										</small>
+									</li>
+									<li>
+										<small class="elem-block" style="cursor:pointer;" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>"><b>INVOICE</b></small>
+									</li>
+								</ul>
 							</div>
 						</div>
 
@@ -188,13 +195,16 @@
 							<div class="text-left hidden-xs">
 								<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 								<p class="zero-gaps">
-									<span class="text-capsule status-<?php echo strtolower(urldecode($data['status']));?>"><?php echo ucwords(urldecode($data['status']));?></span>
+									<span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($data['status'])));?>"><?php echo ucwords(urldecode($data['status']));?></span>
 									<span class="text-capsule bg-theme<?php if (in_array(6, $status_array) AND count($orders['order_details']) == count($status_array)): ?><?php else: ?> hide<?php endif ?>" js-data="confirmed">Confirmed</span>
 								</p>
 							</div>
 							<div class="order-footer-total">
 								<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
-								<p class="hidden-lg hidden-md hidden-sm text-center" style="margin:0;"><span class="text-capsule status-placed">Placed</span></p>
+								<p class="zero-gaps hidden-lg hidden-md hidden-sm text-left" style="font-size:11px;">
+									<span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($data['status'])));?>"><?php echo ucwords(urldecode($data['status']));?></span>
+									<span class="text-capsule bg-theme<?php if (in_array(6, $status_array) AND count($orders['order_details']) == count($status_array)): ?><?php else: ?> hide<?php endif ?>" js-data="confirmed">Confirmed</span>
+								</p>
 								<div>
 									<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
 									<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo number_format($orders['fee']);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>

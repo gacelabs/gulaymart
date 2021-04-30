@@ -107,15 +107,6 @@
 								</div>
 							</div>
 						</div>
-
-						<hr class="carved">
-
-						<div class="text-step-basic" style="margin:0;">
-							<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
-							<div>
-								<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
