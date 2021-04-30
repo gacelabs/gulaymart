@@ -24,7 +24,7 @@ class Authenticate extends MY_Controller {
 				if ($this->accounts->profile['is_profile_complete'] === 0) {
 					$to = 'profile';
 				} else {
-					$to = $this->session->userdata('referrer') ?: 'farm/';
+					$to = $this->session->userdata('referrer') ?: 'orders/';
 				}
 			} else {
 				$to = '?error=Invalid credentials';

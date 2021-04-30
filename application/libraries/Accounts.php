@@ -159,11 +159,15 @@ class Accounts {
 
 	public function logout($redirect_url='')
 	{
+		// debug($redirect_url, 'stop');
 		$profile = $this->class->session->userdata('profile');
 		$this->class->session->unset_userdata('profile');
 		// $this->class->session->sess_destroy();
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
+
+		$referrer = str_replace(base_url('/'), '', $redirect_url);
+		$this->class->session->set_userdata('referrer', $referrer);
 
 		$prev_latlng = ['lat' => $profile['lat'], 'lng' => $profile['lng']];
 		// $this->class->session->set_userdata('prev_latlng', serialize($prev_latlng));
