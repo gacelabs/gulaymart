@@ -38,6 +38,9 @@ $route['orders/cancelled'] = 'Orders/index/cancelled';
 
 $route['orders/thank-you'] = 'Orders/thankyou';
 
+$route['admin/dash'] = 'Admin';
+$route['admin/dash'] = 'Admin/index';
+
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
 $route['dev-build/fetch-cities'] = 'DevBuild/fetch';

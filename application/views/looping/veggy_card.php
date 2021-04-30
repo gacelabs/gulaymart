@@ -1,4 +1,3 @@
-
 <div class="veggy-nearby-product-item">
 	<a href="<?php echo $data['product_url'];?>">
 		<div class="veggy-nearby-product-img" style="background-image: url('<?php identify_main_photo($data);?>'); background-size: 228px 268px;">

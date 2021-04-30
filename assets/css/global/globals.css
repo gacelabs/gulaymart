@@ -24,7 +24,6 @@ body.check-loc-on {
 }
 #global_navbar_logo {
 	background-color: #fff;
-	border-radius: 4px;
 	color: #799938;
 	font-size: 17px;
 	height: 34px;
@@ -41,6 +40,7 @@ body.check-loc-on {
 }
 #global_search_form input, #global_search_form button {
 	border: none;
+	border-radius: 0;
 	box-shadow: none;
 	outline: none;
 	padding: 7px 12px;
@@ -52,7 +52,6 @@ body.check-loc-on {
 }
 #global_navbar_btn_list>li {
 	background: #fff;
-	border-radius: 4px;
 	color: #799938;
 	cursor: pointer;
 	display: inline-block;
@@ -87,7 +86,6 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 	height: 34px;
 	margin: -7px 0 0;
 	padding: 0;
-	border-radius: 4px;
 	width: 34px;
 }
 .global-navbar-badge {

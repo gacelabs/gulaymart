@@ -9,6 +9,11 @@ body {
 	font-weight: normal;
 	padding-top: 54px;
 }
+input, select, textarea, button, .btn, .input-group-addon {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
 a {
 	color: inherit;
 }
@@ -20,6 +25,9 @@ h1, h2, h3, h4, h5 {
 }
 .clearfix {
 	clear: both !important;
+}
+.panel, .panel-heading, .panel-footer {
+	border-radius: 0;
 }
 .elem-block {
 	display: block;
@@ -57,6 +65,7 @@ h1, h2, h3, h4, h5 {
 }
 kbd {
 	font-family: 'Roboto', sans-serif;
+	border-radius: 0 !important;
 }
 .stop {
 	cursor: not-allowed;
@@ -65,10 +74,6 @@ kbd {
 	background-color: #fff;
 	padding: 15px 15px 15px 11px;
 	border-left: 4px solid #e43232;
-	border-top: 1px solid #ccc;
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	border-radius: 4px;
 	box-shadow: 0px 1px 6px 1px rgb(0 0 0 / 15%);
 	display: grid;
 	grid-template-columns: 20px 1fr;

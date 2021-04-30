@@ -65,7 +65,7 @@
 									<div class="form-group">
 										<label for="farm_name">Farm name</label>
 										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters. <span class="text-link" data-toggle="modal" data-target="#farm_identity_help">NEED HELP?</span></small>
-										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>">
+										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>" style="text-transform:capitalize;">
 									</div>
 									<div class="form-group">
 										<label for="tagline">Tagline</label>
@@ -254,7 +254,7 @@
 										<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
 										<input type="url" name="user_farms[youtube]" class="form-control social-url" data-id="#storefront-youtube" placeholder="YouTube URL" value="<?php isset_echo($data['farms'], 'youtube');?>">
 									</div>
-									<div class="input-group">
+									<div class="input-group" style="margin-bottom:0;">
 										<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
 										<input type="url" name="user_farms[messenger]" class="form-control social-url" data-id="#storefront-messenger" placeholder="Messenger URL" value="<?php isset_echo($data['farms'], 'messenger');?>">
 									</div>

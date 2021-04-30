@@ -4,7 +4,7 @@
 			<div class="product-list-photo" style="background-image: url(<?php identify_main_photo($data);?>);"></div>
 			<div class="product-desc-body">
 				<div class="product-title-container ellipsis-container">
-					<h1 class="zero-gaps"><?php echo $data['name'];?></h1>
+					<h1 class="zero-gaps"><?php echo ucwords($data['name']);?></h1>
 				</div>
 				<div class="product-list-footer">
 					<ul class="spaced-list between">

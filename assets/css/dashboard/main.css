@@ -19,7 +19,6 @@
 }
 #global_navbar_logo {
 	background-color: #799938;
-	border-radius: 4px;
 	color: #fff;
 	font-size: 17px;
 	height: 34px;
@@ -31,7 +30,6 @@
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	border-radius: 4px;
 	box-shadow: 0 0 0 1px rgb(0 0 0 / 11%);
 	display: inline-block;
 	height: 34px;
@@ -97,14 +95,11 @@
 }
 .dashboard-panel {
 	background-color: #fff;
-	border-radius: 4px;
 	margin-bottom: 20px;
 	position: relative;
 }
 .dashboard-panel.theme {
 	border-top: 3px solid #a8d253;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
 }
 .dashboard-panel-top {
 	border-bottom: 1px solid #efefef;
@@ -115,8 +110,6 @@
 }
 .dashboard-panel-footer {
 	background-color: #cecece;
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
 }
 
 @media (max-width: 991px) {
