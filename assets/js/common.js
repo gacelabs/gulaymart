@@ -39,7 +39,7 @@ $(document).ready(function() {
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
-				simpleAjax('api/set_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true}, $(e.relatedTarget));
+				simpleAjax('api/set_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
@@ -207,6 +207,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 			url: url,
 			type: 'post',
 			data: data,
+			cache: false,
 			dataType: 'json',
 			beforeSend: function(xhr, settings) {
 				if (ui) {

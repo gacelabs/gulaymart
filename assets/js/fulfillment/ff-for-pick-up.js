@@ -5,24 +5,22 @@ $(document).ready(function() {
 var renderHTML = function(obj) {
 	// console.log(obj)
 	var uiToPrint = $('[js-element="invoice-body"]').find('[js-element="to-print"]');
-	$('[js-element="invoice-body"]').find('p[js-data="loader"]').addClass('hide');
 	uiToPrint.replaceWith(obj.html);
 	
+	$('[js-element="invoice-body"]').find('p[js-data="loader"]').addClass('hide');
+	$('[js-element="to-print"]').removeClass('hide');
 	// console.log($('[js-element="print-action"]'))
-	$('[js-element="print-action"]').on('click', function(e) {
+	$('[js-element="print-action"]').off('click').on('click', function(e) {
 		var oThis = $(e.target);
-		oThis.hide();
-
-		html2canvas(document.querySelector('[js-element="to-print"]')).then(canvas => {
-			window.onafterprint = function(e){
-				$(window).off('mousemove', window.onafterprint);
-				console.log(oThis);
-				oThis.show();
-			};
-			setTimeout(function(){
-				$(window).one('mousemove', window.onafterprint);
-			}, 0);
-			printJS(canvas.toDataURL(), 'image');
+		if (oThis.prop('tagName') != 'BUTTON') oThis = $(e.target).parent('[js-element="print-action"]');
+		oThis.attr('prev-ui', oThis.html()).html('<span class="spinner-border spinner-border-sm"></span> Loading');
+		html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
+			oThis.html(oThis.attr('prev-ui'));
+			canvas.toBlob(function(blob) {
+				var url = URL.createObjectURL(blob);
+				// console.log(url);
+				printJS({printable:url, type:'image'});
+			});
 		});
 	});
 }

@@ -211,7 +211,11 @@ class Api extends MY_Controller {
 					// debug($results, 'stop');
 					if ($results) {
 						$html = $this->load->view('static/'.$view, $results, true);
-						$this->set_response('error', false, ['html'=>$html], false, 'renderHTML');
+						$object = ['html'=>$html,'identifier'=>''];
+						if (isset($post['identifier'])) {
+							$object['identifier'] = $post['identifier'];
+						}
+						$this->set_response('error', false, $object, false, 'renderHTML');
 					}
 				}
 			}

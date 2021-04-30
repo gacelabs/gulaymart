@@ -3,7 +3,7 @@
 	$buyer = json_decode(base64_decode($buyer), true);
 	$order_details = json_decode(base64_decode($order_details), true);
 ?>
-<div js-element="to-print">
+<div id="zig-wrapper" js-element="to-print" js-id="<?php echo $id;?>" class="hide">
 	<div class="zig-zag-bottom zig-zag-top">
 		<div class="zig-body">
 			<div class="zig-top">
@@ -40,7 +40,7 @@
 							<i class="fa fa-phone"></i>
 						</div>
 						<div>
-							<?php if ($current_profile) : ?>
+							<?php if ($current_profile['id'] == $buyer['id']) : ?>
 							<p class="zero-gaps"><?php echo $buyer['profile']['phone'];?></p>
 							<?php else : ?>
 							<p class="zero-gaps"><?php echo substr($buyer['profile']['phone'], 0, 4);?>-***-****</p>
@@ -94,7 +94,7 @@
 						<p class="text-contrast zero-gaps"><?php echo $order_id;?></p>
 					</li>
 					<li class="text-right">
-						<button class="btn btn-sm" js-element="print-action">Print<i class="fa fa-print icon-right"></i></button>
+						<button class="btn btn-sm" js-element="print-action" data-html2canvas-ignore>Print<i class="fa fa-print icon-right"></i></button>
 					</li>
 				</ul>
 				<div style="margin-top:20px;text-align: center;">
