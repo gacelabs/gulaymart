@@ -1088,10 +1088,28 @@ class CreateDev {
 				'default' => NULL,
 				'null' => true,
 			],
+			'referral_code' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => REFERRAL_CODE,
+				'null' => true,
+			],
 			'toktok_post' => [
 				'type' => 'LONGTEXT',
 				'default' => NULL,
 				'null' => true,
+			],
+			'is_manually' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'is_failed' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
 			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',

@@ -176,7 +176,9 @@ class Fulfillment extends My_Controller {
 					// set status for pick-up this will now also send to toktok post delivery
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
 					
+					/*send it realtime to buyer*/
 					$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post]);
+
 					$redirect = 'fulfillment/for-pick-up';
 					$action = 'Ready for Pick Up';
 					if ($status_value == 5) {
