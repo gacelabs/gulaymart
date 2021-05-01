@@ -247,6 +247,9 @@ class Accounts {
 				$this->class->db->update('users', ['device_id' => $this->device_id], ['id' => $request['id']]);
 			}
 			$request['device_id'] = $this->device_id;
+			
+			$toktok_operators = $this->class->gm_db->get('toktok_operators', ['user_id' => $this->profile['id']], 'row');
+			$request['operator'] = $toktok_operators;
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;

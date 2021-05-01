@@ -12,6 +12,8 @@
 						if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 						/*communicate from fulfillment tab to orders tab*/
 						if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
+						/*communicate from operators booking page*/
+						if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
 					}
 				});
 			},

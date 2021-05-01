@@ -111,3 +111,4 @@ defined('NON_LOCATION_KEYS') OR define('NON_LOCATION_KEYS', serialize(['id','lat
 defined('METERS_DISTANCE_TO_USER') OR define('METERS_DISTANCE_TO_USER', 50000);
 defined('NON_PRODUCT_KEYS') OR define('NON_PRODUCT_KEYS', serialize(['user_id', 'category_id', 'subcategory_id', 'added']));
 defined('SECONDS_DISTANCE_TO_USER') OR define('SECONDS_DISTANCE_TO_USER', 3600);
+defined('ADMIN_PASS') OR define('ADMIN_PASS', '2');

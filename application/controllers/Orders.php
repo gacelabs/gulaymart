@@ -84,12 +84,17 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
-		$messages = $this->gm_db->get('messages', ['user_id' => $this->accounts->profile['id'], 'unread' => 1]);
-		// debug($messages, 'stop');
+		if ($this->farms AND $this->products->count()) {
+			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
+			$messages = $this->gm_db->get_or_in('messages', ['user_id' => $this->accounts->profile['id'], 'page_id' => $ids]);
+		} else {
+			$messages = $this->gm_db->get('messages', ['user_id' => $this->accounts->profile['id']]);
+		}
 		$data_messages = false;
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
+				$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
 				if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 					$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
 					$message['product']['farm_location_id'] = $message['entity_id'];
@@ -97,7 +102,6 @@ class Orders extends MY_Controller {
 						'product_id' => $message['page_id'],
 						'farm_location_id' => $message['entity_id']
 					], 'row');
-					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
 					$message['bought'] = $this->gm_db->count('baskets', [
 						'user_id' => $message['user_id'],
 						'product_id' => $message['page_id'],

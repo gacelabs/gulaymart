@@ -181,7 +181,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			}
 
 			oSettings.data = formData;
-			console.log(oSettings);
+			// console.log(oSettings);
 			if (oFormAjax != false && oFormAjax.readyState !== 4) oFormAjax.abort();
 			oFormAjax = $.ajax(oSettings);
 		} else {

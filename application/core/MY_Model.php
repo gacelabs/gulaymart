@@ -319,4 +319,15 @@ class MY_Model extends CI_Model {
 		}
 		return false;
 	}
+
+	public function columns($field=false, $data=false)
+	{
+		$list = [];
+		if ($field AND $data) {
+			foreach ($data as $key => $row) {
+				$list[] = $row[$field];
+			}
+		}
+		return $list;
+	}
 }

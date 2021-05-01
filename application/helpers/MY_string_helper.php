@@ -371,7 +371,7 @@ function clean_string_name($string=FALSE, $replaced=FALSE, $delimiter='-')
 		$string = preg_replace('/[^a-z0-9\.-]/', '', strtolower($string));
 		$string = preg_replace('/[()]/', '', strtolower($string));
 		$string = preg_replace('/[+]/', '', strtolower($string));
-		if ($replaced) {
+		if ($replaced != FALSE) {
 			$string = preg_replace('/'.$delimiter.'/', $replaced, $string);
 		}
 	}
@@ -1531,8 +1531,8 @@ function format_duration($duration=0)
 				$duration .= ' minutes';
 			}
 		} else {
-			$hours = (float)($duration / 60);
-			$minutes = (float)($duration % 60);
+			$hours = floor((float)($duration / 60));
+			$minutes = ceil((float)($duration % 60));
 			if ($hours == 1) {
 				$duration = '1 hour ';
 			} else {
@@ -1556,10 +1556,8 @@ function get_fullname($data=false, $other='', $return=false)
 	$fullname = $other;
 	$ci =& get_instance();
 	if ($data) {
-		if ($ci->accounts->has_session) {
-			if ($data['id'] == $ci->accounts->profile['id']) {
-				$fullname = $ci->accounts->profile['firstname'];
-			}
+		if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
+			$fullname = $ci->accounts->profile['firstname'];
 		} else {
 			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
 		}
@@ -1590,4 +1588,24 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 	} else {
 		return $main_photo;
 	}
+}
+
+function operatorlogger($data=false, $app=false, $operator=false)
+{
+	$logfile = fopen(get_root_path('assets/data/logs/operator-bookings.log'), "a+");
+	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	if ($data AND $app AND $operator) {
+		$ci =& get_instance();
+		/*log here*/
+		$merge_ids = $ci->gm_db->columns('id', $data);
+		$txt .= "Code: " . (isset($app->response_code) ? $app->response_code : '-1') . "\n";
+		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids]) . " \n";
+	} else {
+		$txt .= "Code: -1 \n";
+		$txt .= "Response: $data \n";
+	}
+	
+	$txt .= "---------------------------------------------------------------------------------" . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
 }

@@ -1099,13 +1099,13 @@ class CreateDev {
 				'default' => NULL,
 				'null' => true,
 			],
-			'is_manually' => [
+			'operator' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
 				'default' => '0',
 				'null' => false,
 			],
-			'is_failed' => [
+			'is_sent' => [
 				'type' => 'TINYINT',
 				'constraint' => '1',
 				'default' => '0',
@@ -1120,8 +1120,84 @@ class CreateDev {
 			'DEFAULT CHARSET' => 'utf8'
 		]);
 		
+		return $table_data;
+	}
+
+	public function create_admin_settings_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'setting' => [
+				'type' => 'TEXT',
+				'default' => true,
+				'null' => true,
+			],
+			'value' => [
+				'type' => 'TEXT',
+				'default' => true,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('admin_settings', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		sleep(5);
+		$attributes = [
+			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50])],
+		];
+		$this->class->db->insert_batch('admin_settings', $attributes);
 
 		return $table_data;
 	}
 
+	public function create_toktok_operators_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'referral_code' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => null,
+				'null' => true,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('toktok_operators', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
 }
