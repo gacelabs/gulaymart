@@ -188,7 +188,7 @@ class Admin extends MY_Controller {
 											/*send this data to this operator in realtime*/
 											$merge_ids = $this->gm_db->columns('id', $toktok);
 											$app = $this->senddataapi->trigger('operator-bookings', 'send-bookings', [
-												'message' => 'You have available bookings, please press on BOOK NOW',
+												'message' => 'You have available bookings, please click "BOOK NOW"',
 												'merge_ids' => $merge_ids,
 											]);
 											
