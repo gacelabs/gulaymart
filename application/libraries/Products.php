@@ -353,9 +353,13 @@ class Products {
 					// debug($feedbacks_data, $feedbacks, 'stop');
 				}
 				$product['feedbacks'] = $feedbacks_data;
-				$product['can_comment'] =  $this->class->gm_db->count('baskets', ['product_id'=>$product_id,'location_id'=>$farm_location_id,'user_id'=>$this->profile['id'],'status'=>[3,4,6]]);
-				if ($product['can_comment'] == 0 AND $feedbacks_data) {
-					$product['can_comment'] = $this->class->gm_db->count('products', ['user_id'=>$this->profile['id'],'id'=>$product_id]);
+				if ($this->has_session) {
+					$product['can_comment'] =  $this->class->gm_db->count('baskets', ['product_id'=>$product_id,'location_id'=>$farm_location_id,'user_id'=>$this->profile['id'],'status'=>[3,4,6]]);
+					if ($product['can_comment'] == 0 AND $feedbacks_data) {
+						$product['can_comment'] = $this->class->gm_db->count('products', ['user_id'=>$this->profile['id'],'id'=>$product_id]);
+					}
+				} else {
+					$product['can_comment'] = 0;
 				}
 
 				$product['category'] = false;
