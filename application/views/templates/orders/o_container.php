@@ -102,7 +102,7 @@
 									if ($product['photos'] AND isset($product['photos']['main'])) {
 										$photo_url = $product['photos']['main']['url_path'];
 									}
-									if ($order['status'] != 5) $initial_total += (float)$order['sub_total'];
+									if ($order['status'] != 5 OR $data['status'] == 'cancelled') $initial_total += (float)$order['sub_total'];
 									$details = $order; unset($details['product']);
 									$details['merge_id'] = $orders['id'];
 									$details['basket_ids'] = $orders['basket_ids'];

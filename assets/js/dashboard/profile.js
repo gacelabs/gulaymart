@@ -54,6 +54,20 @@ $(document).ready(function() {
 		oPauseInputAjax = $.ajax(oSettings);
 	});
 
+	$('#toktok-active').off('change').on('change', function(e) {
+		e.preventDefault();
+		$('[name=referral_code]').removeClass('error');
+		if (this.checked) {
+			$('[name=referral_code]').removeAttr('readonly');
+			$('[name=referral_code]').attr('required','required');
+			$('[js-element="rider-template"]').find('input').attr('required','required');
+		} else {
+			$('[name=referral_code]').attr('readonly','readonly');
+			$('[name=referral_code]').removeAttr('required');
+			$('[js-element="rider-template"]').find('input').removeAttr('required');
+		}
+	});
+
 	setTimeout(function() { $('#search-place').attr('autocomplete', 'input'); }, 300);
 });
 
@@ -97,3 +111,9 @@ var onCursorIdle = function(e) {
 		});
 	}, 3000);
 };
+
+var appendOperatorID = function(obj) {
+	if (obj && obj.id != undefined) {
+		$('#form_toktok').prepend('<input type="hidden" name="id" value="'+obj.id+'">');
+	}
+}

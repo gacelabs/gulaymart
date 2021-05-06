@@ -120,7 +120,7 @@
 									</div>
 									<div class="panel-footer text-right">
 										<div class="input-group">
-											<input type="text" class="form-control" name="admin_pass" required="required" to-clear placeholder="Admin password">
+											<input type="password" class="form-control" name="admin_pass" required="required" to-clear placeholder="Admin password">
 											<span class="input-group-btn">
 												<button type="submit" class="btn btn-default" type="button" data-loading-text="">Apply</button>
 											</span>

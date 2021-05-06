@@ -146,6 +146,8 @@ class Admin extends MY_Controller {
 								$post['f_price'] = $toktok_dpd['pricing']['price'];
 								$post['f_sender_mobile'] = preg_replace('/-/', '', $post['f_sender_mobile']);
 								$post['f_recepient_mobile'] = preg_replace('/-/', '', $post['f_recepient_mobile']);
+								// $post['referral_code'] = 'PPS9665253';
+								// $post['f_driver_id'] = '164515';
 								// unset($post['referral_code']);
 								debug($post, 'stop');
 								// $this->toktokapi->app_request('post_delivery', $post);

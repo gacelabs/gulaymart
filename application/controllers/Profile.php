@@ -7,6 +7,7 @@ class Profile extends MY_Controller {
 
 	public function index($id=false)
 	{
+		// debug($this, true);
 		$is_basket_session = redirect_basket_orders();
 		$this->render_page([
 			'top' => [

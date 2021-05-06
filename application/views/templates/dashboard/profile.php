@@ -182,6 +182,76 @@
 				</div>
 			</div>
 			<?php endif; ?>
+
+			<div class="dashboard-panel theme">
+				<ul class="spaced-list between dashboard-panel-top">
+					<li><h4 class="zero-gaps">Toktok Operator Details</h4></li>
+				</ul>
+				<div class="dashboard-panel-middle">
+					<form action="api/save_toktok" method="post" data-ajax="2" class="form-validate" id="form_toktok">
+						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
+						<?php if (isset($current_profile['operator']) AND $current_profile['operator']): ?>
+							<input type="hidden" name="id" value="<?php echo $current_profile['operator']['id'];?>">
+							<ul class="spaced-list between">
+								<li>
+									<div class="input-group">
+										<span class="input-group-btn">
+											<label class="btn" for="referral_code">Referral code</label>
+										</span>
+										<input type="text" class="form-control" id="referral_code" name="referral_code"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?> value="<?php isset_echo($current_profile['operator'], 'referral_code');?>" />
+									</div>
+								</li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" id="toktok-active" name="active"<?php echo $current_profile['operator']['active'] ? ' checked': '';?> value="1" />
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+							<hr>
+							<div class="row" js-element="rider-template">
+								<div class="col-lg-6">
+									<input type="text" class="form-control" name="rider[0][name]" placeholder="Rider Name"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?>>
+								</div>
+								<div class="col-lg-6">
+									<div class="input-group">
+										<input type="text" class="form-control" name="rider[0][mobile]" placeholder="Mobile Number"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?>>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button"><i class="fa fa-plus"></i></button>
+										</span>
+									</div>
+								</div>
+							</div>
+						<?php else: ?>
+							<ul class="spaced-list between">
+								<li>
+									<input type="text" class="form-control" name="referral_code" readonly="readonly" required="required" placeholder="Enter Referral Code" >
+								</li>
+								<li>
+									<label class="switch">
+										<input type="checkbox" id="toktok-active" name="active" value="1" />
+										<span class="slider round"></span>
+									</label>
+								</li>
+							</ul>
+							<hr>
+							<div class="row" js-element="rider-template">
+								<div class="col-lg-6">
+									<input type="text" class="form-control" name="rider[0][name]" readonly placeholder="Rider Name">
+								</div>
+								<div class="col-lg-6">
+									<div class="input-group">
+										<input type="text" class="form-control" name="rider[0][mobile]" readonly placeholder="Mobile Number">
+										<span class="input-group-btn">
+											<button class="btn btn-default" readonly type="button"><i class="fa fa-plus"></i></button>
+										</span>
+									</div>
+								</div>
+							</div>
+						<?php endif ?>
+					</form>
+				</div>
+			</div>
 		</div>
 
 		<?php if (isset($current_profile['profile']['phone'])) : ?>
