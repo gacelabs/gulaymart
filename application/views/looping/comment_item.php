@@ -22,7 +22,7 @@
 				<div class="input-group">
 					<input type="text" class="form-control" required="required" style="width:100%;" placeholder="<?php echo $placeholder;?>" name="content">
 					<span class="input-group-btn">
-						<button type="submit" class="btn btn-md btn-contrast" data-loading-text>
+						<button type="submit" class="btn btn-md btn-contrast" loading-text>
 							<small>POST</small>
 						</button>
 					</span>

@@ -185,71 +185,103 @@
 
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
-					<li><h4 class="zero-gaps">Toktok Operator Details</h4></li>
+					<li><h4 class="zero-gaps">Operator Details</h4></li>
 				</ul>
 				<div class="dashboard-panel-middle">
-					<form action="api/save_toktok" method="post" data-ajax="2" class="form-validate" id="form_toktok">
+					<form action="profile/save_operator_details" method="post" data-ajax="1" class="form-validate" id="operator_form">
 						<input type="hidden" name="user_id" value="<?php echo $current_profile['id'];?>">
-						<?php if (isset($current_profile['operator']) AND $current_profile['operator']): ?>
-							<input type="hidden" name="id" value="<?php echo $current_profile['operator']['id'];?>">
-							<ul class="spaced-list between">
-								<li>
-									<div class="input-group">
-										<span class="input-group-btn">
-											<label class="btn" for="referral_code">Referral code</label>
-										</span>
-										<input type="text" class="form-control" id="referral_code" name="referral_code"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?> value="<?php isset_echo($current_profile['operator'], 'referral_code');?>" />
-									</div>
-								</li>
-								<li>
-									<label class="switch">
-										<input type="checkbox" id="toktok-active" name="active"<?php echo $current_profile['operator']['active'] ? ' checked': '';?> value="1" />
-										<span class="slider round"></span>
-									</label>
-								</li>
-							</ul>
-							<hr>
-							<div class="row" js-element="rider-template">
-								<div class="col-lg-6">
-									<input type="text" class="form-control" name="rider[0][name]" placeholder="Rider Name"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?>>
-								</div>
-								<div class="col-lg-6">
-									<div class="input-group">
-										<input type="text" class="form-control" name="rider[0][mobile]" placeholder="Mobile Number"<?php echo $current_profile['operator']['active'] ? ' required': ' readonly';?>>
-										<span class="input-group-btn">
-											<button class="btn btn-default" type="button"><i class="fa fa-plus"></i></button>
-										</span>
-									</div>
+						<?php 
+							$active = $referral_code = false;
+							// $riders = [['id' => 0, 'name' => '', 'mobile' => '', 'active' => -1]];
+							$riders = false;
+							if (isset($current_profile['operator']) AND $current_profile['operator']) {?>
+								<input type="hidden" name="id" value="<?php echo $current_profile['operator']['id'];?>"><?php 
+								$active = $current_profile['operator']['active'];
+								$referral_code = $current_profile['operator']['referral_code'];
+								if ($current_profile['operator_riders']) {
+									$riders = $current_profile['operator_riders'];
+								}
+							}
+						?>
+						<div class="row">
+							<div class="col-lg-10 col-md-10 col-sm-10 col-xs-9">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<label class="btn" for="referral_code">Referral code</label>
+									</span>
+									<input type="text" class="form-control" id="referral_code" name="referral_code" required value="<?php echo $referral_code;?>"<?php echo $active ? '': ' readonly';?> />
 								</div>
 							</div>
-						<?php else: ?>
-							<ul class="spaced-list between">
-								<li>
-									<input type="text" class="form-control" name="referral_code" readonly="readonly" required="required" placeholder="Enter Referral Code" >
-								</li>
-								<li>
-									<label class="switch">
-										<input type="checkbox" id="toktok-active" name="active" value="1" />
-										<span class="slider round"></span>
-									</label>
-								</li>
-							</ul>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" style="margin-top: 6px;">
+								<label class="switch">
+									<input type="checkbox" id="toktok-active" name="active" value="1"<?php echo $active ? ' checked': '';?> />
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+						<div class="row">
 							<hr>
-							<div class="row" js-element="rider-template">
-								<div class="col-lg-6">
-									<input type="text" class="form-control" name="rider[0][name]" readonly placeholder="Rider Name">
-								</div>
-								<div class="col-lg-6">
-									<div class="input-group">
-										<input type="text" class="form-control" name="rider[0][mobile]" readonly placeholder="Mobile Number">
-										<span class="input-group-btn">
-											<button class="btn btn-default" readonly type="button"><i class="fa fa-plus"></i></button>
-										</span>
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<label>Riders</label>
+							</div>
+						</div>
+						<?php if ($riders): ?>
+							<?php foreach ($riders as $key => $rider): ?>
+								<div class="row" js-element="riders">
+									<input type="hidden" name="riders[<?php echo $key;?>][id]" js-name="id" value="<?php echo $rider['id'];?>">
+									<input type="hidden" name="riders[<?php echo $key;?>][active]" js-name="active" value="<?php echo $rider['active'];?>">
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-5">
+										<div class="form-group">
+											<input type="text" name="riders[<?php echo $key;?>][name]" js-name="name" required class="form-control" placeholder="Rider Name"<?php echo $active ? '': ' readonly';?> value="<?php echo $rider['name'];?>"<?php echo $rider['active'] ? '': ' disabled';?> />
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-5">
+										<div class="input-group">
+											<input type="text" name="riders[<?php echo $key;?>][mobile]" js-name="mobile" required class="form-control" placeholder="Mobile Number"<?php echo $active ? '': ' readonly';?> value="<?php echo $rider['mobile'];?>" data-inputmask="'mask': '09999999999'" placeholder="09xxxxxxxxx"<?php echo $rider['active'] ? '': ' disabled';?> autocomplete="input" />
+											<span class="input-group-btn">
+												<?php
+													$eventtooltip = ' data-toggle="tooltip" data-placement="top" title="Deactivate Rider"';
+													$event = 'toggle-on';
+													if ($rider['active'] == 0) {
+														$eventtooltip = ' data-toggle="tooltip" data-placement="top" title="Activate Rider"';
+														$event = 'toggle-off';
+													}
+												?>
+												<button loading-text="" value="<?php echo $rider['id'];?>" js-element="action" js-event="<?php echo $event;?>" class="btn btn-default" type="button"<?php echo $active ? '': ' disabled';?><?php echo $eventtooltip;?>><i class="fa fa-<?php echo $event;?>"></i></button>
+											</span>
+										</div>
 									</div>
 								</div>
+							<?php endforeach ?>
+						<?php else: ?>
+							<div class="text-step-basic">
+								<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
+								<p class="zero-gaps">Click the <b class="text-contrast">Add Rider</b> button bellow to save set <b>rider info</b>.</p>
 							</div>
 						<?php endif ?>
+						<div class="dashboard-panel-footer text-right" js-element="rider-footer">
+							<button type="button" js-element="action" js-event="plus" class="btn btn-contrast pull-left"><i class="fa fa-plus"></i> Add Rider</button>
+							<input type="button" js-element="reset" class="btn btn-default icon-left" value="Reset" />
+							<button type="submit" class="btn btn-contrast">Save</button>
+						</div>
 					</form>
+					<div class="row hide" js-template="riders">
+						<input type="hidden" name="riders[0][id]" js-name="id" value="0">
+						<input type="hidden" name="riders[0][active]" js-name="active" value="1">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-5">
+							<div class="form-group">
+								<input type="text" name="riders[0][name]" js-name="name" required class="form-control" placeholder="Rider Name" value="" aria-required="true" aria-invalid="false">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-5">
+							<div class="input-group">
+								<input type="text" name="riders[0][mobile]" js-name="mobile" required class="form-control" placeholder="Mobile Number" value="" data-inputmask="'mask': '09999999999'" inputmode="text" aria-required="true" autocomplete="input" />
+								<span class="input-group-btn">
+									<button loading-text="" value="0" js-element="action" js-event="trash" class="btn btn-default" type="button"><i class="fa fa-trash"></i></button>
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

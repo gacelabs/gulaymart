@@ -248,8 +248,13 @@ class Accounts {
 			}
 			$request['device_id'] = $this->device_id;
 			
-			$toktok_operators = $this->class->gm_db->get('toktok_operators', ['user_id' => $this->profile['id']], 'row');
-			$request['operator'] = $toktok_operators;
+			$toktok_operator = $this->class->gm_db->get('operators', ['user_id' => $this->profile['id']], 'row');
+			$request['operator'] = $toktok_operator;
+			$request['operator_riders'] = false;
+			if ($toktok_operator) {
+				$operator_riders = $this->class->gm_db->get('operator_riders', ['operator_id' => $toktok_operator['id']]);
+				$request['operator_riders'] = $operator_riders;
+			}
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;

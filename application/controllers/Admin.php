@@ -173,14 +173,14 @@ class Admin extends MY_Controller {
 							'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
 						]);
 						if ($toktok_for_operators) {
-							$toktok_operators = $this->gm_db->get('toktok_operators', ['active' => 1]);
-							if ($toktok_operators) {
-								$operators = count($toktok_operators);
+							$operators = $this->gm_db->get('operators', ['active' => 1]);
+							if ($operators) {
+								$operators = count($operators);
 								$chunk_count = floor(count($toktok_for_operators) / $operators); /*this will be average*/
 								if ($chunk_count > 0) {
 									$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
 									/*now loop from operators and give them bookings*/
-									foreach ($toktok_operators as $key => $operator) {
+									foreach ($operators as $key => $operator) {
 										if (isset($toktok_for_operators[$key])) {
 											$toktok = $toktok_for_operators[$key];
 

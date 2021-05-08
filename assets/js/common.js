@@ -122,7 +122,13 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Processing ...',
 			keep_loading = false;
 			if (uiButtonSubmit) {
-				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Processing ...';
+				if (typeof uiButtonSubmit.attr('loading-text') == 'undefined') {
+					loadingText = '';
+				} else if (typeof uiButtonSubmit.attr('loading-text') != 'undefined') {
+					loadingText = uiButtonSubmit.attr('loading-text');
+				} else {
+					loadingText = 'Processing ...';
+				}
 				keep_loading = (uiButtonSubmit.data('keep-loading') != undefined) ? uiButtonSubmit.data('keep-loading') : false;
 				// console.log(keep_loading);
 			}
@@ -201,7 +207,13 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
 			sLastButtonText = ui.html();
-			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Processing ...';
+			if (typeof ui.attr('loading-text') == 'undefined') {
+				loadingText = '';
+			} else if (typeof ui.attr('loading-text') != 'undefined') {
+				loadingText = ui.attr('loading-text');
+			} else {
+				loadingText = 'Processing ...';
+			}
 		}
 		var oSettings = {
 			url: url,

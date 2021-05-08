@@ -90,24 +90,6 @@ class Api extends MY_Controller {
 		$this->set_response('error', 'Unable to save notification settings!', $post);
 	}
 
-	public function save_toktok()
-	{
-		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		// debug($post, 'stop');
-		if ($post) {
-			if (!isset($post['active'])) $post['active'] = 0;
-			if (!isset($post['id'])) {
-				$post['id'] = $this->gm_db->new('toktok_operators', $post);
-			} else {
-				$id = $post['id']; unset($post['id']);
-				$this->gm_db->save('toktok_operators', $post, ['id' => $id]);
-				$post['id'] = $id;
-			}
-			$this->set_response('success', 'Toktok Operator Settings Saved!', $post, false, 'appendOperatorID');
-		}
-		$this->set_response('error', 'Unable to save Toktok Operator settings!', $post);
-	}
-
 	public function agree_terms()
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();

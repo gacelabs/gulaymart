@@ -217,7 +217,8 @@ class DevBuild extends CI_Controller {
 			'serviceable_areas',
 			'baskets_merge',
 			'admin_settings',
-			'toktok_operators',
+			'operators',
+			'operator_riders',
 		];
 
 		return $data;

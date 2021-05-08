@@ -1161,7 +1161,7 @@ class CreateDev {
 		return $table_data;
 	}
 
-	public function create_toktok_operators_table()
+	public function create_operators_table()
 	{
 		$this->class->load->dbforge();
 		sleep(3);
@@ -1193,7 +1193,55 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('toktok_operators', true, [
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('operators', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
+
+	public function create_operator_riders_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'operator_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'name' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => null,
+				'null' => true,
+			],
+			'mobile' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => null,
+				'null' => true,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('operator_id');
+		$table_data = $this->class->dbforge->create_table('operator_riders', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);

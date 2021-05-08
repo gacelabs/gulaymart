@@ -122,7 +122,7 @@
 										<div class="input-group">
 											<input type="password" class="form-control" name="admin_pass" required="required" to-clear placeholder="Admin password">
 											<span class="input-group-btn">
-												<button type="submit" class="btn btn-default" type="button" data-loading-text="">Apply</button>
+												<button type="submit" class="btn btn-default" type="button" loading-text="">Apply</button>
 											</span>
 										</div>
 									</div>

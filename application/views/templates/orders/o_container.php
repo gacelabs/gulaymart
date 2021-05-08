@@ -87,7 +87,7 @@
 							?>
 							<?php if ($data['status'] != 'cancelled' AND $forpickup == false): ?>
 							<div class="text-right">
-								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>' data-loading-text=""><span class="text-danger">&times;</span></button>
+								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>' loading-text=""><span class="text-danger">&times;</span></button>
 							</div>
 							<?php endif ?>
 						</div>
@@ -144,7 +144,7 @@
 									</div>
 									<?php if ($details['status'] == 2 AND in_array($data['status'], ['placed'])): ?>
 										<div class="text-right">
-											<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove" js-element="remove-product" data-json='<?php echo $json;?>' data-loading-text=""><span class="text-danger">&times;</span></button>
+											<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove" js-element="remove-product" data-json='<?php echo $json;?>' loading-text=""><span class="text-danger">&times;</span></button>
 										</div>
 									<?php endif ?>
 
