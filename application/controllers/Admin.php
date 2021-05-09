@@ -147,17 +147,21 @@ class Admin extends MY_Controller {
 								$post['f_price'] = $toktok_dpd['pricing']['price'];
 								$post['f_sender_mobile'] = preg_replace('/-/', '', $post['f_sender_mobile']);
 								$post['f_recepient_mobile'] = preg_replace('/-/', '', $post['f_recepient_mobile']);
-								// $post['referral_code'] = 'PPS9665253';
-								// $post['f_driver_id'] = '164515';
-								// unset($post['referral_code']);
+								// GET RIDER
+								/*$rider = ['term'=>ltrim($set['rider_mobile'], '0'), '_type'=>'query', 'q'=>ltrim($set['rider_mobile'], '0')];
+								$this->toktokapi->app_request('rider', $rider);
+								if ($this->toktokapi->success) {
+									$post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
+								}*/
 								// debug($post, 'stop');
-								// $this->toktokapi->app_request('post_delivery', $post);
-								// debug($this->toktokapi, 'stop');
-								// if ($this->toktokapi->success) {
-									$raw = ['is_sent' => 1, 'operator' => -1]; /*'operator' => -1 is us*/
-								// } else {
-								// 	$raw = ['is_sent' => 2, 'operator' => -1]; /*'is_sent' => 2 FAILED*/
-								// }
+
+								/*$this->toktokapi->app_request('post_delivery', $post);
+								debug($this->toktokapi, 'stop');
+								if ($this->toktokapi->success) {*/
+									$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+								/*} else {
+									$raw = ['is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
+								}*/
 								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
 							}
 						}
@@ -204,8 +208,8 @@ class Admin extends MY_Controller {
 							operatorlogger('No records available for operators');
 						}
 						/*then let the cron job run this until all operator bookings are done*/
+						/*there will be another method that checks these and switches back ON again*/
 						$this->notify_operator_booking();
-						/*there will be another cron job that checks these and switches back ON again*/
 					}
 				} else {
 					$this->notify_operator_booking();
@@ -242,7 +246,8 @@ class Admin extends MY_Controller {
 				$set['switch'] = 1; /*enable switch*/
 				$this->gm_db->save('admin_settings', ['value' => json_encode($set)], ['id' => $automation_settings['id']]);
 			}
-			$this->post_deliveries();
+			/*when cron job runs again it will continue our bookings based on settings*/
+			// $this->post_deliveries();
 		}
 	}
 
