@@ -1590,15 +1590,15 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 	}
 }
 
-function operatorlogger($data=false, $app=false, $operator=false)
+function operatorlogger($data=false, $operator=false)
 {
 	$logfile = fopen(get_root_path('assets/data/logs/operator-bookings.log'), "a+");
 	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	if ($data AND $app AND $operator) {
+	if ($data AND $operator) {
 		$ci =& get_instance();
 		/*log here*/
 		$merge_ids = $ci->gm_db->columns('id', $data);
-		$txt .= "Code: " . (isset($app->response_code) ? $app->response_code : '-1') . "\n";
+		$txt .= "Code: 200\n";
 		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids]) . " \n";
 	} else {
 		$txt .= "Code: -1 \n";

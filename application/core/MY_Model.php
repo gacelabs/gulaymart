@@ -322,10 +322,13 @@ class MY_Model extends CI_Model {
 
 	public function columns($field=false, $data=false)
 	{
-		$list = [];
+		$list = $unique = [];
 		if ($field AND $data) {
 			foreach ($data as $key => $row) {
-				$list[] = $row[$field];
+				if (!isset($unique[$row[$field]])) {
+					$unique[$row[$field]] = true;
+					$list[] = $row[$field];
+				}
 			}
 		}
 		return $list;

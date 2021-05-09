@@ -273,4 +273,35 @@ class Baskets {
 		return false;
 	}
 
+	public function merge_disassembled($where=true, $row=false, $limit=false, $order_by='location_id')
+	{
+		if ($where != false) {
+			if (!is_bool($limit) AND is_numeric($limit)) {
+				$this->class->db->limit($limit);
+			}
+			$direction = 'ASC';
+			if ((bool)strstr(strtolower($order_by), ':desc')) {
+				$chunck = explode(':', $order_by);
+				$order_by = $chunck[0];
+				$direction = $chunck[1];
+			}
+			$data = $this->class->db->order_by($order_by, $direction)->get_where('baskets_merge', $where);
+			if (isset($data) AND $data->num_rows()) {
+				$baskets = $data->result_array();
+				foreach ($baskets as $key => $basket) {
+					$baskets[$key]['seller'] = json_decode(base64_decode($baskets[$key]['seller']), true);
+					$baskets[$key]['buyer'] = json_decode(base64_decode($baskets[$key]['buyer']), true);
+					$baskets[$key]['order_details'] = json_decode(base64_decode($baskets[$key]['order_details']), true);
+				}
+				// debug($baskets, 'stop');
+				if ($row) {
+					return $baskets[0];
+				} else {
+					return $baskets;
+				}
+			}
+		}
+		return false;
+	}
+
 }

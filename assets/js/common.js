@@ -142,7 +142,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
 					if (uiButtonSubmit) {
-						if (uiButtonSubmit.data('orig-ui') == undefined) {
+						if (uiButtonSubmit.data('orig-ui') == undefined && keep_loading == false) {
 							uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
 						}
 						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);

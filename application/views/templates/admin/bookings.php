@@ -138,30 +138,38 @@
 					<div class="booking-parent">
 						<div class="booking-heading">
 							<ul class="spaced-list between">
-								<li><small>Pending Booking</small></li>
-								<li><small>Quezon City to Bulacan</small></li>
-								<li><small>Delivery Fee: &#x20b1; 100</small></li>
+								<li><small js-status>Pending Booking</small></li>
+								<li><small js-farm>...</small></li>
+								<li><small>Delivery Fee: &#x20b1; <span js-fee>0</span></small></li>
 							</ul>
 						</div>
 						<div class="booking-body">
 							<div class="sender-info-form">
 								<p><b>Operator Information</b></p>
-								<form action="admin/run_operator_booking" class="booking-form-grid form-validate" data-ajax="1" data-disable="enter">
+								<form action="admin/run_operator_booking" class="booking-form-grid form-validate" data-ajax="1" data-disable="enter" js-form="booking-form">
 									<div class="booking-form-grid-item">
-										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Referral Code" data-content="Receive your commission, enter your Toktok Referral Code.">Referral Code <i class="fa fa-question-circle"></i></small>
-										<div class="form-group zero-gaps">
-											<input type="text" class="form-control" name="referral_code" required="required" disabled="disabled">
-										</div>
+										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Delivery Code" data-content="Gulaymart's posted Delivery Code.">Delivery Code <i class="fa fa-question-circle"></i></small>
+										<div class="form-group zero-gaps" js-event="awaiting-code"><p class="zero-gaps">Awaiting...</p></div>
 									</div>
 									<div class="booking-form-grid-item">
-										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Toktok Password" data-content="Toktok authenticates every booking with a Referral Code. Please enter your Toktok Operator password below.">Password <i class="fa fa-question-circle"></i></small>
-										<div class="form-group zero-gaps">
-											<input type="password" class="form-control" name="password" required="required" disabled="disabled">
+										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Toktok Rider" data-content="You can assign a Toktok rider here. Please select one if desired.">Assigned Rider <i class="fa fa-question-circle"></i></small>
+										<div class="form-group zero-gaps" js-event="awaiting-rider"><p class="zero-gaps">Awaiting...</p></div>
+										<div class="form-group zero-gaps hide" js-element="riders-list">
+											<?php if ($current_profile['operator_riders']): ?>
+												<select class="form-control" name="rider_mobile" required="required">
+													<?php foreach ($current_profile['operator_riders'] as $key => $rider): ?>
+														<option value="<?php echo $rider['mobile'];?>">(<?php echo $rider['mobile'].') '.$rider['name'];?></option>
+													<?php endforeach ?>
+												</select>
+											<?php else: ?>
+												<p class="zero-gaps">Awaiting...</p>
+											<?php endif ?>
 										</div>
+										<div class="form-group zero-gaps hide" js-event="selected-rider"><p class="zero-gaps">None</p></div>
 									</div>
 									<div class="booking-form-grid-item">
 										<small class="elem-block"><i class="fa fa-clock-o"></i> <span js-id="timer">90</span> second(s)</small>
-										<button class="btn btn-contrast" disabled="disabled" js-element="operator-bookings"><span class="spinner-border spinner-border-sm"></span> Awaiting bookings...</button>
+										<button data-keep-loading="true" type="submit" class="btn btn-contrast" disabled="disabled" js-element="operator-bookings"><span class="spinner-border spinner-border-sm"></span> Awaiting bookings...</button>
 									</div>
 								</form>
 							</div>

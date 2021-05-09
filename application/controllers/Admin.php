@@ -9,6 +9,7 @@ class Admin extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('baskets');
 		// INITIALIZING TOKTOK OBJECT
 		// $this->load->library('toktokapi');
 		// debug($this->toktokapi, 'stop');
@@ -149,14 +150,14 @@ class Admin extends MY_Controller {
 								// $post['referral_code'] = 'PPS9665253';
 								// $post['f_driver_id'] = '164515';
 								// unset($post['referral_code']);
-								debug($post, 'stop');
+								// debug($post, 'stop');
 								// $this->toktokapi->app_request('post_delivery', $post);
 								// debug($this->toktokapi, 'stop');
-								if ($this->toktokapi->success) {
+								// if ($this->toktokapi->success) {
 									$raw = ['is_sent' => 1, 'operator' => -1]; /*'operator' => -1 is us*/
-								} else {
-									$raw = ['is_sent' => 2, 'operator' => -1]; /*'is_sent' => 2 FAILED*/
-								}
+								// } else {
+								// 	$raw = ['is_sent' => 2, 'operator' => -1]; /*'is_sent' => 2 FAILED*/
+								// }
 								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
 							}
 						}
@@ -175,27 +176,22 @@ class Admin extends MY_Controller {
 						if ($toktok_for_operators) {
 							$operators = $this->gm_db->get('operators', ['active' => 1]);
 							if ($operators) {
-								$operators = count($operators);
-								$chunk_count = floor(count($toktok_for_operators) / $operators); /*this will be average*/
+								$operator_cnt = count($operators);
+								$chunk_count = floor(count($toktok_for_operators) / $operator_cnt); /*this will be average*/
+								// debug($chunk_count, 'stop');
 								if ($chunk_count > 0) {
 									$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
+									// debug($toktok_for_operators, 'stop');
 									/*now loop from operators and give them bookings*/
 									foreach ($operators as $key => $operator) {
 										if (isset($toktok_for_operators[$key])) {
-											$toktok = $toktok_for_operators[$key];
-
-											/*update the baskets_merge data for this operator*/
-											$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $toktok['id']]);
-
-											/*send this data to this operator in realtime*/
-											$merge_ids = $this->gm_db->columns('id', $toktok);
-											$app = $this->senddataapi->trigger('operator-bookings', 'send-bookings', [
-												'message' => 'You have available bookings, please click "BOOK NOW"',
-												'merge_ids' => $merge_ids,
-											]);
-											
-											/*log here*/
-											operatorlogger($toktok, $app, $operator);
+											$deliveries = $toktok_for_operators[$key];
+											foreach ($deliveries as $delivery) {
+												/*update the baskets_merge data for this operator*/
+												$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
+												/*log here*/
+												operatorlogger($deliveries, $operator);
+											}
 										}
 									}
 								} else {
@@ -208,21 +204,115 @@ class Admin extends MY_Controller {
 							operatorlogger('No records available for operators');
 						}
 						/*then let the cron job run this until all operator bookings are done*/
+						$this->notify_operator_booking();
 						/*there will be another cron job that checks these and switches back ON again*/
 					}
+				} else {
+					$this->notify_operator_booking();
 				}
 			}
 		}
 	}
 
+	public function notify_operator_booking()
+	{
+		$toktok_for_operators = $this->baskets->merge_disassembled([
+			'status' => 6, 'operator >' => 0, 'is_sent' => 0,
+		], false, false, 'added');
+		// debug($toktok_for_operators, 'stop');
+		if ($toktok_for_operators) {
+			$operators = $this->gm_db->columns('operator', $toktok_for_operators);
+			// debug($operators, 'stop');
+			if ($operators) {
+				foreach ($operators as $key => $operator_id) {
+					/*now send alerts to operators*/
+					$this->senddataapi->trigger('operator-bookings', 'send-bookings', [
+						'message' => 'You have available bookings, please press on BOOK NOW',
+						'operator_id' => $operator_id,
+						'delivery' => $toktok_for_operators[0],
+						'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => 1]),
+						'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => [0,1]]),
+					]);
+				}
+			}
+		} else {
+			$automation_settings = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
+			if ($automation_settings) {
+				$set = json_decode($automation_settings['value'], true);
+				$set['switch'] = 1; /*enable switch*/
+				$this->gm_db->save('admin_settings', ['value' => json_encode($set)], ['id' => $automation_settings['id']]);
+			}
+			$this->post_deliveries();
+		}
+	}
+
 	public function run_operator_booking()
 	{
-		/*SAMPLE LANG MAG-REFLECT TO IN REALTIME SA admin/bookings PAGE*/
-		$this->senddataapi->trigger('operator-bookings', 'send-bookings', [
-			'message' => 'You have available bookings, please press on BOOK NOW',
-			'merge_ids' => false,
-		]);
 		$post = $this->input->post() ?: $this->input->get();
-		debug($post, 'stop');
+		if (isset($post['id'])) {
+			$toktok = $this->baskets->merge_disassembled(['id' => $post['id']], true);
+			if ($toktok) {
+				$toktok_post = json_decode(base64_decode($toktok['toktok_post']), true);
+				// debug($toktok_post, 'stop');
+				if ($toktok_post) {
+					$operator = $this->gm_db->get('operators', ['id' => $toktok['operator'], 'active' => 1], 'row');
+					// debug($operator, 'stop');
+					if ($operator) {
+						$this->load->library('toktokapi');
+						$pricing = toktok_price_directions_format([
+							'sender_lat' => $toktok_post['f_sender_address_lat'],
+							'sender_lng' => $toktok_post['f_sender_address_lng'],
+							'receiver_lat' => $toktok_post['f_recepient_address_lat'],
+							'receiver_lng' => $toktok_post['f_recepient_address_lng'],
+						]);
+						$this->toktokapi->app_request('price_and_directions', $pricing);
+						if ($this->toktokapi->success) {
+							$toktok_dpd = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
+							unset($toktok_dpd['directions']);
+							// debug($toktok_dpd, 'stop');
+							$toktok_post['f_post'] = json_encode(['hash'=>$toktok_dpd['hash']]);
+							$toktok_post['f_distance'] = $toktok_dpd['pricing']['distance'] . ' km';
+							$toktok_post['f_duration'] = format_duration($toktok_dpd['pricing']['duration']);
+							$toktok_post['f_price'] = $toktok_dpd['pricing']['price'];
+							$toktok_post['f_sender_mobile'] = preg_replace('/-/', '', $toktok_post['f_sender_mobile']);
+							$toktok_post['f_recepient_mobile'] = preg_replace('/-/', '', $toktok_post['f_recepient_mobile']);
+
+							$post['referral_code'] = $operator['referral_code'];
+							// GET RIDER
+							$rider = ['term' => ltrim($post['rider_mobile'], '0'), '_type' => 'query', 'q' => ltrim($post['rider_mobile'], '0')];
+							$this->toktokapi->app_request('rider', $rider);
+							if ($this->toktokapi->success) {
+								$toktok_post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
+								// debug($toktok_post, 'stop');
+								/*$this->toktokapi->app_request('post_delivery', $toktok_post);
+								// debug($this->toktokapi, 'stop');
+								if ($this->toktokapi->success) {*/
+									$raw = ['is_sent' => 1];
+								/*} else {
+									$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
+								}*/
+								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+								sleep(3);
+								$toktok_for_operators = $this->baskets->merge_disassembled([
+									'status' => 6, 'operator' => $operator['id'], 'is_sent' => 0,
+								], false, false, 'added');
+
+								if ($toktok_for_operators) {
+									$this->set_response('success', false, [
+										'operator_id' => $operator['id'],
+										'delivery' => $toktok_for_operators[0],
+										'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator['id'], 'is_sent' => 1]),
+										'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator['id'], 'is_sent' => [0,1]]),
+									], false, 'bookDelivery');
+								} else {
+									$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		$this->set_response('error', 'No Bookings available!', $post, false);
 	}
 }
