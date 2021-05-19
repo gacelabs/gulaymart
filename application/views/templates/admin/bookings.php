@@ -145,7 +145,7 @@
 						</div>
 						<div class="booking-body">
 							<div class="sender-info-form">
-								<p><b>Operator Information</b></p>
+								<p><b>Delivery Information</b></p>
 								<form action="admin/run_operator_booking" class="booking-form-grid form-validate" data-ajax="1" data-disable="enter" js-form="booking-form">
 									<div class="booking-form-grid-item">
 										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Delivery Code" data-content="Gulaymart's posted Delivery Code.">Delivery Code <i class="fa fa-question-circle"></i></small>
@@ -156,7 +156,8 @@
 										<div class="form-group zero-gaps" js-event="awaiting-rider"><p class="zero-gaps">Awaiting...</p></div>
 										<div class="form-group zero-gaps hide" js-element="riders-list">
 											<?php if ($current_profile['operator_riders']): ?>
-												<select class="form-control" name="rider_mobile" required="required">
+												<select class="form-control" name="rider_mobile">
+													<option value="">Assign a Rider</option>
 													<?php foreach ($current_profile['operator_riders'] as $key => $rider): ?>
 														<option value="<?php echo $rider['mobile'];?>">(<?php echo $rider['mobile'].') '.$rider['name'];?></option>
 													<?php endforeach ?>

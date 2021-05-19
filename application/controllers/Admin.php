@@ -283,35 +283,38 @@ class Admin extends MY_Controller {
 							$toktok_post['f_recepient_mobile'] = preg_replace('/-/', '', $toktok_post['f_recepient_mobile']);
 
 							$post['referral_code'] = $operator['referral_code'];
-							// GET RIDER
-							$rider = ['term' => ltrim($post['rider_mobile'], '0'), '_type' => 'query', 'q' => ltrim($post['rider_mobile'], '0')];
-							$this->toktokapi->app_request('rider', $rider);
-							if ($this->toktokapi->success) {
-								$toktok_post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
-								// debug($toktok_post, 'stop');
-								/*$this->toktokapi->app_request('post_delivery', $toktok_post);
-								// debug($this->toktokapi, 'stop');
-								if ($this->toktokapi->success) {*/
-									$raw = ['is_sent' => 1];
-								/*} else {
-									$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
-								}*/
-								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
-								sleep(3);
-								$toktok_for_operators = $this->baskets->merge_disassembled([
-									'status' => 6, 'operator' => $operator['id'], 'is_sent' => 0,
-								], false, false, 'added');
-
-								if ($toktok_for_operators) {
-									$this->set_response('success', false, [
-										'operator_id' => $operator['id'],
-										'delivery' => $toktok_for_operators[0],
-										'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator['id'], 'is_sent' => 1]),
-										'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator['id'], 'is_sent' => [0,1]]),
-									], false, 'bookDelivery');
-								} else {
-									$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
+							$toktok_post['f_driver_id'] = '';
+							if (isset($post['rider_mobile']) AND strlen(trim($post['rider_mobile'])) > 0) {
+								// GET RIDER
+								$rider = ['term'=>ltrim($post['rider_mobile'], '0'), '_type'=>'query', 'q'=>ltrim($post['rider_mobile'], '0')];
+								$this->toktokapi->app_request('rider', $rider);
+								if ($this->toktokapi->success) {
+									$toktok_post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
 								}
+							}
+							// debug($toktok_post, 'stop');
+							/*$this->toktokapi->app_request('post_delivery', $toktok_post);
+							// debug($this->toktokapi, 'stop');
+							if ($this->toktokapi->success) {*/
+								$raw = ['is_sent' => 1];
+							/*} else {
+								$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
+							}*/
+							$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+							sleep(3);
+							$toktok_for_operators = $this->baskets->merge_disassembled([
+								'status' => 6, 'operator' => $operator['id'], 'is_sent' => 0,
+							], false, false, 'added');
+
+							if ($toktok_for_operators) {
+								$this->set_response('success', false, [
+									'operator_id' => $operator['id'],
+									'delivery' => $toktok_for_operators[0],
+									'count' => $this->gm_db->count('baskets_merge', ['status'=>6, 'operator'=>$operator['id'], 'is_sent'=>1]),
+									'total' => $this->gm_db->count('baskets_merge', ['status'=>6, 'operator'=>$operator['id'], 'is_sent'=>[0,1]]),
+								], false, 'bookDelivery');
+							} else {
+								$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
 							}
 						}
 					}
