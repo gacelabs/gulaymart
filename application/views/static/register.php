@@ -2,8 +2,17 @@
 	<?php if (empty($current_profile)): ?>
 	<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
 		<div id="register_welcome">
-			<h1 style="margin-bottom:20px;"><i class="fa fa-leaf my-logo"></i> <b>Gulaymart</b></h1>
+			<h1 style="margin-bottom:20px;"><a href=""><i class="fa fa-leaf my-logo"></i></a> <b>Gulaymart</b></h1>
 			<h3>Find the freshest vegetables grown by the framers within your community.</h3>
+		</div>
+		<div class="hidden-xs">
+			<div id="register_farmers_images">
+				<div><img src="assets/images/product-item/microgreens.jpg"></div>
+				<div><img src="assets/images/product-item/pechay.jpg"></div>
+				<div><img src="assets/images/product-item/lettuce.jpg"></div>
+			</div>
+			<p>Buying vegetables from these local farmers help them live a life for a day. For the longest time, we always support big brands, it's time to make a difference and touch the lives of many urban and rural farmers in the country.</p>
+			<p>Let's help support locals, buy at <a href="" class="text-link">Marketplace</a></p>
 		</div>
 	</div>
 	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
@@ -28,7 +37,7 @@
 				</div>
 				<div class="register-footer">
 					<ul class="spaced-list between">
-						<li><a href="" class="text-link" style="border:none;">Marketplace</a></li>
+						<li><a href="" class="text-link" style="border:none;">Terms and Use</a></li>
 						<?php if ($current_profile): ?>
 							<li><a href="profile/" class="text-link" style="border:none;">Dashboard</a></li>
 						<?php else: ?>
@@ -37,11 +46,6 @@
 					</ul>
 				</div>
 			</form>
-			<div>
-			</div>
-		</div>
-		<div class="terms-container">
-			<a href="#"><small>Terms and Use</small></a>
 		</div>
 	</div>
 	<?php else: ?>
@@ -55,7 +59,6 @@
 					<li><small><a href="" class="text-link">Home</a></small></li>
 					<li><small><a href="basket/" class="text-link">Basket</a></small></li>
 				</ul>
-				
 			</div>
 		</div>
 	</div>

@@ -69,12 +69,12 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
-									<input type="text" name="firstname" class="form-control" placeholder="First name" required="required" value="<?php check_value('firstname', [], true);?>">
+									<input type="text" name="firstname" class="form-control text-caps" placeholder="First name" required="required" value="<?php check_value('firstname', [], true);?>">
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<div class="form-group">
-									<input type="text" name="lastname" class="form-control" placeholder="Last name" value="<?php check_value('lastname', [], true);?>">
+									<input type="text" name="lastname" class="form-control text-caps" placeholder="Last name" value="<?php check_value('lastname', [], true);?>">
 								</div>
 							</div>
 						</div>
@@ -182,7 +182,78 @@
 				</div>
 			</div>
 			<?php endif; ?>
+		</div>
 
+		<?php if (isset($current_profile['profile']['phone'])) : ?>
+		<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
+
+			<?php if ($current_profile['shippings']) : ?>
+			<div class="dashboard-panel">
+				<div class="dashboard-panel-middle">
+					<ul class="spaced-list between panel-inner-header">
+						<li><small><b>SHIPPING INFORMATION</b></small></li>
+						<li><small class="text-contrast" js-target="shipping_address_panel">EDIT/ ADD</small></li>
+					</ul>
+					<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+					<div class="profile-grid">
+						<div class="text-center"><i class="text-theme fa fa-map-marker"></i></div>
+						<div class="text-left" style="padding-top: 0;">
+							<p class="zero-gaps"><?php echo ucwords($shipping['address_1']);?></p>
+							<small class="elem-block address_2"><?php echo $shipping['address_2'];?></small>
+							<small class="elem-block text-gray pull-right"><?php str_has_value_echo('1', $shipping['active'], ' PRIMARY');?></small>
+						</div>
+					</div>
+					<?php endforeach ?>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="dashboard-panel theme <?php echo(empty($current_profile['shippings']) ? "" : "hide"); ?>" id="shipping_address_panel">
+				<ul class="spaced-list between dashboard-panel-top">
+					<li><h4 class="zero-gaps">Delivery address</h4></li>
+					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
+				</ul>
+				<div class="dashboard-panel-middle">
+					<div class="saved-shipping-container">
+						<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+							<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
+								<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
+									<div class="text-left">
+										<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
+										<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
+										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
+									</div>	
+									<div class="text-center">
+										<p class="zero-gaps">Primary</p>
+										<label class="switch">
+											<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
+											<span class="slider round"></span>
+										</label>
+									</div>
+								</div>
+							<?php endforeach ?>
+						<?php else: ?>
+							<div class="text-step-basic">
+								<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
+								<p class="zero-gaps">Follow the <b class="text-contrast">Steps</b> bellow to save a <b>delivery address</b>.</p>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php $this->view('static/map_location_form', ['url' => 'api/save_shipping']); ?>
+			</div>
+		</div>
+		<?php endif; ?>
+		
+		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
+		<hr class="carved clearfix">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;">
+			<a href="farm/storefront/">
+				<img src="assets/images/banner/be-farmer.png" class="img-responsive" style="margin:0 auto;">
+			</a>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<h4>Are you a Toktok Operator?</h4>
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">Operator Details</h4></li>
@@ -284,75 +355,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<?php if (isset($current_profile['profile']['phone'])) : ?>
-		<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12 shipping-address-panel">
-
-			<?php if ($current_profile['shippings']) : ?>
-			<div class="dashboard-panel">
-				<div class="dashboard-panel-middle">
-					<ul class="spaced-list between panel-inner-header">
-						<li><small><b>SHIPPING INFORMATION</b></small></li>
-						<li><small class="text-contrast" js-target="shipping_address_panel">EDIT/ ADD</small></li>
-					</ul>
-					<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
-					<div class="profile-grid">
-						<div class="text-center"><i class="text-theme fa fa-map-marker"></i></div>
-						<div class="text-left" style="padding-top: 0;">
-							<p class="zero-gaps"><?php echo ucwords($shipping['address_1']);?></p>
-							<small class="elem-block address_2"><?php echo $shipping['address_2'];?></small>
-							<small class="elem-block text-gray pull-right"><?php str_has_value_echo('1', $shipping['active'], ' PRIMARY');?></small>
-						</div>
-					</div>
-					<?php endforeach ?>
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="dashboard-panel theme <?php echo(empty($current_profile['shippings']) ? "" : "hide"); ?>" id="shipping_address_panel">
-				<ul class="spaced-list between dashboard-panel-top">
-					<li><h4 class="zero-gaps">Delivery address</h4></li>
-					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
-				</ul>
-				<div class="dashboard-panel-middle">
-					<div class="saved-shipping-container">
-						<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
-							<?php foreach ($current_profile['shippings'] as $key => $shipping): ?>
-								<div class="saved-shipping-item" id="shipping-item-<?php echo $shipping['id'];?>">
-									<div class="text-left">
-										<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
-										<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
-									</div>	
-									<div class="text-center">
-										<p class="zero-gaps">Primary</p>
-										<label class="switch">
-											<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
-											<span class="slider round"></span>
-										</label>
-									</div>
-								</div>
-							<?php endforeach ?>
-						<?php else: ?>
-							<div class="text-step-basic">
-								<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
-								<p class="zero-gaps">Follow the <b class="text-contrast">Steps</b> bellow to save a <b>delivery address</b>.</p>
-							</div>
-						<?php endif; ?>
-					</div>
-				</div>
-				<?php $this->view('static/map_location_form', ['url' => 'api/save_shipping']); ?>
-			</div>
-		</div>
-		<?php endif; ?>
-		
-		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
-		<hr class="carved clearfix">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;">
-			<a href="farm/storefront/">
-				<img src="assets/images/banner/be-farmer.png" class="img-responsive" style="margin:0 auto;">
-			</a>
 		</div>
 		<?php endif; ?>
 	</div>
