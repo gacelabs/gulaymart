@@ -6,9 +6,6 @@ body.register {
 	margin-top: 80px;
 	max-width: 1000px;
 }
-#register_welcome {
-	margin-top: 20px;
-}
 #register_form {
 	background-color: #fff;
 	padding: 25px;
@@ -37,6 +34,25 @@ body.register {
 }
 .terms-container {
 	padding: 15px;
+}
+#register_farmers_images {
+	display: grid;
+	grid-template-columns: repeat(3, 33.33%);
+	grid-gap: 10px;
+	margin: 15px 0;
+	width: 100%;
+}
+#register_farmers_images>div {
+	background-color: #fff;
+	border-radius: 6px;
+	margin: 1%;
+	padding: 15px;
+	width: 100%;
+}
+#register_farmers_images>div>img {
+	border-radius: 6px;
+	box-shadow: 0px 2px 10px 0px rgb(0 0 0 / 28%);
+	width: 100%;
 }
 @media (max-width: 991px) {
 	#register_container {
