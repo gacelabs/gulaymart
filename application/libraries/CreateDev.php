@@ -1135,12 +1135,12 @@ class CreateDev {
 			],
 			'setting' => [
 				'type' => 'TEXT',
-				'default' => true,
+				'default' => null,
 				'null' => true,
 			],
 			'value' => [
 				'type' => 'TEXT',
-				'default' => true,
+				'default' => null,
 				'null' => true,
 			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
