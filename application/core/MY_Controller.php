@@ -85,9 +85,9 @@ class MY_Controller extends CI_Controller {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
 				echo do_jsonp_callback('ajaxSuccessResponse', [
-					'type'=>'error',
-					'message'=>"Session has been expired! Reloading page...",
-					'redirect'=>'/'
+					'type' => 'error',
+					'message' => "Nothing happened, Session has been expired! Reloading browser...",
+					'redirect' => '/'
 				]); exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/

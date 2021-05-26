@@ -232,7 +232,7 @@ class Baskets {
 							$product['photos']['main'] = $photos[0];
 							unset($photos[0]);
 						}
-						$product['photos']['others'] = count($photos) ? $photos : false;
+						$product['photos']['others'] = $photos ?: false;
 					}
 					$farm_location = $this->class->gm_db->get_in('user_farm_locations', ['id' => $basket['location_id']], 'row');
 					$farm = false;
