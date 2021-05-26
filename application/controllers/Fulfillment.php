@@ -199,4 +199,11 @@ class Fulfillment extends My_Controller {
 		$this->set_response('error', remove_multi_space('Unable to set Order for pick up'), $post);
 	}
 
+	public function check_fulfillments()
+	{
+		$this->load->library('toktokapi');
+		// debug($this->toktokapi, 'stop');
+		$this->toktokapi->check_delivery();
+	}
+
 }
