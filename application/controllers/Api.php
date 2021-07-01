@@ -258,4 +258,57 @@ class Api extends MY_Controller {
 		$this->set_response('error', false, $post);
 	}
 
+	public function fulfillment_process($profile_id=0)
+	{
+		if ($profile_id > 0 OR $this->accounts->has_session) {
+			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
+			$this->load->library('baskets');
+			$status_id = get_status_dbvalue($this->input->post('status'));
+			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $profile_id, 'status' => $status_id]);
+			$baskets_merge_data = setup_basketmerge_data($baskets_merge);
+			// debug($baskets_merge_data, 'stop');
+			$this->load->library('toktokapi');
+			// debug($this->toktokapi, 'stop');
+			$baskets_merge_ids = [];
+			if ($baskets_merge_data) {
+				foreach ($baskets_merge_data as $key => $data) {
+					$date_range = false;
+					if (isset($data['schedule']) AND !empty($data['schedule'])) {
+						$date_range = [
+							// 'from' => date('m/d/Y', strtotime($data['schedule'])),
+							'from' => '01/01/2021',
+							'to' => date('m/d/Y', strtotime($data['schedule'])),
+						];
+					}
+					// status must be 4 = Item Picked Up in toktok status
+					$delivery = $this->toktokapi->check_delivery($date_range, '', 6, 'Ricaline Nicole Guilas');
+					// debug($delivery, 'stop');
+					if ($delivery->success AND count($delivery->response)) {
+						foreach ($delivery->response as $order) {
+							if (isset($order['details']) AND isset($order['details']['post'])) {
+								$order['details']['post']['notes'] = 'GulayMart Order#:6ED99B0438';
+								$post_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
+								$order_id = '';
+								if (count($post_data)) $order_id = trim($post_data[1]);
+								$delivery_id = $order['details']['post']['delivery_id'];
+								$response = $this->gm_db->save('baskets_merge', [
+									'status' => 3, /*on delivery*/
+									'delivery_id' => $delivery_id,
+									'toktok_data' => base64_encode(json_encode($order)),
+								], ['id' => $data['id']]);
+								if ($response) $baskets_merge_ids[] = $data['id'];
+							}
+						}
+					}
+				}
+			}
+			if (count($baskets_merge_ids)) {
+				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids]); exit();
+			} else {
+				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids]); exit();
+			}
+			// debug($baskets_merge_data, 'stop');
+		}
+	}
+
 }

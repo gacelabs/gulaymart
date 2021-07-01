@@ -137,7 +137,7 @@ class ToktokApi {
 				$deliveries[] = ['details'=>$details, 'rider_location' => $rider_location];
 			}
 		}
-		debug($deliveries, 'stop');
+		// debug($deliveries, 'stop');
 		$this->response = $deliveries;
 
 		return $this->set_response();

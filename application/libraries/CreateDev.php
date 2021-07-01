@@ -1021,6 +1021,11 @@ class CreateDev {
 				'constraint' => '10',
 				'auto_increment' => true
 			],
+			'delivery_id' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			'seller_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
@@ -1095,6 +1100,11 @@ class CreateDev {
 				'null' => true,
 			],
 			'toktok_post' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'toktok_data' => [
 				'type' => 'LONGTEXT',
 				'default' => NULL,
 				'null' => true,

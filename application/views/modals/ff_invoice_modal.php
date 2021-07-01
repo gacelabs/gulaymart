@@ -1,5 +1,4 @@
 
-<?php if ($data['orders']): ?>
 <div class="modal fade" id="ff_invoice_modal" tabindex="-1" role="dialog" aria-labelledby="ff_invoice_modalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content" style="border-radius:0;">
@@ -113,4 +112,3 @@
 		</div>
 	</div>
 </div>
-<?php endif ?>

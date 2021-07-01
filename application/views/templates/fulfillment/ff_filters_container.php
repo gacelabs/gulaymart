@@ -29,7 +29,7 @@
 			<small class="elem-block"><b>FILTER STATUS</b></small>
 			<div class="ff-navbar-grid filter-status">
 				<div class="grid-item">
-					<a href="fulfillment/placed/" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
+					<a href="fulfillment/placed/" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
 						Placed
 						<?php if ($data['counts']['placed']): ?>
 						<kbd class="pull-right"><?php echo $data['counts']['placed'];?></kbd>
@@ -37,7 +37,7 @@
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
+					<a href="fulfillment/for-pick-up" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
 						For Pick Up
 						<?php if ($data['counts']['for+pick+up']): ?>
 						<kbd class="pull-right"><?php echo $data['counts']['for+pick+up'];?></kbd>
@@ -45,7 +45,7 @@
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
+					<a href="fulfillment/on-delivery" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
 						On Delivery
 						<?php if ($data['counts']['on+delivery']): ?>
 						<kbd class="pull-right"><?php echo $data['counts']['on+delivery'];?></kbd>
@@ -53,7 +53,7 @@
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
+					<a href="fulfillment/received" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
 						Received
 						<?php if ($data['counts']['received']): ?>
 						<kbd class="pull-right"><?php echo $data['counts']['received'];?></kbd>
@@ -61,7 +61,7 @@
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
+					<a href="fulfillment/cancelled" data-nav="cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
 						Cancelled
 						<?php if ($data['counts']['cancelled']): ?>
 						<kbd style="background-color:#a9a9a9;" class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd>

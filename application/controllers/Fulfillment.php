@@ -24,66 +24,65 @@ class Fulfillment extends My_Controller {
 	{
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
-		$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $this->accounts->profile['id'], 'status' => $status_id]);
-		// debug($baskets_merge, 'stop');
-		if ($baskets_merge) {
-			foreach ($baskets_merge as $key => $merged) {
-				$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
-				$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
-				$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
-				foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
-					// $baskets_merge[$key]['order_details'][$index]['status'] = 2;
-					if (!isset($baskets_merge[$key]['order_type'])) {
-						$baskets_merge[$key]['order_type'] = $details['when'];
-						$baskets_merge[$key]['schedule'] = '';
-						if ($details['when'] == 2) {
-							$baskets_merge[$key]['schedule'] = date('F j, Y', strtotime($details['schedule']));
-						}
-					}
-					$basket = $this->gm_db->get('baskets', ['id' => $details['basket_id']], 'row');
-					$baskets_merge[$key]['order_details'][$index]['cancel_by'] = '';
-					$baskets_merge[$key]['order_details'][$index]['reason'] = '';
-					if ($basket) {
-						$baskets_merge[$key]['order_details'][$index]['cancel_by'] = $basket['cancel_by'];
-						$baskets_merge[$key]['order_details'][$index]['reason'] = $basket['reason'];
-					}
-				}
-				$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
-			}
+		$filters = ['seller_id' => $this->accounts->profile['id'], 'status' => $status_id];
+		if ($this->input->is_ajax_request()) {
+			$filters['id'] = $this->input->post('ids');
+			// $filters['id'] = ["25", "28", "31", "41"];
 		}
+		$baskets_merge = $this->baskets->get_baskets_merge($filters);
+		// debug($baskets_merge, 'stop');
+		$baskets_merge = setup_basketmerge_data($baskets_merge);
 		// debug($baskets_merge, 'stop');
 		$farm = $this->farmers->get(['user_id' => $this->accounts->profile['id']], true);
 		// debug($farm, 'stop');
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table', 'print.min']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'fulfillment', 'ff-'.$status],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'fulfillment/ff_container'
+		if ($this->input->is_ajax_request()) {
+			echo json_encode(['total_items' => count($baskets_merge), 'html' => $this->load->view('templates/fulfillment/ff_product_container', [
+				'data' => [
+					'farm' => $farm,
+					'orders' => $baskets_merge,
+					'status' => $status,
+					'counts' => [
+						'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
+					],
+				]
+			], true)]);
+			exit();
+		} else {
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table', 'print.min']
 				],
-				'footer' => [],
-			],
-			'bottom' => [
-				'modals' => ['ff_invoice_modal'],
-				'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'fulfillment/main', 'fulfillment/ff-'.clean_string_name(urldecode($status))],
-			],
-			'data' => [
-				'farm' => $farm,
-				'orders' => $baskets_merge,
-				'status' => $status,
-				'counts' => [
-					'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
-					'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
-					'on+delivery' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
-					'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
-					'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
+				'middle' => [
+					'body_class' => ['dashboard', 'fulfillment', 'ff-'.$status],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'fulfillment/ff_container'
+					],
+					'footer' => [],
 				],
-			]
-		]);
+				'bottom' => [
+					'modals' => ['ff_invoice_modal'],
+					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'fulfillment/main', 'fulfillment/ff-'.clean_string_name(urldecode($status))],
+				],
+				'data' => [
+					'farm' => $farm,
+					'orders' => $baskets_merge,
+					'status' => $status,
+					'counts' => [
+						'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
+					],
+				]
+			]);
+		}
 	}
 
 	public function change_status($all=0)

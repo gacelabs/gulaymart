@@ -14,10 +14,51 @@
 						if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 						/*communicate from operators booking page*/
 						if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
+						/*listen for incomming on delivery fulfillments*/
+						if (typeof fulfillmentProcess == 'function') {
+							// var event = oSegments[2];
+							// realtime.bind(event+'-fulfillment', 'fulfillment-bookings', function(object) {
+							// 	var oData = object.data;
+							// 	/*oData has properties message and operator*/
+							// 	realtimeBookings(oData);
+							// });
+							fulfillmentProcess(function(data) {
+								var method = oSegments[2];
+								$.ajax({
+									url: 'fulfillment/'+method+'/',
+									type: 'post',
+									dataType: 'json',
+									data: { ids: data.ids },
+									success: function(response) {
+										if (response.html.length) {
+											if ($('.ff-product-container').find('.no-records-ui:visible').length) {
+												$('.ff-product-container').replaceWith(response.html);
+											} else {
+												var newHtml = $(response.html).find('[js-element="fulfill-panel"]').html();
+												newHtml = $(newHtml).find('.no-records-ui').remove();
+												newHtml.insertBefore($('.ff-product-container').find('.no-records-ui'));
+											}
+											switch (method) {
+												case 'on-delivery':
+													sStatus = 'for+pick+up';
+													var prev = isNaN(parseInt($('[data-nav="'+method+'"]').find('kbd').text())) ? 0 : parseInt($('[data-nav="'+method+'"]').find('kbd').text());
+													var dataCnt = parseInt(response.total_items);
+													$('[data-nav="'+method+'"]').find('kbd').text(prev + dataCnt);
+												break;
+												case 'received':
+													sStatus = 'on+delivery';
+												break;
+											}
+										}
+									}
+								});
+							});
+						}
 					}
 				});
 			},
-			afterConnect: function() {}
+			afterConnect: function() {
+			}
 		});
 	};
 	(function(d, s, id) {

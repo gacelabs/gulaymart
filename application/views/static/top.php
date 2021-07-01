@@ -41,5 +41,6 @@
 		var oValidationRules=<?php echo json_encode($this->valid_fields);?>;
 		var PROFILE_INFO_MESSAGE = '<?php echo PROFILE_INFO_MESSAGE;?>';
 		var DEVICE_ID = '<?php echo $this->device_id;?>';
+		var oSegments = <?php echo json_encode($this->uri->segment_array()); ?>;
 	</script>
 </head>

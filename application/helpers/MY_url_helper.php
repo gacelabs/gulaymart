@@ -315,7 +315,7 @@ function get_status_value($status=false)
 {
 	if ($status) {
 		$ci =& get_instance();
-		switch ($status) {
+		switch (strtolower(trim($status))) {
 			case '1': /*verified*/
 				return 'verified';
 			break;
@@ -360,6 +360,62 @@ function get_status_dbvalue($status=false)
 				return 5;
 			break;
 			case 'for+pick+up': /*for pick up*/
+				return 6;
+			break;
+		}
+	}
+	return 0;
+}
+
+function get_toktokstatus_value($status=false)
+{
+	if ($status) {
+		$ci =& get_instance();
+		switch (strtolower(trim($status))) {
+			case '1': /*Placed Order*/
+				return 'placed+order';
+			break;
+			case '2': /*Scheduled for Delivery*/
+				return 'scheduled+for+delivery';
+			break;
+			case '3': /*On the Way to Sender*/
+				return 'on+the+way+to+sender';
+			break;
+			case '4': /*Item Picked Up*/
+				return 'item+picked+up';
+			break;
+			case '5': /*On the Way to Recipient*/
+				return 'on+the+way+to+recipient';
+			break;
+			case '6': /*Item Delivered*/
+				return 'item+delivered';
+			break;
+		}
+	}
+	return '';
+}
+
+function get_toktokstatus_dbvalue($status=false)
+{
+	if ($status) {
+		$ci =& get_instance();
+		switch (strtolower(trim($status))) {
+			case 'placed+order': /*verified*/
+				return 1;
+			break;
+			case 'scheduled+for+delivery': /*placed*/
+				return 2;
+			break;
+			case 'on+the+way+to+sender': /*on delivery*/
+				return 3;
+			break;
+			case 'item+picked+up': /*received*/
+				return 4;
+			break;
+			case 'on+the+way+to+recipient': /*cancelled*/
+				return 5;
+			break;
+			case 'item+delivered': /*for pick up*/
 				return 6;
 			break;
 		}
@@ -529,4 +585,35 @@ function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for p
 	$txt .= "--------------------------------" . "\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
+}
+
+function setup_basketmerge_data($baskets_merge=false)
+{
+	if ($baskets_merge) {
+		$ci =& get_instance();
+		foreach ($baskets_merge as $key => $merged) {
+			$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
+			$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
+			$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
+			foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
+				// $baskets_merge[$key]['order_details'][$index]['status'] = 2;
+				if (!isset($baskets_merge[$key]['order_type'])) {
+					$baskets_merge[$key]['order_type'] = $details['when'];
+					$baskets_merge[$key]['schedule'] = '';
+					if ($details['when'] == 2) {
+						$baskets_merge[$key]['schedule'] = date('F j, Y', strtotime($details['schedule']));
+					}
+				}
+				$basket = $ci->gm_db->get('baskets', ['id' => $details['basket_id']], 'row');
+				$baskets_merge[$key]['order_details'][$index]['cancel_by'] = '';
+				$baskets_merge[$key]['order_details'][$index]['reason'] = '';
+				if ($basket) {
+					$baskets_merge[$key]['order_details'][$index]['cancel_by'] = $basket['cancel_by'];
+					$baskets_merge[$key]['order_details'][$index]['reason'] = $basket['reason'];
+				}
+			}
+			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
+		}
+	}
+	return $baskets_merge;
 }

@@ -378,6 +378,7 @@ class Basket extends My_Controller {
 				$basket_ids = $place_order[$farm_location_id]['basket_ids'];
 				$place_order[$farm_location_id]['basket_ids'] = implode(',', $basket_ids);
 				$order_ids[] = $place_order[$farm_location_id]['order_id'] = strtoupper(substr(md5(implode(',', $basket_ids)), 0, 10));
+				$toktok_post['f_recepient_notes'] = 'GulayMart Order#:'.$place_order[$farm_location_id]['order_id'];
 				$place_order[$farm_location_id]['fee'] = $fee;
 				$place_order[$farm_location_id]['distance'] = $session['toktok_details']['pricing']['distance'];
 				$place_order[$farm_location_id]['duration'] = $session['toktok_details']['pricing']['duration'];
