@@ -35,7 +35,7 @@ class Fulfillment extends My_Controller {
 		// debug($baskets_merge, 'stop');
 		$farm = $this->farmers->get(['user_id' => $this->accounts->profile['id']], true);
 		// debug($farm, 'stop');
-		if ($this->input->is_ajax_request()) {
+		if ($this->input->is_ajax_request() AND is_array($baskets_merge)) {
 			echo json_encode(['total_items' => count($baskets_merge), 'html' => $this->load->view('templates/fulfillment/ff_product_container', [
 				'data' => [
 					'farm' => $farm,

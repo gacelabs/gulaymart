@@ -43,7 +43,7 @@ function toktok_post_delivery_format($data=false)
 		'f_post' => $data ? json_encode(['hash' => $data['hash']]) : '',
 		'pac-input' => $seller ? remove_multi_space($seller['address_1'].' '.$seller['address_2'], true) : '',
 		'pac-input2' => $shipping ? remove_multi_space($shipping['address_1'].' '.$shipping['address_2'], true) : '',
-		'f_distance' => $pricing ? $pricing['distance'] . 'km' : '0 km',
+		'f_distance' => $pricing ? $pricing['distance'] . ' km' : '0 km',
 		'f_duration' => $pricing ? format_duration($pricing['duration']) : '0 minutes',
 		'f_price' => $pricing ? $pricing['price'] : '',
 		'f_distance_hidden' => '',
@@ -613,6 +613,9 @@ function setup_basketmerge_data($baskets_merge=false)
 				}
 			}
 			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
+			if (isset($baskets_merge[$key]['toktok_data']) AND !empty($baskets_merge[$key]['toktok_data'])) {
+				$baskets_merge[$key]['toktok_data'] = json_decode(base64_decode($baskets_merge[$key]['toktok_data']), true);
+			}
 		}
 	}
 	return $baskets_merge;

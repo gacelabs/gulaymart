@@ -340,8 +340,16 @@ class Basket extends My_Controller {
 				unset($buyer['attributes']); unset($buyer['settings']);
 				$place_order[$farm_location_id]['buyer'] = $buyer;
 
+				$pricing = $session['toktok_details']['pricing'];
+				$fee = (float)$pricing['price'];
+				// $session['mobile'] = '80109'; /*test rider id*/
+				$hash = $session['hash'] = $session['toktok_details']['hash'];
+				$toktok_post = toktok_post_delivery_format($session);
+
 				$initial_total = 0;
 				foreach ($session['order_details'] as $order_type => $orders) {
+					$toktok_post['f_order_type_send'] = $toktok_post['f_order_type_rec'] = $order_type;
+
 					foreach ($orders as $key => $order) {
 						$sub_total = $order['quantity'] * $order['rawdata']['details']['price'];
 						$product = $order['rawdata']['product'];
@@ -364,14 +372,21 @@ class Basket extends My_Controller {
 						$place_order[$farm_location_id]['basket_ids'][] = $order['id'];
 						$all_basket_ids[] = $order['id'];
 						$initial_total += $sub_total;
+
+						if ($order_type == 2 AND (empty($toktok_post['f_sender_date']) AND empty($toktok_post['f_recepient_date']))) {
+							$receive_time = date('H:i:s', strtotime('+1 hour'));
+
+							$toktok_post['f_sender_date'] = date('d/m/Y', strtotime($order['schedule']));
+							$toktok_post['f_sender_datetime_from'] = date('H:i:s');
+							$toktok_post['f_sender_datetime_to'] = $receive_time;
+
+							$toktok_post['f_recepient_date'] = date('d/m/Y', strtotime($order['schedule']));
+							$toktok_post['f_recepient_datetime_from'] = $receive_time;
+							$toktok_post['f_recepient_datetime_to'] = date('H:i:s', strtotime('+'.((float)$pricing['duration'] + 60).' minute'));
+						}
 					}
 				}
 
-				$fee = (float)$session['toktok_details']['pricing']['price'];
-				$session['mobile'] = '80109'; /*test rider id*/
-				$hash = $session['hash'] = $session['toktok_details']['hash'];
-
-				$toktok_post = toktok_post_delivery_format($session);
 				$toktok_post['f_recepient_cod'] = $initial_total + $fee;
 				$final_total += $toktok_post['f_recepient_cod'];
 
@@ -380,8 +395,8 @@ class Basket extends My_Controller {
 				$order_ids[] = $place_order[$farm_location_id]['order_id'] = strtoupper(substr(md5(implode(',', $basket_ids)), 0, 10));
 				$toktok_post['f_recepient_notes'] = 'GulayMart Order#:'.$place_order[$farm_location_id]['order_id'];
 				$place_order[$farm_location_id]['fee'] = $fee;
-				$place_order[$farm_location_id]['distance'] = $session['toktok_details']['pricing']['distance'];
-				$place_order[$farm_location_id]['duration'] = $session['toktok_details']['pricing']['duration'];
+				$place_order[$farm_location_id]['distance'] = $pricing['distance'];
+				$place_order[$farm_location_id]['duration'] = $pricing['duration'];
 
 				$place_order[$farm_location_id]['location_id'] = $farm_location_id;
 				$place_order[$farm_location_id]['status'] = 2;

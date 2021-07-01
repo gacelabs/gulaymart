@@ -147,7 +147,7 @@ class Admin extends MY_Controller {
 								$post['f_price'] = $toktok_dpd['pricing']['price'];
 								$post['f_sender_mobile'] = preg_replace('/-/', '', $post['f_sender_mobile']);
 								$post['f_recepient_mobile'] = preg_replace('/-/', '', $post['f_recepient_mobile']);
-								$post['f_recepient_notes'] .= ' <GULAYMART~'.$toktok['id'].'>';
+								// $post['f_recepient_notes'] .= ' <GULAYMART~'.$toktok['id'].'>';
 								// GET RIDER
 								/*$rider = ['term'=>ltrim($set['rider_mobile'], '0'), '_type'=>'query', 'q'=>ltrim($set['rider_mobile'], '0')];
 								$this->toktokapi->app_request('rider', $rider);
@@ -282,7 +282,7 @@ class Admin extends MY_Controller {
 							$toktok_post['f_price'] = $toktok_dpd['pricing']['price'];
 							$toktok_post['f_sender_mobile'] = preg_replace('/-/', '', $toktok_post['f_sender_mobile']);
 							$toktok_post['f_recepient_mobile'] = preg_replace('/-/', '', $toktok_post['f_recepient_mobile']);
-							$toktok_post['f_recepient_notes'] .= ' <GULAYMART~'.$toktok['id'].'>';
+							// $toktok_post['f_recepient_notes'] .= ' <GULAYMART~'.$toktok['id'].'>';
 
 							$toktok_post['referral_code'] = $operator['referral_code'];
 							/*$toktok_post['f_driver_id'] = '';

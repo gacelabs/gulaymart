@@ -263,7 +263,8 @@ class Api extends MY_Controller {
 		if ($profile_id > 0 OR $this->accounts->has_session) {
 			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
 			$this->load->library('baskets');
-			$status_id = get_status_dbvalue($this->input->post('status'));
+			$status_value = $this->input->post('status');
+			$status_id = get_status_dbvalue($status_value);
 			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $profile_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_basketmerge_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
@@ -272,31 +273,53 @@ class Api extends MY_Controller {
 			$baskets_merge_ids = [];
 			if ($baskets_merge_data) {
 				foreach ($baskets_merge_data as $key => $data) {
-					$date_range = false;
-					if (isset($data['schedule']) AND !empty($data['schedule'])) {
-						$date_range = [
-							// 'from' => date('m/d/Y', strtotime($data['schedule'])),
-							'from' => '01/01/2021',
-							'to' => date('m/d/Y', strtotime($data['schedule'])),
-						];
+					$toktok_status = '';
+					$valid = false;
+					switch ($status_value) {
+						case 'for+pick+up': /*if status is now on-delivery*/
+							$toktok_status = 4;
+							$valid = empty($data['delivery_id']);
+							$actual_status = 3;
+							break;
+						case 'on+delivery': /*if status is now received*/
+							$toktok_status = 6;
+							$valid = !empty($data['delivery_id']);
+							$actual_status = 4;
+							break;
 					}
-					// status must be 4 = Item Picked Up in toktok status
-					$delivery = $this->toktokapi->check_delivery($date_range, '', 6, 'Ricaline Nicole Guilas');
-					// debug($delivery, 'stop');
-					if ($delivery->success AND count($delivery->response)) {
-						foreach ($delivery->response as $order) {
-							if (isset($order['details']) AND isset($order['details']['post'])) {
-								$order['details']['post']['notes'] = 'GulayMart Order#:6ED99B0438';
-								$post_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
-								$order_id = '';
-								if (count($post_data)) $order_id = trim($post_data[1]);
-								$delivery_id = $order['details']['post']['delivery_id'];
-								$response = $this->gm_db->save('baskets_merge', [
-									'status' => 3, /*on delivery*/
-									'delivery_id' => $delivery_id,
-									'toktok_data' => base64_encode(json_encode($order)),
-								], ['id' => $data['id']]);
-								if ($response) $baskets_merge_ids[] = $data['id'];
+					if ($valid) {
+						$buyer_name = $data['buyer']['fullname'];
+						$date_range = false;
+						if (isset($data['schedule']) AND !empty($data['schedule'])) {
+							$date_range = [
+								'from' => date('m/d/Y', strtotime($data['schedule'])),
+								'to' => date('m/d/Y', strtotime($data['schedule'])),
+							];
+						}
+						// check toktok delivery status
+						$delivery = $this->toktokapi->check_delivery($date_range, '', $toktok_status, $buyer_name);
+						if ($delivery->success AND count($delivery->response)) {
+							debug($buyer_name, $delivery, 'stop');
+							foreach ($delivery->response as $order) {
+								if (isset($order['details']) AND isset($order['details']['post'])) {
+									// $order['details']['post']['notes'] = 'GulayMart Order#:6ED99B0438';
+									$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
+									$order_id = '';
+									if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
+
+									if ($order_id == $data['order_id']) {
+										/*set new status*/
+										$set = ['status' => $actual_status];
+										if (empty($data['delivery_id'])) {
+											/*delivery_id not set yet*/
+											$delivery_id = $order['details']['post']['delivery_id'];
+											$set['delivery_id'] = $delivery_id;
+											$set['toktok_data'] = base64_encode(json_encode($order));
+										}
+										$response = $this->gm_db->save('baskets_merge', $set, ['id' => $data['id']]);
+										if ($response) $baskets_merge_ids[] = $data['id'];
+									}
+								}
 							}
 						}
 					}
