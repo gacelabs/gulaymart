@@ -108,7 +108,7 @@ class Admin extends MY_Controller {
 			$set = json_decode($automation_settings['value'], true);
 			$toktok_data = $this->gm_db->get('baskets_merge', [
 				'status' => 6, 'operator' => 0, 'is_sent' => 0,
-				'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['booking_limit'],
+				'order_by' => 'added', 'direction' => 'ASC',/* 'limit' => $set['booking_limit'],*/
 			]);
 			// debug($automation_settings, $toktok_data, 'stop');
 			if ($toktok_data) {
@@ -169,6 +169,7 @@ class Admin extends MY_Controller {
 					}
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
+						return true; /*Disable OPERATOR distributions*/
 						/*booking_limit reached, turn off switch*/
 						$set['switch'] = 0;
 						$this->gm_db->save('admin_settings', ['value' => json_encode($set)], ['id' => $automation_settings['id']]);
@@ -213,6 +214,7 @@ class Admin extends MY_Controller {
 						$this->notify_operator_booking();
 					}
 				} else {
+					return true; /*Disable OPERATOR distributions*/
 					$this->notify_operator_booking();
 				}
 			}
@@ -221,6 +223,7 @@ class Admin extends MY_Controller {
 
 	public function notify_operator_booking()
 	{
+		return false; /*Disable OPERATOR distributions*/
 		$toktok_for_operators = $this->baskets->merge_disassembled([
 			'status' => 6, 'operator >' => 0, 'is_sent' => 0,
 		], false, false, 'added');
@@ -254,6 +257,7 @@ class Admin extends MY_Controller {
 
 	public function run_operator_booking()
 	{
+		return false; /*Disable OPERATOR distributions*/
 		$post = $this->input->post() ?: $this->input->get();
 		if (isset($post['id'])) {
 			$toktok = $this->baskets->merge_disassembled(['id' => $post['id']], true);
