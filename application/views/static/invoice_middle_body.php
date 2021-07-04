@@ -24,17 +24,17 @@
 					<?php switch ($status) {
 						case 3:
 							echo '<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;transform:scaleX(-1);-webkit-transform: scaleX(-1);">';
-							echo "<h4>Your order is now On Delivery!</h4>";
+							echo "<h4>Order is now On Delivery!</h4>";
 							break;
 						case 4:
 							echo "<h4>Order Received!</h4>";
 							break;
 						case 5:
-							echo "<h4>Your order was Cancelled!</h4>";
+							echo "<h4>Order was Cancelled!</h4>";
 							break;
 						default:
 							echo '<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">';
-							echo "<h4>Your order is Ready for Pick Up!</h4>";
+							echo "<h4>Order is Ready for Pick Up!</h4>";
 							break;
 					}?>
 				</div>

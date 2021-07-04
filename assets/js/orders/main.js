@@ -41,3 +41,78 @@ var renderHTML = function(obj) {
 		});*/
 	});
 }
+
+var order_process = false;
+function orderProcess(callback) {
+	var segment2 = oSegments[2], sStatus = null;
+	switch (segment2) {
+		case 'on-delivery':
+			sStatus = 'for+pick+up';
+		break;
+		case 'received':
+			sStatus = 'on+delivery';
+		break;
+	}
+
+	if (sStatus != null) {
+		if (order_process != false && order_process.readyState !== 4) order_process.abort();
+		order_process = $.ajax({
+			url: 'api/order_process/',
+			type: 'post',
+			data: {status: sStatus, segment: segment2},
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+				if (data.success == true) callback(data);
+			}
+		});
+	}
+}
+
+function runOrders(data) {
+	var method = data.event;
+	$.ajax({
+		url: 'orders/'+method+'/',
+		type: 'post',
+		dataType: 'json',
+		data: { ids: data.ids },
+		success: function(response) {
+			console.log(response);
+			if (response.html.length) {
+				if ($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui:visible').length) {
+					$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
+				} else {
+					var newHtml = $(response.html).find('[js-element="orders-panel"]').html();
+					newHtml = $(newHtml).find('.no-records-ui').remove();
+					newHtml.insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
+				}
+				switch (method) {
+					case 'on-delivery':
+						var sPrevNav = 'for-pick-up';
+					break;
+					case 'received':
+						var sPrevNav = 'on-delivery';
+					break;
+				}
+				var uiPrevNav = $('[data-nav="'+sPrevNav+'"]'), uiCurrNav = $('[data-nav="'+method+'"]');
+				if (uiCurrNav.find('kbd').length == 0) {
+					uiCurrNav.find('div').append($('<kbd>'));
+				}
+				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
+				var dataCnt = parseInt(response.total_items);
+				uiCurrNav.find('kbd').text(prev + dataCnt);
+				/*set count for pickup*/
+				if (uiPrevNav.find('kbd').length == 0) {
+					uiPrevNav.find('div').append($('<kbd>'));
+				}
+				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
+				var dataCnt = parseInt(response.total_items);
+				if (prev > dataCnt) {
+					uiPrevNav.find('kbd').text(prev - dataCnt);
+				} else if (prev >= 0) {
+					uiPrevNav.find('kbd').remove();
+				}
+			}
+		}
+	});
+}

@@ -31,12 +31,14 @@ class Fulfillment extends My_Controller {
 		}
 		$baskets_merge = $this->baskets->get_baskets_merge($filters);
 		// debug($baskets_merge, 'stop');
-		$baskets_merge = setup_basketmerge_data($baskets_merge);
+		$baskets_merge = setup_fulfillments_data($baskets_merge);
 		// debug($baskets_merge, 'stop');
 		$farm = $this->farmers->get(['user_id' => $this->accounts->profile['id']], true);
 		// debug($farm, 'stop');
-		if ($this->input->is_ajax_request() AND is_array($baskets_merge)) {
-			echo json_encode(['total_items' => count($baskets_merge), 'html' => $this->load->view('templates/fulfillment/ff_product_container', [
+		if ($this->input->is_ajax_request()) {
+				$total_items = 0;
+				if (is_array($baskets_merge)) $total_items = count($baskets_merge);
+				echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/fulfillment/ff_product_container', [
 				'data' => [
 					'farm' => $farm,
 					'orders' => $baskets_merge,

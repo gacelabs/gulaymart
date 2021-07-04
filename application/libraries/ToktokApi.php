@@ -134,7 +134,7 @@ class ToktokApi {
 						'earlier' => $location['list_delivery_status'],
 					];
 				}
-				$deliveries[] = ['details'=>$details, 'rider_location' => $rider_location];
+				$deliveries[] = ['details' => $details, 'rider_location' => $rider_location];
 			}
 		}
 		// debug($deliveries, 'stop');

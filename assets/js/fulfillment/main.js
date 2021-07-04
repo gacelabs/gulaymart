@@ -99,7 +99,7 @@ function fulfillmentProcess(callback) {
 		fulfillment_process = $.ajax({
 			url: 'api/fulfillment_process/',
 			type: 'post',
-			data: {status: sStatus},
+			data: {status: sStatus, segment: segment2},
 			dataType: 'json',
 			success: function(data) {
 				console.log(data);
@@ -107,4 +107,51 @@ function fulfillmentProcess(callback) {
 			}
 		});
 	}
+}
+
+function runFulfillments(data) {
+	var method = data.event;
+	$.ajax({
+		url: 'fulfillment/'+method+'/',
+		type: 'post',
+		dataType: 'json',
+		data: { ids: data.ids },
+		success: function(response) {
+			if (response.html.length) {
+				if ($('.ff-product-container').find('.no-records-ui:visible').length) {
+					$('.ff-product-container').replaceWith(response.html);
+				} else {
+					var newHtml = $(response.html).find('[js-element="fulfill-panel"]').html();
+					newHtml = $(newHtml).find('.no-records-ui').remove();
+					newHtml.insertBefore($('.ff-product-container').find('.no-records-ui'));
+				}
+				switch (method) {
+					case 'on-delivery':
+						var sPrevNav = 'for-pick-up';
+					break;
+					case 'received':
+						var sPrevNav = 'on-delivery';
+					break;
+				}
+				var uiPrevNav = $('[data-nav="'+sPrevNav+'"]'), uiCurrNav = $('[data-nav="'+method+'"]');
+				if (uiCurrNav.find('kbd').length == 0) {
+					uiCurrNav.find('div').append($('<kbd>'));
+				}
+				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
+				var dataCnt = parseInt(response.total_items);
+				uiCurrNav.find('kbd').text(prev + dataCnt);
+				/*set count for pickup*/
+				if (uiPrevNav.find('kbd').length == 0) {
+					uiPrevNav.find('div').append($('<kbd>'));
+				}
+				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
+				var dataCnt = parseInt(response.total_items);
+				if (prev > dataCnt) {
+					uiPrevNav.find('kbd').text(prev - dataCnt);
+				} else if (prev >= 0) {
+					uiPrevNav.find('kbd').remove();
+				}
+			}
+		}
+	});
 }
