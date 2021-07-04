@@ -68,11 +68,11 @@
 		<div id="navbar_farm_menu_container" js-event="navbarFarmMenuContainer">
 			<?php if ($this->farms): ?>
 				<?php if ($this->products->count()): ?>
-					<div class="aside-nav-child">
+					<!-- <div class="aside-nav-child">
 						<a href="farm/sales/" class="aside-nav-item <?php in_array_echo("sales", $middle['body_class'], "active");?>">
 							<i class="fa fa-tachometer"></i><span>Sales</span>
 						</a>
-					</div>
+					</div> -->
 				<?php endif ?>
 				<div class="aside-nav-child">
 					<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
@@ -93,11 +93,11 @@
 				</a>
 			</div>
 			<?php if ($this->farms): ?>
-				<div class="aside-nav-child hidden-xs">
+				<!-- <div class="aside-nav-child hidden-xs">
 					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
 						<i class="fa fa-cog"></i><span>Settings</span>
 					</a>
-				</div>
+				</div> -->
 			<?php endif ?>
 
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
@@ -105,7 +105,8 @@
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<a href="support/help-center/" class="aside-nav-item  hidden-xs">
+		<!-- <a href="support/help-center/" class="aside-nav-item  hidden-xs"> -->
+		<a href="//support.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
 		<a href="sign-out" class="aside-nav-item hidden-xs">

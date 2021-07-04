@@ -19,61 +19,59 @@ class Orders extends MY_Controller {
 	{
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
-		$baskets_merge = false;
-		if ($status_id > 0) {
-			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id]);
-			// debug($baskets_merge, 'stop');
-			$baskets_merge = setup_orders_data($baskets_merge);
-			// debug($baskets_merge, 'stop');
-			if ($this->input->is_ajax_request()) {
-				$total_items = 0;
-				if (is_array($baskets_merge)) $total_items = count($baskets_merge);
-				echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/orders/o_order_items', [
-					'data' => [
-						'orders' => $baskets_merge,
-						'status' => $status,
-						'counts' => [
-							'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
-							'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
-							'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
-							'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
-							'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
-						],
-					]
-				], true)]);
-				exit();
-			} else {
-				$this->render_page([
-					'top' => [
-						'css' => ['dashboard/main', 'global/order-table', 'orders/main', 'global/zigzag', 'modal/invoice-modal', 'print.min']
+		$filters = ['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id];
+		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
+			$filters['id'] = $this->input->post('ids');
+			// $filters['id'] = ["25", "28", "31", "41"];
+		}
+		$baskets_merge = setup_orders_data($this->baskets->get_baskets_merge($filters));
+		// debug($baskets_merge, 'stop');
+		if ($this->input->is_ajax_request()) {
+			$total_items = 0;
+			if (is_array($baskets_merge)) $total_items = count($baskets_merge);
+			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/orders/o_order_items', [
+				'data' => [
+					'orders' => $baskets_merge,
+					'status' => $status,
+					'counts' => [
+						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
-					'middle' => [
-						'body_class' => ['dashboard', 'orders-active', 'orders-'.$status],
-						'head' => ['dashboard/navbar'],
-						'body' => [
-							'dashboard/navbar_aside',
-							'orders/o_container',
-						],
-					],
-					'bottom' => [
-						'modals' => ['ff_invoice_modal'],
-						'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/main', 'orders/o-'.clean_string_name(urldecode($status))],
-					],
-					'data' => [
-						'orders' => $baskets_merge,
-						'status' => $status,
-						'counts' => [
-							'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
-							'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
-							'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
-							'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
-							'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
-						],
-					]
-				]);
-			}
+				]
+			], true)]);
+			exit();
 		} else {
-			show_404();
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'global/order-table', 'orders/main', 'global/zigzag', 'modal/invoice-modal', 'print.min']
+				],
+				'middle' => [
+					'body_class' => ['dashboard', 'orders-active', 'orders-'.$status],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'orders/o_container',
+					],
+				],
+				'bottom' => [
+					'modals' => ['ff_invoice_modal'],
+					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/main', 'orders/o-'.clean_string_name(urldecode($status))],
+				],
+				'data' => [
+					'orders' => $baskets_merge,
+					'status' => $status,
+					'counts' => [
+						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
+						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
+						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
+					],
+				]
+			]);
 		}
 	}
 

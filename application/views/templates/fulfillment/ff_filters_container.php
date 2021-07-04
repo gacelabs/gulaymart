@@ -1,10 +1,10 @@
 <div class="row hidden-xs" id="ff_filters_container">
 	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
-		<div class="ff-navbar-grid farm-order">
+		<!-- <form class="ff-navbar-grid farm-order">
 			<div class="grid-item">
 				<small class="elem-block" style="margin-bottom:5px;"><b>FARM LOCATIONS</b></small>
-				<select class="form-control ff-navbar-pill">
-					<option selected>All farms</option>
+				<select class="form-control ff-navbar-pill" name="location-id">
+					<option>All farms</option>
 					<?php if ($data['farm']): ?>
 						<?php foreach ($data['farm']['farm_locations'] as $key => $location): ?>
 							<option value="<?php echo $location['id'];?>"><?php echo $location['city'];?></option>
@@ -14,8 +14,8 @@
 			</div>
 			<div class="grid-item">
 				<small class="elem-block" style="margin-bottom:5px;"><b>ORDER SCHEDULE</b></small>
-				<select class="form-control ff-navbar-pill">
-					<option selected value="1">Today</option>
+				<select class="form-control ff-navbar-pill" name="order-type">
+					<option value="1">Today</option>
 					<option value="2">Scheduled</option>
 				</select>
 			</div>
@@ -23,7 +23,7 @@
 				<small class="elem-block" style="margin-bottom:5px;"><b>&nbsp;</b></small>
 				<button class="btn btn-default ff-navbar-pill">Filter <i class="fa fa-sort-amount-desc"></i></button>
 			</div>
-		</div>
+		</form> -->
 
 		<div class="filter-status-container">
 			<small class="elem-block"><b>FILTER STATUS</b></small>

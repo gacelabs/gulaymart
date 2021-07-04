@@ -25,13 +25,11 @@ class Fulfillment extends My_Controller {
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
 		$filters = ['seller_id' => $this->accounts->profile['id'], 'status' => $status_id];
-		if ($this->input->is_ajax_request()) {
+		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
 			$filters['id'] = $this->input->post('ids');
 			// $filters['id'] = ["25", "28", "31", "41"];
 		}
-		$baskets_merge = $this->baskets->get_baskets_merge($filters);
-		// debug($baskets_merge, 'stop');
-		$baskets_merge = setup_fulfillments_data($baskets_merge);
+		$baskets_merge = setup_fulfillments_data($this->baskets->get_baskets_merge($filters));
 		// debug($baskets_merge, 'stop');
 		$farm = $this->farmers->get(['user_id' => $this->accounts->profile['id']], true);
 		// debug($farm, 'stop');

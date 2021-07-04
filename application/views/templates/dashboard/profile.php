@@ -247,12 +247,13 @@
 		
 		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 		<hr class="carved clearfix">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;">
+		<!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;"> -->
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="background-color:#f8f8f8;margin-bottom:-15px;padding:20px 0;">
 			<a href="farm/storefront/">
 				<img src="assets/images/banner/be-farmer.png" class="img-responsive" style="margin:0 auto;">
 			</a>
 		</div>
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		<!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 			<h4>Are you a Toktok Operator?</h4>
 			<div class="dashboard-panel theme">
 				<ul class="spaced-list between dashboard-panel-top">
@@ -355,7 +356,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<?php endif; ?>
 	</div>
 </div>
