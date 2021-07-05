@@ -10,8 +10,33 @@ class Marketplace extends MY_Controller {
 		parent::__construct();
 	}
 
-	public function index()
+	public function index($category=false)
 	{
+		$category_ids = false;
+		if ($category != false) {
+			$category_ids = get_data_in('products_category', ['value' => $category], 'id');
+		} else {
+			$category_ids = get_data_in('products_category', false, 'id');
+		}
+		if ($this->input->is_ajax_request()) {
+			// debug($category_ids, 'stop');
+			$not_ids = $this->input->post('not_ids') ?: $this->input->get('not_ids');
+
+			if (is_array($category_ids) AND count($category_ids)) {
+				$nearby_products = nearby_products($this->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids]);
+			} else {
+				$nearby_products = nearby_products($this->latlng, ['category_ids' => $category_ids, 'not_ids' => false]);
+			}
+			$html = '';
+			if ($nearby_products) {
+				foreach ($nearby_products as $key => $product) {
+					$html .= $this->load->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']], true);
+				}
+				$nearby_products = nearby_products($this->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
+			}
+			// debug($nearby_products, 'stop');
+			echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)]); exit();
+		}
 		// debug(nearby_farms($this->latlng), nearby_products($this->latlng), 'stop');
 		$this->render_page([
 			'top' => [
@@ -50,26 +75,18 @@ class Marketplace extends MY_Controller {
 			],
 			'data' => [
 				'nearby_veggies' => nearby_veggies($this->latlng),
-				'nearby_products' => nearby_products($this->latlng),
+				'nearby_products' => nearby_products($this->latlng, ['category_ids' => $category_ids, 'not_ids' => false]),
+				'nearby_products_count' => nearby_products($this->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]),
 				'nearby_farms' => nearby_farms($this->latlng),
 			],
 		]/*, true*/);
 	}
 
-	public function loadmore()
+	public function category($category=false)
 	{
-		$post = $this->input->post();
-		$html = '';
-		if ($post) {
-			foreach ($post['page'] as $key => $id) {
-				$product = $this->products->get(['id' => $id], false, true, true);
-				$html .= $this->load->view('looping/product_item', ['data'=>$product, 'id'=>$id, 'forajax'=>true], true);
-			}
-			// debug($post, $html, 'stop');
-			if (strlen(trim($html)) > 0) {
-				echo json_encode(['success' => true, 'data' => ['post' => $post, 'html' => $html], 'callback' => 'renderMoreVeggies']); exit();
-			}
+		if ($category == false) {
+			redirect(base_url('/'));
 		}
-		echo json_encode(['success' => false, 'data' => ['post' => $post, 'html' => $html]]); exit();
+		$this->index($category);
 	}
 }

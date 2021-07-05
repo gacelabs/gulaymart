@@ -365,6 +365,7 @@ class Products {
 				$product['category'] = false;
 				$category = $this->class->gm_db->get('products_category', ['id' => $product['category_id']], 'row');
 				if ($category) $product['category'] = $category['label'];
+				if ($category) $product['category_value'] = $category['value'];
 
 				$product['subcategory'] = false;
 				$subcategory = $this->class->gm_db->get('products_subcategory', ['id' => $product['subcategory_id']], 'row');

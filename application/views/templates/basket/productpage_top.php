@@ -1,5 +1,5 @@
 <?php if ($data['product']): ?>
-	<?php $product = $data['product']; ?>
+	<?php $product = $data['product'];?>
 	<div class="container">
 		<div class="row" id="productpage_top">
 			<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
@@ -24,7 +24,7 @@
 			<div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
 				<div class="productpage-basic-container">
 					<div class="cat-breadcrumb">
-						<p class="text-gray zero-gaps"><a href=""><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href=""><?php echo $product['subcategory'];?></a></p>
+						<p class="text-gray zero-gaps"><a href="marketplace/category/<?php echo $product['category_value'];?>"><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href="<?php echo $product['product_url'];?>"><?php echo $product['subcategory'];?></a></p>
 					</div>
 					<h1 class="productpage-title"><?php echo $product['name'];?></h1>
 					<h2 class="productpage-price">

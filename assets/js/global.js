@@ -108,3 +108,30 @@ function modalCallbacks() {
 		}
 	});
 }
+
+function loadMore(ui, method) {
+	if (ui != undefined && ui.length && ui.data('url') != undefined) {
+		ui.on('click', function() {
+			var ids = [];
+			if ($(ui.data('items')).length) {
+				$(ui.data('items')).map(function(i, elem) {
+					ids.push($(elem).data('id'));
+				});
+			}
+			// console.log(ids);
+			$.ajax({
+				url: ui.data('url'),
+				type: 'post',
+				data: {'not_ids': ids},
+				dataType: 'json',
+				success: function(data) {
+					// console.log(data);
+					if (data.success) {
+						$(ui.data('items')).parent().append(data.html);
+					}
+					if ($(ui.data('items')).length == data.count) ui.hide();
+				}
+			});
+		});
+	}
+}

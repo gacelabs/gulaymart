@@ -727,7 +727,7 @@ function linking_mode($link=null)
 	return false;
 }
 
-function get_data_in($table=false, $where=false, $order=2)
+function get_data_in($table=false, $where=false, $field=false, $order=2)
 {
 	if ($table) {
 		$ci =& get_instance();
@@ -737,7 +737,19 @@ function get_data_in($table=false, $where=false, $order=2)
 		} else {
 			$data = $ci->db->get($table);
 		}
-		if ($data->num_rows()) return $data->result_array();
+		if ($data->num_rows()) {
+			if ($field) {
+				$result = [];
+				foreach ($data->result_array() as $key => $row) {
+					if (isset($row[$field])) {
+						$result[] = $row[$field];
+					}
+				}
+				return $result;
+			} else {
+				return $data->result_array();
+			}
+		}
 	}
 	return [];
 }
@@ -1267,6 +1279,9 @@ function nearby_farms($data=false, $user_id=false)
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
 					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					if (count($farms) == MARKETPLACE_MAX_FARMERS) {
+						break;
+					}
 					// $duration = (int)$driving_distance['durationval'];
 					// $farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1333,7 +1348,7 @@ function nearby_veggies($data=false, $user_id=false)
 				// var_dump($driving_distance);
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$duration = (int)$driving_distance['durationval'];
-					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, 5);
+					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, MARKETPLACE_MAX_VEGGIES);
 				}
 			}
 		}
@@ -1342,7 +1357,7 @@ function nearby_veggies($data=false, $user_id=false)
 	return $veggies;
 }
 
-function nearby_products($data=false, $user_id=false, $farm_location_id=false)
+function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false)
 {
 	$products = false;
 	if ($data) {
@@ -1364,7 +1379,7 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 				// debug($driving_distance['distance'], 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions);
 					// $duration = (int)$driving_distance['durationval'];
 					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1375,13 +1390,19 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 	return $products;
 }
 
-function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false)
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false)
 {
 	$ci =& get_instance();
 	if ($compare_1 <= $compare_2) {
 		$items_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
+		if ($conditions != false) {
+			if (isset($conditions['not_ids']) AND $conditions['not_ids'] != false) {
+				$items_locations = $ci->gm_db->get_not_in('products_location', ['farm_location_id' => $row['id'], 'product_id' => $conditions['not_ids']]);
+				// debug($items_locations, 'stop');
+			}
+		}
 		if ($items_locations) {
-			$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+			// $farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
 			foreach ($items_locations as $index => $location) {
 				$where = ['id' => $location['product_id']];
 				if ($user_id) {
@@ -1393,14 +1414,23 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 				} else {*/
 					$item = $ci->gm_db->get('products', $where, 'row');
 				/*}*/
+				if ($conditions != false) {
+					if (isset($conditions['category_ids']) AND $conditions['category_ids'] != false) {
+						$where['category_id'] = $conditions['category_ids'];
+						$item = $ci->gm_db->get_in('products', $where, 'row');
+						// debug($item, 'stop');
+					}
+				}
 
 				if ($item) {
 					$item['farm_location_id'] = $row['id'];
+
 					$item['category'] = false;
+					$item['category_value'] = false;
+					$item['subcategory'] = false;
 					$category = $ci->gm_db->get('products_category', ['id' => $item['category_id']], 'row');
 					if ($category) $item['category'] = $category['label'];
-
-					$item['subcategory'] = false;
+					if ($category) $item['category_value'] = $category['value'];
 					$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $item['subcategory_id']], 'row');
 					if ($subcategory) {
 						$item['subcategory'] = $subcategory['label'];
@@ -1433,6 +1463,11 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 					$item['storefront'] = storefront_url($item);
 					$item['product_url'] = product_url($item);
 					$items[] = $item;
+					if ($conditions != false) {
+						if (isset($conditions['limit']) AND $conditions['limit'] == false) {
+							$limit = $conditions['limit'];
+						}
+					}
 					if (!is_bool($limit) AND is_numeric($limit)) {
 						if (count($items) == $limit) {
 							break;

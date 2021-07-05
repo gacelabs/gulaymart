@@ -10,7 +10,7 @@
 				</div>
 			</a>
 			<?php foreach ($this->categories as $key => $category): ?>
-				<a href="" class="veggy-category-item" data-category-group="<?php echo $category['id'];?>">
+				<a href="marketplace/category/<?php echo $category['value'];?>" class="veggy-category-item" data-category-group="<?php echo $category['id'];?>">
 					<div class="veggy-category-item-inner">
 						<img src="<?php echo $category['photo'];?>" alt="<?php echo $category['label'];?>" />
 						<p><?php echo $category['label'];?> <i class="fa fa-chevron-down"></i></p>

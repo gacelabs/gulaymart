@@ -2,7 +2,7 @@
 <div id="veggy_nearby_container">
 	<ul class="spaced-list between">
 		<li><h3><b>Veggies nearby</b></h3></li>
-		<li><a href="" class="text-link"><h3><b>More</b></h3></a></li>
+		<!-- <li><a href="" class="text-link"><h3><b>More</b></h3></a></li> -->
 	</ul>
 	<div class="zero-gaps" id="veggy_nearby_body">
 		<div id="veggy_nearby_right_container">

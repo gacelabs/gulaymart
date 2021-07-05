@@ -1,5 +1,5 @@
 <?php if (isset($data['category'])): ?>
-	<div class="product-list-card" data-category="<?php echo $id;?>">
+	<div class="product-list-card" data-category="<?php echo $id;?>" data-id="<?php echo $data['id'];?>">
 		<a href="<?php echo $data['product_url'];?>">
 			<div class="product-list-photo" style="background-image: url(<?php identify_main_photo($data);?>);"></div>
 			<div class="product-desc-body">

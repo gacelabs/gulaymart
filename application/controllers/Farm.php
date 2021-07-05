@@ -555,7 +555,7 @@ class Farm extends MY_Controller {
 			$data = [
 				'farm' => $user_farm,
 				'location' => $farm_location,
-				'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
+				'products' => nearby_products($this->latlng, false, $user_farm['user_id'], $farm_location_id),
 				'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
 			];
 			// debug($data, 'stop');

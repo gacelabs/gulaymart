@@ -112,3 +112,6 @@ defined('METERS_DISTANCE_TO_USER') OR define('METERS_DISTANCE_TO_USER', 30000);
 defined('NON_PRODUCT_KEYS') OR define('NON_PRODUCT_KEYS', serialize(['user_id', 'category_id', 'subcategory_id', 'added']));
 defined('SECONDS_DISTANCE_TO_USER') OR define('SECONDS_DISTANCE_TO_USER', 3600);
 defined('ADMIN_PASS') OR define('ADMIN_PASS', '2');
+defined('MARKETPLACE_MAX_ITEMS') OR define('MARKETPLACE_MAX_ITEMS', 10);
+defined('MARKETPLACE_MAX_VEGGIES') OR define('MARKETPLACE_MAX_VEGGIES', 6);
+defined('MARKETPLACE_MAX_FARMERS') OR define('MARKETPLACE_MAX_FARMERS', 24);
