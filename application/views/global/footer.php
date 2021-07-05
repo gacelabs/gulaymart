@@ -1,17 +1,12 @@
 <div id="footer_page_container">
 	<div class="container">
-
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 			<h3 style="font-size: 16px;"><b>Categories</b></h3>
-			<p style="margin-bottom:5px;"><a href="">All veggies</a></p>
-			<p style="margin-bottom:5px;"><a href="">Leafy</a></p>
-			<p style="margin-bottom:5px;"><a href="">Root</a></p>
-			<p style="margin-bottom:5px;"><a href="">Cruciferous</a></p>
-			<p style="margin-bottom:5px;"><a href="">Marrow</a></p>
-			<p style="margin-bottom:5px;"><a href="">Stem</a></p>
-			<p style="margin-bottom:5px;"><a href="">Allium</a></p>
+			<p style="margin-bottom:5px;"><a href="/">All veggies</a></p>
+			<?php foreach ($this->categories as $key => $category): ?>
+				<p style="margin-bottom:5px;"><a href="marketplace/category/<?php echo $category['value'];?>"><?php echo $category['label'];?></a></p>
+			<?php endforeach ?>
 		</div>
-
 
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 			<h3 style="font-size: 16px;"><b>Help Center</b></h3>
