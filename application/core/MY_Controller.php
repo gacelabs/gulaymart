@@ -12,6 +12,7 @@ class MY_Controller extends CI_Controller {
 	public $action = 'index';
 	public $referrer = FALSE;
 	public $latlng = ['lat' => 14.628538456333938, 'lng' => 120.97507784318562];
+	public $current_city = FALSE;
 
 	public function __construct()
 	{
@@ -29,6 +30,11 @@ class MY_Controller extends CI_Controller {
 		if (!empty($latlng)) {
 			// debug($latlng, 'stop');
 			$this->latlng = unserialize($latlng);
+		}
+		$current_city = get_cookie('current_city', true);
+		if (!empty($latlng)) {
+			// debug($current_city, 'stop');
+			$this->current_city = urldecode($current_city);
 		}
 		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));

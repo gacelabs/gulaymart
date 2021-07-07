@@ -44,6 +44,7 @@ class DevBuild extends CI_Controller {
 			if ($exists == true) {
 				if ($mode == 'drop') {
 					delete_cookie('prev_latlng');
+					delete_cookie('current_city');
 				} elseif ($mode == 'clear') {
 					foreach ($datatables as $key => $table) {
 						if ($this->db->table_exists($table)) {
