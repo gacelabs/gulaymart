@@ -85,11 +85,23 @@ class DevBuild extends CI_Controller {
 										unset($row[$field]);
 									}
 								}
+								if (isset($row['added']) AND isset($row['updated'])) {
+									unset($row['added']); unset($row['updated']);
+								}
 								if (count($row)) {
-									$this->gm_db->new($table, $row);
+									$record = $this->gm_db->get($table, $row, 'row');
+									if ($record) {
+										// debug($record, 'stop');
+										if (isset($record['added']) AND isset($record['updated'])) {
+											unset($record['added']); unset($record['updated']);
+										}
+										$this->gm_db->save($table, $row, $record);
+									} else {
+										$this->gm_db->new($table, $row);
+									}
 								}
 							}
-							echo '- <b style="color: green;">'.count($insertdata[$table]).' records restored.</b><br>';
+							echo '- <b style="color: green;">'.count($insertdata[$table]).' record(s) restored.</b><br>';
 						}
 					} else {
 						echo '<i style="color: orange;">Table '.$table.' existing!</i> <br>';
@@ -180,7 +192,7 @@ class DevBuild extends CI_Controller {
 						$logfile = fopen(get_root_path('assets/data/logs/fetched-cities.log'), "a+");
 						$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
 						$txt .= "Total fetched: " . $total_fetched . " \n";
-						$txt .= "Total records: " . $total_count . " \n";
+						$txt .= "Total record(s): " . $total_count . " \n";
 						$txt .= "Total remaining: " . $total_remaining . " \n";
 						$txt .= "--------------------------------" . "\n";
 						fwrite($logfile, $txt);
