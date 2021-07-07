@@ -211,6 +211,7 @@ class Accounts {
 					if ($shipping['active'] == 1) {
 						$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
 						set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
+						
 						$address = explode(',', $shipping['address_2']);
 						$city = remove_multi_space(str_replace('city of', '', strtolower(isset($address[0]) ? $address[0] : '')), true);
 						$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
