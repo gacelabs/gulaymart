@@ -24,14 +24,26 @@ $route['products/(:any)'] = 'Basket/productpage';
 
 $route['basket/checkout'] = 'Basket/checkout';
 
-$route['fulfillment'] = 'Fulfillment/index';
+$route['fulfillment/placed'] = 'Fulfillment/index/placed';
+$route['fulfillment/for-pick-up'] = 'Fulfillment/index/for+pick+up';
+$route['fulfillment/on-delivery'] = 'Fulfillment/index/on+delivery';
+$route['fulfillment/received'] = 'Fulfillment/index/received';
+$route['fulfillment/cancelled'] = 'Fulfillment/index/cancelled';
 
-$route['orders/thank-you'] = 'transactions/thankyou';
+$route['orders/placed'] = 'Orders/index/placed';
+$route['orders/for-pick-up'] = 'Orders/index/for+pick+up';
+$route['orders/on-delivery'] = 'Orders/index/on+delivery';
+$route['orders/received'] = 'Orders/index/received';
+$route['orders/cancelled'] = 'Orders/index/cancelled';
+
+$route['orders/thank-you'] = 'Orders/thankyou';
+
+$route['admin/dash'] = 'Admin';
+$route['admin/dash'] = 'Admin/index';
 
 $route['dev-build'] = 'DevBuild/index';
 $route['dev-build/run'] = 'DevBuild/run';
 $route['dev-build/fetch-cities'] = 'DevBuild/fetch';
-
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -171,13 +171,12 @@
 		z-index: 1;
 	}
 	.price-tally-pull-up {
-		background-color: #9fd05e;
+		border: 1px solid #ccc;
 		border-radius: 4px;
-		color: #fff;
-		height: 18px;
-		padding: 1px 0;
+		height: 22px;
+		padding: 2px 0;
 		text-align: center;
-		width: 100%;
+		width: 22px;
 	}
 	.order-summary-middle.active {
 		filter: blur(2px);

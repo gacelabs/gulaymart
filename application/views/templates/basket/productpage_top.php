@@ -1,28 +1,30 @@
 <?php if ($data['product']): ?>
-	<?php $product = $data['product']; ?>
+	<?php $product = $data['product'];?>
 	<div class="container">
 		<div class="row" id="productpage_top">
 			<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
 				<div class="product-imgs-container">
 					<?php if ($product['photos']): ?>
-					<div id="main_img_preview" style="background-image: url('<?php echo $product['photos']['main']['url_path'];?>');"></div>
-					<div class="img-thumb-container">
-						<ul class="inline-list" id="img_thumb_list">
-							<li><div class="img-thumb-item active" style="background-image: url('<?php echo $product['photos']['main']['url_path'];?>');"></div></li>
-							<?php if (isset($product['photos']['other']) AND $product['photos']['other']): ?>
-								<?php foreach ($product['photos']['other'] as $key => $photo): ?>
-									<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
-								<?php endforeach ?>
-							<?php endif ?>
-						</ul>
-					</div>
+						<?php $no_main = true;?>
+						<div id="main_img_preview" style="background-image: url('<?php identify_main_photo($product, false, $no_main);?>');"></div>
+						<div class="img-thumb-container">
+							<ul class="inline-list" id="img_thumb_list">
+								<li><div class="img-thumb-item active" style="background-image: url('<?php identify_main_photo($product);?>');"></div></li>
+								<?php if (isset($product['photos']['other']) AND $product['photos']['other']): ?>
+									<?php foreach ($product['photos']['other'] as $key => $photo): ?>
+										<?php if ($no_main AND $key == 0) continue;?>
+										<li><div class="img-thumb-item" style="background-image: url('<?php echo $photo['url_path'];?>');"></div></li>
+									<?php endforeach ?>
+								<?php endif ?>
+							</ul>
+						</div>
 					<?php endif ?>
 				</div>
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-7 col-xs-12">
 				<div class="productpage-basic-container">
 					<div class="cat-breadcrumb">
-						<p class="text-gray zero-gaps"><a href=""><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href=""><?php echo $product['subcategory'];?></a></p>
+						<p class="text-gray zero-gaps"><a href="marketplace/category/<?php echo $product['category_value'];?>"><?php echo $product['category'];?></a> <i class="fa fa-angle-right"></i> <a href="<?php echo $product['product_url'];?>"><?php echo $product['subcategory'];?></a></p>
 					</div>
 					<h1 class="productpage-title"><?php echo $product['name'];?></h1>
 					<h2 class="productpage-price">
@@ -43,8 +45,7 @@
 							<div class="productpage-variety" js-element="variety">
 								<?php if ($stocks > 0): ?>
 									<div class="variety-location">
-										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-cubes"></i> <span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
-										<p class="zero-gaps" style="margin-bottom:5px;"><i class="fa fa-map-marker"></i> <?php echo $product['farm_location']['city_prov'];?></p>
+										<p><span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
 										<div class="input-group">
 											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
 											<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
@@ -57,15 +58,36 @@
 										</div>
 									</div>
 								<?php else: ?>
-									<p>NO STOCKS AVAILABLE</p>
+									<p class="zero-gaps" style="margin-bottom:5px;">NO STOCKS AVAILABLE</p>
 								<?php endif ?>
 							</div>
+						</div>
+						<div class="productpage-basic-grid" style="margin-bottom: 15px;">
+							<p class="text-gray zero-gaps">FROM</p>
+							<p class="zero-gaps"><?php echo $product['farm_location']['city_prov'];?></p>
 						</div>
 
 						<?php if ($stocks > 0): ?>
 							<div class="add-basket-btn" js-element="basket-btns">
-								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" style="margin-right:5px;" data-keep-loading="3000"><i class="fa fa-shopping-basket icon-left text-theme"></i>Add to Basket</button>
-								<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" style="width:125px;" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">Buy Now</a>
+								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" data-keep-loading="3000">
+									<ul class="spaced-list between text-left">
+										<li><i class="fa fa-calendar icon-left"></i></li>
+										<li><p class="zero-gaps">Add to Basket</p><small style="vertical-align:top;font-size:10px;">SCHEDULED DELIVERY</small></li>
+									</ul>
+									<input type="hidden" name="order_type" value="2" />
+								</button>
+								<button href="basket/add/<?php echo $product['id'];?>" type="button" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
+									<ul class="spaced-list between text-left">
+										<li><i class="fa fa-clock-o icon-left text-white"></i></li>
+										<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+									</ul>
+								</button>
+								<!-- <a href="basket/add/<?php //echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php //echo $product['basket_details']['farm_location_id'];?>">
+									<ul class="spaced-list between">
+										<li><p class="zero-gaps">Buy Now</p>
+										<small class="elem-block" style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+									</ul>
+								</a> -->
 							</div>
 						<?php endif ?>
 					</form>
@@ -140,14 +162,16 @@
 								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Today</p>
-									<small class="text-gray elem-block">Earliest: <?php echo compute_eta($product['farm_location']['durationval'], true);?></small>
+									<?php if ($product['farm_location']['durationval']): ?>
+										<small class="text-gray elem-block">Earliest: <?php compute_eta($product['farm_location']['durationval'], true, true);?></small>									
+									<?php endif ?>
 								</div>
 							</div>
 							<div class="productpage-summary-grid">
 								<img src="assets/images/icons/calendar.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Schedule</p>
-									<small class="text-gray elem-block">For bulk orders</small>
+									<small class="text-gray elem-block">Add To Basket</small>
 								</div>
 							</div>
 						</div>

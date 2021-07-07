@@ -113,7 +113,7 @@ $(document).ready(function() {
 	$('#add_product_btn').click(function(e) {
 		e.stopPropagation();
 		$('#nav_basket').find('.notif-dot').remove();	
-		$('#nav_basket').append('<i class="fa fa-circle text-success notif-dot"></i>');	
+		$('#nav_basket').append('<i class="fa fa-circle text-success notif-dot"></i>');
 	});
 
 	// thubmnail preview
@@ -128,12 +128,19 @@ $(document).ready(function() {
 
 	$('#buy_now_btn').bind('click', function(e) {
 		e.preventDefault();
-		if (Object.keys($(e.target).data()).length) {
+		var oThis = $(e.target);
+		var tagName = oThis.prop('tagName');
+		if (tagName != 'A') oThis = $('#buy_now_btn');
+		if (Object.keys(oThis.data()).length) {
 			var oData = {
-				baskets: {location_id: $(e.target).data('location-id'), quantity: parseInt($('[name="baskets[quantity]"]').val())}
+				baskets: {
+					location_id: oThis.data('location-id'),
+					quantity: parseInt($('[name="baskets[quantity]"]').val()),
+				},
+				order_type: 1
 			};
-			// console.log($(e.target).attr('href'), oData);
-			simpleAjax($(e.target).attr('href'), oData, $(e.target), 3000);
+			// console.log(oThis.attr('href'), oData);
+			simpleAjax(oThis.attr('href'), oData, oThis, 12000);
 		}
 	});
 
@@ -155,9 +162,9 @@ var stockChanged = function(obj) {
 	// console.log(obj);
 	if (obj && obj.baskets) {
 		var qty = parseInt(obj.baskets.quantity);
-		var stocks = parseInt(obj.baskets.rawdata.basket_details.stocks);
+		var stocks = parseInt(obj.baskets.rawdata.details.stocks);
 		var newStocks = stocks - qty;
-		$('[class="max-qty"]').text('Max quantity '+newStocks);
+		$('[class="max-qty"]').text('Maximum of '+newStocks);
 		$('[name="baskets[quantity]"]').prop('max', newStocks).attr('max', newStocks);
 		if (newStocks <= 0) {
 			$('[js-element="variety"]').html('<p>NO STOCKS AVAILABLE</p>');

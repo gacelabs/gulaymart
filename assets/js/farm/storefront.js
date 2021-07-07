@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
 	$('[data-toggle="tooltip"]').tooltip();
-	$('[data-toggle="popover"]').popover();
+	$('[data-toggle="popover"]').popover({
+		'trigger': 'hover'
+	});
 
 	$('.custom-item-btn').click(function() {
 		$('.storefront_nav').find('div.custom-item-child').removeClass('active');

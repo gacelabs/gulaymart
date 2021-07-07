@@ -5,7 +5,7 @@ function debug()
 	$args = func_get_args();
 	echo "<pre>";
 	foreach ($args as $index => $data) {
-		if ($data !== 'stop' AND $data !== true) {
+		if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
 			$trace = debug_backtrace();
 			try {
 				if (!empty($trace)) {
@@ -371,7 +371,7 @@ function clean_string_name($string=FALSE, $replaced=FALSE, $delimiter='-')
 		$string = preg_replace('/[^a-z0-9\.-]/', '', strtolower($string));
 		$string = preg_replace('/[()]/', '', strtolower($string));
 		$string = preg_replace('/[+]/', '', strtolower($string));
-		if ($replaced) {
+		if ($replaced != FALSE) {
 			$string = preg_replace('/'.$delimiter.'/', $replaced, $string);
 		}
 	}
@@ -727,7 +727,7 @@ function linking_mode($link=null)
 	return false;
 }
 
-function get_data_in($table=false, $where=false, $order=2)
+function get_data_in($table=false, $where=false, $field=false, $order=2)
 {
 	if ($table) {
 		$ci =& get_instance();
@@ -737,7 +737,19 @@ function get_data_in($table=false, $where=false, $order=2)
 		} else {
 			$data = $ci->db->get($table);
 		}
-		if ($data->num_rows()) return $data->result_array();
+		if ($data->num_rows()) {
+			if ($field) {
+				$result = [];
+				foreach ($data->result_array() as $key => $row) {
+					if (isset($row[$field])) {
+						$result[] = $row[$field];
+					}
+				}
+				return $result;
+			} else {
+				return $data->result_array();
+			}
+		}
 	}
 	return [];
 }
@@ -1196,7 +1208,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 		$results = json_decode($response, true);
 
 		// debug($results, 'stop');
-		if ($results['status'] == 'OK') {
+		if (isset($results['status']) == 'OK') {
 			$rows = $results['rows'][0];
 			$elements = $rows['elements'][0];
 			if ($elements['status'] != 'ZERO_RESULTS') {
@@ -1214,7 +1226,7 @@ function get_driving_distance($coordinates=false, $mode='driving', $language='ph
 			}
 		}
 	}
-	return ['distance' => 0, 'distanceval' => 0, 'distance' => 0, 'durationval' => 0];
+	return ['distance' => 0, 'distanceval' => 0, 'duration' => 0, 'durationval' => 0];
 }
 
 function float2rat($n, $tolerance = 1.e-6) {
@@ -1267,6 +1279,9 @@ function nearby_farms($data=false, $user_id=false)
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
 					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					if (count($farms) == MARKETPLACE_MAX_FARMERS) {
+						break;
+					}
 					// $duration = (int)$driving_distance['durationval'];
 					// $farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1333,7 +1348,7 @@ function nearby_veggies($data=false, $user_id=false)
 				// var_dump($driving_distance);
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$duration = (int)$driving_distance['durationval'];
-					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, 5);
+					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, MARKETPLACE_MAX_VEGGIES);
 				}
 			}
 		}
@@ -1342,7 +1357,7 @@ function nearby_veggies($data=false, $user_id=false)
 	return $veggies;
 }
 
-function nearby_products($data=false, $user_id=false, $farm_location_id=false)
+function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false)
 {
 	$products = false;
 	if ($data) {
@@ -1364,7 +1379,7 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 				// debug($driving_distance['distance'], 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions);
 					// $duration = (int)$driving_distance['durationval'];
 					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1375,13 +1390,19 @@ function nearby_products($data=false, $user_id=false, $farm_location_id=false)
 	return $products;
 }
 
-function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false)
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false)
 {
 	$ci =& get_instance();
 	if ($compare_1 <= $compare_2) {
 		$items_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
+		if ($conditions != false) {
+			if (isset($conditions['not_ids']) AND $conditions['not_ids'] != false) {
+				$items_locations = $ci->gm_db->get_not_in('products_location', ['farm_location_id' => $row['id'], 'product_id' => $conditions['not_ids']]);
+				// debug($items_locations, 'stop');
+			}
+		}
 		if ($items_locations) {
-			$farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
+			// $farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
 			foreach ($items_locations as $index => $location) {
 				$where = ['id' => $location['product_id']];
 				if ($user_id) {
@@ -1393,14 +1414,23 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 				} else {*/
 					$item = $ci->gm_db->get('products', $where, 'row');
 				/*}*/
+				if ($conditions != false) {
+					if (isset($conditions['category_ids']) AND $conditions['category_ids'] != false) {
+						$where['category_id'] = $conditions['category_ids'];
+						$item = $ci->gm_db->get_in('products', $where, 'row');
+						// debug($item, 'stop');
+					}
+				}
 
 				if ($item) {
 					$item['farm_location_id'] = $row['id'];
+
 					$item['category'] = false;
+					$item['category_value'] = false;
+					$item['subcategory'] = false;
 					$category = $ci->gm_db->get('products_category', ['id' => $item['category_id']], 'row');
 					if ($category) $item['category'] = $category['label'];
-
-					$item['subcategory'] = false;
+					if ($category) $item['category_value'] = $category['value'];
 					$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $item['subcategory_id']], 'row');
 					if ($subcategory) {
 						$item['subcategory'] = $subcategory['label'];
@@ -1433,6 +1463,11 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 					$item['storefront'] = storefront_url($item);
 					$item['product_url'] = product_url($item);
 					$items[] = $item;
+					if ($conditions != false) {
+						if (isset($conditions['limit']) AND $conditions['limit'] == false) {
+							$limit = $conditions['limit'];
+						}
+					}
 					if (!is_bool($limit) AND is_numeric($limit)) {
 						if (count($items) == $limit) {
 							break;
@@ -1531,8 +1566,8 @@ function format_duration($duration=0)
 				$duration .= ' minutes';
 			}
 		} else {
-			$hours = (float)($duration / 60);
-			$minutes = (float)($duration % 60);
+			$hours = floor((float)($duration / 60));
+			$minutes = ceil((float)($duration % 60));
 			if ($hours == 1) {
 				$duration = '1 hour ';
 			} else {
@@ -1556,7 +1591,11 @@ function get_fullname($data=false, $other='', $return=false)
 	$fullname = $other;
 	$ci =& get_instance();
 	if ($data) {
-		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
+			$fullname = $ci->accounts->profile['firstname'];
+		} else {
+			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		}
 	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
 		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
 	}
@@ -1565,4 +1604,43 @@ function get_fullname($data=false, $other='', $return=false)
 	} else {
 		return $fullname;
 	}
+}
+
+function identify_main_photo($product=false, $return=false, &$no_main=true)
+{
+	$main_photo = 'https://place-hold.it/100x100.png?text=No+Image&fontsize=14';
+	if ($product) {
+		if (!isset($product['photos']['main']) AND isset($product['photos']['other'])) {
+			$main_photo = $product['photos']['other'][0]['url_path'];
+		} elseif (isset($product['photos']['main'])) {
+			$main_photo = $product['photos']['main']['url_path'];
+			$no_main = false;
+		}
+	}
+	// debug($no_main, 'stop');
+	if ($return == false) {
+		echo $main_photo;
+	} else {
+		return $main_photo;
+	}
+}
+
+function operatorlogger($data=false, $operator=false)
+{
+	$logfile = fopen(get_root_path('assets/data/logs/operator-bookings.log'), "a+");
+	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	if ($data AND $operator) {
+		$ci =& get_instance();
+		/*log here*/
+		$merge_ids = $ci->gm_db->columns('id', $data);
+		$txt .= "Code: 200\n";
+		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids]) . " \n";
+	} else {
+		$txt .= "Code: -1 \n";
+		$txt .= "Response: $data \n";
+	}
+	
+	$txt .= "---------------------------------------------------------------------------------" . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
 }

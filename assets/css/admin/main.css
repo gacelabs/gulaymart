@@ -1,0 +1,78 @@
+a, a:hover, a:focus {
+	text-decoration: none !important;
+}
+.navbar-wrapper {
+	background-color: #fff;
+	margin-bottom: 15px;
+}
+.navbar-parent {
+	position: relative;
+}
+.navbar-item {
+	padding: 10px 12px;
+	display: inline-block;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+	color: #aaa;
+}
+.navbar-item:hover, .navbar-item.active {
+	border-bottom: 2px solid #2196F3;
+	color: #2196F3;
+}
+.list-grid-parent {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-gap: 5px;
+	margin-bottom: 10px;
+}
+.list-grid-parent:last-child {
+	margin-bottom: 0;
+}
+.list-grid-item.text-right {
+	padding: 6px 0 0;
+}
+.list-grid-item>i {
+	text-align: center;
+	background-color: #eee;
+	padding-left: 0;
+	padding-right: 0;
+	height: 30px;
+	width: 30px;
+	padding: 8px 0px;
+	margin-right: 10px;
+	color: #a8d253;
+}
+.list-grid-item.text-right>input {
+	max-width: 70px;
+	float: right;
+	margin-top: -6px;
+	height: 30px;
+}
+.admin .panel-footer button {
+	width: 70px
+}
+.booking-parent {
+	margin-bottom: 15px;
+}
+.booking-parent:last-child {
+	margin-bottom: 0;
+}
+.booking-heading {
+	border-bottom: 1px solid #ddd;
+}
+.booking-heading, .booking-body {
+	background-color: #fff;
+	padding: 10px;
+}
+.booking-heading>ul.inline-list>li {
+	margin-right: 10px;
+}
+.booking-form-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr) auto;
+	grid-gap: 10px;
+}
+.booking-form-grid small.elem-block {
+	margin-bottom: 5px;
+	color: #999;
+}

@@ -64,6 +64,8 @@ $(document).ready(function() {
 			}
 		}, 1000);
 	}).on('hide.bs.modal', function(e) {});
+
+	loadMore($('#load_more_btn'));
 });
 
 var reloadState = function(data) {

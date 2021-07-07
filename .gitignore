@@ -39,3 +39,6 @@ assets/deliveries-2021-04-19.json
 assets/data/endpoints-1
 assets/data/endpoints-2.php
 assets/data/toktok-script.js
+*.json
+assets/data/logs/toktok-api.log
+assets/data/logs/

@@ -9,6 +9,11 @@ body {
 	font-weight: normal;
 	padding-top: 54px;
 }
+input, select, textarea, button, .btn, .input-group-addon {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
 a {
 	color: inherit;
 }
@@ -18,8 +23,14 @@ a:hover {
 h1, h2, h3, h4, h5 {
 	margin: 0 0 10px 0;
 }
+.text-caps {
+	text-transform: capitalize;
+}
 .clearfix {
 	clear: both !important;
+}
+.panel, .panel-heading, .panel-footer {
+	border-radius: 0;
 }
 .elem-block {
 	display: block;
@@ -57,6 +68,7 @@ h1, h2, h3, h4, h5 {
 }
 kbd {
 	font-family: 'Roboto', sans-serif;
+	border-radius: 0 !important;
 }
 .stop {
 	cursor: not-allowed;
@@ -65,10 +77,6 @@ kbd {
 	background-color: #fff;
 	padding: 15px 15px 15px 11px;
 	border-left: 4px solid #e43232;
-	border-top: 1px solid #ccc;
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	border-radius: 4px;
 	box-shadow: 0px 1px 6px 1px rgb(0 0 0 / 15%);
 	display: grid;
 	grid-template-columns: 20px 1fr;
@@ -144,10 +152,14 @@ ul.inline-list>li {
 .inline-list.right-gap>li {
 	margin-right: 10px;
 }
-.btn-theme, .bg-white.theme {
-	background-color: #a8d253;
+.btn-theme, .bg-white.theme, .bg-theme {
+	background-color: #a8d253 !important;
 	color: #fff !important;
 	outline: none;
+}
+.bt-danger {
+	background-color: #ff7575 !important;
+	color: #fff !important;
 }
 .btn-contrast, .bg-contrast {
 	background-color: #2196F3;
@@ -227,13 +239,13 @@ input:checked + .slider:before {
 	display: inline-block;
 	width: 2rem;
 	height: 2rem;
-	vertical-align: text-bottom;
+	/*vertical-align: text-bottom;*/
 	border: 0.25em solid currentColor;
 	border-right-color: transparent;
 	border-radius: 50%;
 	-webkit-animation: spinner-border 0.75s linear infinite;
 	animation: spinner-border 0.75s linear infinite;
-	margin-bottom: 2px;
+	/*margin-bottom: 2px;*/
 }
 .spinner-border-sm {
 	width: 1rem;

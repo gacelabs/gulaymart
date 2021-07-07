@@ -6,6 +6,7 @@
 		$farm_location = $product['farm_location'];
 		$feedbacks = $product['feedbacks'];
 		$product['entity_id'] = $farm_location['id'];
+		$can_comment = $product['can_comment'];
 	?>
 	<div class="container">
 		<div class="row" id="productpage_middle">
@@ -19,62 +20,69 @@
 					</div>
 				</div>
 
-				<div class="panel productpage-feedback">
-					<div class="panel-heading">
-						<ul class="spaced-list between">
-							<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
-							<li><a href="transactions/messages/" style="font-size:11px;" class="text-link">VIEW</a></li>
-						</ul>
-					</div>
-					
-					<div class="panel-body">
-						<div class="productpage-desc-inner" js-element="parent-comments-container">
-							<?php if ($feedbacks): ?>
-								<?php foreach ($feedbacks as $id => $feedback): ?>
-									<div class="media">
-										<div class="media-left">
-											<img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true">
-										</div>
-										<div class="media-body">
-											<ul class="spaced-list between">
-												<li><p class="media-heading"><?php get_fullname($feedback['first']['profile']);?></p></li>
-												<li><small class="text-gray"><?php echo date('F j, Y | g:ia', strtotime($feedback['first']['added']));?></small></li>
-											</ul>
-											<p><?php echo $feedback['first']['content'];?></p>
-											<?php if (isset($feedback['replies'])): ?>
-												<?php
-												foreach ($feedback['replies'] as $key => $reply) {
-													$reply['totalcnt'] = count($feedback['replies']) - 1;
-													$reply['key'] = $key;
-													$reply['id'] = $id;
-													$reply['product'] = $product;
-													$this->view('looping/reply_item', $reply);
-												}?>
-											<?php else: ?>
-												<?php $this->view('looping/comment_item', ['placeholder'=>'Reply a feedback ...', 'under'=>$id, 'page'=>$product]); ?>
-											<?php endif ?>
-										</div>
-									</div>
-								<?php endforeach ?>
-							<?php endif ?>
-							<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+					<div class="panel productpage-feedback">
+						<div class="panel-heading">
+							<ul class="spaced-list between">
+								<li><p style="font-size:11px;" class="text-gray">FEEDBACK</p></li>
+							</ul>
 						</div>
-					</div>
+						
+						<div class="panel-body">
+							<div class="productpage-desc-inner" js-element="parent-comments-container">
+								<?php if ($feedbacks): ?>
+									<?php foreach ($feedbacks as $id => $feedback): ?>
+										<div class="media">
+											<div class="media-left">
+												<img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true">
+											</div>
+											<div class="media-body">
+												<ul class="spaced-list between">
+													<li><p class="media-heading"><?php get_fullname($feedback['first']['profile']);?></p></li>
+													<li><small class="text-gray"><?php echo date('F j, Y | g:ia', strtotime($feedback['first']['added']));?></small></li>
+												</ul>
+												<p><?php echo $feedback['first']['content'];?></p>
+												<?php if (isset($feedback['replies'])): ?>
+													<?php
+													foreach ($feedback['replies'] as $key => $reply) {
+														$reply['totalcnt'] = count($feedback['replies']) - 1;
+														$reply['key'] = $key;
+														$reply['id'] = $id;
+														$reply['product'] = $product;
+														$this->view('looping/reply_item', $reply);
+													}?>
+												<?php else: ?>
+													<?php $this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]); ?>
+												<?php endif ?>
+											</div>
+										</div>
+									<?php endforeach ?>
+								<?php else: ?>
+									Be the first to make a feedback. Buy Now!
+								<?php endif ?>
 
-					<?php if ($feedbacks): ?>
-						<!-- <div class="panel-footer text-right">
-							<nav aria-label="Page navigation example">
-								<ul class="pagination">
-									<li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-left"></i></a></li>
-									<li class="page-item"><a class="page-link" href="#">1</a></li>
-									<li class="page-item"><a class="page-link" href="#">2</a></li>
-									<li class="page-item"><a class="page-link" href="#">3</a></li>
-									<li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-right"></i></a></li>
-								</ul>
-							</nav>
-						</div> -->
-					<?php endif ?>
-				</div>
+								<?php if ($can_comment): ?>
+								<div style="margin-left:-15px;margin-right:-15px;">
+									<hr style="margin-bottom:10px;border-color:#d0d0d0;">
+									<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+								</div>
+								<?php endif ?>
+							</div>
+						</div>
+
+						<?php if ($feedbacks): ?>
+							<!-- <div class="panel-footer text-right">
+								<nav aria-label="Page navigation example">
+									<ul class="pagination">
+										<li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-left"></i></a></li>
+										<li class="page-item"><a class="page-link" href="#">1</a></li>
+										<li class="page-item"><a class="page-link" href="#">2</a></li>
+										<li class="page-item"><a class="page-link" href="#">3</a></li>
+										<li class="page-item"><a class="page-link" href="#"><i class="fa fa-chevron-right"></i></a></li>
+									</ul>
+								</nav>
+							</div> -->
+						<?php endif ?>
+					</div>
 
 				<?php if ($farm): ?>
 					<div class="panel productpage-farm-info">

@@ -1,91 +1,72 @@
 <div class="row hidden-xs" id="ff_filters_container">
 	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs">
-		<div>
-			<div class="ff-navbar-grid">
-				<div>
-					<small class="elem-block" style="margin-bottom:5px;"><b>FARM LOCATIONS</b></small>
-					<div class="input-group">
-						<select class="form-control" aria-describedby="basic-addon1">
-							<option selected>All farms</option>
-							<option >Antipolo City</option>
-							<option >SJDM City, Bulacan</option>
-							<option >Malabon City</option>
-						</select>
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Filter</button>
-						</span>
-					</div>
-				</div>
-				<div>
-					<small class="elem-block" style="margin-bottom:5px;"><b>ORDER SCHEDULE</b></small>
-					<div class="input-group">
-						<select class="form-control" aria-describedby="basic-addon1">
-							<option selected>Now</option>
-							<option >Scheduled</option>
-						</select>
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Filter</button>
-						</span>
-					</div>
-				</div>
+		<!-- <form class="ff-navbar-grid farm-order">
+			<div class="grid-item">
+				<small class="elem-block" style="margin-bottom:5px;"><b>FARM LOCATIONS</b></small>
+				<select class="form-control ff-navbar-pill" name="location-id">
+					<option>All farms</option>
+					<?php if ($data['farm']): ?>
+						<?php foreach ($data['farm']['farm_locations'] as $key => $location): ?>
+							<option value="<?php echo $location['id'];?>"><?php echo $location['city'];?></option>
+						<?php endforeach ?>
+					<?php endif ?>
+				</select>
 			</div>
-		</div>
+			<div class="grid-item">
+				<small class="elem-block" style="margin-bottom:5px;"><b>ORDER SCHEDULE</b></small>
+				<select class="form-control ff-navbar-pill" name="order-type">
+					<option value="1">Today</option>
+					<option value="2">Scheduled</option>
+				</select>
+			</div>
+			<div class="grid-item">
+				<small class="elem-block" style="margin-bottom:5px;"><b>&nbsp;</b></small>
+				<button class="btn btn-default ff-navbar-pill">Filter <i class="fa fa-sort-amount-desc"></i></button>
+			</div>
+		</form> -->
 
-		<div>
+		<div class="filter-status-container">
 			<small class="elem-block"><b>FILTER STATUS</b></small>
-			<div class="ff-navbar-grid">
-				<div>
-					<a href="fulfillment/placed/">
-						<div class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">Placed <kbd>15</kbd></div>
+			<div class="ff-navbar-grid filter-status">
+				<div class="grid-item">
+					<a href="fulfillment/placed/" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
+						Placed
+						<?php if ($data['counts']['placed']): ?>
+						<kbd class="pull-right"><?php echo $data['counts']['placed'];?></kbd>
+						<?php endif; ?>
 					</a>
 				</div>
-				<div>
-					<a href="fulfillment/pick-up">
-						<div class="ff-navbar-pill <?php in_array_echo("ff-pick-up", $middle['body_class'], "active");?>">For Pick Up <kbd>15</kbd></div>
+				<div class="grid-item">
+					<a href="fulfillment/for-pick-up" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
+						For Pick Up
+						<?php if ($data['counts']['for+pick+up']): ?>
+						<kbd class="pull-right"><?php echo $data['counts']['for+pick+up'];?></kbd>
+						<?php endif; ?>
 					</a>
 				</div>
-				<div>
-					<a href="fulfillment/delivery">
-						<div class="ff-navbar-pill <?php in_array_echo("ff-delivery", $middle['body_class'], "active");?>">On Delivery <kbd>15</kbd></div>
+				<div class="grid-item">
+					<a href="fulfillment/on-delivery" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
+						On Delivery
+						<?php if ($data['counts']['on+delivery']): ?>
+						<kbd class="pull-right"><?php echo $data['counts']['on+delivery'];?></kbd>
+						<?php endif; ?>
 					</a>
 				</div>
-				<div>
-					<a href="fulfillment/received">
-						<div class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">Received <kbd>15</kbd></div>
+				<div class="grid-item">
+					<a href="fulfillment/received" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
+						Received
+						<?php if ($data['counts']['received']): ?>
+						<kbd class="pull-right"><?php echo $data['counts']['received'];?></kbd>
+						<?php endif; ?>
 					</a>
 				</div>
-				<div>
-					<a href="fulfillment/cancelled">
-						<div class="ff-navbar-pill <?php in_array_echo("ff-cancelled", $middle['body_class'], "active");?>">Cancelled <kbd>15</kbd></div>
+				<div class="grid-item">
+					<a href="fulfillment/cancelled" data-nav="cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
+						Cancelled
+						<?php if ($data['counts']['cancelled']): ?>
+						<kbd style="background-color:#a9a9a9;" class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd>
+						<?php endif; ?>
 					</a>
-				</div>
-			</div>
-		</div>
-
-		<div class="zero-gaps">
-			<small class="elem-block"><b>ACTIONS</b></small>
-			<div class="ff-navbar-grid-2">
-				<div>
-					<div class="input-group">
-						<select class="form-control" aria-describedby="basic-addon1" js-event="actionSelect">
-							<option value="0" selected disabled>Bulk action</option>
-							<option value="1">For Pick Up</option>
-							<option value="2">Cancelled</option>
-						</select>
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" js-event="actionApplyBtn">Apply</button>
-						</span>
-					</div>
-				</div>
-				<div>
-					<div class="form-group zero-gaps hide" id="ff_cancel_select_parent">
-						<select class="form-control" aria-describedby="basic-addon1" js-event="cancelReasonSelect">
-							<option value="0" selected disabled>Select a cancellation reason.</option>
-							<option value="1">Out of stock product.</option>
-							<option value="2">Delivery man missed the schedule.</option>
-							<option value="3">Destination out of delivery range.</option>
-						</select>
-					</div>
 				</div>
 			</div>
 		</div>

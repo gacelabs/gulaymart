@@ -32,7 +32,7 @@
 					<?php if ($current_profile) : ?>
 						<a href="profile/">
 							<div id="global_navbar_avatar" style="background-image: url('assets/images/avatar.jpg');"></div>
-							<i class="fa fa-gear global-navbar-badge"></i>
+							<i class="fa fa-gear global-navbar-badge text-contrast"></i>
 						</a>
 					<?php else : ?>
 						<span class="hidden-xs">Log In <span style="color:#c1c1c1;">|</span> Register</span>

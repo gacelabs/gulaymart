@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class CreateDev {
 
-	protected $class = FALSE; 
+	protected $class = false; 
 
 	public function __construct()
 	{
@@ -17,22 +17,22 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'fb_id' => [
 				'type' => 'VARCHAR',
 				'constraint' => '100',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'email_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'password' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'device_id' => [
 				'type' => 'VARCHAR',
@@ -43,7 +43,7 @@ class CreateDev {
 			'lat' => [
 				'type' => 'VARCHAR',
 				'constraint' => '32',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'lng' => [
 				'type' => 'VARCHAR',
@@ -76,12 +76,14 @@ class CreateDev {
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('fb_id');
-		$table_data = $this->class->dbforge->create_table('users', FALSE, [
+		$table_data = $this->class->dbforge->create_table('users', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+		
+		
 		return $table_data;
 	}
 
@@ -92,7 +94,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id' => [
 				'type' => 'INT',
@@ -147,17 +149,18 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('user_farms', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_farms', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -168,7 +171,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'farm_id' => [
 				'type' => 'INT',
@@ -181,7 +184,7 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'active' => [
 				'type' => 'TINYINT',
@@ -194,10 +197,11 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('farm_id');
-		$table_data = $this->class->dbforge->create_table('user_farm_locations', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_farm_locations', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -212,17 +216,18 @@ class CreateDev {
 			'setting' => [
 				'type' => 'VARCHAR',
 				'constraint' => '20',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'value' => ['type' => 'longtext'],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('user_settings', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_settings', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -233,12 +238,12 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'null' => FALSE,
+				'null' => false,
 			],
 			'is_admin' => [
 				'type' => 'TINYINT',
@@ -257,12 +262,13 @@ class CreateDev {
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('galleries', FALSE, [
+		$table_data = $this->class->dbforge->create_table('galleries', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -273,7 +279,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'session_id' => ['type' => 'TEXT'],
 			"past datetime DEFAULT CURRENT_TIMESTAMP",
@@ -284,11 +290,12 @@ class CreateDev {
 				'default' => '0',
 			],
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
-		$table_data = $this->class->dbforge->create_table('email_session', FALSE, [
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('email_session', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -299,7 +306,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			'user_id int DEFAULT NULL',
 			"lat VARCHAR(100) NULL DEFAULT NULL",
@@ -309,7 +316,7 @@ class CreateDev {
 			'ip_address' => [
 				'type' => 'VARCHAR',
 				'constraint' => '50',
-				'null' => TRUE,
+				'null' => true,
 			],
 			'active' => [
 				'type' => 'TINYINT',
@@ -320,12 +327,13 @@ class CreateDev {
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('user_shippings', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_shippings', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -336,7 +344,7 @@ class CreateDev {
 			'id' => [
 				'type' => 'INT',
 				'constraint' => '10',
-				'auto_increment' => TRUE
+				'auto_increment' => true
 			],
 			"user_id INT NOT NULL DEFAULT '0'",
 			"firstname VARCHAR(50) NULL DEFAULT NULL",
@@ -347,12 +355,13 @@ class CreateDev {
 			"added DATETIME NULL DEFAULT CURRENT_TIMESTAMP",
 			"updated DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
 		]);
-		$this->class->dbforge->add_key('id', TRUE);
+		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
-		$table_data = $this->class->dbforge->create_table('user_profiles', FALSE, [
+		$table_data = $this->class->dbforge->create_table('user_profiles', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -392,10 +401,11 @@ class CreateDev {
 		$this->class->dbforge->add_key('activity');
 		$this->class->dbforge->add_key('category_id');
 		$this->class->dbforge->add_key('subcategory_id');
-		$table_data = $this->class->dbforge->create_table('products', false, [
+		$table_data = $this->class->dbforge->create_table('products', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -416,7 +426,7 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('products_category', false, [
+		$table_data = $this->class->dbforge->create_table('products_category', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -452,7 +462,7 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('cat_id');
-		$table_data = $this->class->dbforge->create_table('products_subcategory', false, [
+		$table_data = $this->class->dbforge->create_table('products_subcategory', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -517,7 +527,7 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
-			'replenished' => [
+			'sold' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',
@@ -526,10 +536,11 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('farm_location_id');
-		$table_data = $this->class->dbforge->create_table('products_location', false, [
+		$table_data = $this->class->dbforge->create_table('products_location', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+		
 
 		return $table_data;
 	}
@@ -550,7 +561,7 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('products_measurement', false, [
+		$table_data = $this->class->dbforge->create_table('products_measurement', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -605,10 +616,11 @@ class CreateDev {
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('product_id');
 		$this->class->dbforge->add_key('is_main');
-		$table_data = $this->class->dbforge->create_table('products_photo', false, [
+		$table_data = $this->class->dbforge->create_table('products_photo', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+				
 		return $table_data;
 	}
 
@@ -636,108 +648,11 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('product_id');
-		$table_data = $this->class->dbforge->create_table('products_attribute', false, [
+		$table_data = $this->class->dbforge->create_table('products_attribute', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
-		return $table_data;
-	}
-
-	public function create_baskets_table()
-	{
-		$this->class->load->dbforge();
-		sleep(3);
-		$this->class->dbforge->add_field([
-			'id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-				'auto_increment' => true
-			],
-			'product_id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-				'default' => '0',
-				'null' => false,
-			],
-			'user_id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-				'default' => '0',
-				'null' => false,
-			],
-			'location_id' => [
-				'type' => 'INT',
-				'constraint' => '10',
-				'default' => '0',
-				'null' => false,
-			],
-			'device_id' => [
-				'type' => 'VARCHAR',
-				'constraint' => '12',
-				'default' => NULL,
-				'null' => true,
-			],
-			'quantity' => [
-				'type' => 'INT',
-				'default' => '0',
-				'null' => false,
-			],
-			'fee' => [
-				'type' => 'INT',
-				'default' => '0',
-				'null' => false,
-			],
-			'status' => [
-				'type' => 'TINYINT',
-				'constraint' => '2',
-				'default' => '0',
-				'null' => false,
-			],
-			'order_type' => [
-				'type' => 'TINYINT',
-				'constraint' => '2',
-				'default' => '1',
-				'null' => false,
-			],
-			'date_range' => [
-				'type' => 'VARCHAR',
-				'constraint' => '100',
-				'default' => NULL,
-				'null' => true,
-			],
-			'hash' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true,
-			],
-			'rawdata' => [
-				'type' => 'LONGTEXT',
-				'default' => NULL,
-				'null' => true,
-			],
-			'at_date' => [
-				'type' => 'VARCHAR',
-				'constraint' => '50',
-				'default' => NULL,
-				'null' => true,
-			],
-			'at_time' => [
-				'type' => 'VARCHAR',
-				'constraint' => '50',
-				'default' => NULL,
-				'null' => true,
-			],
-			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
-			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-		]);
-		$this->class->dbforge->add_key('id', true);
-		$this->class->dbforge->add_key('product_id');
-		$this->class->dbforge->add_key('user_id');
-		$this->class->dbforge->add_key('location_id');
-		$table_data = $this->class->dbforge->create_table('baskets', false, [
-			'ENGINE' => 'InnoDB',
-			'DEFAULT CHARSET' => 'utf8'
-		]);
+				
 		return $table_data;
 	}
 
@@ -767,7 +682,7 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('attributes', false, [
+		$table_data = $this->class->dbforge->create_table('attributes', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -818,7 +733,7 @@ class CreateDev {
 		]);
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('attribute_id');
-		$table_data = $this->class->dbforge->create_table('attribute_values', false, [
+		$table_data = $this->class->dbforge->create_table('attribute_values', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -891,10 +806,11 @@ class CreateDev {
 		$this->class->dbforge->add_key('id', true);
 		$this->class->dbforge->add_key('user_id');
 		$this->class->dbforge->add_key('location_id');
-		$table_data = $this->class->dbforge->create_table('basket_transactions', false, [
+		$table_data = $this->class->dbforge->create_table('basket_transactions', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
+		
 
 		return $table_data;
 	}
@@ -934,7 +850,7 @@ class CreateDev {
 				'null' => false,
 			],
 			"`tab` enum('Notifications','Inquiries','Feedbacks') NOT NULL DEFAULT 'Notifications'",
-			"`type` enum('System Update','Inventory','Comments') NOT NULL DEFAULT 'System Update'",
+			"`type` enum('System Update','Inventory','Comments','Orders') NOT NULL DEFAULT 'System Update'",
 			"content LONGTEXT",
 			'unread' => [
 				'type' => 'TINYINT',
@@ -952,11 +868,12 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('messages', false, [
+		$table_data = $this->class->dbforge->create_table('messages', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARACTER SET' => 'utf8mb4',
 			'COLLATE' => 'utf8mb4_general_ci',
 		]);
+		
 
 		return $table_data;
 	}
@@ -991,7 +908,7 @@ class CreateDev {
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
 		$this->class->dbforge->add_key('id', true);
-		$table_data = $this->class->dbforge->create_table('serviceable_areas', false, [
+		$table_data = $this->class->dbforge->create_table('serviceable_areas', true, [
 			'ENGINE' => 'InnoDB',
 			'DEFAULT CHARSET' => 'utf8'
 		]);
@@ -999,4 +916,346 @@ class CreateDev {
 		return $table_data;
 	}
 
+	public function create_baskets_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'product_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'device_id' => [
+				'type' => 'VARCHAR',
+				'constraint' => '12',
+				'default' => NULL,
+				'null' => true,
+			],
+			'quantity' => [
+				'type' => 'INT',
+				'default' => '0',
+				'null' => false,
+			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '0',
+				'null' => false,
+			],
+			'order_type' => [
+				'type' => 'TINYINT',
+				'constraint' => '2',
+				'default' => '1',
+				'null' => false,
+			],
+			'schedule' => [
+				'type' => 'DATE',
+				'default' => NULL,
+				'null' => true,
+			],
+			"reason enum('None','Out Of Stock','Removed Product','Removed by buyer') NOT NULL DEFAULT 'None'",
+			'cancel_by' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'rawdata' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_date' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'at_time' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('product_id');
+		$this->class->dbforge->add_key('user_id');
+		$this->class->dbforge->add_key('location_id');
+		$table_data = $this->class->dbforge->create_table('baskets', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+				
+		return $table_data;
+	}
+
+	public function create_baskets_merge_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'delivery_id' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'seller_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'buyer_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'location_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'status' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '2',
+				'null' => false,
+			],
+			'order_id' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'basket_ids' => [
+				'type' => 'TINYTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'seller' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'buyer' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'order_details' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'fee' => [
+				'type' => 'DOUBLE',
+				'constraint' => '10,2',
+				'default' => '0.00',
+				'null' => true,
+			],
+			'distance' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'duration' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => NULL,
+				'null' => true,
+			],
+			'referral_code' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => REFERRAL_CODE,
+				'null' => true,
+			],
+			'toktok_post' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'toktok_data' => [
+				'type' => 'LONGTEXT',
+				'default' => NULL,
+				'null' => true,
+			],
+			'operator' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'is_sent' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('baskets_merge', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+		
+		return $table_data;
+	}
+
+	public function create_admin_settings_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'setting' => [
+				'type' => 'TEXT',
+				'default' => null,
+				'null' => true,
+			],
+			'value' => [
+				'type' => 'TEXT',
+				'default' => null,
+				'null' => true,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$table_data = $this->class->dbforge->create_table('admin_settings', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		sleep(5);
+		$attributes = [
+			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50])],
+		];
+		$this->class->db->insert_batch('admin_settings', $attributes);
+
+		return $table_data;
+	}
+
+	public function create_operators_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'referral_code' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => null,
+				'null' => true,
+			],
+			'user_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('user_id');
+		$table_data = $this->class->dbforge->create_table('operators', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
+
+	public function create_operator_riders_table()
+	{
+		$this->class->load->dbforge();
+		sleep(3);
+		$this->class->dbforge->add_field([
+			'id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'auto_increment' => true
+			],
+			'operator_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'name' => [
+				'type' => 'VARCHAR',
+				'constraint' => '100',
+				'default' => null,
+				'null' => true,
+			],
+			'mobile' => [
+				'type' => 'VARCHAR',
+				'constraint' => '50',
+				'default' => null,
+				'null' => true,
+			],
+			'active' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '1',
+				'null' => false,
+			],
+			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
+			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+		]);
+		$this->class->dbforge->add_key('id', true);
+		$this->class->dbforge->add_key('operator_id');
+		$table_data = $this->class->dbforge->create_table('operator_riders', true, [
+			'ENGINE' => 'InnoDB',
+			'DEFAULT CHARSET' => 'utf8'
+		]);
+
+		return $table_data;
+	}
 }

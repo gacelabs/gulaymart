@@ -1,11 +1,11 @@
-#veggy_nearby_body {
+/*#veggy_nearby_body {
 	border: 0;
 	display: grid;
 	grid-gap: 0;
 	grid-template-columns: 20% 1fr;
 	margin: 0;
 	padding: 0;
-}
+}*/
 #veggy_nearby_left_container img {
 	margin-bottom: 10px;
 }
@@ -17,21 +17,28 @@
 	border: 0;
 	display: grid;
 	grid-gap: 0;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: repeat(6, 1fr);
 	margin: 0;
 	padding: 0;
 }
 .veggy-nearby-product-item {
+	background-color: #fff;
+	border: 1px solid #fff;
 	position: relative;
 }
-.veggy-nearby-product-item:last-child, .veggy-nearby-product-item:last-child .veggy-nearby-product-img {
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
+.veggy-nearby-product-item:nth-child(even) {
+	border-left: none;
+}
+.veggy-nearby-product-item:hover {
+	box-shadow: 0px 2px 8px 0px rgb(0 0 0 / 20%);
 }
 .veggy-nearby-product-img {
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
 	border: 0;
 	margin: 0;
-	padding-top: 100%;
+	padding-top: 56.25%;
 	width: 100%;
 }
 .veggy-nearby-product-body {
@@ -40,7 +47,8 @@
 	padding: 10px;
 	color: #fff;
 }
-.veggy-nearby-product-item:last-child .veggy-nearby-product-body {
+.veggy-nearby-product-item:nth-child(4), .veggy-nearby-product-item:nth-child(4) .veggy-nearby-product-body, .veggy-nearby-product-item:nth-child(4) .veggy-nearby-product-img {
+	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
 #veggy_nearby_container {
@@ -53,7 +61,7 @@
 }
 @media (max-width: 767px) {
 	#veggy_nearby_container {
-		padding: 0 10px;
+		padding: 0 5px;
 	}
 	#veggy_nearby_container .panel {
 		display: block;
@@ -63,7 +71,7 @@
 		transform: none;
 	}
 	#veggy_nearby_right_container {
-		grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr);
+		grid-template-columns: repeat(6, 110px);
 		white-space: nowrap;
 		overflow-x: auto;
 	}
@@ -76,7 +84,7 @@
 		color: #2196F3;
 	}
 	.veggy-nearby-product-img {
-		height: 150px;
+		height: 110px;
 	}
 	.veggy-nearby-product-body {
 		bottom: 0;

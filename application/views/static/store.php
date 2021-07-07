@@ -7,9 +7,6 @@
 						<li class="text-left">
 							<h1 class="farm_name"><a href="store/<?php echo $data['farm']['id'];?>/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
 							<h4 class="tagline"><?php echo $data['farm']['tagline'];?></h4>
-							<?php if (isset($data['farm']['farm_location_id']) AND $data['farm']['farm_location_id']): ?>
-								<label class="text-white"><?php echo $data['location']['address_2'];?></label>
-							<?php endif ?>
 						</li>
 						<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div></li>
 					</ul>
@@ -27,6 +24,12 @@
 
 			<div id="storefront_product_container">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container" id="product_item_container">
+					<?php if (isset($data['farm']['farm_location_id']) AND $data['farm']['farm_location_id']): ?>
+						<div style="padding:0 10px;margin-bottom:15px;">
+							<small class="elem-block"><b>FARM LOCATION</b></small>
+							<small><?php echo $data['location']['address_2'];?></small>
+						</div>
+					<?php endif ?>
 					<div class="product-item-body zero-gaps">
 						<?php if (isset($data['products']) AND !empty($data['products'])) {
 							foreach ($data['products'] as $key => $product) {

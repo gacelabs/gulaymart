@@ -1,48 +1,56 @@
-body.basket .order-item-middle {
-	padding: 0;
+.basket-container .order-grid-column.order-labels, .basket-container .order-grid-column.order-item {
+	grid-template-columns: minmax(0, 1fr) 150px 150px 50px;
 }
-body.basket .order-item-inner {
-	border-left: 3px solid transparent;
-	padding: 10px 10px 10px 7px;
-	margin-bottom: 0;
+.basket-container .order-footer-total {
+	display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
 }
-body.basket .order-item-inner.active {
-	background-color: #f8f8f8;
-	border-left: 3px solid #2196F3;
+.basket-container .order-table-item input[type="date"] {
+	border-color: #2196F3;
+	border-radius: 4px;
+	height: 30px;
+	padding: 5px;
+	width: 150px;
 }
-.add-basket-item-container .order-item-title {
-	font-family: 'Roboto', sans-serif;
-	margin-bottom: 10px;
+@media (max-width: 991px) {
+	.basket-container .order-grid-column.order-labels, .basket-container .order-grid-column.order-item {
+		grid-template-columns: minmax(0, 1fr) 25px;
+		grid-gap: 5px;
+	}
 }
-.add-basket-item-container .order-item-title .text-link {
-	color: #555;
-}
-.add-basket-item-container .order-item-title .text-link:hover {
-	color: #2196F3;
-}
-.add-basket-item-container .order-item-grid {
-	grid-template-columns: 110px minmax(0, 1fr);
-	margin-top: 5px;
-}
-.add-basket-item-select {
-	margin: 0 auto !important;
-	height: 15px;
-	width: 15px;
-}
-@media (max-width: 767px) {	
-	.add-basket-item-container .tender-amount-grid {
+@media (max-width: 767px) {
+	.basket-container .col-xs-12 {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.basket-container .spaced-list.between {
+		display: block;
+		text-align: right;
+	}
+	.basket-container .spaced-list.between .spaced-list.between>li {
+		display: inline-block;
+		vertical-align: sub;
+	}
+	.basket-container .quantity .input-text.qty {
+		width: 38px;
+	}
+	.basket-container .order-grid-footer {
+		padding: 10px;
 		display: block;
 	}
-	.add-basket-item-container .tender-amount-grid .order-item-status {
-		margin-bottom: 20px;
+	.basket-container .order-item input[type="date"] {
+		width: 150px;
 	}
-	.add-basket-item-container .order-item-grid {
-		grid-template-columns: 80px minmax(0, 1fr);
+	.basket-container .order-footer-total {
+		display: grid;
+		grid-template-columns: 22px auto 1fr;
+		grid-gap: 10px;
 	}
-	body.basket .tender-amount-grid {
-		display: block;
+	.basket-container .order-footer-farm, .basket-container .order-footer-payment {
+		margin-bottom: 15px;
 	}
-	body.basket .tender-amount-grid>div {
-		margin-bottom: 20px;
+	.basket-container .checkout-btn-container {
+		text-align: right;
 	}
 }

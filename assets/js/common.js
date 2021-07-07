@@ -1,76 +1,18 @@
 var hasLatlong = false, autocomplete, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
 $(document).ready(function() {
-	$('div.modal').on('shown.bs.modal', function(e) { 
-		switch (e.target.id) {
-			case 'farm_location_modal':
-				// console.log($(e.relatedTarget));
-				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
-				$(e.target).find('form').prepend(input);
-				if (map != undefined) {
-					$('#shipping-id').remove();
-					var dataLocation = $(e.relatedTarget).next('input:hidden').val();
-					if (dataLocation.length) {
-						var oData = $.parseJSON(dataLocation),
-							oThisLatLong = {lat: parseFloat(oData.lat), lng: parseFloat(oData.lng)};
-						// console.log(oData);
-						resetMap(oThisLatLong);
-						$('#address_1').val(oData.address_1);
-					} else {
-						resetMap({lat: parseFloat(oUser.lat), lng: parseFloat(oUser.lng)});
-						$('#address_1').val('');
-						setTimeout(function() {
-							$('#address_2').val('');
-						}, 500);
-					}
-					setTimeout(function() {
-						google.maps.event.trigger(map, "contextmenu");
-					}, 1000);
-				}
-			break;
-			case 'media_modal':
-				if ($(e.relatedTarget).data('change-ui').length) {
-					var value = $(e.relatedTarget).data('change-ui');
-					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
-					var field = $(e.relatedTarget).data('field');
-					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'col', value: field}));
-				}
-			break;
-		}
-	}).on('hide.bs.modal', function(e) { 
-		switch (e.target.id) {
-			case 'farm_location_modal':
-				$(e.target).find('form input[name="loc_input"]').remove();
-			break;
-			case 'media_modal':
-				// console.log(e);
-				$(e.target).find('form input[name="ui"]').remove();
-				$(e.target).find('form input[name="col"]').remove();
-				
-				var html = $(e.target).find('form .preview_images_list').html();
-				$(e.target).find('form .preview_images_list').html('');
-				html = $(html).find('input:radio').attr('name', 'selected').removeAttr('data-upload').removeAttr('checked').parent('li');
-				$(html).find('input:radio').each(function(i, elem) {
-					var oThis = $(elem);
-					elem.value = oThis.data('url-path');
-				});
-				$(e.target).find('form .preview_images_selected').append(html);
-				$(e.target).find('form').find('input:file').prop('value', '').val('');;
-			break;
-		}
-	});
-
+	modalCallbacks();
 	if ($('select.chosen').length) $('select.chosen').chosen();
 
 	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
-		if (window.location.host.indexOf('local') < 0) {
+		/*if (window.location.host.indexOf('local') < 0) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
 				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
 					navigator.geolocation.getCurrentPosition(function(response) {
 						if (response != undefined) {
 							runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
 							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
-							simpleAjax('api/save_latlng', oLatLong); /*save current latitude and longitude of user*/
+							simpleAjax('api/save_latlng', oLatLong); // save current latitude and longitude of user
 							initMapLocations();
 						}
 					}, function () {
@@ -83,14 +25,18 @@ $(document).ready(function() {
 					console.log('Location Permission ' + oLocation.state);
 				}
 			});
-		} else {
+		} else {*/
 			initMapLocations();
-		}
+		/*}*/
 	}
 
 	if ($('form').length) {
 		$('form [type=submit]').bind('click', function() {
 			$('[type=submit]', $(this).parents('form')).removeAttr('clicked');
+			$(this).attr('clicked', 1);
+		});
+		$('form a').bind('click', function() {
+			$('a', $(this).parents('form')).removeAttr('clicked');
 			$(this).attr('clicked', 1);
 		});
 	}
@@ -108,7 +54,13 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			lastButtonUI = isClicked ? uiButtonSubmit.html() : false, loadingText = 'Processing ...',
 			keep_loading = false;
 			if (uiButtonSubmit) {
-				loadingText = (uiButtonSubmit.data('loading-text') != undefined) ? uiButtonSubmit.data('loading-text') : 'Processing ...';
+				if (typeof uiButtonSubmit.attr('loading-text') == 'undefined') {
+					loadingText = '';
+				} else if (typeof uiButtonSubmit.attr('loading-text') != 'undefined') {
+					loadingText = uiButtonSubmit.attr('loading-text');
+				} else {
+					loadingText = 'Processing ...';
+				}
 				keep_loading = (uiButtonSubmit.data('keep-loading') != undefined) ? uiButtonSubmit.data('keep-loading') : false;
 				// console.log(keep_loading);
 			}
@@ -122,13 +74,13 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 				beforeSend: function(xhr, settings) {
 					$(form).addClass('active-ajaxed-form');
 					if (uiButtonSubmit) {
-						if (uiButtonSubmit.data('orig-ui') == undefined) {
+						if (uiButtonSubmit.data('orig-ui') == undefined && keep_loading == false) {
 							uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
 						}
 						uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 					}
 					if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-						$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+						$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 					}
 				},
 				success: function(data) {
@@ -146,7 +98,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
 						setTimeout(function() {
 							if (uiButtonSubmit) uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-							$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+							$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
 						}, keep_loading);
 					}
 					var fn = eval(callbackFn);
@@ -187,12 +139,19 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
 			sLastButtonText = ui.html();
-			loadingText = (ui.data('loading-text') != undefined) ? ui.data('loading-text') : 'Processing ...';
+			if (typeof ui.attr('loading-text') == 'undefined') {
+				loadingText = '';
+			} else if (typeof ui.attr('loading-text') != 'undefined') {
+				loadingText = ui.attr('loading-text');
+			} else {
+				loadingText = 'Processing ...';
+			}
 		}
 		var oSettings = {
 			url: url,
 			type: 'post',
 			data: data,
+			cache: false,
 			dataType: 'json',
 			beforeSend: function(xhr, settings) {
 				if (ui) {
@@ -201,7 +160,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					ui.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 				}
 				if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-					$('button, a, input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+					$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 				}
 			},
 			success: function(data) {
@@ -219,7 +178,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
 					setTimeout(function() {
 						if (ui) ui.html(ui.data('orig-ui'));
-						$('button, a, input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+						$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
 					}, keep_loading);
 				}
 			}
@@ -324,7 +283,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					bgColor: 'darkgreen',
 					textColor: 'white',
 				};
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'error': case 'danger':
@@ -340,7 +303,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 					bgColor: 'red',
 					textColor: 'white',
 				};
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'info': case 'information':
@@ -377,7 +344,11 @@ var runAlertBox = function(response, heading, bConfirmed) {
 						});
 					}
 				}
-				if (response.unclose == true) oSettings.hideAfter = false;
+				if (response.unclose == true) {
+					oSettings.hideAfter = false;
+				} else {
+					oSettings.hideAfter = 6000;
+				}
 				$.toast(oSettings);
 			break;
 			case 'warning': case 'warn':
@@ -454,19 +425,30 @@ var runMediaUploader = function(callback) {
 			$(elem).off('change').on('change', function(){
 				var checked = "", uiForm = $(elem).parents('form:first');
 				if ($(elem)[0].files.length == 1) checked = "checked";
-
+				
+				var arUis = [], arImageUi = [];
 				for (var i= 0; i < $(elem)[0].files.length; i++) {
 					var blob_path = window.URL.createObjectURL(elem.files[i]),
 					is_upload = uiForm.data('notmedia') ? 1 : 0;
-					var reader = new FileReader();
-					reader.readAsDataURL(elem.files[i]); 
-					reader.onloadend = function() {
-						var base64data = reader.result;                
-						// console.log(base64data);
-						var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
-						uiForm.find('.preview_images_list').append('<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="'+base64data+'" /></li>');
-					}
+					var name = uiForm.attr('id') != undefined ? uiForm.attr('id') : ($(elem).data('name') ? $(elem).data('name') : 'galleries');
+					var sImageUi = '<li data-toggle="tooltip" data-placement="top" title="Select Image"><div class="preview-image-item" style="background-image: url('+blob_path+')"></div><input type="radio" name="'+name+'[index]" '+checked+' value="'+i+'" required data-upload="'+is_upload+'" data-url-path="BLOB_FILE" /></li>';
+					arImageUi.push(sImageUi);
+					var filePromise = new Promise(resolve => {
+						var reader = new FileReader();
+						reader.readAsDataURL(elem.files[i]);
+						reader.onload = () => resolve(reader.result);
+					});
+					filePromise.then(fileContents => { arUis.push(fileContents); });
 				}
+				// console.log(arUis, arImageUi);
+				setTimeout(function() {
+					$.each(arImageUi, function(i, ui) {
+						var li = $(ui);
+						var uiVal = li.find('[data-url-path]').attr('data-url-path', arUis[i]);
+						uiForm.find('.preview_images_list').append(uiVal.parents('li'));
+					});
+				}, 300);
+
 				$('[data-toggle="tooltip"]').tooltip();
 				if (uiForm.parent('.dash-panel.theme[class*=score-]').length) {
 					var position = uiForm.find('[name="pos"]').val();
@@ -776,4 +758,22 @@ function setAutocompleteEvent() {
 		map.fitBounds(bounds);
 		map.setZoom(12);
 	});
+}
+
+function formatDate(date) {
+	if (date == undefined) {
+		var d = new Date();
+	} else {
+		var d = new Date(date);
+	}
+	var month = '' + (d.getMonth() + 1),
+	day = '' + d.getDate(),
+	year = d.getFullYear();
+
+	if (month.length < 2) 
+		month = '0' + month;
+	if (day.length < 2) 
+		day = '0' + day;
+
+	return [year, month, day].join('-');
 }

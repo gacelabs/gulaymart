@@ -17,29 +17,51 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$items_by_farm = [];
-		$basket_session = get_session_baskets();
-		if (count($basket_session)) {
-			// debug($basket_session, 'stop');
+		$items_by_farm = false;
+		$session = get_session_baskets();
+		if (count($session)) {
+			$items_by_farm = [];
+			// debug($session, 'stop');
 			/*reassemble data by farm location*/
-			foreach ($basket_session as $date => $baskets) {
+			foreach ($session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
-					$basket['date'] = $date;
-					$items_by_farm[$date][$basket['rawdata']['farm']['name']][] = $basket;
+					$rawdata = $basket['rawdata'];
+					$farm = $rawdata['farm'];
+					$basket['rawdata']['product']['farm_location_id'] = $farm['farm_location_id'] = $basket['location_id'];
+					unset($basket['rawdata']['farm']);
+
+					$profile = $this->users->get(['id' => $farm['user_id']], true);
+					unset($profile['password']); unset($profile['re_password']);
+					unset($profile['settings']);
+					$farm['profile'] = $profile;
+
+					$address = explode(',', $farm['address_2']);
+					$farm['city'] = isset($address[0]) ? $address[0] : '';
+					$farm['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+
+					$location_and_sched = $basket['location_id'].'|'.$basket['order_type'].'|'.$basket['schedule'];
+					$items_by_farm[$location_and_sched]['farm'] = $farm;
+
+					$items_by_farm[$location_and_sched]['products'][] = $basket;
+					$items_by_farm[$location_and_sched]['checkout_data'][] = [
+						'id' => $basket['id'],
+						'order_type' => $basket['order_type'],
+						'schedule' => $basket['schedule'],
+					];
 				}
 			}
 		}
 		// debug($items_by_farm, 'stop');
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', 'transactions/main', 'basket/main']
+				'css' => ['dashboard/main', 'basket/main', 'global/order-table', 'global/plus-minus-input', 'basket/main']
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'basket'],
 				'head' => ['dashboard/navbar'],
 				'body' => [
 					'dashboard/navbar_aside',
-					'basket/basket_container',
+					'basket/b_container',
 				],
 			],
 			'bottom' => [
@@ -47,6 +69,7 @@ class Basket extends My_Controller {
 				'js' => [
 					'plugins/jquery.inputmask.min',
 					'plugins/inputmask.binding',
+					'plugins/plus_minus_input',
 					'dashboard/main',
 					'basket/main',
 				],
@@ -60,47 +83,50 @@ class Basket extends My_Controller {
 	public function add($product_id=0)
 	{
 		$data = $this->input->post() ?: $this->input->get();
-		$post = add_item_to_basket($data, $product_id);
-		// debug($post, 'stop');
-		if (isset($post['baskets'])) {
+		$post = $this->baskets->prepare_to_basket($data, $product_id);
+		// debug($data, $post, 'stop');
+		if ($post) {
 			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
-				$status = 0;
+				$post['status'] = 0;
 			} else { /*from checkout button*/
-				$status = 1;
-			}
-			$existing = false;
-			if (isset($post['existing'])) {
-				$existing = $post['existing'];
-				unset($post['existing']);
+				$post['status'] = 1;
 			}
 			/*check if the user is logged in if false save post to session*/
 			if ($this->accounts->has_session == false) {
-				$this->session->set_userdata('basket_session', $post);
+				$this->session->set_userdata('basket_session', ['baskets'=>$post]);
 				$message = 'Item added to basket, Redirecting to the registration / login page!';
 				$redirect = base_url('register');
 				$callback = false;
 			} else {
-				/*save the add basket session in DB*/
-				if ($existing AND isset($existing['quantity'])) {
-					$quantity = $existing['quantity'] + (int)$post['baskets']['quantity'];
-					$rawdata = json_decode(base64_decode($existing['rawdata']), true);
-					if (isset($rawdata['basket_details']) AND isset($rawdata['basket_details']['stocks'])) {
-						$quantity = ($quantity > (int)$rawdata['basket_details']['stocks']) ? $rawdata['basket_details']['stocks'] : $quantity;
-					}
-					$this->gm_db->save('baskets', ['quantity' => $quantity], ['id' => $existing['id']]);
+				if ($post['existing'] == 1) {
+					unset($post['existing']);
+					$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
 				} else {
-					$post['baskets']['status'] = $status;
-					$post['baskets']['id'] = $this->gm_db->new('baskets', $post['baskets']);
+					unset($post['existing']);
+					$post['id'] = $this->gm_db->new('baskets', $post);
 				}
-				$message = $status ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket!';
-				$redirect = $status ? base_url('basket/checkout') : false;
-				$callback = $status ? false : 'stockChanged';
-				$post['baskets']['rawdata'] = json_decode(base64_decode($post['baskets']['rawdata']), true);
+				$other_orders = $this->gm_db->get('baskets', [
+					'user_id' => $post['user_id'],
+					'order_type' => $post['order_type'],
+					'at_date' => $post['at_date'],
+				]);
+				// debug($other_orders, 'stop');
+				$hash = '';
+				$basket_ids = [$post['id']];
+				if ($other_orders) {
+					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
+				}
+				$hash = (base64_encode(json_encode($basket_ids)));
+				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
+				$redirect = $post['status'] ? base_url('basket/checkout/'.$hash) : false;
+				$callback = $post['status'] ? false : 'stockChanged';;
+				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 			}
-			// debug($post, $status, 'stop');
-			$this->set_response('success', $message, $post, $redirect, $callback);
+			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
+			// debug($post, 'stop');
+			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
 		}
-		$this->set_response('error', 'No item(s) found', $post, false);
+		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
 	}
 
 	public function view($product_id=0, $farm_location_id=0, $product_name='')
@@ -142,14 +168,19 @@ class Basket extends My_Controller {
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
 			foreach ($post['data'] as $key => $row) {
-				$this->baskets->save(['status' => 5], $row); /*cancelled*/
+				$checkout_pricing = $this->session->userdata('checkout_pricing_'.$row['location_id']);
+				if ($checkout_pricing) {
+					$this->session->unset_userdata('checkout_pricing_'.$row['location_id']);
+				}
+				unset($row['location_id']);
+				$this->baskets->save(['status' => -1], $row); /*removed*/
 			}
-			$this->set_response('success', 'Product removed in basket', $post['data'], 'basket/', 'removeOnBasket');
+			$this->set_response('success', 'Product removed in basket', $post['data'], false, 'removeOnBasket');
 		} elseif ($get AND isset($get['data'])) {
 			// debug($get, 'stop');
-			$this->set_response('confirm', 'Want to delete selected product(s)?', $get['data'], false, 'removeBasketItem');
+			$this->set_response('confirm', 'Want to remove product(s)?', $get['data'], false, 'removeBasketItem');
 		}
-		$this->set_response('error', remove_multi_space('Unable to delete '.$name.' product'), $post);
+		$this->set_response('error', remove_multi_space('Unable to remove product(s)'), $post);
 	}
 
 	public function verify($is_checkout=0)
@@ -157,61 +188,86 @@ class Basket extends My_Controller {
 		$post = $this->input->post();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
-			$ids = array_keys($post['data']);
-			$baskets = $this->baskets->get_in(['id' => $ids]);
-			// debug($baskets, 'stop');
-			foreach ($post['data'] as $id => $row) {
+			$basket_ids = [];
+			foreach ($post['data'] as $key => $row) {
+				$id = $row['id']; unset($row['id']);
 				$basket = $this->baskets->get(['id' => $id], true);
 				// debug($basket, 'stop');
 				if ($basket) {
-					$order_type = 1; 
-					if ($post['type'] != 'deliver_now') {
-						$order_type = 2;
-						/*compute date range between the ETA*/
-						$etas = [];
-						foreach ($baskets as $key => $bskt) {
-							$etas[$bskt['location_id']] = (float) $bskt['duration'];
-						}
-						$eta_duration = 0;
-						foreach ($etas as $location_id => $duration) {
-							$eta_duration += $duration;
-						}
-						$eta = $eta_duration;
-					}
-					$obj = [
-						'status' => $row['checked'], // verified can be viewed on checkout
-						'order_type' => $order_type,
-					];
-					if ($row['checked'] == 1) {
-						$obj['quantity'] = $row['quantity'];
-					}
-					$this->baskets->save($obj, ['id' => $id]);
+					$row['status'] = 1;
+					if ($row['order_type'] == 1) $row['schedule'] = NULL;
+					$this->baskets->save($row, ['id' => $id]);
+					$basket_ids[] = $id;
 				}
 			}
-			if ($is_checkout == 0) {
-				echo json_encode(['success' => true]); exit();
-			} else {
-				echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout', 'message' => 'Basket verified!, Proceeding checkout']); exit();
-			}
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout']); exit();
+		} else {
+			echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
+			exit();
 		}
-		echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
-		exit();
 	}
 
-	public function checkout()
+	public function checkout($base64_basket_ids=false)
 	{
-		$basket_session = get_session_baskets(1);
-		if (count($basket_session)) {
-			// debug($basket_session, 'stop');
-			/*reassemble data by farm location*/
+		if ($base64_basket_ids) {
+			$where = ['id' => json_decode(base64_decode($base64_basket_ids), true), 'status' => 1];
+			// $baskets = $this->baskets->get_in($where);
+			$baskets = get_session_baskets($where);
+			// debug($where, $baskets, 'stop');
+			$this->checkout_handler($baskets);
+		} else {
+			redirect(base_url('basket/?info=Nothing+to+Checkout'));
+		}
+	}
+
+	private function checkout_handler($basket_session=false)
+	{
+		// debug($basket_session, 'stop');
+		if ($basket_session) {
 			$items_by_farm = [];
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
-					$basket['date'] = $date;
-					$items_by_farm[$basket['rawdata']['farm']['name']][] = $basket;
+					$scheduled_value = 'SCHEDULED';
+					if ($basket['order_type'] == 2) {
+						if (!is_null($basket['schedule'])) {
+							$scheduled_value .= ' | '.date('F j, Y', strtotime($basket['schedule']));
+						} else {
+							continue;
+						}
+					}
+					// $this->session->unset_userdata('checkout_pricing_'.$basket['location_id']);
+					$farm = $basket['rawdata']['farm'];
+					unset($basket['rawdata']['farm']);
+					$seller = $items_by_farm[$basket['location_id']]['seller'] = $farm;
+					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['location_id']);
+					if (empty($checkout_pricing)) {
+						$this->load->library('toktokapi');
+						/*get toktok fee if not existing in baskets table*/
+						$pricing = toktok_price_directions_format([
+							'sender_lat' => $seller['lat'],
+							'sender_lng' => $seller['lng'],
+							'receiver_lat' => $this->latlng['lat'],
+							'receiver_lng' => $this->latlng['lng'],
+						]);
+						$this->toktokapi->app_request('price_and_directions', $pricing);
+						if ($this->toktokapi->success) {
+							$checkout_pricing = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
+							// $checkout_pricing['pricing']['price'];
+							// $checkout_pricing['hash'];
+							unset($checkout_pricing['directions']);
+							$this->session->set_userdata('checkout_pricing_'.$basket['location_id'], $checkout_pricing);
+						}
+					}
+					$type_name = $basket['order_type'] == 1 ? 'TODAY' : $scheduled_value;
+					$items_by_farm[$basket['location_id']]['order_type'] = ['id'=>$basket['order_type'], 'type_name'=>$type_name];
+					$items_by_farm[$basket['location_id']]['order_details'][$basket['order_type']][] = $basket;
+					$items_by_farm[$basket['location_id']]['toktok_details'] = $checkout_pricing;
 				}
 			}
 			// debug($items_by_farm, 'stop');
+			if (count($items_by_farm)) {
+				$this->session->set_userdata('place_order_session', $items_by_farm);
+			}
 			$this->render_page([
 				'top' => [
 					'index_page' => 'no',
@@ -252,59 +308,127 @@ class Basket extends My_Controller {
 	*/
 	public function place_order()
 	{
-		$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [1]]);
-		if ($baskets) {
-			$items_by_farm = $toktok_temp_data = [];
-			foreach ($baskets as $key => $basket) $items_by_farm[$basket['location_id']][] = $basket;
-			// debug($items_by_farm, 'stop');
-			foreach ($items_by_farm as $location_id => $items) {
-				$shipping_fee = $items[0]['fee'];
-				$toktok_temp_data[$location_id] = [
-					'user_id' => $this->accounts->profile['id'],
-					'fee' => $shipping_fee,
-					'basket_ids' => '',
-					'total_price' => 0,
-				];
-				$basket_ids = [];
-				foreach ($items as $key => $item) {
-					$basket_ids[] = $item['id'];
-					$toktok_temp_data[$location_id]['item'] = $item;
-					$toktok_temp_data[$location_id]['total_price']+=(int)$item['quantity']*(float) $item['rawdata']['basket_details']['price'];
+		$place_order_session = $this->session->userdata('place_order_session');
+		// debug($place_order_session, 'stop');
+		$place_order = $basket_ids = $all_basket_ids = $farm_location_ids = $seller_ids = $order_ids = false;
+		$final_total = 0;
+		if ($place_order_session) {
+			$place_order = $farm_location_ids = $seller_ids = $order_ids = [];
+			$timestamp = strtotime(date('Y-m-d H:i:s'));
+
+			foreach ($place_order_session as $farm_location_id => $session) {
+				$place_order[$farm_location_id]['basket_ids'] = [];
+
+				$seller = $session['seller'];
+				$seller_ids[] = $seller['user_id'];
+				$profile = $this->users->get(['id' => $seller['user_id']], true);
+				unset($profile['password']); unset($profile['re_password']);
+				unset($profile['settings']); unset($profile['shippings']);
+				$seller['profile'] = $profile;
+
+				$address = explode(',', $seller['address_2']);
+				$seller['city'] = isset($address[0]) ? $address[0] : '';
+				$seller['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+				$seller['farm_location_id'] = $farm_location_id;
+				
+				$session['seller'] = $place_order[$farm_location_id]['seller'] = $seller;
+
+				$buyer = $this->accounts->profile;
+				unset($buyer['farms']); unset($buyer['farm_locations']);
+				unset($buyer['categories']); unset($buyer['subcategories']);
+				unset($buyer['measurements']); unset($buyer['galleries']);
+				unset($buyer['attributes']); unset($buyer['settings']);
+				$place_order[$farm_location_id]['buyer'] = $buyer;
+
+				$pricing = $session['toktok_details']['pricing'];
+				$fee = (float)$pricing['price'];
+				// $session['mobile'] = '80109'; /*test rider id*/
+				$hash = $session['hash'] = $session['toktok_details']['hash'];
+				$toktok_post = toktok_post_delivery_format($session);
+
+				$initial_total = 0;
+				foreach ($session['order_details'] as $order_type => $orders) {
+					$toktok_post['f_order_type_send'] = $toktok_post['f_order_type_rec'] = $order_type;
+
+					foreach ($orders as $key => $order) {
+						$sub_total = $order['quantity'] * $order['rawdata']['details']['price'];
+						$product = $order['rawdata']['product'];
+						$product['farm_location_id'] = $farm_location_id;
+						$place_order[$farm_location_id]['order_details'][] = [
+							'product' => $product,
+							'product_id' => $order['product_id'],
+							'farm_location_id' => $farm_location_id,
+							'quantity' => $order['quantity'],
+							'price' => $order['rawdata']['details']['price'],
+							'measurement' => $order['rawdata']['details']['measurement'],
+							'stocks' => $order['rawdata']['details']['stocks'],
+							'sub_total' => $sub_total,
+							'timestamp' => $timestamp,
+							'status' => 2,
+							'when' => $order_type,
+							'schedule' => $order['schedule'],
+							'basket_id' => $order['id'],
+						];
+						$place_order[$farm_location_id]['basket_ids'][] = $order['id'];
+						$all_basket_ids[] = $order['id'];
+						$initial_total += $sub_total;
+
+						if ($order_type == 2 AND (empty($toktok_post['f_sender_date']) AND empty($toktok_post['f_recepient_date']))) {
+							$receive_time = date('H:i:s', strtotime('+1 hour'));
+
+							$toktok_post['f_sender_date'] = date('d/m/Y', strtotime($order['schedule']));
+							$toktok_post['f_sender_datetime_from'] = date('H:i:s');
+							$toktok_post['f_sender_datetime_to'] = $receive_time;
+
+							$toktok_post['f_recepient_date'] = date('d/m/Y', strtotime($order['schedule']));
+							$toktok_post['f_recepient_datetime_from'] = $receive_time;
+							$toktok_post['f_recepient_datetime_to'] = date('H:i:s', strtotime('+'.((float)$pricing['duration'] + 60).' minute'));
+						}
+					}
 				}
-				$toktok_temp_data[$location_id]['basket_ids'] = implode(',', $basket_ids);
+
+				$toktok_post['f_recepient_cod'] = $initial_total + $fee;
+				$final_total += $toktok_post['f_recepient_cod'];
+
+				$basket_ids = $place_order[$farm_location_id]['basket_ids'];
+				$place_order[$farm_location_id]['basket_ids'] = implode(',', $basket_ids);
+				$order_ids[] = $place_order[$farm_location_id]['order_id'] = strtoupper(substr(md5(implode(',', $basket_ids)), 0, 10));
+				$toktok_post['f_recepient_notes'] = 'GulayMart Order#:'.$place_order[$farm_location_id]['order_id'];
+				$place_order[$farm_location_id]['fee'] = $fee;
+				$place_order[$farm_location_id]['distance'] = $pricing['distance'];
+				$place_order[$farm_location_id]['duration'] = $pricing['duration'];
+
+				$place_order[$farm_location_id]['location_id'] = $farm_location_id;
+				$place_order[$farm_location_id]['status'] = 2;
+				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post));
+				$place_order[$farm_location_id]['seller'] = base64_encode(json_encode($place_order[$farm_location_id]['seller']));
+				$place_order[$farm_location_id]['seller_id'] = $seller['user_id'];
+				$place_order[$farm_location_id]['buyer'] = base64_encode(json_encode($place_order[$farm_location_id]['buyer']));
+				$place_order[$farm_location_id]['buyer_id'] = $buyer['id'];
+				$place_order[$farm_location_id]['order_details'] = base64_encode(json_encode($place_order[$farm_location_id]['order_details']));
+
+				$farm_location_ids[] = $farm_location_id;
 			}
-			// debug($toktok_temp_data, 'stop');
-			foreach ($toktok_temp_data as $location_id => $temp) {
-				$toktok_post = toktok_post_delivery_format($temp['item']);
-				$toktok_post['f_recepient_cod'] = $temp['total_price'] + $temp['fee'];
-				$toktok_data = [
-					'user_id' => $temp['user_id'],
-					'location_id' => $location_id,
-					'basket_ids' => $temp['basket_ids'],
-					'toktok_data' => base64_encode(json_encode($toktok_post)),
-				];
-				// debug($toktok_data, 'stop');
-				/*now save to DB for queueing*/
-				$toktok = $this->gm_db->get('basket_transactions', [
-					'user_id' => $temp['user_id'],
-					'location_id' => $location_id,
-					'queue_status' => 0,
-				], 'row');
-				// $toktok['toktok_data'] = json_decode(base64_decode($toktok['toktok_data']), true);
-				// debug($toktok, $toktok_data, 'stop');
-				if ($toktok == false) {
-					$this->gm_db->new('basket_transactions', $toktok_data);
-				} else {
-					$this->gm_db->save('basket_transactions', $toktok_data, ['id' => $toktok['id']]);
-				}
+		}
+
+		// debug($place_order, 'stop');
+		if ($place_order AND $all_basket_ids) {
+			$merge_ids = [];
+			foreach ($place_order as $data) {
+				$merge_ids[] = $this->baskets->new_baskets_merge($data);
 			}
-			// debug($toktok_data, 'stop');
-			foreach ($baskets as $key => $basket) {
-				$this->baskets->save(['status' => 2], ['id' => $basket['id']]);
-			}
-			$this->set_response('success', 'Orders have been placed!', false, 'orders/thank-you/');
+
+			/*email and add notification here*/
+			notify_placed_orders($final_total, $merge_ids, $seller_ids, $this->accounts->profile);
+
+			// debug($place_order, $all_basket_ids, 'stop');
+			foreach ($all_basket_ids as $id) $this->baskets->save(['status' => 2], ['id' => $id]);
+			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
+			$this->session->unset_userdata('place_order_session');
+			$this->session->set_userdata('typage_session', $order_ids);
+			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
-			$this->set_response('info', 'No more orders to place', false, 'basket/');
+			$this->set_response('info', 'No orders to be place, Redirecting to your basket...', false, 'basket/');
 		}
 	}
 
@@ -417,10 +541,10 @@ class Basket extends My_Controller {
 		debug($this->toktokapi, 'stop');
 	}
 
-	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F36MSKT4')
+	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F2444PJ8')
 	{
 		$this->load->library('toktokapi');
-		parse_str('draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=true&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B7%5D%5Bdata%5D=7&columns%5B7%5D%5Bname%5D=&columns%5B7%5D%5Bsearchable%5D=true&columns%5B7%5D%5Borderable%5D=false&columns%5B7%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B7%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B8%5D%5Bdata%5D=8&columns%5B8%5D%5Bname%5D=&columns%5B8%5D%5Bsearchable%5D=true&columns%5B8%5D%5Borderable%5D=false&columns%5B8%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B8%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B9%5D%5Bdata%5D=9&columns%5B9%5D%5Bname%5D=&columns%5B9%5D%5Bsearchable%5D=true&columns%5B9%5D%5Borderable%5D=false&columns%5B9%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B9%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B10%5D%5Bdata%5D=10&columns%5B10%5D%5Bname%5D=&columns%5B10%5D%5Bsearchable%5D=true&columns%5B10%5D%5Borderable%5D=false&columns%5B10%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B10%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B11%5D%5Bdata%5D=11&columns%5B11%5D%5Bname%5D=&columns%5B11%5D%5Bsearchable%5D=true&columns%5B11%5D%5Borderable%5D=false&columns%5B11%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B11%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=DESC&start=0&length=10&search%5Bvalue%5D=&search%5Bregex%5D=false&date_from=03%2F30%2F2021&date_to=04%2F06%2F2021&driver_id=&order_status=&searchstring='.$searchstring, $output);
+		parse_str('draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=true&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B7%5D%5Bdata%5D=7&columns%5B7%5D%5Bname%5D=&columns%5B7%5D%5Bsearchable%5D=true&columns%5B7%5D%5Borderable%5D=false&columns%5B7%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B7%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B8%5D%5Bdata%5D=8&columns%5B8%5D%5Bname%5D=&columns%5B8%5D%5Bsearchable%5D=true&columns%5B8%5D%5Borderable%5D=false&columns%5B8%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B8%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B9%5D%5Bdata%5D=9&columns%5B9%5D%5Bname%5D=&columns%5B9%5D%5Bsearchable%5D=true&columns%5B9%5D%5Borderable%5D=false&columns%5B9%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B9%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B10%5D%5Bdata%5D=10&columns%5B10%5D%5Bname%5D=&columns%5B10%5D%5Bsearchable%5D=true&columns%5B10%5D%5Borderable%5D=false&columns%5B10%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B10%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B11%5D%5Bdata%5D=11&columns%5B11%5D%5Bname%5D=&columns%5B11%5D%5Bsearchable%5D=true&columns%5B11%5D%5Borderable%5D=false&columns%5B11%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B11%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=DESC&start=0&length=10&search%5Bvalue%5D=&search%5Bregex%5D=false&date_from=03%2F30%2F2021&date_to=04%2F06%2F2021&driver_id='.$driver_id.'&order_status='.$order_status.'&searchstring='.$searchstring, $output);
 		// debug($output, 'stop');
 
 		// CHECKING ORDER BY ID
@@ -465,7 +589,7 @@ class Basket extends My_Controller {
 		}
 	}
 
-	private function delivery_active_place($value='San Jose del Monte Cit')
+	private function delivery_active_place($value='San Jose del Monte City')
 	{
 		// filter_method: today = 6, yesterday = 7, past 7 days = 8
 		// delivery_origin: toktok = 0, toktok food = 1

@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="ff_invoice_modal" tabindex="-1" role="dialog" aria-labelledby="ff_invoice_modalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content" style="border-radius:0;">
@@ -9,17 +10,16 @@
 							<li><button class="close" data-dismiss="modal" aria-label="Close">&times;</button></li>
 						</ul>
 					</div>
-					<div class="more-info-middle">
-						<div id="zig-wrapper">
+					<p class="zero-gaps text-center hide" js-data="loader"><span class="spinner-border spinner-border-sm"></span> LOADING ...</p>
+					<div class="more-info-middle" js-element="invoice-body">
+						<div id="zig-wrapper" class="hide" js-element="to-print">
 							<div class="zig-zag-bottom zig-zag-top">
 								<div class="zig-body">
 									<div class="zig-top">
-
 										<div class="text-center" style="margin-bottom:15px;">
-											<img src="assets/images/icons/deliver.png" width="80" style="margin-bottom:15px;">
+											<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">
 											<h4>Your order is on its way!</h4>
 										</div>
-
 										<div class="invoice-deliver-info-container">
 											<p><small class="elem-block text-gray">DELIVERS TO</small></p>
 											<div class="zig-top-grid">
@@ -42,7 +42,11 @@
 													<i class="fa fa-phone"></i>
 												</div>
 												<div>
+													<?php if ($current_profile) : ?>
+													<p class="zero-gaps">0999-992-1745</p>
+													<?php else : ?>
 													<p class="zero-gaps">0999-***-****</p>
+													<?php endif; ?>
 													<small class="elem-block text-gray">Not visible to seller</small>
 												</div>
 											</div>
@@ -51,7 +55,7 @@
 									<div class="zig-middle">
 										<div class="invoice-summary-container">
 											<div class="text-center" style="margin:15px 0;">
-												<p class="zero-gaps"><b>ORDER SUMMARY</b></p>
+												<h4 class="zero-gaps">ORDER SUMMARY</h4>
 											</div>
 											<div class="invoice-summary-grid">
 												<div>
@@ -78,7 +82,7 @@
 											<div class="invoice-summary-grid">
 												<div>
 													<p class="text-ellipsis"><b>TOTAL</b></p>
-													<small class="elem-block text-gray">To pay upon delivery</small>
+													<small class="elem-block text-gray">Pay upon delivery</small>
 												</div>
 												<div class="text-right">&#x20b1; <b class="text-contrast">670</b></div>
 											</div>
@@ -100,15 +104,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-
-						<hr class="carved">
-
-						<div class="text-step-basic" style="margin:0;">
-							<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
-							<div>
-								<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
 							</div>
 						</div>
 					</div>

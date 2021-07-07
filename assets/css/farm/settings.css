@@ -1,0 +1,24 @@
+.settings-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 200px;
+	grid-gap: 10px;
+	margin: 15px 0;
+}
+.settings-inner-grid {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr);
+	grid-gap: 10px;
+}
+.settings-inner-grid>div:first-child {
+	background-color: #eee;
+    padding-left: 0;
+    padding-right: 0;
+    height: 34px;
+    padding: 7px 0;
+    width: 34px;
+}
+select, button, input {
+	box-shadow: none !important;
+	outline: none !important;
+	border-radius: 0 !important;
+}

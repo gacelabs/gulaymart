@@ -24,7 +24,6 @@ body.check-loc-on {
 }
 #global_navbar_logo {
 	background-color: #fff;
-	border-radius: 4px;
 	color: #799938;
 	font-size: 17px;
 	height: 34px;
@@ -41,6 +40,7 @@ body.check-loc-on {
 }
 #global_search_form input, #global_search_form button {
 	border: none;
+	border-radius: 0;
 	box-shadow: none;
 	outline: none;
 	padding: 7px 12px;
@@ -52,7 +52,6 @@ body.check-loc-on {
 }
 #global_navbar_btn_list>li {
 	background: #fff;
-	border-radius: 4px;
 	color: #799938;
 	cursor: pointer;
 	display: inline-block;
@@ -87,7 +86,6 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 	height: 34px;
 	margin: -7px 0 0;
 	padding: 0;
-	border-radius: 4px;
 	width: 34px;
 }
 .global-navbar-badge {
@@ -122,13 +120,15 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 }
 .text-capsule {
 	background-color: #aaa;
-	padding: 4px 12px;
 	border-radius: 20px;
+	display: inline-block;
+	margin-bottom: 3px;
+	padding: 4px 12px;
 }
 .text-capsule.blue {
 	background-color: #99dcff;
 }
-.status-placed {
+.status-placed, .status-pickup, .status-forpickup {
 	background-color: #e2e2e2;
 }
 .status-delivery {
@@ -136,9 +136,11 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 }
 .status-received {
 	background-color: #a8d253;
+	color: #fff;
 }
 .status-cancelled {
 	background-color: #ff8e8e;
+	color: #fff;
 }
 .preview-image-item {
 	background-position: center center;
@@ -185,6 +187,13 @@ body.check-loc-on #global_navbar>.container {
 #check_loc span:hover {
 	background: rgb(168,210,83);
 	background: linear-gradient(45deg, rgba(168,210,83,1) 0%, rgba(117,202,155,1) 100%);
+}
+.order-deliver-note {
+	background-color: #9eebff;
+	margin: 10px -10px -10px -10px;
+	padding: 5px 10px;
+	color: #111;
+	font-size: 12px;
 }
 @media (max-width: 991px) {
 	body .container {
@@ -268,4 +277,17 @@ body.check-loc-on #global_navbar>.container {
 	#global_search_form>.input-group {
 		max-width: initial;
 	}
+}
+.was-cancelled {
+	opacity: 0.7;
+	border-left: 2px dashed red;
+	border-top: 2px dashed red;
+	border-right: 2px dashed red;
+	border-bottom: 2px dashed red;
+}
+a.stop {
+	pointer-events: none !important;
+}
+[js-element="schedule-value"].error {
+	background-position: right calc(0.375em + 2.1875rem) center !important;
 }

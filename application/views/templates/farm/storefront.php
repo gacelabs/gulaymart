@@ -32,17 +32,17 @@
 					<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 						<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id');?>">
 						<div class="dashboard-panel-top">
-							<h3>Storefront Customs</h3>
+							<h4>Storefront Customs</h4>
 							<ul class="spaced-list between" style="margin-top: 15px;">
 								<li class="text-sm">
 									<?php if (isset($data['farms']) AND $data['farms']): ?>
-										<span class="text-gray">
+										<small class="text-gray">
 											<i class="fa fa-calendar"></i> UPDATED
-										</span><br><?php echo date('F j, Y', strtotime($data['farms']['updated']));?>
+										</small><br><?php echo date('F j, Y', strtotime($data['farms']['updated']));?>
 									<?php else: ?>
-										<span class="text-gray">
+										<small class="text-gray">
 											<i class="fa fa-calendar"></i> TODAY
-										</span><br><?php echo date('F j, Y');?>
+										</small><br><?php echo date('F j, Y');?>
 									<?php endif ?>
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
@@ -65,7 +65,7 @@
 									<div class="form-group">
 										<label for="farm_name">Farm name</label>
 										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters. <span class="text-link" data-toggle="modal" data-target="#farm_identity_help">NEED HELP?</span></small>
-										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>">
+										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>" style="text-transform:capitalize;">
 									</div>
 									<div class="form-group">
 										<label for="tagline">Tagline</label>
@@ -152,12 +152,11 @@
 														$shipping['id'] = 0;
 													}
 													?>
-													<div class="col-lg-12">
+													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="margin-bottom: 5px;"<?php endif ?>>
 														<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 														<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>' required="required">
 													</div>
-													<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?><span>&nbsp;</span><?php endif ?>
 												<?php endforeach ?>
 											</div>
 										</div>
@@ -175,23 +174,30 @@
 														}
 													}
 													?>
-													<div class="input-group">
-														<?php if ($farm_loc == 1): ?>
+													<?php if ($farm_loc == 1): ?>
+														<div class="input-group">
 															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
 															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' class="user-farm-locations" />
-														<?php else: ?>
-															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="">
-															<input type="hidden" name="user_farm_locations[1][<?php echo $key;?>]" value='' class="user-farm-locations" />
-															<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
-														<?php endif ?>
-														<span class="input-group-btn">
+															<span class="input-group-btn">
+															<?php if ($key == 0): ?>
+																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
+															<?php else: ?>
+																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-minus text-danger"></i></button>
+															<?php endif ?>
+															</span>
+														</div>
+													<?php else: ?>
 														<?php if ($key == 0): ?>
-															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
-														<?php else: ?>
-															<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-minus text-danger"></i></button>
+															<div class="input-group">
+																<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="">
+																<input type="hidden" name="user_farm_locations[1][<?php echo $key;?>]" value='' class="user-farm-locations" />
+																<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
+																<span class="input-group-btn">
+																	<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
+																</span>
+															</div>
 														<?php endif ?>
-														</span>
-													</div>
+													<?php endif ?>
 												<?php endforeach ?>
 											<?php else: ?>
 												<div class="input-group">
@@ -248,7 +254,7 @@
 										<span class="input-group-addon"><i class="fa fa-youtube-play"></i></span>
 										<input type="url" name="user_farms[youtube]" class="form-control social-url" data-id="#storefront-youtube" placeholder="YouTube URL" value="<?php isset_echo($data['farms'], 'youtube');?>">
 									</div>
-									<div class="input-group">
+									<div class="input-group" style="margin-bottom:0;">
 										<span class="input-group-addon"><i class="fa fa-comment-o"></i></span>
 										<input type="url" name="user_farms[messenger]" class="form-control social-url" data-id="#storefront-messenger" placeholder="Messenger URL" value="<?php isset_echo($data['farms'], 'messenger');?>">
 									</div>

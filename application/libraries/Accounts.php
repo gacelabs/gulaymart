@@ -159,11 +159,15 @@ class Accounts {
 
 	public function logout($redirect_url='')
 	{
+		// debug($redirect_url, 'stop');
 		$profile = $this->class->session->userdata('profile');
 		$this->class->session->unset_userdata('profile');
 		// $this->class->session->sess_destroy();
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
+
+		$referrer = str_replace(base_url('/'), '', $redirect_url);
+		$this->class->session->set_userdata('referrer', $referrer);
 
 		$prev_latlng = ['lat' => $profile['lat'], 'lng' => $profile['lng']];
 		// $this->class->session->set_userdata('prev_latlng', serialize($prev_latlng));
@@ -204,13 +208,14 @@ class Accounts {
 			if ($shippings) {
 				foreach ($shippings as $key => $shipping) {
 					if ($shipping['active'] == 1) {
-						$latlng = get_cookie('prev_latlng', true);
+						$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
+						/*$latlng = get_cookie('prev_latlng', true);
 						if (!empty($latlng)) {
 							$this->class->latlng = unserialize($latlng);
 						} else {
 							$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
 							set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
-						}
+						}*/
 						break;
 					}
 				}
@@ -242,6 +247,14 @@ class Accounts {
 				$this->class->db->update('users', ['device_id' => $this->device_id], ['id' => $request['id']]);
 			}
 			$request['device_id'] = $this->device_id;
+			
+			$toktok_operator = $this->class->gm_db->get('operators', ['user_id' => $this->profile['id']], 'row');
+			$request['operator'] = $toktok_operator;
+			$request['operator_riders'] = false;
+			if ($toktok_operator) {
+				$operator_riders = $this->class->gm_db->get('operator_riders', ['operator_id' => $toktok_operator['id']]);
+				$request['operator_riders'] = $operator_riders;
+			}
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;

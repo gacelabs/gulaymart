@@ -133,7 +133,7 @@ body.store .storefront-middle {
 	grid-template-columns: 60px 1fr auto;
 }
 .store-item-body {
-	margin: 0 -15px;
+	margin: 0;
 	position: relative;
 }
 .store-item-body-grid {
@@ -177,16 +177,19 @@ body.store .storefront-middle {
 	}
 	body.store #storefront_product_container {
 		background-color: #eeefec;
+		padding: 0;
+		margin-top: 10px;
 	}
 	body.store #storefront_navbar {
 		margin-bottom: 0;
 	}
-	body.store #storefront_product_container {
-		padding: 0;
+	#storefront_page_container .col-xs-12 {
+		padding-left: 0;
+		padding-right: 0;
 	}
-	.banner-section {
-		margin-left: -15px;
-		margin-right: -15px;
+	#storefront_page_container .row {
+		margin-left: 0;
+		margin-right: 0;
 	}
 	.storefront-top {
 		height: 150px;
@@ -215,5 +218,11 @@ body.store .storefront-middle {
 		color: #756d6d;
 		font-size: 14px;
 		text-transform: uppercase;
+	}
+	.storefront-footer {
+		padding: 10px;
+	}
+	#storefront_page_container {
+		margin-bottom: 10px;
 	}
 }

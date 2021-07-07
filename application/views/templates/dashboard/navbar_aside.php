@@ -8,12 +8,20 @@
 			<i class="fa fa-leaf"></i>
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
+		<?php if ($this->farms AND $this->products->count()): ?>
 		<div class="aside-nav-child hidden-xs">
 			<a href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
-				<span class="hidden-xs">Fulfillment <kbd>1</kbd></span>
+				<span class="hidden-xs">Fulfillment 
+					<?php 
+						if ($this->fulfill_count !== false) {
+							echo "<kbd id='nav-fulfill-count'>".$this->fulfill_count."</kbd>";
+						}
+					?>
+				</span>
 			</a>
 		</div>
+		<?php endif ?>
 		<div class="aside-nav-child">
 			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
 				<i class="fa fa-shopping-basket"></i>
@@ -23,26 +31,31 @@
 						echo "<kbd class='hidden-md hidden-sm hidden-xs'>Buy now!</kbd>";
 						echo "<i class='fa fa-circle hidden-lg text-danger'></i>";
 					} elseif ($this->basket_count !== false) {
-						echo "<kbd>".$this->basket_count."</kbd>";
+						echo "<kbd id='nav-basket-count'>".$this->basket_count."</kbd>";
 					}
 					?>
 				</span>
+				<?php
+					if ($this->basket_count) {
+						echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".$this->basket_count."</kbd>";
+					}
+				?>
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="transactions/orders/" class="aside-nav-item <?php in_array_echo("orders", $middle['body_class'], "active");?>">
+			<a href="orders/placed" class="aside-nav-item <?php in_array_echo("orders-active", $middle['body_class'], "active");?>">
 				<i class="fa fa-cart-arrow-down"></i>
 				<span class="hidden-xs">Orders
 					<?php 
-					if ($this->order_count !== false) {
-						echo "<kbd>".$this->order_count."</kbd>";
-					}
+						if ($this->order_count !== false) {
+							echo "<kbd id='nav-order-count'>".$this->order_count."</kbd>";
+						}
 					?>
 				</span>
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="transactions/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages</span>
 			</a>
 		</div>
@@ -55,15 +68,15 @@
 		<div id="navbar_farm_menu_container" js-event="navbarFarmMenuContainer">
 			<?php if ($this->farms): ?>
 				<?php if ($this->products->count()): ?>
-					<div class="aside-nav-child">
+					<!-- <div class="aside-nav-child">
 						<a href="farm/sales/" class="aside-nav-item <?php in_array_echo("sales", $middle['body_class'], "active");?>">
 							<i class="fa fa-tachometer"></i><span>Sales</span>
 						</a>
-					</div>
+					</div> -->
 				<?php endif ?>
 				<div class="aside-nav-child">
 					<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
-						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Add a product</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";;} ?></span>
+						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<i class='fa fa-circle text-danger'></i>";} ?></span>
 					</a>
 				</div>
 			<?php endif ?>
@@ -80,11 +93,11 @@
 				</a>
 			</div>
 			<?php if ($this->farms): ?>
-				<div class="aside-nav-child">
+				<!-- <div class="aside-nav-child hidden-xs">
 					<a href="farm/settings/" class="aside-nav-item <?php in_array_echo("settings", $middle['body_class'], "active");?>">
 						<i class="fa fa-cog"></i><span>Settings</span>
 					</a>
-				</div>
+				</div> -->
 			<?php endif ?>
 
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
@@ -92,7 +105,8 @@
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<a href="support/help-center/" class="aside-nav-item  hidden-xs">
+		<!-- <a href="support/help-center/" class="aside-nav-item  hidden-xs"> -->
+		<a href="//support.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
 		<a href="sign-out" class="aside-nav-item hidden-xs">

@@ -16,6 +16,7 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
 		$referrer = $this->session->userdata('referrer');
@@ -61,8 +62,10 @@ class MY_Controller extends CI_Controller {
 
 		// debug($this);
 		$this->load->library('accounts');
+		$this->load->library('users');
 		$this->load->library('products');
 		$this->load->library('smtpemail');
+		$this->load->library('senddataapi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();
@@ -82,9 +85,9 @@ class MY_Controller extends CI_Controller {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
 				echo do_jsonp_callback('ajaxSuccessResponse', [
-					'type'=>'error',
-					'message'=>"Session has been expired! Reloading page...",
-					'redirect'=>'/'
+					'type' => 'error',
+					'message' => "Nothing happened, Session has been expired! Reloading browser...",
+					'redirect' => '/'
 				]); exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/
@@ -94,7 +97,7 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false)
+	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false, $unclose=false)
 	{
 		if ($this->input->is_ajax_request()) {
 			echo do_jsonp_callback('ajaxSuccessResponse', [
@@ -103,6 +106,7 @@ class MY_Controller extends CI_Controller {
 				'data' => $data,
 				'redirect' => $redirect_url,
 				'callback' => $callback,
+				'unclose' => $unclose,
 			]); exit();
 		} else {
 			if (is_string($redirect_url)) {
@@ -169,27 +173,17 @@ class MY_Controller extends CI_Controller {
 		if ($this->accounts->has_session) {
 			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
 			$this->basket_count = $baskets == false ? false : count($baskets);
-		
-			/*
-			 * status:
-			 * 2 = placed
-			 * 3 = on delivery
-			*/
-			$this->load->library('baskets');
-			$baskets = $this->baskets->get_in(['user_id' => $this->accounts->profile['id'], 'status' => [2,3]]);
-			$products = false;
-			if ($baskets) {
-				$products = [];
-				foreach ($baskets as $key => $basket) {
-					$products[$basket['product_id']] = $basket;
-				}
-			}
-			// debug($products, 'stop');
-			$this->order_count = $products == false ? false : count($products);
+
+			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
+			$this->order_count = $order_count == false ? false : $order_count;
+
+			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
+			$this->fulfill_count = $fulfill_count == false ? false : $fulfill_count;
 		}
+		// debug($products, 'stop');
 	}
 
-	public function render_page($rawdata=false, $debug=false)
+	public function render_page($rawdata=false, $variable=false)
 	{
 		// debug($rawdata, 'stop');
 		// debug($this->action, 'stop');
@@ -314,7 +308,7 @@ class MY_Controller extends CI_Controller {
 							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);
 							break;
 						case 'title': 
-							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.document_title(), $meta_value);
+							$view['top']['metas'][$key] = str_replace('XXX', APP_NAME.' '.(ucwords(urldecode(document_title()))), $meta_value);
 							break;
 						case 'description': case 'name':
 							$view['top']['metas'][$key] = str_replace('XXX', APP_DESCRIPTION, $meta_value);
@@ -331,9 +325,13 @@ class MY_Controller extends CI_Controller {
 		if ((bool)strstr($index_page, 'XXX')) $view['top']['index_page'] = str_replace('XXX', 'no', $index_page);
 		/*set default to page_title*/
 		$page_title = $view['top']['page_title'];
-		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.document_title(), $page_title);
+		if ((bool)strstr($page_title, 'XXX')) $view['top']['page_title'] = str_replace('XXX', APP_NAME.' | '.(ucwords(urldecode(document_title()))), $page_title);
 
-		if ($debug) debug($view, $data, 'stop');
-		$this->load->view('main', ['view' => $view, 'data' => $data]);
+		// debug($view, $data, 'stop');
+		if ($variable) {
+			return $this->load->view('main', ['view' => $view, 'data' => $data], true);
+		} else {
+			$this->load->view('main', ['view' => $view, 'data' => $data]);
+		}
 	}
 }

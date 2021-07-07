@@ -97,6 +97,62 @@ class MY_Model extends CI_Model {
 		return FALSE;
 	}
 
+	public function get_or_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($where != false) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->db->or_where_in($field, $wrow);
+					} else {
+						$this->db->where([$field => $wrow]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
+	public function get_or_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	{
+		if ($where != false) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						$this->db->or_where_not_in($field, $wrow);
+					} else {
+						$this->db->where([$field => $wrow]);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
 	public function query($string=FALSE, $func='result')
 	{
 		if ($string) {
@@ -214,14 +270,17 @@ class MY_Model extends CI_Model {
 				foreach ($tables as $key => $table) {
 					// $this->db->query('TRUNCATE TABLE '.$table['Tables_in_'.$this->db->database]);
 					$db_table = $table['Tables_in_'.$this->db->database];
-					if (in_array($db_table, ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'])) {
-						// $this->db->query('DROP TABLE IF EXISTS '.$table['Tables_in_'.$this->db->database]);
+					if ($db_table != 'serviceable_areas') {
+						$this->db->query('DROP TABLE IF EXISTS '.$this->db->database.'.'.$db_table);
+					}
+					/*if (!in_array(trim($db_table), ['products_measurement', 'products_category', 'products_subcategory', 'attributes', 'attribute_values'])) {
+						$this->db->query('DROP TABLE IF EXISTS '.$this->db->database.'.'.$db_table);
 					} else {
 						$tabledata = $this->get($db_table);
 						if ($tabledata) {
 							foreach ($tabledata as $key => $row) $this->remove($db_table, $row);
 						}
-					}
+					}*/
 				}
 				return true;
 			}
@@ -233,10 +292,15 @@ class MY_Model extends CI_Model {
 	{
 		if ($table) {
 			if ($where) {
-				return $this->db->from($table)->where($where)->count_all_results();
-			} else {
-				return $this->db->from($table)->count_all_results();
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
 			}
+			return $this->db->from($table)->count_all_results();
 		}
 		return 0;
 	}
@@ -254,5 +318,19 @@ class MY_Model extends CI_Model {
 			return $lists;
 		}
 		return false;
+	}
+
+	public function columns($field=false, $data=false)
+	{
+		$list = $unique = [];
+		if ($field AND $data) {
+			foreach ($data as $key => $row) {
+				if (!isset($unique[$row[$field]])) {
+					$unique[$row[$field]] = true;
+					$list[] = $row[$field];
+				}
+			}
+		}
+		return $list;
 	}
 }

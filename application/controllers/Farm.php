@@ -10,7 +10,7 @@ class Farm extends MY_Controller {
 		parent::__construct();
 		// debug($this->action, 'stop');
 		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 
-			AND !in_array($this->action, ['storefront', 'store'])) {
+			AND !in_array($this->action, ['storefront', 'store', 'store_location', 'store_farm'])) {
 			redirect(base_url('farm/storefront'));
 		}
 	}
@@ -398,7 +398,7 @@ class Farm extends MY_Controller {
 					$index = $post['farm_loc'];
 					if (isset($post['user_farm_locations'][$index])) {
 						$locations = $post['user_farm_locations'][$index];
-						$farm_location = isset($post['locations']) ? $post['locations'][$index] : [];
+						$farm_location = isset($post['locations'][$index]) ? $post['locations'][$index] : [];
 						// debug($locations, 'stop');
 						$data = [];
 						foreach ($locations as $key => $location) {
@@ -519,7 +519,7 @@ class Farm extends MY_Controller {
 	{
 		$this->render_page([
 			'top' => [
-				'css' => ['dashboard/main', '../js/plugins/DataTables/datatables.min'],
+				'css' => ['dashboard/main', 'farm/settings'],
 			],
 			'middle' => [
 				'body_class' => ['dashboard', 'settings'],
@@ -555,7 +555,7 @@ class Farm extends MY_Controller {
 			$data = [
 				'farm' => $user_farm,
 				'location' => $farm_location,
-				'products' => nearby_products($this->latlng, $user_farm['user_id'], $farm_location_id),
+				'products' => nearby_products($this->latlng, false, $user_farm['user_id'], $farm_location_id),
 				'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
 			];
 			// debug($data, 'stop');
