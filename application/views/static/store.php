@@ -5,7 +5,7 @@
 				<div id="farm_identity">
 					<ul class="grid-list half">
 						<li class="text-left">
-							<h1 class="farm_name"><a href="store/<?php echo $data['farm']['id'];?>/<?php nice_url($data['farm']['name']);?>"><?php echo $data['farm']['name'];?></a></h1>
+							<h1 class="farm_name"><a href="<?php storefront_url($data['farm'], true);?>"><?php echo $data['farm']['name'];?></a></h1>
 							<h4 class="tagline"><?php echo $data['farm']['tagline'];?></h4>
 						</li>
 						<li class="text-right"><div class="profile_photo" style="background-image: url(<?php echo $data['farm']['profile_pic'];?>);"></div></li>
@@ -46,10 +46,6 @@
 							<?php endif; ?>
 							<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO PRODUCTS TO DISPLAY &#8212;</p>
 						<?php } ?>
-					</div>
-					<div class="clearfix"></div>
-					<div class="banner-section">
-						<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
 					</div>
 				</div>
 				
@@ -125,6 +121,11 @@
 			</div>
 		</div>
 
+		<div class="clearfix"></div>
+		<div class="banner-section">
+			<img src="assets/images/banner/<?php echo $data['farm']['banner'];?>" class="img-responsive" style="width: 100%;">
+		</div>
+		
 		<div class="storefront-footer">
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
