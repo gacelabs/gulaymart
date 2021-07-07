@@ -190,6 +190,7 @@ class Api extends MY_Controller {
 				set_cookie('prev_latlng', serialize($this->latlng), 7776000); // 90 days
 				$city = remove_multi_space(str_replace('city of', '', strtolower($post['city'])), true);
 				$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
+				set_cookie('current_city', trim($city), 7776000); // 90 days
 				$this->set_response('success', 'You have set your residing address at '.ucwords($city).' City!', $coordinates, false, 'reloadState');
 			}
 		}

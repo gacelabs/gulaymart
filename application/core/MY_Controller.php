@@ -219,6 +219,12 @@ class MY_Controller extends CI_Controller {
 				'js' => [],
 			],
 		];
+		// debug($this->uri->segment(1), 'stop');
+		if (!$this->accounts->has_session AND $this->uri->segment(1) != 'register') {
+			$view['bottom']['modals'][] = 'check_loc_modal';
+			$view['bottom']['js'][] = 'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places';
+			$view['bottom']['js'][] = 'plugins/markerclustererplus.min';
+		}
 		$data = false;
 
 		if ($rawdata) {
