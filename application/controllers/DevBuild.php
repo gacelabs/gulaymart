@@ -78,6 +78,7 @@ class DevBuild extends CI_Controller {
 						if ($autoinc) $this->db->query("ALTER TABLE ".$table." AUTO_INCREMENT = ".$autoinc);
 						echo '<i>Table '.$table.' created!</i> <br>';
 						if (isset($insertdata[$table])) {
+							$this->db->reset_query();
 							foreach ($insertdata[$table] as $key => $row) {
 								foreach ($row as $field => $value) {
 									if ($this->db->field_exists($field, $table) == false) {
