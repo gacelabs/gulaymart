@@ -8,7 +8,7 @@
 			<div class="modal-body">
 				<div>
 					<h4>What's a good farm name?</h4>
-					<p>If DTI registered, it is recommened to use the same name you've used to register your farm. Otherwise, feel free to read the guidelines for a good farm name.</p>
+					<p>If you have a DTI registered farm, it is recommened to use the same name. Otherwise, feel free to read the guidelines below.</p>
 				</div>
 				<img src="assets/images/helps/storefront-identity.gif" class="img-responsive" style="margin:30px 0;">
 				
@@ -24,7 +24,7 @@
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
-								Gulaymart's core values is to serve the people within your community, so having even just the City or Barangay included in your farm's name is like telling your customers that you are just around the corner and can deliver fresh veggies in minutes.
+								Gulaymart's core values is to serve the people within the community, so having even just the City or Barangay included in your farm's name implies your customers that you're just around the corner and can deliver fresh veggies in minutes.
 							</div>
 						</div>
 					</div>
@@ -39,7 +39,7 @@
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 							<div class="panel-body">
-								If you have a specialty product whether it's lettuce, microgreens, herbs, root crops, or what have you, it's a good idea to have this in your farm's name and potentially build a household brand.
+								If you have a specialty product whether lettuce, microgreens, herbs, root crops, or what have you, it's a good idea to have this in your farm's name and potentially build a household brand.
 							</div>
 						</div>
 					</div>
@@ -86,7 +86,7 @@
 			<div class="modal-body">
 				<p>If you are a farmer that lives in Manila but has a farm located in the province, then <b class="text-contrast">LOCATIONS</b> is the right option for you.</p>
 				<img src="assets/images/helps/storefront-location.gif" class="img-responsive" style="margin-bottom:15px;">
-				<p>The <b>Enter a different address</b> option allows you to save a specific location for your farm, which will then be used as the <b>pick up point</b> for your products.</p>
+				<p>The <b>Enter a different address</b> option allows you to save the branches of farm, which will then be used as the <b>pick up point</b> for your products.</p>
 				<p>For farmers who has multiple farms with different locations, click on the <b><i class="fa fa-plus"></i></b> button to add more.</p>
 				<div class="text-step-basic">
 					<p class="zero-gaps text-center"><i class="fa fa-exclamation-circle"></i></p>
