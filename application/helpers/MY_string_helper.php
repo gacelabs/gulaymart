@@ -1686,10 +1686,10 @@ function get_items($table='products', $where=[], $limit=20)
 	$items = [];
 
 	if ($items_locations) {
-		if ($ci->db->field_exists('activity', $table)) $where['activity'] = 0;
+		if ($ci->db->field_exists('activity', $table)) $where['activity'] = [0,2];
 		foreach ($items_locations as $index => $location) {
 			$where['id'] = $location['product_id'];
-			$item = $ci->gm_db->get('products', $where, 'row');
+			$item = $ci->gm_db->get_in('products', $where, 'row');
 			// debug($where, 'stop');
 			$farm_location = $ci->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
 			// debug($farm_location, 'stop');

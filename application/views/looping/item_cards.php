@@ -32,6 +32,10 @@
 							<td><i class="fa fa-clock-o"></i> <?php echo ucwords($data['duration']);?></td>
 						</tr>
 					<?php endif ?>
+					<tr>
+						<th style="vertical-align: top;">Activity:&nbsp;</th>
+						<td><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : 'Drafted');?></td>
+					</tr>
 				</table>
 				<p class="messages"></p>
 			</div>
@@ -40,12 +44,15 @@
 					<li>
 						<button data-url="admin/approvals/1" class="send-approval btn btn-sm btn-success">Allow</button>
 					</li>
-					<li>
-						<a href="<?php echo $data['product_url'];?>" class="btn btn-sm btn-primary">View item</a>
-					</li>
-					<li>
-						<button data-url="admin/approvals/2" class="send-approval btn btn-sm btn-danger">Reject</button>
-					</li>
+					<?php if ($data['activity'] == 2): ?>
+						<li>
+							<button data-url="admin/approvals/0" class="send-approval btn btn-sm btn-warning">Add to Draft</button>
+						</li>
+					<?php else: ?>
+						<li>
+							<button data-url="admin/approvals/2" class="send-approval btn btn-sm btn-danger">Reject</button>
+						</li>
+					<?php endif ?>
 				</ul>
 			</div>
 		</div>

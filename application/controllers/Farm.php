@@ -313,6 +313,9 @@ class Farm extends MY_Controller {
 						sleep(1);
 						$this->gm_db->save('products_photo', ['is_main' => 1], ['id' => $post['products_photo']['id']]);
 						$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $id]);
+						if (isset($post['activity'])) {
+							$this->products->save(['activity' => $post['activity']], ['id' => $id]);
+						}
 					}
 				}
 				$post['product_id'] = $id;

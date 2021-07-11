@@ -293,8 +293,8 @@
 							<?php endif ?>
 						</div>
 						<div class="dashboard-panel-footer text-right bg-grey">
-							<button value="0" name="activity" class="btn btn-default">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="0" name="activity" class="btn btn-contrast icon-right">Submit<i class="fa fa-check icon-right"></i></button>
+							<!-- <button value="0" name="activity" class="btn btn-default">Draft<i class="fa fa-floppy-o icon-right"></i></button> -->
+							<button value="0" name="activity" class="btn btn-contrast icon-right">Submit for Approval<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
