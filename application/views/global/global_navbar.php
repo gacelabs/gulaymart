@@ -2,14 +2,7 @@
 	<?php if (empty($current_profile)) : ?>
 	<div id="check_loc">
 		<div class="container">
-			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. 
-				<?php if (empty(get_cookie('current_city', true))): ?>
-				CHECK YOUR 
-				<?php else: ?>
-				CURRENT CITY IS <span><?php echo ucwords(get_cookie('current_city', true));?></span>. CHANGE YOUR 
-				<?php endif ?>
-				<span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.
-			</p>
+			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. CHECK YOUR <span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
 		</div>
 	</div>
 	<?php endif; ?>
@@ -19,11 +12,11 @@
 			<a href=""><i class="fa fa-leaf" id="global_navbar_logo"></i></a>
 
 			<?php if (!in_array("checkout", $middle['body_class'])) : ?>
-			<form action="" method="post" name="search" id="global_search_form">
+			<form action="marketplace/search" method="get" name="search" class="form-validate" id="global_search_form">
 				<div class="input-group">
-					<input type="text" class="form-control" name="search" placeholder="Search veggies...">
+					<input type="text" class="form-control" name="keywords" placeholder="Search veggies..." value="<?php echo $data['keywords'];?>">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="submit" style="background-color:#fff;"><i class="fa fa-search" style="color:#a8d253;"></i></button>
+						<button class="btn btn-default" type="submit" loading-text style="background-color:#fff;"><i class="fa fa-search" style="color:#a8d253;"></i></button>
 					</span>
 				</div>
 			</form>

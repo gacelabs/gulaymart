@@ -69,7 +69,7 @@
 
 						<?php if ($stocks > 0): ?>
 							<div class="add-basket-btn" js-element="basket-btns">
-								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn" data-keep-loading="3000">
+								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
 									<ul class="spaced-list between text-left">
 										<li><i class="fa fa-calendar icon-left"></i></li>
 										<li><p class="zero-gaps">Add to Basket</p><small style="vertical-align:top;font-size:10px;">SCHEDULED DELIVERY</small></li>

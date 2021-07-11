@@ -16,16 +16,22 @@ function runFormValidation(forms) {
 	forms.each(function(i, elem) {
 		var form = $(elem);
 		if (form.data('disable') != undefined) {
-			switch (form.data('disable')) {
-				case 'enter':
-					form.on('keyup keypress', function(e) {
-						var keyCode = e.keyCode || e.which;
-						if (keyCode === 13) { 
-							e.preventDefault();
-							return false;
-						}
-					});
-				break;
+			var arr = form.data('disable').split(',');
+			for (var x in arr) {
+				var item = arr[x];
+				if (typeof item == 'string') {
+					switch ($.trim(item.toLowerCase())) {
+						case 'enter':
+							form.on('keyup keypress', function(e) {
+								var keyCode = e.keyCode || e.which;
+								if (keyCode === 13) { 
+									e.preventDefault();
+									return false;
+								}
+							});
+						break;
+					}
+				}
 			}
 		}
 		form.validate({
