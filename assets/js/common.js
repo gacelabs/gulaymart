@@ -55,7 +55,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			keep_loading = false;
 			if (uiButtonSubmit) {
 				if (typeof uiButtonSubmit.attr('loading-text') == 'undefined') {
-					loadingText = '';
+					loadingText = uiButtonSubmit.html();
 				} else if (typeof uiButtonSubmit.attr('loading-text') != 'undefined') {
 					loadingText = uiButtonSubmit.attr('loading-text');
 				} else {
@@ -140,7 +140,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 		if (ui) {
 			sLastButtonText = ui.html();
 			if (typeof ui.attr('loading-text') == 'undefined') {
-				loadingText = '';
+				loadingText = ui.html();
 			} else if (typeof ui.attr('loading-text') != 'undefined') {
 				loadingText = ui.attr('loading-text');
 			} else {
@@ -707,7 +707,7 @@ function loadMap(oLatLong) {
 }
 
 function initMapLocations() {
-	console.log(oLatLong);
+	// console.log(oLatLong);
 	savedAddress1 = $('#address_1').val();
 	savedAddress2 = $('#address_2').val();
 	if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {

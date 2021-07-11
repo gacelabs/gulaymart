@@ -24,9 +24,14 @@ $(document).ready(function() {
 	});
 
 	$('form:not([data-ajax])').on('submit', function(e) {
-		var uiButtonSubmit = $(e.target).find('[type=submit]');
+		var uiButtonSubmit = $(e.target).find('[type=submit]'), loadingText = 'Processing ...';
 		if (uiButtonSubmit.length && $(e.target).find('.error').length == 0) {
-			uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> Processing ...');
+			if (typeof uiButtonSubmit.attr('loading-text') == 'undefined') {
+				loadingText = uiButtonSubmit.html();
+			} else if (typeof uiButtonSubmit.attr('loading-text') != 'undefined') {
+				loadingText = uiButtonSubmit.attr('loading-text');
+			}
+			uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span> '+loadingText);
 		}
 	});
 
