@@ -1678,3 +1678,75 @@ function operatorlogger($data=false, $operator=false)
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
+
+function get_items($table='products', $where=[], $limit=20)
+{
+	$ci =& get_instance();
+	$items_locations = $ci->gm_db->get('products_location');
+	$items = [];
+
+	if ($items_locations) {
+		if ($ci->db->field_exists('activity', $table)) $where['activity'] = 0;
+		foreach ($items_locations as $index => $location) {
+			$where['id'] = $location['product_id'];
+			$item = $ci->gm_db->get('products', $where, 'row');
+			// debug($where, 'stop');
+			$farm_location = $ci->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+			// debug($farm_location, 'stop');
+			$driving_distance = get_driving_distance([
+				['lat' => $ci->latlng['lat'], 'lng' => $ci->latlng['lng']],
+				['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+			]);
+
+			if ($item) {
+				$item['farm_location_id'] = $location['farm_location_id'];
+
+				$item['category'] = false;
+				$item['category_value'] = false;
+				$item['subcategory'] = false;
+				$category = $ci->gm_db->get('products_category', ['id' => $item['category_id']], 'row');
+				if ($category) $item['category'] = $category['label'];
+				if ($category) $item['category_value'] = $category['value'];
+				$subcategory = $ci->gm_db->get('products_subcategory', ['id' => $item['subcategory_id']], 'row');
+				if ($subcategory) {
+					$item['subcategory'] = $subcategory['label'];
+				}
+
+				$item['photos'] = false;
+				$photos = $ci->gm_db->get('products_photo', ['product_id' => $location['product_id'], 'status' => 1]);
+				if ($photos) {
+					$item['photos'] = [];
+					foreach ($photos as $key => $photo) {
+						if ($photo['is_main']) {
+							$item['photos']['main'] = $photo;
+							break;
+						}
+					}
+					foreach ($photos as $key => $photo) {
+						if (!$photo['is_main']) {
+							$item['photos']['other'][] = $photo;
+						}
+					}
+				}
+
+				$item['distance'] = $driving_distance['distance'];
+				$item['duration'] = $driving_distance['duration'];
+				$item['distanceval'] = $driving_distance['distanceval'];
+				$item['durationval'] = $driving_distance['durationval'];
+				$item['price'] = $location['price'];
+				$item['measurement'] = $location['measurement'];
+				$item['stocks'] = $location['stocks'];
+				$item['storefront'] = storefront_url($item);
+				$item['product_url'] = product_url($item);
+				$items[] = $item;
+				if (!is_bool($limit) AND is_numeric($limit)) {
+					if (count($items) == $limit) {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return $items;
+}

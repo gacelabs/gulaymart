@@ -12,6 +12,12 @@
 					<b>Bookings</b><i class="fa fa-angle-right icon-right"></i>
 				</div>
 			</a>
+
+			<a href="admin/approvals/">
+				<div class="navbar-item <?php echo in_array("admin-approvals", $middle['body_class']) ? "active" : ""; ?>">
+					<b>Approvals</b><i class="fa fa-angle-right icon-right"></i>
+				</div>
+			</a>
 		</div>
 	</div>
 </div>

@@ -130,11 +130,12 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
+var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_abort) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
 	if (keep_loading == undefined) keep_loading = false;
+	if (no_abort == undefined) no_abort = false;
 	if (url) {
 		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
@@ -163,9 +164,10 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 				}
 			},
-			success: function(data) {
-				if (data) {
-					ajaxSuccessResponse(data);
+			success: function(response) {
+				if (response) {
+					response.data.elem = ui;
+					ajaxSuccessResponse(response);
 				}
 			},
 			error: function(xhr, status, thrown) {
@@ -183,7 +185,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 				}
 			}
 		};
-		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4) oSimpleAjax.abort();
+		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4 && no_abort == false) oSimpleAjax.abort();
 		oSimpleAjax = $.ajax(oSettings);
 	}
 }

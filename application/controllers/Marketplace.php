@@ -23,9 +23,7 @@ class Marketplace extends MY_Controller {
 
 	public function category($category=false, $keywords=false)
 	{
-		if ($category == false) {
-			redirect(base_url('/'));
-		}
+		if ($category == false) redirect(base_url('/'));
 		$keywords = $this->input->get('keywords') ? $this->input->get('keywords') : $keywords;
 		if ($keywords === false) {
 			$this->index($category);

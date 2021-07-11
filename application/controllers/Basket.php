@@ -137,6 +137,10 @@ class Basket extends My_Controller {
 			$product = $this->products->product_by_farm_location($product_id, $farm_location_id);
 		}
 		// debug($product, 'stop');
+		if ($product == false) {
+			show_404();
+			// redirect(base_url('/'));
+		}
 		$this->render_page([
 			'top' => [
 				'css' => ['modal/modals', 'basket/productpage', 'static/store']
