@@ -19,11 +19,11 @@
 			<a href=""><i class="fa fa-leaf" id="global_navbar_logo"></i></a>
 
 			<?php if (!in_array("checkout", $middle['body_class'])) : ?>
-			<form action="" method="post" name="search" class="form-validate" id="global_search_form">
+			<form action="" method="post" name="search" id="global_search_form">
 				<div class="input-group">
 					<input type="text" class="form-control" name="search" placeholder="Search veggies...">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" style="background-color:#fff;"><i class="fa fa-search" style="color:#a8d253;"></i></button>
+						<button class="btn btn-default" type="submit" style="background-color:#fff;"><i class="fa fa-search" style="color:#a8d253;"></i></button>
 					</span>
 				</div>
 			</form>
