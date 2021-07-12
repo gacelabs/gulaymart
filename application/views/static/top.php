@@ -9,6 +9,7 @@
 	<title><?php if ($top['page_title']) { echo $top['page_title'];} ?></title> 
 
 	<meta name="robots" content="<?php echo $top['index_page'] == 'yes' ? "index, follow" : "noindex, nofollow"; ?>">
+	<link href="assets/images/favicon.png" rel="icon" type="image/x-icon">
 	<link rel="canonical" href="<?php echo base_url();?>">
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
