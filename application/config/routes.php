@@ -48,6 +48,8 @@ $route['dev-build/fetch-cities'] = 'DevBuild/fetch';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+$route['terms-and-use'] = 'Support/terms';
+$route['policy'] = 'Support/policy';
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Support extends MY_Controller {
 
-	public $allowed_methods = ['view_invoice', 'view_thankyou_page'];
+	public $allowed_methods = ['view_invoice', 'view_thankyou_page', 'terms', 'policy'];
 
 	public function index()
 	{
@@ -65,5 +65,45 @@ class Support extends MY_Controller {
 				'data' => ['for_email' => true, 'total'=>$final_total]
 			]);
 		}
+	}
+
+	public function terms()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['static/register', 'modal/modals'],
+			],
+			'middle' => [
+				'head' => ['../global/global_navbar'],
+				'body_class' => ['register'],
+				'body' => [
+					'support/terms',
+				],
+				'footer' => ['global/footer']
+			],
+			'data' => [
+				'is_login' => 0
+			]
+		]);
+	}
+
+	public function policy()
+	{
+		$this->render_page([
+			'top' => [
+				'css' => ['static/register', 'modal/modals'],
+			],
+			'middle' => [
+				'head' => ['../global/global_navbar'],
+				'body_class' => ['register'],
+				'body' => [
+					'support/policy',
+				],
+				'footer' => ['global/footer']
+			],
+			'data' => [
+				'is_login' => 0
+			]
+		]);
 	}
 }

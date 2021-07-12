@@ -265,5 +265,5 @@
 <p>In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:</p>
 <p>GulayMart</p>
 <p>Antipolo City, Rizal Philippines</p>
-<p>Phone: 09999921745</p>
-<p>hello@gulaymart.com</p>
+<p>Phone: <a href="tel:09999921745">09999921745</a></p>
+<p><a href="mailto:hello@gulaymart.com">hello@gulaymart.com</a></p>

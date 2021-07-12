@@ -37,7 +37,7 @@
 				</div>
 				<div class="register-footer">
 					<ul class="spaced-list between">
-						<li><a href="" class="text-link" style="border:none;">Terms and Use</a></li>
+						<li><a href="terms-and-use" class="text-link" style="border:none;">Terms and Use</a></li>
 						<?php if ($current_profile): ?>
 							<li><a href="profile/" class="text-link" style="border:none;">Dashboard</a></li>
 						<?php else: ?>
