@@ -33,6 +33,8 @@
 					</div>
 					<div class="form-group" style="margin-bottom: 0;">
 						<button class="btn btn-theme btn-lg btn-block">Sign Up</button>
+						<div class="g-recaptcha" data-theme="light" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible" data-rendered-id="0"></div>
+						<p class="text-center h6">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</p>
 					</div>
 				</div>
 				<div class="register-footer">

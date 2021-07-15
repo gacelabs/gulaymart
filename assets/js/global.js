@@ -218,3 +218,44 @@ var reloadState = function(data) {
 		window.location.reload(true);
 	}, 2000);
 }
+
+// Check for browser support of event handling capability
+if (window.addEventListener) {
+	window.addEventListener("load", downloadJSAtOnload, false);
+} else if (window.attachEvent) {
+	window.attachEvent("onload", downloadJSAtOnload);
+} else {
+	window.onload = downloadJSAtOnload;
+}
+
+// Add a script element as a child of the body
+var downloadJSAtOnload = function() {
+	var element = document.createElement("script");
+	element.src = "https://www.google.com/recaptcha/api.js?onload=runReCaptchaOnLoad&render=explicit";
+	document.body.appendChild(element);
+}
+
+window.runReCaptchaOnLoad = function() {
+	$(document).find('form').each(function() {
+		var $this = $(this);
+		var recaptcha = $this.find('.g-recaptcha');
+		if (recaptcha.length) {
+			if (recaptcha.data('size') === 'invisible') {
+				var widgetId = grecaptcha.render(recaptcha.get(0), {
+					callback: function($this) {
+						$this.off('submit').submit();
+					}
+				});
+				if ($this.data('abide') === 'ajax') {
+					$this.off('valid.fndtn.abide.norecaptcha');
+					$this.on('valid.fndtn.abide', function() {
+						grecaptcha.execute(widgetId);
+					});
+				}
+			} else {
+				grecaptcha.render(recaptcha.get(0));
+			}
+		}
+	});
+};
+
