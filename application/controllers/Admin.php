@@ -13,6 +13,10 @@ class Admin extends MY_Controller {
 		// INITIALIZING TOKTOK OBJECT
 		// $this->load->library('toktokapi');
 		// debug($this->toktokapi, 'stop');
+		$this->load->library('accounts');
+		if ($this->accounts->has_session AND $this->accounts->profile['is_admin'] != 1) {
+			redirect(base_url('profile'));
+		}
 	}
 
 	public function index()
@@ -337,5 +341,60 @@ class Admin extends MY_Controller {
 			}
 		}
 		$this->set_response('error', 'No Bookings available!', $post, false);
+	}
+
+	public function approvals($approved=0)
+	{
+		$id = $this->input->post('id');
+		if ($this->accounts->has_session AND $this->accounts->profile['is_admin'] AND !empty($id)) {
+			// debug($id, 'stop');
+			// $approved = 1;
+			$response = false;
+			if (is_array($id)) {
+				$products = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [0,2]]);
+				if ($products) {
+					$response = [];
+					foreach ($products as $key => $product) {
+						$this->gm_db->save('products', ['activity' => $approved], ['id' => $product['id']]);
+						$response[$product['id']] = 'Product '.$product['name'].($approved == 0 ? ' Drafted' : ($approved == 2 ? ' Rejected' : ' Approved'));
+					}
+				}
+			} elseif (is_numeric($id)) {
+				$product = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [0,2]], 'row');
+				if ($product) {
+					$this->gm_db->save('products', ['activity' => $approved], ['id' => $id]);
+					$response = 'Product '.$product['name'].($approved == 0 ? ' Drafted' : ($approved == 2 ? ' Rejected' : ' Approved'));
+				}
+			}
+			echo json_encode(['success' => true, 'data' => ['messages' => $response], 'callback' => 'removeItem']); exit();
+		}
+		// debug(get_items('products'), 'stop');
+		$this->render_page([
+			'top' => [
+				'index_page' => 'no',
+				'css' => ['admin/main', 'modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card'],
+			],
+			'middle' => [
+				'body_class' => ['admin-approvals'],
+				'head' => [
+					'../global/global_navbar',
+					'admin/navbar'
+				],
+				'body' => [
+					'admin/approvals',
+				],
+				'footer' => [
+					'global/footer'
+				],
+			],
+			'bottom' => [
+				'modals' => [],
+				'js' => ['admin/main'],
+			],
+			'data' => [
+				'column' => 'category_id',
+				'result' =>  get_items('products')
+			],
+		]);
 	}
 }

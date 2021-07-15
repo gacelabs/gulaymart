@@ -293,8 +293,8 @@
 							<?php endif ?>
 						</div>
 						<div class="dashboard-panel-footer text-right bg-grey">
-							<button value="0" name="activity" class="btn btn-default">Draft<i class="fa fa-floppy-o icon-right"></i></button>
-							<button value="0" name="activity" class="btn btn-contrast icon-right">Submit<i class="fa fa-check icon-right"></i></button>
+							<!-- <button value="0" name="activity" class="btn btn-default">Draft<i class="fa fa-floppy-o icon-right"></i></button> -->
+							<button value="0" name="activity" class="btn btn-contrast icon-right">Submit for Approval<i class="fa fa-check icon-right"></i></button>
 						</div>
 					</form>
 				</div>
@@ -305,7 +305,7 @@
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
 							<li><p>Listing</p></li>
-							<li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li>
+							<!-- <li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li> -->
 						</ul>
 						<div class="product-list-card">
 							<div class="product-list-photo order-photo" style="background-image:url('https://place-hold.it/360x360.png?text=Upload+Product+Images&fontsize=14');">

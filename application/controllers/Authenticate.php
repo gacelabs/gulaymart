@@ -48,6 +48,9 @@ class Authenticate extends MY_Controller {
 				],
 				'footer' => ['global/footer']
 			],
+			'bottom' => [
+				'js' => ['global'],
+			],
 			'data' => [
 				'is_login' => 0
 			]
@@ -58,15 +61,19 @@ class Authenticate extends MY_Controller {
 	{
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
-		// debug($post);
-		$return = $this->accounts->register($post, 'profile/'); /*this will redirect to settings page */
-		// debug($this->session); debug($return);
-		if (isset($return['allowed']) AND $return['allowed'] == false) {
-			if ($this->accounts->has_session) {
-				redirect(base_url('profile/?error='.$return['message']));
-			} else {
-				redirect(base_url('register?error='.$return['message']));
+		if (validate_recaptcha($post)) {
+			if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
+			$return = $this->accounts->register($post, 'profile/'); /*this will redirect to settings page */
+			// debug($this->session); debug($return);
+			if (isset($return['allowed']) AND $return['allowed'] == false) {
+				if ($this->accounts->has_session) {
+					redirect(base_url('profile/?error='.$return['message']));
+				} else {
+					redirect(base_url('register?error='.$return['message']));
+				}
 			}
+		} else {
+			redirect(base_url('register/?error=Robots are not allowed, Thank you!'));
 		}
 	}
 

@@ -173,6 +173,13 @@ function modalCallbacks() {
 				$(e.target).find('p[js-data="loader"]').addClass('hide');
 				$(e.target).find('[js-element="invoice-body"]').html('');
 			break;
+			case 'login_modal':
+				setTimeout(function() {
+					$('.ask-sign-in').click();
+					$('[name="email_address"]').removeClass('error');
+					$('[name="password"]').removeClass('error');
+				}, 1000);
+			break;
 		}
 	});
 }
@@ -218,3 +225,47 @@ var reloadState = function(data) {
 		window.location.reload(true);
 	}, 2000);
 }
+
+// Check for browser support of event handling capability
+if (window.addEventListener) {
+	window.addEventListener("load", downloadJSAtOnload, false);
+} else if (window.attachEvent) {
+	window.attachEvent("onload", downloadJSAtOnload);
+} else {
+	window.onload = downloadJSAtOnload;
+}
+
+// Add a script element as a child of the body
+var downloadJSAtOnload = function() {
+	var element = document.createElement("script");
+	element.src = "https://www.google.com/recaptcha/api.js?onload=runReCaptchaOnLoad&render=explicit";
+	document.body.appendChild(element);
+}
+
+window.runReCaptchaOnLoad = function() {
+	$(document).find('form').each(function() {
+		var form = $(this);
+		var recaptcha = form.find('.g-recaptcha');
+		if (recaptcha.length) {
+			if (recaptcha.data('size') === 'invisible') {
+				var widgetId = grecaptcha.render(recaptcha.get(0), {
+					callback: function(challenge) {
+						// console.log(challenge);
+						if ($.trim(challenge).length) {
+							form.off('submit').submit();
+						}
+					}
+				});
+				form.bind('submit', function(e) {
+					grecaptcha.reset();
+					if (form.find('[name]').hasClass('error') == false) {
+						grecaptcha.execute(widgetId);
+					}
+				});
+			} else {
+				grecaptcha.render(recaptcha.get(0));
+			}
+		}
+	});
+};
+

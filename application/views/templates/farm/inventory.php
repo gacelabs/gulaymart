@@ -28,7 +28,9 @@
 									<?php foreach ($product as $index => $value): ?>
 										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
 											<?php if ($index == 'id'): ?>
-												<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+												<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
+													<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+												<?php endif ?>
 												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
 											<?php elseif ($index == 'updated'): ?>
 												<?php echo date('M. j, Y | h:i a', strtotime($value));?>

@@ -32,16 +32,18 @@
 						<input type="password" class="form-control" name="re_password" placeholder="Confirm" />
 					</div>
 					<div class="form-group" style="margin-bottom: 0;">
-						<button class="btn btn-theme btn-lg btn-block">Sign Up</button>
+						<button type="submit" data-keep-loading="5000" loading-text="Signing up..." class="btn btn-theme btn-lg btn-block">Sign Up</button>
+						<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div>
+						<p class="text-center h6">This site is protected by reCAPTCHA and the Google <a href="https://www.google.com/intl/en/policies/privacy/" target="_blank">Privacy Policy</a> and <a href="https://www.google.com/intl/en/policies/terms/" target="_blank">Terms of Service</a> apply.</p>
 					</div>
 				</div>
 				<div class="register-footer">
 					<ul class="spaced-list between">
-						<li><a href="" class="text-link" style="border:none;">Terms and Use</a></li>
+						<li><a href="terms-of-use/" class="text-link" style="border:none;">Terms of Use</a></li>
 						<?php if ($current_profile): ?>
 							<li><a href="profile/" class="text-link" style="border:none;">Dashboard</a></li>
 						<?php else: ?>
-							<li><p class="text-link" data-toggle="modal" data-target="#login_modal" style="border:none;">Log In</p></li>
+							<li><a class="text-link" data-toggle="modal" data-target="#login_modal" style="border:none;">Log In</a></li>
 						<?php endif ?>
 					</ul>
 				</div>
@@ -56,7 +58,7 @@
 				<p>Howdy<?php echo ", <b>".$current_profile['firstname']; ?></b>!</p>
 				<p>It looks like you've already logged in.</p>
 				<ul class="spaced-list between">
-					<li><small><a href="" class="text-link">Home</a></small></li>
+					<li><small><a href="/" class="text-link">Home</a></small></li>
 					<li><small><a href="basket/" class="text-link">Basket</a></small></li>
 				</ul>
 			</div>

@@ -6,8 +6,6 @@ class MY_Model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->load->library('accounts');
-		// $this->load->library('smtpemail');
 	}
 
 	public function get($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
@@ -15,6 +13,10 @@ class MY_Model extends CI_Model {
 		if ($table) {
 			if ($field) {
 				$this->db->select($field);
+			}
+			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				$where = (array)$where;
+				$where['activity'] = 1;
 			}
 			if (isset($where['order_by']) AND isset($where['direction'])) {
 				$this->db->order_by($where['order_by'], $where['direction']);
@@ -47,6 +49,10 @@ class MY_Model extends CI_Model {
 			if ($field) {
 				$this->db->select($field);
 			}
+			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				$where = (array)$where;
+				$where['activity'] = 1;
+			}
 			if ($where) {
 				foreach ($where as $key => $row) {
 					if (is_array($row)) {
@@ -74,6 +80,10 @@ class MY_Model extends CI_Model {
 		if ($table) {
 			if ($field) {
 				$this->db->select($field);
+			}
+			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				$where = (array)$where;
+				$where['activity'] = 1;
 			}
 			if ($where) {
 				foreach ($where as $key => $row) {
@@ -104,6 +114,9 @@ class MY_Model extends CI_Model {
 				$this->db->select($field);
 			}
 			if (is_array($where)) {
+				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+					$where['activity'] = 1;
+				}
 				foreach ($where as $field => $wrow) {
 					if (is_array($wrow)) {
 						$this->db->or_where_in($field, $wrow);
@@ -132,6 +145,9 @@ class MY_Model extends CI_Model {
 				$this->db->select($field);
 			}
 			if (is_array($where)) {
+				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+					$where['activity'] = 1;
+				}
 				foreach ($where as $field => $wrow) {
 					if (is_array($wrow)) {
 						$this->db->or_where_not_in($field, $wrow);

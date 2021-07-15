@@ -55,7 +55,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			keep_loading = false;
 			if (uiButtonSubmit) {
 				if (typeof uiButtonSubmit.attr('loading-text') == 'undefined') {
-					loadingText = '';
+					loadingText = uiButtonSubmit.html();
 				} else if (typeof uiButtonSubmit.attr('loading-text') != 'undefined') {
 					loadingText = uiButtonSubmit.attr('loading-text');
 				} else {
@@ -130,17 +130,18 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 	}
 }
 
-var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
+var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_abort) {
 	if (data == undefined) data = {};
 	if (url == undefined) url = false;
 	if (ui == undefined) ui = false;
 	if (keep_loading == undefined) keep_loading = false;
+	if (no_abort == undefined) no_abort = false;
 	if (url) {
 		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
 			sLastButtonText = ui.html();
 			if (typeof ui.attr('loading-text') == 'undefined') {
-				loadingText = '';
+				loadingText = ui.html();
 			} else if (typeof ui.attr('loading-text') != 'undefined') {
 				loadingText = ui.attr('loading-text');
 			} else {
@@ -163,9 +164,10 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 					$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 				}
 			},
-			success: function(data) {
-				if (data) {
-					ajaxSuccessResponse(data);
+			success: function(response) {
+				if (response) {
+					response.data.elem = ui;
+					ajaxSuccessResponse(response);
 				}
 			},
 			error: function(xhr, status, thrown) {
@@ -183,7 +185,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading) {
 				}
 			}
 		};
-		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4) oSimpleAjax.abort();
+		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4 && no_abort == false) oSimpleAjax.abort();
 		oSimpleAjax = $.ajax(oSettings);
 	}
 }
@@ -707,7 +709,7 @@ function loadMap(oLatLong) {
 }
 
 function initMapLocations() {
-	console.log(oLatLong);
+	// console.log(oLatLong);
 	savedAddress1 = $('#address_1').val();
 	savedAddress2 = $('#address_2').val();
 	if ($.trim($('#lat').val()).length && $.trim($('#lng').val()).length) {
