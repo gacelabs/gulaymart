@@ -1,5 +1,5 @@
 
-if (window.location.protocol == 'https') {
+if (window.location.protocol == 'https:') {
 	if (oUser == false) {
 		var time = setInterval(function() {
 			if (FB != undefined) {
@@ -25,10 +25,11 @@ if (window.location.protocol == 'https') {
 		$('.fb-login-btn').off('click').on('click', function(e) {
 			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown'])) {
 				FB.login(function(response) {
+					console.log(response);
 					// if (response.status === 'connected') {
 					// 	simpleAjax('profile/fb_login', {fb_id: response.authResponse.userID});
 					// }
-					simpleAjax('profile/fb_login', {fb_id: '1234567890'});
+					// simpleAjax('profile/fb_login', {fb_id: '1234567890'});
 				}, {scope: 'public_profile, email'});
 			} else {
 				console.log('User already logged in thru FB.');
