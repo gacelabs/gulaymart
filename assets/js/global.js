@@ -249,11 +249,10 @@ window.runReCaptchaOnLoad = function() {
 		if (recaptcha.length) {
 			if (recaptcha.data('size') === 'invisible') {
 				var widgetId = grecaptcha.render(recaptcha.get(0), {
-					callback: function(response) {
-						if ($.trim(response).length) {
-							setTimeout(function() {
-								form.off('submit').submit();
-							}, 1000);
+					callback: function(challenge) {
+						// console.log(challenge);
+						if ($.trim(challenge).length) {
+							form.off('submit').submit();
 						}
 					}
 				});

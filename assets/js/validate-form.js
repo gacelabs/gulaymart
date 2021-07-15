@@ -34,6 +34,7 @@ function runFormValidation(forms) {
 				}
 			}
 		}
+		var recaptcha = form.find('.g-recaptcha');
 		form.validate({
 			ignore: '.ignore',
 			errorPlacement: function(error, element) {
@@ -88,7 +89,7 @@ function runFormValidation(forms) {
 					e.preventDefault();
 					var isFileExists = $(form).find('input:file').length > 0 ? $(form).find('input:file') : false;
 					formAjax(form, isFileExists);
-				} else {
+				} else if (recaptcha.length == 0) {
 					form.submit();
 				}
 			}

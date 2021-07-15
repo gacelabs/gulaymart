@@ -20,7 +20,7 @@
 			<div class="register-top">
 				<h4><b>Support local farmers. Sign up!</b></h4>
 			</div>
-			<form action="sign-up" method="post" class="form-validate" data-ajax="1">
+			<form action="sign-up" method="post" class="form-validate">
 				<div class="register-middle">
 					<div class="form-group">
 						<input type="email" class="form-control" name="email_address" placeholder="Email address" />
