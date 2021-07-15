@@ -23,7 +23,7 @@ if (window.location.protocol == 'https:') {
 	}
 	$(document).ready(function() {
 		$('.fb-login-btn').off('click').on('click', function(e) {
-			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown'])) {
+			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown']) >= 0) {
 				FB.login(function(response) {
 					console.log(response);
 					// if (response.status === 'connected') {
