@@ -173,6 +173,13 @@ function modalCallbacks() {
 				$(e.target).find('p[js-data="loader"]').addClass('hide');
 				$(e.target).find('[js-element="invoice-body"]').html('');
 			break;
+			case 'login_modal':
+				setTimeout(function() {
+					$('.ask-sign-in').click();
+					$('[name="email_address"]').removeClass('error');
+					$('[name="password"]').removeClass('error');
+				}, 1000);
+			break;
 		}
 	});
 }
@@ -252,7 +259,9 @@ window.runReCaptchaOnLoad = function() {
 				});
 				form.bind('submit', function(e) {
 					grecaptcha.reset();
-					grecaptcha.execute(widgetId);
+					if (form.find('[name]').hasClass('error') == false) {
+						grecaptcha.execute(widgetId);
+					}
 				});
 			} else {
 				grecaptcha.render(recaptcha.get(0));

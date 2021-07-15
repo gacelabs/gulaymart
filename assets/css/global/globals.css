@@ -291,3 +291,6 @@ a.stop {
 [js-element="schedule-value"].error {
 	background-position: right calc(0.375em + 2.1875rem) center !important;
 }
+.grecaptcha-badge {
+	display: none !important;
+}
