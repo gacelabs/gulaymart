@@ -722,6 +722,7 @@ function validate_recaptcha($CI_POST=false)
 	$ci =& get_instance();
 	$CI_POST = $CI_POST!=false ? $CI_POST : $ci->input->post();
 	if (isset($CI_POST['g-recaptcha-response'])) {
+		// debug($CI_POST, 'stop');
 		# Verify captcha
 		$post_data = http_build_query([
 			'secret' => RECAPTCHA_SECRET,
@@ -738,7 +739,7 @@ function validate_recaptcha($CI_POST=false)
 		$context  = stream_context_create($opts);
 		$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
 		$result = json_decode($response);
-		// debug($result, 'stop');
+		// debug($CI_POST, $result, 'stop');
 
 		if ($result->success) return true;
 	}

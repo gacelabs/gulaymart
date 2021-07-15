@@ -15,8 +15,8 @@
 			<p style="margin-bottom:5px;"><a href="">Logistics info</a></p>
 			<p style="margin-bottom:5px;"><a href="">Report a bug</a></p>
 			<p style="margin-bottom:5px;"><a href="">Contact Us</a></p>
-			<p style="margin-bottom:5px;"><a href="terms-and-use">Terms and Use</a></p>
-			<p style="margin-bottom:5px;"><a href="privacy-policy">Privacy Policy</a></p>
+			<p style="margin-bottom:5px;"><a href="terms-of-use/">Terms of Use</a></p>
+			<p style="margin-bottom:5px;"><a href="privacy-policy/">Privacy Policy</a></p>
 		</div>
 
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

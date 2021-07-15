@@ -237,21 +237,23 @@ var downloadJSAtOnload = function() {
 
 window.runReCaptchaOnLoad = function() {
 	$(document).find('form').each(function() {
-		var $this = $(this);
-		var recaptcha = $this.find('.g-recaptcha');
+		var form = $(this);
+		var recaptcha = form.find('.g-recaptcha');
 		if (recaptcha.length) {
 			if (recaptcha.data('size') === 'invisible') {
 				var widgetId = grecaptcha.render(recaptcha.get(0), {
-					callback: function($this) {
-						$this.off('submit').submit();
+					callback: function(response) {
+						if ($.trim(response).length) {
+							setTimeout(function() {
+								form.off('submit').submit();
+							}, 1000);
+						}
 					}
 				});
-				if ($this.data('abide') === 'ajax') {
-					$this.off('valid.fndtn.abide.norecaptcha');
-					$this.on('valid.fndtn.abide', function() {
-						grecaptcha.execute(widgetId);
-					});
-				}
+				form.bind('submit', function(e) {
+					grecaptcha.reset();
+					grecaptcha.execute(widgetId);
+				});
 			} else {
 				grecaptcha.render(recaptcha.get(0));
 			}

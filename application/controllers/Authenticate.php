@@ -62,6 +62,7 @@ class Authenticate extends MY_Controller {
 		// $post = ['email_address'=>'leng2@gmail.com', 'password'=>23, 're_password'=>23];
 		$post = $this->input->post();
 		if (validate_recaptcha($post)) {
+			if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
 			$return = $this->accounts->register($post, 'profile/'); /*this will redirect to settings page */
 			// debug($this->session); debug($return);
 			if (isset($return['allowed']) AND $return['allowed'] == false) {
