@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
 			<h3 style="font-size: 16px;"><b>Categories</b></h3>
-			<p style="margin-bottom:5px;"><a href="/">All veggies</a></p>
+			<p style="margin-bottom:5px;"><a href="">All veggies</a></p>
 			<?php foreach ($this->categories as $key => $category): ?>
 				<p style="margin-bottom:5px;"><a href="marketplace/category/<?php echo $category['value'];?>"><?php echo $category['label'];?></a></p>
 			<?php endforeach ?>
