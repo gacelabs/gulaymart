@@ -70,8 +70,8 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('accounts');
 		$this->load->library('users');
 		$this->load->library('products');
-		$this->load->library('smtpemail');
-		$this->load->library('senddataapi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
+		$this->load->library('SmtpEmail');
+		$this->load->library('SendDataApi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();

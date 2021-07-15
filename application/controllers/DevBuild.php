@@ -6,7 +6,7 @@ class DevBuild extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('createdev');
+		$this->load->library('CreateDev');
 	}
 
 	public function index()

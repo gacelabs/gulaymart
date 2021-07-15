@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	if (window.location.protocol == 'https') {
+	if (window.location.protocol == 'https:') {
 		window.fbAsyncInit = function() {
 			FB.init({
 				appId	: '<?php echo FB_APPID;?>',
