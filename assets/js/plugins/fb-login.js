@@ -26,13 +26,15 @@ if (window.location.protocol == 'https:') {
 			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown']) >= 0) {
 				FB.login(function(response) {
 					console.log(response);
-					// if (response.status === 'connected') {
-					// 	simpleAjax('profile/fb_login', {fb_id: response.authResponse.userID});
-					// }
-					// simpleAjax('profile/fb_login', {fb_id: '1234567890'});
+					/*if (response.status === 'connected') {
+						simpleAjax('profile/fb_login', {fb_id: response.authResponse.userID});
+					}*/
 				}, {scope: 'public_profile, email'});
 			} else {
 				console.log('User already logged in thru FB.');
+				setTimeout(function() {
+					window.location.reload(true);
+				}, 300);
 			}
 		});
 	});
