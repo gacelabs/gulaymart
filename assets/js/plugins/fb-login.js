@@ -11,6 +11,7 @@ $(document).ready(function() {
 							case "connected":
 								$('.onlogged-out-btn').addClass('hide');
 								$('.onlogged-in-btns').removeClass('hide');
+								runFbLogin(response);
 							break;
 							case "not_authorized": case "unknown":
 								$('.onlogged-out-btn').removeClass('hide');
@@ -31,19 +32,13 @@ $(document).ready(function() {
 		};
 
 		$('.fb-login-btn').off('click').on('click', function(e) {
-			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown']) >= 0) {
-				FB.login(function(response) {
-					console.log(response);
-					if (response.status === 'connected') {
-						runFbLogin(response);
-					}
-				}, {scope: 'public_profile, email'});
-			} else {
-				console.log('User already logged in thru FB.');
-				setTimeout(function() {
-					window.location.reload(true);
-				}, 300);
-			}
+			FB.login(function(response) {
+				console.log(response);
+				fb_acc_response = response;
+				if (response.status === 'connected') {
+					runFbLogin(response);
+				}
+			}, {scope: 'public_profile, email'});
 		});
 	}
 });

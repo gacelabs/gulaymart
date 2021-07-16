@@ -46,7 +46,7 @@
 							<a href="javascript:;" class="btn btn-block fb-login-btn" scope="public_profile,email">
 								<ul class="spaced-list between">
 									<li><i class="fa fa-facebook-official" style="color:#4267B2;"></i></li>
-									<li>Facebook</li>
+									<li id="fb-status">Facebook</li>
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
