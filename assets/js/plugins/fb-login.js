@@ -11,7 +11,7 @@ $(document).ready(function() {
 							case "connected":
 								$('.onlogged-out-btn').addClass('hide');
 								$('.onlogged-in-btns').removeClass('hide');
-								runFbLogin(response);
+								runFbLogin();
 							break;
 							case "not_authorized": case "unknown":
 								$('.onlogged-out-btn').removeClass('hide');
@@ -24,10 +24,10 @@ $(document).ready(function() {
 			}, 1000);
 		}
 
-		var runFbLogin = function(response) {
-			simpleAjax('authenticate/fb_login', {
-				// fb_id: response.authResponse.userID,
-				'data': response.authResponse,
+		var runFbLogin = function() {
+			FB.api('/me?fields=id,email,name', function(data) {
+				console.log(data);
+				simpleAjax('authenticate/fb_login', data);
 			});
 		};
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
 				console.log(response);
 				fb_acc_response = response;
 				if (response.status === 'connected') {
-					runFbLogin(response);
+					runFbLogin();
 				}
 			}, {scope: 'public_profile, email'});
 		});
