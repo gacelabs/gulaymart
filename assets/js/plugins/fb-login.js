@@ -2,39 +2,34 @@
 $(document).ready(function() {
 	if (window.location.protocol == 'https:') {
 		if (oUser == false) {
-			var time = setInterval(function() {
-				if (FB != undefined) {
-					FB.getLoginStatus(function(response) {
-						fb_acc_response = response;
-						var status = response.status;
-						switch (status) {
-							case "connected":
-								$('.onlogged-out-btn').addClass('hide');
-								$('.onlogged-in-btns').removeClass('hide');
+			FB.getLoginStatus(function(response) {
+				fb_acc_response = response;
+				var status = response.status;
+				switch (status) {
+					case "connected":
+						$('.onlogged-out-btn').addClass('hide');
+						$('.onlogged-in-btns').removeClass('hide');
 
-								$('.login-detail').addClass('hide');
-								$('.login-form-body').addClass('hide');
-								$('.fb-login-btn').addClass('hide');
-								$('.fb-login-panel').removeClass('hide');
-								$('.fb-signing-in').removeClass('hide');
-								$('[data-target="#login_modal"]').click();
-								runFbLogin();
-							break;
-							case "not_authorized": case "unknown":
-								$('.onlogged-out-btn').removeClass('hide');
-								$('.onlogged-in-btns').addClass('hide');
-								
-								$('.login-detail').removeClass('hide');
-								$('.login-form-body').removeClass('hide');
-								$('.fb-login-btn').removeClass('hide');
-								$('.fb-login-panel').addClass('hide');
-								$('.fb-signing-in').addClass('hide');
-							break;
-						}
-					});
-					clearInterval(time);
+						$('.login-detail').addClass('hide');
+						$('.login-form-body').addClass('hide');
+						$('.fb-login-btn').addClass('hide');
+						$('.fb-login-panel').removeClass('hide');
+						$('.fb-signing-in').removeClass('hide');
+						$('[data-target="#login_modal"]').click();
+						runFbLogin();
+					break;
+					case "not_authorized": case "unknown":
+						$('.onlogged-out-btn').removeClass('hide');
+						$('.onlogged-in-btns').addClass('hide');
+						
+						$('.login-detail').removeClass('hide');
+						$('.login-form-body').removeClass('hide');
+						$('.fb-login-btn').removeClass('hide');
+						$('.fb-login-panel').addClass('hide');
+						$('.fb-signing-in').addClass('hide');
+					break;
 				}
-			}, 1000);
+			});
 		}
 
 		var runFbLogin = function() {
