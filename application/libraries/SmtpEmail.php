@@ -14,7 +14,7 @@ class SmtpEmail /*implements EmailFunctions*/ {
 		$this->db = $ci->db;
 	}
 
-	public function setup()
+	public function setup($user_type='hello')
 	{
 		$this->email->clear();
 
@@ -22,8 +22,24 @@ class SmtpEmail /*implements EmailFunctions*/ {
 		$config['smtp_host']	= 'ssl://smtp.gmail.com';
 		$config['smtp_port']	= '465';
 		$config['smtp_timeout']	= '30';
-		$config['smtp_user']	= 'gacelabs.inc@gmail.com';
-		$config['smtp_pass']	= 'jpmmkjexgngkuktt';
+		switch (strtolower($user_type)) {
+			case 'admin':
+				$config['smtp_user']	= 'admin@gulaymart.com';
+				$config['smtp_pass']	= 'mqbzoqeeginkjkei';
+				break;
+			case 'hello':
+				$config['smtp_user']	= 'hello@gulaymart.com';
+				$config['smtp_pass']	= 'gocfwzcdnebgztgx';
+				break;
+			case 'support':
+				$config['smtp_user']	= 'support@gulaymart.com';
+				$config['smtp_pass']	= 'yckkdhtymwgeoyfo';
+				break;
+			default: /*gacelabs*/
+				$config['smtp_user']	= 'gacelabs.inc@gmail.com';
+				$config['smtp_pass']	= 'jpmmkjexgngkuktt';
+				break;
+		}
 		$config['charset']		= 'utf-8';
 		$config['newline']		= "\r\n";
 		$config['mailtype']		= 'html'; // or text
