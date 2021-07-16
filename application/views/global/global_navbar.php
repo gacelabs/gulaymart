@@ -2,7 +2,11 @@
 	<?php if (empty($current_profile)) : ?>
 	<div id="check_loc">
 		<div class="container">
-			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. SEARCH YOUR <span data-toggle="modal" data-target="#check_loc_modal">CITY HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
+			<div class="simple-marquee-container">
+				<div class="marquee">
+					<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. SEARCH YOUR <span data-toggle="modal" data-target="#check_loc_modal">CITY HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<?php endif; ?>

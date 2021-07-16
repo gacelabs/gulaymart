@@ -228,9 +228,11 @@ class MY_Controller extends CI_Controller {
 		// debug($this->uri->segment(1), 'stop');
 		if (!$this->accounts->has_session) {
 			if ($this->uri->segment(1) != 'register') {
+				$view['top']['css'][] = 'marquee';
 				$view['bottom']['modals'][] = 'check_loc_modal';
 				$view['bottom']['js'][] = 'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places';
 				$view['bottom']['js'][] = 'plugins/markerclustererplus.min';
+				$view['bottom']['js'][] = 'plugins/marquee';
 			}
 			$view['bottom']['js'][] = 'plugins/fb-login';
 		}
