@@ -11,14 +11,14 @@
 				<div><img src="assets/images/product-item/pechay.jpg"></div>
 				<div><img src="assets/images/product-item/lettuce.jpg"></div>
 			</div>
-			<p>Buying vegetables from these local farmers help them live a life for a day. For the longest time, we always support big brands, it's time to make a difference and touch the lives of many urban and rural farmers in the country.</p>
+			<p>Buying vegetables from local farmers help them live a life for a day. For the longest time, we've been supporting big brands, it's time to make a difference and touch the lives of many urban and rural farmers in the country.</p>
 			<p>Let's help support locals, buy at <a href="" class="text-link">Marketplace</a></p>
 		</div>
 	</div>
 	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 		<div id="register_form">
 			<div class="register-top">
-				<h4><b>Support local farmers. Sign up!</b></h4>
+				<h3><b>Support local farmers.<br>Sign up!</b></h3>
 			</div>
 			<form action="sign-up" method="post" class="form-validate">
 				<div class="register-middle">

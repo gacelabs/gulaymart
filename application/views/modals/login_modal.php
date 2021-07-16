@@ -12,7 +12,7 @@
 
 					<div class="login-middle login-detail">
 						<h1>Log In</h1>
-						<p>Find the freshest vegetables grown by the famers in your community.</p>
+						<p>Find the freshest vegetables grown by the farmers in your community.</p>
 					</div>
 
 					<div class="login-middle reset-detail hide">
