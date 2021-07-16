@@ -26,7 +26,7 @@
 					</ul>
 					<div class="profile-grid">
 						<div class="text-center"><i class="text-theme fa fa-id-badge"></i></div>
-						<div class="text-left"><p class="zero-gaps"><?php echo $current_profile['fullname']; ?></p></div>
+						<div class="text-left text-caps"><p class="zero-gaps"><?php echo $current_profile['fullname']; ?></p></div>
 					</div>
 					<div class="profile-grid">
 						<div class="text-center"><i class="text-theme fa fa-calendar"></i></div>
@@ -80,7 +80,7 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth month and year will be used to curate contents."></small></label>
+								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth day will help Gulaymart curate contents for you."></small></label>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">

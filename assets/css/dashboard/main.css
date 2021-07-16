@@ -38,8 +38,9 @@
 	width: 34px;
 }
 .text-great-user {
-	 margin: 8px  0;
-	 font-size: 16px;
+	font-size: 16px;
+	text-transform: capitalize;
+	margin: 8px  0;
 }
 #dashboard_navbar_aside {
 	position: fixed;
@@ -136,15 +137,15 @@
 		text-align: right;
 	}
 	#dashboard_navbar {
-		height: 38px;
+		height: 45px;
 		padding: 5px;
 	}
 	#dashboard_navbar>.container-fluid {
 		padding: 0;
 	}
 	#global_navbar_logo, #global_navbar_avatar {
-		height: 28px;
-		width: 28px;
+		height: 35px;
+		width: 35px;
 	}
 	#global_navbar_logo {
 		padding: 4px 0;
@@ -182,10 +183,11 @@
 		width: 100%;
 	}
 	.aside-nav-item>i {
-		height: 28px;
+		height: 35px;
 		margin: 0;
-		padding: 7px 0;
-		width: 28px;
+		padding: 9px 0;
+		width: 35px;
+		font-size: 18px;
 	}
 	.aside-nav-item .nav-basket-count {
 		position: absolute;
@@ -194,7 +196,7 @@
 		font-size: 8px;
 	}
 	.text-great-user {
-		margin: 5px 0;
+		margin: 8px 0;
 	}
 	#dashboard_navbar_aside, #dashboard_panel_right {
 		float: initial;
@@ -202,6 +204,10 @@
 	#dashboard_panel_right .row>.col-xs-12 {
 		border-radius: 0;
 		padding: 0;
+	}
+	#profile_info_panel .row {
+		margin-left: 0;
+		margin-right: 0;
 	}
 	.dashboard-panel-footer {
 		border-radius: 0;
@@ -222,7 +228,7 @@
 		z-index: -2;
 	}
 	#navbar_farm_menu_container.active {
-		bottom: 38px;
+		bottom: 45px;
 		visibility: visible;
 	}
 	#navbar_farm_menu_container .aside-nav-item {

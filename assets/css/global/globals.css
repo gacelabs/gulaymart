@@ -170,10 +170,6 @@ body.check-loc-on #global_navbar>.container {
 	margin-top: -10px;
 	margin-left: -10px;
 	margin-right: -10px;
-	padding: 5px 10px;
-	text-align: center;
-	white-space: nowrap;
-	overflow-y: auto;
 }
 #check_loc span {
 	background-color: #fff;
@@ -187,6 +183,23 @@ body.check-loc-on #global_navbar>.container {
 #check_loc span:hover {
 	background: rgb(168,210,83);
 	background: linear-gradient(45deg, rgba(168,210,83,1) 0%, rgba(117,202,155,1) 100%);
+}
+#check_loc .container {
+	padding: 5px 10px;
+	text-align: center;
+	white-space: nowrap;
+	overflow-y: auto;
+}
+#category_loc_button {
+	border: 1px solid #ccc;
+	padding: 5px 10px;
+	border-radius: 3px;
+	background-color: #fff;
+	cursor: pointer;
+}
+#category_loc_button h3 {
+	font-size: 16px;
+	margin:0;
 }
 .order-deliver-note {
 	background-color: #9eebff;
@@ -225,39 +238,61 @@ body.check-loc-on #global_navbar>.container {
 		padding-right: 0;
 	}
 	#global_navbar_grid {
-		grid-template-columns: 28px 1fr 28px;
+		grid-template-columns: auto 1fr auto;
 		grid-gap: 7px;
 	}
 	body.is-logged #global_navbar_grid {
 		grid-template-columns: auto 1fr auto;
 		grid-gap: 12px;
 	}
+	#global_search_form input {
+		border-radius: 4px !important;
+		border-top-right-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+	}
+	#global_search_form button {
+		border-radius: 4px !important;
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;	
+	}
 	#global_search_form input, #global_search_form button {
-		height: 28px;
+		height: 35px;
 		padding: 4px 12px;
 	}
 	body.is-logged #global_navbar_btn_list>li {
 		margin-left: 4px;
 	}
 	body.is-logged #global_navbar_btn_list>li, #global_navbar_btn_list>li, #global_navbar_logo {
-		height: 28px;
-		padding: 4px 0;
-		width: 28px;
+		border-radius: 4px;
+		font-size: 18px;
+		height: 35px;
+		width: 35px;
+	}
+	input, select, textarea, button, .btn, .input-group-addon {
+
 	}
 	body.is-logged #global_navbar_btn_list>li:last-child, #global_navbar_avatar {
-		height: 28px;
+		height: 35px;
 		margin-top: 0;
 		padding: 0;
-		width: 28px;
+		width: 35px;
+	}
+	body.is-logged #nav_basket {
+		margin-right: 5px;
 	}
 	body.check-loc-on {
-		padding-top: 65px !important;
+		padding-top: 73px !important;
 	}
 	#check_loc {
 		margin-top: -5px;
+		padding-right: 10px;
 	}
 	body.check-loc-on #global_navbar>.container {
 		padding-top: 5px;
+	}
+	#category_loc_button {
+		padding: 2px 4px;
+		margin-top: -3px;
 	}
 }
 @media (max-width: 260px) {

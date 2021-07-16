@@ -2,14 +2,7 @@
 	<?php if (empty($current_profile)) : ?>
 	<div id="check_loc">
 		<div class="container">
-			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. 
-				<?php if (empty(get_cookie('current_city', true))): ?>
-					CHECK YOUR 
-				<?php else: ?>
-					CURRENT CITY IS <span><?php echo ucwords(get_cookie('current_city', true));?></span>. CHANGE YOUR 
-				<?php endif ?>
-				<span data-toggle="modal" data-target="#check_loc_modal">LOCATION HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.
-			</p>
+			<p class="zero-gaps">GULAYMART HELPS YOU FIND THE FRESHEST VEGGIES IN YOUR COMMUNITY. SEARCH YOUR <span data-toggle="modal" data-target="#check_loc_modal">CITY HERE</span> TO SHOW SUPPORT FOR OUR LOCAL FARMERS.</p>
 		</div>
 	</div>
 	<?php endif; ?>
@@ -36,7 +29,7 @@
 					</li>
 					<?php endif ; ?>
 
-					<li <?php echo(empty($current_profile) ? 'data-toggle="modal" data-target="#login_modal"' : ''); ?>>
+					<li <?php echo(empty($current_profile) ? 'data-toggle="modal" data-target="#login_modal"' : 'style="background-color:transparent;"'); ?>>
 						<?php if ($current_profile) : ?>
 							<a href="profile/">
 								<div id="global_navbar_avatar" style="background-image: url('assets/images/avatar.jpg');"></div>

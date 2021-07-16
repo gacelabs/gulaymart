@@ -1,6 +1,13 @@
 <?php if ($this->categories): ?>
 <div id="category_container">
-	<h3><b>Categories</b></h3>
+	<ul class="spaced-list between">
+		<li>
+			<h3><b>Categories</b></h3>
+		</li>
+		<?php if (!empty(get_cookie('current_city', true))): ?>
+		<li><div id="category_loc_button" data-toggle="tooltip" data-placement="top" title="Select City" ><h3 data-toggle="modal" data-target="#check_loc_modal"><i class="fa fa-map-marker icon-left" ></i><?php echo ucwords(get_cookie('current_city', true));?></h3></div></li>
+		<?php endif; ?>
+	</ul>
 	<div class="panel zero-gaps">
 		<div id="veggy_categories">
 			<a href="" class="veggy-category-item">
