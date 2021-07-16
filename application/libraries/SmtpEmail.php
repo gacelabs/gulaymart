@@ -85,9 +85,14 @@ class SmtpEmail /*implements EmailFunctions*/ {
 
 	private function submit($data)
 	{
+		// debug($this->email, 'stop');
 		/*set from values*/
 		if (!isset($data['email_from'])) {
-			$this->email->from('gulaymart@gmail.com', 'Gulay Mart');
+			if (isset($this->email->smtp_user)) {
+				$this->email->from($this->email->smtp_user, APP_NAME);
+			} else {
+				$this->email->from('admin@gulaymart.com', APP_NAME);
+			}
 		} else {
 			$this->email->from($data['email_from'], (isset($data['email_from_name']) ? $data['email_from_name'] : ''), (isset($data['email_return']) ? $data['email_return'] : NULL));
 		}

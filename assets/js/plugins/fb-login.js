@@ -24,7 +24,7 @@ $(document).ready(function() {
 		}
 
 		var runFbLogin = function(response) {
-			simpleAjax('profile/fb_login', {
+			simpleAjax('authenticate/fb_login', {
 				// fb_id: response.authResponse.userID,
 				'data': response.authResponse,
 			});

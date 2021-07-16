@@ -3,11 +3,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
 
-	public $allowed_methods = ['fetch_coordinates'];
+	public $allowed_methods = ['fetch_coordinates'/*, 'test_mail'*/];
 
 	public function __construct()
 	{
 		parent::__construct();
+	}
+
+	public function test_mail($type='hello')
+	{
+		$mail = $this->smtpemail->setup($type);
+		$email = ['email_body_message' => 'Test Email Sent!'];
+		$email['email_subject'] = 'Email Testing';
+		$email['email_to'] = 'gacelabs.inc@gmail.com';
+		$email['email_bcc'] = ['sirpoigarcia@gmail.com'];
+		// debug($email, 'stop');
+		// $mail->debug = TRUE;
+		$return = $mail->send($email, false, true);
+		debug($return, 'stop');
 	}
 
 	public function save_shipping()
