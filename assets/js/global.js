@@ -247,7 +247,7 @@ window.runReCaptchaOnLoad = function() {
 		var form = $(this);
 		runGRecaptchaChallenge(form.find('.g-recaptcha'), form);
 	});
-	runGRecaptchaChallenge($('.login-with-social .g-recaptcha'));
+	// runGRecaptchaChallenge($('.login-with-social .g-recaptcha'));
 };
 
 var fbWidgetId;

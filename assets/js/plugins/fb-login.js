@@ -27,14 +27,11 @@ $(document).ready(function() {
 			simpleAjax('profile/fb_login', {
 				// fb_id: response.authResponse.userID,
 				'data': response.authResponse,
-				'g-recaptcha-response': grecaptcha.getResponse()
 			});
 		};
 
 		$('.fb-login-btn').off('click').on('click', function(e) {
-			grecaptcha.reset();
 			if (fb_acc_response && $.inArray(fb_acc_response.status, ['not_authorized','unknown']) >= 0) {
-				grecaptcha.execute(fbWidgetId);
 				FB.login(function(response) {
 					console.log(response);
 					if (response.status === 'connected') {
