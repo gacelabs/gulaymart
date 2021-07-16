@@ -14,6 +14,7 @@ class Authenticate extends MY_Controller {
 	{
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
 		// debug($this->session->userdata('referrer'));
 		$is_ok = $this->accounts->login($post);
 		$to = '/';
@@ -212,15 +213,15 @@ class Authenticate extends MY_Controller {
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		debug($post);
-		if (validate_recaptcha($post)) {
+		$is_ok = $this->accounts->fb_login($post);
+		// debug($is_ok);
+		$to = 'farm/';
+		if ($is_ok == false) $to = '?error=Invalid credentials';
+		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
+		/*if (validate_recaptcha($post)) {
 			if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
-			$is_ok = $this->accounts->fb_login($post);
-			// debug($is_ok);
-			$to = 'farm/';
-			if ($is_ok == false) $to = '?error=Invalid credentials';
-			echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
 		} else {
 			echo json_encode(['success' => false, 'redirect' => base_url($to), 'message' => 'Robots are not allowed, Thank you!']);
-		}
+		}*/
 	}
 }

@@ -245,27 +245,38 @@ var downloadJSAtOnload = function() {
 window.runReCaptchaOnLoad = function() {
 	$(document).find('form').each(function() {
 		var form = $(this);
-		var recaptcha = form.find('.g-recaptcha');
+		runGRecaptchaChallenge(form.find('.g-recaptcha'), form);
+	});
+	// runGRecaptchaChallenge($('.login-with-social .g-recaptcha'));
+};
+
+var fbWidgetId;
+var runGRecaptchaChallenge = function(recaptcha, form) {
+	if (recaptcha != undefined) {
 		if (recaptcha.length) {
 			if (recaptcha.data('size') === 'invisible') {
-				var widgetId = grecaptcha.render(recaptcha.get(0), {
-					callback: function(challenge) {
-						// console.log(challenge);
-						if ($.trim(challenge).length) {
-							form.off('submit').submit();
+				if (form != undefined) {
+					var widgetId = grecaptcha.render(recaptcha.get(0), {
+						callback: function(challenge) {
+							// console.log(challenge);
+							if ($.trim(challenge).length) {
+								form.off('submit').submit();
+							}
 						}
-					}
-				});
-				form.bind('submit', function(e) {
-					grecaptcha.reset();
-					if (form.find('[name]').hasClass('error') == false) {
-						grecaptcha.execute(widgetId);
-					}
-				});
+					});
+					form.bind('submit', function(e) {
+						grecaptcha.reset();
+						if (form.find('[name]').hasClass('error') == false) {
+							grecaptcha.execute(widgetId);
+						}
+					});
+				} else {
+					fbWidgetId = grecaptcha.render(recaptcha.get(0));
+				}
 			} else {
 				grecaptcha.render(recaptcha.get(0));
 			}
 		}
-	});
-};
+	}
+}
 
