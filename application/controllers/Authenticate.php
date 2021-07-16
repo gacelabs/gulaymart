@@ -14,6 +14,7 @@ class Authenticate extends MY_Controller {
 	{
 		// $post = ['username'=>'bong', 'password'=>2];
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
 		// debug($this->session->userdata('referrer'));
 		$is_ok = $this->accounts->login($post);
 		$to = '/';
