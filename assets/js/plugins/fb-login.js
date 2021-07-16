@@ -11,11 +11,24 @@ $(document).ready(function() {
 							case "connected":
 								$('.onlogged-out-btn').addClass('hide');
 								$('.onlogged-in-btns').removeClass('hide');
+
+								$('.login-detail').addClass('hide');
+								$('.login-form-body').addClass('hide');
+								$('.fb-login-btn').addClass('hide');
+								$('.fb-login-panel').removeClass('hide');
+								$('.fb-signing-in').removeClass('hide');
+								$('[data-target="#login_modal"]').click();
 								runFbLogin();
 							break;
 							case "not_authorized": case "unknown":
 								$('.onlogged-out-btn').removeClass('hide');
 								$('.onlogged-in-btns').addClass('hide');
+								
+								$('.login-detail').removeClass('hide');
+								$('.login-form-body').removeClass('hide');
+								$('.fb-login-btn').removeClass('hide');
+								$('.fb-login-panel').addClass('hide');
+								$('.fb-signing-in').addClass('hide');
 							break;
 						}
 					});

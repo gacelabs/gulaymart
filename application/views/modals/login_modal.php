@@ -20,6 +20,11 @@
 						<p>We'll send your current password to the email address you've used to register.</p>
 					</div>
 
+					<div class="login-middle fb-login-panel hide">
+						<h1>Logging In thru Facebook</h1>
+						<p>We've detected your facebook login session, we are logging you in now, please wait.</p>
+					</div>
+
 					<div class="login-footer">
 						<div class="login-form-body">
 							<form method="post" action="sign-in" class="form-validate sign-in-form">
@@ -52,6 +57,7 @@
 							</a>
 							<!-- <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div> -->
 							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to <b>Log In</b></button>
+							<button class="btn btn-default btn-block fb-signing-in hide"><span class="spinner-border spinner-border-sm"></span>facebook signing in...</button>
 						</div>
 					</div>
 				</div>
