@@ -35,3 +35,8 @@
 .notif-item-top, .notif-item-middle, .notif-item-footer {
 	padding: 10px;
 }
+@media (max-width: 767px) {
+	.messages-nav-grid {
+		grid-template-columns: repeat(3, auto);
+	}
+}
