@@ -92,13 +92,17 @@ defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b6
 defined('APP_NAME') OR define('APP_NAME', 'Gulay Mart');
 defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'Gulay Mart an Online Supermarket near you.');
 defined('APP_VERSION') OR define('APP_VERSION', '1.0');
+
+/*IMPORTANT PASSSWORDS*/
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
 defined('GM_ADMIN') OR define('GM_ADMIN', '&m_@DM!n-p@55-K3y');
 defined('GM_ADMIN_MYSQL_PASS') OR define('GM_ADMIN_MYSQL_PASS', '&m_@DM!n-mY597-p@55-K3y');
 defined('GM_USER_MYSQL_PASS') OR define('GM_USER_MYSQL_PASS', '&m_U53r-mY597-p@55-K3y');
+defined('GM_USER_POI_MYSQL_PASS') OR define('GM_USER_POI_MYSQL_PASS', 'Phoinyakz1982..!');
 defined('PHPMYADMIN_PASS') OR define('PHPMYADMIN_PASS', 'pHPMy_@DM!n-p@55-K3y');
-defined('PHPMYADMIN_ROOT_PASS') OR define('PHPMYADMIN_ROOT_PASS', 'pHPMy_@DM!n-R00t-p@55-K3y');
+defined('MYSQL_ROOT_PASS') OR define('MYSQL_ROOT_PASS', 'pHPMy_@DM!n-R00t-p@55-K3y');
+/*IMPORTANT PASSSWORDS*/
 
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
 defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');

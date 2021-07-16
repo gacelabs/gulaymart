@@ -105,8 +105,8 @@
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<!-- <a href="support/help-center/" class="aside-nav-item  hidden-xs"> -->
-		<a href="//support.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
+		<!-- <a href="help/help-center/" class="aside-nav-item  hidden-xs"> -->
+		<a href="//help.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
 		<a href="sign-out" class="aside-nav-item hidden-xs">
