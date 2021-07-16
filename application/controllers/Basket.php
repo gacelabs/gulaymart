@@ -157,7 +157,7 @@ class Basket extends My_Controller {
 			],
 			'bottom' => [
 				'modals' => ['login_modal'],
-				'js' => ['basket/productpage', 'plugins/fb-login'],
+				'js' => ['basket/productpage'],
 			],
 			'data' => [
 				'product' => $product

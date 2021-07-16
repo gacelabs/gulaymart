@@ -36,7 +36,8 @@
 		echo $this->minify->deploy_css(false);
 	}
 	?>
-	<!-- <link rel="manifest" href="/manifest.json"> -->
+	<link rel="manifest" href="/manifest.json">
+	
 	<script type="text/javascript" id="main-obj-script">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
 		var oValidationRules=<?php echo json_encode($this->valid_fields);?>;

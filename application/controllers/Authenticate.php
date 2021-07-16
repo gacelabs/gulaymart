@@ -211,11 +211,16 @@ class Authenticate extends MY_Controller {
 	public function fb_login()
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		// debug($post);
-		$is_ok = $this->accounts->fb_login($post);
-		// debug($is_ok);
-		$to = 'farm/';
-		if ($is_ok == false) $to = '?error=Invalid credentials';
-		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
+		debug($post);
+		if (validate_recaptcha($post)) {
+			if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
+			$is_ok = $this->accounts->fb_login($post);
+			// debug($is_ok);
+			$to = 'farm/';
+			if ($is_ok == false) $to = '?error=Invalid credentials';
+			echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
+		} else {
+			echo json_encode(['success' => false, 'redirect' => base_url($to), 'message' => 'Robots are not allowed, Thank you!']);
+		}
 	}
 }

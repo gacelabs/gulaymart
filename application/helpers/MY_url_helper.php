@@ -703,7 +703,6 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 				'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
 				'plugins/markerclustererplus.min',
 				'marketplace/main', 
-				'plugins/fb-login', 
 				'global',
 			],
 		],
