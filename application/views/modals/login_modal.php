@@ -32,7 +32,6 @@
 								<div style="text-align: right;margin-bottom: 10px;">
 									<a href="javascript:;" class="resetpass-btn" style="font-size: 11px;">Forgot Password?</a>
 								</div>
-								<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div>
 								<button type="submit" class="btn btn-theme btn-block">Log In</button>
 							</form>
 							<form method="post" action="authenticate/recover" class="form-validate resetpass-form hide" data-ajax="1">
@@ -51,6 +50,7 @@
 									<li><i class="fa fa-chevron-right" style="color:#aaa;"></i></li>
 								</ul>
 							</a>
+							<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div>
 							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to <b>Log In</b></button>
 						</div>
 					</div>
