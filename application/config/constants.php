@@ -94,7 +94,7 @@ defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'Gulay Mart an Online Su
 defined('APP_VERSION') OR define('APP_VERSION', '1.0');
 
 /*IMPORTANT PASSSWORDS*/
-defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y');
+defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y'); // also the ssh root password
 defined('GACELABS_KEY') OR define('GACELABS_KEY', '&@c3L4b$-k3y');
 defined('GM_ADMIN') OR define('GM_ADMIN', '&m_@DM!n-p@55-K3y');
 defined('GM_ADMIN_MYSQL_PASS') OR define('GM_ADMIN_MYSQL_PASS', '&m_@DM!n-mY597-p@55-K3y');
