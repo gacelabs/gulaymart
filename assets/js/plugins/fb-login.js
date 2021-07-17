@@ -45,9 +45,9 @@ $(document).ready(function() {
 			}, {scope: 'public_profile, email'});
 		});
 	} else {
+		runFbLogin(true);
 		$('[href="sign-out"]').bind('click', function(e) {
 			e.preventDefault();
-			runFbLogin();
 			var oThis = $(e.target);
 			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
 			console.log(FB.getAuthResponse());
