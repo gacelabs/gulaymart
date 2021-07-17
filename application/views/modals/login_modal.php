@@ -57,7 +57,7 @@
 							</a>
 							<!-- <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div> -->
 							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to <b>Log In</b></button>
-							<button class="btn btn-default btn-block fb-signing-in hide"><span class="spinner-border spinner-border-sm"></span>&nbsp;facebook signing in...</button>
+							<button class="btn btn-default btn-block fb-signing-in hide"><span class="spinner-border spinner-border-sm"></span>&nbsp;Signing in facebook ...</button>
 						</div>
 					</div>
 				</div>
