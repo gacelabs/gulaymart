@@ -182,7 +182,7 @@ $(document).ready(function() {
 	autosize($('textarea'));
 
 	$('form.sign-in-form').bind('submit', function() {
-		$('.login-top').addClass('hide');
+		$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 		$('.login-with-social').addClass('hide');
 		$('.resetpass-btn').css('visibility', 'hidden');
 	});
