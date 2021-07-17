@@ -3,6 +3,8 @@ RewriteEngine On
 #RewriteCond $1 !^(index\.php|assets|images|js|css|uploads|favicon.png)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+# Ignore json, js and css file
+#RewriteRule ^/(.*)(\.json|\.js|\.css)
 RewriteRule (.*) index.php/$1
 
 <IfModule mod_env.c>
