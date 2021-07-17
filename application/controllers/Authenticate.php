@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Authenticate extends MY_Controller {
 
-	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'recover'];
+	public $allowed_methods = ['sign_in', 'sign_up', 'register', 'fb_login', 'fb_deauthorize', 'recover'];
 
 	public function index($value=false)
 	{
@@ -212,7 +212,27 @@ class Authenticate extends MY_Controller {
 	public function fb_login()
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		// debug($post, 'stop');
+		debug($post, 'stop');
+		$is_ok = $this->accounts->fb_login($post);
+		// debug($is_ok);
+		$to = '/';
+		if ($is_ok == false) {
+			$to = 'sign-out';
+			$type = 'false';
+			$message = 'Unable to login, clearing session';
+			$callback = 'logOutFacebook';
+		} else {
+			$type = 'success';
+			$message = 'You are now Logged in with Facabook';
+			$callback = false;
+		}
+		$this->set_response($type, $message, $post/*, base_url($to)*/);
+	}
+
+	public function fb_deauthorize()
+	{
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		debug($post, 'stop');
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
 		$to = '/';

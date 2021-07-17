@@ -69,12 +69,12 @@ $(document).ready(function() {
 });
 
 var runFbLogin = function(already) {
-	FB.api('/me?fields=id,email,name', function(data) {
+	/*FB.api('/me?fields=id,email,name', function(data) {
 		console.log(data);
 		if (already == undefined) {
 			simpleAjax('authenticate/fb_login', data);
 		}
-	});
+	});*/
 };
 
 var logOutFacebook = function() {
