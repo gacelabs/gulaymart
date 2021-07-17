@@ -55,3 +55,5 @@ $(document).ready(function() {
 		});
 	}
 });
+
+var logOutFacebook = function() { FB.logout(); };

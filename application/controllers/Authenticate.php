@@ -215,13 +215,17 @@ class Authenticate extends MY_Controller {
 		// debug($post, 'stop');
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
-		$to = 'farm/';
-		if ($is_ok == false) $to = '?error=Invalid credentials';
-		echo json_encode(['success' => $is_ok, 'redirect' => base_url($to)]);
-		/*if (validate_recaptcha($post)) {
-			if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
+		$to = '/';
+		if ($is_ok == false) {
+			$to = 'sign-out';
+			$type = 'false';
+			$message = 'Unable to login, clearing session';
+			$callback = 'logOutFacebook';
 		} else {
-			echo json_encode(['success' => false, 'redirect' => base_url($to), 'message' => 'Robots are not allowed, Thank you!']);
-		}*/
+			$type = 'success';
+			$message = 'You are now Logged in with Facabook';
+			$callback = false;
+		}
+		$this->set_response($type, $message, $post, base_url($to));
 	}
 }
