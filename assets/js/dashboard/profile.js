@@ -106,10 +106,10 @@ $(document).ready(function() {
 		if (FB.getAuthResponse() != null) {
 			FB.logout(function(response) {
 				console.log(response);
-				window.location = oThis.attr('href');
+				// window.location = oThis.attr('href');
 			});
 		} else {
-			window.location = oThis.attr('href');
+			// window.location = oThis.attr('href');
 		}
 	});
 });
