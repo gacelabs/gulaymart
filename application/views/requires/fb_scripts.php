@@ -8,6 +8,7 @@
 			version	: '<?php echo FB_VERSION;?>'
 		});
 		FB.AppEvents.logPageView();
+		fbOnAfterInit();
 	};
 	(function(d, s, id){
 		var js, fjs = d.getElementsByTagName(s)[0];

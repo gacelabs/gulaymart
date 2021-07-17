@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+var fbOnAfterInit = function() {
 	FB.getLoginStatus(function(response) {
 		fb_acc_response = response;
 		var status = response.status;
@@ -70,7 +70,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-});
+}
 
 var runFbLogin = function(already) {
 	FB.api('/me?fields=id,email,name', function(data) {
@@ -85,3 +85,9 @@ var logOutFacebook = function(oThis) {
 		window.location = oThis.attr('href');
 	});
 };
+
+window.onbeforeunload = function() {
+	if (oUser) {
+		return "Leaving the page will lose bookings given to you.";
+	}
+}
