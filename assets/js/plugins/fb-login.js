@@ -25,7 +25,7 @@ $(document).ready(function() {
 			if (FB.getAccessToken() != '') {
 				logOutFacebook(oThis);
 			} else {
-				// window.location = oThis.attr('href');
+				window.location = oThis.attr('href');
 			}
 		});
 	}
@@ -33,7 +33,7 @@ $(document).ready(function() {
 
 var runFbLogin = function() {
 	FB.api('/me?fields=id,email,name', function(data) {
-		console.log('login 2', fb_acc_response);
+		// console.log('login 2', fb_acc_response);
 		simpleAjax('authenticate/fb_login', data);
 	});
 };
@@ -41,6 +41,6 @@ var runFbLogin = function() {
 var logOutFacebook = function(oThis) {
 	FB.logout(function(response) {
 		console.log('logout', response);
-		// window.location = oThis.attr('href');
+		window.location = oThis.attr('href');
 	});
 };
