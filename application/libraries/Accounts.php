@@ -169,11 +169,12 @@ class Accounts {
 							'user_id' => $user['id'],
 						]);
 					} else {
+						$profile = $fbprofile->row_array();
 						$this->class->db->update('user_profiles', [
 							'firstname' => $fullname[0],
 							'lastname' => $fullname[1],
 							'user_id' => $user['id'],
-						], ['id' => $fbprofile->id]);
+						], ['id' => $profile['id']]);
 					}
 				}
 			}
