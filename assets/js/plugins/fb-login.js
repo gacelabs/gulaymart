@@ -16,13 +16,6 @@ $(document).ready(function() {
 				}
 			}, {scope: 'public_profile, email'});
 		});
-	} else {
-		/*$('[href="sign-out"]').bind('click', function(e) {
-			e.preventDefault();
-			var oThis = $(e.target);
-			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-			logOutFacebook(oThis);
-		});*/
 	}
 });
 
@@ -31,17 +24,4 @@ var runFbLogin = function() {
 		// console.log('login 2', fb_acc_response);
 		simpleAjax('authenticate/fb_login', data);
 	});
-};
-
-var logOutFacebook = function(oThis) {
-	/*switch (fb_acc_response.status) {
-		case "not_authorized": case "unknown":*/
-			window.location = oThis.attr('href');
-		/*break;
-		default:
-			FB.logout(function(response) {
-				window.location = oThis.attr('href');
-			});
-		break;
-	}*/
 };
