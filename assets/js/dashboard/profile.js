@@ -103,10 +103,14 @@ $(document).ready(function() {
 		e.preventDefault();
 		var oThis = $(e.target);
 		if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-		FB.logout();
-		setTimeout(function() {
-			// window.location = oThis.attr('href');
-		}, 300);
+		if (FB.getAuthResponse() != null) {
+			FB.logout(function(response) {
+				console.log(response);
+				window.location = oThis.attr('href');
+			});
+		} else {
+			window.location = oThis.attr('href');
+		}
 	});
 });
 
