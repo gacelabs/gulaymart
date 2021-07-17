@@ -223,7 +223,7 @@ class Authenticate extends MY_Controller {
 			$callback = 'logOutFacebook';
 		} else {
 			$type = 'success';
-			$message = 'You are now Logged in with Facabook';
+			$message = '';
 			$callback = false;
 		}
 		$this->set_response($type, $message, $post, base_url($to));
