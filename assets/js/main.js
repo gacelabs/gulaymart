@@ -183,6 +183,7 @@ $(document).ready(function() {
 
 	$('form.sign-in-form').bind('submit', function() {
 		$('.login-with-social').addClass('hide');
+		$('.resetpass-btn').css('visibility', 'hidden');
 	});
 
 });
