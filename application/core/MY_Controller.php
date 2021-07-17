@@ -235,7 +235,7 @@ class MY_Controller extends CI_Controller {
 				$view['bottom']['js'][] = 'plugins/marquee';
 			}
 		}
-		$view['bottom']['js'][] = 'plugins/fb-login';
+		// $view['bottom']['js'][] = 'plugins/fb-login';
 		$data = false;
 
 		if ($rawdata) {
