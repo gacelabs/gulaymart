@@ -36,7 +36,7 @@
 		echo $this->minify->deploy_css(false);
 	}
 	?>
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="/manifest.json">
 	<!-- <link rel="manifest" href="manifest.webmanifest"> -->
 	
 	<script type="text/javascript" id="main-obj-script">
