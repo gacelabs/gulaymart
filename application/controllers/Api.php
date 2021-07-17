@@ -69,17 +69,21 @@ class Api extends MY_Controller {
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		if ($post) {
 			// debug($post, 'stop');
+			$tmp = $post;
+			if (isset($tmp['email_address']) AND strlen(trim($tmp['email_address'])) > 0) {
+				unset($post['email_address']);
+			}
 			if (isset($post['id']) AND $post['id'] > 0) {
 				$id = $post['id']; unset($post['id']);
 				$this->gm_db->save('user_profiles', $post, ['id' => $id]);
-				if (isset($post['email_address']) AND strlen(trim($post['email_address'])) > 0) {
-					$this->gm_db->save('users', ['email_address' => $post['email_address']], ['id' => $id]);
+				if (isset($tmp['email_address']) AND strlen(trim($tmp['email_address'])) > 0) {
+					$this->gm_db->save('users', ['email_address' => $tmp['email_address']], ['id' => $id]);
 				}
 				$this->set_response('success', 'Profile info saved!', $post, 'profile');
 			} elseif (!isset($post['id'])) {
 				$id = $this->gm_db->new('user_profiles', $post);
-				if (isset($post['email_address']) AND strlen(trim($post['email_address'])) > 0) {
-					$this->gm_db->save('users', ['email_address' => $post['email_address']], ['id' => $id]);
+				if (isset($tmp['email_address']) AND strlen(trim($tmp['email_address'])) > 0) {
+					$this->gm_db->save('users', ['email_address' => $tmp['email_address']], ['id' => $id]);
 				}
 				$this->set_response('success', 'Profile info added!', $post, 'profile');
 			}
