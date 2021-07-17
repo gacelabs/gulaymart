@@ -22,7 +22,7 @@ $(document).ready(function() {
 						$('.fb-login-btn').addClass('hide');
 						$('.fb-login-panel').removeClass('hide');
 						$('.fb-signing-in').removeClass('hide');
-						$('[data-target="#login_modal"]:first').modal('show');
+						$('#login_modal').modal('show');
 						runFbLogin();
 					break;
 					case "not_authorized": case "unknown":
