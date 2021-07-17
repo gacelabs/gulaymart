@@ -173,7 +173,7 @@ class Accounts {
 							'firstname' => $fullname[0],
 							'lastname' => $fullname[1],
 							'user_id' => $user['id'],
-						], ['id' => $fbprofile['id']]);
+						], ['id' => $fbprofile->id]);
 					}
 				}
 			}
