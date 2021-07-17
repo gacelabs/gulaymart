@@ -36,8 +36,7 @@
 		echo $this->minify->deploy_css(false);
 	}
 	?>
-	<link rel="manifest" href="/manifest.json">
-	<!-- <link rel="manifest" href="manifest.webmanifest"> -->
+	<link rel="manifest" href="/public/manifest.webmanifest.json">
 	
 	<script type="text/javascript" id="main-obj-script">
 		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
