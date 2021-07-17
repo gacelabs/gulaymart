@@ -34,7 +34,6 @@ $(document).ready(function() {
 				break;
 			}
 		});
-
 		$('.fb-login-btn').off('click').on('click', function(e) {
 			FB.login(function(response) {
 				console.log(response);
@@ -45,7 +44,9 @@ $(document).ready(function() {
 			}, {scope: 'public_profile, email'});
 		});
 	} else {
-		runFbLogin(true);
+		FB.login(function(response) {
+			fb_acc_response = response;
+		}, {scope: 'public_profile, email'});
 		$('[href="sign-out"]').bind('click', function(e) {
 			e.preventDefault();
 			var oThis = $(e.target);
