@@ -218,13 +218,11 @@ class Authenticate extends MY_Controller {
 		$to = '/';
 		if ($is_ok == false) {
 			$to = 'sign-out';
-			$type = 'false';
+			$type = 'error';
 			$message = 'Unable to login, clearing session';
-			$callback = 'logOutFacebook';
 		} else {
 			$type = 'success';
 			$message = '';
-			$callback = false;
 		}
 		$this->set_response($type, $message, $post, base_url($to));
 	}
@@ -233,19 +231,5 @@ class Authenticate extends MY_Controller {
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		debug($post, 'stop');
-		$is_ok = $this->accounts->fb_login($post);
-		// debug($is_ok);
-		$to = '/';
-		if ($is_ok == false) {
-			$to = 'sign-out';
-			$type = 'false';
-			$message = 'Unable to login, clearing session';
-			$callback = 'logOutFacebook';
-		} else {
-			$type = 'success';
-			$message = 'You are now Logged in with Facabook';
-			$callback = false;
-		}
-		$this->set_response($type, $message, $post/*, base_url($to)*/);
 	}
 }
