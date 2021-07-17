@@ -138,17 +138,46 @@ class Accounts {
 		// debug($post);
 		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
 			/*user is logging in*/
-			$fbuser = $this->class->db->get_where('users', $post);
+			$fbuser = $this->class->db->get_where('users', ['email_address' => $post['email']]);
 			if ($fbuser->num_rows() > 0) {
 				$user = $fbuser->row_array();
+				if (empty($user['fb_id'])) {
+					$this->class->db->update('users', ['fb_id' => $post['id']], ['id' => $user['id']]);
+				}
 			} else { /*register this user*/
-				$query = $this->class->db->insert('users', $post);
+				$this->class->db->insert('users', [
+					'fb_id' => $post['id'],
+					'email_address' => $post['email'],
+				]);
 				$id = $this->class->db->insert_id();
 				$qry = $this->class->db->get_where('users', ['id' => $id]);
 				$user = $qry->row_array();
 			}
+
+			if (isset($post['name'])) {
+				$fullname = explode(' ', trim($post['name']));
+				if (count($fullname)) {
+					$fbprofile = $this->class->db->get_where('user_profiles', [
+						'firstname' => $fullname[0], 
+						'lastname' => $fullname[1], 
+						'user_id' => $user['id'],
+					]);
+					if ($fbprofile->num_rows() == 0) {
+						$this->class->db->insert('user_profiles', [
+							'firstname' => $fullname[0],
+							'lastname' => $fullname[1],
+							'user_id' => $user['id'],
+						]);
+					} else {
+						$this->class->db->update('user_profiles', [
+							'firstname' => $fullname[0],
+							'lastname' => $fullname[1],
+							'user_id' => $user['id'],
+						], ['id' => $fbprofile['id']]);
+					}
+				}
+			}
 			// debug($user);
-			unset($user['password']); unset($user['re_password']);
 			$this->class->session->set_userdata('profile', $user);
 			$this->profile = $user;
 			return TRUE;
