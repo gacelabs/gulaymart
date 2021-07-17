@@ -165,13 +165,13 @@ class Accounts {
 							'lastname' => $fullname[count($fullname)-1],
 							'user_id' => $user['id'],
 						]);
-					} else {
+					/*} else {
 						$profile = $fbprofile->row_array();
 						$this->class->db->update('user_profiles', [
 							'firstname' => $fullname[0],
 							'lastname' => $fullname[count($fullname)-1],
 							'user_id' => $user['id'],
-						], ['id' => $profile['id']]);
+						], ['id' => $profile['id']]);*/
 					}
 				}
 			}
