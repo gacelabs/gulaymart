@@ -111,7 +111,7 @@
 								<label>Registered email</label>
 								<?php if ((bool)strstr($current_profile['email_address'], '@facebook.com')): ?>
 									<div class="form-group">
-										<input type="email" class="form-control" placeholder="Email address" required="required">
+										<input type="email" name="email_address" class="form-control" placeholder="Email address" required="required">
 									</div>
 								<?php else: ?>
 									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
