@@ -45,20 +45,24 @@ $(document).ready(function() {
 		});
 	} else {
 		FB.getLoginStatus(function(response) {
-			console.log(response);
+			fb_acc_response = response;
+			switch (response.status) {
+				case "not_authorized": case "unknown":
+					FB.login(function(response) {
+						fb_acc_response = response;
+					}, {scope: 'public_profile, email'});
+				break;
+			}
 		});
 		$('[href="sign-out"]').bind('click', function(e) {
 			e.preventDefault();
 			var oThis = $(e.target);
 			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-			console.log(FB.getAuthResponse());
-			if (FB.getAuthResponse() != null) {
-				// FB.logout(function(response) {
-					// console.log(response);
-					// window.location = oThis.attr('href');
-				// });
+			// console.log(FB.getUserID());
+			if (FB.getUserID() != null) {
+				logOutFacebook();
 			} else {
-				// window.location = oThis.attr('href');
+				window.location = oThis.attr('href');
 			}
 		});
 	}
@@ -73,4 +77,8 @@ var runFbLogin = function(already) {
 	});
 };
 
-var logOutFacebook = function() { FB.logout(); };
+var logOutFacebook = function() {
+	FB.logout(function(response) {
+		window.location = oThis.attr('href');
+	});
+};
