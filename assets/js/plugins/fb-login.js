@@ -54,7 +54,7 @@ $(document).ready(function() {
 				if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
 				// console.log(FB.getUserID());
 				if (FB.getUserID() != '') {
-					logOutFacebook();
+					logOutFacebook(oThis);
 				} else {
 					window.location = oThis.attr('href');
 				}
@@ -71,7 +71,7 @@ var runFbLogin = function(already) {
 	});
 };
 
-var logOutFacebook = function() {
+var logOutFacebook = function(oThis) {
 	FB.logout(function(response) {
 		window.location = oThis.attr('href');
 	});
