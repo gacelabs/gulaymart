@@ -137,6 +137,7 @@ class Accounts {
 	{
 		// debug($post);
 		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
+			if (!isset($post['email'])) $post['email'] = $post['id'].'@facebook.com';
 			/*user is logging in*/
 			$fbuser = $this->class->db->get_where('users', ['email_address' => $post['email']]);
 			if ($fbuser->num_rows() > 0) {
