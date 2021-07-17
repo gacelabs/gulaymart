@@ -104,10 +104,10 @@ $(document).ready(function() {
 		var oThis = $(e.target);
 		if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
 		if (FB.getAuthResponse() != null) {
-			FB.logout(function(response) {
-				console.log(response);
+			// FB.logout(function(response) {
+				// console.log(response);
 				// window.location = oThis.attr('href');
-			});
+			// });
 		} else {
 			// window.location = oThis.attr('href');
 		}
