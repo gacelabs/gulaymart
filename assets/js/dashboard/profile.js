@@ -98,6 +98,14 @@ $(document).ready(function() {
 			$('#toktok-active').trigger('change');
 		}
 	});
+
+	$('[href="sign-out"]').bind('click', function(e) {
+		e.preventDefault();
+		FB.logout();
+		setTimeout(function() {
+			window.location = $(this).attr('href');
+		}, 300);
+	});
 });
 
 function updateSavedObjects(data) {
