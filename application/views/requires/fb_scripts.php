@@ -21,14 +21,14 @@
 						});
 					break;
 				}
-			} else {
+			/*} else {
 				switch (status) {
 					case "not_authorized": case "unknown":
 						FB.login(function(response) {
 							fb_acc_response = response;
 						}, {scope: 'public_profile, email'});
 					break;
-				}
+				}*/
 			}
 		});
 	};
