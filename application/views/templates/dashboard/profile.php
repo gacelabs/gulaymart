@@ -109,13 +109,15 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<label>Registered email</label>
-								<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
-									<?php if ((bool)strstr($current_profile['email_address'], '@facebook.com')): ?>
+								<?php if ((bool)strstr($current_profile['email_address'], '@facebook.com')): ?>
+									<div class="form-group">
 										<input type="email" class="form-control" placeholder="Email address" required="required">
-									<?php else: ?>
+									</div>
+								<?php else: ?>
+									<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
 										<input type="email" class="form-control copy" placeholder="<?php check_value('email_address', [], true);?>" disabled>
-									<?php endif ?>
-								</div>
+									</div>
+								<?php endif ?>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
