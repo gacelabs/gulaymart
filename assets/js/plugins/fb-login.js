@@ -30,6 +30,7 @@ $(document).ready(function() {
 						$('.onlogged-out-btn').removeClass('hide');
 						$('.onlogged-in-btns').addClass('hide');
 						
+						$('#login_modal').removeAttr('data-keyboard').removeAttr('data-backdrop');
 						$('[href="register"]').removeClass('hide');
 						$('.login-detail').removeClass('hide');
 						$('.login-form-body').removeClass('hide');
