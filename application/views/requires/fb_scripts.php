@@ -28,10 +28,10 @@
 						$('.fb-signing-in').removeClass('hide');
 						$('#login_modal').modal('show');
 
-						FB.api('/me?fields=id,email,name', function(data) {
+						/*FB.api('/me?fields=id,email,name', function(data) {
 							// console.log('login 1', fb_acc_response);
 							simpleAjax('authenticate/fb_login', data);
-						});
+						});*/
 					break;
 					case "not_authorized": case "unknown":
 						$('.onlogged-out-btn').removeClass('hide');
