@@ -160,20 +160,20 @@ class Accounts {
 				if (count($fullname)) {
 					$fbprofile = $this->class->db->get_where('user_profiles', [
 						'firstname' => $fullname[0], 
-						'lastname' => $fullname[1], 
+						'lastname' => $fullname[count($fullname)], 
 						'user_id' => $user['id'],
 					]);
 					if ($fbprofile->num_rows() == 0) {
 						$this->class->db->insert('user_profiles', [
 							'firstname' => $fullname[0],
-							'lastname' => $fullname[1],
+							'lastname' => $fullname[count($fullname)],
 							'user_id' => $user['id'],
 						]);
 					} else {
 						$profile = $fbprofile->row_array();
 						$this->class->db->update('user_profiles', [
 							'firstname' => $fullname[0],
-							'lastname' => $fullname[1],
+							'lastname' => $fullname[count($fullname)],
 							'user_id' => $user['id'],
 						], ['id' => $profile['id']]);
 					}
