@@ -47,6 +47,12 @@ $(document).ready(function() {
 				case "not_authorized": case "unknown":
 					console.log(fb_acc_response);
 				break;
+				default:
+					FB.login(function(response) {
+						console.log(response);
+						fb_acc_response = response;
+					}, {scope: 'public_profile, email'});
+				break;
 			}
 			$('[href="sign-out"]').bind('click', function(e) {
 				e.preventDefault();
