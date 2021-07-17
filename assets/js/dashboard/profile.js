@@ -98,20 +98,6 @@ $(document).ready(function() {
 			$('#toktok-active').trigger('change');
 		}
 	});
-
-	$('[href="sign-out"]').bind('click', function(e) {
-		e.preventDefault();
-		var oThis = $(e.target);
-		if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-		if (FB.getAuthResponse() != null) {
-			// FB.logout(function(response) {
-				// console.log(response);
-				// window.location = oThis.attr('href');
-			// });
-		} else {
-			// window.location = oThis.attr('href');
-		}
-	});
 });
 
 function updateSavedObjects(data) {
