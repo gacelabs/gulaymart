@@ -212,7 +212,7 @@ class Authenticate extends MY_Controller {
 	public function fb_login()
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		debug($post, 'stop');
+		// debug($post, 'stop');
 		$is_ok = $this->accounts->fb_login($post);
 		// debug($is_ok);
 		$to = 'farm/';
