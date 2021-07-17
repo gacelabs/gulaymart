@@ -184,7 +184,7 @@ $(document).ready(function() {
 	$('form.sign-in-form').bind('submit', function() {
 		$('a,select,button,input:button,input:submit').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
 		$('.login-with-social').addClass('hide');
-		$('.resetpass-btn').css('visibility', 'hidden');
+		// $('.resetpass-btn').css('visibility', 'hidden');
 	});
 
 });
