@@ -42,3 +42,4 @@ assets/data/toktok-script.js
 *.json
 assets/data/logs/toktok-api.log
 assets/data/logs/
+*.webmanifest
