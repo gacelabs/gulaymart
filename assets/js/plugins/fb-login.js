@@ -44,10 +44,9 @@ $(document).ready(function() {
 			}, {scope: 'public_profile, email'});
 		});
 	} else {
-		FB.login(function(response) {
+		FB.getLoginStatus(function(response) {
 			console.log(response);
-			fb_acc_response = response;
-		}, {scope: 'public_profile, email'});
+		});
 		$('[href="sign-out"]').bind('click', function(e) {
 			e.preventDefault();
 			var oThis = $(e.target);
