@@ -42,7 +42,7 @@
 		<div class="col-lg-6">
 			<h3 style="font-size: 16px;"><b>Web Protection by</b></h3>
 			<ul class="inline-list right-gap">
-				<li><img src="assets/images/websecure.jpg" width="75"></li>
+				<li id="install-app"><img src="assets/images/websecure.jpg" width="75"></li>
 				<li><a href="https://www.digitalocean.com/?refcode=01b641693698&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" width="100" /></a></li>
 			</ul>
 		</div>
