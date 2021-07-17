@@ -226,7 +226,7 @@ class Authenticate extends MY_Controller {
 			$message = 'You are now Logged in with Facabook';
 			$callback = false;
 		}
-		$this->set_response($type, $message, $post/*, base_url($to)*/);
+		$this->set_response($type, $message, $post, base_url($to));
 	}
 
 	public function fb_deauthorize()
