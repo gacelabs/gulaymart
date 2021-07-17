@@ -17,6 +17,7 @@ $(document).ready(function() {
 						$('.onlogged-out-btn').addClass('hide');
 						$('.onlogged-in-btns').removeClass('hide');
 
+						$('[href="register"]').addClass('hide');
 						$('.login-detail').addClass('hide');
 						$('.login-form-body').addClass('hide');
 						$('.fb-login-btn').addClass('hide');
@@ -29,6 +30,7 @@ $(document).ready(function() {
 						$('.onlogged-out-btn').removeClass('hide');
 						$('.onlogged-in-btns').addClass('hide');
 						
+						$('[href="register"]').removeClass('hide');
 						$('.login-detail').removeClass('hide');
 						$('.login-form-body').removeClass('hide');
 						$('.fb-login-btn').removeClass('hide');
