@@ -25,7 +25,7 @@ $(document).ready(function() {
 			if (FB.getUserID() != '') {
 				logOutFacebook(oThis);
 			} else {
-				window.location = oThis.attr('href');
+				// window.location = oThis.attr('href');
 			}
 		});
 	}
@@ -33,12 +33,14 @@ $(document).ready(function() {
 
 var runFbLogin = function() {
 	FB.api('/me?fields=id,email,name', function(data) {
+		console.log('login 2', fb_acc_response);
 		simpleAjax('authenticate/fb_login', data);
 	});
 };
 
 var logOutFacebook = function(oThis) {
 	FB.logout(function(response) {
-		window.location = oThis.attr('href');
+		console.log('logout', response);
+		// window.location = oThis.attr('href');
 	});
 };
