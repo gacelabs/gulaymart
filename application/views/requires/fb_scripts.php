@@ -12,16 +12,6 @@
 
 		FB.getLoginStatus(function(response) {
 			fb_acc_response = response;
-			var status = response.status;
-			if (oUser == false) {
-				switch (status) {
-					case "connected":
-						FB.logout(function(response) {
-							fb_acc_response = response;
-						});
-					break;
-				}
-			}
 		});
 	};
 	(function(d, s, id){
