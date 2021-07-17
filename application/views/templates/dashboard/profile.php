@@ -55,7 +55,7 @@
 			</div>
 			<?php endif; ?>
 
-			<div class="dashboard-panel theme <?php echo(empty($current_profile['profile']['phone']) ? "" : "hide"); ?>" id="profile_info_panel">
+			<div class="dashboard-panel theme hide" id="profile_info_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">What's your name?</h4></li>
 					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
@@ -111,7 +111,7 @@
 								<label>Registered email</label>
 								<div class="form-group email-copy" data-toggle="tooltip" data-placement="right" data-trigger="click" title="Copied!">
 									<?php if ((bool)strstr($current_profile['email_address'], '@facebook.com')): ?>
-										<input type="email" class="form-control copy" placeholder="<?php check_value('email_address', [], true);?>" required="required">
+										<input type="email" class="form-control" placeholder="Email address" required="required">
 									<?php else: ?>
 										<input type="email" class="form-control copy" placeholder="<?php check_value('email_address', [], true);?>" disabled>
 									<?php endif ?>
