@@ -101,9 +101,11 @@ $(document).ready(function() {
 
 	$('[href="sign-out"]').bind('click', function(e) {
 		e.preventDefault();
+		var oThis = $(e.target);
+		if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
 		FB.logout();
 		setTimeout(function() {
-			window.location = $(this).attr('href');
+			// window.location = oThis.attr('href');
 		}, 300);
 	});
 });
