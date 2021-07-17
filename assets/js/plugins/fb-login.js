@@ -17,7 +17,8 @@ $(document).ready(function() {
 						$('.onlogged-out-btn').addClass('hide');
 						$('.onlogged-in-btns').removeClass('hide');
 
-						$('[href="register"]').addClass('hide');
+						$('#login_modal').find('[data-dismiss="modal"]').addClass('hide');
+						$('#login_modal').find('[href="register"]').addClass('hide');
 						$('.login-detail').addClass('hide');
 						$('.login-form-body').addClass('hide');
 						$('.fb-login-btn').addClass('hide');
@@ -31,7 +32,8 @@ $(document).ready(function() {
 						$('.onlogged-in-btns').addClass('hide');
 						
 						$('#login_modal').removeAttr('data-keyboard').removeAttr('data-backdrop');
-						$('[href="register"]').removeClass('hide');
+						$('#login_modal').find('[data-dismiss="modal"]').removeClass('hide');
+						$('#login_modal').find('[href="register"]').removeClass('hide');
 						$('.login-detail').removeClass('hide');
 						$('.login-form-body').removeClass('hide');
 						$('.fb-login-btn').removeClass('hide');
