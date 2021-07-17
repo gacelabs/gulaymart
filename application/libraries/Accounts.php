@@ -158,11 +158,7 @@ class Accounts {
 			if (isset($post['name'])) {
 				$fullname = explode(' ', trim($post['name']));
 				if (count($fullname)) {
-					$fbprofile = $this->class->db->get_where('user_profiles', [
-						'firstname' => $fullname[0], 
-						'lastname' => $fullname[count($fullname)-1], 
-						'user_id' => $user['id'],
-					]);
+					$fbprofile = $this->class->db->get_where('user_profiles', ['user_id' => $user['id']]);
 					if ($fbprofile->num_rows() == 0) {
 						$this->class->db->insert('user_profiles', [
 							'firstname' => $fullname[0],
