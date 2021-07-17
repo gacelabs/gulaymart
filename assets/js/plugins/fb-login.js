@@ -45,11 +45,7 @@ $(document).ready(function() {
 		} else {
 			switch (status) {
 				case "not_authorized": case "unknown":
-					console.log(fb_acc_response);
-				break;
-				default:
 					FB.login(function(response) {
-						console.log(response);
 						fb_acc_response = response;
 					}, {scope: 'public_profile, email'});
 				break;
