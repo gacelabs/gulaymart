@@ -45,6 +45,7 @@ $(document).ready(function() {
 		});
 	} else {
 		FB.login(function(response) {
+			console.log(response);
 			fb_acc_response = response;
 		}, {scope: 'public_profile, email'});
 		$('[href="sign-out"]').bind('click', function(e) {
