@@ -1,9 +1,9 @@
 
 $(document).ready(function() {
-	if (oUser == false) {
-		FB.getLoginStatus(function(response) {
-			fb_acc_response = response;
-			var status = response.status;
+	FB.getLoginStatus(function(response) {
+		fb_acc_response = response;
+		var status = response.status;
+		if (oUser == false) {
 			switch (status) {
 				case "connected":
 					$('.onlogged-out-btn').addClass('hide');
@@ -33,48 +33,42 @@ $(document).ready(function() {
 					$('.fb-signing-in').addClass('hide');
 				break;
 			}
-		});
-		$('.fb-login-btn').off('click').on('click', function(e) {
-			FB.login(function(response) {
-				console.log(response);
-				fb_acc_response = response;
-				if (response.status === 'connected') {
-					runFbLogin();
-				}
-			}, {scope: 'public_profile, email'});
-		});
-	} else {
-		FB.getLoginStatus(function(response) {
-			fb_acc_response = response;
-			switch (response.status) {
+			$('.fb-login-btn').off('click').on('click', function(e) {
+				FB.login(function(response) {
+					console.log(response);
+					fb_acc_response = response;
+					if (response.status === 'connected') {
+						runFbLogin();
+					}
+				}, {scope: 'public_profile, email'});
+			});
+		} else {
+			switch (status) {
 				case "not_authorized": case "unknown":
-					FB.login(function(response) {
-						fb_acc_response = response;
-					}, {scope: 'public_profile, email'});
+					console.log(fb_acc_response);
 				break;
 			}
-		});
-		$('[href="sign-out"]').bind('click', function(e) {
-			e.preventDefault();
-			var oThis = $(e.target);
-			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-			// console.log(FB.getUserID());
-			if (FB.getUserID() != '') {
-				logOutFacebook();
-			} else {
-				window.location = oThis.attr('href');
-			}
-		});
-	}
+			$('[href="sign-out"]').bind('click', function(e) {
+				e.preventDefault();
+				var oThis = $(e.target);
+				if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
+				// console.log(FB.getUserID());
+				if (FB.getUserID() != '') {
+					logOutFacebook();
+				} else {
+					window.location = oThis.attr('href');
+				}
+			});
+		}
+	});
 });
 
 var runFbLogin = function(already) {
-	/*FB.api('/me?fields=id,email,name', function(data) {
-		console.log(data);
+	FB.api('/me?fields=id,email,name', function(data) {
 		if (already == undefined) {
 			simpleAjax('authenticate/fb_login', data);
 		}
-	});*/
+	});
 };
 
 var logOutFacebook = function() {
