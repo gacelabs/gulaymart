@@ -21,8 +21,8 @@ $(document).ready(function() {
 			e.preventDefault();
 			var oThis = $(e.target);
 			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
-			// console.log(FB.getUserID());
-			if (FB.getUserID() != '') {
+			// console.log(FB.getAccessToken());
+			if (FB.getAccessToken() != '') {
 				logOutFacebook(oThis);
 			} else {
 				// window.location = oThis.attr('href');
