@@ -59,7 +59,7 @@ $(document).ready(function() {
 			var oThis = $(e.target);
 			if (oThis.prop('tagName') != 'A') oThis = $(e.target).parents('a');
 			// console.log(FB.getUserID());
-			if (FB.getUserID() != null) {
+			if (FB.getUserID() != '') {
 				logOutFacebook();
 			} else {
 				window.location = oThis.attr('href');
