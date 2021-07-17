@@ -2,7 +2,7 @@ $(document).ready(function() {
 	if (oUser == false) {
 		$('.fb-login-btn').off('click').on('click', function(e) {
 			FB.login(function(response) {
-				console.log(response);
+				// console.log(response);
 				fb_acc_response = response;
 				if (response.status === 'connected') {
 					$('#login_modal').find('[data-dismiss="modal"]').addClass('hide');

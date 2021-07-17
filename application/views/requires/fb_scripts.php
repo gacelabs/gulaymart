@@ -4,6 +4,7 @@
 		FB.init({
 			appId	: '<?php echo FB_APPID;?>',
 			cookie	: true,
+			status	: true,
 			xfbml	: true,
 			version	: '<?php echo FB_VERSION;?>'
 		});
