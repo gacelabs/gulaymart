@@ -138,14 +138,9 @@ class Accounts {
 		// debug($post);
 		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
 			if (!isset($post['email'])) $post['email'] = $post['id'].'@facebook.com';
-			/*user is logging in*/
-			$fbuser = $this->class->db->get_where('users', ['email_address' => $post['email']]);
-			if ($fbuser->num_rows() > 0) {
-				$user = $fbuser->row_array();
-				if (empty($user['fb_id'])) {
-					$this->class->db->update('users', ['fb_id' => $post['id']], ['id' => $user['id']]);
-				}
-			} else { /*register this user*/
+
+			$fbuser = $this->class->db->get_where('users', ['fb_id' => $post['id']]);
+			if ($fbuser->num_rows() == 0) {
 				$this->class->db->insert('users', [
 					'fb_id' => $post['id'],
 					'email_address' => $post['email'],
@@ -153,6 +148,11 @@ class Accounts {
 				$id = $this->class->db->insert_id();
 				$qry = $this->class->db->get_where('users', ['id' => $id]);
 				$user = $qry->row_array();
+			} else {
+				$user = $fbuser->row_array();
+				if (empty($user['email_address'])) {
+					$this->class->db->update('users', ['email_address' => $post['email']], ['id' => $user['id']]);
+				}
 			}
 
 			if (isset($post['name'])) {
