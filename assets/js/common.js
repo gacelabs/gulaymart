@@ -190,7 +190,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 	}
 }
 
-var ajaxSuccessResponse = function(response) {
+var ajaxSuccessResponse = function(response, e) {
 	// console.log(response);
 	var bConfirmed = true;
 	if (response && response.type && response.type.length && response.message.length) {
@@ -205,8 +205,8 @@ var ajaxSuccessResponse = function(response) {
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
-				// console.log(response.callback, 'function');
-				fn(response.data);
+				console.log(response.callback, 'function');
+				fn(response.data, e);
 			}
 		}
 	}

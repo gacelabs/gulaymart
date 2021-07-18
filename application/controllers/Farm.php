@@ -195,6 +195,9 @@ class Farm extends MY_Controller {
 								$passed = 1;
 								$message = 'Product Succesfully Added!';
 								$successFunction = 'redirectNewProduct';
+								/*email admins here*/
+								$content = '<p>'.$message.'</p><p>Check product <a href="'.base_url('farm/save-veggy/'.$product_id.'/').'">here</a>.</p>';
+								send_gm_email($profile['id'], $content);
 							}
 						} else {
 							$passed = 0;
@@ -250,6 +253,7 @@ class Farm extends MY_Controller {
 		if ($post AND $id > 0) {
 			if (check_data_values($post)) {
 				// debug($post, $_FILES, 'stop');
+				$product = $this->products->get(['id' => $id])[0];
 				if (isset($post['products'])) {
 					$products = $post['products'];
 					if ($this->products->save($products, ['id' => $id])) {
@@ -317,9 +321,16 @@ class Farm extends MY_Controller {
 							$this->products->save(['activity' => $post['activity']], ['id' => $id]);
 						}
 					}
+					/*email admins here*/
+					$content = '<p>Product saved!</p><p>It is now being reviewed for approval.</p><p>Please check product <a href="'.base_url('farm/save-veggy/'.$id.'/'.strtolower($product['name'])).'">here</a>.</p>';
+					// debug($content, 'stop');
+					if (send_gm_email($this->accounts->profile['id'], $content)) {
+						send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content);
+					}
 				}
 				$post['product_id'] = $id;
 				$post['updated'] = 1;
+				$post['products'] = $product;
 				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
 			}
@@ -361,11 +372,18 @@ class Farm extends MY_Controller {
 
 	public function remove_veggy($id=0, $name='')
 	{
-		$post = $this->input->post();
-		if ($post) {
+		$post = $this->input->post() ? $this->input->post() : $this->input->get();
+		if ($post AND !isset($post['_']) AND !isset($post['callback'])) {
 			if (check_data_values($post)) {
+				// unset($post['_']); unset($post['callback']);
 				// debug($post, 'stop');
 				$this->products->save(['activity' => 2], $post);
+				/*email admins here*/
+				$content = remove_multi_space('<p>Product '.$name.' has been removed.</p>', true);
+				// debug($content, 'stop');
+				if (send_gm_email($this->accounts->profile['id'], $content)) {
+					send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content);
+				}
 				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
 			}
 			$this->set_response('error', remove_multi_space('Unable to remove '.$name.' product'), $post);

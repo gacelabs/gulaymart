@@ -464,20 +464,29 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 {
 	$ci =& get_instance();
 	if ($user_id AND $datestamp AND $content) {
-		// send message to the user has to replenish the needed stocks for delivery
-		$check_msgs = $ci->gm_db->get('messages', [
-			'tab' => $tab, 'type' => $type,
-			'user_id' => $user_id, 'unread' => 1,
-			'datestamp' => $datestamp,
-			'content' => $content,
-		], 'row');
-		if ($check_msgs == false) {
-			$ci->gm_db->new('messages', [
+		$settings = false;
+		if (strtolower($type) == 'orders' AND strtolower($tab) == 'notifications') {
+			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_email', 'value' => 'checked']);
+		} elseif (strtolower($tab) == 'notifications' AND strtolower($type) == 'inventory') {
+			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_cp', 'value' => 'checked']);
+		}
+		// debug($settings, 'stop');
+		if ($settings) {
+			// send message to the user has to replenish the needed stocks for delivery
+			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
-				'user_id' => $user_id, 'datestamp' => $datestamp,
+				'user_id' => $user_id, 'unread' => 1,
+				'datestamp' => $datestamp,
 				'content' => $content,
-			]);
-			return true;
+			], 'row');
+			if ($check_msgs == false) {
+				$ci->gm_db->new('messages', [
+					'tab' => $tab, 'type' => $type,
+					'user_id' => $user_id, 'datestamp' => $datestamp,
+					'content' => $content,
+				]);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -490,16 +499,20 @@ function send_gm_email($user_id=false, $content=false, $subject='Email Notificat
 		$user = $ci->gm_db->get('users', ['id' => $user_id], 'row');
 		// debug($post, 'stop');
 		if ($user AND filter_var($user['email_address'], FILTER_VALIDATE_EMAIL)) {
-			$mail = $ci->smtpemail->setup();
-			$email = ['email_body_message' => $content];
-			$email['email_subject'] = $subject;
-			$email['email_to'] = $user['email_address'];
-			$email['email_bcc'] = ['sirpoigarcia@gmail.com', 'gacelabs.inc@gmail.com'];
-			// debug($email, 'stop');
-
-			// $mail->debug = TRUE;
-			$return = $mail->send($email, 5/*, TRUE*/); /*send after 5 mins*/
-			// debug($return, 'stop');
+			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_cp', 'value' => 'checked']);
+			// debug($settings, 'stop');
+			if ($settings) {
+				$mail = $ci->smtpemail->setup('admin');
+				$email = ['email_body_message' => $content];
+				$email['email_subject'] = $subject;
+				$email['email_to'] = $user['email_address'];
+				$email['email_bcc'] = ['sirpoigarcia@gmail.com', 'gacelabs.inc@gmail.com'];
+				// debug($email, 'stop');
+				// $mail->debug = TRUE;
+				$return = $mail->send($email, false, true);
+				// debug($return, 'stop');
+				return $return;
+			}
 		}
 	}
 	return false;

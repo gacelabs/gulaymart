@@ -47,16 +47,40 @@ $(document).ready(function() {
 	$('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault();
 		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
+		var isJsonPCallback = $(e.target).data('call-jsonp') != undefined ? $(e.target).data('call-jsonp') : 1;
 		var oSettings = {
 			url: e.target.href,
 			type: 'get',
 			data: oData,
-			dataType: 'jsonp',
-			jsonpCallback: 'gmCall',
+			dataType: 'json',
+			success: function(response) {
+				var bConfirmed = true;
+				if (response && response.type && response.type.length && response.message.length) {
+					bConfirmed = runAlertBox(response, undefined, bConfirmed);
+				}
+				if (bConfirmed) {
+					setTimeout(function() {
+						if (response && (typeof response.redirect == 'string')) {
+							if (response.redirect) window.location = response.redirect;
+						}
+					}, 3000);
+					if (response && (typeof response.callback == 'string')) {
+						var fn = eval(response.callback);
+						if (typeof fn == 'function') {
+							// console.log(response.callback, 'function');
+							fn(response.data, e);
+						}
+					}
+				}
+			},/*
 			error: function(xhr, status, thrown) {
 				console.log(status, thrown);
-			}
+			}*/
 		};
+		if (isJsonPCallback) {
+			oSettings.dataType = 'jsonp';
+			oSettings.jsonpCallback = 'gmCall';
+		}
 		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
 		oPauseAjax = $.ajax(oSettings);
 	});

@@ -87,22 +87,24 @@ class Orders extends MY_Controller {
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
-				$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
-				if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
-					$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
-					$message['product']['farm_location_id'] = $message['entity_id'];
-					$message['location'] = $this->gm_db->get('products_location', [
-						'product_id' => $message['page_id'],
-						'farm_location_id' => $message['entity_id']
-					], 'row');
-					$message['bought'] = $this->gm_db->count('baskets', [
-						'user_id' => $message['user_id'],
-						'product_id' => $message['page_id'],
-						'status >' => 2,
-					]);
-					$message['photo'] = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'is_main' => 1], 'row');
+				if ($message['unread'] == 1) {
+					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
+					if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
+						$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
+						$message['product']['farm_location_id'] = $message['entity_id'];
+						$message['location'] = $this->gm_db->get('products_location', [
+							'product_id' => $message['page_id'],
+							'farm_location_id' => $message['entity_id']
+						], 'row');
+						$message['bought'] = $this->gm_db->count('baskets', [
+							'user_id' => $message['user_id'],
+							'product_id' => $message['page_id'],
+							'status >' => 2,
+						]);
+						$message['photo'] = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'is_main' => 1], 'row');
+					}
+					$data_messages[$message['tab']][] = $message;
 				}
-				$data_messages[$message['tab']][] = $message;
 			}
 		}
 		// debug($data_messages, 'stop');
