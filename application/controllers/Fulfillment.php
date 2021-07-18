@@ -16,7 +16,7 @@ class Fulfillment extends My_Controller {
 		}
 		$this->load->library('farmers');
 		// INITIALIZING TOKTOK OBJECT
-		// $this->load->library('toktokapi');
+		// $this->load->library('ToktokApi');
 		// debug($this->toktokapi, 'stop');
 	}
 
@@ -200,7 +200,7 @@ class Fulfillment extends My_Controller {
 
 	public function check_fulfillments()
 	{
-		$this->load->library('toktokapi');
+		$this->load->library('ToktokApi');
 		// debug($this->toktokapi, 'stop');
 		$this->toktokapi->check_delivery();
 	}

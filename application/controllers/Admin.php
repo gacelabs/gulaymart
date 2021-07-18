@@ -11,7 +11,7 @@ class Admin extends MY_Controller {
 		parent::__construct();
 		$this->load->library('baskets');
 		// INITIALIZING TOKTOK OBJECT
-		// $this->load->library('toktokapi');
+		// $this->load->library('ToktokApi');
 		// debug($this->toktokapi, 'stop');
 		$this->load->library('accounts');
 		if ($this->accounts->has_session AND $this->accounts->profile['is_admin'] != 1) {
@@ -116,7 +116,7 @@ class Admin extends MY_Controller {
 			]);
 			// debug($automation_settings, $toktok_data, 'stop');
 			if ($toktok_data) {
-				$this->load->library('toktokapi');
+				$this->load->library('ToktokApi');
 				// $this->toktokapi->check_delivery();
 				/*do not start if switch is off*/
 				if ($set['switch'] == 1) {
@@ -276,7 +276,7 @@ class Admin extends MY_Controller {
 					$operator = $this->gm_db->get('operators', ['id' => $toktok['operator'], 'active' => 1], 'row');
 					// debug($operator, 'stop');
 					if ($operator) {
-						$this->load->library('toktokapi');
+						$this->load->library('ToktokApi');
 						$pricing = toktok_price_directions_format([
 							'sender_lat' => $toktok_post['f_sender_address_lat'],
 							'sender_lng' => $toktok_post['f_sender_address_lng'],

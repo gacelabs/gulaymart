@@ -11,7 +11,7 @@ class Orders extends MY_Controller {
 		parent::__construct();
 		$this->load->library('baskets');
 		// INITIALIZING TOKTOK OBJECT
-		// $this->load->library('toktokapi');
+		// $this->load->library('ToktokApi');
 		// debug($this->toktokapi, 'stop');
 	}
 

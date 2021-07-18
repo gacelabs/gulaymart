@@ -299,7 +299,7 @@ class Api extends MY_Controller {
 			// debug($baskets_merge_data, 'stop');
 			$baskets_merge_ids = [];
 			if ($baskets_merge_data) {
-				$this->load->library('toktokapi');
+				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
 				foreach ($baskets_merge_data as $key => $data) {
 					$toktok_status = '';
@@ -386,7 +386,7 @@ class Api extends MY_Controller {
 			// debug($baskets_merge_data, 'stop');
 			$baskets_ids = [];
 			if ($baskets_merge_data) {
-				$this->load->library('toktokapi');
+				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
 				foreach ($baskets_merge_data as $key => $data) {
 					$toktok_status = '';

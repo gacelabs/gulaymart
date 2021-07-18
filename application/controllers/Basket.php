@@ -11,7 +11,7 @@ class Basket extends My_Controller {
 		parent::__construct();
 		$this->load->library('baskets');
 		// INITIALIZING TOKTOK OBJECT
-		// $this->load->library('toktokapi');
+		// $this->load->library('ToktokApi');
 		// debug($this->toktokapi, 'stop');
 	}
 
@@ -245,7 +245,7 @@ class Basket extends My_Controller {
 					$seller = $items_by_farm[$basket['location_id']]['seller'] = $farm;
 					$checkout_pricing = $this->session->userdata('checkout_pricing_'.$basket['location_id']);
 					if (empty($checkout_pricing)) {
-						$this->load->library('toktokapi');
+						$this->load->library('ToktokApi');
 						/*get toktok fee if not existing in baskets table*/
 						$pricing = toktok_price_directions_format([
 							'sender_lat' => $seller['lat'],
@@ -439,7 +439,7 @@ class Basket extends My_Controller {
 	private function book_delivery()
 	{
 		// DELIVERY POSTING
-		$this->load->library('toktokapi');
+		$this->load->library('ToktokApi');
 		$params = [
 			'f_id' => 'D1F36MSKT4',
 			// 'referral_code' => 'PPS8083189',
@@ -547,7 +547,7 @@ class Basket extends My_Controller {
 
 	private function check_delivery($driver_id='', $order_status='', $searchstring='D1F2444PJ8')
 	{
-		$this->load->library('toktokapi');
+		$this->load->library('ToktokApi');
 		parse_str('draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=6&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=true&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B7%5D%5Bdata%5D=7&columns%5B7%5D%5Bname%5D=&columns%5B7%5D%5Bsearchable%5D=true&columns%5B7%5D%5Borderable%5D=false&columns%5B7%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B7%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B8%5D%5Bdata%5D=8&columns%5B8%5D%5Bname%5D=&columns%5B8%5D%5Bsearchable%5D=true&columns%5B8%5D%5Borderable%5D=false&columns%5B8%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B8%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B9%5D%5Bdata%5D=9&columns%5B9%5D%5Bname%5D=&columns%5B9%5D%5Bsearchable%5D=true&columns%5B9%5D%5Borderable%5D=false&columns%5B9%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B9%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B10%5D%5Bdata%5D=10&columns%5B10%5D%5Bname%5D=&columns%5B10%5D%5Bsearchable%5D=true&columns%5B10%5D%5Borderable%5D=false&columns%5B10%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B10%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B11%5D%5Bdata%5D=11&columns%5B11%5D%5Bname%5D=&columns%5B11%5D%5Bsearchable%5D=true&columns%5B11%5D%5Borderable%5D=false&columns%5B11%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B11%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=0&order%5B0%5D%5Bdir%5D=DESC&start=0&length=10&search%5Bvalue%5D=&search%5Bregex%5D=false&date_from=03%2F30%2F2021&date_to=04%2F06%2F2021&driver_id='.$driver_id.'&order_status='.$order_status.'&searchstring='.$searchstring, $output);
 		// debug($output, 'stop');
 
@@ -599,7 +599,7 @@ class Basket extends My_Controller {
 		// delivery_origin: toktok = 0, toktok food = 1
 		// searchstring: <place to search>
 		/*GET deliveries today on specific place*/
-		$this->load->library('toktokapi');
+		$this->load->library('ToktokApi');
 		$this->toktokapi->app_request('active_places', [
 			'filter_method' => '6',
 			'delivery_origin' => '0',

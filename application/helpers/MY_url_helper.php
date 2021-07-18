@@ -252,7 +252,7 @@ function add_item_to_basket($post, $product_id)
 						'receiver_lat' => $ci->latlng['lat'],
 						'receiver_lng' => $ci->latlng['lng'],
 					]);
-					$ci->load->library('toktokapi');
+					$ci->load->library('ToktokApi');
 					$ci->toktokapi->app_request('price_and_directions', $pricing);
 					if ($ci->toktokapi->success) {
 						$price_and_directions = $ci->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
