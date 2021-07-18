@@ -34,14 +34,12 @@
 								<?php foreach ($data['messages']['Notifications'] as $tab => $message): ?>
 									<div class="notif-item">
 										<div class="notif-item-top">
-											<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y', $message['datestamp']);?></span> </p>
+											<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y | ', $message['datestamp']) . date('g:i a', strtotime($message['added']));?></span> </p>
 										</div>
 										<div class="notif-item-middle">
-											<p>
-												<?php if ($message['unread']): ?><strong><?php endif ?>
-												<?php echo $message['content'];?>
-												<?php if ($message['unread']): ?></strong><?php endif ?>
-											</p>
+											<?php if ($message['unread']): ?><strong><?php endif ?>
+											<?php echo $message['content'];?>
+											<?php if ($message['unread']): ?></strong><?php endif ?>
 										</div>
 										<div class="notif-item-footer">
 											<ul class="inline-list">
@@ -62,14 +60,16 @@
 								$this->view('templates/orders/feedbacks', ['feedbacks' => $data['messages']['Feedbacks']]);
 							}
 						?>
-					<?php else: ?>
-						<div class="notif-item">
-							<div class="notif-item-middle">
-								<p>Empty</p>
-							</div>
-						</div>
 					<?php endif ?>
+
 				</div>
+					
+				<?php if ($this->gm_db->count('messages', ['unread' => [0,1]]) == 0): ?>
+					<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+						<h1>No Messages</h1>
+						<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+					</div>
+				<?php endif ?>
 			</div>
 		</div>
 	</div>
