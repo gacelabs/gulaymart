@@ -56,7 +56,13 @@
 		</div>
 		<div class="aside-nav-child">
 			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
-				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages</span>
+				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages
+					<?php 
+					$msg_count = $this->gm_db->count('messages', ['unread' => 1]);
+					if ($msg_count): ?>
+						<kbd id='nav-messages-count'><?php echo $msg_count;?></kbd>
+					<?php endif ?>
+				</span>
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
