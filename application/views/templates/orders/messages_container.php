@@ -3,9 +3,27 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 			<div class="messages-nav-grid">
-				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications</div>
-				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries</div>
-				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks</div>
+				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
+					<?php 
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications']);
+					if ($msg_count): ?>
+						<kbd id='msg_notifications-count'><?php echo $msg_count;?></kbd>
+					<?php endif ?>
+				</div>
+				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries
+					<?php 
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries']);
+					if ($msg_count): ?>
+						<kbd id='msg_inquiries-count'><?php echo $msg_count;?></kbd>
+					<?php endif ?>
+				</div>
+				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
+					<?php 
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Feedbacks']);
+					if ($msg_count): ?>
+						<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
+					<?php endif ?>
+				</div>
 			</div>
 
 			<div id="link_panel_top">
