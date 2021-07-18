@@ -533,7 +533,7 @@ class Products {
 			}
 
 			$updated = $product['updated'];
-			$product['activity'] = $product['activity'] == 1 ? 'Published' : ($product['activity'] == 0 ? 'Draft' : 'Rejected');
+			$product['activity'] = $product['activity'] == 1 ? 'Published' : ($product['activity'] == 0 ? 'Draft' : ($product['activity'] == 3 ? 'Deleted' : 'Rejected'));
 
 			$display = false;
 			if ($except_field) {

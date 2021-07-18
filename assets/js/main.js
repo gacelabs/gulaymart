@@ -118,12 +118,12 @@ $(document).ready(function() {
 	$('#main-obj-script').remove();
 
 	if ($('.render-datatable').length) {
+		if ($.fn.dataTable != undefined) $.fn.dataTable.ext.errMode = 'none';
 		$(document.body).find('table').each(function(i, elem) {
-			if ($.fn.dataTable != undefined) $.fn.dataTable.ext.errMode = 'none';
 			var text = $.trim($(elem).find('tr:first th:first').text());
 			// console.log(text);
 			var blanks = {targets: []}, currency = {targets: []};
-			if ($.inArray(text.toLowerCase(), ['action','activity']) >= 0) {
+			/*if ($.inArray(text.toLowerCase(), ['actions','activity']) >= 0) {
 				if (blanks.orderable == undefined) blanks.orderable = false;
 				blanks.targets.push(i);
 			}
@@ -131,12 +131,27 @@ $(document).ready(function() {
 			if ($.inArray(text2.toLowerCase(), ['photo','image','']) >= 0) {
 				var last_cnt = $(elem).find('tr:first th').length - 1;
 				blanks.targets.push(last_cnt);
-			}
-			var text3 = $.trim($(elem).find('tr:first th:last').text()), aaSort = 1, aaSortDir = 'asc';
-			if ($.inArray(text3.toLowerCase(), ['updated']) >= 0) {
+			}*/
+			var /*text3 = $.trim($(elem).find('tr:first th:last').text()),*/ aaSort = 1, aaSortDir = 'asc';
+			/*if ($.inArray(text3.toLowerCase(), ['updated']) >= 0) {
 				aaSort = $(elem).find('tr:first th').length - 1;
 				aaSortDir = 'desc';
-			}
+			}*/
+			$(elem).find('tr:first th').each(function(i, unit) {
+				var text = $.trim($(unit).text());
+				if ($.inArray(text.toLowerCase(), ['actions'/*,'activity'*/]) >= 0) {
+					if (blanks.orderable == undefined) blanks.orderable = false;
+					blanks.targets.push(i);
+				}
+				if ($.inArray(text.toLowerCase(), ['photo','image','']) >= 0) {
+					var last_cnt = $(elem).find('tr:first th').length - 1;
+					blanks.targets.push(last_cnt);
+				}
+				if ($.inArray(text.toLowerCase(), ['updated']) >= 0) {
+					aaSort = $(elem).find('tr:first th').length - 1;
+					aaSortDir = 'desc';
+				}
+			});
 			// console.log(blanks, last_cnt);
 			oSettings = {
 				// stateSave: true,

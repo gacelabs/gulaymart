@@ -1679,14 +1679,14 @@ function operatorlogger($data=false, $operator=false)
 	fclose($logfile);
 }
 
-function get_items($table='products', $where=[], $limit=20)
+function get_products($where=[], $limit=20)
 {
 	$ci =& get_instance();
 	$items_locations = $ci->gm_db->get('products_location');
 	$items = [];
 
 	if ($items_locations) {
-		if ($ci->db->field_exists('activity', $table)) $where['activity'] = [0,2];
+		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [0,2,3];
 		foreach ($items_locations as $index => $location) {
 			$where['id'] = $location['product_id'];
 			$item = $ci->gm_db->get_in('products', $where, 'row');

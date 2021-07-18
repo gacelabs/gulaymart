@@ -34,7 +34,7 @@
 					<?php endif ?>
 					<tr>
 						<th style="vertical-align: top;">Activity:&nbsp;</th>
-						<td><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : 'Drafted');?></td>
+						<td><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : ($data['activity'] == 3 ? 'Deleted' : 'Drafted'));?></td>
 					</tr>
 				</table>
 				<p class="messages"></p>
