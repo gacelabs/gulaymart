@@ -53,6 +53,8 @@ var removeItem = function(id) {
 
 var removeOnTable = function(data) {
 	if (data && data.id) {
-		$('tr[product_id='+data.id+']').fadeOut();
+		$('tr[product_id='+data.id+']').fadeOut('fast', function() {
+			$('#inventory_table').DataTable().row($(this)).remove().draw();
+		});
 	}
 }

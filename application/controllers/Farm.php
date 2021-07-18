@@ -373,11 +373,11 @@ class Farm extends MY_Controller {
 	public function remove_veggy($id=0, $name='')
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		if ($post AND !isset($post['_']) AND !isset($post['callback'])) {
+		if ($post AND !isset($post['_'])) {
 			if (check_data_values($post)) {
 				// unset($post['_']); unset($post['callback']);
 				// debug($post, 'stop');
-				$this->products->save(['activity' => 2], $post);
+				$this->products->save(['activity' => 3], $post);
 				/*email admins here*/
 				$content = remove_multi_space('<p>Product '.$name.' has been removed.</p>', true);
 				// debug($content, 'stop');
@@ -530,7 +530,7 @@ class Farm extends MY_Controller {
 				'js' => ['farm/main', 'plugins/DataTables/datatables.min', 'dashboard/main'],
 			],
 			'data' => [
-				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id']]),
+				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id'], 'activity' => [0,1,2]]),
 				'field_lists' => ['ACTIONS', 'NAME', 'ACTIVITY', 'CATEGORY', 'SUBCATEGORY', 'LOCATIONS', 'UPDATED'],
 			],
 		]);
