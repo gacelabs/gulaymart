@@ -20,13 +20,15 @@
 					<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My city is</span>
 					<input type="text" class="form-control" id="check-place" placeholder="Search City ..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
 				</div>
-				<div class="text-center" style="margin-top:20px;background-color:#eaeaea;padding:15px;border-radius:4px;">
-					<p>━ OR ━</p>
-					<ul class="inline-list">
-						<li data-dismiss="modal" data-toggle="modal" data-target="#login_modal"><button class="btn btn-default btn-sm">Log In</button></li>
-						<li><a href="register/" class="btn btn-default btn-sm icon-right">Register</a></li>
-					</ul>
-				</div>
+				<?php if (!$current_profile): ?>
+					<div class="text-center" style="margin-top:20px;background-color:#eaeaea;padding:15px;border-radius:4px;">
+						<p>━ OR ━</p>
+						<ul class="inline-list">
+							<li data-dismiss="modal" data-toggle="modal" data-target="#login_modal"><button class="btn btn-default btn-sm">Log In</button></li>
+							<li><a href="register/" class="btn btn-default btn-sm icon-right">Register</a></li>
+						</ul>
+					</div>
+				<?php endif ?>
 			</div>
 		</div>
 	</div>
