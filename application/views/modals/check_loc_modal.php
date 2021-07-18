@@ -2,6 +2,9 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
+				<?php if (!empty(get_cookie('prev_latlng', true))): ?>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<?php endif ?>
 				<h4 class="modal-title">Check Location</h4>
 			</div>
 			<div class="modal-body">
