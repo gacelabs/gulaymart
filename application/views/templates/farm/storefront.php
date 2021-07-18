@@ -30,7 +30,7 @@
 			<div class="col-lg-5 col-md-5 col-sm-12 hidden-xs" id="storefront_customs_parent">
 				<div class="dashboard-panel theme">
 					<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
-						<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id');?>">
+						<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id', 0);?>">
 						<div class="dashboard-panel-top">
 							<h4>Storefront Customs</h4>
 							<ul class="spaced-list between" style="margin-top: 15px;">
