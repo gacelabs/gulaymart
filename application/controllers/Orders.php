@@ -87,7 +87,7 @@ class Orders extends MY_Controller {
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
-				if ($message['unread'] == 1) {
+				if (in_array($message['unread'], [0,1])) {
 					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
 					if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 						$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
