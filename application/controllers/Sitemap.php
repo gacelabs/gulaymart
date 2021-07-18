@@ -11,7 +11,7 @@ class Sitemap extends MY_Controller {
 			'lastmod' => date('Y-m-d'),
 			'changefreq' => 'always'
 		]];
-		$products = nearby_products($this->latlng);
+		$products = $this->gm_db->get('products');
 		debug($products, 'stop');
 		if ($products) {
 			foreach ($products as $key => $product) {

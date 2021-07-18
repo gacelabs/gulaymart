@@ -308,18 +308,22 @@
 							<!-- <li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li> -->
 						</ul>
 						<div class="product-list-card">
-							<div class="product-list-photo order-photo" style="background-image:url('https://place-hold.it/360x360.png?text=Upload+Product+Images&fontsize=14');">
+							<div class="product-list-photo order-photo" style="background-image:url('<?php identify_main_photo($data['product']);?>');">
 							</div>
 							<div class="product-desc-body">
 								<div class="product-title-container ellipsis-container">
-									<h1 class="zero-gaps order-title">Product name</h1>
+									<h1 class="zero-gaps order-title"><?php check_value('name', $data['product']);?></h1>
 								</div>
 							</div>
 							<div class="product-list-footer">
-								<ul class="spaced-list between">
-									<li><p class="product-price">₱ <span class="order-price">120</span> / <span class="order-unit">Kilogram</span></p></li>
-									<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration">30 mins</span></p></li>
-								</ul>
+							<?php if ($data['product']['latlng']): ?>
+								<?php foreach ($data['product']['latlng'] as $key => $prod): ?>
+									<ul class="spaced-list between">
+										<li><p class="product-price">₱ <span class="order-price"><?php echo $prod['price'];?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
+										<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration"><?php echo ucwords($prod['duration']);?></span></p></li>
+									</ul>
+								<?php endforeach ?>
+							<?php endif ?>
 							</div>
 						</div>
 						<div class="new-veggy-status-container">

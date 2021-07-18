@@ -57,7 +57,7 @@
 										</div>
 									<?php endforeach ?>
 								<?php else: ?>
-									Be the first to make a feedback. Buy Now!
+									Be the first to make a feedback. <button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button>
 								<?php endif ?>
 
 								<?php if ($can_comment): ?>
