@@ -18,7 +18,7 @@
 
 				<div class="input-group">
 					<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My city is</span>
-					<input type="text" class="form-control" id="check-place" placeholder="" aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+					<input type="text" class="form-control" id="check-place" placeholder="Search City ..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
 				</div>
 				<div class="text-center" style="margin-top:20px;background-color:#eaeaea;padding:15px;border-radius:4px;">
 					<p>━ OR ━</p>

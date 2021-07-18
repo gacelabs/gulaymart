@@ -99,7 +99,7 @@ function modalCallbacks() {
 			break;
 			case 'check_loc_modal':
 				var input = $('#check-place').get(0);
-				input.focus();
+				// input.focus();
 				var i = setInterval(function() {
 					if (typeof google != 'undefined') {
 						clearInterval(i);
