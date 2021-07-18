@@ -166,7 +166,11 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 			},
 			success: function(response) {
 				if (response) {
-					response.data.elem = ui;
+					if (response.data != undefined) {
+						response.data.elem = ui;
+					} else if (response) {
+						response.elem = ui;
+					}
 					ajaxSuccessResponse(response);
 				}
 			},

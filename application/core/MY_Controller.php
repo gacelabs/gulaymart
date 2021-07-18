@@ -227,7 +227,7 @@ class MY_Controller extends CI_Controller {
 		];
 		// debug($this->uri->segment(1), 'stop');
 		if (!$this->accounts->has_session) {
-			if ($this->uri->segment(1) != 'register') {
+			if (!in_array($this->uri->segment(1), ['register','support'])) {
 				$view['top']['css'][] = 'marquee';
 				$view['bottom']['modals'][] = 'check_loc_modal';
 				$view['bottom']['js'][] = 'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places';

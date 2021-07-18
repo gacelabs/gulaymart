@@ -471,7 +471,7 @@ class Api extends MY_Controller {
 				$where = ['id' => $id];
 				$message = ''; // No errors
 			} elseif (is_string($id)) {
-				$where = json_decode($id);
+				$where = json_decode($id, true);
 				switch (json_last_error()) {
 					case JSON_ERROR_NONE:
 						$message = ''; // No errors
