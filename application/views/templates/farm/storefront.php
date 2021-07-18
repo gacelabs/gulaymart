@@ -148,8 +148,6 @@
 													}
 													if ($farm_locations) {
 														$shipping['id'] = $farm_locations[$key]['id'];
-													} else {
-														$shipping['id'] = 0;
 													}
 													?>
 													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="margin-bottom: 5px;"<?php endif ?>>
