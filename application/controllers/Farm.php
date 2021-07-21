@@ -400,7 +400,7 @@ class Farm extends MY_Controller {
 			// debug($post, 'stop');
 			if ($profile) {
 				$user_id = $profile['id'];
-				$farm_id = 0;
+				$farm_id = $farm_location_id = 0;
 				$first_save = false;
 				if (isset($post['user_farms'])) {
 					$farm_id = isset($post['user_farms']['id']) ? $post['user_farms']['id'] : 0;
@@ -470,6 +470,15 @@ class Farm extends MY_Controller {
 				if ($this->farms) $message = 'Storefront Succesfully Updated!';
 					
 				if ($first_save) {
+					/*email admins here*/
+					$user_farm = $this->gm_db->get('user_farms', ['id' => $farm_id], 'row');
+					if ($user_farm) {
+						$content = '<p>You have created your Storefront!</p><p>Please check it <a href="'.base_url('store/'.$farm_id.'/'.$farm_location_id.'/'.strtolower($user_farm['name'])).'">here</a>.</p>';
+						// debug($content, 'stop');
+						if (send_gm_email($profile['id'], $content)) {
+							send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content);
+						}
+					}
 					$this->set_response('info', $message, $post, 'farm/storefront');
 				} else {
 					$this->set_response('info', $message, $post, false, 'refreshStorePreview');
@@ -572,6 +581,7 @@ class Farm extends MY_Controller {
 				$user_farm['farm_location_id'] = $farm_location_id;
 			} else {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
+				$farm_location_id = $user_farm['farm_location_id'] = ($farm_location ? $farm_location['id'] : 0);
 			}
 			$data = [
 				'farm' => $user_farm,

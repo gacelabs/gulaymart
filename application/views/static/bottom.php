@@ -47,15 +47,14 @@
 		<?php endif ?>
 
 		<script type="text/javascript">
-			/*if ('serviceWorker' in navigator) {
-				console.log("Will the service worker register?");
+			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('sw.js')
 				.then(function(reg){
-					console.log("Yes, it did.");
+					console.log("Service Worker registered", reg);
 				}).catch(function(err) {
-					console.log("No it didn't. This happened:", err)
+					console.log("Issue happened", err);
 				});
-			}*/
+			}
 		</script>
 	</body>
 </html>

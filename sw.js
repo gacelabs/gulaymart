@@ -8,9 +8,9 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function(event) {
 	console.log("fetched");
-	event.respondWith(
+	/*event.respondWith(
 		fetch(event.request).catch(function() {
 			return caches.match(event.request);
 		})
-	);
+	);*/
 });
