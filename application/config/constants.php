@@ -128,3 +128,18 @@ defined('MARKETPLACE_MAX_FARMERS') OR define('MARKETPLACE_MAX_FARMERS', 24);
 
 defined('RECAPTCHA_KEY') OR define('RECAPTCHA_KEY', '6Lei4fQUAAAAANUAGGDO7bHtCeydYC93apLLdxZn');
 defined('RECAPTCHA_SECRET') OR define('RECAPTCHA_SECRET', '6Lei4fQUAAAAAHuouWMQsjHtPaaGJE201bhTkAaP');
+/*
+ * GM status:
+ * 0 = verified (checkout page)
+ * 1 = placed
+ * 2 = for pick up
+ * 3 = on delivery
+ * 4 = received
+ * 5 = cancelled
+*/
+defined('GM_VERIFIED_STATUS') OR define('GM_VERIFIED_STATUS', 0);
+defined('GM_PLACED_STATUS') OR define('GM_PLACED_STATUS', 1);
+defined('GM_FOR_PICK_UP_STATUS') OR define('GM_FOR_PICK_UP_STATUS', 2);
+defined('GM_ON_DELIVERY_STATUS') OR define('GM_ON_DELIVERY_STATUS', 3);
+defined('GM_RECEIVED_STATUS') OR define('GM_RECEIVED_STATUS', 4);
+defined('GM_CANCELLED_STATUS') OR define('GM_CANCELLED_STATUS', 5);

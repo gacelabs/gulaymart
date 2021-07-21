@@ -302,14 +302,6 @@ class Basket extends My_Controller {
 		}
 	}
 
-	/*
-	 * status:
-	 * 1 = verified (checkout page)
-	 * 2 = placed
-	 * 3 = on delivery
-	 * 4 = received
-	 * 5 = cancelled
-	*/
 	public function place_order()
 	{
 		$place_order_session = $this->session->userdata('place_order_session');

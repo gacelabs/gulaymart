@@ -48,7 +48,14 @@ class Admin extends MY_Controller {
 				'modals' => [],
 				'js' => ['admin/main'],
 			],
-			'data' => [],
+			'data' => [
+				'users_count' => $this->gm_db->count('users', ['is_admin' => 1]),
+				'farmers_count' => $this->gm_db->count('user_farms', ['user_id >' => 0]),
+				'bookings_count' => [
+					'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS]),
+					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_CANCELLED_STATUS]),
+				],
+			],
 		]);
 	}
 

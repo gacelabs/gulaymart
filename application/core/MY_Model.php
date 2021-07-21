@@ -8,7 +8,7 @@ class MY_Model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function get($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	public function get($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($table) {
 			if ($field) {
@@ -40,10 +40,10 @@ class MY_Model extends CI_Model {
 				}
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function get_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	public function get_in($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($table) {
 			if ($field) {
@@ -72,10 +72,10 @@ class MY_Model extends CI_Model {
 				}
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function get_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	public function get_not_in($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($table) {
 			if ($field) {
@@ -104,10 +104,10 @@ class MY_Model extends CI_Model {
 				}
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function get_or_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	public function get_or_in($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($where != false) {
 			if ($field) {
@@ -138,7 +138,7 @@ class MY_Model extends CI_Model {
 		return false;
 	}
 
-	public function get_or_not_in($table=FALSE, $where=FALSE, $func='result', $field=FALSE, $redirect_url='')
+	public function get_or_not_in($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($where != false) {
 			if ($field) {
@@ -169,7 +169,42 @@ class MY_Model extends CI_Model {
 		return false;
 	}
 
-	public function query($string=FALSE, $func='result')
+	public function get_join($table=false, $where=false, $join=false, $on=false, $type=false, $func='result', $field=false)
+	{
+		if ($table) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				$where = (array)$where;
+				$where['activity'] = 1;
+			}
+			if ($where) {
+				foreach ($where as $key => $row) {
+					if (is_array($row)) {
+						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
+			}
+			if ($join AND $on) {
+				$this->db->join($join, $on, ($type ?: 'left'));
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
+	public function query($string=false, $func='result')
 	{
 		if ($string) {
 			$data = $this->db->query($string);
@@ -178,10 +213,10 @@ class MY_Model extends CI_Model {
 				return $data->{$func.'_array'}();
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function new($table=FALSE, $post=FALSE, $redirect_url='')
+	public function new($table=false, $post=false, $redirect_url='')
 	{
 		if ($table AND $post) {
 			if ($this->db->field_exists('version', $table)) {
@@ -197,10 +232,10 @@ class MY_Model extends CI_Model {
 				return $insert_id;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function new_batch($table=FALSE, $post=FALSE, $redirect_url='')
+	public function new_batch($table=false, $post=false, $redirect_url='')
 	{
 		if ($table AND $post) {
 			if ($this->db->field_exists('version', $table)) {
@@ -217,10 +252,10 @@ class MY_Model extends CI_Model {
 				return $this->db->insert_id();
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function save($table=FALSE, $set=FALSE, $where=FALSE, $redirect_url='')
+	public function save($table=false, $set=false, $where=false, $redirect_url='')
 	{
 		if ($table AND $set AND $where) {
 			if ($this->db->field_exists('version', $table)) {
@@ -235,10 +270,10 @@ class MY_Model extends CI_Model {
 				return TRUE;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function save_batch($table=FALSE, $set=FALSE, $where=FALSE, $redirect_url='')
+	public function save_batch($table=false, $set=false, $where=false, $redirect_url='')
 	{
 		if ($table AND $set AND $where) {
 			if ($this->db->field_exists('version', $table)) {
@@ -258,10 +293,10 @@ class MY_Model extends CI_Model {
 				return TRUE;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
-	public function remove($table=FALSE, $where=FALSE, $redirect_url='')
+	public function remove($table=false, $where=false, $redirect_url='')
 	{
 		if ($table AND $where) {
 			$this->db->delete($table, $where);
@@ -271,7 +306,7 @@ class MY_Model extends CI_Model {
 				return TRUE;
 			}
 		}
-		return FALSE;
+		return false;
 	}
 
 	public function drop_tables()
@@ -304,7 +339,7 @@ class MY_Model extends CI_Model {
 		return false;
 	}
 
-	public function count($table=FALSE, $where=FALSE)
+	public function count($table=false, $where=false)
 	{
 		if ($table) {
 			if ($where) {

@@ -15,7 +15,7 @@
 								<i class="fa fa-id-badge"></i>Users
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>329</b></span>
+								<span><b id="users-count"><?php echo (isset($data['users_count']) ? $data['users_count'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -23,7 +23,7 @@
 								<i class="fa fa-leaf"></i>Farmers
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="farmers-count"><?php echo (isset($data['farmers_count']) ? $data['farmers_count'] : 0);?></b></span>
 							</div>
 						</div>
 					</div>
@@ -60,7 +60,7 @@
 								<i class="fa fa-check"></i>Successful
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="bookings-succeeded"><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['succeeded'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -68,7 +68,7 @@
 								<i class="fa fa-times"></i>Failed
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="bookings-failed"><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['failed'] : 0);?></b></span>
 							</div>
 						</div>
 					</div>
