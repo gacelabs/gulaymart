@@ -50,7 +50,7 @@
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('sw.js')
 				.then(function(reg){
-					console.log("Service Worker registered", reg);
+					console.log("Service Worker registered", reg.pushManager);
 				}).catch(function(err) {
 					console.log("Issue happened", err);
 				});
