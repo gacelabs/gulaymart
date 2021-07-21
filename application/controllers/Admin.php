@@ -59,21 +59,16 @@ class Admin extends MY_Controller {
 		]);
 	}
 
-	public function bookings()
+	public function bookings($mode=false)
 	{
 		$post = $this->input->post() ?: $this->input->get();
-		if ($post AND isset($post['admin_pass'])) {
-			if ($post['admin_pass'] == ADMIN_PASS) {
-				// debug($post, 'stop');
-				foreach ($post['admin_settings'] as $key => $data) {
-					$id = $data['id'];
-					if (!isset($data['value']['switch'])) $data['value']['switch'] = '0';
-					// debug($data, 'stop');
-					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'])], ['id' => $id]);
-				}
-				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
+		if ($post) {
+			// debug($post, 'stop');
+			if (method_exists($this, $mode)) {
+				$this->$mode($post);
+			} else {
+				$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
 			}
-			$this->set_response('error', 'Admin password does not match!', $post['admin_settings'], false);
 		} else {
 			$admin_settings = $this->gm_db->get('admin_settings');
 			// debug($admin_settings, true);
@@ -114,6 +109,32 @@ class Admin extends MY_Controller {
 				],
 			]);
 		}
+	}
+
+	private function counts($post=false)
+	{
+		if ($post) {
+			debug($post, 'stop');
+		}
+		$this->set_response('error', 'Failed to do request!, Please try again later', $post, false);
+	}
+
+	private function automation($post=false)
+	{
+		if ($post AND isset($post['admin_pass'])) {
+			if ($post['admin_pass'] == ADMIN_PASS) {
+				// debug($post, 'stop');
+				foreach ($post['admin_settings'] as $key => $data) {
+					$id = $data['id'];
+					if (!isset($data['value']['switch'])) $data['value']['switch'] = '0';
+					// debug($data, 'stop');
+					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'])], ['id' => $id]);
+				}
+				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
+			}
+		}
+		$this->set_response('error', 'Admin password does not match!', 
+			(($post AND isset($post['admin_settings'])) ? $post['admin_settings'] : ''), false);
 	}
 
 	/*this will be run on cron job*/

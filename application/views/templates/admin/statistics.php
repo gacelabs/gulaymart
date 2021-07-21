@@ -30,9 +30,9 @@
 					<div class="panel-footer">
 						<div class="input-group">
 							<select class="form-control">
-								<option>Today (<?php echo date('M d'); ?>)</option>
+								<option>Today (<?php echo date('M d');?>)</option>
 								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y'); ?>)</option>
+								<option>Year To Date (<?php echo date('Y');?>)</option>
 								<option>All Time</option>
 							</select>
 							<span class="input-group-btn">
@@ -75,9 +75,9 @@
 					<div class="panel-footer">
 						<div class="input-group">
 							<select class="form-control">
-								<option>Today (<?php echo date('M d'); ?>)</option>
+								<option>Today (<?php echo date('M d');?>)</option>
 								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y'); ?>)</option>
+								<option>Year To Date (<?php echo date('Y');?>)</option>
 								<option>All Time</option>
 							</select>
 							<span class="input-group-btn">
