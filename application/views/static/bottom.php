@@ -47,10 +47,12 @@
 		<?php endif ?>
 
 		<script type="text/javascript">
+			var serviceWorker;
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('sw.js')
 				.then(function(reg){
-					console.log("Service Worker registered", reg.pushManager);
+					serviceWorker = reg;
+					console.log("Service Worker registered");
 				}).catch(function(err) {
 					console.log("Issue happened", err);
 				});
