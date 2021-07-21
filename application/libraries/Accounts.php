@@ -137,7 +137,7 @@ class Accounts {
 	{
 		// debug($post);
 		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
-			if (!isset($post['email'])) $post['email'] = $post['id'].'@facebook.com';
+			if (!isset($post['email']) OR (isset($post['email']) AND empty($post['email']))) $post['email'] = $post['id'].'@facebook.com';
 
 			$fbuser = $this->class->db->get_where('users', ['fb_id' => $post['id']]);
 			if ($fbuser->num_rows() == 0) {
@@ -161,17 +161,10 @@ class Accounts {
 					$fbprofile = $this->class->db->get_where('user_profiles', ['user_id' => $user['id']]);
 					if ($fbprofile->num_rows() == 0) {
 						$this->class->db->insert('user_profiles', [
-							'firstname' => $fullname[0],
-							'lastname' => $fullname[count($fullname)-1],
+							'firstname' => trim($fullname[0]),
+							'lastname' => trim($fullname[count($fullname)-1]),
 							'user_id' => $user['id'],
 						]);
-					/*} else {
-						$profile = $fbprofile->row_array();
-						$this->class->db->update('user_profiles', [
-							'firstname' => $fullname[0],
-							'lastname' => $fullname[count($fullname)-1],
-							'user_id' => $user['id'],
-						], ['id' => $profile['id']]);*/
 					}
 				}
 			}
