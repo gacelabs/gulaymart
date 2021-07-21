@@ -28,17 +28,17 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="input-group">
-							<select class="form-control">
-								<option>Today (<?php echo date('M d');?>)</option>
-								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y');?>)</option>
-								<option>All Time</option>
+						<form action="admin/bookings/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<select class="form-control" name="updated">
+								<option value="today">Today (<?php echo date('M d');?>)</option>
+								<option value="lastmonth">Last Month</option>
+								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
+								<option value="alltime">All Time</option>
 							</select>
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button">Apply</button>
+								<button class="btn btn-default" type="submit">Apply</button>
 							</span>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -73,17 +73,17 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="input-group">
-							<select class="form-control">
-								<option>Today (<?php echo date('M d');?>)</option>
-								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y');?>)</option>
-								<option>All Time</option>
+						<form action="admin/bookings/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<select class="form-control" name="updated">
+								<option value="today">Today (<?php echo date('M d');?>)</option>
+								<option value="lastmonth">Last Month</option>
+								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
+								<option value="alltime">All Time</option>
 							</select>
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button">Apply</button>
+								<button class="btn btn-default" type="submit">Apply</button>
 							</span>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
