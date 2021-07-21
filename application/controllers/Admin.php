@@ -52,8 +52,8 @@ class Admin extends MY_Controller {
 				'users_count' => $this->gm_db->count('users', ['is_admin' => 1]),
 				'farmers_count' => $this->gm_db->count('user_farms', ['user_id >' => 0]),
 				'bookings_count' => [
-					'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS]),
-					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_CANCELLED_STATUS]),
+					'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1]),
+					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
 				],
 			],
 		]);
@@ -105,7 +105,12 @@ class Admin extends MY_Controller {
 					'js' => ['hideshow', 'admin/main', 'admin/bookings'],
 				],
 				'data' => [
-					'settings' => $admin_settings
+					'settings' => $admin_settings,
+					'bookings_count' => [
+						'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator' => -1]),
+						'manual' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator >' => 0]),
+						'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
+					],
 				],
 			]);
 		}

@@ -29,7 +29,7 @@
 								<i class="fa fa-check"></i>Successful
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['succeeded'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -37,7 +37,7 @@
 								<i class="fa fa-wrench"></i>Manual
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['manual'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -45,7 +45,7 @@
 								<i class="fa fa-times"></i>Failed
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['failed'] : 0);?></b></span>
 							</div>
 						</div>
 					</div>
