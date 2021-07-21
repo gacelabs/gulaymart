@@ -210,6 +210,7 @@ class Admin extends MY_Controller {
 					}
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
+						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!']); exit();
 						return true; /*Disable OPERATOR distributions*/
 						/*booking_limit reached, turn off switch*/
 						$set['switch'] = 0;
@@ -258,7 +259,11 @@ class Admin extends MY_Controller {
 					return true; /*Disable OPERATOR distributions*/
 					$this->notify_operator_booking();
 				}
+			} else {
+				echo json_encode(['status' => false, 'message' => 'no available post']); exit();
 			}
+		} else {
+			echo json_encode(['status' => false, 'message' => 'admin setting unknown']); exit();
 		}
 	}
 
