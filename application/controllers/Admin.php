@@ -114,7 +114,7 @@ class Admin extends MY_Controller {
 	private function counts($post=false)
 	{
 		if ($post) {
-			debug($post, 'stop');
+			// debug($post, 'stop');
 		}
 		$this->set_response('error', 'Failed to do request!, Please try again later', $post, false);
 	}
