@@ -169,7 +169,7 @@ class MY_Model extends CI_Model {
 		return false;
 	}
 
-	public function get_join($table=false, $where=false, $join=false, $on=false, $type=false, $func='result', $field=false)
+	public function get_join($table=false, $where=false, $join=false, $on=false, $type=false, $field=false, $func='result', $redirect_url='')
 	{
 		if ($table) {
 			if ($field) {
@@ -189,7 +189,17 @@ class MY_Model extends CI_Model {
 				}
 			}
 			if ($join AND $on) {
-				$this->db->join($join, $on, ($type ?: 'left'));
+				if (is_string($join)) {
+					$this->db->join($join, $on, ($type ?: 'left'));
+				} elseif (is_array($join) AND is_array($on)) {
+					foreach ($join as $key => $j) {
+						if (is_string($type) AND isset($on[$key])) {
+							$this->db->join($j, $on[$key], ($type ?: 'left'));
+						} elseif (is_array($type)) {
+							$this->db->join($j, $on[$key], (isset($type[$key]) ? $type[$key] : 'left'));
+						}
+					}
+				}
 			}
 			$data = $this->db->get($table);
 			// debug($data);

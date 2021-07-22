@@ -151,6 +151,10 @@ class CreateDev {
 				'constraint' => '50',
 				'null' => true,
 			],
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -392,6 +396,10 @@ class CreateDev {
 			'subcategory_id' => [
 				'type' => 'SMALLINT',
 				'default' => '0',
+			],
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
 			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
