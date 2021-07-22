@@ -10,16 +10,16 @@ $(document).ready(function() {
 				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
 					navigator.geolocation.getCurrentPosition(function(response) {
 						if (response != undefined) {
-							// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
+							runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
 							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
 							// simpleAjax('api/save_latlng', oLatLong); // save current latitude and longitude of user
 							initMapLocations();
 						}
 					}, function () {
-						// runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.'});
+						runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.'});
 					});
 				} else if (oLocation.state == 'denied') {
-					// runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
+					runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
 				}
 				oLocation.onchange = function() {
 					console.log('Location Permission ' + oLocation.state);
