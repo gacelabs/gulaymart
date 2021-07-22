@@ -16,7 +16,7 @@ class Sitemap extends MY_Controller {
 		]];
 		/*PRODUCTS*/
 		$products = $this->gm_db->get_join(
-			'products', false, 'products_location', 'products_location.product_id = products.id', 'left', 
+			'products', ['products.activity' => 1], 'products_location', 'products_location.product_id = products.id', 'left', 
 			'products.*, products_location.farm_location_id'
 		);
 		// debug($products, 'stop');
