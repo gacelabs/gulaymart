@@ -7,6 +7,7 @@ $(document).ready(function() {
 	if ($('#map-box').length) {
 		if (window.location.protocol == 'https:' && mobileAndTabletCheck()) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
+				console.log(oLocation);
 				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
 					navigator.geolocation.getCurrentPosition(function(response) {
 						if (response != undefined) {
