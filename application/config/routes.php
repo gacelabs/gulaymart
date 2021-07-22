@@ -52,7 +52,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['terms-of-use'] = 'Support/terms';
 $route['privacy-policy'] = 'Support/policy';
 
-$route['sitemap\.xml'] = "sitemap/index";
+$route['sitemap\.xml'] = "Sitemap/index";
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
