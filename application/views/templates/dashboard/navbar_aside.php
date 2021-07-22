@@ -106,12 +106,16 @@
 				</div> -->
 			<?php endif ?>
 
+			<a href="//help.gulaymart.com" class="aside-nav-item hidden-lg hidden-md hidden-sm">
+				<i class="fa fa-question-circle" style="background-color:#cacaca;"></i>Help Center
+			</a>
+
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
 				<i class="fa fa-sign-out" style="background-color:#cacaca;"></i>Sign out
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<a href="help/help-center/" class="aside-nav-item  hidden-xs">
+		<a href="//help.gulaymart.com" class="aside-nav-item  hidden-xs">
 		<a href="//help.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
