@@ -5,7 +5,7 @@
 			<loc><?php echo $row['loc'];?></loc>
 			<lastmod><?php echo $row['lastmod'];?></lastmod>
 			<changefreq><?php echo $row['changefreq'];?></changefreq>
-			<priority>0.5</priority>
+			<priority>1.0</priority>
 			<?php if (isset($row['images']) AND count($row['images'])): ?>
 				<?php foreach ($row['images'] as $image): ?>
 					<image:image>
