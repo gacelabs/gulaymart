@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
-		if (window.location.protocol == 'https:' && mobileAndTabletCheck()) {
+		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
 				console.log(oLocation);
 				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
@@ -17,6 +17,10 @@ $(document).ready(function() {
 						}
 					}, function () {
 						runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.'});
+					}, {
+						enableHighAccuracy: true,
+						timeout: 5000,
+						maximumAge: 0
 					});
 				} else if (oLocation.state == 'denied') {
 					runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
@@ -601,7 +605,7 @@ function fnDragEnd(marker, isNew) {
 							break;
 						}
 					}
-					console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
+					// console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
 					var sValue = arVal.join(', ');
 					uiInputAddress.attr('value', sValue);
 					uiInputAddress.val(sValue);
