@@ -10,7 +10,9 @@ $(document).ready(function() {
 				navigator.geolocation.getCurrentPosition(function(response) {
 					if (response != undefined) {
 						// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
+						console.log('previous:', oLatLong);
 						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+						console.log('current:', oLatLong);
 						initMapLocations();
 					}
 				}, function () {
@@ -22,11 +24,7 @@ $(document).ready(function() {
 		}
 		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
-				oLocation.onchange = function(a,b,c) {
-					console.log(a,b,c)
-					// findMe(location);
-				}
-				oLocation.onchange();
+				oLocation.onchange = function() { findMe(oLocation); }
 				findMe(oLocation);
 			});
 		} else {
