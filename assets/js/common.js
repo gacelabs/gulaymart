@@ -5,29 +5,29 @@ $(document).ready(function() {
 
 	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
+		function findMe(oLocation) {
+			if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
+				navigator.geolocation.getCurrentPosition(function(response) {
+					if (response != undefined) {
+						// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
+						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+						initMapLocations();
+					}
+				}, function () {
+					runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.'});
+				}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+			} else if (oLocation.state == 'denied') {
+				runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
+			}
+		}
 		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
-				console.log(oLocation);
-				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
-					navigator.geolocation.getCurrentPosition(function(response) {
-						if (response != undefined) {
-							// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
-							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
-							initMapLocations();
-						}
-					}, function () {
-						runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.'});
-					}, {
-						enableHighAccuracy: true,
-						timeout: 5000,
-						maximumAge: 0
-					});
-				} else if (oLocation.state == 'denied') {
-					runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
+				oLocation.onchange = function(a,b,c) {
+					console.log(a,b,c)
+					// findMe(location);
 				}
-				oLocation.onchange = function() {
-					console.log('Location Permission ' + oLocation.state);
-				}
+				oLocation.onchange();
+				findMe(oLocation);
 			});
 		} else {
 			initMapLocations();
