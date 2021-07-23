@@ -15,7 +15,7 @@ $(document).ready(function() {
 						initMapLocations();
 					}
 				}, function () {
-					runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.'});
+					runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.', unclose: true});
 				}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 			} else if (oLocation.state == 'denied') {
 				runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
