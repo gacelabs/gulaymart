@@ -10,15 +10,14 @@ $(document).ready(function() {
 				$('.close-jq-toast-single:visible').trigger('click');
 				navigator.geolocation.getCurrentPosition(function(response) {
 					if (response != undefined) {
-						// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
 						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
 						initMapLocations();
 					}
 				}, function () {
-					runAlertBox({type:'info', message: 'Please enable your location for accurate data experience.', unclose: true});
+					runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
 				}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 			} else if (oLocation.state == 'denied') {
-				runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
+				runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.', unclose: true});
 			}
 		}
 		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
