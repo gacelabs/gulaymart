@@ -40,6 +40,14 @@ $(document).ready(function() {
 			$(this).attr('clicked', 1);
 		});
 	}
+
+	if (!oUser) {
+		if ($('.simple-marquee-container').SimpleMarquee != undefined) {
+			$('.simple-marquee-container').SimpleMarquee({
+				duration: 40000,
+			});
+		}
+	}
 });
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
