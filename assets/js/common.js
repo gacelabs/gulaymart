@@ -7,12 +7,11 @@ $(document).ready(function() {
 	if ($('#map-box').length) {
 		function findMe(oLocation) {
 			if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
+				$('.close-jq-toast-single:visible').trigger('click');
 				navigator.geolocation.getCurrentPosition(function(response) {
 					if (response != undefined) {
 						// runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
-						console.log('previous:', oLatLong);
 						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
-						console.log('current:', oLatLong);
 						initMapLocations();
 					}
 				}, function () {
