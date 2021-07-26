@@ -28,12 +28,13 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<form action="admin/bookings/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+						<form action="admin/stats/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<input type="hidden" name="tables" value="users,user_farms" />
 							<select class="form-control" name="updated">
+								<option value="alltime">All Time</option>
 								<option value="today">Today (<?php echo date('M d');?>)</option>
 								<option value="lastmonth">Last Month</option>
 								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
-								<option value="alltime">All Time</option>
 							</select>
 							<span class="input-group-btn">
 								<button class="btn btn-default" type="submit">Apply</button>
@@ -74,11 +75,12 @@
 					</div>
 					<div class="panel-footer">
 						<form action="admin/bookings/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<input type="hidden" name="tables" value="baskets_merge" />
 							<select class="form-control" name="updated">
+								<option value="alltime">All Time</option>
 								<option value="today">Today (<?php echo date('M d');?>)</option>
 								<option value="lastmonth">Last Month</option>
 								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
-								<option value="alltime">All Time</option>
 							</select>
 							<span class="input-group-btn">
 								<button class="btn btn-default" type="submit">Apply</button>

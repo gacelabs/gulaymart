@@ -59,16 +59,31 @@ class Admin extends MY_Controller {
 		]);
 	}
 
+	public function stats($mode=false)
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		if ($post) {
+			// debug($post, 'stop');
+			if (method_exists($this, $mode)) {
+				$tables = explode(',', $post['tables']);
+				$results = $this->$mode($post, $tables, __FUNCTION__);
+				$this->set_response('success', '', $results, false, 'drawDataCount');
+			}
+		}
+		$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
+	}
+
 	public function bookings($mode=false)
 	{
 		$post = $this->input->post() ?: $this->input->get();
 		if ($post) {
 			// debug($post, 'stop');
 			if (method_exists($this, $mode)) {
-				$this->$mode($post);
-			} else {
-				$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
+				$tables = explode(',', $post['tables']);
+				$results = $this->$mode($post, $tables, __FUNCTION__);
+				$this->set_response('success', '', $results, false, 'drawDataCount');
 			}
+			$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
 		} else {
 			$admin_settings = $this->gm_db->get('admin_settings');
 			// debug($admin_settings, true);
@@ -111,12 +126,38 @@ class Admin extends MY_Controller {
 		}
 	}
 
-	private function counts($post=false)
+	private function counts($post=false, $tables=false, $function=false)
 	{
-		if ($post) {
-			// debug($post, 'stop');
+		$results = [];
+		if ($post AND $tables) {
+			$where = format_time_label($post);
+			if ($function == 'stats') {
+				$users_where = $farmers_where = $where;
+				$users_where['is_admin'] = 1;
+				$farmers_where['user_id >'] = 0;
+				$results = [
+					'users-count' => $this->gm_db->count('users', $users_where),
+					'farmers-count' => $this->gm_db->count('user_farms', $farmers_where),
+				];
+			} elseif ($function == 'bookings') {
+				$succeed_where = $manual_where = $failed_where = $where;
+
+				$succeed_where['status'] = GM_RECEIVED_STATUS;
+				$succeed_where['is_sent'] = 1;
+				$manual_where['status'] = GM_RECEIVED_STATUS;
+				$manual_where['is_sent'] = 1;
+				$manual_where['operator >'] = 0;
+				$failed_where['status'] = GM_ON_DELIVERY_STATUS;
+				$failed_where['is_sent'] = 0;
+
+				$results = [
+					'bookings-succeeded' => $this->gm_db->count('baskets_merge', $succeed_where),
+					'bookings-manualed' => $this->gm_db->count('baskets_merge', $manual_where),
+					'bookings-failed' => $this->gm_db->count('baskets_merge', $failed_where),
+				];
+			}
 		}
-		$this->set_response('error', 'Failed to do request!, Please try again later', $post, false);
+		return $results;
 	}
 
 	private function automation($post=false)

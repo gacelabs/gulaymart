@@ -757,3 +757,29 @@ function validate_recaptcha($CI_POST=false)
 	}
 	return false;
 }
+
+function format_time_label($timedata=false)
+{
+	$results = [];
+	if ($timedata) {
+		if (is_string($timedata)) $timedata = [$timedata];
+		foreach ($timedata as $key => $time) {
+			switch (strtolower(trim($time))) {
+				case 'today':
+					$results['DATE('.$key.')'] = date('Y-m-d');
+					break;
+				case 'lastmonth':
+					$results['DATE('.$key.')'] = date('Y-m-d', strtotime("-1 months"));
+					break;
+				case 'yeartodate':
+					$results['YEAR('.$key.')'] = date('Y');
+					break;
+				case 'alltime':
+					$results = [];
+					break;
+			}
+		}
+	}
+	// debug($results, 'stop');
+	return $results;
+}
