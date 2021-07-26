@@ -90,11 +90,17 @@ class MY_Controller extends CI_Controller {
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
-				echo do_jsonp_callback('ajaxSuccessResponse', [
+				$data = [
 					'type' => 'error',
 					'message' => "Nothing happened, Session has been expired! Reloading browser...",
 					'redirect' => '/'
-				]); exit();
+				];
+				if ($this->input->get('callback') == 'gmCall') {
+					echo do_jsonp_callback('ajaxSuccessResponse', $data);
+				} else {
+					echo json_encode($data);
+				}
+				exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/
 			if (!$this->input->is_ajax_request() AND $this->no_entry_for_signed_out) {

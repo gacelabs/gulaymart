@@ -67,7 +67,7 @@ class Admin extends MY_Controller {
 			if (method_exists($this, $mode)) {
 				$tables = explode(',', $post['tables']);
 				$results = $this->$mode($post, $tables, __FUNCTION__);
-				$this->set_response('success', '', $results, false, 'drawDataCount');
+				$this->set_response('success', '', $results, false, 'drawData'.ucfirst($mode));
 			}
 		}
 		$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
@@ -79,9 +79,9 @@ class Admin extends MY_Controller {
 		if ($post) {
 			// debug($post, 'stop');
 			if (method_exists($this, $mode)) {
-				$tables = explode(',', $post['tables']);
+				$tables = isset($post['tables']) ? explode(',', $post['tables']) : false;
 				$results = $this->$mode($post, $tables, __FUNCTION__);
-				$this->set_response('success', '', $results, false, 'drawDataCount');
+				$this->set_response('success', '', $results, false, 'drawData'.ucfirst($mode));
 			}
 			$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
 		} else {
@@ -163,7 +163,9 @@ class Admin extends MY_Controller {
 	private function automation($post=false)
 	{
 		if ($post AND isset($post['admin_pass'])) {
-			if ($post['admin_pass'] == ADMIN_PASS) {
+			// if ($post['admin_pass'] == ADMIN_PASS) {
+			$user = $this->gm_db->get_in('users', ['id' => $this->accounts->profile['id']], 'row');
+			if ($user AND (md5($post['admin_pass']) == $user['password'])) {
 				// debug($post, 'stop');
 				foreach ($post['admin_settings'] as $key => $data) {
 					$id = $data['id'];
@@ -174,7 +176,7 @@ class Admin extends MY_Controller {
 				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
 			}
 		}
-		$this->set_response('error', 'Admin password does not match!', 
+		$this->set_response('error', 'Your admin password does not match!', 
 			(($post AND isset($post['admin_settings'])) ? $post['admin_settings'] : ''), false);
 	}
 

@@ -50,7 +50,7 @@ var removeItem = function(data) {
 	}
 }
 
-var drawDataCount = function(obj, ui) {
+var drawDataCounts = function(obj, ui) {
 	// console.log(obj);
 	var btn = $('.active-ajaxed-form').find('button:submit');
 	if (btn.length) {

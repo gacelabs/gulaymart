@@ -217,7 +217,7 @@ var ajaxSuccessResponse = function(response, e) {
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
-				console.log(response.callback, 'function');
+				// console.log(response.callback, 'function');
 				fn(response.data, e);
 			}
 		}
