@@ -98,15 +98,19 @@
 
 					notification.addEventListener('click', function(e) {
 						console.log(e.type, e);
+						return true;
 					});
 					notification.addEventListener('close', function(e) {
 						console.log(e.type, e);
+						return true;
 					});
 					notification.addEventListener('error', function(e) {
 						console.log(e.type, e);
+						return true;
 					});
 					notification.addEventListener('show', function(e) {
 						console.log(e.type, e);
+						return true;
 					});
 				});
 			};
