@@ -47,16 +47,60 @@
 		<?php endif ?>
 
 		<script type="text/javascript">
-			var serviceWorker;
+			var serviceWorker, isSubscribed;
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.register('sw.js')
 				.then(function(reg){
 					serviceWorker = reg;
 					console.log("Service Worker registered");
+					/*serviceWorker.pushManager.getSubscription()
+					.then(function(subscription) {
+						isSubscribed = !(subscription === null);
+						if (isSubscribed) {
+							console.log('User IS subscribed.');
+						} else {
+							console.log('User is NOT subscribed.');
+							serviceWorker.pushManager.subscribe({
+								userVisibleOnly: true,
+								applicationServerKey: 'BA6gsZ2MpAFeB7t0U10uga1bPG9hWDGWOLrHDYKmOua5Cs9oBDEbycdmTFoZ_rVM6v08expaJvKkyJFNMHXd9fo'
+							});
+						}
+					});*/
 				}).catch(function(err) {
 					console.log("Issue happened", err);
 				});
 			}
+
+			$(document).ready(function() {
+				if (!('Notification' in window)) {
+					runAlertBox({type:'info', message: 'This browser does not support desktop notification.'});
+				} else if (Notification.permission === "granted") {
+					runSampleNotif();
+				} else if (Notification.permission === "denied") {
+					Notification.requestPermission().then(function (permission) {
+						console.log(permission);
+						if (permission === "granted") {
+							runSampleNotif();
+						} else {
+							runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.', unclose: true});
+						}
+					});
+				}
+			});
+
+			var runSampleNotif = function() {
+				$('#install-app').bind('click', function() {
+					var notification = new Notification('test', {
+						body: 'message',
+						tag: 'simple-push-demo-notification',
+						icon: 'https://gulaymart.com/assets/images/favicon.png'
+					});
+
+					notification.addEventListener('click', function(e) {
+						console.log(e);
+					});
+				});
+			};
 		</script>
 	</body>
 </html>
