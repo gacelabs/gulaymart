@@ -97,7 +97,16 @@
 					});
 
 					notification.addEventListener('click', function(e) {
-						console.log(e);
+						console.log(e.type, e);
+					});
+					notification.addEventListener('close', function(e) {
+						console.log(e.type, e);
+					});
+					notification.addEventListener('error', function(e) {
+						console.log(e.type, e);
+					});
+					notification.addEventListener('show', function(e) {
+						console.log(e.type, e);
 					});
 				});
 			};
