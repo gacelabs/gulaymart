@@ -46,17 +46,39 @@
 					iCount++;
 					navigator.serviceWorker.ready.then(function(registration) {
 						registration.update();
-						/*registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
-							console.log(notifications);
-							return notifications.length;
-						}).then(function(messageCount) {
-							alert(messageCount)
+						if (mobileAndTabletCheck()) {
+							registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
+								alert(notifications.length);
+								return notifications.length;
+							}).then(function(messageCount) {
+								let notificationTitle = '';
+								const options = {
+									badge: 'https://gulaymart.com/assets/images/favicon.png',
+									body: '',
+									icon: 'https://gulaymart.com/assets/images/favicon.png',
+									tag: 'demo-notification1',
+									renotify: true,
+									vibrate: [200, 100, 200, 100, 200, 100, 200],
+									data: oUser
+								};
+								if (messageCount > 1) {
+									notificationTitle = 'New Message';
+									options.body = 'You have '+messageCount+' new messages';
+									options.data.newMessageCount = messageCount;
+								} else {
+									notificationTitle = 'New Message';
+									options.body = 'You have a new Message';
+									options.data.newMessageCount = 1;
+								}
+								return registration.showNotification(notificationTitle, options);
+							});
+						} else {
 							let notificationTitle = '';
 							const options = {
 								badge: 'https://gulaymart.com/assets/images/favicon.png',
 								body: '',
 								icon: 'https://gulaymart.com/assets/images/favicon.png',
-								tag: 'demo-notification1',
+								tag: 'demo-notification',
 								renotify: true,
 								vibrate: [200, 100, 200, 100, 200, 100, 200],
 								data: oUser
@@ -70,9 +92,8 @@
 								options.body = 'You have a new Message';
 								options.data.newMessageCount = 1;
 							}
-
-							return registration.showNotification(notificationTitle, options);
-						});*/
+							registration.showNotification(notificationTitle, options);
+						}
 						/*var sTag = 'demo-notification'+iCount
 						if (iCount >= 3) {
 							sTag = 'demo-notification2';
@@ -93,26 +114,6 @@
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: {}
 						});*/
-						let notificationTitle = '';
-						const options = {
-							badge: 'https://gulaymart.com/assets/images/favicon.png',
-							body: '',
-							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							tag: 'demo-notification',
-							renotify: true,
-							vibrate: [200, 100, 200, 100, 200, 100, 200],
-							data: oUser
-						};
-						if (iCount > 1) {
-							notificationTitle = 'New Message';
-							options.body = 'You have '+iCount+' new messages';
-							options.data.newMessageCount = iCount;
-						} else {
-							notificationTitle = 'New Message';
-							options.body = 'You have a new Message';
-							options.data.newMessageCount = 1;
-						}
-						registration.showNotification(notificationTitle, options);
 					});
 				}
 			});
