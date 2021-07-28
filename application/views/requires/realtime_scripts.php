@@ -75,6 +75,7 @@
 
 						return registration.showNotification(notificationTitle, options);
 					});*/
+					if (iCount == 3) iCount = 2;
 					registration.showNotification('test', {
 						/*actions: [{
 							action: 'orders',
