@@ -51,25 +51,39 @@
 			if ('serviceWorker' in navigator) {
 				var runSampleNotif = function() {
 					$('#install-app').bind('click', function() {
-						alert('clicked');
-						var notification = new Notification('test', {
-							body: 'message',
-							tag: 'simple-push-demo-notification',
-							icon: 'https://gulaymart.com/assets/images/favicon.png'
-						});
+						try {
+							var notification = new Notification('test', {
+								body: 'message',
+								tag: 'simple-push-demo-notification',
+								icon: 'https://gulaymart.com/assets/images/favicon.png',
+								renotify: true,
+							});
+							console.log(notification);
+							notification.addEventListener('click', function(e) {
+								console.log(e.type, e);
+							});
+							notification.addEventListener('close', function(e) {
+								console.log(e.type, e);
+							});
+							notification.addEventListener('error', function(e) {
+								console.log(e.type, e);
+							});
+							notification.addEventListener('show', function(e) {
+								console.log(e.type, e);
+							});
 
-						notification.addEventListener('click', function(e) {
-							console.log(e.type, e);
-						});
-						notification.addEventListener('close', function(e) {
-							console.log(e.type, e);
-						});
-						notification.addEventListener('error', function(e) {
-							console.log(e.type, e);
-						});
-						notification.addEventListener('show', function(e) {
-							console.log(e.type, e);
-						});
+						} catch (err) {
+							navigator.serviceWorker.ready.then(function(registration) {
+								console.log(registration);
+								registration.showNotification('test', {
+									body: 'message',
+									tag: 'simple-push-demo-notification',
+									icon: 'https://gulaymart.com/assets/images/favicon.png',
+									renotify: true,
+									vibrate: [200, 100, 200, 100, 200, 100, 200],
+								});
+							});
+						}
 					});
 				};
 
@@ -97,10 +111,7 @@
 					} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
-								navigator.serviceWorker.ready.then(function(registration) {
-									registration.showNotification('Notification with ServiceWorker');
-									runSampleNotif();
-								});
+								runSampleNotif();
 							} else {
 								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.', unclose: true});
 							}
