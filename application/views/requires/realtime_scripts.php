@@ -47,7 +47,7 @@
 					registration.getNotifications().then(function(notifications) {
 						console.log(notifications);
 					}).then(function() {
-						
+
 					});
 					registration.showNotification('test', {
 						/*actions: [{
@@ -60,6 +60,7 @@
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
 						// requireInteraction: true,
+						dir: 'rtl',
 						vibrate: [200, 100, 200, 100, 200, 100, 200],
 						data: {}
 					});
