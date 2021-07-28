@@ -45,6 +45,7 @@
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.getNotifications().then(function(notifications) {
+						console.log(notifications);
 						return notifications.length;
 					}).then(function(messageCount) {
 						let notificationTitle = '';
@@ -57,13 +58,13 @@
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: oUser
 						};
-						if (messageCount > 1) {
+						if (iCount > 1) {
 							notificationTitle = 'New Message';
-							options.body = 'You have '+messageCount+' new messages';
-							options.data.newMessageCount = messageCount;
+							options.body = 'You have '+iCount+' new messages';
+							options.data.newMessageCount = iCount;
 						} else {
 							notificationTitle = 'New Message';
-							options.body = 'You have 1 Message';
+							options.body = 'You have a new Message';
 							options.data.newMessageCount = 1;
 						}
 
