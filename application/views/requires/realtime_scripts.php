@@ -61,9 +61,9 @@
 						});
 					};
 
+					alert(Notification.permission);
 					navigator.serviceWorker.register('sw.js').then(function(reg){
 						serviceWorker = reg;
-						alert(Notification.permission);
 						if (!('Notification' in window)) {
 							runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 						} else if (Notification.permission === 'granted') {
