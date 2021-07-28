@@ -46,7 +46,7 @@
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.update();
 					registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
-						// console.log(notifications);
+						console.log(notifications);
 						return notifications.length;
 					}).then(function(messageCount) {
 						alert(messageCount)
