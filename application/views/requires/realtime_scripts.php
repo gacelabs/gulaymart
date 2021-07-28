@@ -28,19 +28,6 @@
 			},
 			afterConnect: function() {
 				if ('serviceWorker' in navigator) {
-					var runNotifRegistration = function() {
-						Notification.requestPermission().then(function (permission) {
-							if (permission === "granted") {
-								runSampleNotif();
-							} else {
-								runAlertBox({
-									type:'info',
-									message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
-									unclose: true
-								});
-							}
-						});
-					};
 					var runSampleNotif = function() {
 						$('#install-app').bind('click', function() {
 							navigator.serviceWorker.ready.then(function(registration) {
@@ -67,10 +54,18 @@
 							runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 						} else if (Notification.permission === 'granted') {
 							runSampleNotif();
-						} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
-							runNotifRegistration();
 						} else {
-							runNotifRegistration();
+							Notification.requestPermission().then(function (permission) {
+								if (permission === "granted") {
+									runSampleNotif();
+								} else {
+									runAlertBox({
+										type:'info',
+										message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
+										unclose: true
+									});
+								}
+							});
 						}
 					}).catch(function(err) {
 						console.log("Issue happened", err);
