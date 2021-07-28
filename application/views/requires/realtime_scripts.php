@@ -75,7 +75,7 @@
 
 						return registration.showNotification(notificationTitle, options);
 					});*/
-					registration.showNotification('test'+iCount, {
+					registration.showNotification('test', {
 						/*actions: [{
 							action: 'orders',
 							title: 'View Order '+iCount,
@@ -83,7 +83,7 @@
 						}],*/
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: 'message '+iCount,
-						tag: 'demo-notification-1',
+						tag: 'demo-notification'+iCount,
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						// image: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
