@@ -46,24 +46,50 @@
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.getNotifications().then(function(notifications) {
 						console.log(notifications);
-					}).then(function() {
+						let oLastMsgData = [];
+						for(let i = 0; i < notifications.length; i++) {
+							oLastMsgData.push(notifications[i]);
+						}
+						return oLastMsgData;
+					}).then(function(oLastMsgData) {
+						let notificationTitle = '';
+						const options = {
+							badge: 'https://gulaymart.com/assets/images/favicon.png',
+							body: '',
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+							tag: 'demo-notification-1',
+							renotify: true,
+							vibrate: [200, 100, 200, 100, 200, 100, 200],
+							data: {}
+						};
+						if (Object.keys(oLastMsgData).length) {
+							for (let x in oLastMsgData) {
+								let item = oLastMsgData[x];
+								notificationTitle += item.title+"\n";
+								options.body += item.body+"\n";
+							}
+						} else {
+							notificationTitle = 'test';
+							options.body = 'message '+iCount;
+						}
 
+						return registration.showNotification(notificationTitle, options);
 					});
-					registration.showNotification('test', {
-						/*actions: [{
-							action: 'notification',
-							title: 'Order'
-						}],*/
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: 'message '+iCount,
-						tag: 'demo-notification-1',
-						image: 'https://gulaymart.com/assets/images/favicon.png',
-						renotify: true,
-						// requireInteraction: true,
-						dir: 'ltr',
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: {}
-					});
+					// registration.showNotification('test', {
+					// 	/*actions: [{
+					// 		action: 'notification',
+					// 		title: 'Order'
+					// 	}],*/
+					// 	badge: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	body: 'message '+iCount,
+					// 	tag: 'demo-notification-1',
+					// 	icon: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	// image: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	renotify: true,
+					// 	// requireInteraction: true,
+					// 	vibrate: [200, 100, 200, 100, 200, 100, 200],
+					// 	data: {}
+					// });
 				});
 			});
 		};
