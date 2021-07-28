@@ -44,6 +44,11 @@
 			$('#install-app').bind('click', function() {
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
+					registration.getNotifications().then(function(notifications) {
+						console.log(notifications);
+					}).then(function() {
+						
+					});
 					registration.showNotification('test', {
 						/*actions: [{
 							action: 'notification',
@@ -54,7 +59,7 @@
 						tag: 'demo-notification-1',
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
-						requireInteraction: true,
+						// requireInteraction: true,
 						vibrate: [200, 100, 200, 100, 200, 100, 200],
 						data: {}
 					});
