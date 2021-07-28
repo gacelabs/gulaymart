@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, isSubscribed, iNotifRequestCount = 0;
+	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
 			afterInit: function() {
@@ -29,22 +29,15 @@
 			afterConnect: function() {
 				if ('serviceWorker' in navigator) {
 					var runNotifRegistration = function() {
-						++iNotifRequestCount;
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
-								localStorage.removeItem('notificationCount');
 								runSampleNotif();
 							} else {
-								var sMessageText = 'Please enable Notification permission to use realtime messaging Service.<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>';
-								if (localStorage.getItem('notificationCount') != null) {
-									sMessageText = 'Notifications permission has been blocked as the user has dismissed the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.';
-								}
-								if (iNotifRequestCount == 4) {
-									localStorage.setItem('notificationCount', iNotifRequestCount);
-									runAlertBox({type:'info', message: 'Notifications permission has been blocked as the user has dismissed the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', unclose: true});
-								} else {
-									runAlertBox({type:'info', message: sMessageText, unclose: true, callback: runNotifRegistration});
-								}
+								runAlertBox({
+									type:'info',
+									message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
+									unclose: true
+								});
 							}
 						});
 					};
@@ -75,7 +68,6 @@
 						} else if (Notification.permission === 'granted') {
 							runSampleNotif();
 						} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
-							++iNotifRequestCount;
 							runNotifRegistration();
 						}
 					}).catch(function(err) {
