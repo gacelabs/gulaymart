@@ -32,10 +32,10 @@
 						$('#install-app').bind('click', function() {
 							navigator.serviceWorker.ready.then(function(registration) {
 								registration.showNotification('test', {
-									actions: [{
+									/*actions: [{
 										action: 'notification',
 										title: 'Order'
-									}],
+									}],*/
 									badge: 'https://gulaymart.com/assets/images/favicon.png',
 									body: 'message',
 									tag: 'simple-push-demo-notification',
