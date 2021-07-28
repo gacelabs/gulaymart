@@ -47,10 +47,12 @@
 					navigator.serviceWorker.ready.then(function(registration) {
 						registration.update();
 						if (mobileAndTabletCheck()) {
-							registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
-								console.log(notifications);
-								if (notifications[i].data && notifications[i].data.id === oUser.id) {
-									currentNotification = notifications[i];
+							registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
+								let currentNotification;
+								if (notifications.length) {
+									if (notifications[i].data && notifications[i].data.id === oUser.id) {
+										currentNotification = notifications[i];
+									}
 								}
 								return currentNotification;
 							}).then(function(currentNotification) {
@@ -59,7 +61,7 @@
 									badge: 'https://gulaymart.com/assets/images/favicon.png',
 									body: '',
 									icon: 'https://gulaymart.com/assets/images/favicon.png',
-									tag: 'demo-notification1',
+									tag: 'demo-notification',
 									renotify: true,
 									vibrate: [200, 100, 200, 100, 200, 100, 200],
 									data: oUser
