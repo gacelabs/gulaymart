@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, isSubscribed;
+	var realtime = false, serviceWorker, iCount = 0;
 	window.initSendData = function() {
 		realtime = new SendData({
 			afterInit: function() {
@@ -38,10 +38,11 @@
 		js.src = "<?php echo REALTIME_URL;?>";
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
-	
+
 	if ('serviceWorker' in navigator) {
 		var runSampleNotif = function() {
 			$('#install-app').bind('click', function() {
+				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.showNotification('test', {
 						/*actions: [{
@@ -49,7 +50,7 @@
 							title: 'Order'
 						}],*/
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: 'message',
+						body: 'message '+iCount,
 						tag: 'simple-push-demo-notification',
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
