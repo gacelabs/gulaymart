@@ -80,6 +80,7 @@
 									icon: 'https://gulaymart.com/assets/images/favicon.png',
 									renotify: true,
 									vibrate: [200, 100, 200, 100, 200, 100, 200],
+									data: {}
 								});
 								console.log(notification);
 							});
