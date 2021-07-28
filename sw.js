@@ -16,12 +16,13 @@ self.addEventListener('fetch', function(event) {
 	});
 
 self.addEventListener('notificationclick', function(event) {
+	console.log(event);
 	console.log('On notification click: ', event.notification.tag);
 	event.notification.close();
 
 	/*This looks to see if the current is already open and*/
 	/*focuses if it is*/
-	event.waitUntil(clients.matchAll({
+	/*event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
 		for (var i = 0; i < clientList.length; i++) {
@@ -31,5 +32,5 @@ self.addEventListener('notificationclick', function(event) {
 		}
 		if (clients.openWindow)
 			return clients.openWindow('/');
-	}));
+	}));*/
 });
