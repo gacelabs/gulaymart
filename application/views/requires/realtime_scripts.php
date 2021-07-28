@@ -49,8 +49,7 @@
 						if (mobileAndTabletCheck()) {
 							registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
 								let currentNotification;
-								console.log(notifications);
-								if (notifications.length) {
+								for(let i = 0; i < notifications.length; i++) {
 									if (notifications[i].data && notifications[i].data.id === oUser.id) {
 										currentNotification = notifications[i];
 									}
