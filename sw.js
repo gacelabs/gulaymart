@@ -7,7 +7,7 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-	console.log("fetched");
+	console.log("fetched", event.notification);
 	/*event.respondWith(
 		fetch(event.request).catch(function() {
 			return caches.match(event.request);
