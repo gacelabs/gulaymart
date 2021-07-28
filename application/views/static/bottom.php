@@ -74,14 +74,14 @@
 
 						// } catch (err) {
 							navigator.serviceWorker.ready.then(function(registration) {
-								console.log(registration);
-								registration.showNotification('test', {
+								var notification = registration.showNotification('test', {
 									body: 'message',
 									tag: 'simple-push-demo-notification',
 									icon: 'https://gulaymart.com/assets/images/favicon.png',
 									renotify: true,
 									vibrate: [200, 100, 200, 100, 200, 100, 200],
 								});
+								console.log(notification);
 							});
 						// }
 					});
