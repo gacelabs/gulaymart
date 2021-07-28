@@ -66,11 +66,11 @@
 							};
 							if (currentNotification) {
 								const messageCount = currentNotification.data.newMessageCount + 1;
-								notificationTitle = 'New Message';
+								notificationTitle = 'Demo';
 								options.body = 'You have '+messageCount+' new messages';
 								options.data.newMessageCount = messageCount;
 							} else {
-								notificationTitle = 'New Message';
+								notificationTitle = 'Demo';
 								options.body = 'You have a new Message';
 								options.data.newMessageCount = 1;
 							}
