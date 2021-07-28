@@ -42,20 +42,63 @@
 	if ('serviceWorker' in navigator) {
 		var runSampleNotif = function() {
 			$('#install-app').bind('click', function() {
-				iCount++;
-				navigator.serviceWorker.ready.then(function(registration) {
-					registration.update();
-					registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
-						console.log(notifications);
-						return notifications.length;
-					}).then(function(messageCount) {
-						alert(messageCount)
+				if (oUser) {
+					iCount++;
+					navigator.serviceWorker.ready.then(function(registration) {
+						registration.update();
+						/*registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
+							console.log(notifications);
+							return notifications.length;
+						}).then(function(messageCount) {
+							alert(messageCount)
+							let notificationTitle = '';
+							const options = {
+								badge: 'https://gulaymart.com/assets/images/favicon.png',
+								body: '',
+								icon: 'https://gulaymart.com/assets/images/favicon.png',
+								tag: 'demo-notification1',
+								renotify: true,
+								vibrate: [200, 100, 200, 100, 200, 100, 200],
+								data: oUser
+							};
+							if (iCount > 1) {
+								notificationTitle = 'New Message';
+								options.body = 'You have '+iCount+' new messages';
+								options.data.newMessageCount = iCount;
+							} else {
+								notificationTitle = 'New Message';
+								options.body = 'You have a new Message';
+								options.data.newMessageCount = 1;
+							}
+
+							return registration.showNotification(notificationTitle, options);
+						});*/
+						/*var sTag = 'demo-notification'+iCount
+						if (iCount >= 3) {
+							sTag = 'demo-notification2';
+						}
+						registration.showNotification('test', {
+							actions: [{
+								action: 'orders',
+								title: 'View Order '+iCount,
+								icon: 'https://gulaymart.com/assets/images/favicon.png',
+							}],
+							badge: 'https://gulaymart.com/assets/images/favicon.png',
+							body: 'message '+iCount,
+							tag: sTag,
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+							image: 'https://gulaymart.com/assets/images/favicon.png',
+							renotify: true,
+							requireInteraction: true,
+							vibrate: [200, 100, 200, 100, 200, 100, 200],
+							data: {}
+						});*/
 						let notificationTitle = '';
 						const options = {
 							badge: 'https://gulaymart.com/assets/images/favicon.png',
 							body: '',
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							tag: 'demo-notification1',
+							tag: 'demo-notification',
 							renotify: true,
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: oUser
@@ -69,30 +112,9 @@
 							options.body = 'You have a new Message';
 							options.data.newMessageCount = 1;
 						}
-
-						return registration.showNotification(notificationTitle, options);
+						registration.showNotification(notificationTitle, options);
 					});
-					// var sTag = 'demo-notification'+iCount
-					// if (iCount >= 3) {
-					// 	sTag = 'demo-notification2';
-					// }
-					// registration.showNotification('test', {
-					// 	/*actions: [{
-					// 		action: 'orders',
-					// 		title: 'View Order '+iCount,
-					// 		icon: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	}],*/
-					// 	badge: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	body: 'message '+iCount,
-					// 	tag: sTag,
-					// 	icon: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	// image: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	renotify: true,
-					// 	// requireInteraction: true,
-					// 	vibrate: [200, 100, 200, 100, 200, 100, 200],
-					// 	data: {}
-					// });
-				});
+				}
 			});
 		};
 
