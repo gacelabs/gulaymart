@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker;
+	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
 			afterInit: function() {
@@ -83,6 +83,18 @@
 
 		navigator.serviceWorker.register('sw.js').then(function(reg){
 			serviceWorker = reg;
+			/*serviceWorker.pushManager.getSubscription().then(function(subscription) {
+				isSubscribed = !(subscription === null);
+				if (isSubscribed) {
+					console.log('User IS subscribed.');
+				} else {
+					console.log('User is NOT subscribed.');
+					serviceWorker.pushManager.subscribe({
+						userVisibleOnly: true,
+						applicationServerKey: 'BA6gsZ2MpAFeB7t0U10uga1bPG9hWDGWOLrHDYKmOua5Cs9oBDEbycdmTFoZ_rVM6v08expaJvKkyJFNMHXd9fo'
+					});
+				}
+			});*/
 			if (oUser) {
 				if (!('Notification' in window)) {
 					runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
