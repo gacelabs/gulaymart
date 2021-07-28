@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false;
+	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
 			afterInit: function() {
@@ -27,6 +27,49 @@
 				});
 			},
 			afterConnect: function() {
+				if ('serviceWorker' in navigator) {
+					var runNotifRegistration = function() {
+						Notification.requestPermission().then(function (permission) {
+							if (permission === "granted") {
+								runSampleNotif();
+							} else {
+								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>', callback: 'runNotifRegistration'});
+							}
+						});
+					};
+					var runSampleNotif = function() {
+						$('#install-app').bind('click', function() {
+							navigator.serviceWorker.ready.then(function(registration) {
+								registration.showNotification('test', {
+									actions: [{
+										action: 'notification',
+										title: 'Order'
+									}],
+									badge: 'https://gulaymart.com/assets/images/favicon.png',
+									body: 'message',
+									tag: 'simple-push-demo-notification',
+									icon: 'https://gulaymart.com/assets/images/favicon.png',
+									renotify: true,
+									vibrate: [200, 100, 200, 100, 200, 100, 200],
+									data: {}
+								});
+							});
+						});
+					};
+
+					navigator.serviceWorker.register('sw.js').then(function(reg){
+						serviceWorker = reg;
+						if (!('Notification' in window)) {
+							runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
+						} else if (Notification.permission === 'granted') {
+							runSampleNotif();
+						} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
+							runNotifRegistration();
+						}
+					}).catch(function(err) {
+						console.log("Issue happened", err);
+					});
+				}
 			}
 		});
 	};
