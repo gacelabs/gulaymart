@@ -75,6 +75,10 @@
 						// } catch (err) {
 							navigator.serviceWorker.ready.then(function(registration) {
 								var notification = registration.showNotification('test', {
+									actions: [
+										action: 'notification',
+										title: 'Order'
+									],
 									badge: 'https://gulaymart.com/assets/images/favicon.png',
 									body: 'message',
 									tag: 'simple-push-demo-notification',
