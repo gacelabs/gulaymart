@@ -51,6 +51,7 @@
 			if ('serviceWorker' in navigator) {
 				var runSampleNotif = function() {
 					$('#install-app').bind('click', function() {
+						alert('clicked');
 						var notification = new Notification('test', {
 							body: 'message',
 							tag: 'simple-push-demo-notification',
@@ -97,7 +98,6 @@
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
 								navigator.serviceWorker.ready.then(function(registration) {
-									alert(1)
 									registration.showNotification('Notification with ServiceWorker');
 									runSampleNotif();
 								});
