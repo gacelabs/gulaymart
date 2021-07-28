@@ -28,7 +28,6 @@
 			},
 			afterConnect: function() {
 				if ('serviceWorker' in navigator) {
-					localStorage.removeItem('notificationCount');
 					var runNotifRegistration = function() {
 						++iNotifRequestCount;
 						Notification.requestPermission().then(function (permission) {
