@@ -49,6 +49,29 @@
 		<script type="text/javascript">
 			var serviceWorker, isSubscribed;
 			if ('serviceWorker' in navigator) {
+				var runSampleNotif = function() {
+					$('#install-app').bind('click', function() {
+						var notification = new Notification('test', {
+							body: 'message',
+							tag: 'simple-push-demo-notification',
+							icon: 'https://gulaymart.com/assets/images/favicon.png'
+						});
+
+						notification.addEventListener('click', function(e) {
+							console.log(e.type, e);
+						});
+						notification.addEventListener('close', function(e) {
+							console.log(e.type, e);
+						});
+						notification.addEventListener('error', function(e) {
+							console.log(e.type, e);
+						});
+						notification.addEventListener('show', function(e) {
+							console.log(e.type, e);
+						});
+					});
+				};
+
 				navigator.serviceWorker.register('sw.js')
 				.then(function(reg){
 					serviceWorker = reg;
@@ -66,50 +89,23 @@
 							});
 						}
 					});*/
+					if (!('Notification' in window)) {
+						runAlertBox({type:'info', message: 'This browser does not support desktop notification.'});
+					} else if (Notification.permission === "granted") {
+						runSampleNotif();
+					} else if (Notification.permission === "denied") {
+						Notification.requestPermission().then(function (permission) {
+							if (permission === "granted") {
+								runSampleNotif();
+							} else {
+								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.', unclose: true});
+							}
+						});
+					}
 				}).catch(function(err) {
 					console.log("Issue happened", err);
 				});
 			}
-
-			$(document).ready(function() {
-				if (!('Notification' in window)) {
-					runAlertBox({type:'info', message: 'This browser does not support desktop notification.'});
-				} else if (Notification.permission === "granted") {
-					runSampleNotif();
-				} else if (Notification.permission === "denied") {
-					Notification.requestPermission().then(function (permission) {
-						console.log(permission);
-						if (permission === "granted") {
-							runSampleNotif();
-						} else {
-							runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.', unclose: true});
-						}
-					});
-				}
-			});
-
-			var runSampleNotif = function() {
-				$('#install-app').bind('click', function() {
-					var notification = new Notification('test', {
-						body: 'message',
-						tag: 'simple-push-demo-notification',
-						icon: 'https://gulaymart.com/assets/images/favicon.png'
-					});
-
-					notification.addEventListener('click', function(e) {
-						console.log(e.type, e);
-					});
-					notification.addEventListener('close', function(e) {
-						console.log(e.type, e);
-					});
-					notification.addEventListener('error', function(e) {
-						console.log(e.type, e);
-					});
-					notification.addEventListener('show', function(e) {
-						console.log(e.type, e);
-					});
-				});
-			};
 		</script>
 	</body>
 </html>
