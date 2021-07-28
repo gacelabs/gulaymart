@@ -75,7 +75,10 @@
 
 						return registration.showNotification(notificationTitle, options);
 					});*/
-					if (iCount == 3) iCount = 2;
+					var sTag = 'demo-notification'+iCount
+					if (iCount == 3) {
+						sTag = 'demo-notification2';
+					}
 					registration.showNotification('test', {
 						/*actions: [{
 							action: 'orders',
@@ -84,7 +87,7 @@
 						}],*/
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: 'message '+iCount,
-						tag: 'demo-notification'+iCount,
+						tag: sTag,
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						// image: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
