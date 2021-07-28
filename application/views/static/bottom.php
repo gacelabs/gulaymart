@@ -51,28 +51,28 @@
 			if ('serviceWorker' in navigator) {
 				var runSampleNotif = function() {
 					$('#install-app').bind('click', function() {
-						try {
-							var notification = new Notification('test', {
-								body: 'message',
-								tag: 'simple-push-demo-notification',
-								icon: 'https://gulaymart.com/assets/images/favicon.png',
-								renotify: true,
-							});
-							console.log(notification);
-							notification.addEventListener('click', function(e) {
-								console.log(e.type, e);
-							});
-							notification.addEventListener('close', function(e) {
-								console.log(e.type, e);
-							});
-							notification.addEventListener('error', function(e) {
-								console.log(e.type, e);
-							});
-							notification.addEventListener('show', function(e) {
-								console.log(e.type, e);
-							});
+						// try {
+						// 	var notification = new Notification('test', {
+						// 		body: 'message',
+						// 		tag: 'simple-push-demo-notification',
+						// 		icon: 'https://gulaymart.com/assets/images/favicon.png',
+						// 		renotify: true,
+						// 	});
+						// 	console.log(notification);
+						// 	notification.addEventListener('click', function(e) {
+						// 		console.log(e.type, e);
+						// 	});
+						// 	notification.addEventListener('close', function(e) {
+						// 		console.log(e.type, e);
+						// 	});
+						// 	notification.addEventListener('error', function(e) {
+						// 		console.log(e.type, e);
+						// 	});
+						// 	notification.addEventListener('show', function(e) {
+						// 		console.log(e.type, e);
+						// 	});
 
-						} catch (err) {
+						// } catch (err) {
 							navigator.serviceWorker.ready.then(function(registration) {
 								console.log(registration);
 								registration.showNotification('test', {
@@ -83,7 +83,7 @@
 									vibrate: [200, 100, 200, 100, 200, 100, 200],
 								});
 							});
-						}
+						// }
 					});
 				};
 
