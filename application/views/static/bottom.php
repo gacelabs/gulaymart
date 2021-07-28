@@ -97,6 +97,7 @@
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
 								navigator.serviceWorker.ready.then(function(registration) {
+									alert(1)
 									registration.showNotification('Notification with ServiceWorker');
 									runSampleNotif();
 								});
