@@ -44,7 +44,7 @@
 			$('#install-app').bind('click', function() {
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
-					registration.getNotifications().then(function(notifications) {
+					registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
 						console.log(notifications);
 						return notifications.length;
 					}).then(function(messageCount) {
