@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, iCount = 0;
+	var realtime = false, serviceWorker;
 	window.initSendData = function() {
 		realtime = new SendData({
 			afterInit: function() {
@@ -43,42 +43,17 @@
 		var runSampleNotif = function() {
 			$('#install-app').bind('click', function() {
 				if (oUser) {
-					iCount++;
 					navigator.serviceWorker.ready.then(function(registration) {
 						registration.update();
-						if (mobileAndTabletCheck()) {
-							registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
-								let currentNotification;
-								for(let i = 0; i < notifications.length; i++) {
-									if (notifications[i].data && notifications[i].data.id === oUser.id) {
-										currentNotification = notifications[i];
-									}
+						registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
+							let currentNotification;
+							for(let i = 0; i < notifications.length; i++) {
+								if (notifications[i].data && notifications[i].data.id === oUser.id) {
+									currentNotification = notifications[i];
 								}
-								return currentNotification;
-							}).then(function(currentNotification) {
-								let notificationTitle = '';
-								const options = {
-									badge: 'https://gulaymart.com/assets/images/favicon.png',
-									body: '',
-									icon: 'https://gulaymart.com/assets/images/favicon.png',
-									tag: 'demo-notification',
-									renotify: true,
-									vibrate: [200, 100, 200, 100, 200, 100, 200],
-									data: oUser
-								};
-								if (currentNotification) {
-									const messageCount = currentNotification.data.newMessageCount + 1;
-									notificationTitle = 'New Message';
-									options.body = 'You have '+messageCount+' new messages';
-									options.data.newMessageCount = messageCount;
-								} else {
-									notificationTitle = 'New Message';
-									options.body = 'You have a new Message';
-									options.data.newMessageCount = 1;
-								}
-								return registration.showNotification(notificationTitle, options);
-							});
-						} else {
+							}
+							return currentNotification;
+						}).then(function(currentNotification) {
 							let notificationTitle = '';
 							const options = {
 								badge: 'https://gulaymart.com/assets/images/favicon.png',
@@ -89,37 +64,18 @@
 								vibrate: [200, 100, 200, 100, 200, 100, 200],
 								data: oUser
 							};
-							if (iCount > 1) {
+							if (currentNotification) {
+								const messageCount = currentNotification.data.newMessageCount + 1;
 								notificationTitle = 'New Message';
-								options.body = 'You have '+iCount+' new messages';
-								options.data.newMessageCount = iCount;
+								options.body = 'You have '+messageCount+' new messages';
+								options.data.newMessageCount = messageCount;
 							} else {
 								notificationTitle = 'New Message';
 								options.body = 'You have a new Message';
 								options.data.newMessageCount = 1;
 							}
-							registration.showNotification(notificationTitle, options);
-						}
-						/*var sTag = 'demo-notification'+iCount
-						if (iCount >= 3) {
-							sTag = 'demo-notification2';
-						}
-						registration.showNotification('test', {
-							actions: [{
-								action: 'orders',
-								title: 'View Order '+iCount,
-								icon: 'https://gulaymart.com/assets/images/favicon.png',
-							}],
-							badge: 'https://gulaymart.com/assets/images/favicon.png',
-							body: 'message '+iCount,
-							tag: sTag,
-							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							image: 'https://gulaymart.com/assets/images/favicon.png',
-							renotify: true,
-							requireInteraction: true,
-							vibrate: [200, 100, 200, 100, 200, 100, 200],
-							data: {}
-						});*/
+							return registration.showNotification(notificationTitle, options);
+						});
 					});
 				}
 			});
