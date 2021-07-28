@@ -44,79 +44,75 @@
 			$('#install-app').bind('click', function() {
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
-					/*registration.getNotifications().then(function(notifications) {
-						console.log(notifications);
-						let oLastMsgData = [];
-						for(let i = 0; i < notifications.length; i++) {
-							oLastMsgData.push(notifications[i]);
-						}
-						return oLastMsgData;
-					}).then(function(oLastMsgData) {
+					registration.getNotifications().then(function(notifications) {
+						return notifications.length;
+					}).then(function(messageCount) {
 						let notificationTitle = '';
 						const options = {
 							badge: 'https://gulaymart.com/assets/images/favicon.png',
 							body: '',
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							tag: 'demo-notification-1',
+							tag: 'demo-notification',
 							renotify: true,
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
-							data: {}
+							data: oUser
 						};
-						if (Object.keys(oLastMsgData).length) {
-							for (let x in oLastMsgData) {
-								let item = oLastMsgData[x];
-								notificationTitle += item.title+"\n";
-								options.body += item.body+"\n";
-							}
+						if (messageCount > 1) {
+							notificationTitle = 'New Message';
+							options.body = 'You have '+messageCount+' new messages';
+							options.data.newMessageCount = messageCount;
 						} else {
-							notificationTitle = 'test';
-							options.body = 'message '+iCount;
+							notificationTitle = 'New Message';
+							options.body = 'You have 1 Message';
+							options.data.newMessageCount = 1;
 						}
 
 						return registration.showNotification(notificationTitle, options);
-					});*/
-					var sTag = 'demo-notification'+iCount
-					if (iCount == 3) {
-						sTag = 'demo-notification2';
-					}
-					registration.showNotification('test', {
-						/*actions: [{
-							action: 'orders',
-							title: 'View Order '+iCount,
-							icon: 'https://gulaymart.com/assets/images/favicon.png',
-						}],*/
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: 'message '+iCount,
-						tag: sTag,
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						// image: 'https://gulaymart.com/assets/images/favicon.png',
-						renotify: true,
-						// requireInteraction: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: {}
 					});
+					// var sTag = 'demo-notification'+iCount
+					// if (iCount >= 3) {
+					// 	sTag = 'demo-notification2';
+					// }
+					// registration.showNotification('test', {
+					// 	/*actions: [{
+					// 		action: 'orders',
+					// 		title: 'View Order '+iCount,
+					// 		icon: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	}],*/
+					// 	badge: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	body: 'message '+iCount,
+					// 	tag: sTag,
+					// 	icon: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	// image: 'https://gulaymart.com/assets/images/favicon.png',
+					// 	renotify: true,
+					// 	// requireInteraction: true,
+					// 	vibrate: [200, 100, 200, 100, 200, 100, 200],
+					// 	data: {}
+					// });
 				});
 			});
 		};
 
 		navigator.serviceWorker.register('sw.js').then(function(reg){
 			serviceWorker = reg;
-			if (!('Notification' in window)) {
-				runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
-			} else if (Notification.permission === 'granted') {
-				runSampleNotif();
-			} else {
-				Notification.requestPermission().then(function (permission) {
-					if (permission === "granted") {
-						runSampleNotif();
-					} else {
-						runAlertBox({
-							type:'info',
-							message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
-							unclose: true
-						});
-					}
-				});
+			if (oUser) {
+				if (!('Notification' in window)) {
+					runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
+				} else if (Notification.permission === 'granted') {
+					runSampleNotif();
+				} else {
+					Notification.requestPermission().then(function (permission) {
+						if (permission === "granted") {
+							runSampleNotif();
+						} else {
+							runAlertBox({
+								type:'info',
+								message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
+								unclose: true
+							});
+						}
+					});
+				}
 			}
 		}).catch(function(err) {
 			console.log("Issue happened", err);
