@@ -45,7 +45,7 @@
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.update();
-					registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
+					registration.getNotifications({tag:'demo-notification'+iCount}).then(function(notifications) {
 						console.log(notifications);
 						return notifications.length;
 					}).then(function(messageCount) {
@@ -55,7 +55,7 @@
 							badge: 'https://gulaymart.com/assets/images/favicon.png',
 							body: '',
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							tag: 'demo-notification',
+							tag: 'demo-notification'+iCount,
 							renotify: true,
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: oUser
