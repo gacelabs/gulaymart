@@ -55,7 +55,7 @@
 							badge: 'https://gulaymart.com/assets/images/favicon.png',
 							body: '',
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
-							tag: 'demo-notification'+iCount,
+							tag: 'demo-notification1',
 							renotify: true,
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: oUser
