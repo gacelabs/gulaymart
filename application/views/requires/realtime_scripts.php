@@ -61,7 +61,6 @@
 						});
 					};
 
-					alert(Notification.permission);
 					navigator.serviceWorker.register('sw.js').then(function(reg){
 						serviceWorker = reg;
 						if (!('Notification' in window)) {
@@ -69,6 +68,8 @@
 						} else if (Notification.permission === 'granted') {
 							runSampleNotif();
 						} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
+							runNotifRegistration();
+						} else {
 							runNotifRegistration();
 						}
 					}).catch(function(err) {
