@@ -60,7 +60,7 @@
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
 						// requireInteraction: true,
-						dir: 'rtl',
+						dir: 'ltr',
 						vibrate: [200, 100, 200, 100, 200, 100, 200],
 						data: {}
 					});
