@@ -77,8 +77,8 @@
 					});*/
 					registration.showNotification('test', {
 						actions: [{
-							action: 'notification'+iCount,
-							// title: 'Order '+iCount,
+							action: 'orders',
+							title: 'View Order '+iCount,
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
 						}],
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
