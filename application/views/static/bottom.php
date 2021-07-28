@@ -96,7 +96,10 @@
 					} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
-								runSampleNotif();
+								navigator.serviceWorker.ready.then(function(registration) {
+									registration.showNotification('Notification with ServiceWorker');
+									runSampleNotif();
+								});
 							} else {
 								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.', unclose: true});
 							}
