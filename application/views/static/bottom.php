@@ -89,12 +89,11 @@
 							});
 						}
 					});*/
-					console.log(Notification.permission);
 					if (!('Notification' in window)) {
 						runAlertBox({type:'info', message: 'This browser does not support desktop notification.'});
-					} else if (Notification.permission === "granted") {
+					} else if (Notification.permission === 'granted') {
 						runSampleNotif();
-					} else if (Notification.permission === "denied") {
+					} else if (Notification.permission === 'default' || Notification.permission === 'denied') {
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
 								runSampleNotif();
