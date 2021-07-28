@@ -33,7 +33,7 @@
 							if (permission === "granted") {
 								runSampleNotif();
 							} else {
-								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>', callback: 'runNotifRegistration'});
+								runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>', callback: runNotifRegistration, unclose: true});
 							}
 						});
 					};
