@@ -29,14 +29,13 @@
 			afterConnect: function() {
 				if ('serviceWorker' in navigator) {
 					var runNotifRegistration = function() {
-						console.log(iNotifRequestCount);
 						++iNotifRequestCount;
 						Notification.requestPermission().then(function (permission) {
 							if (permission === "granted") {
 								runSampleNotif();
 							} else {
 								if (iNotifRequestCount == 3) {
-									runAlertBox({type:'warn', message: 'Notifications permission has been blocked as the user has dismissed the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', unclose: true});
+									runAlertBox({type:'warn', message: 'Notifications permission has been blocked as the user has dismissed the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.'});
 								} else {
 									runAlertBox({type:'info', message: 'Please enable Notification permission to use realtime messaging Service.<br><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br>', unclose: true, callback: runNotifRegistration});
 								}
