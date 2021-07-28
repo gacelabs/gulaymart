@@ -48,9 +48,11 @@
 						registration.update();
 						if (mobileAndTabletCheck()) {
 							registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
-								alert(notifications.length);
-								return notifications.length;
-							}).then(function(messageCount) {
+								if (notifications[i].data && notifications[i].data.id === oUser.id) {
+									currentNotification = notifications[i];
+								}
+								return currentNotification;
+							}).then(function(currentNotification) {
 								let notificationTitle = '';
 								const options = {
 									badge: 'https://gulaymart.com/assets/images/favicon.png',
@@ -61,7 +63,8 @@
 									vibrate: [200, 100, 200, 100, 200, 100, 200],
 									data: oUser
 								};
-								if (messageCount > 1) {
+								if (currentNotification) {
+									const messageCount = currentNotification.data.newMessageCount + 1;
 									notificationTitle = 'New Message';
 									options.body = 'You have '+messageCount+' new messages';
 									options.data.newMessageCount = messageCount;
