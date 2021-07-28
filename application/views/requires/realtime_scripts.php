@@ -5,7 +5,7 @@
 		realtime = new SendData({
 			afterInit: function() {
 				realtime.connect(function() {
-					// console.log('gulaymart.com ready to communicate!');
+					/*console.log('gulaymart.com ready to communicate!');*/
 					/*realtime.trigger('add-delivery', 'deliveries', {});*/
 					if (oUser) {
 						/*communicate from orders tab to fulfillment tab*/
@@ -71,7 +71,7 @@
 								options.data.newMessageCount = messageCount;
 							} else {
 								notificationTitle = 'Demo';
-								options.body = 'You have a new Message';
+								options.body = 'You have a new message';
 								options.data.newMessageCount = 1;
 							}
 							return registration.showNotification(notificationTitle, options);
@@ -96,6 +96,30 @@
 				}
 			});*/
 			if (oUser) {
+				// if ('safari' in window) {
+				// 	if ('pushNotification' in window.safari) {
+				// 		runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
+				// 	} else {
+				// 		var checkRemotePermission = function (permissionData) {
+				// 			if (permissionData.permission === 'granted') {
+				// 				/*The web service URL is a valid push provider, and the user said yes.*/
+				// 				/*permissionData.deviceToken is now available to use.*/
+				// 			} else {
+				//				/*This is a new web service URL and its validity is unknown.*/
+				// 				window.safari.pushNotification.requestPermission(
+				// 					'https://gulaymart.com', /*The web service URL.*/
+				// 					'web.com.gulaymart',     /*The Website Push ID.*/
+				// 					oUser,					 /*Data that you choose to send to your server to help you identify the user.*/
+				// 					checkRemotePermission	 /*The callback function.*/
+				// 				);
+				// 			}
+				// 		};
+
+				// 		var permissionData = window.safari.pushNotification.permission('web.com.gulaymart');
+				// 		checkRemotePermission(permissionData);
+				// 	}
+				// }
+
 				if (!('Notification' in window)) {
 					runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 				} else if (Notification.permission === 'granted') {
