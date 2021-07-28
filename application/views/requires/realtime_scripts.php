@@ -44,7 +44,7 @@
 			$('#install-app').bind('click', function() {
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
-					registration.getNotifications().then(function(notifications) {
+					/*registration.getNotifications().then(function(notifications) {
 						console.log(notifications);
 						let oLastMsgData = [];
 						for(let i = 0; i < notifications.length; i++) {
@@ -74,22 +74,23 @@
 						}
 
 						return registration.showNotification(notificationTitle, options);
+					});*/
+					registration.showNotification('test', {
+						actions: [{
+							action: 'notification'+iCount,
+							// title: 'Order '+iCount,
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+						}],
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: 'message '+iCount,
+						tag: 'demo-notification-1',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						// image: 'https://gulaymart.com/assets/images/favicon.png',
+						renotify: true,
+						// requireInteraction: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: {}
 					});
-					// registration.showNotification('test', {
-					// 	/*actions: [{
-					// 		action: 'notification',
-					// 		title: 'Order'
-					// 	}],*/
-					// 	badge: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	body: 'message '+iCount,
-					// 	tag: 'demo-notification-1',
-					// 	icon: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	// image: 'https://gulaymart.com/assets/images/favicon.png',
-					// 	renotify: true,
-					// 	// requireInteraction: true,
-					// 	vibrate: [200, 100, 200, 100, 200, 100, 200],
-					// 	data: {}
-					// });
 				});
 			});
 		};
