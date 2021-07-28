@@ -27,50 +27,6 @@
 				});
 			},
 			afterConnect: function() {
-				if ('serviceWorker' in navigator) {
-					var runSampleNotif = function() {
-						$('#install-app').bind('click', function() {
-							navigator.serviceWorker.ready.then(function(registration) {
-								registration.showNotification('test', {
-									/*actions: [{
-										action: 'notification',
-										title: 'Order'
-									}],*/
-									badge: 'https://gulaymart.com/assets/images/favicon.png',
-									body: 'message',
-									tag: 'simple-push-demo-notification',
-									icon: 'https://gulaymart.com/assets/images/favicon.png',
-									renotify: true,
-									vibrate: [200, 100, 200, 100, 200, 100, 200],
-									data: {}
-								});
-							});
-						});
-					};
-
-					navigator.serviceWorker.register('sw.js').then(function(reg){
-						serviceWorker = reg;
-						if (!('Notification' in window)) {
-							runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
-						} else if (Notification.permission === 'granted') {
-							runSampleNotif();
-						} else {
-							Notification.requestPermission().then(function (permission) {
-								if (permission === "granted") {
-									runSampleNotif();
-								} else {
-									runAlertBox({
-										type:'info',
-										message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
-										unclose: true
-									});
-								}
-							});
-						}
-					}).catch(function(err) {
-						console.log("Issue happened", err);
-					});
-				}
 			}
 		});
 	};
@@ -82,4 +38,49 @@
 		js.src = "<?php echo REALTIME_URL;?>";
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
+	
+	if ('serviceWorker' in navigator) {
+		var runSampleNotif = function() {
+			$('#install-app').bind('click', function() {
+				navigator.serviceWorker.ready.then(function(registration) {
+					registration.showNotification('test', {
+						/*actions: [{
+							action: 'notification',
+							title: 'Order'
+						}],*/
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: 'message',
+						tag: 'simple-push-demo-notification',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: {}
+					});
+				});
+			});
+		};
+
+		navigator.serviceWorker.register('sw.js').then(function(reg){
+			serviceWorker = reg;
+			if (!('Notification' in window)) {
+				runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
+			} else if (Notification.permission === 'granted') {
+				runSampleNotif();
+			} else {
+				Notification.requestPermission().then(function (permission) {
+					if (permission === "granted") {
+						runSampleNotif();
+					} else {
+						runAlertBox({
+							type:'info',
+							message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
+							unclose: true
+						});
+					}
+				});
+			}
+		}).catch(function(err) {
+			console.log("Issue happened", err);
+		});
+	}
 </script>
