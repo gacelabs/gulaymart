@@ -53,7 +53,7 @@
 						body: 'message '+iCount,
 						tag: 'simple-push-demo-notification',
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						renotify: true,
+						// renotify: true,
 						vibrate: [200, 100, 200, 100, 200, 100, 200],
 						data: {}
 					});
