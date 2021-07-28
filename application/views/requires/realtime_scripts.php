@@ -45,7 +45,7 @@
 				iCount++;
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.update();
-					registration.getNotifications({tag:'demo-notification'+iCount}).then(function(notifications) {
+					registration.getNotifications({tag:'demo-notification1'}).then(function(notifications) {
 						console.log(notifications);
 						return notifications.length;
 					}).then(function(messageCount) {
