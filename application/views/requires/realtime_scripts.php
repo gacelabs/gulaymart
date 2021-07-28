@@ -51,7 +51,7 @@
 						}],*/
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: 'message '+iCount,
-						tag: 'simple-push-demo-notification',
+						tag: 'simple-push-demo-notification-'+iCount,
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
 						renotify: true,
 						requireInteraction: true,
