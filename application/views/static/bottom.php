@@ -89,6 +89,7 @@
 							});
 						}
 					});*/
+					console.log(Notification.permission);
 					if (!('Notification' in window)) {
 						runAlertBox({type:'info', message: 'This browser does not support desktop notification.'});
 					} else if (Notification.permission === "granted") {
