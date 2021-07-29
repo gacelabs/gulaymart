@@ -23,7 +23,8 @@ self.addEventListener('notificationclick', function(event) {
 	event.notification.close();
 	/*This looks to see if the current is already open and*/
 	/*focuses if it is*/
-	event.waitUntil(event.target.clients.matchAll({
+	let clients = event.target.clients;
+	event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
 		if (oData) {
@@ -33,14 +34,18 @@ self.addEventListener('notificationclick', function(event) {
 				if (client.url == 'https://gulaymart.com/' && 'focus' in client) {
 					/*console.log('has focus', client);*/
 					client.focus();
-					client.navigate(client.url);
+					setTimeout(function() {
+						client.navigate(client.url);
+					}, 1000);
 					return;
 				}
 			}		
 		}
 		if (clients.openWindow) {
 			/*console.log('no focus', clients);*/
-			return clients.openWindow(oData.url);
+			return setTimeout(function() {
+				clients.openWindow(oData.url);
+			}, 1000);
 		}
 	}));
 });
