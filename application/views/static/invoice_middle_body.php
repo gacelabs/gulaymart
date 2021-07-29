@@ -128,7 +128,7 @@
 					<?php endif ?>
 				</ul>
 				<div style="margin-top:20px;text-align: center;">
-					<p class="zero-gaps"><small><span class="text-gray">BY:</span> <a href="gulaymart.com" class="text-theme"><i class="fa fa-leaf"></i> GULAYMART</a></small></p>
+					<p class="zero-gaps"><small><span class="text-gray">BY:</span> <a href="<?php echo base_url();?>" class="text-theme"><i class="fa fa-leaf"></i> GULAYMART</a></small></p>
 				</div>
 			</div>
 		</div>
