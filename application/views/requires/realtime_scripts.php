@@ -181,13 +181,13 @@
 				if (!('Notification' in window)) {
 					runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 				} else if (Notification.permission === 'granted') {
-					runSampleNotif();
 					runNotificationListeners();
+					runSampleNotif();
 				} else {
 					Notification.requestPermission().then(function (permission) {
 						if (permission === "granted") {
-							runSampleNotif();
 							runNotificationListeners();
+							runSampleNotif();
 						} else {
 							runAlertBox({
 								type:'info',
