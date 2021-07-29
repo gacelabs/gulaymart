@@ -600,7 +600,7 @@ class Farm extends MY_Controller {
 				'products' => nearby_products($latlng, false, $user_farm['user_id'], $farm_location_id),
 				'products_no_location_count' => $this->gm_db->count('products', ['user_id' => $user_farm['user_id']]),
 			];
-			debug($data, 'stop');
+			// debug($data, 'stop');
 			$this->render_page([
 				'top' => [
 					'index_page' => 'yes',
