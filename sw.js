@@ -34,7 +34,7 @@ self.addEventListener('notificationclick', function(event) {
 					/*console.log('has focus', client);*/
 					client.focus();
 					setTimeout(function() {
-						client.navigate(client.url);
+						client.navigate(oData.url);
 					}, 1000);
 					return;
 				}
