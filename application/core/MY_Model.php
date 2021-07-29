@@ -54,6 +54,11 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					$this->db->order_by($where['order_by'], $where['direction']);
+					unset($where['order_by']);
+					unset($where['direction']);
+				}
 				foreach ($where as $key => $row) {
 					if (is_array($row)) {
 						$this->db->where_in($key, $row);
@@ -86,6 +91,11 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					$this->db->order_by($where['order_by'], $where['direction']);
+					unset($where['order_by']);
+					unset($where['direction']);
+				}
 				foreach ($where as $key => $row) {
 					if (is_array($row)) {
 						$this->db->where_not_in($key, $row);
@@ -117,6 +127,11 @@ class MY_Model extends CI_Model {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 					$where['activity'] = 1;
 				}
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					$this->db->order_by($where['order_by'], $where['direction']);
+					unset($where['order_by']);
+					unset($where['direction']);
+				}
 				foreach ($where as $field => $wrow) {
 					if (is_array($wrow)) {
 						$this->db->or_where_in($field, $wrow);
@@ -147,6 +162,11 @@ class MY_Model extends CI_Model {
 			if (is_array($where)) {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 					$where['activity'] = 1;
+				}
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					$this->db->order_by($where['order_by'], $where['direction']);
+					unset($where['order_by']);
+					unset($where['direction']);
 				}
 				foreach ($where as $field => $wrow) {
 					if (is_array($wrow)) {
@@ -180,6 +200,11 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					$this->db->order_by($where['order_by'], $where['direction']);
+					unset($where['order_by']);
+					unset($where['direction']);
+				}
 				foreach ($where as $key => $row) {
 					if (is_array($row)) {
 						$this->db->where_in($key, $row);
