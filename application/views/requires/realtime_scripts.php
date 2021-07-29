@@ -76,7 +76,9 @@
 								options.body = 'You have a new message';
 								options.data.newMessageCount = 1;
 							}
-							return registration.showNotification(notificationTitle, options);
+							var notifications = registration.showNotification(notificationTitle, options);
+							console.log(notifications);
+							return notifications;
 						});
 					});
 				}
