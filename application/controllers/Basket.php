@@ -214,7 +214,7 @@ class Basket extends My_Controller {
 	public function checkout($base64_basket_ids=false)
 	{
 		if ($base64_basket_ids) {
-			$where = ['id' => json_decode(base64_decode($base64_basket_ids), true), 'status' => 1];
+			$where = ['id' => array_unique(json_decode(base64_decode($base64_basket_ids), true)), 'status' => 1];
 			// $baskets = $this->baskets->get_in($where);
 			$baskets = get_session_baskets($where);
 			// debug($where, $baskets, 'stop');
