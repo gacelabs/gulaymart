@@ -5,21 +5,21 @@
 			<div class="messages-nav-grid">
 				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications']);
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications', 'user_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='msg_notifications-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
 				</div>
 				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries']);
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries', 'user_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='msg_inquiries-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
 				</div>
 				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Feedbacks']);
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Feedbacks', 'user_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
