@@ -73,7 +73,7 @@
 				if (oUser) {
 					oUser.seller_id = oUser.id;
 					oUser.url = window.location.protocol + '//' + window.location.hostname + '/profile/';
-					onServiceWorkerReady('demo', {
+					realtime.trigger('send-notification', 'ordered-items', {
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: '',
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
