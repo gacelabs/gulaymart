@@ -79,7 +79,7 @@
 				if (oUser) {
 					oUser.seller_id = oUser.id;
 					oUser.url = window.location.protocol + '//' + window.location.hostname + '/profile/';
-					realtime.trigger('send-notification', 'ordered-notification', {
+					realtime.trigger('ordered-notification', 'send-notification', {
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: '',
 						icon: 'https://gulaymart.com/assets/images/favicon.png',
@@ -101,12 +101,12 @@
 						} else {
 							$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 						}
-						realtime.bind('send-notification', 'fulfilled-notification', function(object) {
+						realtime.bind('fulfilled-notification', 'send-notification', function(object) {
 							var oData = object.data;
 							// console.log(oData);
 							onServiceWorkerReady('fulfillment', oData);
 						});
-						realtime.bind('send-notification', 'ordered-notification', function(object) {
+						realtime.bind('ordered-notification', 'send-notification', function(object) {
 							var oData = object.data;
 							// console.log(oData);
 							onServiceWorkerReady('order', oData);
