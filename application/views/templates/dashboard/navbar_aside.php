@@ -58,7 +58,7 @@
 			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => 1]);
+					$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'user_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='nav-messages-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
