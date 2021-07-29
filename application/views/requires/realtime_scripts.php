@@ -3,7 +3,7 @@
 	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
-			debug: true,
+			// debug: true,
 			afterInit: function() {
 				realtime.connect(function() {
 					/*console.log('gulaymart.com ready to communicate!');*/
