@@ -95,6 +95,11 @@
 				if (realtime != false) {
 					clearInterval(i);
 					setTimeout(function() {
+						if (realtime.app.connected) {
+							$('#is-connected').addClass('text-success');
+						} else {
+							$('#is-connected').addClass('text-danger');
+						}
 						realtime.bind('send-notification', 'fulfilled-items', function(object) {
 							var oData = object.data;
 							console.log(oData);
