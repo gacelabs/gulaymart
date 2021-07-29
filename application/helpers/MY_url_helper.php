@@ -92,9 +92,17 @@ function toktok_post_delivery_format($data=false)
 	return $params;
 }
 
-function toktok_price_directions_format($data=false)
+function toktok_price_directions_format($data=false, $vehicle='Motorcycle')
 {
 	$ci =& get_instance();
+	$ci->load->library('ToktokApi');
+	$ci->toktokapi->app_request('vehicle_types');
+	$vehicle_id = 'clc1ZkhIZnlSMXFoTUFWODE0eXkyUT09';
+	if ($ci->toktokapi->success) {
+		$vehicle = find_value($vehicle, $ci->toktokapi->response['message'], 'type', true);
+		// debug($vehicle, $ci->toktokapi, 'stop');
+		$vehicle_id = $vehicle['id'];
+	}
 	$pricing = [
 		'f_sender_lat' => $data ? $data['sender_lat'] : 0,
 		'f_sender_lon' => $data ? $data['sender_lng'] : 0,
@@ -108,6 +116,7 @@ function toktok_price_directions_format($data=false)
 		'isExpress' => ($data AND isset($data['express']) AND $data['express'] == true) ? 'true' : 'false',
 		// 'isCashOnDelivery' => ($data AND isset($data['cod']) AND $data['cod'] == true) ? 'true' : 'false',
 		'isCashOnDelivery' => 'true',
+		'vehicleTypeId' => $vehicle_id,
 	];
 	return $pricing;
 }

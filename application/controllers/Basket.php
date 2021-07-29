@@ -219,7 +219,7 @@ class Basket extends My_Controller {
 			$where = ['id' => array_unique($ids), 'status' => 1];
 			// $baskets = $this->baskets->get_in($where);
 			$baskets = get_session_baskets($where);
-			debug($where, $baskets, 'stop');
+			// debug($where, $baskets, 'stop');
 			$this->checkout_handler($baskets);
 		} else {
 			redirect(base_url('basket/?info=Nothing+to+Checkout'));
@@ -256,6 +256,7 @@ class Basket extends My_Controller {
 							'receiver_lng' => $this->latlng['lng'],
 						]);
 						$this->toktokapi->app_request('price_and_directions', $pricing);
+						// debug($this->toktokapi, 'stop');
 						if ($this->toktokapi->success) {
 							$checkout_pricing = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
 							// $checkout_pricing['pricing']['price'];

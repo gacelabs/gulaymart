@@ -46,7 +46,7 @@ class ToktokApi {
 				if (!in_array($method, ['post_delivery', 'view_delivery', 'fetch_riders'])) {
 					curl_setopt($this->ch, CURLOPT_POST, false);
 					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
-				} elseif (in_array($method, ['view_delivery'])) {
+				} elseif (in_array($method, ['view_delivery', 'vehicle_types'])) {
 					curl_setopt($this->ch, CURLOPT_POST, true);
 					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'/'.$params);
 				} else {
@@ -181,6 +181,7 @@ class ToktokApi {
 				'active_places' => 'sys/pickup_dropoff_point/map_pickup_dropoff_point_list',
 				'rider_by_id' => 'app/driver/get_driver_by_id/', // driver_id=NnVqclFUY2RIbkk5Q3JKRi9lTTc2QT09 (found in )
 				'driver_list' => 'app/driver/driver_list_table/',
+				'vehicle_types' => 'app/enterprise_deliveries/fetchVehicleTypes',
 			];
 		} elseif ($type == 'website') {
 			$this->url = $this->website;
