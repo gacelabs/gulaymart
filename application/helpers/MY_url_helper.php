@@ -710,23 +710,29 @@ function setup_orders_data($baskets_merge=false)
 function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $keywords='')
 {
 	$ci =& get_instance();
+	$latlng = get_cookie('prev_latlng', true);
+	if (empty($latlng)) {
+		$latlng = $ci->latlng;
+	} else {
+		$latlng = unserialize($latlng);
+	}
 	// debug($category_ids, 'stop');
 	if ($ci->input->is_ajax_request()) {
 		$not_ids = $ci->input->post('not_ids') ?: $ci->input->get('not_ids');
 		$has_ids = $ci->input->post('has_ids') ?: $ci->input->get('has_ids');
 
-		$nearby_products = nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]);
+		$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]);
 		$html = '';
 		if ($nearby_products) {
 			foreach ($nearby_products as $key => $product) {
 				$html .= $ci->load->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']], true);
 			}
-			$nearby_products = nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
+			$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
 		}
 		// debug($nearby_products, 'stop');
 		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)]); exit();
 	}
-	// debug(nearby_farms($ci->latlng), nearby_products($ci->latlng), 'stop');
+	// debug(nearby_farms($latlng), nearby_products($latlng), 'stop');
 	$ci->render_page([
 		'top' => [
 			'metas' => [
@@ -762,10 +768,10 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 			],
 		],
 		'data' => [
-			'nearby_veggies' => nearby_veggies($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products' => nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products_count' => nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
-			'nearby_farms' => nearby_farms($ci->latlng),
+			'nearby_veggies' => nearby_veggies($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+			'nearby_products' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+			'nearby_products_count' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
+			'nearby_farms' => nearby_farms($latlng),
 			'keywords' => $keywords,
 		],
 	]);
