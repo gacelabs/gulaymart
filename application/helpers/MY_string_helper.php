@@ -1388,7 +1388,7 @@ function nearby_veggies($data=false, $conditions=false, $user_id=false)
 	return $veggies;
 }
 
-function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false)
+function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false, $bypass=false)
 {
 	$products = false;
 	if ($data) {
@@ -1403,14 +1403,24 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 		if ($results) {
 			$products = [];
 			foreach ($results as $key => $row) {
-				$driving_distance = get_driving_distance([
-					['lat' => $data['lat'], 'lng' => $data['lng']],
-					['lat' => $row['lat'], 'lng' => $row['lng']],
-				]);
-				// debug($driving_distance['distance'], 'stop');
+				if ($bypass == false) {
+					$driving_distance = get_driving_distance([
+						['lat' => $data['lat'], 'lng' => $data['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					]);
+				} else {
+					$driving_distance = get_driving_distance([
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					]);
+				}
+				// debug($driving_distance, METERS_DISTANCE_TO_USER, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions);
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions, [
+						['lat' => $bypass['lat'], 'lng' => $bypass['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					]);
 					// $duration = (int)$driving_distance['durationval'];
 					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1421,7 +1431,7 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 	return $products;
 }
 
-function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false)
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false, $bypass=false)
 {
 	$ci =& get_instance();
 	if ($compare_1 <= $compare_2) {
@@ -1487,6 +1497,7 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 						}
 					}
 
+					if ($bypass) $driving_distance = get_driving_distance($bypass);
 					$item['distance'] = $driving_distance['distance'];
 					$item['duration'] = $driving_distance['duration'];
 					$item['distanceval'] = $driving_distance['distanceval'];
