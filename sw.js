@@ -1,11 +1,11 @@
 self.addEventListener('install', function(event) {
 	console.log("installed");
-	event.waitUntil(self.skipWaiting());
+	// event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', function(event) {
 	console.log("activated");
-	event.waitUntil(self.clients.claim());
+	// event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', function(event) {
