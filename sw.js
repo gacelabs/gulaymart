@@ -31,7 +31,7 @@ self.addEventListener('notificationclick', function(event) {
 			/*console.log('list', clientList);*/
 			for (var i = 0; i < clientList.length; i++) {
 				var client = clientList[i];
-				if (client.url == 'https://gulaymart.com/' && 'focus' in client) {
+				if (/*client.url == 'https://gulaymart.com/' && */'focus' in client) {
 					/*console.log('has focus', client);*/
 					client.focus();
 					setTimeout(function() {
