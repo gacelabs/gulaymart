@@ -95,6 +95,9 @@
 				if (realtime != false) {
 					clearInterval(i);
 					setTimeout(function() {
+						$('#is-connected').off('click').on('click', function() {
+							alert(JSON.stringify(realtime.app));
+						});
 						if (realtime.app.connected) {
 							$('#is-connected').addClass('text-success');
 						} else {
