@@ -214,10 +214,12 @@ class Basket extends My_Controller {
 	public function checkout($base64_basket_ids=false)
 	{
 		if ($base64_basket_ids) {
-			$where = ['id' => array_unique(json_decode(base64_decode($base64_basket_ids), true)), 'status' => 1];
+			$ids = json_decode(base64_decode($base64_basket_ids), true);
+			// debug(array_unique($ids), 'stop');
+			$where = ['id' => array_unique($ids), 'status' => 1];
 			// $baskets = $this->baskets->get_in($where);
 			$baskets = get_session_baskets($where);
-			// debug($where, $baskets, 'stop');
+			debug($where, $baskets, 'stop');
 			$this->checkout_handler($baskets);
 		} else {
 			redirect(base_url('basket/?info=Nothing+to+Checkout'));
