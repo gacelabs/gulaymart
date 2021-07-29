@@ -40,10 +40,48 @@
 	}(document, "script", "sd-sdk"));
 
 	if ('serviceWorker' in navigator) {
+		var onServiceWorkerReady = function(type, oData) {
+			navigator.serviceWorker.ready.then(function(registration) {
+				registration.update();
+				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
+					let currentNotification;
+					for(let i = 0; i < notifications.length; i++) {
+						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
+							currentNotification = notifications[i];
+						}
+					}
+					return currentNotification;
+				}).then(function(currentNotification) {
+					let notificationTitle = '';
+					const options = oData;
+					if (currentNotification) {
+						const messageCount = currentNotification.data.newMessageCount + 1;
+						notificationTitle = 'New Message';
+						options.body = 'You have '+messageCount+' new '+type+'s';
+						options.data.newMessageCount = messageCount;
+					} else {
+						notificationTitle = 'New Message';
+						options.body = 'You have a new '+type;
+						options.data.newMessageCount = 1;
+					}
+					return registration.showNotification(notificationTitle, options);
+				});
+			});
+		};
 		var runSampleNotif = function() {
 			$('#install-app').bind('click', function() {
 				if (oUser) {
-					navigator.serviceWorker.ready.then(function(registration) {
+					oUser.seller_id = oUser.id;
+					onServiceWorkerReady('demo', {
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: '',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						tag: 'demo-notification',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: oUser
+					});
+					/*navigator.serviceWorker.ready.then(function(registration) {
 						registration.update();
 						registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
 							console.log(notifications);
@@ -83,38 +121,10 @@
 							});
 							return notifications;
 						});
-					});
+					});*/
 				}
 			});
 		};
-		var onServiceWorkerReady = function(type, oData) {
-			navigator.serviceWorker.ready.then(function(registration) {
-				registration.update();
-				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
-					let currentNotification;
-					for(let i = 0; i < notifications.length; i++) {
-						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
-							currentNotification = notifications[i];
-						}
-					}
-					return currentNotification;
-				}).then(function(currentNotification) {
-					let notificationTitle = '';
-					const options = oData;
-					if (currentNotification) {
-						const messageCount = currentNotification.data.newMessageCount + 1;
-						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+type+'s';
-						options.data.newMessageCount = messageCount;
-					} else {
-						notificationTitle = 'New Message';
-						options.body = 'You have a new '+type;
-						options.data.newMessageCount = 1;
-					}
-					return registration.showNotification(notificationTitle, options);
-				});
-			});
-		}
 		var runNotificationListeners = function() {
 			setInterval(function() {
 				if (realtime != false) {
