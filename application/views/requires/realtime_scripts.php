@@ -106,12 +106,12 @@
 						}
 						realtime.bind('send-notification', 'fulfilled-items', function(object) {
 							var oData = object.data;
-							console.log(oData);
+							// console.log(oData);
 							onServiceWorkerReady('fulfillment', oData);
 						});
 						realtime.bind('send-notification', 'ordered-items', function(object) {
 							var oData = object.data;
-							console.log(oData);
+							// console.log(oData);
 							onServiceWorkerReady('order', oData);
 						});
 					}, 300);
