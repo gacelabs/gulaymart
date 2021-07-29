@@ -48,6 +48,7 @@
 		</div>
 	</div>
 </div>
+<!-- this is to determine if realtime is connected -->
 <div class="container">
 	<div class="text-right">
 		<small id="is-connected" class="fa fa-link"></small>
