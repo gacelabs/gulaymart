@@ -113,16 +113,21 @@
 			});
 		}
 		var runNotificationListeners = function() {
-			realtime.bind('send-notification', 'fulfilled-items', function(object) {
-				var oData = object.data;
-				console.log(oData);
-				onServiceWorkerReady('fulfillment', oData);
-			});
-			realtime.bind('send-notification', 'ordered-items', function(object) {
-				var oData = object.data;
-				console.log(oData);
-				onServiceWorkerReady('order', oData);
-			});
+			setInterval(function() {
+				if (realtime != false) {
+					clearInterval();
+					realtime.bind('send-notification', 'fulfilled-items', function(object) {
+						var oData = object.data;
+						console.log(oData);
+						onServiceWorkerReady('fulfillment', oData);
+					});
+					realtime.bind('send-notification', 'ordered-items', function(object) {
+						var oData = object.data;
+						console.log(oData);
+						onServiceWorkerReady('order', oData);
+					});
+				}
+			}, 1000);
 		};
 
 		navigator.serviceWorker.register('sw.js').then(function(reg){
