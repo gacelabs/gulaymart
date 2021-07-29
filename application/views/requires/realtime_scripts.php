@@ -43,6 +43,7 @@
 										return currentNotification;
 									}).then(function(currentNotification) {
 										let notificationTitle = '';
+										oUser.url = '/';
 										const options = {
 											badge: 'https://gulaymart.com/assets/images/favicon.png',
 											body: '',
