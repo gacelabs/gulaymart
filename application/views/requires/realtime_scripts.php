@@ -38,7 +38,7 @@
 		js.src = "<?php echo REALTIME_URL;?>";
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
-	
+
 	if ('serviceWorker' in navigator) {
 		var runSampleNotif = function() {
 			$('#install-app').bind('click', function() {
@@ -46,6 +46,7 @@
 					navigator.serviceWorker.ready.then(function(registration) {
 						registration.update();
 						registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
+							console.log(notifications);
 							let currentNotification;
 							for(let i = 0; i < notifications.length; i++) {
 								if (notifications[i].data && notifications[i].data.id === oUser.id) {
