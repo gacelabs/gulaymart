@@ -55,7 +55,7 @@
 			</div>
 			<?php endif; ?>
 
-			<div class="dashboard-panel theme" id="profile_info_panel">
+			<div class="dashboard-panel theme<?php if (!$current_profile['profile']) : ?> hide<?php endif; ?>" id="profile_info_panel">
 				<ul class="spaced-list between dashboard-panel-top">
 					<li><h4 class="zero-gaps">What's your name?</h4></li>
 					<li><small><a href="profile/" class="text-link">EXIT</a></small></li>
