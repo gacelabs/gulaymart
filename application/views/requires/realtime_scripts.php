@@ -68,6 +68,46 @@
 							}
 						});
 					};
+					var onServiceWorkerReady = function(type, oData) {
+						navigator.serviceWorker.ready.then(function(registration) {
+							registration.update();
+							registration.getNotifications({tag:oData.tag}).then(function(notifications) {
+								let currentNotification;
+								for(let i = 0; i < notifications.length; i++) {
+									if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
+										currentNotification = notifications[i];
+									}
+								}
+								return currentNotification;
+							}).then(function(currentNotification) {
+								let notificationTitle = '';
+								const options = oData;
+								if (currentNotification) {
+									const messageCount = currentNotification.data.newMessageCount + 1;
+									notificationTitle = 'New Message';
+									options.body = 'You have '+messageCount+' new '+type+'s';
+									options.data.newMessageCount = messageCount;
+								} else {
+									notificationTitle = 'New Message';
+									options.body = 'You have a new '+type;
+									options.data.newMessageCount = 1;
+								}
+								return registration.showNotification(notificationTitle, options);
+							});
+						});
+					}
+					var runNotificationListeners = function() {
+						realtime.bind('send-notification', 'fulfilled-items', function(object) {
+							var oData = object.data;
+							console.log(oData);
+							onServiceWorkerReady('fulfillment', oData);
+						});
+						realtime.bind('send-notification', 'ordered-items', function(object) {
+							var oData = object.data;
+							console.log(oData);
+							onServiceWorkerReady('order', oData);
+						});
+					};
 
 					navigator.serviceWorker.register('sw.js').then(function(reg){
 						serviceWorker = reg;
@@ -84,38 +124,35 @@
 							}
 						});*/
 						if (oUser) {
-							// if ('safari' in window) {
-							// 	if ('pushNotification' in window.safari) {
-							// 		runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
-							// 	} else {
-							// 		var checkRemotePermission = function (permissionData) {
-							// 			if (permissionData.permission === 'granted') {
-							// 				/*The web service URL is a valid push provider, and the user said yes.*/
-							// 				/*permissionData.deviceToken is now available to use.*/
-							// 			} else {
-							//				/*This is a new web service URL and its validity is unknown.*/
-							// 				window.safari.pushNotification.requestPermission(
-							// 					'https://gulaymart.com', /*The web service URL.*/
-							// 					'web.com.gulaymart',     /*The Website Push ID.*/
-							// 					oUser,					 /*Data that you choose to send to your server to help you identify the user.*/
-							// 					checkRemotePermission	 /*The callback function.*/
-							// 				);
-							// 			}
-							// 		};
-
-							// 		var permissionData = window.safari.pushNotification.permission('web.com.gulaymart');
-							// 		checkRemotePermission(permissionData);
-							// 	}
-							// }
-
+							/*if ('safari' in window) {
+								if ('pushNotification' in window.safari) {
+									runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
+								} else {
+									var checkRemotePermission = function (permissionData) {
+										if (permissionData.permission === 'granted') {
+										} else {
+											window.safari.pushNotification.requestPermission(
+												'https://gulaymart.com',
+												'web.com.gulaymart',
+												oUser,
+												checkRemotePermission
+											);
+										}
+									};
+									var permissionData = window.safari.pushNotification.permission('web.com.gulaymart');
+									checkRemotePermission(permissionData);
+								}
+							}*/
 							if (!('Notification' in window)) {
 								runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 							} else if (Notification.permission === 'granted') {
 								runSampleNotif();
+								runNotificationListeners();
 							} else {
 								Notification.requestPermission().then(function (permission) {
 									if (permission === "granted") {
 										runSampleNotif();
+										runNotificationListeners();
 									} else {
 										runAlertBox({
 											type:'info',

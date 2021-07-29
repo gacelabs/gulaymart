@@ -16,19 +16,29 @@ self.addEventListener('fetch', function(event) {
 	});
 
 self.addEventListener('notificationclick', function(event) {
-	console.log('On notification click: ', event.notification.tag, event);
+	console.log('on notification click: ', event);
+	let oData = event.notification.data;
 	event.notification.close();
 	/*This looks to see if the current is already open and*/
 	/*focuses if it is*/
-	/*event.waitUntil(clients.matchAll({
+	event.waitUntil(clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
-		for (var i = 0; i < clientList.length; i++) {
-			var client = clientList[i];
-			if (client.url == '/' && 'focus' in client)
-				return client.focus();
+		if (oData) {
+			/*console.log('list', clientList);*/
+			for (var i = 0; i < clientList.length; i++) {
+				var client = clientList[i];
+				if (client.url == oData.url && 'focus' in client) {
+				    /*console.log('has focus', client);*/
+					client.focus();
+	                client.navigate(client.url);
+					return;
+				}
+			}		
 		}
-		if (clients.openWindow)
-			return clients.openWindow('/');
-	}));*/
+		if (clients.openWindow) {
+			/*console.log('no focus', clients);*/
+			return clients.openWindow(oData.url);
+		}
+	}));
 });
