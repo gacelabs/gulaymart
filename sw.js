@@ -40,11 +40,10 @@ self.addEventListener('notificationclick', function(event) {
 				}
 			}		
 		}
-		if (event.target.clients.openWindow) {
-			/*console.log('no focus', clients);*/
+		/*if (event.target.clients.openWindow) {
 			return setTimeout(function() {
 				event.target.clients.openWindow(oData.url);
 			}, 1000);
-		}
+		}*/
 	}));
 });

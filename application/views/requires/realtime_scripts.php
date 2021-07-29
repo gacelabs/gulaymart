@@ -27,6 +27,11 @@
 				});
 			},
 			afterConnect: function() {
+				if (realtime.app.connected) {
+					$('#is-connected').addClass('text-success');
+				} else {
+					$('#is-connected').addClass('text-danger');
+				}
 			}
 		});
 	};
@@ -41,7 +46,6 @@
 
 	if ('serviceWorker' in navigator) {
 		var onServiceWorkerReady = function(type, oData) {
-			alert(type);
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
