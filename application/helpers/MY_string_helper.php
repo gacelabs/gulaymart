@@ -1408,19 +1408,21 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 						['lat' => $data['lat'], 'lng' => $data['lng']],
 						['lat' => $row['lat'], 'lng' => $row['lng']],
 					]);
+					$bypass_data = false;
 				} else {
 					$driving_distance = get_driving_distance([
 						['lat' => $row['lat'], 'lng' => $row['lng']],
 						['lat' => $row['lat'], 'lng' => $row['lng']],
 					]);
+					$bypass_data = [
+						['lat' => $bypass['lat'], 'lng' => $bypass['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					];
 				}
 				// debug($driving_distance, METERS_DISTANCE_TO_USER, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions, [
-						['lat' => $bypass['lat'], 'lng' => $bypass['lng']],
-						['lat' => $row['lat'], 'lng' => $row['lng']],
-					]);
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions, $bypass_data);
 					// $duration = (int)$driving_distance['durationval'];
 					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
