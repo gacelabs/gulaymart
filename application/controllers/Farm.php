@@ -583,11 +583,16 @@ class Farm extends MY_Controller {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
 				$farm_location_id = $user_farm['farm_location_id'] = ($farm_location ? $farm_location['id'] : 0);
 			}
-			$latlng = get_cookie('prev_latlng', true);
-			if (empty($latlng)) {
-				$latlng = $this->latlng;
+				
+			if (isset($farm_location['lat']) AND isset($farm_location['lng'])) {
+				$latlng = ['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']];
 			} else {
-				$latlng = unserialize($latlng);
+				$latlng = get_cookie('prev_latlng', true);
+				if (empty($latlng)) {
+					$latlng = $this->latlng;
+				} else {
+					$latlng = unserialize($latlng);
+				}
 			}
 			$data = [
 				'farm' => $user_farm,
