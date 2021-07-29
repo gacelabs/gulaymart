@@ -77,7 +77,10 @@
 								options.data.newMessageCount = 1;
 							}
 							var notifications = registration.showNotification(notificationTitle, options);
-							console.log(notifications);
+
+							notifications.then(function(request) {
+								console.log(request);
+							});
 							return notifications;
 						});
 					});
