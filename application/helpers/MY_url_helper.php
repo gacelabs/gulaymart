@@ -569,7 +569,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 		$ci->senddataapi->trigger('send-notification', 'ordered-items', [
 			'badge' => base_url('assets/images/favicon.png'),
 			'body' => '',
-			'icon' =>base_url('assets/images/favicon.png'),
+			'icon' => base_url('assets/images/favicon.png'),
 			'tag' => 'send-notification:ordered-items',
 			'renotify' => true,
 			'vibrate' => [200, 100, 200, 100, 200, 100, 200],
@@ -578,7 +578,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 				'merge_ids' => $merge_ids,
 				'seller_id' => $seller_id,
 				'buyer' => $buyer,
-				'url' => base_url('fulfillment/placed'),
+				'url' => base_url('orders/messages'),
 			],
 		]);
 	}
@@ -617,7 +617,7 @@ function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for p
 		$ci->senddataapi->trigger('send-notification', 'fulfilled-items', [
 			'badge' => base_url('assets/images/favicon.png'),
 			'body' => '',
-			'icon' =>base_url('assets/images/favicon.png'),
+			'icon' => base_url('assets/images/favicon.png'),
 			'tag' => 'send-notification:fulfilled-items',
 			'renotify' => true,
 			'vibrate' => [200, 100, 200, 100, 200, 100, 200],
@@ -627,7 +627,7 @@ function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for p
 				'action' => $action,
 				'status' => $status,
 				'seller_id' => $seller_id,
-				'url' => base_url('fulfillment/'.$status),
+				'url' => base_url('orders/messages'),
 			],
 		]);
 	}

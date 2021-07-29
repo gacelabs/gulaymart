@@ -41,6 +41,7 @@
 
 	if ('serviceWorker' in navigator) {
 		var onServiceWorkerReady = function(type, oData) {
+			alert(type);
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
@@ -82,47 +83,6 @@
 						vibrate: [200, 100, 200, 100, 200, 100, 200],
 						data: oUser
 					});
-					/*navigator.serviceWorker.ready.then(function(registration) {
-						registration.update();
-						registration.getNotifications({tag:'demo-notification'}).then(function(notifications) {
-							console.log(notifications);
-							let currentNotification;
-							for(let i = 0; i < notifications.length; i++) {
-								if (notifications[i].data && notifications[i].data.id === oUser.id) {
-									currentNotification = notifications[i];
-								}
-							}
-							return currentNotification;
-						}).then(function(currentNotification) {
-							let notificationTitle = '';
-							oUser.url = 'https://gulaymart.com/';
-							const options = {
-								badge: 'https://gulaymart.com/assets/images/favicon.png',
-								body: '',
-								icon: 'https://gulaymart.com/assets/images/favicon.png',
-								tag: 'demo-notification',
-								renotify: true,
-								vibrate: [200, 100, 200, 100, 200, 100, 200],
-								data: oUser
-							};
-							if (currentNotification) {
-								const messageCount = currentNotification.data.newMessageCount + 1;
-								notificationTitle = 'Demo';
-								options.body = 'You have '+messageCount+' new messages';
-								options.data.newMessageCount = messageCount;
-							} else {
-								notificationTitle = 'Demo';
-								options.body = 'You have a new message';
-								options.data.newMessageCount = 1;
-							}
-							var notifications = registration.showNotification(notificationTitle, options);
-
-							notifications.then(function(request) {
-								console.log(request);
-							});
-							return notifications;
-						});
-					});*/
 				}
 			});
 		};
