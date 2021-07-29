@@ -29,9 +29,9 @@
 			},
 			afterConnect: function() {
 				if (realtime.app.connected) {
-					$('#is-connected').addClass('text-success');
+					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
 				} else {
-					$('#is-connected').addClass('text-danger');
+					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 			}
 		});
@@ -96,13 +96,10 @@
 				if (realtime != false) {
 					clearInterval(i);
 					setTimeout(function() {
-						$('#is-connected').off('click').on('click', function() {
-							alert(JSON.stringify(realtime.app));
-						});
 						if (realtime.app.connected) {
-							$('#is-connected').addClass('text-success');
+							$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
 						} else {
-							$('#is-connected').addClass('text-danger');
+							$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 						}
 						realtime.bind('send-notification', 'fulfilled-items', function(object) {
 							var oData = object.data;
