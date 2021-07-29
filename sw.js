@@ -23,8 +23,7 @@ self.addEventListener('notificationclick', function(event) {
 	event.notification.close();
 	/*This looks to see if the current is already open and*/
 	/*focuses if it is*/
-	let clients = event.target.clients;
-	event.waitUntil(clients.matchAll({
+	event.waitUntil(event.target.clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
 		if (oData) {
@@ -41,10 +40,10 @@ self.addEventListener('notificationclick', function(event) {
 				}
 			}		
 		}
-		if (clients.openWindow) {
+		if (event.target.clients.openWindow) {
 			/*console.log('no focus', clients);*/
 			return setTimeout(function() {
-				clients.openWindow(oData.url);
+				event.target.clients.openWindow(oData.url);
 			}, 1000);
 		}
 	}));
