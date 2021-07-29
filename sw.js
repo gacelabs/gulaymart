@@ -19,7 +19,7 @@ self.addEventListener('fetch', function(event) {
 
 self.addEventListener('notificationclick', function(event) {
 	let oData = event.notification.data;
-	console.log('on notification click: ', event, self.clients, new URL(oData.url));
+	console.log('on notification click: ', event);
 	event.notification.close();
 	/*This looks to see if the current is already open and*/
 	/*focuses if it is*/
