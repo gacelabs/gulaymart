@@ -45,6 +45,37 @@
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
 
+	if ('serviceWorker' in navigator) {
+		var onServiceWorkerReady = function(type, oData) {
+			navigator.serviceWorker.ready.then(function(registration) {
+				registration.update();
+				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
+					let currentNotification;
+					for(let i = 0; i < notifications.length; i++) {
+						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
+							currentNotification = notifications[i];
+						}
+					}
+					return currentNotification;
+				}).then(function(currentNotification) {
+					let notificationTitle = '';
+					const options = oData;
+					if (currentNotification) {
+						const messageCount = currentNotification.data.newMessageCount + 1;
+						notificationTitle = 'New Message';
+						options.body = 'You have '+messageCount+' new '+type+'s';
+						options.data.newMessageCount = messageCount;
+					} else {
+						notificationTitle = 'New Message';
+						options.body = 'You have a new '+type;
+						options.data.newMessageCount = 1;
+					}
+					return registration.showNotification(notificationTitle, options);
+				});
+			});
+		};
+	}
+
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser) {
@@ -75,80 +106,21 @@
 					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						onServiceWorkerReady('fulfillment', oData);
+						if ('serviceWorker' in navigator) onServiceWorkerReady('fulfillment', oData);
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						onServiceWorkerReady('order', oData);
+						if ('serviceWorker' in navigator) onServiceWorkerReady('order', oData);
 					});
 				}, 300);
 			}
 		}, 1000);
 	};
 	if ('serviceWorker' in navigator) {
-		var onServiceWorkerReady = function(type, oData) {
-			navigator.serviceWorker.ready.then(function(registration) {
-				registration.update();
-				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
-					let currentNotification;
-					for(let i = 0; i < notifications.length; i++) {
-						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
-							currentNotification = notifications[i];
-						}
-					}
-					return currentNotification;
-				}).then(function(currentNotification) {
-					let notificationTitle = '';
-					const options = oData;
-					if (currentNotification) {
-						const messageCount = currentNotification.data.newMessageCount + 1;
-						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+type+'s';
-						options.data.newMessageCount = messageCount;
-					} else {
-						notificationTitle = 'New Message';
-						options.body = 'You have a new '+type;
-						options.data.newMessageCount = 1;
-					}
-					return registration.showNotification(notificationTitle, options);
-				});
-			});
-		};
 		navigator.serviceWorker.register('sw.js').then(function(reg){
 			serviceWorker = reg;
-			/*serviceWorker.pushManager.getSubscription().then(function(subscription) {
-				isSubscribed = !(subscription === null);
-				if (isSubscribed) {
-					console.log('User IS subscribed.');
-				} else {
-					console.log('User is NOT subscribed.');
-					serviceWorker.pushManager.subscribe({
-						userVisibleOnly: true,
-						applicationServerKey: 'BA6gsZ2MpAFeB7t0U10uga1bPG9hWDGWOLrHDYKmOua5Cs9oBDEbycdmTFoZ_rVM6v08expaJvKkyJFNMHXd9fo'
-					});
-				}
-			});*/
 			if (oUser) {
-				/*if ('safari' in window) {
-					if ('pushNotification' in window.safari) {
-						runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
-					} else {
-						var checkRemotePermission = function (permissionData) {
-							if (permissionData.permission === 'granted') {
-							} else {
-								window.safari.pushNotification.requestPermission(
-									'https://gulaymart.com',
-									'web.com.gulaymart',
-									oUser,
-									checkRemotePermission
-								);
-							}
-						};
-						var permissionData = window.safari.pushNotification.permission('web.com.gulaymart');
-						checkRemotePermission(permissionData);
-					}
-				}*/
 				if (!('Notification' in window)) {
 					runAlertBox({type:'info', message: 'This browser does not support Notification Service.'});
 				} else if (Notification.permission === 'granted') {
