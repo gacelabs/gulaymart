@@ -80,7 +80,7 @@
 		$('#install-app').bind('click', function() {
 			if (oUser) {
 				oUser.seller_id = oUser.id;
-				oUser.url = window.location.protocol + '//' + window.location.hostname + '/profile/';
+				oUser.url = window.location.protocol + '//' + window.location.hostname + '/orders/messages/';
 				realtime.trigger('ordered-notification', 'send-notification', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
 					body: '',
