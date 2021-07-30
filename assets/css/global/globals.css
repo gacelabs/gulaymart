@@ -329,3 +329,11 @@ a.stop {
 .grecaptcha-badge {
 	display: none !important;
 }
+
+.render-datatable th.for-responsive:first-child {
+	width: 0 !important;
+}
+
+.render-datatable td.for-responsive:before {
+	left: 12px !important;
+}

@@ -13,9 +13,12 @@
 						<?php if ($data['products']): ?>
 							<thead>
 								<tr>
+									<?php if ($this->agent->is_mobile()): ?>
+										<th class="for-responsive"></th>
+									<?php endif ?>
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
-											<th>Actions</th>	
+											<th>Actions</th>
 										<?php else: ?>
 											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
@@ -25,6 +28,9 @@
 							<tbody>
 							<?php foreach ($data['products'] as $key => $product): ?>
 								<tr product_id="<?php echo $product['id'];?>">
+									<?php if ($this->agent->is_mobile()): ?>
+										<td class="for-responsive"></td>
+									<?php endif ?>
 									<?php foreach ($product as $index => $value): ?>
 										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
 											<?php if ($index == 'id'): ?>
