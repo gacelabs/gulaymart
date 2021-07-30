@@ -155,7 +155,7 @@ $(document).ready(function() {
 			// console.log(blanks, last_cnt);
 			oSettings = {
 				// stateSave: true,
-				// responsive: true,
+				responsive: true,
 				aaSorting: [[ aaSort, aaSortDir ]],
 				columnDefs: [blanks],
 				language: {
