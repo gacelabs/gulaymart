@@ -238,7 +238,7 @@ class SendDataApi {
 	{
 		if ($this->is_loaded) {
 			if ($channel != '' AND $event != '') {
-				$check = $this->do_curl('app/channels/'.$this->app_secret.'/0', array('channel' => $channel));
+				$check = $this->do_curl('app/channels/'.$this->app_secret.'/0', array('channel' => $event.':'.$channel));
 				if ($check) {
 					$data_object = array(
  						'channel' => $channel,
