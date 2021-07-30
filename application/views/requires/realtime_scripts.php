@@ -3,7 +3,7 @@
 	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
-			debug: true,
+			// debug: true,
 			afterInit: function() {
 				realtime.connect(function() {
 					/*console.log('gulaymart.com ready to communicate!');*/
@@ -45,6 +45,47 @@
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
 
+	var runSampleNotif = function() {
+		$('#install-app').bind('click', function() {
+			if (oUser) {
+				oUser.seller_id = oUser.id;
+				oUser.url = window.location.protocol + '//' + window.location.hostname + '/profile/';
+				realtime.trigger('ordered-notification', 'send-notification', {
+					badge: 'https://gulaymart.com/assets/images/favicon.png',
+					body: '',
+					icon: 'https://gulaymart.com/assets/images/favicon.png',
+					tag: 'demo-notification',
+					renotify: true,
+					vibrate: [200, 100, 200, 100, 200, 100, 200],
+					data: oUser
+				});
+			}
+		});
+	};
+	var runNotificationListeners = function() {
+		var i = setInterval(function() {
+			if (realtime != false) {
+				clearInterval(i);
+				setTimeout(function() {
+					if (realtime.app.connected) {
+						$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
+					} else {
+						$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
+					}
+					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
+						var oData = object.data;
+						// console.log(oData);
+						onServiceWorkerReady('fulfillment', oData);
+					});
+					realtime.bind('ordered-notification', 'send-notification', function(object) {
+						var oData = object.data;
+						// console.log(oData);
+						onServiceWorkerReady('order', oData);
+					});
+				}, 300);
+			}
+		}, 1000);
+	};
 	if ('serviceWorker' in navigator) {
 		var onServiceWorkerReady = function(type, oData) {
 			navigator.serviceWorker.ready.then(function(registration) {
@@ -74,48 +115,6 @@
 				});
 			});
 		};
-		var runSampleNotif = function() {
-			$('#install-app').bind('click', function() {
-				if (oUser) {
-					oUser.seller_id = oUser.id;
-					oUser.url = window.location.protocol + '//' + window.location.hostname + '/profile/';
-					realtime.trigger('ordered-notification', 'send-notification', {
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: '',
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						tag: 'demo-notification',
-						renotify: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: oUser
-					});
-				}
-			});
-		};
-		var runNotificationListeners = function() {
-			var i = setInterval(function() {
-				if (realtime != false) {
-					clearInterval(i);
-					setTimeout(function() {
-						if (realtime.app.connected) {
-							$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
-						} else {
-							$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
-						}
-						realtime.bind('fulfilled-notification', 'send-notification', function(object) {
-							var oData = object.data;
-							// console.log(oData);
-							onServiceWorkerReady('fulfillment', oData);
-						});
-						realtime.bind('ordered-notification', 'send-notification', function(object) {
-							var oData = object.data;
-							// console.log(oData);
-							onServiceWorkerReady('order', oData);
-						});
-					}, 300);
-				}
-			}, 1000);
-		};
-
 		navigator.serviceWorker.register('sw.js').then(function(reg){
 			serviceWorker = reg;
 			/*serviceWorker.pushManager.getSubscription().then(function(subscription) {
@@ -173,5 +172,8 @@
 		}).catch(function(err) {
 			console.log("Issue happened", err);
 		});
+	} else {
+		runNotificationListeners();
+		runSampleNotif();
 	}
 </script>
