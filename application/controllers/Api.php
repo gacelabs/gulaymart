@@ -360,7 +360,7 @@ class Api extends MY_Controller {
 					}
 				}
 			}
-			/*$this->senddataapi->trigger($segment.'-fulfillment', 'order-bookings', [
+			/*$this->senddataapi->trigger($segment.'-fulfillment', 'send-bookings', [
 				'message' => 'You have available bookings passed from '.$segment,
 				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'event' => $segment],
 			]);*/
@@ -448,7 +448,7 @@ class Api extends MY_Controller {
 					}
 				}
 			}
-			/*$this->senddataapi->trigger($segment.'-order', 'order-bookings', [
+			/*$this->senddataapi->trigger($segment.'-order', 'send-bookings', [
 				'message' => 'You have available bookings passed from '.$segment,
 				'data' => ['success' => false, 'ids' => $baskets_ids, 'event' => $segment],
 			]);*/
