@@ -265,7 +265,7 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			$senddata = $this->senddataapi->trigger('remove-item', 'fulfilled-items', ['all'=>$all, 'data'=>$post['data']]);
+			$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', ['all'=>$all, 'data'=>$post['data']]);
 			// debug($senddata, 'stop');
 			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
 		} elseif ($get AND isset($get['data'])) {

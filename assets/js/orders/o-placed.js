@@ -191,7 +191,7 @@ if ($('body').hasClass('orders-placed')) {
 	var runFulfillmentsToOrders = function(realtime) {
 		console.log('Listening from Fulfillments activity!');
 		// console.log(realtime);
-		realtime.bind('change-order-status', 'ordered-items', function(object) {
+		realtime.bind('status-ordered-items', 'change-order-status', function(object) {
 			// console.log('received response from change-order-status:ordered-items', object.data);
 			var oData = object.data;
 			changeOnFulfillmentRealtime(oData.data);

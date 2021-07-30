@@ -120,7 +120,7 @@ class Fulfillment extends My_Controller {
 					}
 				}
 
-				$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post['data']]);
+				$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', ['data'=>$post['data']]);
 				// debug($response, 'stop');
 				$this->set_response('success', 'Product status on Order(s) changed', $post['data'], false, 'changeOnFulfillment');
 			}
@@ -176,7 +176,7 @@ class Fulfillment extends My_Controller {
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
 					
 					/*send it realtime to buyer*/
-					$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post]);
+					$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', ['data'=>$post]);
 
 					$redirect = 'fulfillment/for-pick-up';
 					$action = 'Ready for Pick Up';

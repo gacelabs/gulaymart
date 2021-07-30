@@ -113,7 +113,7 @@ if ($('body').hasClass('ff-placed')) {
 	var runOrdersToFulfillments = function(realtime) {
 		console.log('Listening from Orders activity!');
 		// console.log(realtime);
-		realtime.bind('remove-item', 'fulfilled-items', function(object) {
+		realtime.bind('remove-fulfilled-items', 'remove-item', function(object) {
 			var oData = object.data;
 			// console.log(oData);
 			removeOnFulfillment(oData);
