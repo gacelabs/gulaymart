@@ -40,7 +40,8 @@
 								</div>
 							</div>
 							<div class="input-container<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="category_container" style="margin-bottom:0;">
-								<label for="product_name">Category <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></label>
+								<label for="product_name">Category</label>
+								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Not sure what category your veggy fits in, do you <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></small>
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
 										<?php foreach ($this->categories as $key => $category): ?>
@@ -304,7 +305,7 @@
 				<div class="dashboard-panel">
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
-							<li><p>Listing</p></li>
+							<li><label>Preview listing</label></li>
 							<!-- <li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li> -->
 						</ul>
 						<div class="product-list-card">
