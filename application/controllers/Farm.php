@@ -368,7 +368,11 @@ class Farm extends MY_Controller {
 					],
 				]);
 			} else {
-				redirect(base_url('farm/storefront?info=Please fill-out your farm details'));
+				if (!$this->accounts->profile['farms']) {
+					redirect(base_url('farm/storefront?info=Please fill-out your farm details'));
+				} else {
+					redirect(base_url('farm/storefront?error=Accessed item does not exist!'));
+				}
 			}
 		}
 	}
