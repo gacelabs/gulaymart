@@ -19,11 +19,14 @@ class Accounts {
 	{
 		$allowed = FALSE; $user = FALSE; $msg = '';
 		if ($credits) {
-			if (isset($credits['email_address']) AND isset($credits['password'])) {
+			if (isset($credits['email_address']) AND (isset($credits['password']) OR isset($credits['id']))) {
 				if (isset($credits['ismd5']) AND $credits['ismd5']) {
 					unset($credits['ismd5']);
 				} else {
-					$credits['password'] = md5($credits['password']);
+					if (!isset($credits['id']) AND strlen($credits['password']) > 0) {
+						$credits['password'] = md5($credits['password']);
+						unset($credits['id']);
+					}
 				}
 				$email_address_query = $this->class->db->get_where($table, ['email_address' => $credits['email_address']]);
 
@@ -35,11 +38,11 @@ class Accounts {
 						$enter = TRUE;
 					}
 				}
-				// debug($enter);
+				// debug($enter, 'stop');
 
 				if ($enter) {
 					$query = $this->class->db->get_where($table, $credits);
-					// debug($query->row_array());
+					// debug($query->row_array(), 'stop');
 					if ($query->num_rows()) {
 						$allowed = TRUE;
 						$user = $query->row_array();
