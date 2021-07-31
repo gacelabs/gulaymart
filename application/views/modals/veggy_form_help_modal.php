@@ -37,7 +37,7 @@
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<p>Leaf vegetables, also called leafy greens, salad greens, pot herbs, vegetable greens, or simply greens, are plant leaves eaten as a vegetable, sometimes accompanied by tender petioles and shoots. Although they come from a very wide variety of plants, most share a great deal with other leaf vegetables in nutrition and cooking methods.</p>
-								<p>Some good examples: Lettuce, Spinach, Microgreens, Basil, Arugula and <a href="https://en.wikipedia.org/wiki/Leaf_vegetable" target="_blank">more</a></p>
+								<p>Some good examples: Lettuce, Cabbage (Chinese Pechay), Spinach, Microgreens, Basil, Arugula and <a href="https://en.wikipedia.org/wiki/Leaf_vegetable" target="_blank">more</a></p>
 							</div>
 						</div>
 					</div>
