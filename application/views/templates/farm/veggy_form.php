@@ -306,7 +306,7 @@
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
 							<li><label>Preview listing</label></li>
-							<!-- <li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li> -->
+							<!-- <li><p><a href="#"<?php if (!$this->agent->is_mobile()): ?> target="_new"<?php endif ?> class="text-link order-link">View Page</a></p></li> -->
 						</ul>
 						<div class="product-list-card">
 							<div class="product-list-photo order-photo" style="background-image:url('<?php identify_main_photo($data['product']);?>');">

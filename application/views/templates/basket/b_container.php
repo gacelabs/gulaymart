@@ -87,7 +87,7 @@
 						<div class="order-grid-footer" js-element="location-id-<?php echo $location_id;?>">
 							<div class="text-left order-footer-farm hidden-xs">
 								<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-								<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
+								<p class="zero-gaps"><a<?php if (!$this->agent->is_mobile()): ?> target="farm_<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 								<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
 							</div>
 							<div class="text-left order-footer-payment hidden-xs">

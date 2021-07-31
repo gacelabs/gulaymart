@@ -118,7 +118,7 @@
 										</div>
 									</div>
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-										<p class="zero-gaps"><a href="<?php echo $farm['storefront'];?>" class="text-link visit-farm-link" target="storefrontTab<?php echo $farm['id'];?>"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
+										<p class="zero-gaps"><a href="<?php echo $farm['storefront'];?>" class="text-link visit-farm-link"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'];?>"<?php endif ?>><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
 									</div>
 								</div>
 							</div>

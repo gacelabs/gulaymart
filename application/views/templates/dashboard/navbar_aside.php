@@ -106,7 +106,7 @@
 				</div> -->
 			<?php endif ?>
 
-			<a href="//help.gulaymart.com" target="_blank" class="aside-nav-item hidden-lg hidden-md hidden-sm">
+			<a href="//help.gulaymart.com"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> class="aside-nav-item hidden-lg hidden-md hidden-sm">
 				<i class="fa fa-question-circle" style="background-color:#cacaca;"></i>Help Center
 			</a>
 
@@ -115,7 +115,7 @@
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<a href="//help.gulaymart.com" target="_blank" class="aside-nav-item hidden-xs">
+		<a href="//help.gulaymart.com"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> class="aside-nav-item hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
 		<a href="sign-out" class="aside-nav-item hidden-xs">
