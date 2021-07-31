@@ -8,9 +8,8 @@ class Farm extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		// debug($this->action, 'stop');
-		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 
-			AND !in_array($this->action, ['storefront', 'store', 'store_location', 'store_farm'])) {
+		// debug($this->accounts->profile, 'stop');
+		if ($this->accounts->has_session AND $this->accounts->profile['is_agreed_terms'] == 0 AND $this->accounts->profile['farms'] AND !in_array($this->action, ['storefront', 'store', 'store_location', 'store_farm'])) {
 			redirect(base_url('farm/storefront'));
 		}
 	}
