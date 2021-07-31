@@ -30,7 +30,7 @@
 							<div class="input-container">
 								<div>
 									<label for="product_name">Product name</label>
-									<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
+									<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 								</div>
 								<div class="input-group">
 									<input type="text" class="form-control" id="product_name" name="products[name]" required="required" placeholder="Example: Fresh & Organic Romaine Lettuce [Per kilo]" value="<?php check_value('name', $data['product']);?>">
@@ -41,7 +41,7 @@
 							</div>
 							<div class="input-container<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Not sure what category your veggy fits in, do you <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></small>
+								<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Not sure what category your veggy fits in, do you <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></small>
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
 										<?php foreach ($this->categories as $key => $category): ?>
@@ -100,7 +100,7 @@
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Product attributes</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
@@ -144,7 +144,7 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product Pricing (Location based)</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
@@ -233,7 +233,7 @@
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Short description</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
@@ -261,7 +261,7 @@
 						<div class="dashboard-panel-middle">
 							<div>
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600 pixels.</small>
+								<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600 pixels.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
