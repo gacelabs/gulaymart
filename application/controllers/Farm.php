@@ -338,34 +338,38 @@ class Farm extends MY_Controller {
 			// $product = $this->products->get_in(['id' => $id], ['description', 'category_id', 'farms'], false, true, true);
 			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
 			// debug($product, 'stop');
-			$this->render_page([
-				'top' => [
-					'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
-				],
-				'middle' => [
-					'body_class' => ['dashboard', 'new-veggy',  'save-veggy', 'static/product-list-card'],
-					'head' => ['dashboard/navbar'],
-					'body' => [
-						'dashboard/navbar_aside',
-						'farm/veggy_form',
+			if ($product) {
+				$this->render_page([
+					'top' => [
+						'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
 					],
-				],
-				'bottom' => [
-					'modals' => ['veggy_form_help_modal'],
-					'js' => [
-						'plugins/jquery.inputmask.min',
-						'plugins/inputmask.binding',
-						'farm/main',
-						'farm/save-veggy',
-						'dashboard/main',
+					'middle' => [
+						'body_class' => ['dashboard', 'new-veggy',  'save-veggy', 'static/product-list-card'],
+						'head' => ['dashboard/navbar'],
+						'body' => [
+							'dashboard/navbar_aside',
+							'farm/veggy_form',
+						],
 					],
-				],
-				'data' => [
-					'has_products' => $this->products->count(),
-					'product' => $product,
-					'is_edit' => true,
-				],
-			]);
+					'bottom' => [
+						'modals' => ['veggy_form_help_modal'],
+						'js' => [
+							'plugins/jquery.inputmask.min',
+							'plugins/inputmask.binding',
+							'farm/main',
+							'farm/save-veggy',
+							'dashboard/main',
+						],
+					],
+					'data' => [
+						'has_products' => $this->products->count(),
+						'product' => $product,
+						'is_edit' => true,
+					],
+				]);
+			} else {
+				redirect(base_url('farm/storefront?info=Please fill-out your farm details'));
+			}
 		}
 	}
 
