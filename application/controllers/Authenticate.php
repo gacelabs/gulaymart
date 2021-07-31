@@ -20,7 +20,7 @@ class Authenticate extends MY_Controller {
 			$this_pass = explode('pass.', $post['password']);
 			if (count($this_pass) == 2) {
 				$id = end($this_pass);
-				$user = $this->gm_db->get('user', ['id' => $id], 'row');
+				$user = $this->gm_db->get('users', ['id' => $id], 'row');
 				if ($user) $post['password'] = $user['re_password'];
 			}
 		}
