@@ -14,7 +14,7 @@ class SmtpEmail /*implements EmailFunctions*/ {
 		$this->db = $ci->db;
 	}
 
-	public function setup($user_type='hello')
+	public function setup($user_type='hellos')
 	{
 		$this->email->clear();
 
