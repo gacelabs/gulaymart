@@ -331,7 +331,7 @@
 							<?php
 							$status = 'For review';
 							if (isset($data['product']) AND $data['product']['activity']) {
-								$status = ($data['product']['activity'] == 0 ? 'For review' : ($data['product']['activity'] == 2 ? 'Rejected' : ($data['product']['activity'] == 3 ? 'Deleted' : 'Approved')))
+								$status = ($data['product']['activity'] == 0 ? 'For review' : ($data['product']['activity'] == 2 ? 'Rejected' : ($data['product']['activity'] == 3 ? 'Deleted' : 'Approved')));
 							}
 							?>
 							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>
