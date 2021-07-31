@@ -140,7 +140,7 @@
 								<img src="assets/images/icons/cash.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps">Cash On Delivery</p>
-									<small class="text-gray elem-block">Pay to upon deliver</small>
+									<small class="text-gray elem-block">Pay upon deliver</small>
 								</div>
 							</div>
 							<!-- <div class="productpage-summary-grid">

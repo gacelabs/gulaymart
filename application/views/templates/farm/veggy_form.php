@@ -40,7 +40,7 @@
 								</div>
 							</div>
 							<div class="input-container<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="category_container" style="margin-bottom:0;">
-								<label for="product_name">Category</label>
+								<label for="product_name">Category <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></label>
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
 										<?php foreach ($this->categories as $key => $category): ?>

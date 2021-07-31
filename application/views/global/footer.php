@@ -30,6 +30,7 @@
 			<p style="margin-bottom:5px;"><a href="">Gulaymart &copy; <?php echo date('Y'); ?></a></p>
 		</div>
 	</div>
+	<hr class="visible-xs" style="clear:both;border-color:transparent;">
 	<div class="container text-center">
 		<div class="col-lg-6">
 			<!-- <h3 style="font-size: 16px;"><b>Facilities and Services</b></h3>
