@@ -32,7 +32,7 @@ class MY_Controller extends CI_Controller {
 			$this->latlng = unserialize($latlng);
 		}
 		$current_city = get_cookie('current_city', true);
-		if (!empty($latlng)) {
+		if (!empty($current_city)) {
 			// debug($current_city, 'stop');
 			$this->current_city = urldecode($current_city);
 		}

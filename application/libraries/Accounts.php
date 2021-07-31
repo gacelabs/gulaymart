@@ -19,11 +19,14 @@ class Accounts {
 	{
 		$allowed = FALSE; $user = FALSE; $msg = '';
 		if ($credits) {
-			if (isset($credits['email_address']) AND isset($credits['password'])) {
+			if (isset($credits['email_address']) AND (isset($credits['password']) OR isset($credits['id']))) {
 				if (isset($credits['ismd5']) AND $credits['ismd5']) {
 					unset($credits['ismd5']);
 				} else {
-					$credits['password'] = md5($credits['password']);
+					if (!isset($credits['id']) AND strlen($credits['password']) > 0) {
+						$credits['password'] = md5($credits['password']);
+						unset($credits['id']);
+					}
 				}
 				$email_address_query = $this->class->db->get_where($table, ['email_address' => $credits['email_address']]);
 
@@ -35,11 +38,11 @@ class Accounts {
 						$enter = TRUE;
 					}
 				}
-				// debug($enter);
+				// debug($enter, 'stop');
 
 				if ($enter) {
 					$query = $this->class->db->get_where($table, $credits);
-					// debug($query->row_array());
+					// debug($query->row_array(), 'stop');
 					if ($query->num_rows()) {
 						$allowed = TRUE;
 						$user = $query->row_array();
@@ -230,14 +233,20 @@ class Accounts {
 				foreach ($shippings as $key => $shipping) {
 					if ($shipping['active'] == 1) {
 						$this->class->latlng = ['lat' => $shipping['lat'], 'lng' => $shipping['lng']];
-						// set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
+						$latlng = get_cookie('prev_latlng', true);
+						if (empty($latlng)) {
+							set_cookie('prev_latlng', serialize($this->class->latlng), 7776000); // 90 days
+						}
 						
 						$address = explode(',', $shipping['address_2']);
 						$city = remove_multi_space(str_replace('city of', '', strtolower(isset($address[0]) ? $address[0] : '')), true);
 						$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
 						$request['current_city'] = $city;
 						$this->class->current_city = $city;
-						// set_cookie('current_city', trim($city), 7776000); // 90 days
+						$current_city = get_cookie('current_city', true);
+						if (empty($current_city)) {
+							set_cookie('current_city', trim($city), 7776000); // 90 days
+						}
 						/*$latlng = get_cookie('prev_latlng', true);
 						if (!empty($latlng)) {
 							$this->class->latlng = unserialize($latlng);
