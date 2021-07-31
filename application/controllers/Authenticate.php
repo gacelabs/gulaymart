@@ -23,12 +23,9 @@ class Authenticate extends MY_Controller {
 				$user = $this->gm_db->get('users', ['id' => $id], 'row');
 				// debug($user, 'stop');
 				if ($user) {
-					// if (!empty($user['re_password'])) {
-					// 	$post['password'] = $user['re_password'];
-					// } else {
-						$post['id'] = $id;
-						unset($post['password']);
-					// }
+					$post['id'] = $id;
+					$post['email_address'] = $user['email_address'];
+					unset($post['password']);
 				}
 				// debug($post, 'stop');
 			}
