@@ -6,8 +6,6 @@
 			// debug: true,
 			afterInit: function() {
 				realtime.connect(function() {
-					/*console.log('gulaymart.com ready to communicate!');*/
-					/*realtime.trigger('add-delivery', 'deliveries', {});*/
 					if (oUser) {
 						/*communicate from orders tab to fulfillment tab*/
 						if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);

@@ -35,6 +35,9 @@ self.addEventListener('notificationclick', function(event) {
 					return;
 				}
 			}
+			if (event.target.clients.openWindow && oData.url) {
+				return event.waitUntil(event.target.clients.openWindow(oData.url));
+			}
 		}
 	}));
 });
