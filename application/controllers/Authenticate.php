@@ -16,8 +16,10 @@ class Authenticate extends MY_Controller {
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		if (isset($post['g-recaptcha-response'])) unset($post['g-recaptcha-response']);
 		// debug($this->session->userdata('referrer'));
-		if (isset($post['password']) AND ((bool)strstr($post['password'], 'use-this-pass.'))) {
-			$this_pass = explode('pass.', $post['password']);
+		// debug($post, 'stop');
+		if (isset($post['password']) AND ((bool)strstr($post['password'], 'use-this-id.'))) {
+			$this_pass = explode('id.', $post['password']);
+			// debug($this_pass, 'stop');
 			if (count($this_pass) == 2) {
 				$id = end($this_pass);
 				$user = $this->gm_db->get('users', ['id' => $id], 'row');
