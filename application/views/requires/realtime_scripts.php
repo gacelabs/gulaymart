@@ -1,5 +1,5 @@
 
-<button id="add-pwa" class="hide">add to home</button>
+<button id="add-pwa" style="display: none;">add to home</button>
 <script type="text/javascript">
 	var realtime = false, serviceWorker, isSubscribed, deferredPrompt;
 	window.initSendData = function() {
@@ -75,6 +75,8 @@
 		};
 
 		document.getElementById('add-pwa').addEventListener('click', async () => {
+			/*Hide the app provided install promotion*/
+			document.getElementById('add-pwa').style.display = 'none';
 			/*Show the install prompt*/
 			deferredPrompt.prompt();
 			/*Wait for the user to respond to the prompt*/
@@ -92,8 +94,7 @@
 			/*Stash the event so it can be triggered later.*/
 			deferredPrompt = e;
 			/*Update UI notify the user they can install the PWA*/
-			document.getElementById('add-pwa').click();
-			// showInstallPromotion();
+			document.getElementById('add-pwa').style.display = 'block';
 			/*Optionally, send analytics event that PWA install promo was shown.*/
 			console.log(`'beforeinstallprompt' event was fired.`, e);
 		});
