@@ -24,7 +24,7 @@ $(document).ready(function() {
 	}
 });
 
-function getParameterByName(name, url) {
+function getUrlParamByName(name, url) {
 	if (url == undefined) url = window.location.href;
 	name = name.replace(/[\[\]]/g, '\\$&');
 	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -36,7 +36,7 @@ function getParameterByName(name, url) {
 	return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-if ((getParameterByName('install-app') == 'true') && oSegments.length == 0) {
+if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 	let deferredPrompt;
 	document.getElementById('add-pwa').addEventListener('click', async () => {
 		/*Hide the app provided install promotion*/
