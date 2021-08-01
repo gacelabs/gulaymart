@@ -74,7 +74,7 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 			if ('serviceWorker' in navigator) {
 				// alert(APPNAME + ' Installed!');
 				navigator.serviceWorker.ready.then(function(registration) {
-					registration.getNotifications({tag:'install-notification'}).then(function(notifications) {
+					registration.getNotifications().then(function(notifications) {
 						let currentNotification;
 						for(let i = 0; i < notifications.length; i++) {
 							if (notifications[i].data) {
@@ -90,7 +90,7 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 							icon: 'https://gulaymart.com/assets/images/favicon.png',
 							tag: 'install-notification',
 							renotify: true,
-							requireInteraction: true,
+							// requireInteraction: true,
 							vibrate: [200, 100, 200, 100, 200, 100, 200],
 							data: {
 								url: 'https://gulaymart.com/',
