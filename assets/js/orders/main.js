@@ -21,7 +21,7 @@ var renderHTML = function(obj) {
 		
 		var printableWin = window.open(obj.printable_link);
 		window.onafterprint = function(e){
-			$(window).off('mousemove', window.onafterprint);
+			$(window).off('mousemove touchmove', window.onafterprint);
 			oThis.html(oThis.attr('prev-ui'));
 			printableWin.close();
 		};
