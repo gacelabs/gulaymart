@@ -19,7 +19,7 @@
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
 											<th>Actions</th>
-										<?php else: ?>
+										<?php elseif ($key != 'version'): ?>
 											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
 									<?php endforeach ?>
@@ -44,7 +44,7 @@
 												<div class="inventory-name-block">
 													<?php echo ucwords($value);?>
 												</div>
-											<?php else: ?>
+											<?php elseif ($index != 'version'): ?>
 												<?php echo $value;?>
 											<?php endif ?>
 										</td>
