@@ -61,7 +61,7 @@
 										</div>
 									</div>
 									<div class="text-right">
-										<button class="btn btn-xs btn-default order-remove-btn" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
+										<button class="btn btn-xs btn-default order-remove-btn<?php if (count($baskets['products']) == 1): ?> hide<?php endif ?>" js-event="removeBasketItemBtn" data-id="<?php echo $item['id'];?>" data-location="<?php echo $location_id;?>"><span class="text-danger">&times;</span></button>
 									</div>
 
 									<div class="visible-sm visible-xs">

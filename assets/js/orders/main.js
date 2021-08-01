@@ -27,6 +27,7 @@ var renderHTML = function(obj) {
 		};
 		setTimeout(function(){
 			$(window).one('mousemove', window.onafterprint);
+			$(window).one('click', window.onafterprint);
 		});
 		printableWin.print();
 
