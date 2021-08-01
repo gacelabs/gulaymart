@@ -24,19 +24,19 @@ $(document).ready(function() {
 	}
 });
 
-function getUrlParamByName(name, url) {
-	if (url == undefined) url = window.location.href;
-	name = name.replace(/[\[\]]/g, '\\$&');
-	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-		results = regex.exec(url);
-	// console.log(results);
-	if (!results) return null;
-	if (!results[2]) return '';
-
-	return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
 if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
+	function getUrlParamByName(name, url) {
+		if (url == undefined) url = window.location.href;
+		name = name.replace(/[\[\]]/g, '\\$&');
+		var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+			results = regex.exec(url);
+		// console.log(results);
+		if (!results) return null;
+		if (!results[2]) return '';
+
+		return decodeURIComponent(results[2].replace(/\+/g, ' '));
+	}
+
 	let deferredPrompt;
 	document.getElementById('add-pwa').addEventListener('click', async () => {
 		/*Hide the app provided install promotion*/
