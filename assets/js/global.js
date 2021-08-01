@@ -71,11 +71,10 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Optionally, send analytics event to indicate successful install*/
 		/*console.log('PWA was installed');*/
 		setTimeout(function() {
-			console.log(navigator);
 			if ('serviceWorker' in navigator) {
 				// alert(APPNAME + ' Installed!');
 				navigator.serviceWorker.ready.then(function(registration) {
-					registration.update();
+					console.log(registration);
 					return registration.showNotification('App Installed', {
 						badge: 'https://gulaymart.com/assets/images/favicon.png',
 						body: 'Start Earning NOW!',
