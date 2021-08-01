@@ -46,7 +46,7 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Wait for the user to respond to the prompt*/
 		const { outcome } = await deferredPrompt.userChoice;
 		/*Optionally, send analytics event with outcome of user choice*/
-		console.log(`User response to the install prompt: ${outcome}`);
+		/*console.log(`User response to the install prompt: ${outcome}`);*/
 		/*We've used the prompt, and can't use it again, throw it away*/
 		deferredPrompt = null;
 	});
@@ -60,7 +60,7 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Update UI notify the user they can install the PWA*/
 		document.getElementById('add-pwa').style.display = 'block';
 		/*Optionally, send analytics event that PWA install promo was shown.*/
-		console.log(`'beforeinstallprompt' event was fired.`);
+		/*console.log(`'beforeinstallprompt' event was fired.`);*/
 	});
 
 	window.addEventListener('appinstalled', (e) => {
@@ -69,7 +69,7 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Clear the deferredPrompt so it can be garbage collected*/
 		deferredPrompt = null;
 		/*Optionally, send analytics event to indicate successful install*/
-		console.log('PWA was installed');
+		/*console.log('PWA was installed');*/
 		setTimeout(function() {
 			alert(APPNAME + ' Installed!');
 		}, 3000);
