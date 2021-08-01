@@ -74,18 +74,28 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 			if ('serviceWorker' in navigator) {
 				// alert(APPNAME + ' Installed!');
 				navigator.serviceWorker.ready.then(function(registration) {
-					console.log(registration);
-					return registration.showNotification('App Installed', {
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: 'Start Earning NOW!',
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						tag: 'install-notification',
-						renotify: true,
-						requireInteraction: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: {
-							url: 'https://gulaymart.com/',
+					registration.getNotifications({tag:'install-notification'}).then(function(notifications) {
+						let currentNotification;
+						for(let i = 0; i < notifications.length; i++) {
+							if (notifications[i].data) {
+								currentNotification = notifications[i];
+							}
 						}
+						return currentNotification;
+					}).then(function(currentNotification) {
+						console.log(currentNotification);
+						return registration.showNotification('App Installed', {
+							badge: 'https://gulaymart.com/assets/images/favicon.png',
+							body: 'Start Earning NOW!',
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+							tag: 'install-notification',
+							renotify: true,
+							requireInteraction: true,
+							vibrate: [200, 100, 200, 100, 200, 100, 200],
+							data: {
+								url: 'https://gulaymart.com/',
+							}
+						});
 					});
 				});
 			}
