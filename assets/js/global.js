@@ -71,7 +71,24 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Optionally, send analytics event to indicate successful install*/
 		/*console.log('PWA was installed');*/
 		setTimeout(function() {
-			alert(APPNAME + ' Installed!');
+			// alert(APPNAME + ' Installed!');
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.ready.then(function(registration) {
+					registration.update();
+					return registration.showNotification('App Installed', {
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: 'Start Earning NOW!',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						tag: 'install-notification',
+						renotify: true,
+						requireInteraction: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: {
+							url: 'https://gulaymart.com/',
+						}
+					});
+				});
+			}
 		}, 3000);
 	});
 }
