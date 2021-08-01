@@ -26,8 +26,7 @@ var renderHTML = function(obj) {
 			printableWin.close();
 		};
 		setTimeout(function(){
-			$(window).one('mousemove', window.onafterprint);
-			$(window).one('click', window.onafterprint);
+			$(window).one('mousemove touchmove', window.onafterprint);
 		});
 		printableWin.print();
 
