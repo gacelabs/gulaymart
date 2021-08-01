@@ -75,8 +75,6 @@
 		};
 
 		document.getElementById('add-pwa').addEventListener('click', async () => {
-			/*Hide the app provided install promotion*/
-			hideInstallPromotion();
 			/*Show the install prompt*/
 			deferredPrompt.prompt();
 			/*Wait for the user to respond to the prompt*/
@@ -86,7 +84,7 @@
 			/*We've used the prompt, and can't use it again, throw it away*/
 			deferredPrompt = null;
 		});
-		
+
 		/*Initialize deferredPrompt for use later to show browser install prompt.*/
 		window.addEventListener('beforeinstallprompt', (e) => {
 			/*Prevent the mini-infobar from appearing on mobile*/
