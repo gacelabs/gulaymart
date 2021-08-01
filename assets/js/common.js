@@ -405,6 +405,18 @@ var runAlertBox = function(response, heading, bConfirmed) {
 	return bConfirmed;
 }
 
+function getParameterByName(name, url) {
+	if (url == undefined) url = window.location.href;
+	name = name.replace(/[\[\]]/g, '\\$&');
+	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+		results = regex.exec(url);
+	// console.log(results);
+	if (!results) return null;
+	if (!results[2]) return '';
+
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 function copyToClipboard(text) {
 	var textArea = document.createElement("textarea");
 	textArea.value = text;
