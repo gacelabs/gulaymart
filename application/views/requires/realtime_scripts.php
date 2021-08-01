@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, isSubscribed;
+	var realtime = false, serviceWorker, isSubscribed, deferredPrompt;
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
@@ -73,8 +73,6 @@
 			});
 		};
 		/*Initialize deferredPrompt for use later to show browser install prompt.*/
-		let deferredPrompt;
-
 		window.addEventListener('beforeinstallprompt', (e) => {
 			/*Prevent the mini-infobar from appearing on mobile*/
 			e.preventDefault();
@@ -84,6 +82,13 @@
 			// showInstallPromotion();
 			/*Optionally, send analytics event that PWA install promo was shown.*/
 			console.log(`'beforeinstallprompt' event was fired.`);
+			deferredPrompt.prompt();
+			// Wait for the user to respond to the prompt
+			const { outcome } = await deferredPrompt.userChoice;
+			// Optionally, send analytics event with outcome of user choice
+			console.log(`User response to the install prompt: ${outcome}`);
+			// We've used the prompt, and can't use it again, throw it away
+			deferredPrompt = null;
 		});
 	}
 
