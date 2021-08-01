@@ -69,8 +69,8 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Clear the deferredPrompt so it can be garbage collected*/
 		deferredPrompt = null;
 		/*Optionally, send analytics event to indicate successful install*/
-		console.log('PWA was installed', e);
-		e.target.close();
+		console.log('PWA was installed', this);
+		// e.currentTarget.close();
 	});
 }
 
