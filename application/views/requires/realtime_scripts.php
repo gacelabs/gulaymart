@@ -86,11 +86,11 @@
 			// showInstallPromotion();
 			/*Optionally, send analytics event that PWA install promo was shown.*/
 			console.log(`'beforeinstallprompt' event was fired.`, e);
-			deferredPrompt.prompt();
-			// Wait for the user to respond to the prompt
-			const { outcome } = await fnUserChoice(deferredPrompt);
-			// Optionally, send analytics event with outcome of user choice
-			console.log(`User response to the install prompt: ${outcome}`);
+			// deferredPrompt.prompt();
+			// // Wait for the user to respond to the prompt
+			// const { outcome } = await fnUserChoice(deferredPrompt);
+			// // Optionally, send analytics event with outcome of user choice
+			// console.log(`User response to the install prompt: ${outcome}`);
 			// We've used the prompt, and can't use it again, throw it away
 			// deferredPrompt = null;
 		});
