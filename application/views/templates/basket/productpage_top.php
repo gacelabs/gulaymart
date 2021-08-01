@@ -68,7 +68,7 @@
 						</div>
 
 						<?php if ($stocks > 0): ?>
-							<div class="add-basket-btn" js-element="basket-btns">
+							<div class="add-basket-btn" js-element="basket-btns" style="width: 305px;">
 								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
 									<ul class="spaced-list between text-left">
 										<li><i class="fa fa-calendar icon-left"></i></li>
