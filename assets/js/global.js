@@ -63,14 +63,14 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		console.log(`'beforeinstallprompt' event was fired.`);
 	});
 
-	window.addEventListener('appinstalled', () => {
+	window.addEventListener('appinstalled', (e) => {
 		/*Hide the app-provided install promotion*/
 		document.getElementById('add-pwa').style.display = 'none';
 		/*Clear the deferredPrompt so it can be garbage collected*/
 		deferredPrompt = null;
 		/*Optionally, send analytics event to indicate successful install*/
-		console.log('PWA was installed');
-		window.close();
+		console.log('PWA was installed', e);
+		// window.close();
 	});
 }
 
