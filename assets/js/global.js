@@ -59,11 +59,18 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		deferredPrompt = e;
 		/*Update UI notify the user they can install the PWA*/
 		document.getElementById('add-pwa').style.display = 'block';
-		/*setTimeout(function() {
-			document.getElementById('add-pwa').click();
-		}, 1000);*/
 		/*Optionally, send analytics event that PWA install promo was shown.*/
 		console.log(`'beforeinstallprompt' event was fired.`);
+	});
+
+	window.addEventListener('appinstalled', () => {
+		/*Hide the app-provided install promotion*/
+		document.getElementById('add-pwa').style.display = 'none';
+		/*Clear the deferredPrompt so it can be garbage collected*/
+		deferredPrompt = null;
+		/*Optionally, send analytics event to indicate successful install*/
+		console.log('PWA was installed');
+		window.close();
 	});
 }
 
