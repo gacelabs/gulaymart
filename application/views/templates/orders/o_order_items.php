@@ -26,7 +26,7 @@
 				?>
 				<?php if ($data['status'] != 'cancelled' AND $forpickup == false): ?>
 				<div class="text-right">
-					<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove all" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>' loading-text=""><span class="text-danger">&times;</span></button>
+					<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Cancel order?" js-element="remove-all" data-merge_id='<?php echo $orders['id'];?>' loading-text=""><span class="text-danger">&times;</span></button>
 				</div>
 				<?php endif ?>
 			</div>
@@ -61,7 +61,7 @@
 							</div>
 							<div class="media-body">
 								<div class="ellipsis-container" style="height:20px;margin:0;-webkit-line-clamp:1;">
-									<p class="zero-gaps media-heading"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
+									<p class="zero-gaps media-heading"><a<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
 								</div>
 								<div class="ellipsis-container">
 									<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
@@ -83,7 +83,7 @@
 						</div>
 						<?php if ($details['status'] == 2 AND in_array($data['status'], ['placed'])): ?>
 							<div class="text-right">
-								<button class="btn btn-xs btn-default order-remove-btn" data-toggle="tooltip" data-placement="top" title="Remove" js-element="remove-product" data-json='<?php echo $json;?>' loading-text=""><span class="text-danger">&times;</span></button>
+								<button class="btn btn-xs btn-default order-remove-btn<?php if (count($orders['order_details']) == 1): ?> hide<?php endif ?>" data-toggle="tooltip" data-placement="top" title="Cancel item?" js-element="remove-product" data-json='<?php echo $json;?>' loading-text=""><span class="text-danger">&times;</span></button>
 							</div>
 						<?php endif ?>
 
@@ -124,7 +124,7 @@
 			<div class="order-grid-footer" js-element="farm-<?php echo $orders['id'];?>-<?php echo $farm['farm_location_id'];?>">
 				<div class="order-footer-farm text-left hidden-xs">
 					<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-					<p class="zero-gaps"><a target="farm_<?php echo $farm['id'];?>" href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
+					<p class="zero-gaps"><a<?php if (!$this->agent->is_mobile()): ?> target="farm_<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 					<p class="zero-gaps"><?php echo $farm['city_prov'];?></p>
 				</div>
 				<div class="order-footer-payment text-left hidden-xs">

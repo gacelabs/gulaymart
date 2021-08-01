@@ -50,6 +50,7 @@
 		</div>
 	</div>
 </div>
+<button id="add-pwa" style="display: none;">Install App</button>
 <!-- this is to determine if realtime is connected -->
 <div class="container">
 	<div class="text-right">

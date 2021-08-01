@@ -4,32 +4,34 @@
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
-			afterInit: function() {
+			autoConnect: true,
+			autoRunStash: true,
+			/*afterInit: function() {
 				realtime.connect(function() {
-					if (oUser) {
-						/*communicate from orders tab to fulfillment tab*/
-						if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
-						/*communicate from fulfillment tab to orders tab*/
-						if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
-						/*communicate from operators booking page*/
-						if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
-						
-						/*listen for incomming on delivery fulfillments*/
-						if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
-							fulfillmentProcess(runFulfillments);
-						}
-						/*listen for incomming on delivery orders*/
-						if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
-							orderProcess(runOrders);
-						}
-					}
 				});
-			},
+			},*/
 			afterConnect: function() {
 				if (realtime.app.connected) {
 					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
 				} else {
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
+				}
+				if (oUser) {
+					/*communicate from orders tab to fulfillment tab*/
+					if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
+					/*communicate from fulfillment tab to orders tab*/
+					if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
+					/*communicate from operators booking page*/
+					if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
+					
+					/*listen for incomming on delivery fulfillments*/
+					if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
+						fulfillmentProcess(runFulfillments);
+					}
+					/*listen for incomming on delivery orders*/
+					if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
+						orderProcess(runOrders);
+					}
 				}
 			}
 		});

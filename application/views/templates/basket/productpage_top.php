@@ -48,7 +48,7 @@
 										<p><span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
 										<div class="input-group">
 											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
-											<input type="text" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
+											<input type="number" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
 											<span class="input-group-btn">
 												<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[quantity]" type="button"><i class="fa fa-minus"></i></button>
 											</span>
@@ -68,7 +68,7 @@
 						</div>
 
 						<?php if ($stocks > 0): ?>
-							<div class="add-basket-btn" js-element="basket-btns">
+							<div class="add-basket-btn" js-element="basket-btns"<?php if ($this->agent->is_mobile()): ?> style="width: 305px;"<?php endif ?>>
 								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
 									<ul class="spaced-list between text-left">
 										<li><i class="fa fa-calendar icon-left"></i></li>

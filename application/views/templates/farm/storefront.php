@@ -47,7 +47,7 @@
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
 									<li class="text-right">
-										<a class="text-link btn btn-default icon-left" id="storefrontTab" target="storefrontTab<?php echo $data['farms']['id'];?>" href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+										<a class="text-link btn btn-default icon-left" id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $data['farms']['id'];?>"<?php endif ?> href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
 										<button type="submit" class="btn btn-contrast">Update</button>
 									</li>
 								<?php else: ?>

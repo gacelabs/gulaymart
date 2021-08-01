@@ -86,7 +86,7 @@
 					<?php $total = 0;?>
 					<?php if ($order_details): ?>
 						<?php foreach ($order_details as $key => $details): ?>
-							<?php if ($details['status'] == 5) continue; ?>
+							<?php /*if ($details['status'] == 5) continue;*/ ?>
 							<div class="invoice-summary-grid">
 								<div>
 									<p class="text-ellipsis"><?php echo ucwords($details['product']['name']);?></p>

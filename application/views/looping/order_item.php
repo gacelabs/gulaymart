@@ -21,7 +21,7 @@
 			<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 		</div>
 		<div class="media-body">
-			<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+			<p class="zero-gaps media-heading text-ellipsis"><a<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
 			<div class="ellipsis-container">
 				<p class="zero-gaps"><?php echo $product['description'];?></p>
 			</div>

@@ -24,6 +24,85 @@ $(document).ready(function() {
 	}
 });
 
+function getUrlParamByName(name, url) {
+	if (url == undefined) url = window.location.href;
+	name = name.replace(/[\[\]]/g, '\\$&');
+	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+		results = regex.exec(url);
+	// console.log(results);
+	if (!results) return null;
+	if (!results[2]) return '';
+
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
+	let deferredPrompt;
+	document.getElementById('add-pwa').addEventListener('click', async () => {
+		/*Hide the app provided install promotion*/
+		document.getElementById('add-pwa').style.display = 'none';
+		/*Show the install prompt*/
+		deferredPrompt.prompt();
+		/*Wait for the user to respond to the prompt*/
+		const { outcome } = await deferredPrompt.userChoice;
+		/*Optionally, send analytics event with outcome of user choice*/
+		/*console.log(`User response to the install prompt: ${outcome}`);*/
+		/*We've used the prompt, and can't use it again, throw it away*/
+		deferredPrompt = null;
+	});
+
+	/*Initialize deferredPrompt for use later to show browser install prompt.*/
+	window.addEventListener('beforeinstallprompt', (e) => {
+		/*Prevent the mini-infobar from appearing on mobile*/
+		e.preventDefault();
+		/*Stash the event so it can be triggered later.*/
+		deferredPrompt = e;
+		/*Update UI notify the user they can install the PWA*/
+		document.getElementById('add-pwa').style.display = 'block';
+		/*Optionally, send analytics event that PWA install promo was shown.*/
+		/*console.log(`'beforeinstallprompt' event was fired.`);*/
+	});
+
+	window.addEventListener('appinstalled', (e) => {
+		/*Hide the app-provided install promotion*/
+		document.getElementById('add-pwa').style.display = 'none';
+		/*Clear the deferredPrompt so it can be garbage collected*/
+		deferredPrompt = null;
+		/*Optionally, send analytics event to indicate successful install*/
+		/*console.log('PWA was installed');*/
+		setTimeout(function() {
+			if ('serviceWorker' in navigator) {
+				// alert(APPNAME + ' Installed!');
+				/*navigator.serviceWorker.ready.then(function(registration) {
+					registration.getNotifications().then(function(notifications) {
+						let currentNotification;
+						for(let i = 0; i < notifications.length; i++) {
+							if (notifications[i].data) {
+								currentNotification = notifications[i];
+							}
+						}
+						return currentNotification;
+					}).then(function(currentNotification) {
+						console.log(currentNotification);
+						return registration.showNotification('App Installed', {
+							badge: 'https://gulaymart.com/assets/images/favicon.png',
+							body: 'Start Earning NOW!',
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+							tag: 'install-notification',
+							renotify: true,
+							requireInteraction: true,
+							vibrate: [200, 100, 200, 100, 200, 100, 200],
+							data: {
+								url: 'https://gulaymart.com',
+							}
+						});
+					});
+				});*/
+			}
+		}, 3000);
+	});
+}
+
 function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
 	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));

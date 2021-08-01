@@ -763,8 +763,7 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 				'plugins/inputmask.binding',
 				'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
 				'plugins/markerclustererplus.min',
-				'marketplace/main', 
-				'global',
+				'marketplace/main',
 			],
 		],
 		'data' => [
