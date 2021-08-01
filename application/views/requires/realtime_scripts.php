@@ -3,7 +3,7 @@
 	var realtime = false, serviceWorker, isSubscribed;
 	window.initSendData = function() {
 		realtime = new SendData({
-			debug: true,
+			// debug: true,
 			autoConnect: true,
 			autoRunStash: true,
 			/*afterInit: function() {
