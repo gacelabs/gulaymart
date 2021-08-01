@@ -32,22 +32,24 @@
 										<td class="for-responsive"></td>
 									<?php endif ?>
 									<?php foreach ($product as $index => $value): ?>
-										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
-											<?php if ($index == 'id'): ?>
-												<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
-													<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+										<?php if ($index != 'version'): ?>
+											<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
+												<?php if ($index == 'id'): ?>
+													<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
+														<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+													<?php endif ?>
+													<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
+												<?php elseif ($index == 'updated'): ?>
+													<?php echo date('M. j, Y | h:i a', strtotime($value));?>
+												<?php elseif ($index == 'name'): ?>
+													<div class="inventory-name-block">
+														<?php echo ucwords($value);?>
+													</div>
+												<?php else: ?>
+													<?php echo $value;?>
 												<?php endif ?>
-												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
-											<?php elseif ($index == 'updated'): ?>
-												<?php echo date('M. j, Y | h:i a', strtotime($value));?>
-											<?php elseif ($index == 'name'): ?>
-												<div class="inventory-name-block">
-													<?php echo ucwords($value);?>
-												</div>
-											<?php elseif ($index != 'version'): ?>
-												<?php echo $value;?>
-											<?php endif ?>
-										</td>
+											</td>
+										<?php endif ?>
 									<?php endforeach ?>
 								</tr>
 							<?php endforeach ?>
