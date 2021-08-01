@@ -32,7 +32,7 @@
 	</div>
 	<hr class="visible-xs" style="clear:both;border-color:transparent;">
 	<div class="container text-center">
-		<div class="col-lg-6">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<!-- <h3 style="font-size: 16px;"><b>Facilities and Services</b></h3>
 			<ul class="inline-list right-gap">
 				<li><img src="assets/images/toktok.png" width="75"></li>
@@ -40,7 +40,8 @@
 				<li><img src="assets/images/paypal.png" width="100"></li>
 			</ul> -->
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<h3 style="font-size: 16px;"><b>Web Protection by</b></h3>
 			<ul class="inline-list right-gap">
 				<li id="install-app"><img src="assets/images/websecure.jpg" width="75"></li>

@@ -99,7 +99,7 @@
 														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $toktok_pricing['price']);?></b></p>
 													</div>
 												</div>
-												<small class="elem-block text-gray"><i>Inclusive of delivery fee (&#x20b1; <?php echo $toktok_pricing['price'];?>)</i></small>
+												<small class="elem-block text-gray"><i>Delivery fee (&#x20b1; <?php echo $toktok_pricing['price'];?>)</i></small>
 											</div>
 										<?php endforeach ?>
 							 		</div>

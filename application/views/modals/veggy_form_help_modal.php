@@ -24,7 +24,7 @@
 				<h4 class="modal-title">Categories</h4>
 			</div>
 			<div class="modal-body">
-				<p>Help Gulaymart understands your listing better by selecting the right category for your veggy. Find out what <b>category</b> your product fits in.</p>
+				<p>Help Gulaymart understand your listing better by selecting the right category for your veggies. Find out what <b>category</b> your product fits in.</p>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="headingOne">
@@ -37,7 +37,7 @@
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<p>Leaf vegetables, also called leafy greens, salad greens, pot herbs, vegetable greens, or simply greens, are plant leaves eaten as a vegetable, sometimes accompanied by tender petioles and shoots. Although they come from a very wide variety of plants, most share a great deal with other leaf vegetables in nutrition and cooking methods.</p>
-								<p>Some good examples: Lettuce, Cabbage (Chinese Pechay), Spinach, Microgreens, Basil, Arugula and <a href="https://en.wikipedia.org/wiki/Leaf_vegetable" target="_blank">more</a></p>
+								<p>Some good examples: Lettuce, Cabbage (Chinese Pechay), Spinach, Microgreens, Basil, Arugula and <a href="https://en.wikipedia.org/wiki/Leaf_vegetable" target="_blank" class="text-link">more.</a></p>
 							</div>
 						</div>
 					</div>
