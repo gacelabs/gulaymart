@@ -1,5 +1,4 @@
 
-<button id="add-pwa" style="display: none;">add to home</button>
 <script type="text/javascript">
 	var realtime = false, serviceWorker, isSubscribed, deferredPrompt;
 	window.initSendData = function() {
