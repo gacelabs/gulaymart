@@ -58,17 +58,13 @@ var renderHTML = function(obj) {
 		
 		var printableWin = window.open(obj.printable_link);
 		window.onafterprint = function(e){
-			$(window).off('mousemove', window.onafterprint);
-			$(window).off('touchmove', window.onafterprint);
-			$(window).off('click', window.onafterprint);
+			$(printableWin).off('mousemove touchmove', window.onafterprint);
 			oThis.html(oThis.attr('prev-ui'));
 			printableWin.close();
 		};
 		setTimeout(function(){
-			$(window).one('mousemove', window.onafterprint);
-			$(window).one('touchmove', window.onafterprint);
-			$(window).one('click', window.onafterprint);
-		});
+			$(printableWin).one('mousemove touchmove', window.onafterprint);
+		}, 1000);
 		printableWin.print();
 
 		/*html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
