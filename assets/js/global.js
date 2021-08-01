@@ -71,8 +71,9 @@ if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
 		/*Optionally, send analytics event to indicate successful install*/
 		/*console.log('PWA was installed');*/
 		setTimeout(function() {
-			// alert(APPNAME + ' Installed!');
+			console.log(navigator);
 			if ('serviceWorker' in navigator) {
+				// alert(APPNAME + ' Installed!');
 				navigator.serviceWorker.ready.then(function(registration) {
 					registration.update();
 					return registration.showNotification('App Installed', {
