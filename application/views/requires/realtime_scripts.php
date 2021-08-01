@@ -72,6 +72,10 @@
 				});
 			});
 		};
+
+		const fnUserChoice = async function(deferredPrompt) {
+			return deferredPrompt.userChoice;
+		}
 		/*Initialize deferredPrompt for use later to show browser install prompt.*/
 		window.addEventListener('beforeinstallprompt', (e) => {
 			/*Prevent the mini-infobar from appearing on mobile*/
@@ -81,10 +85,10 @@
 			/*Update UI notify the user they can install the PWA*/
 			// showInstallPromotion();
 			/*Optionally, send analytics event that PWA install promo was shown.*/
-			console.log(`'beforeinstallprompt' event was fired.`, e.waitUntil);
+			console.log(`'beforeinstallprompt' event was fired.`, e);
 			deferredPrompt.prompt();
 			// Wait for the user to respond to the prompt
-			const { outcome } = await deferredPrompt.userChoice;
+			const { outcome } = await fnUserChoice(deferredPrompt);
 			// Optionally, send analytics event with outcome of user choice
 			console.log(`User response to the install prompt: ${outcome}`);
 			// We've used the prompt, and can't use it again, throw it away
