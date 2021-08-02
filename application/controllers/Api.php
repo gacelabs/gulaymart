@@ -286,18 +286,18 @@ class Api extends MY_Controller {
 		$this->set_response('error', false, $post);
 	}
 
-	public function fulfillment_process($profile_id=0)
+	public function fulfillment_process($seller_id=0)
 	{
-		if ($profile_id > 0 OR $this->accounts->has_session) {
-			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
+		if ($seller_id > 0 OR $this->accounts->has_session) {
+			if ($seller_id == 0 AND $this->accounts->has_session) $seller_id = $this->accounts->profile['id'];
 			$this->load->library('baskets');
 			$status_value = $this->input->post('status');
 			$segment = $this->input->post('segment');
 			$status_id = get_status_dbvalue($status_value);
-			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $profile_id, 'status' => $status_id]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $seller_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_fulfillments_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
-			$baskets_merge_ids = [];
+			$baskets_merge_ids = $buyer_ids = [];
 			if ($baskets_merge_data) {
 				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
@@ -318,6 +318,7 @@ class Api extends MY_Controller {
 					}
 					if ($valid) {
 						$buyer_name = $data['buyer']['fullname'];
+						$buyer_ids[] = $data['buyer']['id'];
 						$date_range = false;
 						if (isset($data['schedule']) AND !empty($data['schedule'])) {
 							$date_range = [
@@ -362,26 +363,26 @@ class Api extends MY_Controller {
 			}
 			/*$this->senddataapi->trigger($segment.'-fulfillment', 'send-bookings', [
 				'message' => 'You have available bookings passed from '.$segment,
-				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'event' => $segment],
+				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'buyer_id' => $buyer_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_merge_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment]); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment]); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}
 	}
 
-	public function order_process($profile_id=0)
+	public function order_process($buyer_id=0)
 	{
-		if ($profile_id > 0 OR $this->accounts->has_session) {
-			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
+		if ($buyer_id > 0 OR $this->accounts->has_session) {
+			if ($buyer_id == 0 AND $this->accounts->has_session) $buyer_id = $this->accounts->profile['id'];
 			$this->load->library('baskets');
 			$status_value = $this->input->post('status');
 			$segment = $this->input->post('segment');
 			$status_id = get_status_dbvalue($status_value);
-			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $buyer_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_orders_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
 			$baskets_ids = [];
@@ -453,9 +454,9 @@ class Api extends MY_Controller {
 				'data' => ['success' => false, 'ids' => $baskets_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment]); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment]); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}

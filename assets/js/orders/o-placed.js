@@ -1,67 +1,7 @@
 
 var oRemoveAjax = false;
 $(document).ready(function() {
-	$('[js-element="remove-product"]').bind('click', function(e) {
-		var arData = [];
-		arData.push($(this).data('json'));
-		// console.log(arData);
-		var uiButtonSubmit = $(e.target);
-		var lastButtonUI = uiButtonSubmit.html();
-		var oSettings = {
-			url: 'orders/delete/',
-			type: 'get',
-			data: {data: arData},
-			dataType: 'jsonp',
-			jsonpCallback: 'gmCall',
-			beforeSend: function(xhr, settings) {
-				uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
-				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
-			},
-			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
-			},
-			complete: function(xhr, status) {
-				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-				uiButtonSubmit.removeAttr('disabled');
-			}
-		};
-		$.ajax(oSettings);
-	});
-
-	$('[js-element="remove-all"]').bind('click', function(e) {
-		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
-			$(e.target).parents('.order-table-item:first').fadeOut().remove();
-			updateOrdersCounts();
-		} else {
-			var oToDeleteData = [];
-			$(e.target).parents('.order-table-item:first').find('[js-element="remove-all"]').each(function(i, elem) {
-				oToDeleteData.push({merge_id: $(elem).data('merge_id')});
-			});
-			// console.log(oToDeleteData);
-			var uiButtonSubmit = $(e.target);
-			var lastButtonUI = uiButtonSubmit.html();
-			var oSettings = {
-				url: 'orders/delete/1',
-				type: 'get',
-				data: {data: oToDeleteData},
-				dataType: 'jsonp',
-				jsonpCallback: 'gmCall',
-				beforeSend: function(xhr, settings) {
-					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
-					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
-				},
-				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
-				},
-				complete: function(xhr, status) {
-					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
-					uiButtonSubmit.removeAttr('disabled');
-				}
-			};
-			if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
-			oRemoveAjax = $.ajax(oSettings);
-		}
-	});
+	runDomReady();
 });
 
 if ($('body').hasClass('orders-placed')) {
@@ -96,6 +36,11 @@ if ($('body').hasClass('orders-placed')) {
 			$('#nav-order-count').text(iNavLastCnt);
 		} else {
 			$('#nav-order-count').hide();
+		}
+		if ($('#nav-fulfill-count').length) {
+			var fulfillCount = parseInt($('#nav-fulfill-count').text());
+			if (isNaN(fulfillCount)) fulfillCount = 0;
+			$('#nav-fulfill-count').text(fulfillCount - 1);
 		}
 
 		var iCancelCnt = (iInitCancelCnt+iFinalCancelCnt < 0) ? false : iInitCancelCnt+iFinalCancelCnt;
@@ -194,7 +139,11 @@ if ($('body').hasClass('orders-placed')) {
 		realtime.bind('status-ordered-items', 'change-order-status', function(object) {
 			// console.log('received response from change-order-status:ordered-items', object.data);
 			var oData = object.data;
-			changeOnFulfillmentRealtime(oData.data);
+			if (Object.keys(oData.buyer_id).length) {
+				if ($.inArray(oUser.id, oData.buyer_id) >= 0) changeOnFulfillmentRealtime(oData.data);
+			} else {
+				if (oData.buyer_id == oUser.id) changeOnFulfillmentRealtime(oData.data);
+			}
 		});
 	}
 	var changeOnFulfillmentRealtime = function(obj) {
@@ -289,5 +238,69 @@ var renderHTML = function(obj) {
 				printJS({printable:url, type:'image'});
 			});
 		});*/
+	});
+}
+
+var runDomReady = function() {
+	$(document.body).find('[js-element="remove-product"]').bind('click', function(e) {
+		var arData = [];
+		arData.push($(this).data('json'));
+		// console.log(arData);
+		var uiButtonSubmit = $(e.target);
+		var lastButtonUI = uiButtonSubmit.html();
+		var oSettings = {
+			url: 'orders/delete/',
+			type: 'get',
+			data: {data: arData},
+			dataType: 'jsonp',
+			jsonpCallback: 'gmCall',
+			beforeSend: function(xhr, settings) {
+				uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
+			},
+			error: function(xhr, status, thrown) {
+				console.log(status, thrown);
+			},
+			complete: function(xhr, status) {
+				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+				uiButtonSubmit.removeAttr('disabled');
+			}
+		};
+		$.ajax(oSettings);
+	});
+
+	$(document.body).find('[js-element="remove-all"]').bind('click', function(e) {
+		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
+			$(e.target).parents('.order-table-item:first').fadeOut().remove();
+			updateOrdersCounts();
+		} else {
+			var oToDeleteData = [];
+			$(e.target).parents('.order-table-item:first').find('[js-element="remove-all"]').each(function(i, elem) {
+				oToDeleteData.push({merge_id: $(elem).data('merge_id')});
+			});
+			// console.log(oToDeleteData);
+			var uiButtonSubmit = $(e.target);
+			var lastButtonUI = uiButtonSubmit.html();
+			var oSettings = {
+				url: 'orders/delete/1',
+				type: 'get',
+				data: {data: oToDeleteData},
+				dataType: 'jsonp',
+				jsonpCallback: 'gmCall',
+				beforeSend: function(xhr, settings) {
+					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
+				},
+				error: function(xhr, status, thrown) {
+					console.log(status, thrown);
+				},
+				complete: function(xhr, status) {
+					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+					uiButtonSubmit.removeAttr('disabled');
+				}
+			};
+			if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
+			oRemoveAjax = $.ajax(oSettings);
+		}
 	});
 }

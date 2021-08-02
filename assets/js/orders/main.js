@@ -44,8 +44,8 @@ var renderHTML = function(obj) {
 
 var order_process = false;
 function orderProcess(callback) {
-	var segment2 = oSegments[2], sStatus = null;
-	switch (segment2) {
+	var sSegment2 = oSegments[2], sStatus = null;
+	switch (sSegment2) {
 		case 'on-delivery':
 			sStatus = 'for+pick+up';
 		break;
@@ -59,11 +59,24 @@ function orderProcess(callback) {
 		order_process = $.ajax({
 			url: 'api/order_process/',
 			type: 'post',
-			data: {status: sStatus, segment: segment2},
+			data: {status: sStatus, segment: sSegment2},
 			dataType: 'json',
 			success: function(data) {
 				console.log(data);
 				if (data.success == true) callback(data);
+			}
+		});
+	} else {
+		if (sSegment2 == undefined) sSegment2 = 'placed';
+		realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
+			var oData = object.data;
+			console.log(oData);
+			if (oData.success) {
+				if (Object.keys(oData.buyer_id).length) {
+					if ($.inArray(oUser.id, oData.buyer_id) >= 0) runOrders(oData);
+				} else {
+					if (oData.buyer_id == oUser.id) runOrders(oData);
+				}
 			}
 		});
 	}
@@ -75,7 +88,7 @@ function runOrders(data) {
 		url: 'orders/'+method+'/',
 		type: 'post',
 		dataType: 'json',
-		data: { ids: data.ids },
+		data: { ids: data.ids, buyer_id: data.buyer_id },
 		success: function(response) {
 			console.log(response);
 			if (response.html.length) {
@@ -83,9 +96,13 @@ function runOrders(data) {
 					$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
 				} else {
 					var newHtml = $(response.html).find('[js-element="orders-panel"]').html();
-					newHtml = $(newHtml).find('.no-records-ui').remove();
-					newHtml.insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
+					var newOrderHtml = $(newHtml).find('.no-records-ui').remove();
+					if (newOrderHtml.length == 0) {
+						newOrderHtml = $(response.html);
+					}
+					newOrderHtml.insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
 				}
+				runDomReady();
 				switch (method) {
 					case 'on-delivery':
 						var sPrevNav = 'for-pick-up';
@@ -111,6 +128,15 @@ function runOrders(data) {
 					uiPrevNav.find('kbd').text(prev - dataCnt);
 				} else if (prev >= 0) {
 					uiPrevNav.find('kbd').remove();
+				}
+				if ($('#nav-order-count').length) {
+					var orderCount = parseInt($('#nav-order-count').text());
+					if (isNaN(orderCount)) orderCount = 0;
+					$('#nav-order-count').text(orderCount + 1);
+
+					var fulfillCount = parseInt($('#nav-fulfill-count').text());
+					if (isNaN(fulfillCount)) fulfillCount = 0;
+					$('#nav-fulfill-count').text(fulfillCount + 1);
 				}
 			}
 		}

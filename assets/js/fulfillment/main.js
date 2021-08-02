@@ -80,8 +80,8 @@ var renderHTML = function(obj) {
 
 var fulfillment_process = false;
 function fulfillmentProcess(callback) {
-	var segment2 = oSegments[2], sStatus = null;
-	switch (segment2) {
+	var sSegment2 = oSegments[2], sStatus = null;
+	switch (sSegment2) {
 		case 'on-delivery':
 			sStatus = 'for+pick+up';
 		break;
@@ -95,11 +95,24 @@ function fulfillmentProcess(callback) {
 		fulfillment_process = $.ajax({
 			url: 'api/fulfillment_process/',
 			type: 'post',
-			data: {status: sStatus, segment: segment2},
+			data: {status: sStatus, segment: sSegment2},
 			dataType: 'json',
 			success: function(data) {
 				console.log(data);
 				if (data.success == true) callback(data);
+			}
+		});
+	} else {
+		if (sSegment2 == undefined) sSegment2 = 'placed';
+		realtime.bind(sSegment2+'-fulfillment', 'incoming-fulfillment', function(object) {
+			var oData = object.data;
+			console.log(oData);
+			if (oData.success) {
+				if (Object.keys(oData.seller_id).length) {
+					if ($.inArray(oUser.id, oData.seller_id) >= 0) runFulfillments(oData);
+				} else {
+					if (oData.seller_id == oUser.id) runFulfillments(oData);
+				}
 			}
 		});
 	}
@@ -111,16 +124,20 @@ function runFulfillments(data) {
 		url: 'fulfillment/'+method+'/',
 		type: 'post',
 		dataType: 'json',
-		data: { ids: data.ids },
+		data: { ids: data.ids, seller_id: data.seller_id },
 		success: function(response) {
 			if (response.html.length) {
 				if ($('.ff-product-container').find('.no-records-ui:visible').length) {
 					$('.ff-product-container').replaceWith(response.html);
 				} else {
 					var newHtml = $(response.html).find('[js-element="fulfill-panel"]').html();
-					newHtml = $(newHtml).find('.no-records-ui').remove();
-					newHtml.insertBefore($('.ff-product-container').find('.no-records-ui'));
+					var newFulfillmentHtml = $(newHtml).find('.no-records-ui').remove();
+					if (newFulfillmentHtml.length == 0) {
+						newFulfillmentHtml = $(response.html);
+					}
+					newFulfillmentHtml.insertBefore($('.ff-product-container').find('.no-records-ui'));
 				}
+				runDomReady();
 				switch (method) {
 					case 'on-delivery':
 						var sPrevNav = 'for-pick-up';
@@ -146,6 +163,15 @@ function runFulfillments(data) {
 					uiPrevNav.find('kbd').text(prev - dataCnt);
 				} else if (prev >= 0) {
 					uiPrevNav.find('kbd').remove();
+				}
+				if ($('#nav-fulfill-count').length) {
+					var fulfillCount = parseInt($('#nav-fulfill-count').text());
+					if (isNaN(fulfillCount)) fulfillCount = 0;
+					$('#nav-fulfill-count').text(fulfillCount + 1);
+
+					var orderCount = parseInt($('#nav-order-count').text());
+					if (isNaN(orderCount)) orderCount = 0;
+					$('#nav-order-count').text(orderCount + 1);
 				}
 			}
 		}

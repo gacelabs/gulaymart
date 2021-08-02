@@ -5,9 +5,12 @@
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/autosize.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/jquery-dateformat.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/toast.min.js'); ?>"></script>
-		<script type="text/javascript" src="<?php echo base_url('assets/js/global.js'); ?>"></script>
 
 		<?php
+			$this->minify->add_js('global.js');
+			$this->minify->add_js('validate-form.js');
+			$this->minify->add_js('common.js');
+			$this->minify->add_js('main.js');
 			foreach ($bottom['js'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_URL)) {
 					echo '<script type="text/javascript" src="'.$value.'"></script>';
@@ -18,9 +21,6 @@
 				}
 				echo "\r\n";
 			}
-			$this->minify->add_js('validate-form.js');
-			$this->minify->add_js('common.js');
-			$this->minify->add_js('main.js');
 			echo $this->minify->deploy_js(false);
 		?>
 		

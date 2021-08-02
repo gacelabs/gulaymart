@@ -22,6 +22,7 @@ class Orders extends MY_Controller {
 		$filters = ['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
 			$filters['id'] = $this->input->post('ids');
+			$filters['buyer_id'] = $this->input->post('buyer_id');
 			// $filters['id'] = ["25", "28", "31", "41"];
 		}
 		$baskets_merge = setup_orders_data($this->baskets->get_baskets_merge($filters));
@@ -40,6 +41,7 @@ class Orders extends MY_Controller {
 						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
 						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
+					'no_rec_ui' => true,
 				]
 			], true)]);
 			exit();
@@ -58,7 +60,7 @@ class Orders extends MY_Controller {
 				],
 				'bottom' => [
 					'modals' => ['ff_invoice_modal'],
-					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/main', 'orders/o-'.clean_string_name(urldecode($status))],
+					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/o-'.clean_string_name(urldecode($status)), 'orders/main'],
 				],
 				'data' => [
 					'orders' => $baskets_merge,
@@ -211,10 +213,11 @@ class Orders extends MY_Controller {
 		$get = $this->input->get();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
-			$basket_ids = [];
+			$basket_ids = $seller_ids = [];
 			foreach ($post['data'] as $key => $row) {
 				$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
 				if ($merge) {
+					$seller_ids[$merge['seller_id']] = $merge['seller_id'];
 					$order_details = json_decode(base64_decode($merge['order_details']), true);
 					if ($order_details) {
 						/*modify the status of the product*/
@@ -265,7 +268,11 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', ['all'=>$all, 'data'=>$post['data']]);
+			$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', [
+				'all' => $all, 
+				'data' => $post['data'],
+				'seller_id' => $seller_ids
+			]);
 			// debug($senddata, 'stop');
 			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
 		} elseif ($get AND isset($get['data'])) {

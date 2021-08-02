@@ -1,47 +1,5 @@
 $(document).ready(function() {
-
-	$('[js-event="actionSelect"]').change(function() {
-		var actionVal = $(this).val();
-		if (actionVal == "5") {
-			$(this).next('[js-event="reasonSelect"]').removeClass('hide');
-			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#ff7575');
-		} else {
-			$(this).next('[js-event="reasonSelect"]').addClass('hide');
-			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#799938');
-			$(this).next('[js-event="reasonSelect"]').val('None');
-		}
-		isAllSelected($(this).parents('.order-table-item').data('merge-id'));
-	});
-
-	$('[js-event="cancelReasonSelect"]').change(function() {
-		if ($.isNumeric($(this).val())) {
-			$(this).removeClass('error');
-		}
-	});
-
-	$('[js-element="proceed-btn"]').prop('disabled', true).attr('disabled', 'disabled');
-	$('[data-merge-id]').each(function(i, elem) {
-		isAllSelected($(elem).data('merge-id'));
-	});
-
-	$('[js-element="proceed-btn"]').bind('click', function(e) {
-		var id = $(this).data('merge_id');
-		if (id) {
-			var arFulfillments = [];
-			$('[data-merge-id="'+id+'"]').find('[js-element="selectItems"]').each(function(i, elem) {
-				var oData = $(elem).find('[js-event="actionSelect"]').data();
-				if (oData != undefined) {
-					oData.status = $(elem).find('[js-event="actionSelect"]').val();
-					oData.reason = $(elem).find('[js-event="reasonSelect"]').val();
-					arFulfillments.push(oData);
-				}
-			});
-			// console.log({merge_id: id, data: arFulfillments});
-			$('[data-merge-id="'+id+'"]').find('a,select.button,input:submit,input:button,input:text').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
-			simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), 12000);
-		}
-	});
-
+	runDomReady();
 });
 
 if ($('body').hasClass('ff-placed')) {
@@ -116,7 +74,11 @@ if ($('body').hasClass('ff-placed')) {
 		realtime.bind('remove-fulfilled-items', 'remove-item', function(object) {
 			var oData = object.data;
 			// console.log(oData);
-			removeOnFulfillment(oData);
+			if (Object.keys(oData.seller_id).length) {
+				if ($.inArray(oUser.id, oData.seller_id) >= 0) removeOnFulfillment(oData);
+			} else {
+				if (oData.seller_id == oUser.id) removeOnFulfillment(oData);
+			}
 		});
 	}
 
@@ -147,4 +109,48 @@ if ($('body').hasClass('ff-placed')) {
 			if (bCanceledCnt) updateFulfillmentsCounts();
 		}
 	}
+}
+
+var runDomReady = function() {
+	$(document.body).find('[js-event="actionSelect"]').bind('change', function() {
+		var actionVal = $(this).val();
+		if (actionVal == "5") {
+			$(this).next('[js-event="reasonSelect"]').removeClass('hide');
+			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#ff7575');
+		} else {
+			$(this).next('[js-event="reasonSelect"]').addClass('hide');
+			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#799938');
+			$(this).next('[js-event="reasonSelect"]').val('None');
+		}
+		isAllSelected($(this).parents('.order-table-item').data('merge-id'));
+	});
+
+	$(document.body).find('[js-event="cancelReasonSelect"]').bind('change', function() {
+		if ($.isNumeric($(this).val())) {
+			$(this).removeClass('error');
+		}
+	});
+
+	$('[js-element="proceed-btn"]').prop('disabled', true).attr('disabled', 'disabled');
+	$('[data-merge-id]').each(function(i, elem) {
+		isAllSelected($(elem).data('merge-id'));
+	});
+
+	$(document.body).find('[js-element="proceed-btn"]').bind('click', function(e) {
+		var id = $(this).data('merge_id');
+		if (id) {
+			var arFulfillments = [];
+			$('[data-merge-id="'+id+'"]').find('[js-element="selectItems"]').each(function(i, elem) {
+				var oData = $(elem).find('[js-event="actionSelect"]').data();
+				if (oData != undefined) {
+					oData.status = $(elem).find('[js-event="actionSelect"]').val();
+					oData.reason = $(elem).find('[js-event="reasonSelect"]').val();
+					arFulfillments.push(oData);
+				}
+			});
+			// console.log({merge_id: id, data: arFulfillments});
+			$('[data-merge-id="'+id+'"]').find('a,select.button,input:submit,input:button,input:text').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+			simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), 12000);
+		}
+	});
 }

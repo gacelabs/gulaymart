@@ -84,9 +84,9 @@
 											<option value="5">Cancelled</option> <!-- cancelled -->
 										</select>
 										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
-											<option value="None">Select Reason</option>
-											<option value="Removed Product">Removed Product</option>
+											<option value="None">No Reason</option>
 											<option value="Out Of Stock">Out Of Stock</option>
+											<option value="Removed Product">Removed Product</option>
 										</select>
 									<?php else : ?>
 										<p class="zero-gaps">
@@ -163,9 +163,11 @@
 				</div>
 			<?php endforeach ?>
 		<?php endif ?>
-		<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
-			<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
-			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-		</div>
+		<?php if (!isset($data['no_rec_ui'])): ?>
+			<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
+				<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+				<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+			</div>
+		<?php endif ?>
 	</div>
 </div>

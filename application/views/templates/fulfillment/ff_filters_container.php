@@ -31,33 +31,25 @@
 				<div class="grid-item">
 					<a href="fulfillment/placed/" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
 						Placed
-						<?php if ($data['counts']['placed']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['placed'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right"><?php if ($data['counts']['placed']): ?><?php echo $data['counts']['placed'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/for-pick-up" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
 						For Pick Up
-						<?php if ($data['counts']['for+pick+up']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['for+pick+up'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right"><?php if ($data['counts']['for+pick+up']): ?><?php echo $data['counts']['for+pick+up'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/on-delivery" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
 						On Delivery
-						<?php if ($data['counts']['on+delivery']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['on+delivery'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right"><?php if ($data['counts']['on+delivery']): ?><?php echo $data['counts']['on+delivery'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/received" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
 						Received
-						<?php if ($data['counts']['received']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['received'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right"><?php if ($data['counts']['received']): ?><?php echo $data['counts']['received'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">

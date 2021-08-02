@@ -425,6 +425,16 @@ class Basket extends My_Controller {
 			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
 			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
+
+			/*send realtime placed order*/
+			$this->senddataapi->trigger('placed-order', 'incoming-orders', [
+				'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'placed'
+			]);
+			/*send realtime placed fulfillment*/
+			$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
+				'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'placed'
+			]);
+
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
 			$this->set_response('info', 'No orders to be place, Redirecting to your basket...', false, 'basket/');
