@@ -249,8 +249,8 @@ var renderHTML = function(obj) {
 		};
 		setTimeout(function(){
 			$(printableWin).one('mousemove touchmove', window.onafterprint);
-		}, 1000);
-		printableWin.print();
+			printableWin.print();
+		}, 300);
 
 		/*console.log(document.querySelector('[js-element="to-print"]'));
 		html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {

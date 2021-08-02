@@ -64,8 +64,8 @@ var renderHTML = function(obj) {
 		};
 		setTimeout(function(){
 			$(printableWin).one('mousemove touchmove', window.onafterprint);
-		}, 1000);
-		printableWin.print();
+			printableWin.print();
+		}, 300);
 
 		/*html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
 			oThis.html(oThis.attr('prev-ui'));
