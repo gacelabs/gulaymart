@@ -107,12 +107,26 @@
 					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) onServiceWorkerReady('fulfillment', oData);
+						if ('serviceWorker' in navigator) {
+							onServiceWorkerReady('fulfillment', oData);
+							if ($('#nav-messages-count').length) {
+								var count = parseInt($('#nav-messages-count').text());
+								if (isNaN(count)) count = 0;
+								$('#nav-messages-count').text(count + 1);
+							}
+						}
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) onServiceWorkerReady('order', oData);
+						if ('serviceWorker' in navigator) {
+							onServiceWorkerReady('order', oData);
+							if ($('#nav-messages-count').length) {
+								var count = parseInt($('#nav-messages-count').text());
+								if (isNaN(count)) count = 0;
+								$('#nav-messages-count').text(count + 1);
+							}
+						}
 					});
 				}, 300);
 			}

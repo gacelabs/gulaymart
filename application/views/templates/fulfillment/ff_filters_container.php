@@ -31,33 +31,33 @@
 				<div class="grid-item">
 					<a href="fulfillment/placed/" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
 						Placed
-						<kbd class="pull-right"><?php if ($data['counts']['placed']): ?><?php echo $data['counts']['placed'];?><?php endif; ?></kbd>
+						<kbd class="pull-right<?php if (!$data['counts']['placed']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['placed']): ?><?php echo $data['counts']['placed'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/for-pick-up" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
 						For Pick Up
-						<kbd class="pull-right"><?php if ($data['counts']['for+pick+up']): ?><?php echo $data['counts']['for+pick+up'];?><?php endif; ?></kbd>
+						<kbd class="pull-right<?php if (!$data['counts']['for+pick+up']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['for+pick+up']): ?><?php echo $data['counts']['for+pick+up'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/on-delivery" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
 						On Delivery
-						<kbd class="pull-right"><?php if ($data['counts']['on+delivery']): ?><?php echo $data['counts']['on+delivery'];?><?php endif; ?></kbd>
+						<kbd class="pull-right<?php if (!$data['counts']['on+delivery']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['on+delivery']): ?><?php echo $data['counts']['on+delivery'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/received" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
 						Received
-						<kbd class="pull-right"><?php if ($data['counts']['received']): ?><?php echo $data['counts']['received'];?><?php endif; ?></kbd>
+						<kbd class="pull-right<?php if (!$data['counts']['received']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['received']): ?><?php echo $data['counts']['received'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
 					<a href="fulfillment/cancelled" data-nav="cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
 						Cancelled
-						<?php if ($data['counts']['cancelled']): ?>
-						<kbd style="background-color:#a9a9a9;" class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd>
-						<?php endif; ?>
+						
+						<kbd style="background-color:#a9a9a9;" class="pull-right<?php if (!$data['counts']['cancelled']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['cancelled']): ?><?php echo $data['counts']['cancelled'];?><?php endif; ?></kbd>
+						
 					</a>
 				</div>
 			</div>

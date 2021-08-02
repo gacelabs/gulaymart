@@ -115,14 +115,14 @@ function runOrders(data) {
 				if (uiCurrNav.find('kbd').length == 0) {
 					uiCurrNav.find('div').append($('<kbd>'));
 				}
-				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
+				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').removeClass('no-count').text());
 				var dataCnt = parseInt(response.total_items);
 				uiCurrNav.find('kbd').text(prev + dataCnt);
 				/*set count for pickup*/
 				if (uiPrevNav.find('kbd').length == 0) {
 					uiPrevNav.find('div').append($('<kbd>'));
 				}
-				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
+				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').removeClass('no-count').text());
 				var dataCnt = parseInt(response.total_items);
 				if (prev > dataCnt) {
 					uiPrevNav.find('kbd').text(prev - dataCnt);

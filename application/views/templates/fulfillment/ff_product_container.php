@@ -79,12 +79,12 @@
 								<div class="text-right" js-element="selectItems">
 									<?php if (in_array($details['status'], [2,6]) AND $data['status'] == 'placed') : ?>
 										<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(6, $details['status'], ' style="color: rgb(121, 153, 56);"');?> data-basket_id="<?php echo $order['basket_id'];?>" data-location_id="<?php echo $order['farm_location_id'];?>" data-product_id="<?php echo $product['id'];?>" data-sub_total="<?php echo $order['sub_total'];?>">
-											<option>Select Action</option>
+											<option value="2">Select Action</option>
 											<option value="6"<?php str_has_value_echo(6, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
 											<option value="5">Cancelled</option> <!-- cancelled -->
 										</select>
 										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
-											<option value="None">No Reason</option>
+											<option value="None">Select Reason</option>
 											<option value="Out Of Stock">Out Of Stock</option>
 											<option value="Removed Product">Removed Product</option>
 										</select>

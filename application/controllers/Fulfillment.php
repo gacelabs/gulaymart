@@ -136,7 +136,7 @@ class Fulfillment extends My_Controller {
 	public function ready()
 	{
 		$post = $this->input->post() ?: $this->input->get();
-		debug($post, 'stop');
+		// debug($post, 'stop');
 		if ($post AND isset($post['merge_id']) AND isset($post['data'])) {
 			$cancelled = [];
 

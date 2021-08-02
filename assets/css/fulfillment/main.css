@@ -70,3 +70,6 @@ select.ff-navbar-pill option:not(checked), .order-item select option:not(checked
 	    grid-template-columns: repeat(5, minmax(0, 1fr));
 	}
 }
+.ff-navbar-pill kbd.no-count {
+	display: none !important;
+}

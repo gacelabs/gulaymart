@@ -5,19 +5,20 @@ $(document).ready(function() {
 });
 
 if ($('body').hasClass('orders-placed')) {
-	var updateOrdersCounts = function(noAlert) {
+	var updateOrdersCounts = function(noAlert, isConfirmed) {
 		if (noAlert == undefined) noAlert = false;
+		if (isConfirmed == undefined) isConfirmed = false;
 
-		var iCnt = $('.order-table-item:not(.was-cancelled)').length,
+		var iCnt = $('.order-table-item:visible').length,
 		iInitCancelCnt = parseInt($('.trans-navbar-pill.cancelled').find('kbd').text()),
 		iFinalCancelCnt = $('.order-table-item.was-cancelled').length,
 		iNavCnt = parseInt($('#nav-order-count').text());
 
 		if (iCnt == 0) {
-			$('.trans-navbar-pill.active').find('kbd').hide();
+			$('.trans-navbar-pill.active').find('kbd').addClass('no-count').text('');
 			$('[js-element="orders-panel"]').find('.no-records-ui').fadeIn('slow').removeClass('hide');
 		} else {
-			$('.trans-navbar-pill.active').find('kbd').text(iCnt);
+			$('.trans-navbar-pill.active').find('kbd').removeClass('no-count').text(iCnt);
 			$('[js-element="orders-panel"]').find('.no-records-ui').fadeOut('slow').addClass('hide');
 		}
 
@@ -37,7 +38,7 @@ if ($('body').hasClass('orders-placed')) {
 		} else {
 			$('#nav-order-count').hide();
 		}
-		if ($('#nav-fulfill-count').length) {
+		if (noAlert==false && $('#nav-fulfill-count').length) {
 			var fulfillCount = parseInt($('#nav-fulfill-count').text());
 			if (isNaN(fulfillCount)) fulfillCount = 0;
 			$('#nav-fulfill-count').text(fulfillCount - 1);
@@ -45,9 +46,20 @@ if ($('body').hasClass('orders-placed')) {
 
 		var iCancelCnt = (iInitCancelCnt+iFinalCancelCnt < 0) ? false : iInitCancelCnt+iFinalCancelCnt;
 		if (iCancelCnt != false) {
-			$('.trans-navbar-pill.cancelled').find('kbd').text(iCancelCnt);
+			$('.trans-navbar-pill.cancelled').find('kbd').removeClass('no-count').text(iCancelCnt);
 		} else {
-			$('.trans-navbar-pill.cancelled').find('kbd').hide();
+			$('.trans-navbar-pill.cancelled').find('kbd').addClass('no-count').text('');
+		}
+
+		if ($('.trans-navbar-pill.active').parent('[data-nav]').length && isConfirmed == true) {
+			var tab = $('.trans-navbar-pill.active').parent('[data-nav]').data('nav');
+			console.log(tab);
+			if (tab != undefined) {
+				var kbd = $('.trans-navbar-pill.active').parent('[data-nav]').parent('div').next().find('[data-nav] kbd');
+				var nextCount = parseInt(kbd.text());
+				if (isNaN(nextCount)) nextCount = 0;
+				kbd.text(nextCount + 1);
+			}
 		}
 	}
 
@@ -149,7 +161,7 @@ if ($('body').hasClass('orders-placed')) {
 	var changeOnFulfillmentRealtime = function(obj) {
 		if (obj != undefined) {
 			if (Object.keys(obj.data).length) {
-				var finalTotal = 0, arNotExists = [];
+				var finalTotal = 0, arNotExists = [], arIsConfirmed = [];
 				$.each(obj.data, function(i, res) {
 					var oData = {
 						'merge_id': obj.merge_id,
@@ -164,11 +176,13 @@ if ($('body').hasClass('orders-placed')) {
 					if (res.status == 5) {
 						$('[js-element="item-id-'+oData.merge_id+'-'+oData.product_id+'"]').addClass('was-cancelled').find('[js-element="remove-product"]').hide();
 						finalTotal -= parseFloat(oData.sub_total);
-						arNotExists.push($('[data-merge-id="'+oData.merge_id+'"]').length > 0)
+						arNotExists.push($('[data-merge-id="'+oData.merge_id+'"]').length > 0);
 						uiFarm.find('[js-data="confirmed"]').addClass('hide');
 					} else {
 						$('[js-element="item-id-'+oData.merge_id+'-'+oData.product_id+'"]').removeClass('was-cancelled').find('[js-element="remove-product"]').hide();
 						$('[data-merge-id="'+oData.merge_id+'"]').removeClass('was-cancelled').find('[js-element="remove-all"]').hide();
+						$('[data-merge-id="'+oData.merge_id+'"]').addClass('was-confirmed');
+						arIsConfirmed.push(true);
 					}
 
 					var fee = parseFloat(uiFarm.find('[js-element="item-fee"]').text());
@@ -190,13 +204,21 @@ if ($('body').hasClass('orders-placed')) {
 						setTimeout(function() {
 							runAlertBox({type:'info', message: 'Order added to Cancelled Orders'/*, unclose:true*/});
 							$('.order-table-item.was-cancelled').fadeOut('slow');
-							setTimeout(function() {
-								$('.order-table-item.was-cancelled').remove();
-							}, 1000);
 						}, 3000);
 					});
 
 					updateOrdersCounts(true);
+				}
+				if ($.inArray(true, arIsConfirmed) >= 0) {
+					$('.order-table-item.was-confirmed').each(function(i, elem) {
+						setTimeout(function() {
+							runAlertBox({type:'info', message: 'Order added to For Pick Up Orders'/*, unclose:true*/});
+							$('.order-table-item.was-confirmed').fadeOut('slow', function() {
+								$(this).remove();
+								updateOrdersCounts(true, true);
+							});
+						}, 3000);
+					});
 				}
 			}
 		}
