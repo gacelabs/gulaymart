@@ -60,7 +60,7 @@ class Orders extends MY_Controller {
 				],
 				'bottom' => [
 					'modals' => ['ff_invoice_modal'],
-					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/o-'.clean_string_name(urldecode($status)), 'orders/main'],
+					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'orders/main', 'orders/o-'.clean_string_name(urldecode($status))],
 				],
 				'data' => [
 					'orders' => $baskets_merge,

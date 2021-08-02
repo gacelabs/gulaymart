@@ -136,12 +136,15 @@ defined('MARKETPLACE_MAX_FARMERS') OR define('MARKETPLACE_MAX_FARMERS', 24);
 defined('RECAPTCHA_KEY') OR define('RECAPTCHA_KEY', '6Lei4fQUAAAAANUAGGDO7bHtCeydYC93apLLdxZn');
 defined('RECAPTCHA_SECRET') OR define('RECAPTCHA_SECRET', '6Lei4fQUAAAAAHuouWMQsjHtPaaGJE201bhTkAaP');
 /*
- * GM status:
- * 0 = verified (checkout page)
- * 1 = placed
- * 2 = for pick up
- * 3 = on delivery
- * 4 = received
+                    STATUS LINKS
+ * GM status:                       TOKTOK status:
+ * 0 = verified (checkout page)     
+                                    2 = Scheduled for Delivery (this is for scheduled GM orders only)
+ * 1 = placed                       1 = Placed Order
+ * 2 = for pick up                  3 = On the Way to Sender
+                                    4 = Item Picked Up
+ * 3 = on delivery                  5 = On the Way to Recipient
+ * 4 = received                     6 = Item Delivered
  * 5 = cancelled
 */
 defined('GM_VERIFIED_STATUS') OR define('GM_VERIFIED_STATUS', 0);

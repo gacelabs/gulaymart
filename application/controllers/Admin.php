@@ -197,6 +197,7 @@ class Admin extends MY_Controller {
 				/*do not start if switch is off*/
 				if ($set['switch'] == 1) {
 					$admin_turned_off = false;
+					$buyer_ids = $seller_ids = $merge_ids = [];
 					foreach ($toktok_data as $key => $toktok) {
 						/*recheck automation settings if switched is on/off*/
 						$check = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
@@ -240,17 +241,34 @@ class Admin extends MY_Controller {
 									$this->toktokapi->app_request('post_delivery', $post);
 									// debug($this->toktokapi, 'stop');
 									if ($this->toktokapi->success) {
-										$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+										$raw = ['status' => 3, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
 									} else {
-										$raw = ['is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
+										$raw = ['status' => 3, 'is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
 									}
 								} else {
-									$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+									$raw = ['status' => 3, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
 								}
 								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+								$basket_ids = explode(',', $toktok['basket_ids']);
+								if ($basket_ids) {
+									foreach ($basket_ids as $basket_id) {
+										$this->gm_db->save('baskets', ['status' => 3], ['id' => $basket_id]);
+									}
+								}
+								$buyer_ids[$toktok['buyer_id']] = $toktok['buyer_id'];
+								$seller_ids[$toktok['seller_id']] = $toktok['seller_id'];
+								$merge_ids[$toktok['id']] = $toktok['id'];
 							}
 						}
 					}
+					// send realtime on-delivery order
+					$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+						'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
+					]);
+					// send realtime on-delivery fulfillment
+					$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+						'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
+					]);
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
 						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!']); exit();
@@ -392,14 +410,20 @@ class Admin extends MY_Controller {
 								$this->toktokapi->app_request('post_delivery', $toktok_post);
 								// debug($this->toktokapi, 'stop');
 								if ($this->toktokapi->success) {
-									$raw = ['is_sent' => 1];
+									$raw = ['status' => 3, 'is_sent' => 1];
 								} else {
-									$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
+									$raw = ['status' => 3, 'is_sent' => 2]; // 'is_sent' => 2 FAILED
 								}
 							} else {
-								$raw = ['is_sent' => 1];
+								$raw = ['status' => 3, 'is_sent' => 1];
 							}
 							$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+							$basket_ids = explode(',', $toktok['basket_ids']);
+							if ($basket_ids) {
+								foreach ($basket_ids as $basket_id) {
+									$this->gm_db->save('baskets', ['status' => 3], ['id' => $basket_id]);
+								}
+							}
 
 							sleep(3);
 							$toktok_for_operators = $this->baskets->merge_disassembled([

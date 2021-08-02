@@ -69,7 +69,7 @@ class Fulfillment extends My_Controller {
 				],
 				'bottom' => [
 					'modals' => ['ff_invoice_modal'],
-					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'fulfillment/ff-'.clean_string_name(urldecode($status)), 'fulfillment/main'],
+					'js' => ['plugins/print.min', 'plugins/html2canvas.min', 'fulfillment/main', 'fulfillment/ff-'.clean_string_name(urldecode($status))],
 				],
 				'data' => [
 					'farm' => $farm,
