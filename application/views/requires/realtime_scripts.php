@@ -111,7 +111,7 @@
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
 						var oData = object.data;
-						console.log(oData, object);
+						// console.log(oData);
 						if ('serviceWorker' in navigator) onServiceWorkerReady('order', oData);
 					});
 				}, 300);
