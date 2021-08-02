@@ -80,6 +80,7 @@
 		$('#install-app').bind('click', function() {
 			if (oUser) {
 				oUser.seller_id = oUser.id;
+				oUser.tag = 'demo-notification';
 				oUser.url = window.location.protocol + '//' + window.location.hostname + '/orders/messages/';
 				realtime.trigger('ordered-notification', 'send-notification', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
@@ -110,7 +111,7 @@
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
 						var oData = object.data;
-						// console.log(oData);
+						console.log(oData);
 						if ('serviceWorker' in navigator) onServiceWorkerReady('order', oData);
 					});
 				}, 300);
