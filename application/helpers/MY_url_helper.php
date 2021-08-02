@@ -895,3 +895,13 @@ function check_device_agent() {
 		return 'desktop_';
 	}
 }
+
+function format_number($value=0)
+{
+	// debug((is_numeric( $value ) && floor( $value ) != $value), 'stop');
+	if ((is_numeric( $value ) && floor( $value ) != $value)) {
+		return number_format($value, 2, '.', ',');
+	} else {
+		return number_format($value);
+	}
+}

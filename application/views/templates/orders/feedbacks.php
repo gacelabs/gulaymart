@@ -18,7 +18,7 @@
 						<div class="order-info-container">
 							<div class="order-item-title">
 								<p class="zero-gaps"><a href="<?php product_url($feedback['product'], true);?>" class="text-link"><?php echo $feedback['product']['name'];?></a></p>
-								<p class="zero-gaps">&#x20b1; <b><?php echo $feedback['location']['price'];?></b> / <?php echo $feedback['location']['measurement'];?></p>
+								<p class="zero-gaps">&#x20b1; <b><?php echo format_number($feedback['location']['price']);?></b> / <?php echo $feedback['location']['measurement'];?></p>
 							</div>
 						</div>
 					</div>

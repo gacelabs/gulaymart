@@ -28,7 +28,7 @@
 					</div>
 					<h1 class="productpage-title"><?php echo $product['name'];?></h1>
 					<h2 class="productpage-price">
-						<span class="text-gray">&#x20b1;</span> <span class="text-contrast"><?php echo number_format($product['basket_details']['price']);?></span> 
+						<span class="text-gray">&#x20b1;</span> <span class="text-contrast"><?php echo format_number($product['basket_details']['price']);?></span> 
 						<!-- <span class="text-gray">-</span> <span class="text-contrast"></span> -->
 					</h2>
 					<hr>
@@ -47,7 +47,7 @@
 									<div class="variety-location">
 										<p><span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
 										<div class="input-group">
-											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo $product['basket_details']['price'];?></span></span>
+											<span class="input-group-addon addon-variety-input"><span class="text-gray">&#x20b1; <?php echo format_number($product['basket_details']['price']);?></span></span>
 											<input type="number" class="form-control input-number" value="1" min="1" max="<?php echo $stocks;?>" name="baskets[quantity]" required="required" />
 											<span class="input-group-btn">
 												<button class="btn btn-default btn-number dual-btn-left" disabled="disabled" data-type="minus" data-field="baskets[quantity]" type="button"><i class="fa fa-minus"></i></button>

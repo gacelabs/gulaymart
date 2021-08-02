@@ -92,7 +92,7 @@
 									<p class="text-ellipsis"><?php echo ucwords($details['product']['name']);?></p>
 									<small class="elem-block text-gray">QTY <?php echo $details['quantity'];?> - <?php echo $details['measurement'];?></small>
 								</div>
-								<div class="text-right">&#x20b1; <?php echo number_format($details['price'] * $details['quantity']);?></div>
+								<div class="text-right">&#x20b1; <?php echo format_number($details['price'] * $details['quantity']);?></div>
 							</div>
 							<?php $total += $details['price'] * $details['quantity'];?>
 						<?php endforeach ?>
@@ -102,7 +102,7 @@
 							<p class="text-ellipsis"><?php echo $seller['city'];?> to <?php echo $buyer['firstname'];?>'s address</p>
 							<small class="elem-block text-gray">Delivery Fee</small>
 						</div>
-						<div class="text-right">&#x20b1; <?php echo number_format($fee);?></div>
+						<div class="text-right">&#x20b1; <?php echo format_number($fee);?></div>
 					</div>
 					<hr>
 					<div class="invoice-summary-grid">
@@ -110,7 +110,7 @@
 							<p class="text-ellipsis"><b>TOTAL</b></p>
 							<small class="elem-block text-gray">Pay upon delivery</small>
 						</div>
-						<div class="text-right">&#x20b1; <b class="text-contrast"><?php echo number_format($total + $fee);?></b></div>
+						<div class="text-right">&#x20b1; <b class="text-contrast"><?php echo format_number($total + $fee);?></b></div>
 					</div>
 				</div>
 			</div>

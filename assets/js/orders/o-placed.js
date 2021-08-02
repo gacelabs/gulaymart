@@ -44,21 +44,22 @@ if ($('body').hasClass('orders-placed')) {
 			$('#nav-fulfill-count').text(fulfillCount - 1);
 		}
 
-		var iCancelCnt = (iInitCancelCnt+iFinalCancelCnt < 0) ? false : iInitCancelCnt+iFinalCancelCnt;
-		if (iCancelCnt != false) {
-			$('.trans-navbar-pill.cancelled').find('kbd').removeClass('no-count').text(iCancelCnt);
-		} else {
-			$('.trans-navbar-pill.cancelled').find('kbd').addClass('no-count').text('');
+		var iCancelCnt = (iInitCancelCnt+iFinalCancelCnt < 0) ? 0 : iInitCancelCnt+iFinalCancelCnt;
+		if (!isNaN(iCancelCnt)) {
+			if (iCancelCnt != 0) {
+				$('.trans-navbar-pill.cancelled').find('kbd').removeClass('no-count').text(iCancelCnt);
+			} else {
+				$('.trans-navbar-pill.cancelled').find('kbd').addClass('no-count').text('');
+			}
 		}
 
 		if ($('.trans-navbar-pill.active').parent('[data-nav]').length && isConfirmed == true) {
 			var tab = $('.trans-navbar-pill.active').parent('[data-nav]').data('nav');
-			console.log(tab);
 			if (tab != undefined) {
 				var kbd = $('.trans-navbar-pill.active').parent('[data-nav]').parent('div').next().find('[data-nav] kbd');
 				var nextCount = parseInt(kbd.text());
 				if (isNaN(nextCount)) nextCount = 0;
-				kbd.text(nextCount + 1);
+				kbd.removeClass('no-count').text(nextCount + 1);
 			}
 		}
 	}

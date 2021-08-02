@@ -69,7 +69,7 @@
 							</div>
 						</div>
 						<div class="text-right hidden-sm hidden-xs">
-							<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo ucfirst($order['measurement']);?></p>
+							<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p>
 							<?php if ($details['status'] == 5): ?>
 								<?php if ($order['cancel_by'] == $current_profile['id']): ?>
 									<p class="zero-gaps"><small class="text-capsule status-cancelled">Removed by You</small></p>
@@ -89,7 +89,7 @@
 
 						<div class="visible-sm visible-xs">
 							<ul class="spaced-list between">
-								<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo ucfirst($order['measurement']);?></p></li>
+								<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p></li>
 								<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 							</ul>
 						</div>
@@ -147,8 +147,8 @@
 					</p>
 					<div>
 						<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
-						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo number_format($orders['fee']);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>
-						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
+						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo format_number($orders['fee'], 2);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo format_number($initial_total);?></span></p>
+						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo format_number($initial_total + (float)$orders['fee']);?></b></p>
 					</div>
 				</div>
 			</div>

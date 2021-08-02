@@ -53,7 +53,7 @@
 										</div>
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
-										<p class="zero-gaps">&#x20b1; <?php echo number_format($details['price']);?> / <?php echo $details['measurement'];?></p>
+										<p class="zero-gaps">&#x20b1; <?php echo format_number($details['price']);?> / <?php echo $details['measurement'];?></p>
 									</div>
 									<div class="text-right hidden-sm hidden-xs">
 										<div class="quantity buttons_added">
@@ -68,7 +68,7 @@
 										<ul class="spaced-list between">
 											<li>
 												<ul class="spaced-list between">
-													<li><p class="zero-gaps">&#x20b1; <?php echo number_format($details['price']);?> / <?php echo $details['measurement'];?></p></li>
+													<li><p class="zero-gaps">&#x20b1; <?php echo format_number($details['price']);?> / <?php echo $details['measurement'];?></p></li>
 													<li class="icon-right">
 														<div class="quantity buttons_added">
 															<input type="button" value="-" class="minus" js-element="qty-btns"><input type="number" step="1" min="1" max="<?php echo $details['stocks'];?>" name="quantity" value="<?php echo $item['quantity'];?>" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="" js-event="qty" js-id="<?php echo $item['id'];?>" js-price="<?php echo $details['price'];?>" /><input type="button" value="+" class="plus" js-element="qty-btns">

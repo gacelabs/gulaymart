@@ -85,7 +85,7 @@
 															foreach ($orders as $index => $order) {
 																$total = $order['rawdata']['details']['price'] * $order['quantity'];
 																$sub_total += $total;
-																$products_array[] = $order['rawdata']['product']['name']/*.' &#x20b1; '.number_format($total).' x '.$order['quantity']*/;
+																$products_array[] = $order['rawdata']['product']['name']/*.' &#x20b1; '.format_number($total).' x '.$order['quantity']*/;
 															}
 														}
 														$final_total += $sub_total + $toktok_pricing['price'];
@@ -96,10 +96,10 @@
 														</div>
 													</div>
 													<div class="text-right">
-														<p class="zero-gaps">&#x20b1; <b><?php echo number_format($sub_total + $toktok_pricing['price']);?></b></p>
+														<p class="zero-gaps">&#x20b1; <b><?php echo format_number($sub_total + $toktok_pricing['price']);?></b></p>
 													</div>
 												</div>
-												<small class="elem-block text-gray"><i>Delivery fee (&#x20b1; <?php echo $toktok_pricing['price'];?>)</i></small>
+												<small class="elem-block text-gray"><i>Delivery fee (&#x20b1; <?php echo format_number($toktok_pricing['price']);?>)</i></small>
 											</div>
 										<?php endforeach ?>
 							 		</div>
@@ -107,7 +107,7 @@
 							</div>
 							<div class="cta-bottom-container">
 								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-angle-right"></i></small>
-								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo number_format($final_total);?></b></button>
+								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo format_number($final_total);?></b></button>
 							</div>
 						</form>
 					</div>
