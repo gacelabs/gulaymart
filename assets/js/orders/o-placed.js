@@ -250,7 +250,7 @@ var renderHTML = function(obj) {
 		setTimeout(function(){
 			$(printableWin).one('mousemove touchmove', window.onafterprint);
 			printableWin.print();
-		}, 300);
+		}, 1000);
 
 		/*console.log(document.querySelector('[js-element="to-print"]'));
 		html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
