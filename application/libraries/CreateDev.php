@@ -430,6 +430,11 @@ class CreateDev {
 			'label varchar(100) DEFAULT NULL',
 			'value varchar(50) DEFAULT NULL',
 			'photo longtext',
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => 1,
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
