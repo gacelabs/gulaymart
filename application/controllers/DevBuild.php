@@ -90,7 +90,11 @@ class DevBuild extends CI_Controller {
 									unset($row['added']); unset($row['updated']);
 								}
 								if (count($row)) {
-									$record = $this->gm_db->get($table, $row, 'row');
+									if ($table == 'admin_settings') {
+										$record = $this->gm_db->get($table, false, 'row');
+									} else {
+										$record = $this->gm_db->get($table, $row, 'row');
+									}
 									if ($record) {
 										// debug($record, 'stop');
 										if (isset($record['added']) AND isset($record['updated'])) {
