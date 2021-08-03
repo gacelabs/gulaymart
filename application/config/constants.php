@@ -107,11 +107,16 @@ defined('MYSQL_ROOT_PASS') OR define('MYSQL_ROOT_PASS', 'pHPMy_@DM!n-R00t-p@55-K
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
 if ((bool)strstr($_SERVER['HTTP_HOST'], 'local')) {
     // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
-    defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/DA772D289F150555D5A58473E97EF4AF');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
     // defined('REALTIME_URL') OR define('REALTIME_URL', 'http://local.app.send.data/get/jsfile/1E56FA5E54577C98A5FF31F577DFAE75');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '1E56FA5E54577C98A5FF31F577DFAE75');
+    defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/DA772D289F150555D5A58473E97EF4AF');
+    defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'DA772D289F150555D5A58473E97EF4AF');
 } else {
-    defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
-    // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/2DBC7E5261EF425D3D1CF990E3682F56');
+    defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/2DBC7E5261EF425D3D1CF990E3682F56');
+    defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '2DBC7E5261EF425D3D1CF990E3682F56');
+    // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
 }
 defined('MONTHS') OR define('MONTHS', serialize([
 	'January','February','March','April','May','June','July','August','September','October','November','December'
