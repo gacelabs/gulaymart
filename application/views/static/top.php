@@ -46,5 +46,6 @@
 		var DEVICE_ID = '<?php echo $this->device_id;?>';
 		var oSegments = <?php echo json_encode($this->uri->segment_array()); ?>;
 		var APPNAME = '<?php echo APP_NAME;?>';
+		var IS_LOCAL = <?php echo (bool)strstr($_SERVER['HTTP_HOST'], 'local') ? 1 : 0;?>;
 	</script>
 </head>

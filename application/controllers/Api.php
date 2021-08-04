@@ -270,13 +270,15 @@ class Api extends MY_Controller {
 						if (isset($post['identifier'])) {
 							$object['identifier'] = $post['identifier'];
 						}
-						$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
-						// debug($printable, 'stop');
-						create_dirs('invoices');
 						$filename = 'assets/data/files/invoices/'.$results['order_id'].'-invoice.html';
-						$handle = fopen($filename, "w+");
-						fwrite($handle, $printable);
-						fclose($handle);
+						if (!file_exists($filename)) {
+							$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
+							// debug($printable, 'stop');
+							create_dirs('invoices');
+							$handle = fopen($filename, "w+");
+							fwrite($handle, $printable);
+							fclose($handle);
+						}
 						$object['printable_link'] = base_url($filename);
 						$this->set_response('error', false, $object, false, 'renderHTML');
 					}

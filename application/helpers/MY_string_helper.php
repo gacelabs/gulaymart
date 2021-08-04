@@ -282,33 +282,37 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 
 function create_dirs($dir='')
 {
-	/*create the dirs*/
-	$folder_chunks = explode('/', 'assets/data/files/');
-	if (count($folder_chunks)) {
-		$uploaddir = get_root_path();
-		foreach ($folder_chunks as $key => $folder) {
-			$uploaddir .= $folder.'/';
-			// debug($uploaddir);
-			@mkdir($uploaddir);
-		}
-	}
-	@mkdir(get_root_path('assets/data/files/'));
-	$uploaddir = get_root_path('assets/data/files/'.$dir);
-	
-	if ($dir != '') {
+	if (is_dir('assets/data/files/'.$dir) == false) {
 		/*create the dirs*/
-		$folder_chunks = explode('/', str_replace(' ', '_', $dir));
-		// debug($folder_chunks);
+		$folder_chunks = explode('/', 'assets/data/files/');
 		if (count($folder_chunks)) {
-			$uploaddir = get_root_path('assets/data/files/');
+			$uploaddir = get_root_path();
 			foreach ($folder_chunks as $key => $folder) {
 				$uploaddir .= $folder.'/';
 				// debug($uploaddir);
 				@mkdir($uploaddir);
 			}
 		}
+		@mkdir(get_root_path('assets/data/files/'));
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
+		
+		if ($dir != '') {
+			/*create the dirs*/
+			$folder_chunks = explode('/', str_replace(' ', '_', $dir));
+			// debug($folder_chunks);
+			if (count($folder_chunks)) {
+				$uploaddir = get_root_path('assets/data/files/');
+				foreach ($folder_chunks as $key => $folder) {
+					$uploaddir .= $folder.'/';
+					// debug($uploaddir);
+					@mkdir($uploaddir);
+				}
+			}
+		}
+		@chmod($uploaddir, 0755);
+	} else {
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
 	}
-	@chmod($uploaddir, 0755);
 
 	return $uploaddir;
 }

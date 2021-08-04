@@ -22,7 +22,25 @@ $(document).ready(function() {
 			}
 		});
 	}
+
+	$('[js-event="farmMenuTrigger"]').click(function() {
+		$(this).toggleClass('active');
+		$('[js-event="navbarFarmMenuContainer"]').toggleClass('active');
+	});
 });
+
+var backNotTriggered = false;
+window.onpopstate = function(e) {
+	if (mobileAndTabletCheck()) {
+		console.log(e.target.location.hash);
+		if (e.target.location.hash !== '') {
+			backNotTriggered = true;
+		} else {
+			backNotTriggered = false;
+			if ($('.modal.fade.in').length) $('.modal.fade.in').modal('hide');
+		}
+	}
+};
 
 function getUrlParamByName(name, url) {
 	if (url == undefined) url = window.location.href;
@@ -138,6 +156,7 @@ function modalCallbacks() {
 	$('div.modal').on('shown.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'farm_location';
 				// console.log($(e.relatedTarget));
 				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
 				$(e.target).find('form').prepend(input);
@@ -163,6 +182,7 @@ function modalCallbacks() {
 				}
 			break;
 			case 'media_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'media';
 				if ($(e.relatedTarget).data('change-ui').length) {
 					var value = $(e.relatedTarget).data('change-ui');
 					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
@@ -171,12 +191,14 @@ function modalCallbacks() {
 				}
 			break;
 			case 'ff_invoice_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'invoice';
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
 				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 			case 'check_loc_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'check_location';
 				var input = $('#check-place').get(0);
 				// input.focus();
 				var i = setInterval(function() {
@@ -226,6 +248,9 @@ function modalCallbacks() {
 						});
 					}
 				}, 1000);
+			break;
+			case 'login_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'login';
 			break;
 		}
 	}).on('hide.bs.modal', function(e) { 

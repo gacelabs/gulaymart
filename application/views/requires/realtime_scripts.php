@@ -4,7 +4,7 @@
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
-			autoConnect: true,
+			autoConnect: IS_LOCAL ? false : true,
 			autoRunStash: true,
 			/*afterInit: function() {
 				realtime.connect(function() {
