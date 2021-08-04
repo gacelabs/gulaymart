@@ -60,9 +60,9 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row)) {
+					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_in($key, $row);
-					} else {
+					} elseif (is_string($row)) {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -97,9 +97,9 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row)) {
+					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_not_in($key, $row);
-					} else {
+					} elseif (is_string($row)) {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -206,9 +206,9 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row)) {
+					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_in($key, $row);
-					} else {
+					} elseif (is_string($row)) {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -379,9 +379,9 @@ class MY_Model extends CI_Model {
 		if ($table) {
 			if ($where) {
 				foreach ($where as $key => $row) {
-					if (is_array($row)) {
+					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_in($key, $row);
-					} else {
+					} elseif (is_string($row)) {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -416,7 +416,8 @@ class MY_Model extends CI_Model {
 					$list[] = $row[$field];
 				}
 			}
+			return $list;
 		}
-		return $list;
+		return '';
 	}
 }

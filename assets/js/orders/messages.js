@@ -51,3 +51,20 @@ var deleteMessage = function(data, ui) {
 		});
 	}
 }
+
+var appendComment = function(obj) {
+	console.log(obj);
+	$('#seller_content').addClass('hide');
+	if (obj.under != undefined) {
+		if (obj.under > 0) {
+			$('#seller_content').removeClass('hide');
+			$('#seller_comments').text(obj.content);
+			// $('#seller_buyer_date').text($.format.date(obj.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+			$('#seller_buyer_date').text(timeZoneFormatDate(obj.added));
+			$('#seller_reply').val('');
+			$('#reply_box').addClass('hide');
+			$('#feedback-btn-id-'+obj.id).text('View');
+			$('#feedback-btn-id-'+obj.id).attr('data-reply', JSON.stringify(obj));
+		}
+	}
+};

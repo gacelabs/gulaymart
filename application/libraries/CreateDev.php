@@ -181,6 +181,11 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
+			'name' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			"lat VARCHAR(100) NULL DEFAULT NULL",
 			"lng VARCHAR(100) NULL DEFAULT NULL",
 			"address_1 VARCHAR(255) NULL DEFAULT NULL",
@@ -844,7 +849,13 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
-			'user_id' => [
+			'to_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'from_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',

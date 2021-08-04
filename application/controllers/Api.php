@@ -73,6 +73,8 @@ class Api extends MY_Controller {
 			if (isset($post['email_address']) AND strlen(trim($post['email_address'])) > 0) {
 				unset($post['email_address']);
 			}
+			$post['firstname'] = ucwords($post['firstname']);
+			$post['lastname'] = ucwords($post['lastname']);
 			if (isset($post['id']) AND $post['id'] > 0) {
 				$id = $post['id']; unset($post['id']);
 				$this->gm_db->save('user_profiles', $post, ['id' => $id]);

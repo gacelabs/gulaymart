@@ -79,27 +79,28 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
+		$messages = $data_messages = false;
 		if ($this->farms AND $this->products->count()) {
 			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
 			$messages = $this->gm_db->get_or_in('messages', [
-				'user_id' => $this->accounts->profile['id'], 
+				'to_id' => $this->accounts->profile['id'], 
 				'page_id' => $ids,
 				'order_by' => 'added',
 				'direction' => 'DESC',
 			]);
 		} else {
 			$messages = $this->gm_db->get('messages', [
-				'user_id' => $this->accounts->profile['id'],
+				'to_id' => $this->accounts->profile['id'],
 				'order_by' => 'added',
 				'direction' => 'DESC',
 			]);
 		}
-		$data_messages = false;
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
 				if (in_array($message['unread'], [0,1])) {
-					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
+					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['from_id']], 'row');
+					$message['bought'] = $message['product'] = $message['location'] = $message['photo'] = false;
 					if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 						$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
 						$message['product']['farm_location_id'] = $message['entity_id'];
@@ -108,13 +109,15 @@ class Orders extends MY_Controller {
 							'farm_location_id' => $message['entity_id']
 						], 'row');
 						$message['bought'] = $this->gm_db->count('baskets', [
-							'user_id' => $message['user_id'],
+							'user_id' => $message['to_id'],
 							'product_id' => $message['page_id'],
 							'status >' => 2,
 						]);
 						$message['photo'] = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'is_main' => 1], 'row');
+						$data_messages[$message['tab']][($message['under'] ? 'replies' : 'first')][] = $message;
+					} else {
+						$data_messages[$message['tab']][] = $message;
 					}
-					$data_messages[$message['tab']][] = $message;
 				}
 			}
 		}
@@ -194,8 +197,8 @@ class Orders extends MY_Controller {
 				$post['id'] = $post['under'];
 			}
 
-			$post['added'] = strtotime(date('Y-m-d H:i:s'));
-			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['user_id']], 'row');
+			$post['added'] = date('Y-m-d H:i:s');
+			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['from_id']], 'row');
 			$post['product'] = $this->gm_db->get('products', ['id' => $post['page_id']], 'row');
 			$post['product']['entity_id'] = $post['entity_id'];
 			

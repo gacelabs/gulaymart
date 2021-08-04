@@ -97,7 +97,7 @@ function device_id()
 	return strtoupper(substr(md5($DEVICE), 0, 12));
 }
 
-function get_mac_address()
+function get_mac_address($find_ip=false)
 {
 	// debug(PHP_OS, 'stop');
 	$macaddress = false;
@@ -105,17 +105,29 @@ function get_mac_address()
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 		@system('ipconfig /all');
 		$mycomsys = ob_get_contents();  
-		ob_clean();  
-		$find_mac = "Physical";  
+		ob_clean();
+		if ($find_ip == false) {
+			$find_mac = "Physical";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);  
-		$macaddress = substr($mycomsys, ($pmac+36), 17);  
+		$macaddress = substr($mycomsys, ($pmac+36), $length);  
 	} elseif (strtoupper(PHP_OS) == 'LINUX') {
 		@system('ifconfig');
 		$mycomsys = ob_get_contents();
 		ob_clean();
-		$find_mac = "ether";
+		if ($find_ip == false) {
+			$find_mac = "ether";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);
-		$macaddress = substr($mycomsys, ($pmac+6), 17);
+		$macaddress = substr($mycomsys, ($pmac+6), $length);
 	}
 	// Display Mac Address 
 	return $macaddress;
@@ -843,7 +855,7 @@ function get_machine($field='geoplugin_request')
 function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	$output = NULL;
 	$ci =& get_instance();
-	$IP_ADDRESS = $ci->accounts->has_session ? $ci->accounts->profile['ip_address'] : $_SERVER['REMOTE_ADDR'];
+	$IP_ADDRESS = $_SERVER['REMOTE_ADDR'];
 	if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
 		$ip = $_SERVER["REMOTE_ADDR"];
 		if ($deep_detect) {
@@ -853,7 +865,7 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 				$ip = $_SERVER['HTTP_CLIENT_IP'];
 		}
 		$ip = in_array($ip, ['::1', '[::1]', '127.0.0.1', 'localhost']) ? $IP_ADDRESS : $ip;
-	}
+	} 
 	$purpose    = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
 	$support    = array("country", "countrycode", "state", "region", "city", "location", "address");
 	$continents = array(
@@ -867,45 +879,47 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	);
 	if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
 		$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-		// debug($ipdat);
+		// debug($ipdat, 'stop');
 		if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
 			switch ($purpose) {
 				case "location":
-				$output = array(
-					"city"           => @$ipdat->geoplugin_city,
-					"state"          => @$ipdat->geoplugin_regionName,
-					"country"        => @$ipdat->geoplugin_countryName,
-					"country_code"   => @$ipdat->geoplugin_countryCode,
-					"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
-					"continent_code" => @$ipdat->geoplugin_continentCode
-				);
+					$output = array(
+						"city"           => @$ipdat->geoplugin_city,
+						"state"          => @$ipdat->geoplugin_regionName,
+						"country"        => @$ipdat->geoplugin_countryName,
+						"country_code"   => @$ipdat->geoplugin_countryCode,
+						"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
+						"continent_code" => @$ipdat->geoplugin_continentCode,
+						"timezone" 		 => @$ipdat->geoplugin_timezone,
+					);
 				break;
 				case "address":
-				$address = array($ipdat->geoplugin_countryName);
-				if (@strlen($ipdat->geoplugin_regionName) >= 1)
-					$address[] = $ipdat->geoplugin_regionName;
-				if (@strlen($ipdat->geoplugin_city) >= 1)
-					$address[] = $ipdat->geoplugin_city;
-				$output = implode(", ", array_reverse($address));
+					$address = array($ipdat->geoplugin_countryName);
+					if (@strlen($ipdat->geoplugin_regionName) >= 1)
+						$address[] = $ipdat->geoplugin_regionName;
+					if (@strlen($ipdat->geoplugin_city) >= 1)
+						$address[] = $ipdat->geoplugin_city;
+					$output = implode(", ", array_reverse($address));
 				break;
 				case "city":
-				$output = @$ipdat->geoplugin_city;
+					$output = @$ipdat->geoplugin_city;
 				break;
 				case "state":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "region":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "country":
-				$output = @$ipdat->geoplugin_countryName;
+					$output = @$ipdat->geoplugin_countryName;
 				break;
 				case "countrycode":
-				$output = @$ipdat->geoplugin_countryCode;
+					$output = @$ipdat->geoplugin_countryCode;
 				break;
 			}
 		}
 	}
+	// debug($output, 'stop');
 	return $output;
 }
 
@@ -1642,18 +1656,18 @@ function get_fullname($data=false, $other='', $return=false)
 	$fullname = $other;
 	$ci =& get_instance();
 	if ($data) {
-		if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
+		/*if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
 			$fullname = $ci->accounts->profile['firstname'];
 		} else {
-			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
-		}
+		}*/
+		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
 	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
 		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
 	}
 	if ($return == false) {
-		echo $fullname;
+		echo ucwords($fullname);
 	} else {
-		return $fullname;
+		return ucwords($fullname);
 	}
 }
 

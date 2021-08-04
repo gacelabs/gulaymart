@@ -153,7 +153,7 @@ function checkCookie(cname) {
 }
 
 function modalCallbacks() {
-	$('div.modal').on('shown.bs.modal', function(e) { 
+	$('div.modal').on('show.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
 				if (mobileAndTabletCheck()) window.location.hash = 'farm_location';
@@ -252,6 +252,37 @@ function modalCallbacks() {
 			case 'login_modal':
 				if (mobileAndTabletCheck()) window.location.hash = 'login';
 			break;
+			case 'reply_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'reply';
+				var oReply = JSON.parse($(e.relatedTarget).attr('data-reply'));
+				var oFeedback = JSON.parse($(e.relatedTarget).attr('data-feedback'));
+				// console.log(oReply, oFeedback);
+				if (Object.keys(oFeedback).length) {
+					// $('#buyer_photo').attr('src', oFeedback.profile.photo_url);
+					$('#buyer_fullname').text(oFeedback.profile.firstname+' '+oFeedback.profile.lastname);
+					// $('#buyer_date').text($.format.date(oFeedback.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+					$('#buyer_date').text(timeZoneFormatDate(oFeedback.added));
+					$('#buyer_comments').text(oFeedback.content);
+					$('#to_id').val(oFeedback.from_id);
+					
+					$('#under').val(oFeedback.id);
+					$('#page_id').val(oFeedback.page_id);
+					$('#entity_id').val(oFeedback.entity_id);
+				}
+				if (oReply == false) {
+					$('#reply_box').removeClass('hide');
+					$('#seller_content').addClass('hide');
+					$('#seller_buyer_date').text('');
+					$('#seller_comments').text('');
+				} else {
+					/*already replied*/
+					$('#reply_box').addClass('hide');
+					$('#seller_content').removeClass('hide');
+					// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+					$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
+					$('#seller_comments').text(oReply.content);
+				}
+			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {
@@ -283,6 +314,10 @@ function modalCallbacks() {
 					$('[name="email_address"]').removeClass('error');
 					$('[name="password"]').removeClass('error');
 				}, 1000);
+			break;
+			case 'reply_modal':
+				$('#reply_modal').find('form [name][required]').removeClass('error');
+				$('#seller_reply').val('');
 			break;
 		}
 	});
@@ -382,5 +417,22 @@ var runGRecaptchaChallenge = function(recaptcha, form) {
 			}
 		}
 	}
+}
+
+var timeZoneFormatDate = function(sDate, options) {
+	if (options == undefined) {
+		options = {
+			timeZone: TIMEZONE,
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric'
+		};
+	}
+	var oObject = new Date(sDate), 
+	sNewDate = oObject.toLocaleString('en-US', options);
+	return sNewDate;
 }
 

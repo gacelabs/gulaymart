@@ -17,6 +17,19 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$user_timezone = get_cookie('user_timezone', true);
+		// debug(date_default_timezone_get(), $user_timezone, 'stop');
+		if (empty($user_timezone)) {
+			$zone_details = ip_info((bool)strstr($_SERVER['HTTP_HOST'], 'local') ? '120.29.109.66' : NULL);
+			// debug($zone_details, 'stop');
+			if (!empty($zone_details)) {
+				$user_timezone = $zone_details['timezone'];
+				set_cookie('user_timezone', $user_timezone, 7776000); // 90 days
+			}
+		}
+		if (!empty($user_timezone) AND $user_timezone != 'Asia/Manila') date_default_timezone_set($user_timezone);
+		// debug($user_timezone, date_default_timezone_get(), get_cookie('user_timezone', true), 'stop');
+
 		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
