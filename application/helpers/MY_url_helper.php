@@ -843,7 +843,7 @@ function check_device_agent() {
 	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?? null;
 
 	if (!$userAgent || !$httpAccept) {
-		return 'desktop_';
+		return 'desktop';
 	}
 
 	if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($userAgent))) {
@@ -886,13 +886,13 @@ function check_device_agent() {
 
 	if ($tablet_browser > 0) {
 		// do something for tablet devices
-		return 'tablet_';
+		return 'tablet';
 	} else if ($mobile_browser > 0) {
 		// do something for mobile devices
-		return 'mobile_';
+		return 'mobile';
 	} else {
 		// do something for everything else
-		return 'desktop_';
+		return 'desktop';
 	}
 }
 
