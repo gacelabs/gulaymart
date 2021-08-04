@@ -8,7 +8,7 @@ var clearForm = function(obj) {
 		$.each(obj, function(i, data) {
 			if ($('#'+data.setting).find('input[to-clear]').length) $('#'+data.setting).find('input[to-clear]').val('');
 			$.each(data.value, function(name, val) {
-				$('#'+data.setting).find('name=['+name+']').prop('value', val).val(val);
+				$('#'+data.setting).find('[name="admin_settings['+i+'][value]['+name+']"]').prop('value', val).val(val);
 			});
 		});
 	}

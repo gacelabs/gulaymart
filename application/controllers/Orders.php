@@ -22,6 +22,7 @@ class Orders extends MY_Controller {
 		$filters = ['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
 			$filters['id'] = $this->input->post('ids');
+			$filters['buyer_id'] = $this->input->post('buyer_id');
 			// $filters['id'] = ["25", "28", "31", "41"];
 		}
 		$baskets_merge = setup_orders_data($this->baskets->get_baskets_merge($filters));
@@ -40,6 +41,7 @@ class Orders extends MY_Controller {
 						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
 						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
+					'no_rec_ui' => true,
 				]
 			], true)]);
 			exit();
@@ -77,33 +79,68 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
+		$messages = $data_messages = false;
 		if ($this->farms AND $this->products->count()) {
 			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
-			$messages = $this->gm_db->get_or_in('messages', ['user_id' => $this->accounts->profile['id'], 'page_id' => $ids]);
+			$messages = $this->gm_db->get_or_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
+				'page_id' => $ids,
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			]);
 		} else {
-			$messages = $this->gm_db->get('messages', ['user_id' => $this->accounts->profile['id']]);
+			$messages = $this->gm_db->get_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			]);
 		}
-		$data_messages = false;
+		// debug($messages, 'stop');
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
 				if (in_array($message['unread'], [0,1])) {
-					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['user_id']], 'row');
+					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['from_id']], 'row');
+					if ($message['profile'] == false) {
+						$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['to_id']], 'row');
+					}
+					$message['farm'] = $this->gm_db->get('user_farms', ['user_id' => $message['from_id']], 'row');
+					if ($message['farm'] == false) {
+						$message['farm'] = $this->gm_db->get('user_farms', ['user_id' => $message['to_id']], 'row');
+					}
+
 					if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 						$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
+						$message['product']['photos'] = false;
+						$photos = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'status' => 1]);
+						if ($photos) {
+							foreach ($photos as $key => $photo) {
+								if ($photo['is_main']) {
+									$message['product']['photos']['main'] = $photo;
+									break;
+								}
+							}
+							foreach ($photos as $key => $photo) {
+								if (!$photo['is_main']) {
+									$message['product']['photos']['other'][] = $photo;
+								}
+							}
+						}
 						$message['product']['farm_location_id'] = $message['entity_id'];
 						$message['location'] = $this->gm_db->get('products_location', [
 							'product_id' => $message['page_id'],
 							'farm_location_id' => $message['entity_id']
 						], 'row');
 						$message['bought'] = $this->gm_db->count('baskets', [
-							'user_id' => $message['user_id'],
+							'user_id' => $message['to_id'],
 							'product_id' => $message['page_id'],
 							'status >' => 2,
 						]);
 						$message['photo'] = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'is_main' => 1], 'row');
+						$data_messages[$message['tab']][($message['under'] ? 'replies' : 'first')][] = $message;
+					} else {
+						$data_messages[$message['tab']][] = $message;
 					}
-					$data_messages[$message['tab']][] = $message;
 				}
 			}
 		}
@@ -183,8 +220,15 @@ class Orders extends MY_Controller {
 				$post['id'] = $post['under'];
 			}
 
-			$post['added'] = strtotime(date('Y-m-d H:i:s'));
-			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['user_id']], 'row');
+			$post['added'] = date('Y-m-d H:i:s');
+			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['from_id']], 'row');
+			if ($post['profile'] == false) {
+				$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['to_id']], 'row');
+			}
+			$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['from_id']], 'row');
+			if ($post['farm'] == false) {
+				$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['to_id']], 'row');
+			}
 			$post['product'] = $this->gm_db->get('products', ['id' => $post['page_id']], 'row');
 			$post['product']['entity_id'] = $post['entity_id'];
 			
@@ -202,10 +246,11 @@ class Orders extends MY_Controller {
 		$get = $this->input->get();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
-			$basket_ids = [];
+			$basket_ids = $seller_ids = [];
 			foreach ($post['data'] as $key => $row) {
 				$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
 				if ($merge) {
+					$seller_ids[$merge['seller_id']] = $merge['seller_id'];
 					$order_details = json_decode(base64_decode($merge['order_details']), true);
 					if ($order_details) {
 						/*modify the status of the product*/
@@ -256,7 +301,11 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			$senddata = $this->senddataapi->trigger('remove-item', 'fulfilled-items', ['all'=>$all, 'data'=>$post['data']]);
+			$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', [
+				'all' => $all, 
+				'data' => $post['data'],
+				'seller_id' => $seller_ids
+			]);
 			// debug($senddata, 'stop');
 			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
 		} elseif ($get AND isset($get['data'])) {

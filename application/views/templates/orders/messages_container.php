@@ -5,25 +5,28 @@
 			<div class="messages-nav-grid">
 				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications']);
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications', 'to_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='msg_notifications-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
 				</div>
-				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries
+				<!-- <div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries']);
+					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries', 'to_id' => $current_profile['profile']['user_id']]);
 					if ($msg_count): ?>
 						<kbd id='msg_inquiries-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
-				</div>
-				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
-					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Feedbacks']);
-					if ($msg_count): ?>
-						<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
-					<?php endif ?>
-				</div>
+				</div> -->
+				<?php if ($this->farms AND $this->products->count()): ?>
+					<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
+						<?php 
+						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $ids]);
+						if ($msg_count): ?>
+							<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
+						<?php endif ?>
+					</div>
+				<?php endif ?>
 			</div>
 
 			<div id="link_panel_top">
@@ -49,25 +52,41 @@
 										</div>
 									</div>
 								<?php endforeach ?>
+							<?php else: ?>
+								<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+									<h1>Empty Notifications</h1>
+									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+								</div>
 							<?php endif ?>
 						</div>
 
 						<?php
 							if (isset($data['messages']['Inquiries'])) {
-								$this->view('templates/orders/inquiries', ['inquiries' => $data['messages']['Inquiries']]);
-							}
+								// $this->view('templates/orders/inquiries', ['inquiries' => $data['messages']['Inquiries']]);
+							} else {?>
+								<!-- <div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+									<h1>Empty Inquiries</h1>
+									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+								</div> -->
+						<?php }?>
+						<?php
 							if (isset($data['messages']['Feedbacks'])) {
 								$this->view('templates/orders/feedbacks', ['feedbacks' => $data['messages']['Feedbacks']]);
-							}
-						?>
+							} else {?>
+								<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+									<h1>Empty Feedbacks</h1>
+									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+								</div>
+						<?php }?>
 					<?php endif ?>
-
 				</div>
-					
-				<?php if ($this->gm_db->count('messages', ['unread' => [0,1]]) == 0): ?>
-					<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-						<h1>No Messages</h1>
-						<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+
+				<?php if (!$data['messages']): ?>
+					<div>
+						<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+							<h1>Empty Messages</h1>
+							<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+						</div>
 					</div>
 				<?php endif ?>
 			</div>

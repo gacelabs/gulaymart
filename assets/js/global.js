@@ -22,7 +22,104 @@ $(document).ready(function() {
 			}
 		});
 	}
+
+	$('[js-event="farmMenuTrigger"]').click(function() {
+		$(this).toggleClass('active');
+		$('[js-event="navbarFarmMenuContainer"]').toggleClass('active');
+	});
 });
+
+var backNotTriggered = false;
+window.onpopstate = function(e) {
+	if (mobileAndTabletCheck()) {
+		console.log(e.target.location.hash);
+		if (e.target.location.hash !== '') {
+			backNotTriggered = true;
+		} else {
+			backNotTriggered = false;
+			if ($('.modal.fade.in').length) $('.modal.fade.in').modal('hide');
+		}
+	}
+};
+
+function getUrlParamByName(name, url) {
+	if (url == undefined) url = window.location.href;
+	name = name.replace(/[\[\]]/g, '\\$&');
+	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+		results = regex.exec(url);
+	// console.log(results);
+	if (!results) return null;
+	if (!results[2]) return '';
+
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+if ((getUrlParamByName('install-app') == 'true') && oSegments.length == 0) {
+	let deferredPrompt;
+	document.getElementById('add-pwa').addEventListener('click', async () => {
+		/*Hide the app provided install promotion*/
+		document.getElementById('add-pwa').style.display = 'none';
+		/*Show the install prompt*/
+		deferredPrompt.prompt();
+		/*Wait for the user to respond to the prompt*/
+		const { outcome } = await deferredPrompt.userChoice;
+		/*Optionally, send analytics event with outcome of user choice*/
+		/*console.log(`User response to the install prompt: ${outcome}`);*/
+		/*We've used the prompt, and can't use it again, throw it away*/
+		deferredPrompt = null;
+	});
+
+	/*Initialize deferredPrompt for use later to show browser install prompt.*/
+	window.addEventListener('beforeinstallprompt', (e) => {
+		/*Prevent the mini-infobar from appearing on mobile*/
+		e.preventDefault();
+		/*Stash the event so it can be triggered later.*/
+		deferredPrompt = e;
+		/*Update UI notify the user they can install the PWA*/
+		document.getElementById('add-pwa').style.display = 'block';
+		/*Optionally, send analytics event that PWA install promo was shown.*/
+		/*console.log(`'beforeinstallprompt' event was fired.`);*/
+	});
+
+	window.addEventListener('appinstalled', (e) => {
+		/*Hide the app-provided install promotion*/
+		document.getElementById('add-pwa').style.display = 'none';
+		/*Clear the deferredPrompt so it can be garbage collected*/
+		deferredPrompt = null;
+		/*Optionally, send analytics event to indicate successful install*/
+		/*console.log('PWA was installed');*/
+		setTimeout(function() {
+			if ('serviceWorker' in navigator) {
+				// alert(APPNAME + ' Installed!');
+				/*navigator.serviceWorker.ready.then(function(registration) {
+					registration.getNotifications().then(function(notifications) {
+						let currentNotification;
+						for(let i = 0; i < notifications.length; i++) {
+							if (notifications[i].data) {
+								currentNotification = notifications[i];
+							}
+						}
+						return currentNotification;
+					}).then(function(currentNotification) {
+						console.log(currentNotification);
+						return registration.showNotification('App Installed', {
+							badge: 'https://gulaymart.com/assets/images/favicon.png',
+							body: 'Start Earning NOW!',
+							icon: 'https://gulaymart.com/assets/images/favicon.png',
+							tag: 'install-notification',
+							renotify: true,
+							requireInteraction: true,
+							vibrate: [200, 100, 200, 100, 200, 100, 200],
+							data: {
+								url: 'https://gulaymart.com',
+							}
+						});
+					});
+				});*/
+			}
+		}, 3000);
+	});
+}
 
 function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
@@ -56,9 +153,10 @@ function checkCookie(cname) {
 }
 
 function modalCallbacks() {
-	$('div.modal').on('shown.bs.modal', function(e) { 
+	$('div.modal').on('show.bs.modal', function(e) { 
 		switch (e.target.id) {
 			case 'farm_location_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'farm_location';
 				// console.log($(e.relatedTarget));
 				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
 				$(e.target).find('form').prepend(input);
@@ -84,6 +182,7 @@ function modalCallbacks() {
 				}
 			break;
 			case 'media_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'media';
 				if ($(e.relatedTarget).data('change-ui').length) {
 					var value = $(e.relatedTarget).data('change-ui');
 					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
@@ -92,12 +191,14 @@ function modalCallbacks() {
 				}
 			break;
 			case 'ff_invoice_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'invoice';
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
 				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 			case 'check_loc_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'check_location';
 				var input = $('#check-place').get(0);
 				// input.focus();
 				var i = setInterval(function() {
@@ -148,6 +249,51 @@ function modalCallbacks() {
 					}
 				}, 1000);
 			break;
+			case 'login_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'login';
+			break;
+			case 'reply_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'reply';
+				var oReply = JSON.parse($(e.relatedTarget).attr('data-reply'));
+				var oFeedback = JSON.parse($(e.relatedTarget).attr('data-feedback'));
+				console.log(oReply, oFeedback);
+				if (Object.keys(oFeedback).length) {
+					// $('#buyer_photo').attr('src', oFeedback.profile.photo_url);
+					$('#buyer_fullname').text(oFeedback.profile.firstname+' '+oFeedback.profile.lastname);
+					// $('#buyer_date').text($.format.date(oFeedback.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+					$('#buyer_date').text(timeZoneFormatDate(oFeedback.added));
+					$('#buyer_comments').text(oFeedback.content);
+					$('#to_id').val(oFeedback.from_id);
+					
+					$('#under').val(oFeedback.id);
+					$('#page_id').val(oFeedback.page_id);
+					$('#entity_id').val(oFeedback.entity_id);
+				}
+				if (oReply == false) {
+					$('#reply_box').removeClass('hide');
+					$('#seller_content').addClass('hide');
+					$('#seller_buyer_date').text('');
+					$('#seller_comments').text('');
+				} else {
+					if (oReply == true) {
+						$('#reply_modalLabel').text('Last Response:');
+						$('#reply_box').addClass('hide');
+						$('#seller_content').addClass('hide');
+						$('#buyer_fullname').text(oFeedback.farm.name);
+						$('#is_seller').text((oFeedback.from_id == oUser.id ? '(You)' : ''));
+					} else {
+						/*already replied*/
+						$('#reply_modalLabel').text('Last Conversations:');
+						$('#reply_box').addClass('hide');
+						$('#seller_content').removeClass('hide');
+						// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+						$('#seller_farm_name').text(oReply.farm.name);
+						$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
+						$('#seller_comments').text(oReply.content);
+						$('#is_seller').text((oReply.from_id == oUser.id ? '(You)' : ''));
+					}
+				}
+			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {
@@ -179,6 +325,10 @@ function modalCallbacks() {
 					$('[name="email_address"]').removeClass('error');
 					$('[name="password"]').removeClass('error');
 				}, 1000);
+			break;
+			case 'reply_modal':
+				$('#reply_modal').find('form [name][required]').removeClass('error');
+				$('#seller_reply').val('');
 			break;
 		}
 	});
@@ -278,5 +428,26 @@ var runGRecaptchaChallenge = function(recaptcha, form) {
 			}
 		}
 	}
+}
+
+var timeZoneFormatDate = function(sDate, options) {
+	if (options == undefined) {
+		options = {
+			timeZone: TIMEZONE,
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric'
+		};
+	}
+	var oObject = new Date(sDate), 
+	sNewDate = oObject.toLocaleString('en-US', options);
+	return sNewDate;
+}
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

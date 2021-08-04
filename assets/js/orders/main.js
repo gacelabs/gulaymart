@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$('[js-event="showOrderFooter"]').click(function() {
 		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
-		$('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
+		$(this).parents('[js-element]:first').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
 	});
 });
 
@@ -21,14 +21,14 @@ var renderHTML = function(obj) {
 		
 		var printableWin = window.open(obj.printable_link);
 		window.onafterprint = function(e){
-			$(window).off('mousemove', window.onafterprint);
+			$(printableWin).off('mousemove touchmove', window.onafterprint);
 			oThis.html(oThis.attr('prev-ui'));
 			printableWin.close();
 		};
 		setTimeout(function(){
-			$(window).one('mousemove', window.onafterprint);
-		});
-		printableWin.print();
+			$(printableWin).one('mousemove touchmove', window.onafterprint);
+			printableWin.print();
+		}, 1000);
 
 		/*console.log(document.querySelector('[js-element="to-print"]'));
 		html2canvas(document.querySelector('[js-element="to-print"]')).then(function(canvas) {
@@ -44,8 +44,8 @@ var renderHTML = function(obj) {
 
 var order_process = false;
 function orderProcess(callback) {
-	var segment2 = oSegments[2], sStatus = null;
-	switch (segment2) {
+	var sSegment2 = oSegments[2], sStatus = null;
+	switch (sSegment2) {
 		case 'on-delivery':
 			sStatus = 'for+pick+up';
 		break;
@@ -55,15 +55,28 @@ function orderProcess(callback) {
 	}
 
 	if (sStatus != null) {
-		if (order_process != false && order_process.readyState !== 4) order_process.abort();
+		/*if (order_process != false && order_process.readyState !== 4) order_process.abort();
 		order_process = $.ajax({
 			url: 'api/order_process/',
 			type: 'post',
-			data: {status: sStatus, segment: segment2},
+			data: {status: sStatus, segment: sSegment2},
 			dataType: 'json',
 			success: function(data) {
 				console.log(data);
 				if (data.success == true) callback(data);
+			}
+		});
+	} else {*/
+		if (sSegment2 == undefined) sSegment2 = 'placed';
+		realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
+			var oData = object.data;
+			console.log(oData);
+			if (oData.success) {
+				if (Object.keys(oData.buyer_id).length) {
+					if ($.inArray(oUser.id, Object.keys(oData.buyer_id)) >= 0) runOrders(oData);
+				} else {
+					if (oData.buyer_id == oUser.id) runOrders(oData);
+				}
 			}
 		});
 	}
@@ -75,17 +88,16 @@ function runOrders(data) {
 		url: 'orders/'+method+'/',
 		type: 'post',
 		dataType: 'json',
-		data: { ids: data.ids },
+		data: { ids: data.ids, buyer_id: data.buyer_id },
 		success: function(response) {
 			console.log(response);
 			if (response.html.length) {
 				if ($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui:visible').length) {
 					$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
 				} else {
-					var newHtml = $(response.html).find('[js-element="orders-panel"]').html();
-					newHtml = $(newHtml).find('.no-records-ui').remove();
-					newHtml.insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
+					$(response.html).insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
 				}
+				runDomReady();
 				switch (method) {
 					case 'on-delivery':
 						var sPrevNav = 'for-pick-up';
@@ -100,7 +112,7 @@ function runOrders(data) {
 				}
 				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
 				var dataCnt = parseInt(response.total_items);
-				uiCurrNav.find('kbd').text(prev + dataCnt);
+				uiCurrNav.find('kbd').removeClass('no-count').text(prev + dataCnt);
 				/*set count for pickup*/
 				if (uiPrevNav.find('kbd').length == 0) {
 					uiPrevNav.find('div').append($('<kbd>'));
@@ -108,11 +120,84 @@ function runOrders(data) {
 				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
 				var dataCnt = parseInt(response.total_items);
 				if (prev > dataCnt) {
-					uiPrevNav.find('kbd').text(prev - dataCnt);
+					uiPrevNav.find('kbd').removeClass('no-count').text(prev - dataCnt);
 				} else if (prev >= 0) {
-					uiPrevNav.find('kbd').remove();
+					uiPrevNav.find('kbd').addClass('no-count');
+				}
+				if ($('#nav-order-count').length) {
+					var orderCount = parseInt($('#nav-order-count').text());
+					if (isNaN(orderCount)) orderCount = 0;
+					$('#nav-order-count').text(orderCount + 1);
+
+					var fulfillCount = parseInt($('#nav-fulfill-count').text());
+					if (isNaN(fulfillCount)) fulfillCount = 0;
+					$('#nav-fulfill-count').text(fulfillCount + 1);
 				}
 			}
+		}
+	});
+}
+
+var runDomReady = function() {
+	$(document.body).find('[js-element="remove-product"]').bind('click', function(e) {
+		var arData = [];
+		arData.push($(this).data('json'));
+		// console.log(arData);
+		var uiButtonSubmit = $(e.target);
+		var lastButtonUI = uiButtonSubmit.html();
+		var oSettings = {
+			url: 'orders/delete/',
+			type: 'get',
+			data: {data: arData},
+			dataType: 'jsonp',
+			jsonpCallback: 'gmCall',
+			beforeSend: function(xhr, settings) {
+				uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
+			},
+			error: function(xhr, status, thrown) {
+				console.log(status, thrown);
+			},
+			complete: function(xhr, status) {
+				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+				uiButtonSubmit.removeAttr('disabled');
+			}
+		};
+		$.ajax(oSettings);
+	});
+
+	$(document.body).find('[js-element="remove-all"]').bind('click', function(e) {
+		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
+			$(e.target).parents('.order-table-item:first').fadeOut().remove();
+			updateOrdersCounts();
+		} else {
+			var oToDeleteData = [];
+			$(e.target).parents('.order-table-item:first').find('[js-element="remove-all"]').each(function(i, elem) {
+				oToDeleteData.push({merge_id: $(elem).data('merge_id')});
+			});
+			// console.log(oToDeleteData);
+			var uiButtonSubmit = $(e.target);
+			var lastButtonUI = uiButtonSubmit.html();
+			var oSettings = {
+				url: 'orders/delete/1',
+				type: 'get',
+				data: {data: oToDeleteData},
+				dataType: 'jsonp',
+				jsonpCallback: 'gmCall',
+				beforeSend: function(xhr, settings) {
+					uiButtonSubmit.attr('data-orig-ui', lastButtonUI);
+					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
+				},
+				error: function(xhr, status, thrown) {
+					console.log(status, thrown);
+				},
+				complete: function(xhr, status) {
+					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
+					uiButtonSubmit.removeAttr('disabled');
+				}
+			};
+			if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
+			oRemoveAjax = $.ajax(oSettings);
 		}
 	});
 }

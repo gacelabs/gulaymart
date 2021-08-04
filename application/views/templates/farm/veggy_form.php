@@ -30,7 +30,7 @@
 							<div class="input-container">
 								<div>
 									<label for="product_name">Product name</label>
-									<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
+									<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Customers like a short yet concise Product name that tells essential details upfront.</small>
 								</div>
 								<div class="input-group">
 									<input type="text" class="form-control" id="product_name" name="products[name]" required="required" placeholder="Example: Fresh & Organic Romaine Lettuce [Per kilo]" value="<?php check_value('name', $data['product']);?>">
@@ -41,6 +41,7 @@
 							</div>
 							<div class="input-container<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="category_container" style="margin-bottom:0;">
 								<label for="product_name">Category</label>
+								<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Not sure what category your veggy fits in, do you <span class="text-link" data-toggle="modal" data-target="#veggie_category_help">NEED HELP?</span></small>
 								<?php if ($this->categories): ?>
 									<ul class="inline-list">
 										<?php foreach ($this->categories as $key => $category): ?>
@@ -99,7 +100,7 @@
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Product attributes</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
@@ -143,7 +144,7 @@
 					<div class="dashboard-panel-middle">
 						<div style="margin-bottom:15px;">
 							<label>Product Pricing (Location based)</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
@@ -232,7 +233,7 @@
 					<div class="dashboard-panel-middle">
 						<div>
 							<label>Short description</label>
-							<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
+							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
 						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
@@ -260,7 +261,7 @@
 						<div class="dashboard-panel-middle">
 							<div>
 								<label>Images</label>
-								<small class="text-gray"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600 pixels.</small>
+								<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Upload multiple images at once (max 5). Then select the main photo for your product. Recommended size 600 x 600 pixels.</small>
 							</div>
 							<ul class="inline-list preview_images_list"></ul>
 							<div class="input-group">
@@ -304,8 +305,8 @@
 				<div class="dashboard-panel">
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
-							<li><p>Listing</p></li>
-							<!-- <li><p><a href="#" target="_new" class="text-link order-link">View Page</a></p></li> -->
+							<li><label>Preview listing</label></li>
+							<!-- <li><p><a href="#"<?php if (!$this->agent->is_mobile()): ?> target="_new"<?php endif ?> class="text-link order-link">View Page</a></p></li> -->
 						</ul>
 						<div class="product-list-card">
 							<div class="product-list-photo order-photo" style="background-image:url('<?php identify_main_photo($data['product']);?>');">
@@ -319,7 +320,7 @@
 							<?php if ($data['product']['latlng']): ?>
 								<?php foreach ($data['product']['latlng'] as $key => $prod): ?>
 									<ul class="spaced-list between">
-										<li><p class="product-price">₱ <span class="order-price"><?php echo $prod['price'];?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
+										<li><p class="product-price">₱ <span class="order-price"><?php echo format_number($prod['price']);?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
 										<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration"><?php echo ucwords($prod['duration']);?></span></p></li>
 									</ul>
 								<?php endforeach ?>
@@ -327,7 +328,13 @@
 							</div>
 						</div>
 						<div class="new-veggy-status-container">
-							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status">For review</span></h5>
+							<?php
+							$status = 'For review';
+							if (isset($data['product']) AND $data['product']['activity']) {
+								$status = ($data['product']['activity'] == 0 ? 'For review' : ($data['product']['activity'] == 2 ? 'Rejected' : ($data['product']['activity'] == 3 ? 'Deleted' : 'Approved')));
+							}
+							?>
+							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>
 						</div>
 					</div>
 					<div class="dashboard-panel-footer visible-xs">

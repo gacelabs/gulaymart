@@ -92,9 +92,17 @@ function toktok_post_delivery_format($data=false)
 	return $params;
 }
 
-function toktok_price_directions_format($data=false)
+function toktok_price_directions_format($data=false, $vehicle='Motorcycle')
 {
 	$ci =& get_instance();
+	$ci->load->library('ToktokApi');
+	$ci->toktokapi->app_request('vehicle_types');
+	$vehicle_id = 'clc1ZkhIZnlSMXFoTUFWODE0eXkyUT09';
+	if ($ci->toktokapi->success) {
+		$vehicle = find_value($vehicle, $ci->toktokapi->response['message'], 'type', true);
+		// debug($vehicle, $ci->toktokapi, 'stop');
+		$vehicle_id = $vehicle['id'];
+	}
 	$pricing = [
 		'f_sender_lat' => $data ? $data['sender_lat'] : 0,
 		'f_sender_lon' => $data ? $data['sender_lng'] : 0,
@@ -108,6 +116,7 @@ function toktok_price_directions_format($data=false)
 		'isExpress' => ($data AND isset($data['express']) AND $data['express'] == true) ? 'true' : 'false',
 		// 'isCashOnDelivery' => ($data AND isset($data['cod']) AND $data['cod'] == true) ? 'true' : 'false',
 		'isCashOnDelivery' => 'true',
+		'vehicleTypeId' => $vehicle_id,
 	];
 	return $pricing;
 }
@@ -475,14 +484,14 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
-				'user_id' => $user_id, 'unread' => 1,
+				'to_id' => $user_id, 'unread' => 1,
 				'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {
 				$ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
-					'user_id' => $user_id, 'datestamp' => $datestamp,
+					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
 				return true;
@@ -553,9 +562,27 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$ci =& get_instance();
 	$html = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		if ($sent) {
+			$ci->senddataapi->trigger('ordered-notification', 'send-notification', [
+				'badge' => base_url('assets/images/favicon.png'),
+				'body' => '',
+				'icon' => base_url('assets/images/favicon.png'),
+				'tag' => 'ordered-notification:send-notification',
+				'renotify' => true,
+				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+				'data' => [
+					'final_total' => $final_total,
+					'merge_ids' => $merge_ids,
+					'seller_id' => $seller_id,
+					'buyer' => $buyer,
+					'url' => base_url('orders/messages'),
+				],
+			]);
+		}
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
@@ -585,9 +612,28 @@ function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for p
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$ci =& get_instance();
 	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		if ($sent) {
+			$ci->senddataapi->trigger('fulfilled-notification', 'send-notification', [
+				'badge' => base_url('assets/images/favicon.png'),
+				'body' => '',
+				'icon' => base_url('assets/images/favicon.png'),
+				'tag' => 'fulfilled-notification:send-notification',
+				'renotify' => true,
+				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+				'data' => [
+					'merge' => $merge,
+					'buyer' => $buyer,
+					'action' => $action,
+					'status' => $status,
+					'seller_id' => $seller_id,
+					'url' => base_url('orders/messages'),
+				],
+			]);
+		}
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");
@@ -631,7 +677,7 @@ function setup_fulfillments_data($baskets_merge=false)
 			}
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function setup_orders_data($baskets_merge=false)
@@ -662,29 +708,35 @@ function setup_orders_data($baskets_merge=false)
 			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $keywords='')
 {
 	$ci =& get_instance();
+	$latlng = get_cookie('prev_latlng', true);
+	if (empty($latlng)) {
+		$latlng = $ci->latlng;
+	} else {
+		$latlng = unserialize($latlng);
+	}
 	// debug($category_ids, 'stop');
 	if ($ci->input->is_ajax_request()) {
 		$not_ids = $ci->input->post('not_ids') ?: $ci->input->get('not_ids');
 		$has_ids = $ci->input->post('has_ids') ?: $ci->input->get('has_ids');
 
-		$nearby_products = nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]);
+		$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]);
 		$html = '';
 		if ($nearby_products) {
 			foreach ($nearby_products as $key => $product) {
 				$html .= $ci->load->view('looping/product_card', ['data'=>$product, 'id'=>$product['category_id']], true);
 			}
-			$nearby_products = nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
+			$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
 		}
 		// debug($nearby_products, 'stop');
 		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)]); exit();
 	}
-	// debug(nearby_farms($ci->latlng), nearby_products($ci->latlng), 'stop');
+	// debug(nearby_farms($latlng), nearby_products($latlng), 'stop');
 	$ci->render_page([
 		'top' => [
 			'metas' => [
@@ -715,15 +767,14 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 				'plugins/inputmask.binding',
 				'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
 				'plugins/markerclustererplus.min',
-				'marketplace/main', 
-				'global',
+				'marketplace/main',
 			],
 		],
 		'data' => [
-			'nearby_veggies' => nearby_veggies($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products' => nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products_count' => nearby_products($ci->latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
-			'nearby_farms' => nearby_farms($ci->latlng),
+			'nearby_veggies' => nearby_veggies($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+			'nearby_products' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+			'nearby_products_count' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
+			'nearby_farms' => nearby_farms($latlng),
 			'keywords' => $keywords,
 		],
 	]);
@@ -756,4 +807,101 @@ function validate_recaptcha($CI_POST=false)
 		if ($result->success) return true;
 	}
 	return false;
+}
+
+function format_time_label($timedata=false)
+{
+	$results = [];
+	if ($timedata) {
+		if (is_string($timedata)) $timedata = [$timedata];
+		foreach ($timedata as $key => $time) {
+			switch (strtolower(trim($time))) {
+				case 'today':
+					$results['DATE('.$key.')'] = date('Y-m-d');
+					break;
+				case 'lastmonth':
+					$results['DATE('.$key.')'] = date('Y-m-d', strtotime("-1 months"));
+					break;
+				case 'yeartodate':
+					$results['YEAR('.$key.')'] = date('Y');
+					break;
+				case 'alltime':
+					$results = [];
+					break;
+			}
+		}
+	}
+	// debug($results, 'stop');
+	return $results;
+}
+
+function check_device_agent() {
+	$tablet_browser = 0;
+	$mobile_browser = 0;
+
+	$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?? null;
+
+	if (!$userAgent || !$httpAccept) {
+		return 'desktop';
+	}
+
+	if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($userAgent))) {
+		$tablet_browser++;
+	}
+
+	if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile|iphone)/i', strtolower($userAgent))) {
+		$mobile_browser++;
+	}
+
+	if ((strpos(strtolower($httpAccept),'application/vnd.wap.xhtml+xml') > 0) OR ((isset($_SERVER['HTTP_X_WAP_PROFILE']) OR isset($_SERVER['HTTP_PROFILE'])))) {
+		$mobile_browser++;
+	}
+
+	$mobile_ua = trim(strtolower(substr($userAgent, 0, 4)));
+	$mobile_agents = [
+		'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
+		'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
+		'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
+		'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
+		'newt','noki','palm','pana','pant','phil','play','port','prox',
+		'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
+		'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
+		'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
+		'wapr','webc','winw','winw','xda ','xda-'
+	];
+
+	if (in_array($mobile_ua, $mobile_agents)) {
+		$mobile_browser++;
+	}
+
+	if (strpos(strtolower($userAgent),'opera mini') > 0) {
+		$mobile_browser++;
+		// Check for tablets on opera mini alternative headers
+		$stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?$_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:(isset($_SERVER['HTTP_DEVICE_STOCK_UA'])?$_SERVER['HTTP_DEVICE_STOCK_UA']:''));
+		if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
+			$tablet_browser++;
+		}
+	}
+
+	if ($tablet_browser > 0) {
+		// do something for tablet devices
+		return 'tablet';
+	} else if ($mobile_browser > 0) {
+		// do something for mobile devices
+		return 'mobile';
+	} else {
+		// do something for everything else
+		return 'desktop';
+	}
+}
+
+function format_number($value=0)
+{
+	// debug((is_numeric( $value ) && floor( $value ) != $value), 'stop');
+	if ((is_numeric( $value ) && floor( $value ) != $value)) {
+		return number_format($value, 2, '.', ',');
+	} else {
+		return number_format($value);
+	}
 }

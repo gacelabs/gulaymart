@@ -1,7 +1,7 @@
 #veggy_categories {
 	border-radius: 4px;
-	display: grid;
-	grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto);
+	display: flex;
+	/*grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto) minmax(0, auto);*/
 	grid-gap: 15px;
 	width: 100%;
 	padding: 0 10px;
@@ -12,9 +12,9 @@
 	width: 100%;
 }
 .veggy-category-item-inner {
-	display: grid;
-	grid-template-columns: 30px minmax(0, auto);
-	grid-gap: 5px;
+	display: inline-flex;
+	/*grid-template-columns: 30px auto;*/
+	grid-gap: 10px;
 	padding: 10px 0;
 	text-decoration: none !important;
 }

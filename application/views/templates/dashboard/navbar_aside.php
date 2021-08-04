@@ -58,7 +58,12 @@
 			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => 1]);
+					if ($this->farms AND $this->products->count()) {
+						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'page_id' => $ids]);
+					} else {
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $current_profile['id']]);
+					}
 					if ($msg_count): ?>
 						<kbd id='nav-messages-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
@@ -106,15 +111,18 @@
 				</div> -->
 			<?php endif ?>
 
+			<a href="//help.gulaymart.com"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> class="aside-nav-item hidden-lg hidden-md hidden-sm">
+				<i class="fa fa-question-circle" style="background-color:#cacaca;"></i>Help Center
+			</a>
+
 			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
 				<i class="fa fa-sign-out" style="background-color:#cacaca;"></i>Sign out
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>
-		<!-- <a href="help/help-center/" class="aside-nav-item  hidden-xs"> -->
-		<!-- <a href="//help.gulaymart.com" target="_blank" class="aside-nav-item  hidden-xs">
+		<a href="//help.gulaymart.com"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> class="aside-nav-item hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
-		</a> -->
+		</a>
 		<a href="sign-out" class="aside-nav-item hidden-xs">
 			<i class="fa fa-sign-out" style="background-color:#cacaca;"></i><span class="hidden-xs">Sign out</span>
 		</a>

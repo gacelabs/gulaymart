@@ -5,29 +5,29 @@ $(document).ready(function() {
 
 	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
-		/*if (window.location.host.indexOf('local') < 0) {
+		function findMe(oLocation) {
+			if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
+				$('.close-jq-toast-single:visible').trigger('click');
+				navigator.geolocation.getCurrentPosition(function(response) {
+					if (response != undefined) {
+						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+						initMapLocations();
+					}
+				}, function () {
+					runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
+				}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+			} else if (oLocation.state == 'denied') {
+				runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.', unclose: true});
+			}
+		}
+		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
-				if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
-					navigator.geolocation.getCurrentPosition(function(response) {
-						if (response != undefined) {
-							runAlertBox({type:'success', message: 'Accurate Geolocation Data Experience Activated!'});
-							oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
-							simpleAjax('api/save_latlng', oLatLong); // save current latitude and longitude of user
-							initMapLocations();
-						}
-					}, function () {
-						runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.'});
-					});
-				} else if (oLocation.state == 'denied') {
-					runAlertBox({type:'info', message: 'Please allow GulayMart.com to access your location for accurate data experience.', unclose: true});
-				}
-				oLocation.onchange = function() {
-					console.log('Location Permission ' + oLocation.state);
-				}
+				oLocation.onchange = function() { findMe(oLocation); }
+				findMe(oLocation);
 			});
-		} else {*/
+		} else {
 			initMapLocations();
-		/*}*/
+		}
 	}
 
 	if ($('form').length) {
@@ -39,6 +39,14 @@ $(document).ready(function() {
 			$('a', $(this).parents('form')).removeAttr('clicked');
 			$(this).attr('clicked', 1);
 		});
+	}
+
+	if (!oUser) {
+		if ($('.simple-marquee-container').SimpleMarquee != undefined) {
+			$('.simple-marquee-container').SimpleMarquee({
+				duration: 40000,
+			});
+		}
 	}
 });
 
@@ -209,7 +217,7 @@ var ajaxSuccessResponse = function(response, e) {
 		if (response && (typeof response.callback == 'string')) {
 			var fn = eval(response.callback);
 			if (typeof fn == 'function') {
-				console.log(response.callback, 'function');
+				// console.log(response.callback, 'function');
 				fn(response.data, e);
 			}
 		}
@@ -601,7 +609,7 @@ function fnDragEnd(marker, isNew) {
 							break;
 						}
 					}
-					console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
+					// console.log("City: " + city + ", Province: " + province + ", Region: " + region + ", Country: " + country + ", Country Code: " + countryCode);
 					var sValue = arVal.join(', ');
 					uiInputAddress.attr('value', sValue);
 					uiInputAddress.val(sValue);

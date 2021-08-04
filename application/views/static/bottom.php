@@ -5,9 +5,12 @@
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/autosize.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/jquery-dateformat.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/toast.min.js'); ?>"></script>
-		<script type="text/javascript" src="<?php echo base_url('assets/js/global.js'); ?>"></script>
 
 		<?php
+			$this->minify->add_js('global.js');
+			$this->minify->add_js('validate-form.js');
+			$this->minify->add_js('common.js');
+			$this->minify->add_js('main.js');
 			foreach ($bottom['js'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_URL)) {
 					echo '<script type="text/javascript" src="'.$value.'"></script>';
@@ -18,9 +21,6 @@
 				}
 				echo "\r\n";
 			}
-			$this->minify->add_js('validate-form.js');
-			$this->minify->add_js('common.js');
-			$this->minify->add_js('main.js');
 			echo $this->minify->deploy_js(false);
 		?>
 		
@@ -45,17 +45,5 @@
 		<?php if (!isset($data['for_email']) AND $this->action != 'store'): ?>
 			<?php $this->view('requires/realtime_scripts', ['data'=>$data]); ?>
 		<?php endif ?>
-
-		<script type="text/javascript">
-			/*if ('serviceWorker' in navigator) {
-				console.log("Will the service worker register?");
-				navigator.serviceWorker.register('sw.js')
-				.then(function(reg){
-					console.log("Yes, it did.");
-				}).catch(function(err) {
-					console.log("No it didn't. This happened:", err)
-				});
-			}*/
-		</script>
 	</body>
 </html>

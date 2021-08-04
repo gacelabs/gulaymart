@@ -30,8 +30,9 @@
 			<p style="margin-bottom:5px;"><a href="">Gulaymart &copy; <?php echo date('Y'); ?></a></p>
 		</div>
 	</div>
+	<hr class="visible-xs" style="clear:both;border-color:transparent;">
 	<div class="container text-center">
-		<div class="col-lg-6">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<!-- <h3 style="font-size: 16px;"><b>Facilities and Services</b></h3>
 			<ul class="inline-list right-gap">
 				<li><img src="assets/images/toktok.png" width="75"></li>
@@ -39,12 +40,20 @@
 				<li><img src="assets/images/paypal.png" width="100"></li>
 			</ul> -->
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<h3 style="font-size: 16px;"><b>Web Protection by</b></h3>
 			<ul class="inline-list right-gap">
 				<li id="install-app"><img src="assets/images/websecure.jpg" width="75"></li>
 				<li><a href="https://www.digitalocean.com/?refcode=01b641693698&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" width="100" /></a></li>
 			</ul>
 		</div>
+	</div>
+</div>
+<button id="add-pwa" style="display: none;">Install App</button>
+<!-- this is to determine if realtime is connected -->
+<div class="container">
+	<div class="text-right">
+		<small id="is-connected" class="fa fa-link"></small>
 	</div>
 </div>

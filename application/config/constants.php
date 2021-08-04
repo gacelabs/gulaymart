@@ -91,7 +91,7 @@ defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b6
 
 defined('APP_NAME') OR define('APP_NAME', 'Gulay Mart');
 defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'Gulay Mart an Online Supermarket near you.');
-defined('APP_VERSION') OR define('APP_VERSION', '1.0');
+defined('APP_VERSION') OR define('APP_VERSION', '3.9');
 
 /*IMPORTANT PASSSWORDS*/
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y'); // also the ssh root password
@@ -105,7 +105,19 @@ defined('MYSQL_ROOT_PASS') OR define('MYSQL_ROOT_PASS', 'pHPMy_@DM!n-R00t-p@55-K
 /*IMPORTANT PASSSWORDS*/
 
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
-defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
+if ((bool)strstr($_SERVER['HTTP_HOST'], 'local')) {
+    // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
+    defined('REALTIME_URL') OR define('REALTIME_URL', 'http://local.app.send.data/get/jsfile/1E56FA5E54577C98A5FF31F577DFAE75');
+    defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '1E56FA5E54577C98A5FF31F577DFAE75');
+    // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/DA772D289F150555D5A58473E97EF4AF');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'DA772D289F150555D5A58473E97EF4AF');
+} else {
+    defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/2DBC7E5261EF425D3D1CF990E3682F56');
+    defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '2DBC7E5261EF425D3D1CF990E3682F56');
+    // defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
+    // defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
+}
 defined('MONTHS') OR define('MONTHS', serialize([
 	'January','February','March','April','May','June','July','August','September','October','November','December'
 ]));
@@ -128,3 +140,21 @@ defined('MARKETPLACE_MAX_FARMERS') OR define('MARKETPLACE_MAX_FARMERS', 24);
 
 defined('RECAPTCHA_KEY') OR define('RECAPTCHA_KEY', '6Lei4fQUAAAAANUAGGDO7bHtCeydYC93apLLdxZn');
 defined('RECAPTCHA_SECRET') OR define('RECAPTCHA_SECRET', '6Lei4fQUAAAAAHuouWMQsjHtPaaGJE201bhTkAaP');
+/*
+                    STATUS LINKS
+ * GM status:                       TOKTOK status:
+ * 0 = verified (checkout page)     
+                                    2 = Scheduled for Delivery (this is for scheduled GM orders only)
+ * 1 = placed                       1 = Placed Order
+ * 2 = for pick up                  3 = On the Way to Sender
+                                    4 = Item Picked Up
+ * 3 = on delivery                  5 = On the Way to Recipient
+ * 4 = received                     6 = Item Delivered
+ * 5 = cancelled
+*/
+defined('GM_VERIFIED_STATUS') OR define('GM_VERIFIED_STATUS', 0);
+defined('GM_PLACED_STATUS') OR define('GM_PLACED_STATUS', 1);
+defined('GM_FOR_PICK_UP_STATUS') OR define('GM_FOR_PICK_UP_STATUS', 2);
+defined('GM_ON_DELIVERY_STATUS') OR define('GM_ON_DELIVERY_STATUS', 3);
+defined('GM_RECEIVED_STATUS') OR define('GM_RECEIVED_STATUS', 4);
+defined('GM_CANCELLED_STATUS') OR define('GM_CANCELLED_STATUS', 5);

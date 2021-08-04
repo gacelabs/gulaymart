@@ -21,14 +21,14 @@
 			<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
 		</div>
 		<div class="media-body">
-			<p class="zero-gaps media-heading text-ellipsis"><a target="_blank" href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
+			<p class="zero-gaps media-heading text-ellipsis"><a<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> href="<?php product_url($product, true);?>" class="text-link"><?php echo $product['name'];?></a></p>
 			<div class="ellipsis-container">
 				<p class="zero-gaps"><?php echo $product['description'];?></p>
 			</div>
 		</div>
 	</div>
 	<div class="text-right hidden-sm hidden-xs">
-		<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p>
+		<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
 	</div>
 	<div class="text-right hidden-sm hidden-xs">
 		<p class="zero-gaps"><?php echo $order['quantity'];?></p>
@@ -41,7 +41,7 @@
 
 	<div class="visible-sm visible-xs">
 		<ul class="spaced-list between">
-			<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p></li>
+			<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p></li>
 			<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 		</ul>
 	</div>

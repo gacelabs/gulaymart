@@ -47,6 +47,10 @@
 	padding: 10px;
 	color: #fff;
 }
+.veggy-nearby-product-body p {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 .veggy-nearby-product-item:nth-child(4), .veggy-nearby-product-item:nth-child(4) .veggy-nearby-product-body, .veggy-nearby-product-item:nth-child(4) .veggy-nearby-product-img {
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;

@@ -34,7 +34,7 @@
 					<div class="form-group" style="margin-bottom: 0;">
 						<button type="submit" data-keep-loading="5000" loading-text="Signing up..." class="btn btn-theme btn-lg btn-block">Sign Up</button>
 						<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div>
-						<p class="text-center h6">This site is protected by reCAPTCHA and the Google <a href="https://www.google.com/intl/en/policies/privacy/" target="_blank">Privacy Policy</a> and <a href="https://www.google.com/intl/en/policies/terms/" target="_blank">Terms of Service</a> apply.</p>
+						<p class="text-center h6">This site is protected by reCAPTCHA and the Google <a href="https://www.google.com/intl/en/policies/privacy/"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?>>Privacy Policy</a> and <a href="https://www.google.com/intl/en/policies/terms/"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?>>Terms of Service</a> apply.</p>
 					</div>
 				</div>
 				<div class="register-footer">

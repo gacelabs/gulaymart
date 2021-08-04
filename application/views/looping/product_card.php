@@ -8,7 +8,7 @@
 				</div>
 				<div class="product-list-footer">
 					<ul class="spaced-list between">
-						<li><p class="product-price">&#x20b1; <?php echo $data['price'];?> / <?php echo $data['measurement'];?></p></li>
+						<li><p class="product-price">&#x20b1; <?php echo format_number($data['price']);?> / <?php echo $data['measurement'];?></p></li>
 						<?php if (isset($data['distance']) AND isset($data['duration'])): ?>
 							<li><p class="product-distance" data-toggle="tooltip" data-placement="top" title="Estimated distance from you."><i class="fa fa-clock-o"></i> <?php echo ucwords($data['duration']);?></p></li>
 						<?php endif ?>

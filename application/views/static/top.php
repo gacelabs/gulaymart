@@ -45,5 +45,8 @@
 		var PROFILE_INFO_MESSAGE = '<?php echo PROFILE_INFO_MESSAGE;?>';
 		var DEVICE_ID = '<?php echo $this->device_id;?>';
 		var oSegments = <?php echo json_encode($this->uri->segment_array()); ?>;
+		var APPNAME = '<?php echo APP_NAME;?>';
+		var IS_LOCAL = <?php echo (bool)strstr($_SERVER['HTTP_HOST'], 'local') ? 1 : 0;?>;
+		var TIMEZONE = '<?php echo date_default_timezone_get();?>';
 	</script>
 </head>

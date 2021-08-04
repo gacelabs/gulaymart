@@ -17,6 +17,19 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$user_timezone = get_cookie('user_timezone', true);
+		// debug(date_default_timezone_get(), $user_timezone, 'stop');
+		if (empty($user_timezone)) {
+			$zone_details = ip_info((bool)strstr($_SERVER['HTTP_HOST'], 'local') ? '120.29.109.66' : NULL);
+			// debug($zone_details, 'stop');
+			if (!empty($zone_details)) {
+				$user_timezone = $zone_details['timezone'];
+				set_cookie('user_timezone', $user_timezone, 7776000); // 90 days
+			}
+		}
+		if (!empty($user_timezone) AND $user_timezone != 'Asia/Manila') date_default_timezone_set($user_timezone);
+		// debug($user_timezone, date_default_timezone_get(), get_cookie('user_timezone', true), 'stop');
+
 		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
@@ -32,9 +45,14 @@ class MY_Controller extends CI_Controller {
 			$this->latlng = unserialize($latlng);
 		}
 		$current_city = get_cookie('current_city', true);
-		if (!empty($latlng)) {
+		if (!empty($current_city)) {
 			// debug($current_city, 'stop');
 			$this->current_city = urldecode($current_city);
+		}
+		$is_mobile = $this->agent->is_mobile();
+		if ($is_mobile == true) {
+			// debug($is_mobile, 'stop');
+			$this->config->set_item('sess_expire_on_close', '0');
 		}
 		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));
@@ -71,7 +89,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('users');
 		$this->load->library('products');
 		$this->load->library('SmtpEmail');
-		$this->load->library('SendDataApi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
+		$this->load->library('SendDataApi', ['app_key'=>SENDDATA_APPKEY]);
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();
@@ -90,11 +108,17 @@ class MY_Controller extends CI_Controller {
 		} else {
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
-				echo do_jsonp_callback('ajaxSuccessResponse', [
+				$data = [
 					'type' => 'error',
 					'message' => "Nothing happened, Session has been expired! Reloading browser...",
 					'redirect' => '/'
-				]); exit();
+				];
+				if ($this->input->get('callback') == 'gmCall') {
+					echo do_jsonp_callback('ajaxSuccessResponse', $data);
+				} else {
+					echo json_encode($data);
+				}
+				exit();
 			}
 			/*now if not ajax and no_entry_for_signed_out is TRUE redirect*/
 			if (!$this->input->is_ajax_request() AND $this->no_entry_for_signed_out) {

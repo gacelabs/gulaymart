@@ -139,7 +139,7 @@ $(document).ready(function() {
 			}*/
 			$(elem).find('tr:first th').each(function(i, unit) {
 				var text = $.trim($(unit).text());
-				if ($.inArray(text.toLowerCase(), ['actions'/*,'activity'*/]) >= 0) {
+				if ($.inArray(text.toLowerCase(), ['actions','']) >= 0) {
 					if (blanks.orderable == undefined) blanks.orderable = false;
 					blanks.targets.push(i);
 				}
@@ -155,7 +155,8 @@ $(document).ready(function() {
 			// console.log(blanks, last_cnt);
 			oSettings = {
 				// stateSave: true,
-				// responsive: true,
+				responsive: true,
+				colReorder: true,
 				aaSorting: [[ aaSort, aaSortDir ]],
 				columnDefs: [blanks],
 				language: {
@@ -215,7 +216,9 @@ $(document).ready(function() {
 
 	if (window.location.hash) {
 		var hash = window.location.hash;
-		$("html,body").stop().animate({ scrollTop: ($(hash).offset().top - $('#dashboard_navbar').height() - 25), scrollLeft: 0 }, 1000);
+		if ($(hash).length) {
+			$("html,body").stop().animate({ scrollTop: ($(hash).offset().top - $('#dashboard_navbar').height() - 25), scrollLeft: 0 }, 1000);
+		}
 	}
 	
 	autosize($('textarea'));

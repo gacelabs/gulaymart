@@ -7,6 +7,7 @@
 		$feedbacks = $product['feedbacks'];
 		$product['entity_id'] = $farm_location['id'];
 		$can_comment = $product['can_comment'];
+		// debug($feedbacks, 'stop')
 	?>
 	<div class="container">
 		<div class="row" id="productpage_middle">
@@ -37,7 +38,12 @@
 											</div>
 											<div class="media-body">
 												<ul class="spaced-list between">
-													<li><p class="media-heading"><?php get_fullname($feedback['first']['profile']);?></p></li>
+													<li>
+														<p class="media-heading">
+															<b><?php get_fullname($feedback['first']['profile']);?></b>
+															<small class="text-gray">(Verified Customer)</small>
+														</p>
+													</li>
 													<li><small class="text-gray"><?php echo date('F j, Y | g:ia', strtotime($feedback['first']['added']));?></small></li>
 												</ul>
 												<p><?php echo $feedback['first']['content'];?></p>
@@ -51,21 +57,21 @@
 														$this->view('looping/reply_item', $reply);
 													}?>
 												<?php else: ?>
-													<?php $this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]); ?>
+													<?php // $this->view('looping/comment_item', ['placeholder'=>'Reply to this comment ...', 'under'=>$id, 'page'=>$product]); ?>
 												<?php endif ?>
 											</div>
 										</div>
 									<?php endforeach ?>
-								<?php else: ?>
+								<?php elseif (!$current_profile): ?>
 									Be the first to make a feedback. <button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button>
 								<?php endif ?>
-
-								<?php if ($can_comment): ?>
-								<div style="margin-left:-15px;margin-right:-15px;">
-									<hr style="margin-bottom:10px;border-color:#d0d0d0;">
-									<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
-								</div>
+								<?php if ($can_comment == 0 AND $current_profile): ?>
+									<div class="comment-box" style="margin-left:-15px;margin-right:-15px;">
+										<hr style="margin-bottom:10px;border-color:#d0d0d0;">
+										<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>
+									</div>
 								<?php endif ?>
+
 							</div>
 						</div>
 
@@ -118,7 +124,7 @@
 										</div>
 									</div>
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-										<p class="zero-gaps"><a href="<?php echo $farm['storefront'];?>" class="text-link visit-farm-link" target="storefrontTab<?php echo $farm['id'];?>"><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
+										<p class="zero-gaps"><a href="<?php echo $farm['storefront'];?>" class="text-link visit-farm-link"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'];?>"<?php endif ?>><i class="fa fa-external-link-square icon-left"></i>Visit farm</a></p>
 									</div>
 								</div>
 							</div>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /marketplace/category/*
+Allow: /basket/view/*
+Allow: /store/*
+Disallow: /
+
+Sitemap: https://gulaymart.com/sitemap.xml

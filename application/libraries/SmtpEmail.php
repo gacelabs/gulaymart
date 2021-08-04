@@ -23,7 +23,7 @@ class SmtpEmail /*implements EmailFunctions*/ {
 		$config['smtp_port']	= '465';
 		$config['smtp_timeout']	= '30';
 		switch (strtolower($user_type)) {
-			case 'admin':
+			/*case 'admin':
 				$config['smtp_user']	= 'admin@gulaymart.com';
 				$config['smtp_pass']	= 'mqbzoqeeginkjkei';
 				break;
@@ -34,7 +34,7 @@ class SmtpEmail /*implements EmailFunctions*/ {
 			case 'support':
 				$config['smtp_user']	= 'support@gulaymart.com';
 				$config['smtp_pass']	= 'yckkdhtymwgeoyfo';
-				break;
+				break;*/
 			default: /*gacelabs*/
 				$config['smtp_user']	= 'gacelabs.inc@gmail.com';
 				$config['smtp_pass']	= 'jpmmkjexgngkuktt';
@@ -54,27 +54,27 @@ class SmtpEmail /*implements EmailFunctions*/ {
 	public function send($data=FALSE, $minutes=5, $bypass=FALSE)
 	{
 		if ($this->email AND $data) {
-			// debug($bypass); exit();
+			// debug($bypass, 'stop');
 			if ($bypass) {
 				return $this->submit($data);
 			} else {
 				try {
 					$session_id = session_id();
 					$email = $this->db->get_where('email_session', ['session_id'=>$session_id]);
-					// debug($email, 1);
+					// debug($email, 'stop');
 					if ($email->num_rows() == 0) {
 						$email = $this->db->insert('email_session', ['session_id'=>$session_id]);
 					} else {
 						$email = $email->row_array();
 						/*check here now if the prev session id lapse 5 minutes*/
 						$time_diff = time_diff($email['past'], date('Y-m-d H:i:s'), 'minutes');
-						// debug($time_diff, 1);
+						// debug($time_diff, 'stop');
 						if ($time_diff == FALSE) { /*not yet 5 minutes*/
 							return FALSE;
 						}
 						$this->db->update('email_session', ['past' => date('Y-m-d H:i:s')], ['id'=>$email['id']]);
 					}
-					// debug($email, 1);
+					// debug($email, 'stop');
 					return $this->submit($data);
 				} catch (Exception $e) {
 					return $e->getMessage();
@@ -136,13 +136,13 @@ class SmtpEmail /*implements EmailFunctions*/ {
 
 		/*set email message*/
 		$this->email->message($message.$footer);
-		// debug($this->email); exit();
+		// debug($this->email, 'stop');
 
 		/*send the message*/
 		if ($this->debug) {
 			$this->email->send();
 			$debugger = $this->email->print_debugger();
-			debug(['status' => trim(strip_tags($debugger)) == '' ? 1 : 0, 'msg' => trim(strip_tags($debugger))]); exit();
+			debug(['status' => trim(strip_tags($debugger)) == '' ? 1 : 0, 'msg' => trim(strip_tags($debugger))], 'stop');
 		} else {
 			return $this->email->send();
 		}

@@ -49,3 +49,13 @@ var removeItem = function(data) {
 		}
 	}
 }
+
+var drawDataCounts = function(obj, ui) {
+	// console.log(obj);
+	var btn = $('.active-ajaxed-form').find('button:submit');
+	if (btn.length) {
+		$.each(obj, function(index, data) {
+			$('#'+index).text(data);
+		});
+	}
+}

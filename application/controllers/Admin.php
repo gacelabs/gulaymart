@@ -48,25 +48,42 @@ class Admin extends MY_Controller {
 				'modals' => [],
 				'js' => ['admin/main'],
 			],
-			'data' => [],
+			'data' => [
+				'users_count' => $this->gm_db->count('users', ['is_admin' => 1]),
+				'farmers_count' => $this->gm_db->count('user_farms', ['user_id >' => 0]),
+				'bookings_count' => [
+					'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1]),
+					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
+				],
+			],
 		]);
 	}
 
-	public function bookings()
+	public function stats($mode=false)
 	{
 		$post = $this->input->post() ?: $this->input->get();
-		if ($post AND isset($post['admin_pass'])) {
-			if ($post['admin_pass'] == ADMIN_PASS) {
-				// debug($post, 'stop');
-				foreach ($post['admin_settings'] as $key => $data) {
-					$id = $data['id'];
-					if (!isset($data['value']['switch'])) $data['value']['switch'] = '0';
-					// debug($data, 'stop');
-					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'])], ['id' => $id]);
-				}
-				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
+		if ($post) {
+			// debug($post, 'stop');
+			if (method_exists($this, $mode)) {
+				$tables = explode(',', $post['tables']);
+				$results = $this->$mode($post, $tables, __FUNCTION__);
+				$this->set_response('success', '', $results, false, 'drawData'.ucfirst($mode));
 			}
-			$this->set_response('error', 'Admin password does not match!', $post['admin_settings'], false);
+		}
+		$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
+	}
+
+	public function bookings($mode=false)
+	{
+		$post = $this->input->post() ?: $this->input->get();
+		if ($post) {
+			// debug($post, 'stop');
+			if (method_exists($this, $mode)) {
+				$tables = isset($post['tables']) ? explode(',', $post['tables']) : false;
+				$results = $this->$mode($post, $tables, __FUNCTION__);
+				$this->set_response('success', '', $results, false, 'drawData'.ucfirst($mode));
+			}
+			$this->set_response('error', remove_multi_space('Admin method '.$mode.' does not exist!', true), $post, false);
 		} else {
 			$admin_settings = $this->gm_db->get('admin_settings');
 			// debug($admin_settings, true);
@@ -98,10 +115,69 @@ class Admin extends MY_Controller {
 					'js' => ['hideshow', 'admin/main', 'admin/bookings'],
 				],
 				'data' => [
-					'settings' => $admin_settings
+					'settings' => $admin_settings,
+					'bookings_count' => [
+						'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator' => -1]),
+						'manual' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator >' => 0]),
+						'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
+					],
 				],
 			]);
 		}
+	}
+
+	private function counts($post=false, $tables=false, $function=false)
+	{
+		$results = [];
+		if ($post AND $tables) {
+			$where = format_time_label($post);
+			if ($function == 'stats') {
+				$users_where = $farmers_where = $where;
+				$users_where['is_admin'] = 1;
+				$farmers_where['user_id >'] = 0;
+				$results = [
+					'users-count' => $this->gm_db->count('users', $users_where),
+					'farmers-count' => $this->gm_db->count('user_farms', $farmers_where),
+				];
+			} elseif ($function == 'bookings') {
+				$succeed_where = $manual_where = $failed_where = $where;
+
+				$succeed_where['status'] = GM_RECEIVED_STATUS;
+				$succeed_where['is_sent'] = 1;
+				$manual_where['status'] = GM_RECEIVED_STATUS;
+				$manual_where['is_sent'] = 1;
+				$manual_where['operator >'] = 0;
+				$failed_where['status'] = GM_ON_DELIVERY_STATUS;
+				$failed_where['is_sent'] = 0;
+
+				$results = [
+					'bookings-succeeded' => $this->gm_db->count('baskets_merge', $succeed_where),
+					'bookings-manualed' => $this->gm_db->count('baskets_merge', $manual_where),
+					'bookings-failed' => $this->gm_db->count('baskets_merge', $failed_where),
+				];
+			}
+		}
+		return $results;
+	}
+
+	private function automation($post=false)
+	{
+		if ($post AND isset($post['admin_pass'])) {
+			// if ($post['admin_pass'] == ADMIN_PASS) {
+			$user = $this->gm_db->get_in('users', ['id' => $this->accounts->profile['id']], 'row');
+			if ($user AND (md5($post['admin_pass']) == $user['password'])) {
+				// debug($post, 'stop');
+				foreach ($post['admin_settings'] as $key => $data) {
+					$id = $data['id'];
+					if (!isset($data['value']['switch'])) $data['value']['switch'] = '0';
+					// debug($data, 'stop');
+					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'])], ['id' => $id]);
+				}
+				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
+			}
+		}
+		$this->set_response('error', 'Your admin password does not match!', 
+			(($post AND isset($post['admin_settings'])) ? $post['admin_settings'] : ''), false);
 	}
 
 	/*this will be run on cron job*/
@@ -121,6 +197,7 @@ class Admin extends MY_Controller {
 				/*do not start if switch is off*/
 				if ($set['switch'] == 1) {
 					$admin_turned_off = false;
+					$buyer_ids = $seller_ids = $merge_ids = [];
 					foreach ($toktok_data as $key => $toktok) {
 						/*recheck automation settings if switched is on/off*/
 						$check = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
@@ -164,19 +241,37 @@ class Admin extends MY_Controller {
 									$this->toktokapi->app_request('post_delivery', $post);
 									// debug($this->toktokapi, 'stop');
 									if ($this->toktokapi->success) {
-										$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+										$raw = ['status' => 3, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
 									} else {
-										$raw = ['is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
+										$raw = ['status' => 3, 'is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
 									}
 								} else {
-									$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+									$raw = ['status' => 3, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
 								}
 								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+								$basket_ids = explode(',', $toktok['basket_ids']);
+								if ($basket_ids) {
+									foreach ($basket_ids as $basket_id) {
+										$this->gm_db->save('baskets', ['status' => 3], ['id' => $basket_id]);
+									}
+								}
+								$buyer_ids[$toktok['buyer_id']] = $toktok['buyer_id'];
+								$seller_ids[$toktok['seller_id']] = $toktok['seller_id'];
+								$merge_ids[$toktok['id']] = $toktok['id'];
 							}
 						}
 					}
+					// send realtime on-delivery order
+					$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+						'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
+					]);
+					// send realtime on-delivery fulfillment
+					$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+						'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
+					]);
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
+						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!']); exit();
 						return true; /*Disable OPERATOR distributions*/
 						/*booking_limit reached, turn off switch*/
 						$set['switch'] = 0;
@@ -225,7 +320,11 @@ class Admin extends MY_Controller {
 					return true; /*Disable OPERATOR distributions*/
 					$this->notify_operator_booking();
 				}
+			} else {
+				echo json_encode(['status' => false, 'message' => 'no available post']); exit();
 			}
+		} else {
+			echo json_encode(['status' => false, 'message' => 'admin setting unknown']); exit();
 		}
 	}
 
@@ -311,14 +410,20 @@ class Admin extends MY_Controller {
 								$this->toktokapi->app_request('post_delivery', $toktok_post);
 								// debug($this->toktokapi, 'stop');
 								if ($this->toktokapi->success) {
-									$raw = ['is_sent' => 1];
+									$raw = ['status' => 3, 'is_sent' => 1];
 								} else {
-									$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
+									$raw = ['status' => 3, 'is_sent' => 2]; // 'is_sent' => 2 FAILED
 								}
 							} else {
-								$raw = ['is_sent' => 1];
+								$raw = ['status' => 3, 'is_sent' => 1];
 							}
 							$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+							$basket_ids = explode(',', $toktok['basket_ids']);
+							if ($basket_ids) {
+								foreach ($basket_ids as $basket_id) {
+									$this->gm_db->save('baskets', ['status' => 3], ['id' => $basket_id]);
+								}
+							}
 
 							sleep(3);
 							$toktok_for_operators = $this->baskets->merge_disassembled([

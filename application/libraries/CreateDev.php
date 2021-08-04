@@ -151,6 +151,10 @@ class CreateDev {
 				'constraint' => '50',
 				'null' => true,
 			],
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
 			'added datetime DEFAULT CURRENT_TIMESTAMP',
 			'updated datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -176,6 +180,11 @@ class CreateDev {
 			'farm_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
+			],
+			'name' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
 			],
 			"lat VARCHAR(100) NULL DEFAULT NULL",
 			"lng VARCHAR(100) NULL DEFAULT NULL",
@@ -393,6 +402,10 @@ class CreateDev {
 				'type' => 'SMALLINT',
 				'default' => '0',
 			],
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -422,6 +435,11 @@ class CreateDev {
 			'label varchar(100) DEFAULT NULL',
 			'value varchar(50) DEFAULT NULL',
 			'photo longtext',
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => 1,
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -831,7 +849,13 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
-			'user_id' => [
+			'to_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'from_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',

@@ -27,6 +27,7 @@ class Fulfillment extends My_Controller {
 		$filters = ['seller_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
 			$filters['id'] = $this->input->post('ids');
+			$filters['seller_id'] = $this->input->post('seller_id');
 			// $filters['id'] = ["25", "28", "31", "41"];
 		}
 		$baskets_merge = setup_fulfillments_data($this->baskets->get_baskets_merge($filters));
@@ -48,6 +49,7 @@ class Fulfillment extends My_Controller {
 						'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
 						'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
 					],
+					'no_rec_ui' => true,
 				]
 			], true)]);
 			exit();
@@ -119,8 +121,11 @@ class Fulfillment extends My_Controller {
 						], ['id' => $row['basket_id']]);
 					}
 				}
-
-				$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post['data']]);
+				/*send it realtime to buyer*/
+				$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
+					'data' => $post['data'],
+					'buyer_id' => $merge['buyer_id']
+				]);
 				// debug($response, 'stop');
 				$this->set_response('success', 'Product status on Order(s) changed', $post['data'], false, 'changeOnFulfillment');
 			}
@@ -176,7 +181,10 @@ class Fulfillment extends My_Controller {
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
 					
 					/*send it realtime to buyer*/
-					$response = $this->senddataapi->trigger('change-order-status', 'ordered-items', ['data'=>$post]);
+					$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
+						'data' => $post,
+						'buyer_id' => $merge['buyer_id']
+					]);
 
 					$redirect = 'fulfillment/for-pick-up';
 					$action = 'Ready for Pick Up';

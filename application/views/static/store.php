@@ -111,9 +111,9 @@
 				
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 toggle-container hide" id="about_item_container">
 					<!-- GINAWA KO LANG TO PARA MAG SIMULATE KUNG MAY ABOUT NA OR WALA PA -->
-					<?php if (isset($data['kunyare'])) : ?>
+					<?php if (isset($data['farm']) AND (isset($data['farm']['about']) AND strlen($data['farm']['about']))) : ?>
 						<!-- ETO YUNG ABOUT CARD -->
-						<?php $this->view('looping/product_card'); ?>
+						<p class="color-grey text-center" style="margin: 30px 0;"><?php echo $data['farm']['about'];?></p>
 					<?php else: ?>
 						<p class="color-grey text-center" style="margin: 30px 0;">&#8212; NO ABOUT &#8212;</p>
 					<?php endif ?>

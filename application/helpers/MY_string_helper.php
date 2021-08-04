@@ -97,7 +97,7 @@ function device_id()
 	return strtoupper(substr(md5($DEVICE), 0, 12));
 }
 
-function get_mac_address()
+function get_mac_address($find_ip=false)
 {
 	// debug(PHP_OS, 'stop');
 	$macaddress = false;
@@ -105,17 +105,29 @@ function get_mac_address()
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 		@system('ipconfig /all');
 		$mycomsys = ob_get_contents();  
-		ob_clean();  
-		$find_mac = "Physical";  
+		ob_clean();
+		if ($find_ip == false) {
+			$find_mac = "Physical";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);  
-		$macaddress = substr($mycomsys, ($pmac+36), 17);  
+		$macaddress = substr($mycomsys, ($pmac+36), $length);  
 	} elseif (strtoupper(PHP_OS) == 'LINUX') {
 		@system('ifconfig');
 		$mycomsys = ob_get_contents();
 		ob_clean();
-		$find_mac = "ether";
+		if ($find_ip == false) {
+			$find_mac = "ether";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);
-		$macaddress = substr($mycomsys, ($pmac+6), 17);
+		$macaddress = substr($mycomsys, ($pmac+6), $length);
 	}
 	// Display Mac Address 
 	return $macaddress;
@@ -282,33 +294,37 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 
 function create_dirs($dir='')
 {
-	/*create the dirs*/
-	$folder_chunks = explode('/', 'assets/data/files/');
-	if (count($folder_chunks)) {
-		$uploaddir = get_root_path();
-		foreach ($folder_chunks as $key => $folder) {
-			$uploaddir .= $folder.'/';
-			// debug($uploaddir);
-			@mkdir($uploaddir);
-		}
-	}
-	@mkdir(get_root_path('assets/data/files/'));
-	$uploaddir = get_root_path('assets/data/files/'.$dir);
-	
-	if ($dir != '') {
+	if (is_dir('assets/data/files/'.$dir) == false) {
 		/*create the dirs*/
-		$folder_chunks = explode('/', str_replace(' ', '_', $dir));
-		// debug($folder_chunks);
+		$folder_chunks = explode('/', 'assets/data/files/');
 		if (count($folder_chunks)) {
-			$uploaddir = get_root_path('assets/data/files/');
+			$uploaddir = get_root_path();
 			foreach ($folder_chunks as $key => $folder) {
 				$uploaddir .= $folder.'/';
 				// debug($uploaddir);
 				@mkdir($uploaddir);
 			}
 		}
+		@mkdir(get_root_path('assets/data/files/'));
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
+		
+		if ($dir != '') {
+			/*create the dirs*/
+			$folder_chunks = explode('/', str_replace(' ', '_', $dir));
+			// debug($folder_chunks);
+			if (count($folder_chunks)) {
+				$uploaddir = get_root_path('assets/data/files/');
+				foreach ($folder_chunks as $key => $folder) {
+					$uploaddir .= $folder.'/';
+					// debug($uploaddir);
+					@mkdir($uploaddir);
+				}
+			}
+		}
+		@chmod($uploaddir, 0755);
+	} else {
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
 	}
-	@chmod($uploaddir, 0755);
 
 	return $uploaddir;
 }
@@ -839,7 +855,7 @@ function get_machine($field='geoplugin_request')
 function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	$output = NULL;
 	$ci =& get_instance();
-	$IP_ADDRESS = $ci->accounts->has_session ? $ci->accounts->profile['ip_address'] : $_SERVER['REMOTE_ADDR'];
+	$IP_ADDRESS = $_SERVER['REMOTE_ADDR'];
 	if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
 		$ip = $_SERVER["REMOTE_ADDR"];
 		if ($deep_detect) {
@@ -849,7 +865,7 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 				$ip = $_SERVER['HTTP_CLIENT_IP'];
 		}
 		$ip = in_array($ip, ['::1', '[::1]', '127.0.0.1', 'localhost']) ? $IP_ADDRESS : $ip;
-	}
+	} 
 	$purpose    = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
 	$support    = array("country", "countrycode", "state", "region", "city", "location", "address");
 	$continents = array(
@@ -863,45 +879,47 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	);
 	if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
 		$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-		// debug($ipdat);
+		// debug($ipdat, 'stop');
 		if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
 			switch ($purpose) {
 				case "location":
-				$output = array(
-					"city"           => @$ipdat->geoplugin_city,
-					"state"          => @$ipdat->geoplugin_regionName,
-					"country"        => @$ipdat->geoplugin_countryName,
-					"country_code"   => @$ipdat->geoplugin_countryCode,
-					"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
-					"continent_code" => @$ipdat->geoplugin_continentCode
-				);
+					$output = array(
+						"city"           => @$ipdat->geoplugin_city,
+						"state"          => @$ipdat->geoplugin_regionName,
+						"country"        => @$ipdat->geoplugin_countryName,
+						"country_code"   => @$ipdat->geoplugin_countryCode,
+						"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
+						"continent_code" => @$ipdat->geoplugin_continentCode,
+						"timezone" 		 => @$ipdat->geoplugin_timezone,
+					);
 				break;
 				case "address":
-				$address = array($ipdat->geoplugin_countryName);
-				if (@strlen($ipdat->geoplugin_regionName) >= 1)
-					$address[] = $ipdat->geoplugin_regionName;
-				if (@strlen($ipdat->geoplugin_city) >= 1)
-					$address[] = $ipdat->geoplugin_city;
-				$output = implode(", ", array_reverse($address));
+					$address = array($ipdat->geoplugin_countryName);
+					if (@strlen($ipdat->geoplugin_regionName) >= 1)
+						$address[] = $ipdat->geoplugin_regionName;
+					if (@strlen($ipdat->geoplugin_city) >= 1)
+						$address[] = $ipdat->geoplugin_city;
+					$output = implode(", ", array_reverse($address));
 				break;
 				case "city":
-				$output = @$ipdat->geoplugin_city;
+					$output = @$ipdat->geoplugin_city;
 				break;
 				case "state":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "region":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "country":
-				$output = @$ipdat->geoplugin_countryName;
+					$output = @$ipdat->geoplugin_countryName;
 				break;
 				case "countrycode":
-				$output = @$ipdat->geoplugin_countryCode;
+					$output = @$ipdat->geoplugin_countryCode;
 				break;
 			}
 		}
 	}
+	// debug($output, 'stop');
 	return $output;
 }
 
@@ -1388,7 +1406,7 @@ function nearby_veggies($data=false, $conditions=false, $user_id=false)
 	return $veggies;
 }
 
-function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false)
+function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false, $bypass=false)
 {
 	$products = false;
 	if ($data) {
@@ -1403,14 +1421,26 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 		if ($results) {
 			$products = [];
 			foreach ($results as $key => $row) {
-				$driving_distance = get_driving_distance([
-					['lat' => $data['lat'], 'lng' => $data['lng']],
-					['lat' => $row['lat'], 'lng' => $row['lng']],
-				]);
-				// debug($driving_distance['distance'], 'stop');
+				if ($bypass == false) {
+					$driving_distance = get_driving_distance([
+						['lat' => $data['lat'], 'lng' => $data['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					]);
+					$bypass_data = false;
+				} else {
+					$driving_distance = get_driving_distance([
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					]);
+					$bypass_data = [
+						['lat' => $bypass['lat'], 'lng' => $bypass['lng']],
+						['lat' => $row['lat'], 'lng' => $row['lng']],
+					];
+				}
+				// debug($driving_distance, METERS_DISTANCE_TO_USER, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
 					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions);
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions, $bypass_data);
 					// $duration = (int)$driving_distance['durationval'];
 					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
@@ -1421,7 +1451,7 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 	return $products;
 }
 
-function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false)
+function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false, $bypass=false)
 {
 	$ci =& get_instance();
 	if ($compare_1 <= $compare_2) {
@@ -1487,6 +1517,7 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 						}
 					}
 
+					if ($bypass) $driving_distance = get_driving_distance($bypass);
 					$item['distance'] = $driving_distance['distance'];
 					$item['duration'] = $driving_distance['duration'];
 					$item['distanceval'] = $driving_distance['distanceval'];
@@ -1624,19 +1655,18 @@ function get_fullname($data=false, $other='', $return=false)
 	}
 	$fullname = $other;
 	$ci =& get_instance();
+	if ($data == false) $data = $ci->accounts->has_session ? $ci->accounts->profile : false;
 	if ($data) {
-		if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
-			$fullname = $ci->accounts->profile['firstname'];
-		} else {
+		if (isset($data['firstname']) AND isset($data['lastname'])) {
 			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		} elseif (isset($data['name'])) {
+			$fullname = remove_multi_space($data['name'], true);
 		}
-	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
-		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
-	}
+	} 
 	if ($return == false) {
-		echo $fullname;
+		echo ucwords($fullname);
 	} else {
-		return $fullname;
+		return ucwords($fullname);
 	}
 }
 
@@ -1749,4 +1779,24 @@ function get_products($where=[], $limit=20)
 	}
 
 	return $items;
+}
+
+function sort_by_date($array=false)
+{
+	if ($array) {
+		// Comparison function
+		function date_compare($element1, $element2) {
+			if (isset($element1['added']) AND isset($element2['added'])) {
+				$datetime1 = strtotime($element1['added']);
+				$datetime2 = strtotime($element2['added']);
+				return $datetime2 - $datetime1;
+			} else {
+				return false;
+			}
+		} 
+		// Sort the array 
+		usort($array, 'date_compare');
+	}
+
+	return $array;
 }

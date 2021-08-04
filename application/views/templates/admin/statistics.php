@@ -15,7 +15,7 @@
 								<i class="fa fa-id-badge"></i>Users
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>329</b></span>
+								<span><b id="users-count"><?php echo (isset($data['users_count']) ? $data['users_count'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -23,22 +23,23 @@
 								<i class="fa fa-leaf"></i>Farmers
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="farmers-count"><?php echo (isset($data['farmers_count']) ? $data['farmers_count'] : 0);?></b></span>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="input-group">
-							<select class="form-control">
-								<option>Today (<?php echo date('M d'); ?>)</option>
-								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y'); ?>)</option>
-								<option>All Time</option>
+						<form action="admin/stats/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<input type="hidden" name="tables" value="users,user_farms" />
+							<select class="form-control" name="updated">
+								<option value="alltime">All Time</option>
+								<option value="today">Today (<?php echo date('M d');?>)</option>
+								<option value="lastmonth">Last Month</option>
+								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
 							</select>
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button">Apply</button>
+								<button class="btn btn-default" type="submit">Apply</button>
 							</span>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -60,7 +61,7 @@
 								<i class="fa fa-check"></i>Successful
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="bookings-succeeded"><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['succeeded'] : 0);?></b></span>
 							</div>
 						</div>
 						<div class="list-grid-parent">
@@ -68,22 +69,23 @@
 								<i class="fa fa-times"></i>Failed
 							</div>
 							<div class="list-grid-item text-right">
-								<span><b>102</b></span>
+								<span><b id="bookings-failed"><?php echo (isset($data['bookings_count']) ? $data['bookings_count']['failed'] : 0);?></b></span>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="input-group">
-							<select class="form-control">
-								<option>Today (<?php echo date('M d'); ?>)</option>
-								<option>Last Month</option>
-								<option>Year To Date (<?php echo date('Y'); ?>)</option>
-								<option>All Time</option>
+						<form action="admin/bookings/counts" method="post" class="input-group form-validate" data-ajax="1" data-disable="enter">
+							<input type="hidden" name="tables" value="baskets_merge" />
+							<select class="form-control" name="updated">
+								<option value="alltime">All Time</option>
+								<option value="today">Today (<?php echo date('M d');?>)</option>
+								<option value="lastmonth">Last Month</option>
+								<option value="yeartodate">Year To Date (<?php echo date('Y');?>)</option>
 							</select>
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button">Apply</button>
+								<button class="btn btn-default" type="submit">Apply</button>
 							</span>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
