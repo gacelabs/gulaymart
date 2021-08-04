@@ -7,8 +7,8 @@
 		<ul class="spaced-list between">
 			<li>
 				<p class="media-heading">
-					<b><?php get_fullname($profile, 'Guest');?></b>
-					<?php if ($to_id == $profile['id']): ?>
+					<b><?php get_fullname($farm, 'Guest');?></b>
+					<?php if ($to_id == $profile['id'] AND $farm['user_id'] != $profile['id']): ?>
 						<small class="text-gray">(Verified Customer)</small>
 					<?php endif ?>
 				</p>

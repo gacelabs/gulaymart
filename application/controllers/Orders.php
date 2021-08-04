@@ -83,26 +83,51 @@ class Orders extends MY_Controller {
 		if ($this->farms AND $this->products->count()) {
 			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
 			$messages = $this->gm_db->get_or_in('messages', [
-				'to_id' => $this->accounts->profile['id'], 
+				'unread' => 1,
+				'from_id' => $this->accounts->profile['id'],
 				'page_id' => $ids,
-				'order_by' => 'added',
-				'direction' => 'DESC',
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
 			]);
 		} else {
-			$messages = $this->gm_db->get('messages', [
+			$messages = $this->gm_db->get_in('messages', [
 				'to_id' => $this->accounts->profile['id'],
-				'order_by' => 'added',
-				'direction' => 'DESC',
+				'unread' => 1,
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
 			]);
 		}
+		// debug($messages, 'stop');
 		if ($messages) {
 			$data_messages = [];
 			foreach ($messages as $key => $message) {
 				if (in_array($message['unread'], [0,1])) {
 					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['from_id']], 'row');
-					$message['bought'] = $message['product'] = $message['location'] = $message['photo'] = false;
+					if ($message['profile'] == false) {
+						$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['to_id']], 'row');
+					}
+					$message['farm'] = $this->gm_db->get('user_farms', ['user_id' => $message['from_id']], 'row');
+					if ($message['farm'] == false) {
+						$message['farm'] = $this->gm_db->get('user_farms', ['user_id' => $message['to_id']], 'row');
+					}
+
 					if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 						$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
+						$message['product']['photos'] = false;
+						$photos = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'status' => 1]);
+						if ($photos) {
+							foreach ($photos as $key => $photo) {
+								if ($photo['is_main']) {
+									$message['product']['photos']['main'] = $photo;
+									break;
+								}
+							}
+							foreach ($photos as $key => $photo) {
+								if (!$photo['is_main']) {
+									$message['product']['photos']['other'][] = $photo;
+								}
+							}
+						}
 						$message['product']['farm_location_id'] = $message['entity_id'];
 						$message['location'] = $this->gm_db->get('products_location', [
 							'product_id' => $message['page_id'],
@@ -199,6 +224,13 @@ class Orders extends MY_Controller {
 
 			$post['added'] = date('Y-m-d H:i:s');
 			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['from_id']], 'row');
+			if ($post['profile'] == false) {
+				$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['to_id']], 'row');
+			}
+			$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['from_id']], 'row');
+			if ($post['farm'] == false) {
+				$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['to_id']], 'row');
+			}
 			$post['product'] = $this->gm_db->get('products', ['id' => $post['page_id']], 'row');
 			$post['product']['entity_id'] = $post['entity_id'];
 			

@@ -19,8 +19,12 @@
 				</div> -->
 				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
 					<?php 
-					$product_ids = $this->gm_db->columns('id', $this->gm_db->get_in('products', ['user_id' => $this->accounts->profile['id']]));
-					$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $product_ids]);
+					if ($this->farms AND $this->products->count()) {
+						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $ids]);
+					} else {
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $current_profile['id']]);
+					}
 					if ($msg_count): ?>
 						<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
@@ -80,7 +84,7 @@
 				</div>
 
 				<?php if (!$data['messages']): ?>
-					<div class="hideshow-container">
+					<div>
 						<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
 							<h1>Empty Messages</h1>
 							<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>

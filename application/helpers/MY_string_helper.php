@@ -1655,15 +1655,14 @@ function get_fullname($data=false, $other='', $return=false)
 	}
 	$fullname = $other;
 	$ci =& get_instance();
+	if ($data == false) $data = $ci->accounts->has_session ? $ci->accounts->profile : false;
 	if ($data) {
-		/*if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
-			$fullname = $ci->accounts->profile['firstname'];
-		} else {
-		}*/
-		$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
-	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
-		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
-	}
+		if (isset($data['firstname']) AND isset($data['lastname'])) {
+			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		} elseif (isset($data['name'])) {
+			$fullname = remove_multi_space($data['name'], true);
+		}
+	} 
 	if ($return == false) {
 		echo ucwords($fullname);
 	} else {

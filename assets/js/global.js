@@ -256,7 +256,7 @@ function modalCallbacks() {
 				if (mobileAndTabletCheck()) window.location.hash = 'reply';
 				var oReply = JSON.parse($(e.relatedTarget).attr('data-reply'));
 				var oFeedback = JSON.parse($(e.relatedTarget).attr('data-feedback'));
-				// console.log(oReply, oFeedback);
+				console.log(oReply, oFeedback);
 				if (Object.keys(oFeedback).length) {
 					// $('#buyer_photo').attr('src', oFeedback.profile.photo_url);
 					$('#buyer_fullname').text(oFeedback.profile.firstname+' '+oFeedback.profile.lastname);
@@ -275,12 +275,23 @@ function modalCallbacks() {
 					$('#seller_buyer_date').text('');
 					$('#seller_comments').text('');
 				} else {
-					/*already replied*/
-					$('#reply_box').addClass('hide');
-					$('#seller_content').removeClass('hide');
-					// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
-					$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
-					$('#seller_comments').text(oReply.content);
+					if (oReply == true) {
+						$('#reply_modalLabel').text('Last Response:');
+						$('#reply_box').addClass('hide');
+						$('#seller_content').addClass('hide');
+						$('#buyer_fullname').text(oFeedback.farm.name);
+						$('#is_seller').text((oFeedback.from_id == oUser.id ? '(You)' : ''));
+					} else {
+						/*already replied*/
+						$('#reply_modalLabel').text('Last Conversations:');
+						$('#reply_box').addClass('hide');
+						$('#seller_content').removeClass('hide');
+						// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
+						$('#seller_farm_name').text(oReply.farm.name);
+						$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
+						$('#seller_comments').text(oReply.content);
+						$('#is_seller').text((oReply.from_id == oUser.id ? '(You)' : ''));
+					}
 				}
 			break;
 		}
@@ -434,5 +445,9 @@ var timeZoneFormatDate = function(sDate, options) {
 	var oObject = new Date(sDate), 
 	sNewDate = oObject.toLocaleString('en-US', options);
 	return sNewDate;
+}
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

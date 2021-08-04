@@ -24,7 +24,7 @@
 								<?php endif ?>
 							</div>
 							<div class="media-body">
-								<p class="media-heading"><b id="seller_farm_name"><?php echo $current_profile['farms']['name'];?></b> (You) <span class="color-grey"><small id="seller_buyer_date">&nbsp;</small></span></p>
+								<p class="media-heading"><b id="seller_farm_name"></b>&nbsp;<i id="is_seller">&nbsp;</i> <span class="color-grey"><small id="seller_buyer_date">&nbsp;</small></span></p>
 								<p id="seller_comments">&nbsp;</p>
 							</div>
 						</div>

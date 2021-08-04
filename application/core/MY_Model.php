@@ -19,7 +19,13 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if (isset($where['order_by']) AND isset($where['direction'])) {
-				$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 				unset($where['order_by']);
 				unset($where['direction']);
 			}
@@ -55,14 +61,20 @@ class MY_Model extends CI_Model {
 			}
 			if ($where) {
 				if (isset($where['order_by']) AND isset($where['direction'])) {
-					$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 					unset($where['order_by']);
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
 					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_in($key, $row);
-					} elseif (is_string($row)) {
+					} else {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -92,14 +104,20 @@ class MY_Model extends CI_Model {
 			}
 			if ($where) {
 				if (isset($where['order_by']) AND isset($where['direction'])) {
-					$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 					unset($where['order_by']);
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
 					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_not_in($key, $row);
-					} elseif (is_string($row)) {
+					} else {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -128,7 +146,13 @@ class MY_Model extends CI_Model {
 					$where['activity'] = 1;
 				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
-					$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 					unset($where['order_by']);
 					unset($where['direction']);
 				}
@@ -164,7 +188,13 @@ class MY_Model extends CI_Model {
 					$where['activity'] = 1;
 				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
-					$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 					unset($where['order_by']);
 					unset($where['direction']);
 				}
@@ -201,14 +231,20 @@ class MY_Model extends CI_Model {
 			}
 			if ($where) {
 				if (isset($where['order_by']) AND isset($where['direction'])) {
-					$this->db->order_by($where['order_by'], $where['direction']);
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
 					unset($where['order_by']);
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
 					if (is_array($row) AND count($row) > 0) {
 						$this->db->where_in($key, $row);
-					} elseif (is_string($row)) {
+					} else {
 						$this->db->where([$key => $row]);
 					}
 				}
@@ -380,9 +416,9 @@ class MY_Model extends CI_Model {
 			if ($where) {
 				foreach ($where as $key => $row) {
 					if (is_array($row) AND count($row) > 0) {
-						$this->db->where_in($key, $row);
-					} elseif (is_string($row)) {
-						$this->db->where([$key => $row]);
+						$data = $this->db->where_in($key, $row);
+					} else {
+						$data = $this->db->where([$key => $row]);
 					}
 				}
 			}

@@ -341,6 +341,13 @@ class Products {
 						foreach ($feedbacks as $key => $feedback) {
 							if ($feedback['under'] == 0) {
 								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['from_id']], 'row');
+								if ($feedback['profile'] == false) {
+									$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
+								}
+								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
+								if ($feedback['farm'] == false) {
+									$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
+								}
 								$feedbacks_data[$feedback['id']]['first'] = $feedback;
 							}
 						}
@@ -348,6 +355,13 @@ class Products {
 							if ($feedback['under'] != 0) {
 								if (isset($feedbacks_data[$feedback['under']])) {
 									$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['from_id']], 'row');
+									if ($feedback['profile'] == false) {
+										$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
+									}
+									$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
+									if ($feedback['farm'] == false) {
+										$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
+									}
 									$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
 								}
 							}
