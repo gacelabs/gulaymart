@@ -17,18 +17,16 @@
 						<kbd id='msg_inquiries-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
 				</div> -->
-				<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
-					<?php 
-					if ($this->farms AND $this->products->count()) {
+				<?php if ($this->farms AND $this->products->count()): ?>
+					<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
+						<?php 
 						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
 						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $ids]);
-					} else {
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $current_profile['id']]);
-					}
-					if ($msg_count): ?>
-						<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
-					<?php endif ?>
-				</div>
+						if ($msg_count): ?>
+							<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
+						<?php endif ?>
+					</div>
+				<?php endif ?>
 			</div>
 
 			<div id="link_panel_top">
