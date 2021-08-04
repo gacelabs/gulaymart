@@ -66,7 +66,6 @@
 									Be the first to make a feedback. <button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button>
 								<?php endif ?>
 								<?php if ($can_comment == 0 AND $current_profile): ?>
-									Your comments are important, please feel free to add what you desire.
 									<div class="comment-box" style="margin-left:-15px;margin-right:-15px;">
 										<hr style="margin-bottom:10px;border-color:#d0d0d0;">
 										<?php $this->view('looping/comment_item', ['placeholder'=>'Write a feedback ...', 'under'=>0, 'page'=>$product]); ?>

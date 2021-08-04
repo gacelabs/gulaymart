@@ -88,13 +88,13 @@ class Orders extends MY_Controller {
 				'order_by' => ['under', 'added'],
 				'direction' => ['ASC', 'DESC'],
 			]);
-		// } else {
-		// 	$messages = $this->gm_db->get_in('messages', [
-		// 		'to_id' => $this->accounts->profile['id'],
-		// 		'unread' => 1,
-		// 		'order_by' => ['under', 'added'],
-		// 		'direction' => ['ASC', 'DESC'],
-		// 	]);
+		/*} else {
+			$messages = $this->gm_db->get_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
+				'unread' => 1,
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			]);*/
 		}
 		// debug($messages, 'stop');
 		if ($messages) {
