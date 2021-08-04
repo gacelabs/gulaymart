@@ -82,20 +82,18 @@ class Orders extends MY_Controller {
 		$messages = $data_messages = false;
 		if ($this->farms AND $this->products->count()) {
 			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
-			$messages = $this->gm_db->get_in('messages', [
-				'unread' => 1,
-				'under' => 0,
+			$messages = $this->gm_db->get_or_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
 				'page_id' => $ids,
 				'order_by' => ['under', 'added'],
 				'direction' => ['ASC', 'DESC'],
 			]);
-		/*} else {
+		} else {
 			$messages = $this->gm_db->get_in('messages', [
 				'to_id' => $this->accounts->profile['id'],
-				'unread' => 1,
 				'order_by' => ['under', 'added'],
 				'direction' => ['ASC', 'DESC'],
-			]);*/
+			]);
 		}
 		// debug($messages, 'stop');
 		if ($messages) {

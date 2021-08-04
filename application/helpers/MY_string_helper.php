@@ -1780,3 +1780,23 @@ function get_products($where=[], $limit=20)
 
 	return $items;
 }
+
+function sort_by_date($array=false)
+{
+	if ($array) {
+		// Comparison function
+		function date_compare($element1, $element2) {
+			if (isset($element1['added']) AND isset($element2['added'])) {
+				$datetime1 = strtotime($element1['added']);
+				$datetime2 = strtotime($element2['added']);
+				return $datetime2 - $datetime1;
+			} else {
+				return false;
+			}
+		} 
+		// Sort the array 
+		usort($array, 'date_compare');
+	}
+
+	return $array;
+}

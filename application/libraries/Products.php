@@ -448,14 +448,15 @@ class Products {
 						$content = "Product item <a href='".$base_url."'>$name</a> is low on stocks [<em>$stocks pcs remaining</em>]";
 						$check_msgs = $this->class->gm_db->get('messages', [
 							'tab' => 'Notifications', 'type' => 'Inventory',
-							'user_id' => $product['user_id'], 'unread' => 1,
+							'to_id' => $product['user_id'], 'unread' => 1,
 							'datestamp' => $datestamp,
 							'content' => $content,
 						], 'row');
 						if ($check_msgs == false) {
 							$this->class->gm_db->new('messages', [
 								'tab' => 'Notifications', 'type' => 'Inventory',
-								'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+								'to_id' => $product['user_id'], 'datestamp' => $datestamp,
+								'page_id' => $product_id, 'entity_id' => $farm_location_id,
 								'content' => $content,
 							]);
 						}

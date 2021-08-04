@@ -484,14 +484,14 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
-				'user_id' => $user_id, 'unread' => 1,
+				'to_id' => $user_id, 'unread' => 1,
 				'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {
 				$ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
-					'user_id' => $user_id, 'datestamp' => $datestamp,
+					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
 				return true;
@@ -677,7 +677,7 @@ function setup_fulfillments_data($baskets_merge=false)
 			}
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function setup_orders_data($baskets_merge=false)
@@ -708,7 +708,7 @@ function setup_orders_data($baskets_merge=false)
 			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $keywords='')
