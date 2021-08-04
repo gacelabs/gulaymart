@@ -84,6 +84,7 @@ class Orders extends MY_Controller {
 			$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
 			$messages = $this->gm_db->get_in('messages', [
 				'unread' => 1,
+				'under' => 0,
 				'page_id' => $ids,
 				'order_by' => ['under', 'added'],
 				'direction' => ['ASC', 'DESC'],
