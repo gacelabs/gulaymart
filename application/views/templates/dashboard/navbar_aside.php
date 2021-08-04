@@ -60,9 +60,9 @@
 					<?php 
 					if ($this->farms AND $this->products->count()) {
 						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $ids]);
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'page_id' => $ids]);
 					} else {
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $current_profile['id']]);
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $current_profile['id']]);
 					}
 					if ($msg_count): ?>
 						<kbd id='nav-messages-count'><?php echo $msg_count;?></kbd>
