@@ -10,13 +10,16 @@
 						<kbd id='msg_notifications-count'><?php echo $msg_count;?></kbd>
 					<?php endif ?>
 				</div>
-				<!-- <div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries
+				<!-- <div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries -->
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries', 'to_id' => $current_profile['profile']['user_id']]);
-					if ($msg_count): ?>
-						<kbd id='msg_inquiries-count'><?php echo $msg_count;?></kbd>
-					<?php endif ?>
-				</div> -->
+					/*$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries', 'to_id' => $current_profile['profile']['user_id']]);
+					if ($msg_count) {*/
+						?>
+						<!-- <kbd id='msg_inquiries-count'><?php // echo $msg_count;?></kbd> -->
+						<?php
+					/*}*/
+					?>
+				<!-- </div> -->
 				<?php if ($this->farms AND $this->products->count()): ?>
 					<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
 						<?php 
@@ -61,23 +64,19 @@
 						</div>
 
 						<?php
+							/*$inquiries_data = false;
 							if (isset($data['messages']['Inquiries'])) {
-								// $this->view('templates/orders/inquiries', ['inquiries' => $data['messages']['Inquiries']]);
-							} else {?>
-								<!-- <div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-									<h1>Empty Inquiries</h1>
-									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-								</div> -->
-						<?php }?>
+								$inquiries_data = $data['messages']['Inquiries'];
+							}
+							$this->view('templates/orders/inquiries', ['inquiries' => $inquiries_data]);*/
+						?>
 						<?php
+							$feedbacks_data = false;
 							if (isset($data['messages']['Feedbacks'])) {
-								$this->view('templates/orders/feedbacks', ['feedbacks' => $data['messages']['Feedbacks']]);
-							} else {?>
-								<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-									<h1>Empty Feedbacks</h1>
-									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-								</div>
-						<?php }?>
+								$feedbacks_data = $data['messages']['Feedbacks'];
+							}
+							$this->view('templates/orders/feedbacks', ['feedbacks' => $feedbacks_data]);
+						?>
 					<?php endif ?>
 				</div>
 

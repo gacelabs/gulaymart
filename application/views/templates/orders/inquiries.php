@@ -31,4 +31,8 @@
 			</ul>
 		</div>
 	</div>
+	<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
+		<h1>Empty Inquiries</h1>
+		<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+	</div>
 </div>
