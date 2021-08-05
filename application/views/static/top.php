@@ -40,11 +40,11 @@
 	<link rel="manifest" href="/public/manifest.webmanifest.json">
 	
 	<script type="text/javascript" id="main-obj-script">
-		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile) : 'false';?>;
-		var oValidationRules=<?php echo json_encode($this->valid_fields);?>;
+		var fb_acc_response = false, oUser = <?php echo $current_profile ? json_encode($current_profile, JSON_NUMERIC_CHECK) : 'false';?>;
+		var oValidationRules=<?php echo json_encode($this->valid_fields, JSON_NUMERIC_CHECK);?>;
 		var PROFILE_INFO_MESSAGE = '<?php echo PROFILE_INFO_MESSAGE;?>';
 		var DEVICE_ID = '<?php echo $this->device_id;?>';
-		var oSegments = <?php echo json_encode($this->uri->segment_array()); ?>;
+		var oSegments = <?php echo json_encode($this->uri->segment_array(), JSON_NUMERIC_CHECK); ?>;
 		var APPNAME = '<?php echo APP_NAME;?>';
 		var IS_LOCAL = <?php echo (bool)strstr($_SERVER['HTTP_HOST'], 'local') ? 1 : 0;?>;
 		var TIMEZONE = '<?php echo date_default_timezone_get();?>';

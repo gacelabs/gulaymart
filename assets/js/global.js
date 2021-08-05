@@ -294,6 +294,13 @@ function modalCallbacks() {
 					}
 				}
 			break;
+			case 'ff_received_modal':
+				if (mobileAndTabletCheck()) window.location.hash = 'received';
+				// console.log($(e.relatedTarget).data('basket-merge-id'));
+				var merge_id = $(e.relatedTarget).data('basket-merge-id');
+				$(e.target).find('p[js-data="loader"]').removeClass('hide');
+				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
+			break;
 		}
 	}).on('hide.bs.modal', function(e) { 
 		switch (e.target.id) {

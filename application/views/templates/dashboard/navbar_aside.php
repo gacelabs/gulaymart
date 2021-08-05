@@ -10,7 +10,7 @@
 		<div class="navbar-aside-divider"><hr></div>
 		<?php if ($this->farms AND $this->products->count()): ?>
 		<div class="aside-nav-child hidden-xs">
-			<a href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
+			<a data-menu-nav="fulfillments" href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
 				<span class="hidden-xs">Fulfillment 
 					<?php 
@@ -23,7 +23,7 @@
 		</div>
 		<?php endif ?>
 		<div class="aside-nav-child">
-			<a href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
+			<a data-menu-nav="baskets" href="basket/" class="aside-nav-item <?php in_array_echo("basket", $middle['body_class'], "active");?>">
 				<i class="fa fa-shopping-basket"></i>
 				<span class="hidden-xs">Basket 
 					<?php 
@@ -43,7 +43,7 @@
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="orders/placed" class="aside-nav-item <?php in_array_echo("orders-active", $middle['body_class'], "active");?>">
+			<a data-menu-nav="orders" href="orders/placed" class="aside-nav-item <?php in_array_echo("orders-active", $middle['body_class'], "active");?>">
 				<i class="fa fa-cart-arrow-down"></i>
 				<span class="hidden-xs">Orders
 					<?php 
@@ -55,17 +55,11 @@
 			</a>
 		</div>
 		<div class="aside-nav-child">
-			<a href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+			<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages
 					<?php 
-					if ($this->farms AND $this->products->count()) {
-						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'page_id' => $ids]);
-					} else {
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $current_profile['id']]);
-					}
-					if ($msg_count): ?>
-						<kbd id='nav-messages-count'><?php echo $msg_count;?></kbd>
+					if ($this->message_count): ?>
+						<kbd id='nav-messages-count'><?php echo $this->message_count;?></kbd>
 					<?php endif ?>
 				</span>
 			</a>

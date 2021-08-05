@@ -227,12 +227,12 @@
 									<div class="text-left">
 										<p class="zero-gaps address_1"><?php echo $shipping['address_1'];?></p>
 										<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping);?>'>Edit</a></small></p>
+										<p class="zero-gaps"><small><a href="javascript:;" class="edit-shp-btn" data-json='<?php echo json_encode($shipping, JSON_NUMERIC_CHECK);?>'>Edit</a></small></p>
 									</div>	
 									<div class="text-center">
 										<p class="zero-gaps">Primary</p>
 										<label class="switch">
-											<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']]);?>'>
+											<input type="radio" data-ajax="1" name="active"<?php str_has_value_echo('1', $shipping['active'], ' checked');?> data-url="api/save_active_shipping" data-json='<?php echo json_encode(['id' => $shipping['id']], JSON_NUMERIC_CHECK);?>'>
 											<span class="slider round"></span>
 										</label>
 									</div>

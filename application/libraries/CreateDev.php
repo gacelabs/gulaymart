@@ -1188,7 +1188,7 @@ class CreateDev {
 
 		sleep(5);
 		$attributes = [
-			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50])],
+			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50], JSON_NUMERIC_CHECK)],
 		];
 		$this->class->db->insert_batch('admin_settings', $attributes);
 

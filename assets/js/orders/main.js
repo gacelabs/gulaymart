@@ -42,49 +42,89 @@ var renderHTML = function(obj) {
 	});
 }
 
-var order_process = false;
-function orderProcess(callback) {
-	var sSegment2 = oSegments[2], sStatus = null;
-	switch (sSegment2) {
-		case 'on-delivery':
-			sStatus = 'for+pick+up';
-		break;
-		case 'received':
-			sStatus = 'on+delivery';
-		break;
+function reCountOrders(sCurr, bRemove) {
+	if (bRemove == undefined) bRemove = false;
+	var uiChangeNav = false;
+	if (bRemove != false) {
+		uiChangeNav = $('[data-nav="'+bRemove+'"]');
+	}
+	var uiCurrNav = $('[data-nav="'+sCurr+'"]');
+
+	if (uiChangeNav != false) {
+		if (uiChangeNav.length) {
+			if (uiChangeNav.find('kbd').length == 0) uiChangeNav.find('div').append($('<kbd>'));
+			var i = parseInt(uiChangeNav.find('kbd').removeClass('no-count').text());
+			if (isNaN(i)) i = 1;
+			var cnt = (i - 1);
+			if (cnt) {
+				uiChangeNav.find('kbd').removeClass('no-count').text(cnt);
+			} else {
+				uiChangeNav.find('kbd').addClass('no-count').text('');
+			}
+		}
+	}
+	if (uiCurrNav != false) {
+		if (uiCurrNav.length) {
+			if (uiCurrNav.find('kbd').length == 0) uiCurrNav.find('div').append($('<kbd>'));
+			var i = parseInt(uiCurrNav.find('kbd').removeClass('no-count').text());
+			if (isNaN(i)) i = 0;
+			uiCurrNav.find('kbd').removeClass('no-count').text(i + 1);
+		}
 	}
 
-	if (sStatus != null) {
-		/*if (order_process != false && order_process.readyState !== 4) order_process.abort();
-		order_process = $.ajax({
-			url: 'api/order_process/',
-			type: 'post',
-			data: {status: sStatus, segment: sSegment2},
-			dataType: 'json',
-			success: function(data) {
-				console.log(data);
-				if (data.success == true) callback(data);
-			}
-		});
-	} else {*/
-		if (sSegment2 == undefined) sSegment2 = 'placed';
-		realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
-			var oData = object.data;
-			console.log(oData);
-			if (oData.success) {
-				if (Object.keys(oData.buyer_id).length) {
-					if ($.inArray(oUser.id, Object.keys(oData.buyer_id)) >= 0) runOrders(oData);
+	if ($.inArray(sCurr, ['placed', 'cancelled']) >= 0) {
+		if ($('#nav-order-count').length) {
+			var orderCount = parseInt($('#nav-order-count').text());
+			if (sCurr == 'placed') {
+				if (isNaN(orderCount)) orderCount = 0;
+				$('#nav-order-count').removeClass('hide').text(orderCount + 1);
+			} else if (sCurr == 'cancelled') {
+				if (isNaN(orderCount)) orderCount = 1;
+				var newCount = (orderCount - 1);
+				if (newCount) {
+					$('#nav-order-count').removeClass('hide').text(newCount);
 				} else {
-					if (oData.buyer_id == oUser.id) runOrders(oData);
+					$('#nav-order-count').addClass('hide').text('');
 				}
 			}
-		});
+		}
+		if ($('#nav-fulfill-count').length) {
+			var fulfillCount = parseInt($('#nav-fulfill-count').text());
+			if (sCurr == 'placed') {
+				if (isNaN(fulfillCount)) fulfillCount = 0;
+				$('#nav-fulfill-count').removeClass('hide').text(fulfillCount + 1);
+			} else if (sCurr == 'cancelled') {
+				if (isNaN(fulfillCount)) fulfillCount = 1;
+				var newCount = (fulfillCount - 1);
+				if (newCount) {
+					$('#nav-fulfill-count').removeClass('hide').text(newCount);
+				} else {
+					$('#nav-fulfill-count').addClass('hide').text('');
+				}
+			}
+		}
 	}
 }
 
+var order_process = false;
+function orderProcess() {
+	var sSegment2 = oSegments[2];
+	if (sSegment2 == undefined) sSegment2 = 'placed';
+	realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
+		var oData = object.data;
+		console.log(oData);
+		if (oData.success) {
+			if (Object.keys(oData.buyer_id).length) {
+				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runOrders(oData);
+			} else {
+				if (oData.buyer_id == oUser.id) runOrders(oData);
+			}
+		}
+	});
+}
+
 function runOrders(data) {
-	var method = data.event;
-	$.ajax({
+	var method = data.event, oSettings = {
 		url: 'orders/'+method+'/',
 		type: 'post',
 		dataType: 'json',
@@ -92,54 +132,50 @@ function runOrders(data) {
 		success: function(response) {
 			console.log(response);
 			if (response.html.length) {
-				if ($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui:visible').length) {
-					$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
+				if (data.remove == false) {
+					/*just add it*/
+					if ($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui:visible').length) {
+						$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
+					} else {
+						$('#dashboard_panel_right [js-element="orders-panel"]').prepend(response.html);
+					}
+					runDomReady();
+					// reCountOrders(method, data.remove);
 				} else {
-					$(response.html).insertBefore($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui'));
-				}
-				runDomReady();
-				switch (method) {
-					case 'on-delivery':
-						var sPrevNav = 'for-pick-up';
-					break;
-					case 'received':
-						var sPrevNav = 'on-delivery';
-					break;
-				}
-				var uiPrevNav = $('[data-nav="'+sPrevNav+'"]'), uiCurrNav = $('[data-nav="'+method+'"]');
-				if (uiCurrNav.find('kbd').length == 0) {
-					uiCurrNav.find('div').append($('<kbd>'));
-				}
-				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
-				var dataCnt = parseInt(response.total_items);
-				uiCurrNav.find('kbd').removeClass('no-count').text(prev + dataCnt);
-				/*set count for pickup*/
-				if (uiPrevNav.find('kbd').length == 0) {
-					uiPrevNav.find('div').append($('<kbd>'));
-				}
-				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
-				var dataCnt = parseInt(response.total_items);
-				if (prev > dataCnt) {
-					uiPrevNav.find('kbd').removeClass('no-count').text(prev - dataCnt);
-				} else if (prev >= 0) {
-					uiPrevNav.find('kbd').addClass('no-count');
-				}
-				if ($('#nav-order-count').length) {
-					var orderCount = parseInt($('#nav-order-count').text());
-					if (isNaN(orderCount)) orderCount = 0;
-					$('#nav-order-count').text(orderCount + 1);
-
-					var fulfillCount = parseInt($('#nav-fulfill-count').text());
-					if (isNaN(fulfillCount)) fulfillCount = 0;
-					$('#nav-fulfill-count').text(fulfillCount + 1);
+					/*just remove it*/
+					var oArr = [];
+					if (Object.keys(data.ids).length) {
+						oArr = data.ids;
+					} else if (!isNaN(data.ids)) {
+						oArr = [data.ids];
+					}
+					if (typeof oArr == 'object') {
+						for (var x in oArr) {
+							var id = oArr[x];
+							var item = $('[data-merge-id="'+id+'"]');
+							if (item.length) {
+								item.fadeOut('slow', function() {
+									$(this).remove();
+									setTimeout(function() {
+										if ($('[data-merge-id]').length == 0) {
+											$('#dashboard_panel_right [js-element="orders-panel"]')
+												.find('.no-records-ui').removeClass('hide');
+										}
+									}, 300);
+								});
+								// reCountOrders(method, data.remove);
+							}
+						}
+					}
 				}
 			}
 		}
-	});
+	};
+	$.ajax(oSettings);
 }
 
 var runDomReady = function() {
-	$(document.body).find('[js-element="remove-product"]').bind('click', function(e) {
+	$(document.body).find('[js-element="remove-product"]').off('click').on('click', function(e) {
 		var arData = [];
 		arData.push($(this).data('json'));
 		// console.log(arData);
@@ -166,7 +202,7 @@ var runDomReady = function() {
 		$.ajax(oSettings);
 	});
 
-	$(document.body).find('[js-element="remove-all"]').bind('click', function(e) {
+	$(document.body).find('[js-element="remove-all"]').off('click').on('click', function(e) {
 		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
 			$(e.target).parents('.order-table-item:first').fadeOut().remove();
 			updateOrdersCounts();

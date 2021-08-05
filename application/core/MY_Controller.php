@@ -116,7 +116,7 @@ class MY_Controller extends CI_Controller {
 				if ($this->input->get('callback') == 'gmCall') {
 					echo do_jsonp_callback('ajaxSuccessResponse', $data);
 				} else {
-					echo json_encode($data);
+					echo json_encode($data, JSON_NUMERIC_CHECK);
 				}
 				exit();
 			}
@@ -204,11 +204,14 @@ class MY_Controller extends CI_Controller {
 			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
 			$this->basket_count = $baskets == false ? false : count($baskets);
 
-			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
+			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5]);
 			$this->order_count = $order_count == false ? false : $order_count;
 
-			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
+			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 5]);
 			$this->fulfill_count = $fulfill_count == false ? false : $fulfill_count;
+			
+			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $this->accounts->profile['id']]);
+			$this->message_count = $msg_count == false ? false : $msg_count;
 		}
 		// debug($products, 'stop');
 	}

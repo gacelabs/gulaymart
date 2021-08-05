@@ -232,3 +232,60 @@ $(document).ready(function() {
 	});
 
 });
+
+var reCountMenuNavs = function(sNav, totalItems) {
+	switch (sNav) {
+		case 'fulfill': case 'fulfills': case 'fulfillments':
+			if ($('#nav-fulfill-count').length == 0) $('[data-menu-nav=""fulfillments]]').find('span').append('<kbd id="nav-fulfill-count"></kbd>');
+			if (totalItems) {
+				$('#nav-fulfill-count').removeClass('hide').text(totalItems);
+			} else {
+				$('#nav-fulfill-count').addClass('hide').text('');
+			}
+		break;
+		case 'basket': case 'baskets':
+			if ($('#nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd id="nav-basket-count"></kbd>');
+			if (totalItems) {
+				$('#nav-basket-count').removeClass('hide').text(totalItems);
+			} else {
+				$('#nav-basket-count').addClass('hide').text('Buy now!');
+			}
+			if ($('kbd.nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd id="nav-basket-count"></kbd>');
+			if (totalItems) {
+				$('kbd.nav-basket-count').removeClass('hide').text(totalItems);
+			} else {
+				$('#nav-basket-count').addClass('hide').text('Buy now!');
+			}
+		break;
+		case 'order': case 'orders':
+			if ($('#nav-order-count').length == 0) $('[data-menu-nav="orders"]').find('span').append('<kbd id="nav-order-count"></kbd>');
+			if (totalItems) {
+				$('#nav-order-count').removeClass('hide').text(totalItems);
+			} else {
+				$('#nav-order-count').addClass('hide').text('');
+			}
+		break;
+		case 'message': case 'messages':
+			if ($('#nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd id="nav-messages-count"></kbd>');
+			if (totalItems) {
+				$('#nav-messages-count').removeClass('hide').text(totalItems);
+			} else {
+				$('#nav-messages-count').addClass('hide').text('');
+			}
+		break;
+	}
+}
+
+var initMenuNavsCount = function() {
+	realtime.bind('count-item-in-menu', 'incoming-menu-counts', function(object) {
+		var oData = object.data;
+		console.log(oData);
+		if (oData.success) {
+			if (Object.keys(oData.id).length) {
+				if ($.inArray(oUser.id, oData.id) >= 0) reCountMenuNavs(oData.nav, oData.total_items);
+			} else {
+				if (oData.id == oUser.id) reCountMenuNavs(oData.nav, oData.total_items);
+			}
+		}
+	});
+}

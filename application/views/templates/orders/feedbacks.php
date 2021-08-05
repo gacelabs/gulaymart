@@ -57,7 +57,7 @@
 						<ul class="inline-list">
 							<?php if ($is_replies == false): ?>
 							<li>
-								<a id="feedback-btn-id-<?php echo $feedback['id'];?>" class="text-link normal-radius" data-toggle="modal" data-target="#reply_modal" data-feedback='<?php echo json_encode($feedback);?>' data-reply='<?php echo json_encode($reply_data);?>'>
+								<a id="feedback-btn-id-<?php echo $feedback['id'];?>" class="text-link normal-radius" data-toggle="modal" data-target="#reply_modal" data-feedback='<?php echo json_encode($feedback, JSON_NUMERIC_CHECK);?>' data-reply='<?php echo json_encode($reply_data, JSON_NUMERIC_CHECK);?>'>
 									<?php if ($reply_data): ?>
 										View
 									<?php else: ?>
@@ -68,7 +68,7 @@
 							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
 							<?php endif ?>
 							<li>
-								<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => 2, 'fn' => 'deleteMessage']);?>' class="text-link normal-radius">Delete</a>
+								<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => 2, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
 							</li>
 						</ul>
 				</div>

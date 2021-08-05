@@ -35,15 +35,15 @@ class Orders extends MY_Controller {
 					'orders' => $baskets_merge,
 					'status' => $status,
 					'counts' => [
-						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
-						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
-						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
-						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
-						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
+						'placed' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 3]),
+						'received' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 4]),
+						'cancelled' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 5]),
 					],
 					'no_rec_ui' => true,
 				]
-			], true)]);
+			], true)], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -246,11 +246,12 @@ class Orders extends MY_Controller {
 		$get = $this->input->get();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
-			$basket_ids = $seller_ids = [];
+			$basket_ids = $merge_ids = $seller_ids = [];
 			foreach ($post['data'] as $key => $row) {
 				$merge = $this->gm_db->get('baskets_merge', ['id' => $row['merge_id']], 'row');
 				if ($merge) {
 					$seller_ids[$merge['seller_id']] = $merge['seller_id'];
+					$merge_ids[$merge['id']] = $merge['id'];
 					$order_details = json_decode(base64_decode($merge['order_details']), true);
 					if ($order_details) {
 						/*modify the status of the product*/
@@ -265,7 +266,7 @@ class Orders extends MY_Controller {
 						}
 						// debug($order_details, 'stop');
 						$this->gm_db->save('baskets_merge', 
-							['order_details' => base64_encode(json_encode($order_details))], 
+							['order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK))], 
 							['id' => $row['merge_id']]
 						);
 					}
@@ -301,11 +302,37 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', [
+			/*$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', [
 				'all' => $all, 
 				'data' => $post['data'],
 				'seller_id' => $seller_ids
-			]);
+			]);*/
+			if (count($merge_ids)) {
+				// send realtime placed order
+				$this->senddataapi->trigger('placed-order', 'incoming-orders', [
+					'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => 'placed'
+				]);
+				// send realtime cancelled order
+				$this->senddataapi->trigger('cancelled-order', 'incoming-orders', [
+					'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => false
+				]);
+				// send realtime placed fulfillment
+				$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
+					'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'cancelled', 'remove' => 'placed'
+				]);
+				// send realtime cancelled fulfillment
+				$this->senddataapi->trigger('cancelled-fulfillment', 'incoming-fulfillment', [
+					'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'cancelled', 'remove' => false
+				]);
+
+				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5])
+				]);
+				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+					'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_ids, 'status !=' => 5])
+				]);
+			}
+
 			// debug($senddata, 'stop');
 			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
 		} elseif ($get AND isset($get['data'])) {
@@ -314,6 +341,35 @@ class Orders extends MY_Controller {
 			if ($all) $callback = 'removeAllOrderItem';
 			$this->set_response('confirm', 'Want to remove product(s)?', $get['data'], false, $callback);
 		}
-		$this->set_response('error', remove_multi_space('Unable to remove product(s)'), $post);
+		$this->set_response('error', remove_multi_space('Unable to remove product(s)', true), $post);
+	}
+
+	public function receive($id=0)
+	{
+		$get = $this->input->get();
+		$post = $this->input->post();
+		$data = [];
+		// debug($id, $post, 'stop');
+		if ($get AND $id > 0 AND (isset($get['confirm']) AND $get['confirm'] == 1)) {
+			$data = $get;
+			$merge = $this->gm_db->get('baskets_merge', ['id' => $id], 'row');
+			if ($merge) {
+				$this->set_response('confirm', 'Is this item(s) already received?', ['id' => $id], false, 'moveToReceiveOrders');
+			}
+		} elseif ($post AND $id == 0 AND (isset($post['todo']) AND $post['todo'] == 1)) {
+			$data = $post;
+			$merge = $this->gm_db->get('baskets_merge', ['id' => $post['data']['id']], 'row');
+			debug($merge, 'stop');
+			if ($merge) {
+				$basket_ids = explode(',', $merge['basket_ids']);
+				$this->gm_db->save('baskets_merge', ['status' => 4], ['id' => $post['data']['id']]);
+				$this->gm_db->save('baskets', ['status' => 4], ['id' => $basket_ids]);
+			}
+		}
+		$this->set_response(
+			'error', 
+			remove_multi_space('Something went wrong on changing item status, please try again.', true), 
+			$data
+		);
 	}
 }

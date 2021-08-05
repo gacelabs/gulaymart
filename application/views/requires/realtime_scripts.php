@@ -6,10 +6,11 @@
 			// debug: true,
 			autoConnect: IS_LOCAL ? false : true,
 			autoRunStash: true,
-			/*afterInit: function() {
-				realtime.connect(function() {
-				});
-			},*/
+			afterInit: function() {
+				if (IS_LOCAL && '<?php echo SENDDATA_APPKEY;?>' == 'A3193CF4AEC1ADD05F4B78C4E0C61C39') {
+					realtime.connect();
+				}
+			},
 			afterConnect: function() {
 				if (realtime.app.connected) {
 					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
@@ -18,11 +19,11 @@
 				}
 				if (oUser) {
 					/*communicate from orders tab to fulfillment tab*/
-					if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
+					// if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 					/*communicate from fulfillment tab to orders tab*/
-					if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
+					// if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 					/*communicate from operators booking page*/
-					if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
+					// if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
 					
 					/*listen for incomming on delivery fulfillments*/
 					if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
@@ -31,6 +32,15 @@
 					/*listen for incomming on delivery orders*/
 					if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
 						orderProcess(runOrders);
+					}
+					/*listen for incomming on baskets*/
+					if (typeof basketProcess == 'function' && oSegments[1] == 'basket') {
+						basketProcess(runBaskets);
+					}
+
+					/*listen for incomming on menu counts*/
+					if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+						initMenuNavsCount();
 					}
 				}
 			}

@@ -1,5 +1,9 @@
 $(document).ready(function() {
-	$('[js-event="orderWhenSelect"]').change(function() {
+	runDomReady();
+});
+
+var runDomReady = function() {
+	$('[js-event="orderWhenSelect"]').off('change').on('change', function() {
 		if ($(this).val() == 2) {
 			$(this).next('.date-input').removeClass('hide');
 		} else {
@@ -7,17 +11,17 @@ $(document).ready(function() {
 		}
 	});
 
-	$('[js-element="delivery-date"]').change(function() {
+	$('[js-element="delivery-date"]').off('change').on('change', function() {
 		$(this).parents('.order-item').find('[js-event="orderWhenSelect"]:not(:visible)').prop('value', 2).val(2).trigger('change');
 		$(this).parents('.order-item').find('[js-element="delivery-date"]:not(:visible)').prop('value', $(this).val()).val($(this).val());
 	});
 
-	$('[js-event="showOrderFooter"]').click(function() {
+	$('[js-event="showOrderFooter"]').off('click').on('click', function() {
 		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
 		$(this).parents('.order-grid-footer').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
 	});
 
-	$('[js-element="checkout-data"]').bind('click', function(e) {
+	$('[js-element="checkout-data"]').off('click').on('click', function(e) {
 		e.preventDefault();
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
@@ -52,7 +56,7 @@ $(document).ready(function() {
 
 	runQtyDefaults($('[js-event="qty"]'));
 
-	$('[js-event="removeBasketItemBtn"]').bind('click', function(e) {
+	$('[js-event="removeBasketItemBtn"]').off('click').on('click', function(e) {
 		var arData = [];
 		arData.push({id : $(this).data('id'), location_id : $(this).data('location')});
 		// console.log(arData);
@@ -79,7 +83,7 @@ $(document).ready(function() {
 		$.ajax(oSettings);
 	});
 
-	$('[js-element="remove-all"]').bind('click', function(e) {
+	$('[js-element="remove-all"]').off('click').on('click', function(e) {
 		var oToDeleteData = [];
 		$(e.target).parents('.order-table-item:first').find('[js-event="removeBasketItemBtn"]').each(function(i, elem) {
 			oToDeleteData.push({id : $(elem).data('id'), location_id : $(elem).data('location')});
@@ -109,7 +113,7 @@ $(document).ready(function() {
 		if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();
 		oRemoveAjax = $.ajax(oSettings);
 	});
-});
+}
 
 var oRemoveAjax = false;
 var removeBasketItem = function(post) {
@@ -175,7 +179,7 @@ var runQtyDefaults = function(ui) {
 		}
 	});
 
-	ui.bind('input, change', function() {
+	ui.off('input, change').on('input, change', function() {
 		var oThis = $(this), iVal = parseInt(oThis.val()),
 		uiItems = oThis.parents('.order-item:first');
 		oThis.val(iVal); /*no decimals allowed*/
@@ -197,4 +201,71 @@ var runQtyDefaults = function(ui) {
 			}
 		});
 	});
+}
+
+var basketProcess = function() {
+	realtime.bind('add-to-basket', 'incoming-baskets', function(object) {
+		var oData = object.data;
+		console.log(oData);
+		if (oData.success) {
+			if (Object.keys(oData.buyer_id).length) {
+				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runBaskets(oData);
+			} else {
+				if (oData.buyer_id == oUser.id) runBaskets(oData);
+			}
+		}
+	});
+}
+
+var runBaskets = function(data) {
+	var method = data.event, oSettings = {
+		url: 'basket/',
+		type: 'post',
+		dataType: 'json',
+		data: { ids: data.ids, buyer_id: data.buyer_id },
+		success: function(response) {
+			console.log(response);
+			if (response.html.length) {
+				if (data.remove == false) {
+					var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
+					if (uiBasketPanel.length) {
+						if (uiBasketPanel.find('.no-records-ui:visible').length) {
+							uiBasketPanel.html(response.html);
+						} else {
+							uiBasketPanel.prepend(response.html);
+						}
+						runDomReady();
+					}
+				} else {
+					/*just remove it*/
+					var oArr = [];
+					if (Object.keys(data.ids).length) {
+						oArr = data.ids;
+					} else if (!isNaN(data.ids)) {
+						oArr = [data.ids];
+					}
+					if (typeof oArr == 'object') {
+						for (var x in oArr) {
+							var id = oArr[x];
+							var item = $('[data-basket-id="'+id+'"]');
+							if (item.length) {
+								var uiParent = item.parents('.order-table-item');
+								item.fadeOut('slow', function() {
+									$(this).remove();
+									setTimeout(function() {
+										if ($('[data-basket-id]').length == 0) {
+											uiParent.remove();
+											$('#dashboard_panel_right [js-element="baskets-panel"]')
+												.find('.no-records-ui').removeClass('hide');
+										}
+									}, 300);
+								});
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+	$.ajax(oSettings);
 }

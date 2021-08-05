@@ -54,7 +54,7 @@
 									'merge_id'=>$orders['id'],
 									'basket_id'=>$order['basket_id'],
 									'sub_total'=>$order['sub_total'],
-								]);
+								], JSON_NUMERIC_CHECK);
 
 								$status_array[] = $details['status'];
 							?>
@@ -127,13 +127,28 @@
 
 					<?php
 						$farm = $orders['seller'];
+						$buyer = $orders['buyer'];
+						// debug($buyer, 'stop');
 					?>
 
 					<div class="order-grid-footer">
-						<div class="order-footer-farm text-left hidden-xs">
+						<!-- <div class="order-footer-farm text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
 							<p class="zero-gaps"><a<?php if (!$this->agent->is_mobile()): ?> target="farm_<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 							<p class="zero-gaps"><?php echo ucwords($farm['city_prov']);?></p>
+						</div> -->
+						<div class="order-footer-farm text-left hidden-xs">
+							<p class="zero-gaps"><small class="elem-block"><b>BUYER</b></small></p>
+							<p class="zero-gaps"><?php echo ucwords($buyer['fullname']);?></p>
+							<p class="zero-gaps">
+								<?php if ($buyer): ?>
+									<?php foreach ($buyer['shippings'] as $key => $shipping): ?>
+										<?php if ($shipping['active'] == 1): ?>
+											<?php echo ucwords($shipping['address_2']);?>
+										<?php endif ?>
+									<?php endforeach ?>
+								<?php endif ?>
+							</p>
 						</div>
 						<div class="order-footer-payment text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>

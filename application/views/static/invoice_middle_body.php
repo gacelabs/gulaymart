@@ -45,18 +45,20 @@
 						<div class="text-center">
 							<i class="fa fa-id-badge"></i>
 						</div>
-						<p class="zero-gaps"><?php echo $buyer['fullname'];?></p>
+						<p class="zero-gaps"><?php echo ($buyer['id'] == $current_profile['id']) ? '<i>(You) </i>' : '';?><?php echo ucwords($buyer['fullname']);?></p>
 					</div>
 					<div class="zig-top-grid">
 						<div class="text-center">
 							<i class="fa fa-map-marker"></i>
 						</div>
+						<?php $buyer_address = ''; ?>
 						<?php if ($buyer['shippings']): ?>
 							<?php foreach ($buyer['shippings'] as $key => $shipping): ?>
 								<?php if ($shipping['active'] == 1): ?>
 									<div>
 										<p class="zero-gaps"><?php echo ucwords($shipping['address_1']);?></p>
 										<small class="text-gray elem-block"><?php echo $shipping['address_2'];?></small>
+										<?php $buyer_address = $shipping['address_2']; ?>
 									</div>
 									<?php break; ?>
 								<?php endif ?>
@@ -99,7 +101,7 @@
 					<?php endif ?>
 					<div class="invoice-summary-grid">
 						<div>
-							<p class="text-ellipsis"><?php echo $seller['city'];?> to <?php echo $buyer['firstname'];?>'s address</p>
+							<p class="text-ellipsis"><?php echo $seller['city'];?> <b>TO</b> <?php echo ($buyer['id'] == $current_profile['id']) ? 'Your Address' : $buyer_address;?></p>
 							<small class="elem-block text-gray">Delivery Fee</small>
 						</div>
 						<div class="text-right">&#x20b1; <?php echo format_number($fee);?></div>

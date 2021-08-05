@@ -43,15 +43,15 @@ class Fulfillment extends My_Controller {
 					'orders' => $baskets_merge,
 					'status' => $status,
 					'counts' => [
-						'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
-						'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),
-						'on+delivery' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 3]),
-						'received' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 4]),
-						'cancelled' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 5]),
+						'placed' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 2]),
+						'for+pick+up' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 6]),
+						'on+delivery' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 3]),
+						'received' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 4]),
+						'cancelled' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 5]),
 					],
 					'no_rec_ui' => true,
 				]
-			], true)]);
+			], true)], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -105,7 +105,7 @@ class Fulfillment extends My_Controller {
 					}
 					// debug($order_details, 'stop');
 					$this->gm_db->save('baskets_merge', 
-						['order_details' => base64_encode(json_encode($order_details))], 
+						['order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK))], 
 						['id' => $row['merge_id']]
 					);
 				}
@@ -122,10 +122,10 @@ class Fulfillment extends My_Controller {
 					}
 				}
 				/*send it realtime to buyer*/
-				$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
+				/*$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
 					'data' => $post['data'],
 					'buyer_id' => $merge['buyer_id']
-				]);
+				]);*/
 				// debug($response, 'stop');
 				$this->set_response('success', 'Product status on Order(s) changed', $post['data'], false, 'changeOnFulfillment');
 			}
@@ -159,7 +159,7 @@ class Fulfillment extends My_Controller {
 							if ($basket['product_id'] == $row['product_id']) {
 								$this->baskets->save([
 									'status' => $row['status'],
-									'cancel_by' => ($row['status'] == 5) ? $this->accounts->profile['id'] : 0,
+									'cancel_by' => ($row['status'] == GM_CANCELLED_STATUS) ? $this->accounts->profile['id'] : 0,
 									'reason' => $row['reason'],
 								], ['id' => $row['basket_id']]);
 							}
@@ -167,36 +167,81 @@ class Fulfillment extends My_Controller {
 					}
 					// debug($order_details, 'stop');
 					$this->gm_db->save('baskets_merge', 
-						['order_details' => base64_encode(json_encode($order_details))], 
+						['order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK))], 
 						['id' => $post['merge_id']]
 					);
 				}
 
-				$status_value = 6;
-				if (count($post['data']) == count($cancelled)) $status_value = 5;
+				$status_value = GM_FOR_PICK_UP_STATUS;
+				if (count($post['data']) == count($cancelled)) $status_value = GM_CANCELLED_STATUS;
 
 				$count = $this->gm_db->count('baskets_merge', ['id' => $post['merge_id'], 'status' => $status_value]);
 				if ($count == 0) {
 					// set status for pick-up this will now also send to toktok post delivery
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
-					
 					/*send it realtime to buyer*/
-					$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
+					/*$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
 						'data' => $post,
 						'buyer_id' => $merge['buyer_id']
-					]);
-
+					]);*/
 					$redirect = 'fulfillment/for-pick-up';
 					$action = 'Ready for Pick Up';
-					if ($status_value == 5) {
+					if ($status_value == GM_CANCELLED_STATUS) {
 						$redirect = 'fulfillment/cancelled';
 						$action = 'Cancelled';
 					}
+
+					switch ($status_value) {
+						case GM_FOR_PICK_UP_STATUS:
+							// send realtime placed order
+							$this->senddataapi->trigger('placed-order', 'incoming-orders', [
+								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'for-pick-up', 'remove' => 'placed'
+							]);
+							// send realtime for-pick-up order
+							$this->senddataapi->trigger('for-pick-up-order', 'incoming-orders', [
+								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'for-pick-up', 'remove' => false
+							]);
+							// send realtime placed fulfillment
+							$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
+								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'for-pick-up', 'remove' => 'placed'
+							]);
+							// send realtime for-pick-up fulfillment
+							$this->senddataapi->trigger('for-pick-up-fulfillment', 'incoming-fulfillment', [
+								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'for-pick-up', 'remove' => false
+							]);
+							break;
+						case GM_CANCELLED_STATUS:
+							// send realtime placed order
+							$this->senddataapi->trigger('placed-order', 'incoming-orders', [
+								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'cancelled', 'remove' => 'placed'
+							]);
+							// send realtime cancelled order
+							$this->senddataapi->trigger('cancelled-order', 'incoming-orders', [
+								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'cancelled', 'remove' => false
+							]);
+							// send realtime placed fulfillment
+							$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
+								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => 'placed'
+							]);
+							// send realtime cancelled fulfillment
+							$this->senddataapi->trigger('cancelled-fulfillment', 'incoming-fulfillment', [
+								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => false
+							]);
+							break;
+					}
+
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5])
+					]);
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 5])
+					]);
 
 					$buyer = json_decode(base64_decode($merge['buyer']), true);
 					$seller = json_decode(base64_decode($merge['seller']), true);
 					notify_order_details($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
 
+					$redirect = false;
 					$this->set_response('success', 'Order is now Set For Pick Up!', $post, $redirect);
 				} else {
 					$this->set_response('info', 'Order Already set For Pick Up!', $post, false);

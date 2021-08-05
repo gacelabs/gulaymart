@@ -554,8 +554,8 @@ function tinymce_upload($dir='', $filename='upload')
 		/*Respond to the successful upload with JSON.*/
 		/*Use a location key to specify the path to the saved image resource.*/
 		/*{ location : '/your/uploaded/image/file'}*/
-		return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$temp['name'])]);
-		// return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$filename.'.'.$ext)]);
+		return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$temp['name'])], JSON_NUMERIC_CHECK);
+		// return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$filename.'.'.$ext)], JSON_NUMERIC_CHECK);
 	} else {
 		/*Notify editor that the upload failed*/
 		header("HTTP/1.1 500 Server Error");
@@ -700,20 +700,20 @@ function do_curl($request=false, $object=false, $url='')
 				if (strtolower(trim($request)) == 'refresh') {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($object['parameters']));
 				} else {
-					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				}
 				break;
 			case 'update': /*PUT*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 			case 'modify': /*PATCH*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 			case 'remove': /*DELETE*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 		}
 
@@ -807,12 +807,12 @@ function do_jsonp_callback($js_function=false, $payload=['type'=>'info', 'messag
 	$callback = $ci->input->get('callback');
 	if ($callback) {
 		if ($js_function) {
-			echo $callback . '('.$js_function.'('.json_encode($payload).'), false)'; exit();
+			echo $callback . '('.$js_function.'('.json_encode($payload, JSON_NUMERIC_CHECK).'), false)'; exit();
 		} else {
-			echo $callback . '('.json_encode($payload).', false)'; exit();
+			echo $callback . '('.json_encode($payload, JSON_NUMERIC_CHECK).', false)'; exit();
 		}
 	}
-	echo json_encode($payload); exit();
+	echo json_encode($payload, JSON_NUMERIC_CHECK); exit();
 }
 
 function camel_to_dashed($className)
@@ -1698,7 +1698,7 @@ function operatorlogger($data=false, $operator=false)
 		/*log here*/
 		$merge_ids = $ci->gm_db->columns('id', $data);
 		$txt .= "Code: 200\n";
-		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids]) . " \n";
+		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids], JSON_NUMERIC_CHECK) . " \n";
 	} else {
 		$txt .= "Code: -1 \n";
 		$txt .= "Response: $data \n";

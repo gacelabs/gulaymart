@@ -529,7 +529,9 @@
                  <p style="font-size: 14px; line-height: 140%;">
                   <?php if ($buyer): ?>
                    <?php foreach ($buyer['shippings'] as $key => $shipping): ?>
-                    <span style="font-size: 14px; line-height: 19.6px;"><?php echo ucwords($shipping['address_1']) . ucwords($shipping['address_2']);?></span>
+                    <?php if ($shipping['active'] == 1): ?>
+                     <span style="font-size: 14px; line-height: 19.6px;"><?php echo ucwords($shipping['address_1']) . ucwords($shipping['address_2']);?></span>
+                    <?php endif ?>
                    <?php endforeach ?>
                   <?php endif ?>
                  </p>

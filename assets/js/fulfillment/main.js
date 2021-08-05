@@ -78,102 +78,141 @@ var renderHTML = function(obj) {
 	});
 }
 
-var fulfillment_process = false;
-function fulfillmentProcess(callback) {
-	var sSegment2 = oSegments[2], sStatus = null;
-	switch (sSegment2) {
-		case 'on-delivery':
-			sStatus = 'for+pick+up';
-		break;
-		case 'received':
-			sStatus = 'on+delivery';
-		break;
+function reCountFullfilments(sCurr, bRemove) {
+	if (bRemove == undefined) bRemove = false;
+	var uiChangeNav = false;
+	if (bRemove != false) {
+		uiChangeNav = $('[data-nav="'+bRemove+'"]');
+	}
+	var uiCurrNav = $('[data-nav="'+sCurr+'"]');
+
+	if (uiChangeNav != false) {
+		if (uiChangeNav.length) {
+			if (uiChangeNav.find('kbd').length == 0) uiChangeNav.append($('<kbd>'));
+			var i = parseInt(uiChangeNav.find('kbd').removeClass('no-count').text());
+			if (isNaN(i)) i = 1;
+			var cnt = (i - 1);
+			console.log('last count:', cnt, bRemove);
+			if (cnt) {
+				uiChangeNav.find('kbd').removeClass('no-count').text(cnt);
+			} else {
+				uiChangeNav.find('kbd').addClass('no-count').text('');
+			}
+		}
+	}
+	if (uiCurrNav != false) {
+		if (uiCurrNav.length) {
+			if (uiCurrNav.find('kbd').length == 0) uiCurrNav.append($('<kbd>'));
+			var i = parseInt(uiCurrNav.find('kbd').removeClass('no-count').text());
+			if (isNaN(i)) i = 0;
+			console.log('last count:', i+1, sCurr);
+			uiCurrNav.find('kbd').removeClass('no-count').text(i + 1);
+		}
 	}
 
-	if (sStatus != null) {
-		/*if (fulfillment_process != false && fulfillment_process.readyState !== 4) fulfillment_process.abort();
-		fulfillment_process = $.ajax({
-			url: 'api/fulfillment_process/',
-			type: 'post',
-			data: {status: sStatus, segment: sSegment2},
-			dataType: 'json',
-			success: function(data) {
-				console.log(data);
-				if (data.success == true) callback(data);
-			}
-		});
-	} else {*/
-		if (sSegment2 == undefined) sSegment2 = 'placed';
-		realtime.bind(sSegment2+'-fulfillment', 'incoming-fulfillment', function(object) {
-			var oData = object.data;
-			console.log(oData);
-			if (oData.success) {
-				if (Object.keys(oData.seller_id).length) {
-					if ($.inArray(oUser.id, Object.keys(oData.seller_id)) >= 0) runFulfillments(oData);
+	if ($.inArray(sCurr, ['placed', 'cancelled']) >= 0) {
+		if ($('#nav-order-count').length) {
+			var orderCount = parseInt($('#nav-order-count').text());
+			if (sCurr == 'placed') {
+				if (isNaN(orderCount)) orderCount = 0;
+				console.log('order last count:', orderCount+1, sCurr);
+				$('#nav-order-count').removeClass('hide').text(orderCount + 1);
+			} else if (sCurr == 'cancelled') {
+				if (isNaN(orderCount)) orderCount = 1;
+				var newCount = (orderCount - 1);
+				console.log('order last count:', newCount, sCurr);
+				if (newCount) {
+					$('#nav-order-count').removeClass('hide').text(newCount);
 				} else {
-					if (oData.seller_id == oUser.id) runFulfillments(oData);
+					$('#nav-order-count').addClass('hide').text('');
 				}
 			}
-		});
+		}
+		if ($('#nav-fulfill-count').length) {
+			var fulfillCount = parseInt($('#nav-fulfill-count').text());
+			if (sCurr == 'placed') {
+				if (isNaN(fulfillCount)) fulfillCount = 0;
+				console.log('fulfill last count:', fulfillCount+1, sCurr);
+				$('#nav-fulfill-count').removeClass('hide').text(fulfillCount + 1);
+			} else if (sCurr == 'cancelled') {
+				if (isNaN(fulfillCount)) fulfillCount = 1;
+				var newCount = (fulfillCount - 1);
+				console.log('fulfill last count:', newCount, sCurr);
+				if (newCount) {
+					$('#nav-fulfill-count').removeClass('hide').text(newCount);
+				} else {
+					$('#nav-fulfill-count').addClass('hide').text('');
+				}
+			}
+		}
 	}
 }
 
+var fulfillment_process = false;
+function fulfillmentProcess(callback) {
+	var sSegment2 = oSegments[2];
+	if (sSegment2 == undefined) sSegment2 = 'placed';
+	realtime.bind(sSegment2+'-fulfillment', 'incoming-fulfillment', function(object) {
+		var oData = object.data;
+		console.log(oData);
+		if (oData.success) {
+			if (Object.keys(oData.seller_id).length) {
+				if ($.inArray(oUser.id, oData.seller_id) >= 0) runFulfillments(oData);
+			} else {
+				if (oData.seller_id == oUser.id) runFulfillments(oData);
+			}
+		}
+	});
+}
+
 function runFulfillments(data) {
-	var method = data.event;
-	$.ajax({
+	var method = data.event, oSettings = {
 		url: 'fulfillment/'+method+'/',
 		type: 'post',
 		dataType: 'json',
 		data: { ids: data.ids, seller_id: data.seller_id },
 		success: function(response) {
+			console.log(response);
 			if (response.html.length) {
-				if ($('.ff-product-container').find('.no-records-ui:visible').length) {
-					$('.ff-product-container').replaceWith(response.html);
+				if (data.remove == false) {
+					/*just add it*/
+					if ($('.ff-product-container').find('.no-records-ui:visible').length) {
+						$('.ff-product-container').replaceWith(response.html);
+					} else {
+						$('.ff-product-container').find('[js-element="fulfill-panel"]').prepend(response.html);
+					}
+					runDomReady();
+					// reCountFullfilments(method, data.remove);
 				} else {
-					$(response.html).insertBefore($('.ff-product-container').find('.no-records-ui'));
-					// var newHtml = $(response.html).find('[js-element="fulfill-panel"]').html();
-					// newHtml = $(newHtml).find('.no-records-ui').remove();
-					// newHtml.insertBefore($('.ff-product-container').find('.no-records-ui'));
-				}
-				runDomReady();
-				switch (method) {
-					case 'on-delivery':
-						var sPrevNav = 'for-pick-up';
-					break;
-					case 'received':
-						var sPrevNav = 'on-delivery';
-					break;
-				}
-				var uiPrevNav = $('[data-nav="'+sPrevNav+'"]'), uiCurrNav = $('[data-nav="'+method+'"]');
-				if (uiCurrNav.find('kbd').length == 0) {
-					uiCurrNav.find('div').append($('<kbd>'));
-				}
-				var prev = isNaN(parseInt(uiCurrNav.find('kbd').text())) ? 0 : parseInt(uiCurrNav.find('kbd').text());
-				var dataCnt = parseInt(response.total_items);
-				uiCurrNav.find('kbd').removeClass('no-count').text(prev + dataCnt);
-				/*set count for pickup*/
-				if (uiPrevNav.find('kbd').length == 0) {
-					uiPrevNav.find('div').append($('<kbd>'));
-				}
-				var prev = isNaN(parseInt(uiPrevNav.find('kbd').text())) ? 0 : parseInt(uiPrevNav.find('kbd').text());
-				var dataCnt = parseInt(response.total_items);
-				if (prev > dataCnt) {
-					uiPrevNav.find('kbd').removeClass('no-count').text(prev - dataCnt);
-				} else if (prev >= 0) {
-					uiPrevNav.find('kbd').addClass('no-count');
-				}
-				if ($('#nav-fulfill-count').length) {
-					var fulfillCount = parseInt($('#nav-fulfill-count').text());
-					if (isNaN(fulfillCount)) fulfillCount = 0;
-					$('#nav-fulfill-count').text(fulfillCount + 1);
-
-					var orderCount = parseInt($('#nav-order-count').text());
-					if (isNaN(orderCount)) orderCount = 0;
-					$('#nav-order-count').text(orderCount + 1);
+					var oArr = [];
+					if (Object.keys(data.ids).length) {
+						oArr = data.ids;
+					} else if (!isNaN(data.ids)) {
+						oArr = [data.ids];
+					}
+					if (typeof oArr == 'object') {
+						for (var x in oArr) {
+							var id = oArr[x];
+							var item = $('[data-merge-id="'+id+'"]');
+							if (item.length) {
+								item.fadeOut('slow', function() {
+									$(this).remove();
+									setTimeout(function() {
+										if ($('[data-merge-id]').length == 0) {
+											$('.ff-product-container [js-element="fulfill-panel"]')
+												.find('.no-records-ui').removeClass('hide');
+										}
+									}, 300);
+								});
+								// reCountFullfilments(method, data.remove);
+							}
+						}
+					}
 				}
 			}
 		}
-	});
+	};
+	$.ajax(oSettings);
 }
 
 var isAllSelected = function(merge_id) {
@@ -202,7 +241,7 @@ var isAllSelected = function(merge_id) {
 
 
 var runDomReady = function() {
-	$(document.body).find('[js-event="actionSelect"]').bind('change', function() {
+	$(document.body).find('[js-event="actionSelect"]').off('change').on('change', function() {
 		var actionVal = $(this).val();
 		if (actionVal == "5") {
 			$(this).next('[js-event="reasonSelect"]').removeClass('hide');
@@ -215,7 +254,7 @@ var runDomReady = function() {
 		isAllSelected($(this).parents('.order-table-item').data('merge-id'));
 	});
 
-	$(document.body).find('[js-event="cancelReasonSelect"]').bind('change', function() {
+	$(document.body).find('[js-event="cancelReasonSelect"]').off('change').on('change', function() {
 		if ($.isNumeric($(this).val())) {
 			$(this).removeClass('error');
 		}
@@ -226,7 +265,7 @@ var runDomReady = function() {
 		isAllSelected($(elem).data('merge-id'));
 	});
 
-	$(document.body).find('[js-element="proceed-btn"]').bind('click', function(e) {
+	$(document.body).find('[js-element="proceed-btn"]').off('click').on('click', function(e) {
 		var id = $(this).data('merge_id');
 		if (id) {
 			var arFulfillments = [];

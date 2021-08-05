@@ -467,7 +467,7 @@ class Farm extends MY_Controller {
 								'farm_id' => $farm_id
 							], 'result', 'id, lat, lng, address_1, address_2');
 							foreach ($user_farm_locations as $key => $row) {
-								$post['user_farm_locations'][$index][$key] = json_encode($row);
+								$post['user_farm_locations'][$index][$key] = json_encode($row, JSON_NUMERIC_CHECK);
 							}
 						}
 					}

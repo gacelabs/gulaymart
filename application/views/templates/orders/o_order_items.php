@@ -51,7 +51,7 @@
 							'merge_id'=>$orders['id'],
 							'basket_id'=>$order['basket_id'],
 							'sub_total'=>$order['sub_total'],
-						]);
+						], JSON_NUMERIC_CHECK);
 						$status_array[] = $details['status'];
 					?>
 					<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket_id="<?php echo $order['basket_id'];?>">
@@ -136,6 +136,9 @@
 					<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 					<p class="zero-gaps">
 						<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($data['status']));?></span>
+						<?php if ($data['status'] == 'on+delivery'): ?>
+							<!-- <a class="btn text-capsule bg-theme" js-data="received" href="orders/receive/<?php echo $orders['id'];?>" data-ajax="1" data-json='<?php echo json_encode(['confirm' => 1], JSON_NUMERIC_CHECK);?>'>Order Received</a> -->
+						<?php endif ?>
 						<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 					</p>
 				</div>

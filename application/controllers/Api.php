@@ -273,14 +273,14 @@ class Api extends MY_Controller {
 							$object['identifier'] = $post['identifier'];
 						}
 						$filename = 'assets/data/files/invoices/'.$results['order_id'].'-invoice.html';
-						if (!file_exists($filename)) {
+						// if (!file_exists($filename)) {
 							$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
 							// debug($printable, 'stop');
 							create_dirs('invoices');
 							$handle = fopen($filename, "w+");
 							fwrite($handle, $printable);
 							fclose($handle);
-						}
+						// }
 						$object['printable_link'] = base_url($filename);
 						$this->set_response('error', false, $object, false, 'renderHTML');
 					}
@@ -349,7 +349,7 @@ class Api extends MY_Controller {
 											/*delivery_id not set yet*/
 											$delivery_id = $order['details']['post']['delivery_id'];
 											$set['delivery_id'] = $delivery_id;
-											$set['toktok_data'] = base64_encode(json_encode($order));
+											$set['toktok_data'] = base64_encode(json_encode($order, JSON_NUMERIC_CHECK));
 											/*update baskets*/
 											$ids = explode(',', $data['basket_ids']);
 											foreach ($ids as $id) {
@@ -370,9 +370,9 @@ class Api extends MY_Controller {
 				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'buyer_id' => $buyer_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_merge_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}
@@ -437,7 +437,7 @@ class Api extends MY_Controller {
 											/*delivery_id not set yet*/
 											$delivery_id = $order['details']['post']['delivery_id'];
 											$set['delivery_id'] = $delivery_id;
-											$set['toktok_data'] = base64_encode(json_encode($order));
+											$set['toktok_data'] = base64_encode(json_encode($order, JSON_NUMERIC_CHECK));
 											/*update baskets*/
 											$ids = explode(',', $data['basket_ids']);
 											foreach ($ids as $id) {
@@ -458,9 +458,9 @@ class Api extends MY_Controller {
 				'data' => ['success' => false, 'ids' => $baskets_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}

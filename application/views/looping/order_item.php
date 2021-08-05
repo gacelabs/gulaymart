@@ -13,7 +13,7 @@
 		'location_id'=>$order['farm_location_id'],
 		'merge_id'=>$orders['id'],
 		'basket_id'=>$order['basket_id'],
-	]);
+	], JSON_NUMERIC_CHECK);
 ?>
 <div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 	<div class="media">

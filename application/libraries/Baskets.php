@@ -203,7 +203,7 @@ class Baskets {
 				$existing['quantity'] = $quantity;
 				$rawdata = json_decode(base64_decode($existing['rawdata']), true);
 				// $rawdata['details']['sub_total'] = (float)$rawdata['details']['price'] * (int)$quantity;
-				$existing['rawdata'] = base64_encode(json_encode($rawdata));
+				$existing['rawdata'] = base64_encode(json_encode($rawdata, JSON_NUMERIC_CHECK));
 				$basket = $existing;
 				$basket['existing'] = 1;
 			} else {
@@ -245,7 +245,7 @@ class Baskets {
 						'product' => $product,
 						'farm' => $farm,
 					];
-					$basket['rawdata'] = base64_encode(json_encode($basket['rawdata']));
+					$basket['rawdata'] = base64_encode(json_encode($basket['rawdata'], JSON_NUMERIC_CHECK));
 				}
 			}
 			// debug($basket, 'stop');

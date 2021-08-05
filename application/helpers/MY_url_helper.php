@@ -40,7 +40,7 @@ function toktok_post_delivery_format($data=false)
 	$params = [
 		'f_id' => '',
 		'referral_code' => REFERRAL_CODE,
-		'f_post' => $data ? json_encode(['hash' => $data['hash']]) : '',
+		'f_post' => $data ? json_encode(['hash' => $data['hash']], JSON_NUMERIC_CHECK) : '',
 		'pac-input' => $seller ? remove_multi_space($seller['address_1'].' '.$seller['address_2'], true) : '',
 		'pac-input2' => $shipping ? remove_multi_space($shipping['address_1'].' '.$shipping['address_2'], true) : '',
 		'f_distance' => $pricing ? $pricing['distance'] . ' km' : '0 km',
@@ -200,7 +200,7 @@ function get_session_baskets($where=false)
 		$where = ['status' => [0,1]];
 	}
 	if ($ci->accounts->has_session) {
-		$where['user_id'] = $ci->accounts->profile['id'];
+		if (!isset($where['user_id'])) $where['user_id'] = $ci->accounts->profile['id'];
 	} else {
 		$where['device_id'] = $ci->device_id;
 	}
@@ -228,7 +228,7 @@ function add_item_to_basket($post, $product_id)
 				$post['baskets']['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
 				$post['baskets']['at_date'] = $timestamp;
 				$post['baskets']['at_time'] = $time;
-				$post['baskets']['rawdata'] = base64_encode(json_encode($product));
+				$post['baskets']['rawdata'] = base64_encode(json_encode($product, JSON_NUMERIC_CHECK));
 				$post['baskets']['device_id'] = $ci->device_id;
 
 				$where = [
@@ -267,7 +267,7 @@ function add_item_to_basket($post, $product_id)
 						$price_and_directions = $ci->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
 						$post['baskets']['fee'] = $price_and_directions['price'];
 						$hash = $ci->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['hash'];
-						$post['baskets']['hash'] = json_encode(['hash' => $hash]);
+						$post['baskets']['hash'] = json_encode(['hash' => $hash], JSON_NUMERIC_CHECK);
 					}
 				}
 	
@@ -737,7 +737,7 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 			$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
 		}
 		// debug($nearby_products, 'stop');
-		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)]); exit();
+		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)], JSON_NUMERIC_CHECK); exit();
 	}
 	// debug(nearby_farms($latlng), nearby_products($latlng), 'stop');
 	$ci->render_page([

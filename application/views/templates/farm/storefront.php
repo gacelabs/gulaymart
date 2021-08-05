@@ -153,7 +153,7 @@
 													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="margin-bottom: 5px;"<?php endif ?>>
 														<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 														<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
-														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping);?>' required="required">
+														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping, JSON_NUMERIC_CHECK);?>' required="required">
 													</div>
 												<?php endforeach ?>
 											</div>
@@ -175,7 +175,7 @@
 													<?php if ($farm_loc == 1): ?>
 														<div class="input-group">
 															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
-															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location);?>' class="user-farm-locations" />
+															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location, JSON_NUMERIC_CHECK);?>' class="user-farm-locations" />
 															<span class="input-group-btn">
 															<?php if ($key == 0): ?>
 																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>
