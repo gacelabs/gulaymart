@@ -248,13 +248,13 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			if (totalItems) {
 				$('#nav-basket-count').removeClass('hide').text(totalItems);
 			} else {
-				$('#nav-basket-count').addClass('hide').text('Buy now!');
+				$('#nav-basket-count').text('Buy now!');
 			}
 			if ($('kbd.nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd id="nav-basket-count"></kbd>');
 			if (totalItems) {
 				$('kbd.nav-basket-count').removeClass('hide').text(totalItems);
 			} else {
-				$('#nav-basket-count').addClass('hide').text('Buy now!');
+				$('kbd.nav-basket-count').text('Buy now!');
 			}
 		break;
 		case 'order': case 'orders':
