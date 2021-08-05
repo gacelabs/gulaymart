@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Support extends MY_Controller {
 
-	public $allowed_methods = ['view_invoice', 'view_thankyou_page', 'terms', 'policy'];
+	public $allowed_methods = ['order_details', 'thankyou_page', 'terms', 'policy'];
 
 	public function index()
 	{
@@ -26,45 +26,39 @@ class Support extends MY_Controller {
 		]);
 	}
 
-	public function view_invoice($order_id=false)
+	public function order_details()
 	{
-		if ($order_id) {
-			$results = $this->gm_db->get_in('baskets_merge', ['order_id' => $order_id], 'row');
-			// debug($results, 'stop');
+		$post = $this->input->get() ?: $this->input->post();
+		// debug($post, 'stop');
+		if ($post) {
+			$results = $this->gm_db->get_in('baskets_merge', ['id' => $post['id']], 'row');
 			if ($results) {
-				$results['for_email'] = true;
-				$this->render_page([
-					'top' => [
-						'css' => ['modal/invoice-modal', 'global/zigzag', 'global/order-table', 'print.min']
-					],
-					'middle' => [
-						'body' => [
-							'../static/invoice_middle_body'
-						],
-					],
-					'bottom' => [
-						'js' => ['plugins/print.min', 'plugins/html2canvas.min'],
-					],
-					'data' => $results,
-				]);
+				$results['action'] = $post['action'];
+				$results['for'] = $post['for'];
+				$results['status'] = $post['status'];
+				$results['data'] = ['name' => 'There'];
+				if ($post['for'] == 'seller') {
+					$results['data'] = json_decode(base64_decode($results['seller']), true);
+				}
+				if ($post['for'] == 'buyer') {
+					$results['data'] = json_decode(base64_decode($results['buyer']), true);
+					$results['data']['name'] = $results['data']['fullname'];
+				}
+				// debug($results, 'stop');
+				$this->load->view('global/email-seller', $results);
 			}
 		}
+		return '';
 	}
 
-	public function view_thankyou_page($final_total=false)
+	public function thankyou_page()
 	{
-		if ($final_total) {
-			// debug($final_total, 'stop');
-			$this->render_page([
-				'top' => [
-					'css' => ['static/thankyou']
-				],
-				'middle' => [
-					'body' => ['../static/thankyou'],
-				],
-				'data' => ['for_email' => true, 'total'=>$final_total]
-			]);
+		$post = $this->input->get() ?: $this->input->post();
+		// debug($post, 'stop');
+		if ($post) {
+			$this->load->view('global/email-order', $post);
 		}
+		return '';
 	}
 
 	public function terms()

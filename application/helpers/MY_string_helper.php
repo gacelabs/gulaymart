@@ -1800,3 +1800,23 @@ function sort_by_date($array=false)
 
 	return $array;
 }
+
+function make_stream_context($data=false)
+{
+	$context = false;
+	if ($data) {
+		$data = http_build_query($data);
+		$context_options = [
+			'http' => [
+				'method' => 'POST',
+				'header'=> "Content-type: application/x-www-form-urlencoded\r\n".
+						   "Content-Length: " . strlen($data) . "\r\n"
+				,
+				'content' => $data
+			]
+		];
+		$context = stream_context_create($context_options);
+	}
+
+	return $context;
+}

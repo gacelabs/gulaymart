@@ -195,7 +195,7 @@ class Fulfillment extends My_Controller {
 
 					$buyer = json_decode(base64_decode($merge['buyer']), true);
 					$seller = json_decode(base64_decode($merge['seller']), true);
-					notify_invoice_orders($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
+					notify_order_details($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
 
 					$this->set_response('success', 'Order is now Set For Pick Up!', $post, $redirect);
 				} else {

@@ -547,25 +547,26 @@ function count_by_status($where=false)
 
 function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 {
-	$html = file_get_contents(base_url('support/view_thankyou_page/'.$final_total));
-	// debug($html, 'stop');
-	/*create_dirs('placed_orders');
-	$all_orders_id = strtoupper(substr(md5(implode(',', $merge_ids)), 0, 10));
-	$filename = 'assets/data/files/placed_orders/'.$all_orders_id.'-placed.html';
-	$handle = fopen($filename, "w+");
-	fwrite($handle, $html);
-	fclose($handle);*/
+	// $html_email = file_get_contents(base_url('support/view_thankyou_page/'.$final_total));
+	$data = ['total' => $final_total, 'buyer' => $buyer];
+	$context = make_stream_context($data);
+	$html_email = file_get_contents(base_url('support/thankyou_page/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html, 'Your Order have been Placed, Thank you!');
-	$html = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	send_gm_email($buyer['id'], $html_email, 'Your Order have been Placed, Thank you!');
+	$html_buyer_gm = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
+	$context = make_stream_context($data);
+	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
+	$html_seller_gm = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
+
 	$ci =& get_instance();
-	$html = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		send_gm_email($seller_id, $html_seller_email, 'Order(s) have been Placed!');
+		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders');
 		if ($sent) {
 			$ci->senddataapi->trigger('ordered-notification', 'send-notification', [
 				'badge' => base_url('assets/images/favicon.png'),
@@ -596,25 +597,27 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	fclose($logfile);
 }
 
-function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for+pick+up')
+function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for-pick-up')
 {
-	$html = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
-	// debug($printable, 'stop');
-	/*create_dirs('invoices');
-	$filename = 'assets/data/files/invoices/'.$merge['order_id'].'-invoice.html';
-	$handle = fopen($filename, "w+");
-	fwrite($handle, $printable);
-	fclose($handle);*/
+	// $html_email = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
+	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'buyer'];
+	$context = make_stream_context($data);
+	$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html, 'Your Order is '.$action.', Thank you!');
+	send_gm_email($buyer['id'], $html_email, 'Your Order is '.$action.', Thank you!');
 	$html = '<p>Order is '.$action.', <a href="orders/'.$status.'/">Check here</a></p>';
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$data = ['id' => $merge['id'], 'action' => $action, 'for' => 'seller'];
+	$context = make_stream_context($data);
+	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
+
 	$ci =& get_instance();
 	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
+		send_gm_email($seller_id, $html_seller_email, 'Order is '.$action.'!');
 		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 		if ($sent) {
 			$ci->senddataapi->trigger('fulfilled-notification', 'send-notification', [
