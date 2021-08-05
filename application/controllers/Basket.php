@@ -139,7 +139,7 @@ class Basket extends My_Controller {
 
 				/*send realtime basket*/
 				$this->senddataapi->trigger('add-to-basket', 'incoming-baskets', [
-					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'basket', 'remove' => false
+					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id']
 				]);
 				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket', 'total_items' => $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]])

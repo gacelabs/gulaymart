@@ -218,7 +218,7 @@ var basketProcess = function() {
 }
 
 var runBaskets = function(data) {
-	var method = data.event, oSettings = {
+	var oSettings = {
 		url: 'basket/',
 		type: 'post',
 		dataType: 'json',
@@ -226,7 +226,20 @@ var runBaskets = function(data) {
 		success: function(response) {
 			console.log(response);
 			if (response.html.length) {
-				if (data.remove == false) {
+				var oArr = [];
+				if (Object.keys(data.ids).length) {
+					oArr = data.ids;
+				} else if (!isNaN(data.ids)) {
+					oArr = [data.ids];
+				}
+				if (typeof oArr == 'object') {
+					for (var x in oArr) {
+						var id = oArr[x];
+						var item = $('[data-basket-id="'+id+'"]');
+						if (item.length) {
+							item.parents('.order-table-item').remove();
+						}
+					}
 					var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
 					if (uiBasketPanel.length) {
 						if (uiBasketPanel.find('.no-records-ui:visible').length) {
@@ -235,33 +248,6 @@ var runBaskets = function(data) {
 							uiBasketPanel.prepend(response.html);
 						}
 						runDomReady();
-					}
-				} else {
-					/*just remove it*/
-					var oArr = [];
-					if (Object.keys(data.ids).length) {
-						oArr = data.ids;
-					} else if (!isNaN(data.ids)) {
-						oArr = [data.ids];
-					}
-					if (typeof oArr == 'object') {
-						for (var x in oArr) {
-							var id = oArr[x];
-							var item = $('[data-basket-id="'+id+'"]');
-							if (item.length) {
-								var uiParent = item.parents('.order-table-item');
-								item.fadeOut('slow', function() {
-									$(this).remove();
-									setTimeout(function() {
-										if ($('[data-basket-id]').length == 0) {
-											uiParent.remove();
-											$('#dashboard_panel_right [js-element="baskets-panel"]')
-												.find('.no-records-ui').removeClass('hide');
-										}
-									}, 300);
-								});
-							}
-						}
 					}
 				}
 			}
