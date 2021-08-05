@@ -78,76 +78,6 @@ var renderHTML = function(obj) {
 	});
 }
 
-function reCountFullfilments(sCurr, bRemove) {
-	if (bRemove == undefined) bRemove = false;
-	var uiChangeNav = false;
-	if (bRemove != false) {
-		uiChangeNav = $('[data-nav="'+bRemove+'"]');
-	}
-	var uiCurrNav = $('[data-nav="'+sCurr+'"]');
-
-	if (uiChangeNav != false) {
-		if (uiChangeNav.length) {
-			if (uiChangeNav.find('kbd').length == 0) uiChangeNav.append($('<kbd>'));
-			var i = parseInt(uiChangeNav.find('kbd').removeClass('no-count').text());
-			if (isNaN(i)) i = 1;
-			var cnt = (i - 1);
-			console.log('last count:', cnt, bRemove);
-			if (cnt) {
-				uiChangeNav.find('kbd').removeClass('no-count').text(cnt);
-			} else {
-				uiChangeNav.find('kbd').addClass('no-count').text('');
-			}
-		}
-	}
-	if (uiCurrNav != false) {
-		if (uiCurrNav.length) {
-			if (uiCurrNav.find('kbd').length == 0) uiCurrNav.append($('<kbd>'));
-			var i = parseInt(uiCurrNav.find('kbd').removeClass('no-count').text());
-			if (isNaN(i)) i = 0;
-			console.log('last count:', i+1, sCurr);
-			uiCurrNav.find('kbd').removeClass('no-count').text(i + 1);
-		}
-	}
-
-	if ($.inArray(sCurr, ['placed', 'cancelled']) >= 0) {
-		if ($('#nav-order-count').length) {
-			var orderCount = parseInt($('#nav-order-count').text());
-			if (sCurr == 'placed') {
-				if (isNaN(orderCount)) orderCount = 0;
-				console.log('order last count:', orderCount+1, sCurr);
-				$('#nav-order-count').removeClass('hide').text(orderCount + 1);
-			} else if (sCurr == 'cancelled') {
-				if (isNaN(orderCount)) orderCount = 1;
-				var newCount = (orderCount - 1);
-				console.log('order last count:', newCount, sCurr);
-				if (newCount) {
-					$('#nav-order-count').removeClass('hide').text(newCount);
-				} else {
-					$('#nav-order-count').addClass('hide').text('');
-				}
-			}
-		}
-		if ($('#nav-fulfill-count').length) {
-			var fulfillCount = parseInt($('#nav-fulfill-count').text());
-			if (sCurr == 'placed') {
-				if (isNaN(fulfillCount)) fulfillCount = 0;
-				console.log('fulfill last count:', fulfillCount+1, sCurr);
-				$('#nav-fulfill-count').removeClass('hide').text(fulfillCount + 1);
-			} else if (sCurr == 'cancelled') {
-				if (isNaN(fulfillCount)) fulfillCount = 1;
-				var newCount = (fulfillCount - 1);
-				console.log('fulfill last count:', newCount, sCurr);
-				if (newCount) {
-					$('#nav-fulfill-count').removeClass('hide').text(newCount);
-				} else {
-					$('#nav-fulfill-count').addClass('hide').text('');
-				}
-			}
-		}
-	}
-}
-
 var fulfillment_process = false;
 function fulfillmentProcess(callback) {
 	var sSegment2 = oSegments[2];
@@ -182,7 +112,6 @@ function runFulfillments(data) {
 						$('.ff-product-container').find('[js-element="fulfill-panel"]').prepend(response.html);
 					}
 					runDomReady();
-					// reCountFullfilments(method, data.remove);
 				} else {
 					var oArr = [];
 					if (Object.keys(data.ids).length) {
@@ -204,7 +133,6 @@ function runFulfillments(data) {
 										}
 									}, 300);
 								});
-								// reCountFullfilments(method, data.remove);
 							}
 						}
 					}

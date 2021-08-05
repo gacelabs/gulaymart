@@ -460,6 +460,9 @@ class Basket extends My_Controller {
 			]);
 
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket', 'total_items' => $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]])
+			]);
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5])
 			]);
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [

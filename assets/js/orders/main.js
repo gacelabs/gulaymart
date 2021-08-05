@@ -42,70 +42,6 @@ var renderHTML = function(obj) {
 	});
 }
 
-function reCountOrders(sCurr, bRemove) {
-	if (bRemove == undefined) bRemove = false;
-	var uiChangeNav = false;
-	if (bRemove != false) {
-		uiChangeNav = $('[data-nav="'+bRemove+'"]');
-	}
-	var uiCurrNav = $('[data-nav="'+sCurr+'"]');
-
-	if (uiChangeNav != false) {
-		if (uiChangeNav.length) {
-			if (uiChangeNav.find('kbd').length == 0) uiChangeNav.find('div').append($('<kbd>'));
-			var i = parseInt(uiChangeNav.find('kbd').removeClass('no-count').text());
-			if (isNaN(i)) i = 1;
-			var cnt = (i - 1);
-			if (cnt) {
-				uiChangeNav.find('kbd').removeClass('no-count').text(cnt);
-			} else {
-				uiChangeNav.find('kbd').addClass('no-count').text('');
-			}
-		}
-	}
-	if (uiCurrNav != false) {
-		if (uiCurrNav.length) {
-			if (uiCurrNav.find('kbd').length == 0) uiCurrNav.find('div').append($('<kbd>'));
-			var i = parseInt(uiCurrNav.find('kbd').removeClass('no-count').text());
-			if (isNaN(i)) i = 0;
-			uiCurrNav.find('kbd').removeClass('no-count').text(i + 1);
-		}
-	}
-
-	if ($.inArray(sCurr, ['placed', 'cancelled']) >= 0) {
-		if ($('#nav-order-count').length) {
-			var orderCount = parseInt($('#nav-order-count').text());
-			if (sCurr == 'placed') {
-				if (isNaN(orderCount)) orderCount = 0;
-				$('#nav-order-count').removeClass('hide').text(orderCount + 1);
-			} else if (sCurr == 'cancelled') {
-				if (isNaN(orderCount)) orderCount = 1;
-				var newCount = (orderCount - 1);
-				if (newCount) {
-					$('#nav-order-count').removeClass('hide').text(newCount);
-				} else {
-					$('#nav-order-count').addClass('hide').text('');
-				}
-			}
-		}
-		if ($('#nav-fulfill-count').length) {
-			var fulfillCount = parseInt($('#nav-fulfill-count').text());
-			if (sCurr == 'placed') {
-				if (isNaN(fulfillCount)) fulfillCount = 0;
-				$('#nav-fulfill-count').removeClass('hide').text(fulfillCount + 1);
-			} else if (sCurr == 'cancelled') {
-				if (isNaN(fulfillCount)) fulfillCount = 1;
-				var newCount = (fulfillCount - 1);
-				if (newCount) {
-					$('#nav-fulfill-count').removeClass('hide').text(newCount);
-				} else {
-					$('#nav-fulfill-count').addClass('hide').text('');
-				}
-			}
-		}
-	}
-}
-
 var order_process = false;
 function orderProcess() {
 	var sSegment2 = oSegments[2];
@@ -140,7 +76,6 @@ function runOrders(data) {
 						$('#dashboard_panel_right [js-element="orders-panel"]').prepend(response.html);
 					}
 					runDomReady();
-					// reCountOrders(method, data.remove);
 				} else {
 					/*just remove it*/
 					var oArr = [];
@@ -163,7 +98,6 @@ function runOrders(data) {
 										}
 									}, 300);
 								});
-								// reCountOrders(method, data.remove);
 							}
 						}
 					}
