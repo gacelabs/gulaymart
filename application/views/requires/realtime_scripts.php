@@ -96,9 +96,11 @@
 		$('#install-app').bind('click', function() {
 			if (oUser) {
 				++tagCount;
-				oUser.seller_id = oUser.id;
-				oUser.tag = 'demo-notification';
-				oUser.url = window.location.protocol + '//' + window.location.hostname + '/orders/messages/';
+				var oData = {
+					seller_id: oUser.id,
+					tag: 'demo-notification',
+					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
+				};
 				realtime.trigger('ordered-notification', 'send-notification', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
 					body: '',
@@ -126,11 +128,6 @@
 						// console.log(oData);
 						if ('serviceWorker' in navigator) {
 							onServiceWorkerReady('fulfillment', oData);
-							if ($('#nav-messages-count').length) {
-								var count = parseInt($('#nav-messages-count').text());
-								if (isNaN(count)) count = 0;
-								$('#nav-messages-count').text(count + 1);
-							}
 						}
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
@@ -138,11 +135,6 @@
 						// console.log(oData);
 						if ('serviceWorker' in navigator) {
 							onServiceWorkerReady('order', oData);
-							if ($('#nav-messages-count').length) {
-								var count = parseInt($('#nav-messages-count').text());
-								if (isNaN(count)) count = 0;
-								$('#nav-messages-count').text(count + 1);
-							}
 						}
 					});
 				}, 300);
