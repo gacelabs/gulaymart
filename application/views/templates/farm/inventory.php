@@ -9,18 +9,16 @@
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">
-					<table class="table table-bordered table-striped render-datatable" id="inventory_table">
+					<table class="table table-bordered table-striped render-datatable" id="inventory_table" style="width: -webkit-fill-available;">
 						<?php if ($data['products']): ?>
 							<thead>
 								<tr>
 									<?php if ($this->agent->is_mobile()): ?>
-										<th data-priority="1" class="for-responsive"></th>
+										<th class="for-responsive" width="10"></th>
 									<?php endif ?>
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
-											<th<?php if ($this->agent->is_mobile()): ?> style="text-align: center;"<?php endif ?>>Actions</th>
-										<?php elseif ($this->agent->is_mobile() AND $key == 'name'): ?>
-											<th data-priority="1"><?php echo fix_title($key);?></th>
+											<th width="50">Actions</th>
 										<?php elseif ($key != 'version'): ?>
 											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
