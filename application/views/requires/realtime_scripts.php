@@ -108,7 +108,7 @@
 					tag: 'demo-notification'+tagCount,
 					renotify: true,
 					vibrate: [200, 100, 200, 100, 200, 100, 200],
-					data: oUser
+					data: oData
 				});
 			}
 		});
