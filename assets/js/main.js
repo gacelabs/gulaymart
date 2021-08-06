@@ -138,7 +138,7 @@ $(document).ready(function() {
 			}*/
 			$(elem).find('tr:first th').each(function(i, unit) {
 				var text = $.trim($(unit).text());
-				if ($.inArray(text.toLowerCase(), ['actions','']) >= 0) {
+				if ($.inArray(text.toLowerCase(), ['actions','','name']) >= 0) {
 					if (blanks.orderable == undefined) blanks.orderable = false;
 					blanks.targets.push(i);
 				}
