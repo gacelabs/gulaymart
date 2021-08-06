@@ -25,6 +25,7 @@
 				<input type="hidden" name="entity_id" value="<?php echo $page['entity_id'];?>">
 				<input type="hidden" name="tab" value="Feedbacks">
 				<input type="hidden" name="type" value="Comments">
+				<input type="hidden" name="unread" value="<?php echo GM_MESSAGE_UNREAD;?>">
 				<div class="input-group">
 					<input type="text" class="form-control" required="required" style="width:100%;" placeholder="<?php echo $placeholder;?>" name="content">
 					<span class="input-group-btn">

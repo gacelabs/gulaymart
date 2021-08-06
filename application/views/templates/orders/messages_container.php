@@ -5,29 +5,16 @@
 			<div class="messages-nav-grid">
 				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
 					<?php 
-					$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Notifications', 'to_id' => $current_profile['profile']['user_id']]);
-					if ($msg_count): ?>
-						<kbd id='msg_notifications-count'><?php echo $msg_count;?></kbd>
-					<?php endif ?>
-				</div>
-				<!-- <div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_inquiries">Inquiries -->
-					<?php 
-					/*$msg_count = $this->gm_db->count('messages', ['unread' => [0,1], 'tab' => 'Inquiries', 'to_id' => $current_profile['profile']['user_id']]);
-					if ($msg_count) {*/
-						?>
-						<!-- <kbd id='msg_inquiries-count'><?php // echo $msg_count;?></kbd> -->
-						<?php
-					/*}*/
+					$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Notifications', 'to_id' => $current_profile['profile']['user_id']]);
 					?>
-				<!-- </div> -->
+					<kbd id='msg_notifications-count'<?php if (!$msg_count): ?> class="hide"<?php endif ?>><?php echo $msg_count;?></kbd>
+				</div>
 				<?php if ($this->farms AND $this->products->count()): ?>
 					<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
 						<?php 
-						$ids = $this->gm_db->columns('id', $this->products->get_in(['user_id' => $this->accounts->profile['id']]));
-						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'tab' => 'Feedbacks', 'page_id' => $ids]);
-						if ($msg_count): ?>
-							<kbd id='msg_feedbacks-count'><?php echo $msg_count;?></kbd>
-						<?php endif ?>
+						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $current_profile['profile']['user_id']]);
+						?>
+						<kbd id='msg_feedbacks-count'<?php if (!$msg_count): ?> class="hide"<?php endif ?>><?php echo $msg_count;?></kbd>
 					</div>
 				<?php endif ?>
 			</div>
@@ -49,8 +36,8 @@
 										</div>
 										<div class="notif-item-footer">
 											<ul class="inline-list">
-												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => 0, 'fn' => 'readMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Mark as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => 2, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a></li>
+												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => GM_MESSAGE_READ, 'fn' => 'readMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Mark as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a></li>
 											</ul>
 										</div>
 									</div>
@@ -62,14 +49,6 @@
 								</div>
 							<?php endif ?>
 						</div>
-
-						<?php
-							/*$inquiries_data = false;
-							if (isset($data['messages']['Inquiries'])) {
-								$inquiries_data = $data['messages']['Inquiries'];
-							}
-							$this->view('templates/orders/inquiries', ['inquiries' => $inquiries_data]);*/
-						?>
 						<?php
 							$feedbacks_data = false;
 							if (isset($data['messages']['Feedbacks'])) {

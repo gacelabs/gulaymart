@@ -310,14 +310,14 @@ class Api extends MY_Controller {
 					$valid = false;
 					switch ($status_value) {
 						case 'for+pick+up': /*if status is now on-delivery*/
-							$toktok_status = 4;
+							$toktok_status = TT_ON_DELIVERY_STATUS;
 							$valid = empty($data['delivery_id']);
-							$GM_status = 3;
+							$GM_status = GM_ON_DELIVERY_STATUS;
 							break;
 						case 'on+delivery': /*if status is now received*/
-							$toktok_status = 6;
+							$toktok_status = TT_RECEIVED_STATUS;
 							$valid = !empty($data['delivery_id']);
-							$GM_status = 4;
+							$GM_status = GM_RECEIVED_STATUS;
 							break;
 					}
 					if ($valid) {
@@ -398,14 +398,14 @@ class Api extends MY_Controller {
 					$valid = false;
 					switch ($status_value) {
 						case 'for+pick+up': /*if status is now on-delivery*/
-							$toktok_status = 4;
+							$toktok_status = TT_ON_DELIVERY_STATUS;
 							$valid = empty($data['delivery_id']);
-							$GM_status = 3;
+							$GM_status = GM_ON_DELIVERY_STATUS;
 							break;
 						case 'on+delivery': /*if status is now received*/
-							$toktok_status = 6;
+							$toktok_status = TT_RECEIVED_STATUS;
 							$valid = !empty($data['delivery_id']);
-							$GM_status = 4;
+							$GM_status = GM_RECEIVED_STATUS;
 							break;
 					}
 					if ($valid) {

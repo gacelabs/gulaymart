@@ -204,7 +204,7 @@ var runQtyDefaults = function(ui) {
 }
 
 var basketProcess = function() {
-	realtime.bind('add-to-basket', 'incoming-baskets', function(object) {
+	realtime.bind('listen-baskets-activity', 'incoming-baskets', function(object) {
 		var oData = object.data;
 		// console.log(oData);
 		if (oData.success) {
@@ -218,36 +218,46 @@ var basketProcess = function() {
 }
 
 var runBaskets = function(data) {
+	var action = data.event;
 	var oSettings = {
-		url: 'basket/',
+		url: action == undefined ? 'basket/' : action,
 		type: 'post',
 		dataType: 'json',
 		data: { ids: data.ids, buyer_id: data.buyer_id },
 		success: function(response) {
-			// console.log(response);
+			console.log(response);
 			if (response.html.length) {
 				var oArr = [];
-				if (Object.keys(data.ids).length) {
-					oArr = data.ids;
+				if (Object.keys(response.ids).length) {
+					oArr = response.ids;
 				} else if (!isNaN(data.ids)) {
-					oArr = [data.ids];
+					oArr = [response.ids];
 				}
+				console.log(oArr);
 				if (typeof oArr == 'object') {
 					for (var x in oArr) {
 						var id = oArr[x];
 						var item = $('[data-basket-id="'+id+'"]');
 						if (item.length) {
+							console.log('removed', item);
 							item.parents('.order-table-item').remove();
 						}
 					}
 					var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
-					if (uiBasketPanel.length) {
-						if (uiBasketPanel.find('.no-records-ui:visible').length) {
-							uiBasketPanel.html(response.html);
-						} else {
-							uiBasketPanel.prepend(response.html);
+					console.log(action);
+					if (action == undefined) {
+						if (uiBasketPanel.length) {
+							if (uiBasketPanel.find('.no-records-ui:visible').length) {
+								uiBasketPanel.html(response.html);
+							} else {
+								uiBasketPanel.prepend(response.html);
+							}
+							runDomReady();
 						}
-						runDomReady();
+					} else {
+						if (uiBasketPanel.find('.order-table-item').length == 0) {
+							uiBasketPanel.find('.no-records-ui').removeClass('hide');
+						}
 					}
 				}
 			}

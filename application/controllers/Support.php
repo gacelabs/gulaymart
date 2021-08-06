@@ -87,15 +87,61 @@ class Support extends MY_Controller {
 				if (in_array($this->accounts->profile['id'], $user_ids)) {
 					$data['nav'] = $nav = $post['nav'];
 					switch (strtolower($nav)) {
-						case 'basket':
-							$data['total_items'] = $this->gm_db->count('baskets', ['user_id' => $user_ids, 'status' => [0,1]]);
-							break;
-						case 'order':
-							$data['total_items'] = $this->gm_db->count('baskets_merge', ['buyer_id' => $user_ids, 'status !=' => 5]);
-							break;
-						case 'fulfill':
+						case 'fulfill': case 'fulfills': case 'fulfillments':
 							$data['total_items'] = $this->gm_db->count('baskets_merge', ['seller_id' => $user_ids, 'status !=' => 5]);
 							break;
+						case 'basket': case 'baskets':
+							$data['total_items'] = $this->gm_db->count('baskets', ['user_id' => $user_ids, 'status' => [0,1]]);
+							break;
+						case 'order': case 'orders':
+							$data['total_items'] = $this->gm_db->count('baskets_merge', ['buyer_id' => $user_ids, 'status !=' => 5]);
+							break;
+						case 'message': case 'messages':
+							$data['total_items'] = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]);
+							break;
+					}
+				}
+			}
+		}
+		echo clean_json_encode($data); exit();
+	}
+
+	public function check_stattab_counts()
+	{
+		$post = $this->input->get() ?: $this->input->post();
+		// debug($post, 'stop');
+		$data = ['id' => $this->accounts->profile['id'], 'menu' => false, 'tab' => false, 'total_items' => 0];
+		if ($post) {
+			if (isset($post['success']) AND $post['success'] AND !empty($post['id'])) {
+				$user_ids = !is_array($post['id']) ? [$post['id']] : $post['id'];
+				if (in_array($this->accounts->profile['id'], $user_ids)) {
+					$data['tab'] = $tab = $post['tab'];
+					$data['menu'] = $menu = $post['menu'];
+					$params = false;
+					if (in_array($menu, ['fulfillments'])) {
+						$params = ['seller_id' => $user_ids, 'status' => GM_ITEM_REMOVED];
+					} elseif (in_array($menu, ['orders'])) {
+						$params = ['buyer_id' => $user_ids, 'status' => GM_ITEM_REMOVED];
+					}
+					if ($params) {
+						switch (strtolower($tab)) {
+							case 'placed':
+								$params['status'] = GM_PLACED_STATUS;
+								break;
+							case 'for-pick-up':
+								$params['status'] = GM_FOR_PICK_UP_STATUS;
+								break;
+							case 'on-delivery':
+								$params['status'] = GM_ON_DELIVERY_STATUS;
+								break;
+							case 'received':
+								$params['status'] = GM_RECEIVED_STATUS;
+								break;
+							case 'cancelled':
+								$params['status'] = GM_CANCELLED_STATUS;
+								break;
+						}
+						$data['total_items'] = $this->gm_db->count('baskets_merge', $params);
 					}
 				}
 			}

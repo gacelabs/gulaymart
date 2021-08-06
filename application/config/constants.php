@@ -159,11 +159,23 @@ defined('GM_STATUSES_TEST') OR define('GM_STATUSES_TEST', 0);
 |							| 4 = Item Picked Up		  |
 |---------------------------|-----------------------------|
 */
-defined('GM_ITEM_REMOVED') OR		define('GM_ITEM_REMOVED',	   -1);
-defined('GM_VERIFIED_SCHED') OR		define('GM_VERIFIED_SCHED', 	0);
-defined('GM_VERIFIED_NOW') OR		define('GM_VERIFIED_NOW', 		1);
-defined('GM_PLACED_STATUS') OR		define('GM_PLACED_STATUS', 		2);
+defined('GM_ITEM_REMOVED')		 OR	define('GM_ITEM_REMOVED',	   -1);
+defined('GM_VERIFIED_SCHED')	 OR	define('GM_VERIFIED_SCHED', 	0);
+defined('GM_VERIFIED_NOW')		 OR	define('GM_VERIFIED_NOW', 		1);
+defined('GM_PLACED_STATUS')		 OR	define('GM_PLACED_STATUS', 		2);
 defined('GM_ON_DELIVERY_STATUS') OR define('GM_ON_DELIVERY_STATUS', 3);
-defined('GM_RECEIVED_STATUS') OR	define('GM_RECEIVED_STATUS', 	4);
-defined('GM_CANCELLED_STATUS') OR	define('GM_CANCELLED_STATUS', 	5);
+defined('GM_RECEIVED_STATUS')	 OR	define('GM_RECEIVED_STATUS', 	4);
+defined('GM_CANCELLED_STATUS')	 OR	define('GM_CANCELLED_STATUS', 	5);
 defined('GM_FOR_PICK_UP_STATUS') OR define('GM_FOR_PICK_UP_STATUS', 6);
+
+defined('TT_PLACED_STATUS')		 OR	define('TT_PLACED_STATUS', 		1);
+defined('TT_VERIFIED_SCHED')	 OR	define('TT_VERIFIED_SCHED', 	2);
+defined('TT_FOR_PICK_UP_STATUS') OR define('TT_FOR_PICK_UP_STATUS', 3);
+defined('TT_PICKED_UP_STATUS')	 OR	define('TT_PICKED_UP_STATUS', 	4);
+defined('TT_ON_DELIVERY_STATUS') OR	define('TT_ON_DELIVERY_STATUS',	5);
+defined('TT_RECEIVED_STATUS')	 OR	define('TT_RECEIVED_STATUS', 	6);
+
+/*MESSAGES STATUS*/
+defined('GM_MESSAGE_READ')	 OR	define('GM_MESSAGE_READ', 	0);
+defined('GM_MESSAGE_UNREAD') OR define('GM_MESSAGE_UNREAD', 1);
+defined('GM_MESSAGE_DELETE') OR define('GM_MESSAGE_DELETE', 2);

@@ -40,6 +40,7 @@
 					<input type="hidden" id="entity_id" name="entity_id" value="">
 					<input type="hidden" name="tab" value="Feedbacks">
 					<input type="hidden" name="type" value="Comments">
+					<input type="hidden" name="unread" value="<?php echo GM_MESSAGE_UNREAD;?>">
 					<div class="form-group zero-gaps">
 						<textarea class="form-control" required="required" id="seller_reply" name="content" rows="2" placeholder="Reply to this comment ..."></textarea>
 					</div>

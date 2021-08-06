@@ -209,6 +209,13 @@ class Fulfillment extends My_Controller {
 							$this->senddataapi->trigger('for-pick-up-fulfillment', 'incoming-fulfillment', [
 								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'for-pick-up', 'remove' => false
 							]);
+
+							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+								'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'for-pick-up'
+							]);
+							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+								'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'for-pick-up'
+							]);
 							break;
 						case GM_CANCELLED_STATUS:
 							// send realtime placed order
@@ -227,6 +234,13 @@ class Fulfillment extends My_Controller {
 							$this->senddataapi->trigger('cancelled-fulfillment', 'incoming-fulfillment', [
 								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => false
 							]);
+
+							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+								'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'cancelled'
+							]);
+							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+								'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'cancelled'
+							]);
 							break;
 					}
 
@@ -235,6 +249,19 @@ class Fulfillment extends My_Controller {
 					]);
 					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 						'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
+					]);
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $merge['buyer_id'], 'nav' => 'order'
+					]);
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $merge['buyer_id'], 'nav' => 'fulfill'
+					]);
+
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'placed'
+					]);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'placed'
 					]);
 
 					$buyer = json_decode(base64_decode($merge['buyer']), true);

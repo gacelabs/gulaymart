@@ -1,19 +1,15 @@
 <div class="notif-list-container hide" id="msg_feedbacks">
 	<?php if ($feedbacks):
-		$data_feedbacks = $is_replies = false;
-		if (isset($feedbacks['first'])) {
-			$data_feedbacks = $feedbacks['first'];
-		} elseif (isset($feedbacks['replies'])) {
-			$data_feedbacks = $feedbacks['replies'];
-			$is_replies = true;
-		}
-		?>
-		<?php foreach ($data_feedbacks as $key => $feedback): ?>
+		foreach ($feedbacks as $key => $feedback): ?>
 			<div class="notif-item">
 				<div class="notif-item-top">
 					<p class="zero-gaps"><i class="fa fa-commenting-o icon-left"></i>
-						<?php if ($is_replies): ?>
+						<?php if ($feedback['is_buyer'] == 0): ?>
 							<b><?php get_fullname($feedback['farm']);?></b>
+							<?php if ($feedback['farm']['user_id'] == $current_profile['id']): ?>
+							 - <span class="text-gray">You <i class="fa fa-farm"></i></span>
+							 <img src="assets/images/icons/farms.png" class="mini-img-icon" align="left" style="width: 18px; margin-right: 10px;">	
+							<?php endif ?>
 						<?php else: ?>
 							<b><?php get_fullname($feedback['profile']);?></b>
 							<?php if ($feedback['bought'] AND $feedback['to_id'] == $current_profile['id']): ?>
@@ -40,37 +36,22 @@
 						<?php echo $feedback['content'];?>
 					</p>
 				</div>
-				<?php 
-					$reply_data = false;
-					if (isset($feedbacks['replies']) AND $is_replies == false) {
-						foreach ($feedbacks['replies'] as $replies) {
-							if ($replies['under'] == $feedback['id']) {
-								$reply_data = $replies;
-								break;
-							}
-						}
-					} elseif ($is_replies == true) {
-						$reply_data = true;
-					}
-				?>
 				<div class="notif-item-footer">
-						<ul class="inline-list">
-							<?php if ($is_replies == false): ?>
+					<ul class="inline-list">
+						<?php if ($feedback['is_buyer'] == 1): ?>
 							<li>
-								<a id="feedback-btn-id-<?php echo $feedback['id'];?>" class="text-link normal-radius" data-toggle="modal" data-target="#reply_modal" data-feedback='<?php echo json_encode($feedback, JSON_NUMERIC_CHECK);?>' data-reply='<?php echo json_encode($reply_data, JSON_NUMERIC_CHECK);?>'>
-									<?php if ($reply_data): ?>
-										View
-									<?php else: ?>
-										Reply
-									<?php endif ?>
+								<a id="feedback-btn-id-<?php echo $feedback['id'];?>" class="text-link normal-radius" data-toggle="modal" data-target="#reply_modal" data-feedback='<?php echo json_encode($feedback, JSON_NUMERIC_CHECK);?>' data-reply='<?php echo json_encode($feedback['reply'], JSON_NUMERIC_CHECK);?>'>
+									<?php if ($feedback['reply']): ?>View<?php else: ?>Reply<?php endif ?>
 								</a>
 							</li>
-							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-							<?php endif ?>
-							<li>
-								<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => 2, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
-							</li>
-						</ul>
+						<?php endif ?>
+						<?php if ($feedback['reply'] OR $feedback['is_buyer'] == 0): ?>
+						<?php if ($feedback['is_buyer'] == 1): ?>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<?php endif ?>
+						<li>
+							<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
+						</li>
+						<?php endif ?>
+					</ul>
 				</div>
 			</div>
 		<?php endforeach ?>

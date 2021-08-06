@@ -63,7 +63,7 @@ class Basket extends My_Controller {
 			if ($items_by_farm AND isset($items_by_farm['checkout_data'])) $total_items = count($items_by_farm['checkout_data']);
 			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/basket/basket_items', [
 				'data_baskets' => $items_by_farm
-			], true)], JSON_NUMERIC_CHECK);
+			], true), 'ids' => $this->input->post('ids')], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -127,7 +127,8 @@ class Basket extends My_Controller {
 				]);
 				// debug($other_orders, 'stop');
 				$hash = '';
-				$basket_ids = [$post['id']];
+				$basket_ids = [];
+				$basket_ids[$post['id']] = $post['id'];
 				if ($other_orders) {
 					foreach ($other_orders as $other) $basket_ids[$other['id']] = $other['id'];
 				}
@@ -138,7 +139,7 @@ class Basket extends My_Controller {
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 
 				/*send realtime basket*/
-				$this->senddataapi->trigger('add-to-basket', 'incoming-baskets', [
+				$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
 					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id']
 				]);
 				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
@@ -459,6 +460,9 @@ class Basket extends My_Controller {
 				'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'placed', 'remove' => false
 			]);
 
+			$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
+				'success' => true, 'ids' => $all_basket_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'orders/placed/'
+			]);
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
 			]);
@@ -467,6 +471,13 @@ class Basket extends My_Controller {
 			]);
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
+			]);
+
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'orders', 'tab' => 'placed'
+			]);
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'placed'
 			]);
 
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');

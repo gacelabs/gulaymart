@@ -239,7 +239,7 @@
 		margin-right: 5px;
 	}
 }
-[data-menu-nav] kbd:last-child {
+[data-menu-nav] kbd.hidden-lg {
 	position: absolute;
 	top: 3px;
 	right: 8px;

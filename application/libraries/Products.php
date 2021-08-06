@@ -339,31 +339,16 @@ class Products {
 					if ($feedbacks) {
 						$feedbacks_data = [];
 						foreach ($feedbacks as $key => $feedback) {
-							if ($feedback['under'] == 0) {
+							if ($feedback['under'] == 0) { /*to_id is the farmer*/
+								$feedback['is_buyer'] = 1;
+								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
 								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['from_id']], 'row');
-								if ($feedback['profile'] == false) {
-									$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
-								}
-								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
-								if ($feedback['farm'] == false) {
-									$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
-								}
 								$feedbacks_data[$feedback['id']]['first'] = $feedback;
-							}
-						}
-						foreach ($feedbacks as $key => $feedback) {
-							if ($feedback['under'] != 0) {
-								if (isset($feedbacks_data[$feedback['under']])) {
-									$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['from_id']], 'row');
-									if ($feedback['profile'] == false) {
-										$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
-									}
-									$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
-									if ($feedback['farm'] == false) {
-										$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
-									}
-									$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
-								}
+							} else { /*to_id is the profile*/
+								$feedback['is_buyer'] = 0;
+								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
+								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
+								$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
 							}
 						}
 						// debug($feedbacks_data, $feedbacks, 'stop');

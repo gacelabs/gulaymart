@@ -28,12 +28,12 @@
 				<i class="fa fa-shopping-basket"></i>
 				<span class="hidden-xs">Basket 
 					<?php 
-						echo "<kbd id='nav-basket-count'>".($this->basket_count == false ? 'Buy now!' : '')."</kbd>";
+						echo "<kbd id='nav-basket-count'>".($this->basket_count == false ? 'Buy now!' : $this->basket_count)."</kbd>";
 						echo "<i class='fa fa-circle hidden-lg text-danger".($this->basket_count == false ? ' hide' : '')."'></i>";
 					?>
 				</span>
 				<?php
-					echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".($this->basket_count == false ? 'Buy now!' : '')."</kbd>";
+					echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".($this->basket_count == false ? 'Buy now!' : $this->basket_count)."</kbd>";
 				?>
 			</a>
 		</div>

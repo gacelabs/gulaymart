@@ -139,7 +139,6 @@ var runDomReady = function() {
 	$(document.body).find('[js-element="remove-all"]').off('click').on('click', function(e) {
 		if ($(e.target).parents('.order-table-item:first').hasClass('was-cancelled')) {
 			$(e.target).parents('.order-table-item:first').fadeOut().remove();
-			updateOrdersCounts();
 		} else {
 			var oToDeleteData = [];
 			$(e.target).parents('.order-table-item:first').find('[js-element="remove-all"]').each(function(i, elem) {

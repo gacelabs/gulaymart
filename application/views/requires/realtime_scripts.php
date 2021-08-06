@@ -19,7 +19,7 @@
 				}
 				if (oUser) {
 					/*communicate from orders tab to fulfillment tab*/
-					// if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
+					if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 					/*communicate from fulfillment tab to orders tab*/
 					// if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 					/*communicate from operators booking page*/

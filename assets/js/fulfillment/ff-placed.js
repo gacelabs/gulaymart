@@ -2,47 +2,6 @@ $(document).ready(function() {
 	runDomReady();
 });
 
-var updateFulfillmentsCounts = function(noAlert) {
-	if (noAlert == undefined) noAlert = false;
-
-	var iCnt = $('.order-table-item:not(.was-cancelled)').length,
-	iInitCancelCnt = parseInt($('.ff-navbar-pill.cancelled').find('kbd').text()),
-	iFinalCancelCnt = $('.order-table-item.was-cancelled').length,
-	iNavCnt = parseInt($('#nav-fulfill-count').text());
-
-	if (iCnt == 0) {
-		$('.ff-navbar-pill.active').find('kbd').addClass('no-count').text('');
-		$('[js-element="fulfill-panel"]').find('.no-records-ui').fadeIn('slow').removeClass('hide');
-	} else {
-		$('.ff-navbar-pill.active').find('kbd').removeClass('no-count').text(iCnt);
-		$('[js-element="fulfill-panel"]').find('.no-records-ui').fadeOut('slow').addClass('hide');
-	}
-
-	if (noAlert == false) {
-		setTimeout(function() {
-			runAlertBox({type:'info', message: 'Order added to Cancelled Fulfillments'/*, unclose:true*/});
-			$('.order-table-item.was-cancelled').fadeOut('slow');
-			setTimeout(function() {
-				$('.order-table-item.was-cancelled').remove();
-			}, 1000);
-		}, 3000);
-	}
-
-	var iNavLastCnt = (iNavCnt-iFinalCancelCnt < 0) ? false : iNavCnt-iFinalCancelCnt;
-	if (iNavLastCnt != false) {
-		$('#nav-fulfill-count').text(iNavLastCnt);
-	} else {
-		$('#nav-fulfill-count').hide();
-	}
-
-	var iCancelCnt = (iInitCancelCnt+iFinalCancelCnt < 0) ? false : iInitCancelCnt+iFinalCancelCnt;
-	if (iCancelCnt != false) {
-		$('.ff-navbar-pill.cancelled').find('kbd').removeClass('no-count').text(iCancelCnt);
-	} else {
-		$('.ff-navbar-pill.cancelled').find('kbd').addClass('no-count').text('');
-	}
-}
-
 var runOrdersToFulfillments = function(realtime) {
 	console.log('Listening from Orders activity!');
 	// console.log(realtime);
@@ -81,6 +40,14 @@ var removeOnFulfillment = function(obj) {
 			});
 		});
 
-		if (bCanceledCnt) updateFulfillmentsCounts();
+		if (bCanceledCnt) {
+			setTimeout(function() {
+				runAlertBox({type:'info', message: 'Order added to Cancelled Fulfillments'/*, unclose:true*/});
+				$('.order-table-item.was-cancelled').fadeOut('slow');
+				setTimeout(function() {
+					$('.order-table-item.was-cancelled').remove();
+				}, 1000);
+			}, 3000);
+		}
 	}
 }

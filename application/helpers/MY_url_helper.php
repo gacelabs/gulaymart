@@ -325,22 +325,22 @@ function get_status_value($status=false)
 	if ($status) {
 		$ci =& get_instance();
 		switch (strtolower(trim($status))) {
-			case '1': /*verified*/
+			case GM_VERIFIED_SCHED: case GM_VERIFIED_NOW: /*verified*/
 				return 'verified';
 			break;
-			case '2': /*placed*/
+			case GM_PLACED_STATUS: /*placed*/
 				return 'placed';
 			break;
-			case '3': /*on delivery*/
+			case GM_ON_DELIVERY_STATUS: /*on delivery*/
 				return 'on+delivery';
 			break;
-			case '4': /*received*/
+			case GM_RECEIVED_STATUS: /*received*/
 				return 'received';
 			break;
-			case '5': /*cancelled*/
+			case GM_CANCELLED_STATUS: /*cancelled*/
 				return 'cancelled';
 			break;
-			case '6': /*for pick up*/
+			case GM_FOR_PICK_UP_STATUS: /*for pick up*/
 				return 'for+pick+up';
 			break;
 		}
@@ -354,26 +354,26 @@ function get_status_dbvalue($status=false)
 		$ci =& get_instance();
 		switch (strtolower(trim($status))) {
 			case 'verified': /*verified*/
-				return 1;
+				return [GM_VERIFIED_SCHED, GM_VERIFIED_NOW];
 			break;
 			case 'placed': /*placed*/
-				return 2;
+				return GM_PLACED_STATUS;
 			break;
 			case 'on+delivery': /*on delivery*/
-				return 3;
+				return GM_ON_DELIVERY_STATUS;
 			break;
 			case 'received': /*received*/
-				return 4;
+				return GM_RECEIVED_STATUS;
 			break;
 			case 'cancelled': /*cancelled*/
-				return 5;
+				return GM_CANCELLED_STATUS;
 			break;
 			case 'for+pick+up': /*for pick up*/
-				return 6;
+				return GM_FOR_PICK_UP_STATUS;
 			break;
 		}
 	}
-	return 0;
+	return -1;
 }
 
 function get_toktokstatus_value($status=false)
@@ -481,6 +481,9 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 		}
 		// debug($settings, 'stop');
 		if ($settings) {
+			$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $user_id, 'nav' => 'message'
+			]);
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
@@ -610,7 +613,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 	
 	/*message sellers*/
-	$data = ['id' => $merge['id'], 'action' => $action, 'for' => 'seller'];
+	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'seller'];
 	$context = make_stream_context($data);
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
 
