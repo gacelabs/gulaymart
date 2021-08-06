@@ -151,7 +151,7 @@ $(document).ready(function() {
 					aaSortDir = 'desc';
 				}
 			});
-			// console.log(blanks, last_cnt);
+			console.log(blanks, last_cnt);
 			oSettings = {
 				// stateSave: true,
 				responsive: true,
