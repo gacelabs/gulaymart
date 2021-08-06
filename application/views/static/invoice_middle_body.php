@@ -45,7 +45,7 @@
 						<div class="text-center">
 							<i class="fa fa-id-badge"></i>
 						</div>
-						<p class="zero-gaps"><?php echo ($buyer['id'] == $current_profile['id']) ? '<i>(You) </i>' : '';?><?php echo ucwords($buyer['fullname']);?></p>
+						<p class="zero-gaps"><?php echo ($current_profile AND ($current_profile['id'] == $buyer['id'])) ? '<i>(You) </i>' : '';?><?php echo ucwords($buyer['fullname']);?></p>
 					</div>
 					<div class="zig-top-grid">
 						<div class="text-center">
