@@ -513,6 +513,12 @@ class Api extends MY_Controller {
 						unset($post['fn']);
 					}
 					$this->gm_db->save($object, $post, $where);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'notifications'
+					]);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'feedbacks'
+					]);
 					$this->set_response('success', false, $data, false, $fn);
 				}
 			}

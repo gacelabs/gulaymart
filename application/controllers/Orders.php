@@ -80,12 +80,21 @@ class Orders extends MY_Controller {
 	public function messages()
 	{
 		$data_messages = false;
-		$messages = $this->gm_db->get_in('messages', [
-			'to_id' => $this->accounts->profile['id'],
-			'unread' => GM_MESSAGE_UNREAD,
-			'order_by' => ['under', 'added'],
-			'direction' => ['ASC', 'DESC'],
-		]);
+		if ($this->farms) {
+			$messages = $this->gm_db->get_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
+				'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			]);
+		} else {
+			$messages = $this->gm_db->get_in('messages', [
+				'to_id' => $this->accounts->profile['id'],
+				'unread' => [GM_MESSAGE_UNREAD],
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			]);
+		}
 		// debug($messages, 'stop');
 		if ($messages) {
 			$data_messages = [];
@@ -129,42 +138,45 @@ class Orders extends MY_Controller {
 					$message['photo'] = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'is_main' => 1], 'row');
 				}
 				$message['reply'] = false;
-				foreach ($messages as $index => $msg) {
-					if ($msg['under'] == $message['id']) {
-						$msg['is_buyer'] = 0;
-						$msg['farm'] = $this->gm_db->get('user_farms', ['user_id' => $msg['from_id']], 'row');
-						$msg['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $msg['to_id']], 'row');
-						if ($msg['tab'] == 'Feedbacks' AND $msg['type'] == 'Comments') {
-							$msg['product'] = $this->gm_db->get('products', ['id' => $msg['page_id']], 'row');
-							$msg['product']['photos'] = false;
-							$photos = $this->gm_db->get('products_photo', ['product_id' => $msg['page_id'], 'status' => 1]);
-							if ($photos) {
-								foreach ($photos as $key => $photo) {
-									if ($photo['is_main']) {
-										$msg['product']['photos']['main'] = $photo;
-										break;
+				$replies = $this->gm_db->get('messages', ['under' => $message['id']]);
+				if ($replies) {
+					foreach ($replies as $index => $reply) {
+						if ($reply['under'] == $message['id']) {
+							$reply['is_buyer'] = 0;
+							$reply['farm'] = $this->gm_db->get('user_farms', ['user_id' => $reply['from_id']], 'row');
+							$reply['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $reply['to_id']], 'row');
+							if ($reply['tab'] == 'Feedbacks' AND $reply['type'] == 'Comments') {
+								$reply['product'] = $this->gm_db->get('products', ['id' => $reply['page_id']], 'row');
+								$reply['product']['photos'] = false;
+								$photos = $this->gm_db->get('products_photo', ['product_id' => $reply['page_id'], 'status' => 1]);
+								if ($photos) {
+									foreach ($photos as $key => $photo) {
+										if ($photo['is_main']) {
+											$reply['product']['photos']['main'] = $photo;
+											break;
+										}
+									}
+									foreach ($photos as $key => $photo) {
+										if (!$photo['is_main']) {
+											$reply['product']['photos']['other'][] = $photo;
+										}
 									}
 								}
-								foreach ($photos as $key => $photo) {
-									if (!$photo['is_main']) {
-										$msg['product']['photos']['other'][] = $photo;
-									}
-								}
+								$reply['product']['farm_location_id'] = $reply['entity_id'];
+								$reply['location'] = $this->gm_db->get('products_location', [
+									'product_id' => $reply['page_id'],
+									'farm_location_id' => $reply['entity_id']
+								], 'row');
+								$reply['bought'] = $this->gm_db->count('baskets', [
+									'user_id' => $reply['to_id'],
+									'product_id' => $reply['page_id'],
+									'status >' => 2,
+								]);
+								$reply['photo'] = $this->gm_db->get('products_photo', ['product_id' => $reply['page_id'], 'is_main' => 1], 'row');
 							}
-							$msg['product']['farm_location_id'] = $msg['entity_id'];
-							$msg['location'] = $this->gm_db->get('products_location', [
-								'product_id' => $msg['page_id'],
-								'farm_location_id' => $msg['entity_id']
-							], 'row');
-							$msg['bought'] = $this->gm_db->count('baskets', [
-								'user_id' => $msg['to_id'],
-								'product_id' => $msg['page_id'],
-								'status >' => 2,
-							]);
-							$msg['photo'] = $this->gm_db->get('products_photo', ['product_id' => $msg['page_id'], 'is_main' => 1], 'row');
+							$message['reply'] = $reply;
+							break;
 						}
-						$message['reply'] = $msg;
-						break;
 					}
 				}
 				$data_messages[$message['tab']][] = $message;
@@ -244,23 +256,52 @@ class Orders extends MY_Controller {
 				$post['id'] = $id;
 			} else {
 				$post['id'] = $post['under'];
+				$over = $this->gm_db->get_in('messages', ['id' => $post['id']], 'row');
+				if ($over) {
+					$this->gm_db->save('messages', ['unread' => 0], ['id' => $post['id']]);
+				}
 			}
 
 			$post['added'] = date('Y-m-d H:i:s');
-			$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['from_id']], 'row');
-			if ($post['profile'] == false) {
+
+			if ($post['under'] == 0) { /*to_id is the farmer*/
+				$post['is_buyer'] = 1;
+				$post['buyer_id'] = $post['from_id'];
+				$post['seller_id'] = $post['to_id'];
+				$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['to_id']], 'row');
+				$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['from_id']], 'row');
+			} else { /*to_id is the profile*/
+				$post['is_buyer'] = 0;
+				$post['buyer_id'] = $post['to_id'];
+				$post['seller_id'] = $post['from_id'];
+				$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['from_id']], 'row');
 				$post['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $post['to_id']], 'row');
 			}
-			$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['from_id']], 'row');
-			if ($post['farm'] == false) {
-				$post['farm'] = $this->gm_db->get('user_farms', ['user_id' => $post['to_id']], 'row');
-			}
+
 			$post['product'] = $this->gm_db->get('products', ['id' => $post['page_id']], 'row');
 			$post['product']['entity_id'] = $post['entity_id'];
-			
-			$html = $this->load->view('static/commented', $post, true);
+			$post['html'] = $this->load->view('static/commented', $post, true);
 
-			$post['html'] = $html;
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $post['buyer_id'], 'nav' => 'messages'
+			]);
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $post['seller_id'], 'nav' => 'messages'
+			]);
+
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $post['buyer_id'], 'menu' => 'messages', 'tab' => 'notifications'
+			]);
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $post['buyer_id'], 'menu' => 'messages', 'tab' => 'feedbacks'
+			]);
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $post['seller_id'], 'menu' => 'messages', 'tab' => 'notifications'
+			]);
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $post['seller_id'], 'menu' => 'messages', 'tab' => 'feedbacks'
+			]);
+
 			$this->set_response('success', false, $post, false, 'appendComment');
 		}
 		$this->set_response('error', 'Unable to post comment, try again later.', $post);

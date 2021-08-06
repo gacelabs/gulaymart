@@ -33,14 +33,14 @@
 			</div>
 			<div class="modal-footer text-left" id="reply_box">
 				<form action="orders/comment" method="post" class="form-validate" data-ajax="1" data-disable="enter">
-					<input type="hidden" id="under" name="under" value="1">
+					<input type="hidden" id="under" name="under" value="">
 					<input type="hidden" id="to_id" name="to_id" value="">
 					<input type="hidden" name="from_id" value="<?php isset_echo($current_profile, 'id', 0);?>">
 					<input type="hidden" id="page_id" name="page_id" value="">
 					<input type="hidden" id="entity_id" name="entity_id" value="">
 					<input type="hidden" name="tab" value="Feedbacks">
 					<input type="hidden" name="type" value="Comments">
-					<input type="hidden" name="unread" value="<?php echo GM_MESSAGE_UNREAD;?>">
+					<input type="hidden" name="unread" value="<?php echo GM_MESSAGE_READ;?>">
 					<div class="form-group zero-gaps">
 						<textarea class="form-control" required="required" id="seller_reply" name="content" rows="2" placeholder="Reply to this comment ..."></textarea>
 					</div>

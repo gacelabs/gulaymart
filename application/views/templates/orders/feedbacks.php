@@ -44,13 +44,11 @@
 									<?php if ($feedback['reply']): ?>View<?php else: ?>Reply<?php endif ?>
 								</a>
 							</li>
+							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 						<?php endif ?>
-						<?php if ($feedback['reply'] OR $feedback['is_buyer'] == 0): ?>
-						<?php if ($feedback['is_buyer'] == 1): ?>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<?php endif ?>
 						<li>
 							<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
 						</li>
-						<?php endif ?>
 					</ul>
 				</div>
 			</div>
