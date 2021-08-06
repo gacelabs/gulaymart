@@ -43,12 +43,12 @@ $(document).ready(function() {
 	/*end for checkbox switch*/
 
 	var oPauseAjax = false;
-	$('a[data-ajax]').off('click').on('click', function(e) {
+	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault();
 		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
 		var isJsonPCallback = $(e.target).data('call-jsonp') != undefined ? $(e.target).data('call-jsonp') : 1;
 		var oSettings = {
-			url: e.target.href,
+			url: $(e.target).data('href') == undefined ? e.target.href : $(e.target).data('href'),
 			type: 'get',
 			data: oData,
 			dataType: 'json',
@@ -138,7 +138,7 @@ $(document).ready(function() {
 			}*/
 			$(elem).find('tr:first th').each(function(i, unit) {
 				var text = $.trim($(unit).text());
-				if ($.inArray(text.toLowerCase(), ['actions','','name']) >= 0) {
+				if ($.inArray(text.toLowerCase(), ['actions','']) >= 0) {
 					if (blanks.orderable == undefined) blanks.orderable = false;
 					blanks.targets.push(i);
 				}
@@ -151,7 +151,7 @@ $(document).ready(function() {
 					aaSortDir = 'desc';
 				}
 			});
-			console.log(blanks, last_cnt);
+			// console.log(blanks, last_cnt);
 			oSettings = {
 				// stateSave: true,
 				responsive: true,
