@@ -288,6 +288,7 @@ function modalCallbacks() {
 						$('#reply_modalLabel').text('Last Conversations:');
 						$('#reply_box').addClass('hide');
 						$('#seller_content').removeClass('hide');
+						$('#seller_content').find('img.media-object').attr('src', oReply.farm.profile_pic);
 						// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
 						$('#seller_farm_name').text(oReply.farm.name);
 						$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
