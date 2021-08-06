@@ -388,10 +388,12 @@ var initMenuNavsCount = function() {
 
 var reCountStatusTabs = function(sMenu, sTab, totalItems) {
 	if (totalItems.toString().length > 4) totalItems = Number(totalItems).toExponential();
+	var sClass = 'no-count';
+	if (sMenu == 'messages') sClass = 'hide';
 	if (totalItems) {
-		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').removeClass('no-count').text(totalItems);
+		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').removeClass(sClass).text(totalItems);
 	} else {
-		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').addClass('no-count').text('');
+		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').addClass(sClass).text('');
 	}
 }
 

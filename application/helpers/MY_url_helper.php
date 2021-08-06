@@ -484,6 +484,12 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 				'success' => true, 'id' => $user_id, 'nav' => 'message'
 			]);
+			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'notifications'
+			]);
+			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'feedbacks'
+			]);
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,

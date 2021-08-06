@@ -3,14 +3,14 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 			<div class="messages-nav-grid">
-				<div class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
+				<div data-menu="messages" data-nav="notifications" class="messages-navbar-pill hideshow-btn active" hideshow-target="#msg_notifications">Notifications
 					<?php 
 					$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Notifications', 'to_id' => $current_profile['profile']['user_id']]);
 					?>
 					<kbd id='msg_notifications-count'<?php if (!$msg_count): ?> class="hide"<?php endif ?>><?php echo $msg_count;?></kbd>
 				</div>
 				<?php if ($this->farms AND $this->products->count()): ?>
-					<div class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
+					<div data-menu="messages" data-nav="feedbacks" class="messages-navbar-pill hideshow-btn" hideshow-target="#msg_feedbacks">Feedbacks
 						<?php 
 						$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $current_profile['profile']['user_id']]);
 						?>

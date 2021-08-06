@@ -115,15 +115,18 @@ class Support extends MY_Controller {
 			if (isset($post['success']) AND $post['success'] AND !empty($post['id'])) {
 				$user_ids = !is_array($post['id']) ? [$post['id']] : $post['id'];
 				if (in_array($this->accounts->profile['id'], $user_ids)) {
-					$data['tab'] = $tab = $post['tab'];
 					$data['menu'] = $menu = $post['menu'];
+					$data['tab'] = $tab = $post['tab'];
 					$params = false;
 					if (in_array($menu, ['fulfillments'])) {
 						$params = ['seller_id' => $user_ids, 'status' => GM_ITEM_REMOVED];
 					} elseif (in_array($menu, ['orders'])) {
 						$params = ['buyer_id' => $user_ids, 'status' => GM_ITEM_REMOVED];
+					} elseif (in_array($menu, ['messages'])) {
+						$params = ['unread' => GM_MESSAGE_UNREAD, 'tab' => '', 'to_id' => $user_ids];
 					}
 					if ($params) {
+						$table = 'baskets_merge';
 						switch (strtolower($tab)) {
 							case 'placed':
 								$params['status'] = GM_PLACED_STATUS;
@@ -140,8 +143,16 @@ class Support extends MY_Controller {
 							case 'cancelled':
 								$params['status'] = GM_CANCELLED_STATUS;
 								break;
+							case 'notifications':
+								$table = 'messages';
+								$params['tab'] = 'Notifications';
+								break;
+							case 'feedbacks':
+								$table = 'messages';
+								$params['tab'] = 'Feedbacks';
+								break;
 						}
-						$data['total_items'] = $this->gm_db->count('baskets_merge', $params);
+						$data['total_items'] = $this->gm_db->count($table, $params);
 					}
 				}
 			}

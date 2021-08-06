@@ -42,6 +42,11 @@
 					if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
 						initMenuNavsCount();
 					}
+
+					/*listen for incomming on tab counts*/
+					if (typeof initStatusTabsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+						initStatusTabsCount();
+					}
 				}
 			}
 		});
