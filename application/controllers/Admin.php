@@ -193,13 +193,16 @@ class Admin extends MY_Controller {
 			if ($operators) {
 				foreach ($operators as $key => $operator_id) {
 					/*now send alerts to operators*/
-					$this->senddataapi->trigger('operator-bookings', 'send-bookings', [
+					$senddataapi = $this->senddataapi->trigger('operator-bookings', 'send-bookings', [
 						'message' => 'You have available bookings, please press on BOOK NOW',
 						'operator_id' => $operator_id,
 						'delivery' => $toktok_for_operators[0],
 						'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => 1]),
 						'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => [0,1]]),
 					]);
+					if (in_array($senddataapi->response_code, [403,404])) {
+						cronlogger($senddataapi->response_text, ['operator_id' => $operator_id], 'operator-bookings');
+					}
 				}
 			}
 		} else {
@@ -292,6 +295,8 @@ class Admin extends MY_Controller {
 							} else {
 								$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
 							}
+						} else {
+							cronlogger('Error while pushing operator orders to toktok!', $operator, 'operator-bookings');
 						}
 					}
 				}
@@ -433,24 +438,29 @@ class Admin extends MY_Controller {
 								$buyer_ids[$toktok['buyer_id']] = $toktok['buyer_id'];
 								$seller_ids[$toktok['seller_id']] = $toktok['seller_id'];
 								$merge_ids[$toktok['id']] = $toktok['id'];
+							} else {
+								cronlogger('Error while pushing orders to toktok!', $toktok, 'gulaymart-bookings');
 							}
 						}
 					}
-					// send realtime on-delivery order
-					$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
-						'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
-					]);
-					// send realtime on-delivery fulfillment
-					$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
-						'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
-					]);
 
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $buyer_ids, 'nav' => 'order'
-					]);
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
-					]);
+					if (count($buyer_ids) AND count($seller_ids) AND count($merge_ids)) {
+						// send realtime on-delivery order
+						$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+							'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
+						]);
+						// send realtime on-delivery fulfillment
+						$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+							'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
+						]);
+
+						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+							'success' => true, 'id' => $buyer_ids, 'nav' => 'order'
+						]);
+						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+							'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
+						]);
+					}
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
 						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!'], JSON_NUMERIC_CHECK); exit();
@@ -480,19 +490,17 @@ class Admin extends MY_Controller {
 											foreach ($deliveries as $delivery) {
 												/*update the baskets_merge data for this operator*/
 												$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
-												/*log here*/
-												operatorlogger($deliveries, $operator);
 											}
 										}
 									}
 								} else {
 									/*log here*/
-									operatorlogger('Operator count is greater than the records');
+									cronlogger('Operator count is greater than the records', $operators, 'operator-bookings');
 								}
 							}
 						} else {
 							/*log here*/
-							operatorlogger('No records available for operators');
+							cronlogger('No records available for operators', $toktok_for_operators, 'operator-bookings');
 						}
 						/*then let the cron job run this until all operator bookings are done*/
 						/*there will be another method that checks these and switches back ON again*/
@@ -585,6 +593,8 @@ class Admin extends MY_Controller {
 									}
 								}
 							}
+						} else {
+							cronlogger('Error while receiving orders from toktok!', $data, 'gulaymart-bookings');
 						}
 					} else {
 						echo json_encode(['status' => true, 'message' => 'delivery id "'.$data['delivery_id'].'" already exists!'], JSON_NUMERIC_CHECK);

@@ -239,3 +239,9 @@
 		margin-right: 5px;
 	}
 }
+[data-menu-nav] kbd:last-child {
+	position: absolute;
+	top: 3px;
+	right: 8px;
+	font-size: 8px;
+}

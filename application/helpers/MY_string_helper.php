@@ -1689,22 +1689,20 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 	}
 }
 
-function operatorlogger($data=false, $operator=false)
+function cronlogger($response=false, $data=false, $type='error')
 {
-	$logfile = fopen(get_root_path('assets/data/logs/operator-bookings.log'), "a+");
-	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	if ($data AND $operator) {
-		$ci =& get_instance();
-		/*log here*/
-		$merge_ids = $ci->gm_db->columns('id', $data);
-		$txt .= "Code: 200\n";
-		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids], JSON_NUMERIC_CHECK) . " \n";
-	} else {
-		$txt .= "Code: -1 \n";
-		$txt .= "Response: $data \n";
+	$filename = 'assets/data/logs/cron-'.$type.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
 	}
-	
-	$txt .= "---------------------------------------------------------------------------------" . "\n";
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	$txt .= "Code: $type\n";
+	$txt .= "Response: " . json_encode($response, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "Data: " . json_encode($data, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "----------------------------" . "\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }

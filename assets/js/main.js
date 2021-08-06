@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
 	$('[data-toggle="tooltip"]').tooltip();
 	$('[data-toggle="popover"]').popover({
 		'trigger': 'hover'
@@ -231,9 +230,13 @@ $(document).ready(function() {
 		}
 	});
 
+	// if (mobileAndTabletCheck()) runSwiper();
 });
 
 var reCountMenuNavs = function(sNav, totalItems) {
+	if (totalItems.toString().length > 4) {
+		totalItems = Number(totalItems).toExponential();
+	}
 	switch (sNav) {
 		case 'fulfill': case 'fulfills': case 'fulfillments':
 			if ($('#nav-fulfill-count').length == 0) $('[data-menu-nav=""fulfillments]]').find('span').append('<kbd id="nav-fulfill-count"></kbd>');
@@ -324,4 +327,63 @@ var initMenuNavsCount = function() {
 			}
 		}
 	});
+}
+
+var runSwiper = function() {
+	var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
+	var currentPage = $.inArray(window.location.pathname, pageLinks);
+	var xDown = null;
+	var yDown = null;
+
+	function getTouches(evt) {
+		return (
+			evt.touches || evt.originalEvent.touches // browser API
+		); // jQuery
+	}
+	function handleTouchStart(evt) {
+		const firstTouch = getTouches(evt)[0];
+		xDown = firstTouch.clientX;
+		yDown = firstTouch.clientY;
+	}
+	function handleTouchMove(evt) {
+		if (!xDown || !yDown) {
+			return;
+		}
+		var xUp = evt.touches[0].clientX;
+		var yUp = evt.touches[0].clientY;
+
+		var xDiff = xDown - xUp;
+		var yDiff = yDown - yUp;
+
+		if (Math.abs(xDiff) > Math.abs(yDiff)) {
+			/*most significant*/
+			if (xDiff > 0) {
+				/* right swipe */
+				console.log("right swipe");
+				if (pageLinks[currentPage+1] != undefined) {
+					window.location = pageLinks[currentPage+1];
+				}
+			} else {
+				/* left swipe */
+				console.log("left swipe");
+				if (pageLinks[currentPage-1] != undefined) {
+					window.location = pageLinks[currentPage-1];
+				}
+			}
+		} else {
+			if (yDiff > 0) {
+				/* down swipe */
+				console.log("down swipe");
+			} else {
+				/* up swipe */
+				console.log("up swipe");
+			}
+		}
+		/* reset values */
+		xDown = null;
+		yDown = null;
+	}
+
+	document.addEventListener("touchstart", handleTouchStart, false);
+	document.addEventListener("touchmove", handleTouchMove, false);
 }
