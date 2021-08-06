@@ -1820,3 +1820,8 @@ function make_stream_context($data=false)
 
 	return $context;
 }
+
+function clean_json_encode($data=false)
+{
+	return json_encode($data, JSON_NUMERIC_CHECK);
+}

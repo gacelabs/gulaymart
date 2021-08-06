@@ -326,10 +326,10 @@ class Orders extends MY_Controller {
 				]);
 
 				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5])
+					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
 				]);
 				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_ids, 'status !=' => 5])
+					'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
 				]);
 			}
 

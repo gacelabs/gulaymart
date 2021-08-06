@@ -199,7 +199,7 @@ class MY_Controller extends CI_Controller {
 			}
 		}
 		/**/
-		$this->basket_count = $this->order_count = false;
+		$this->basket_count = $this->order_count = $this->fulfill_count = $this->message_count = false;
 		if ($this->accounts->has_session) {
 			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
 			$this->basket_count = $baskets == false ? false : count($baskets);
@@ -210,7 +210,7 @@ class MY_Controller extends CI_Controller {
 			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 5]);
 			$this->fulfill_count = $fulfill_count == false ? false : $fulfill_count;
 			
-			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $this->accounts->profile['id']]);
+			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'under' => 0, 'to_id' => $this->accounts->profile['id']]);
 			$this->message_count = $msg_count == false ? false : $msg_count;
 		}
 		// debug($products, 'stop');

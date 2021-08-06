@@ -142,7 +142,7 @@ class Basket extends My_Controller {
 					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id']
 				]);
 				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket', 'total_items' => $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]])
+					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
 				]);
 			}
 			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
@@ -460,13 +460,13 @@ class Basket extends My_Controller {
 			]);
 
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket', 'total_items' => $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]])
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
 			]);
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5])
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
 			]);
 			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 5])
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
 			]);
 
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');

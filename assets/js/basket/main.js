@@ -88,7 +88,7 @@ var runDomReady = function() {
 		$(e.target).parents('.order-table-item:first').find('[js-event="removeBasketItemBtn"]').each(function(i, elem) {
 			oToDeleteData.push({id : $(elem).data('id'), location_id : $(elem).data('location')});
 		});
-		console.log(oToDeleteData);
+		// console.log(oToDeleteData);
 
 		var uiButtonSubmit = $(e.target);
 		var lastButtonUI = uiButtonSubmit.html();
@@ -206,7 +206,7 @@ var runQtyDefaults = function(ui) {
 var basketProcess = function() {
 	realtime.bind('add-to-basket', 'incoming-baskets', function(object) {
 		var oData = object.data;
-		console.log(oData);
+		// console.log(oData);
 		if (oData.success) {
 			if (Object.keys(oData.buyer_id).length) {
 				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runBaskets(oData);
@@ -224,7 +224,7 @@ var runBaskets = function(data) {
 		dataType: 'json',
 		data: { ids: data.ids, buyer_id: data.buyer_id },
 		success: function(response) {
-			console.log(response);
+			// console.log(response);
 			if (response.html.length) {
 				var oArr = [];
 				if (Object.keys(data.ids).length) {

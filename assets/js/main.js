@@ -242,6 +242,12 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('#nav-fulfill-count').addClass('hide').text('');
 			}
+			if ($('kbd.nav-fulfill-count').length == 0) $('[data-menu-nav="fulfills"]').find('span').append('<kbd class="nav-fulfill-count hidden-lg hidden-md hidden-sm"></kbd>');
+			if (totalItems) {
+				$('kbd.nav-fulfill-count').removeClass('hide').text(totalItems);
+			} else {
+				$('kbd.nav-fulfill-count').text('');
+			}
 		break;
 		case 'basket': case 'baskets':
 			if ($('#nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd id="nav-basket-count"></kbd>');
@@ -250,7 +256,7 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('#nav-basket-count').text('Buy now!');
 			}
-			if ($('kbd.nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd id="nav-basket-count"></kbd>');
+			if ($('kbd.nav-basket-count').length == 0) $('[data-menu-nav="baskets"]').find('span').append('<kbd class="nav-basket-count hidden-lg hidden-md hidden-sm"></kbd>');
 			if (totalItems) {
 				$('kbd.nav-basket-count').removeClass('hide').text(totalItems);
 			} else {
@@ -264,6 +270,12 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('#nav-order-count').addClass('hide').text('');
 			}
+			if ($('kbd.nav-order-count').length == 0) $('[data-menu-nav="orders"]').find('span').append('<kbd class="nav-order-count hidden-lg hidden-md hidden-sm"></kbd>');
+			if (totalItems) {
+				$('kbd.nav-order-count').removeClass('hide').text(totalItems);
+			} else {
+				$('kbd.nav-order-count').text('');
+			}
 		break;
 		case 'message': case 'messages':
 			if ($('#nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd id="nav-messages-count"></kbd>');
@@ -272,19 +284,43 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('#nav-messages-count').addClass('hide').text('');
 			}
+			if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messagess"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
+			if (totalItems) {
+				$('kbd.nav-messages-count').removeClass('hide').text(totalItems);
+			} else {
+				$('kbd.nav-messages-count').text('');
+			}
 		break;
 	}
+}
+
+var checkCountMenuNavs = function(oData) {
+	var oSettings = {
+		url: 'support/check_menunav_counts/',
+		type: 'post',
+		dataType: 'json',
+		data: oData,
+		success: function(response) {
+			// console.log(response);
+			if (response) {
+				if (response.nav && response.id == oUser.id) {
+					reCountMenuNavs(response.nav, response.total_items);
+				}
+			}
+		}
+	};
+	$.ajax(oSettings);
 }
 
 var initMenuNavsCount = function() {
 	realtime.bind('count-item-in-menu', 'incoming-menu-counts', function(object) {
 		var oData = object.data;
-		console.log(oData);
+		// console.log(oData);
 		if (oData.success) {
 			if (Object.keys(oData.id).length) {
-				if ($.inArray(oUser.id, oData.id) >= 0) reCountMenuNavs(oData.nav, oData.total_items);
+				if ($.inArray(oUser.id, oData.id) >= 0) checkCountMenuNavs(oData);
 			} else {
-				if (oData.id == oUser.id) reCountMenuNavs(oData.nav, oData.total_items);
+				if (oData.id == oUser.id) checkCountMenuNavs(oData);
 			}
 		}
 	});

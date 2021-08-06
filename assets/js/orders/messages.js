@@ -57,7 +57,7 @@ var deleteMessage = function(data, ui) {
 }
 
 var appendComment = function(obj) {
-	console.log(obj);
+	// console.log(obj);
 	$('#seller_content').addClass('hide');
 	if (obj.under != undefined) {
 		if (obj.under > 0) {

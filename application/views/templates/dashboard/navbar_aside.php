@@ -14,11 +14,12 @@
 				<i class="fa fa-exchange"></i>
 				<span class="hidden-xs">Fulfillment 
 					<?php 
-						if ($this->fulfill_count !== false) {
-							echo "<kbd id='nav-fulfill-count'>".$this->fulfill_count."</kbd>";
-						}
+						echo "<kbd id='nav-fulfill-count'".($this->fulfill_count == false ? ' class="hide"' : '').">".$this->fulfill_count."</kbd>";
 					?>
 				</span>
+				<?php
+					echo "<kbd class='nav-fulfill-count hidden-lg hidden-md hidden-sm".($this->fulfill_count == false ? ' hide' : '')."'>".$this->fulfill_count."</kbd>";
+				?>
 			</a>
 		</div>
 		<?php endif ?>
@@ -27,18 +28,12 @@
 				<i class="fa fa-shopping-basket"></i>
 				<span class="hidden-xs">Basket 
 					<?php 
-					if($current_profile['shippings'] AND $this->basket_count == false) {
-						echo "<kbd class='hidden-md hidden-sm hidden-xs'>Buy now!</kbd>";
-						echo "<i class='fa fa-circle hidden-lg text-danger'></i>";
-					} elseif ($this->basket_count !== false) {
-						echo "<kbd id='nav-basket-count'>".$this->basket_count."</kbd>";
-					}
+						echo "<kbd id='nav-basket-count'>".($this->basket_count == false ? 'Buy now!' : '')."</kbd>";
+						echo "<i class='fa fa-circle hidden-lg text-danger".($this->basket_count == false ? ' hide' : '')."'></i>";
 					?>
 				</span>
 				<?php
-					if ($this->basket_count) {
-						echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".$this->basket_count."</kbd>";
-					}
+					echo "<kbd class='nav-basket-count hidden-lg hidden-md hidden-sm'>".($this->basket_count == false ? 'Buy now!' : '')."</kbd>";
 				?>
 			</a>
 		</div>
@@ -47,21 +42,25 @@
 				<i class="fa fa-cart-arrow-down"></i>
 				<span class="hidden-xs">Orders
 					<?php 
-						if ($this->order_count !== false) {
-							echo "<kbd id='nav-order-count'>".$this->order_count."</kbd>";
-						}
+						echo "<kbd id='nav-order-count'".($this->order_count == false ? ' class="hide"' : '').">".$this->order_count."</kbd>";
 					?>
 				</span>
+				<?php
+					echo "<kbd class='nav-order-count hidden-lg hidden-md hidden-sm".($this->order_count == false ? ' hide' : '')."'>".$this->order_count."</kbd>";
+				?>
 			</a>
 		</div>
 		<div class="aside-nav-child">
 			<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
-				<i class="fa fa-comment-o"></i><span class="hidden-xs">Messages
+				<i class="fa fa-comment-o"></i>
+				<span class="hidden-xs">Messages
 					<?php 
-					if ($this->message_count): ?>
-						<kbd id='nav-messages-count'><?php echo $this->message_count;?></kbd>
-					<?php endif ?>
+						echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
+					?>
 				</span>
+				<?php
+					echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
+				?>
 			</a>
 		</div>
 		<div class="navbar-aside-divider"><hr></div>

@@ -59,7 +59,7 @@ var runTimer = function() {
 }
 
 var populateOrderDetails = function(oData) {
-	console.log(oData);
+	// console.log(oData);
 	$('[js-form="booking-form"]').find('input[name="id"]').remove();
 	$('[js-form="booking-form"]').prepend($('<input>', {type: 'hidden', name: 'id', value: oData.delivery.id}));
 	$('[js-form="booking-form"]').find('input[name="user_id"]').remove();

@@ -86,9 +86,11 @@
 		};
 	}
 
+	var tagCount = 0;
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser) {
+				++tagCount;
 				oUser.seller_id = oUser.id;
 				oUser.tag = 'demo-notification';
 				oUser.url = window.location.protocol + '//' + window.location.hostname + '/orders/messages/';
@@ -96,7 +98,7 @@
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
 					body: '',
 					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'demo-notification',
+					tag: 'demo-notification'+tagCount,
 					renotify: true,
 					vibrate: [200, 100, 200, 100, 200, 100, 200],
 					data: oUser

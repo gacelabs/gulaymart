@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 var oReceivedAjax = false;
 var moveToReceiveOrders = function(post) {
-	console.log(post);
+	// console.log(post);
 	if (Object.keys(post).length) {
 		var oSettings = {
 			url: 'orders/receive/',

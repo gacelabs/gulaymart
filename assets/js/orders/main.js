@@ -48,7 +48,7 @@ function orderProcess() {
 	if (sSegment2 == undefined) sSegment2 = 'placed';
 	realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
 		var oData = object.data;
-		console.log(oData);
+		// console.log(oData);
 		if (oData.success) {
 			if (Object.keys(oData.buyer_id).length) {
 				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runOrders(oData);
@@ -66,7 +66,7 @@ function runOrders(data) {
 		dataType: 'json',
 		data: { ids: data.ids, buyer_id: data.buyer_id },
 		success: function(response) {
-			console.log(response);
+			// console.log(response);
 			if (response.html.length) {
 				if (data.remove == false) {
 					/*just add it*/

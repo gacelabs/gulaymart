@@ -76,6 +76,33 @@ class Support extends MY_Controller {
 		return '';
 	}
 
+	public function check_menunav_counts()
+	{
+		$post = $this->input->get() ?: $this->input->post();
+		// debug($post, 'stop');
+		$data = ['id' => $this->accounts->profile['id'], 'nav' => false, 'total_items' => 0];
+		if ($post) {
+			if (isset($post['success']) AND $post['success'] AND !empty($post['id'])) {
+				$user_ids = !is_array($post['id']) ? [$post['id']] : $post['id'];
+				if (in_array($this->accounts->profile['id'], $user_ids)) {
+					$data['nav'] = $nav = $post['nav'];
+					switch (strtolower($nav)) {
+						case 'basket':
+							$data['total_items'] = $this->gm_db->count('baskets', ['user_id' => $user_ids, 'status' => [0,1]]);
+							break;
+						case 'order':
+							$data['total_items'] = $this->gm_db->count('baskets_merge', ['buyer_id' => $user_ids, 'status !=' => 5]);
+							break;
+						case 'fulfill':
+							$data['total_items'] = $this->gm_db->count('baskets_merge', ['seller_id' => $user_ids, 'status !=' => 5]);
+							break;
+					}
+				}
+			}
+		}
+		echo clean_json_encode($data); exit();
+	}
+
 	public function thankyou_page()
 	{
 		$post = $this->input->get() ?: $this->input->post();

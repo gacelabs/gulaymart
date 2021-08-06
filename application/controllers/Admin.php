@@ -446,10 +446,10 @@ class Admin extends MY_Controller {
 					]);
 
 					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $buyer_ids, 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_ids, 'status !=' => 5])
+						'success' => true, 'id' => $buyer_ids, 'nav' => 'order'
 					]);
 					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_ids, 'status !=' => 5])
+						'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
 					]);
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
@@ -614,10 +614,10 @@ class Admin extends MY_Controller {
 					]);
 
 					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $row['buyer_ids'], 'nav' => 'order', 'total_items' => $this->gm_db->count('baskets_merge', ['buyer_id' => $row['buyer_ids'], 'status !=' => 5])
+						'success' => true, 'id' => $row['buyer_ids'], 'nav' => 'order'
 					]);
 					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $row['seller_ids'], 'nav' => 'fulfill', 'total_items' => $this->gm_db->count('baskets_merge', ['seller_id' => $row['seller_ids'], 'status !=' => 5])
+						'success' => true, 'id' => $row['seller_ids'], 'nav' => 'fulfill'
 					]);
 				}
 				echo json_encode(['status' => true, 'message' => 'successfull!, orders was received!'], JSON_NUMERIC_CHECK); exit();

@@ -84,7 +84,7 @@ function fulfillmentProcess(callback) {
 	if (sSegment2 == undefined) sSegment2 = 'placed';
 	realtime.bind(sSegment2+'-fulfillment', 'incoming-fulfillment', function(object) {
 		var oData = object.data;
-		console.log(oData);
+		// console.log(oData);
 		if (oData.success) {
 			if (Object.keys(oData.seller_id).length) {
 				if ($.inArray(oUser.id, oData.seller_id) >= 0) runFulfillments(oData);
@@ -102,7 +102,7 @@ function runFulfillments(data) {
 		dataType: 'json',
 		data: { ids: data.ids, seller_id: data.seller_id },
 		success: function(response) {
-			console.log(response);
+			// console.log(response);
 			if (response.html.length) {
 				if (data.remove == false) {
 					/*just add it*/
