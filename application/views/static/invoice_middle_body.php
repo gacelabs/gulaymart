@@ -101,7 +101,7 @@
 					<?php endif ?>
 					<div class="invoice-summary-grid">
 						<div>
-							<p class="text-ellipsis"><?php echo $seller['city'];?> <b>TO</b> <?php echo ($buyer['id'] == $current_profile['id']) ? 'Your Address' : $buyer_address;?></p>
+							<p class="text-ellipsis"><?php echo $seller['city'];?> <b>TO</b> <?php echo ($current_profile AND ($current_profile['id'] == $buyer['id'])) ? 'Your Address' : $buyer_address;?></p>
 							<small class="elem-block text-gray">Delivery Fee</small>
 						</div>
 						<div class="text-right">&#x20b1; <?php echo format_number($fee);?></div>
