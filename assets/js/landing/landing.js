@@ -6,7 +6,7 @@ $(document).ready(function() {
 	setInterval(function() {
 		$('#subphrase').hide();
 		if (i < img.length) {
-			$('#first').css({'background-image': 'url(assets/landing/images/'+img[i]+')'});
+			$('#first').css({'background-image': 'url(assets/images/landing/'+img[i]+')'});
 			$('#subphrase').text(phrase[i]).fadeIn('fast');
 			++i;
 		}
