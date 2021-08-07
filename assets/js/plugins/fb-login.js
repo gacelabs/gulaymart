@@ -28,10 +28,8 @@ var runFbLogin = function(data) {
 		});
 	} else {
 		FB.api('/me?fields=id,email,name', function(data) {
-			FB.getLoginStatus(function(response) {
-				data.fbauth = response;
-				simpleAjax('authenticate/fb_login', data);
-			});
+			data.fbauth = {status: 'connected'};
+			simpleAjax('authenticate/fb_login', data);
 		});
 	}
 };
