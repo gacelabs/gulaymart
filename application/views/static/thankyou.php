@@ -25,13 +25,13 @@
 								<span class="text-white"><b>Placed Order</b></span>
 							</span>
 						</div>
-						<div>
+						<div style="filter:grayscale(1);">
 							<span>
 								<img src="assets/images/icons/deliver.png">
 								<span><b>On Delivery</b></span>
 							</span>
 						</div>
-						<div>
+						<div style="filter:grayscale(1);">
 							<span>
 								<img src="assets/images/icons/received.png" style="transform: rotateY(180deg);">
 								<span><b>Order Received</b></span>
