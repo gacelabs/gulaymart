@@ -21,21 +21,24 @@ $(document).ready(function() {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
-		console.log("Registered:", registration);
-		let deferredPrompt;
-		document.querySelector('.add-pwa').addEventListener('click', async () => {
-			deferredPrompt.prompt();
-			const { outcome } = await deferredPrompt.userChoice;
-			deferredPrompt = null;
-		});
+		// console.log("Registered:", registration);
+		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
+			// console.log(elem, i);
+			let deferredPrompt;
+			elem.addEventListener('click', async () => {
+				deferredPrompt.prompt();
+				const { outcome } = await deferredPrompt.userChoice;
+				deferredPrompt = null;
+			});
 
-		window.addEventListener('beforeinstallprompt', (e) => {
-			e.preventDefault();
-			deferredPrompt = e;
-		});
+			window.addEventListener('beforeinstallprompt', (e) => {
+				e.preventDefault();
+				deferredPrompt = e;
+			});
 
-		window.addEventListener('appinstalled', (e) => {
-			deferredPrompt = null;
+			window.addEventListener('appinstalled', (e) => {
+				deferredPrompt = null;
+			});
 		});
 	}).catch(function(err) {
 		console.log("Issue happened:", err);
