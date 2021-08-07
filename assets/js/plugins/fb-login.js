@@ -1,14 +1,18 @@
 $(document).ready(function() {
 	if (oUser == false) {
 		$('.fb-login-btn').off('click').on('click', function(e) {
-			FB.login(function(response) {
-				// console.log(response);
-				if (response.status === 'connected') {
-					runFbLogin();
-				} else{
-					$('#login_modal').modal('hide');
-				}
-			}, {scope: 'public_profile, email'});
+			if (fbstatus != 'connected') {
+				FB.login(function(response) {
+					// console.log(response);
+					if (response.status === 'connected') {
+						runFbLogin();
+					} else{
+						$('#login_modal').modal('hide');
+					}
+				}, {scope: 'public_profile, email'});
+			} else if (fbstatus == 'unknown') {
+				runFbLogin();
+			}
 		});
 	}
 });
@@ -28,8 +32,10 @@ var runFbLogin = function(data) {
 		});
 	} else {
 		FB.api('/me?fields=id,email,name', function(data) {
-			data.fbauth = {status: 'connected'};
-			simpleAjax('authenticate/fb_login', data);
+			FB.getLoginStatus(function(response) {
+				data.fbauth = response;
+				simpleAjax('authenticate/fb_login', data);
+			});
 		});
 	}
 };

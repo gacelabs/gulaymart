@@ -9,6 +9,9 @@
 			version	: '<?php echo FB_VERSION;?>'
 		});
 		FB.AppEvents.logPageView();
+		FB.getLoginStatus(function(response) {
+			fbstatus = response.status;
+		});
 	};
 	(function(d, s, id){
 		var js, fjs = d.getElementsByTagName(s)[0];

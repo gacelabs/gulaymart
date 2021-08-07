@@ -40,7 +40,7 @@
 	<link rel="manifest" href="/public/manifest.webmanifest.json">
 	
 	<script type="text/javascript" id="main-obj-script">
-		var oUser = <?php echo $current_profile ? json_encode($current_profile, JSON_NUMERIC_CHECK) : 'false';?>;
+		var fbstatus = 'unknown'; oUser = <?php echo $current_profile ? json_encode($current_profile, JSON_NUMERIC_CHECK) : 'false';?>;
 		var oValidationRules=<?php echo json_encode($this->valid_fields, JSON_NUMERIC_CHECK);?>;
 		var PROFILE_INFO_MESSAGE = '<?php echo PROFILE_INFO_MESSAGE;?>';
 		var DEVICE_ID = '<?php echo $this->device_id;?>';
