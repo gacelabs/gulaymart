@@ -17,8 +17,13 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
+		$filters = [];
+		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
+			$filters['id'] = $this->input->post('ids');
+			$filters['user_id'] = $this->input->post('buyer_id');
+		}
 		$items_by_farm = false;
-		$session = get_session_baskets();
+		$session = get_session_baskets($filters);
 		if (count($session)) {
 			$items_by_farm = [];
 			// debug($session, 'stop');
@@ -48,36 +53,46 @@ class Basket extends My_Controller {
 						'order_type' => $basket['order_type'],
 						'schedule' => $basket['schedule'],
 					];
+					$items_by_farm[$location_and_sched]['added'] = $basket['added'];
 				}
 			}
 		}
 		// debug($items_by_farm, 'stop');
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'basket/main', 'global/order-table', 'global/plus-minus-input', 'basket/main']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'basket'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'basket/b_container',
+		if ($this->input->is_ajax_request()) {
+			$total_items = 0;
+			if ($items_by_farm AND isset($items_by_farm['checkout_data'])) $total_items = count($items_by_farm['checkout_data']);
+			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/basket/basket_items', [
+				'data_baskets' => $items_by_farm
+			], true), 'ids' => $this->input->post('ids')], JSON_NUMERIC_CHECK);
+			exit();
+		} else {
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'basket/main', 'global/order-table', 'global/plus-minus-input', 'basket/main']
 				],
-			],
-			'bottom' => [
-				'modals' => ['reply_modal'],
-				'js' => [
-					'plugins/jquery.inputmask.min',
-					'plugins/inputmask.binding',
-					'plugins/plus_minus_input',
-					'dashboard/main',
-					'basket/main',
+				'middle' => [
+					'body_class' => ['dashboard', 'basket'],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'basket/b_container',
+					],
 				],
-			],
-			'data' => [
-				'baskets' => $items_by_farm
-			],
-		]);
+				'bottom' => [
+					'modals' => ['reply_modal'],
+					'js' => [
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'plugins/plus_minus_input',
+						'dashboard/main',
+						'basket/main',
+					],
+				],
+				'data' => [
+					'baskets' => $items_by_farm
+				],
+			]);
+		}
 	}
 
 	public function add($product_id=0)
@@ -87,9 +102,9 @@ class Basket extends My_Controller {
 		// debug($data, $post, 'stop');
 		if ($post) {
 			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
-				$post['status'] = 0;
+				$post['status'] = GM_VERIFIED_SCHED;
 			} else { /*from checkout button*/
-				$post['status'] = 1;
+				$post['status'] = GM_VERIFIED_NOW;
 			}
 			/*check if the user is logged in if false save post to session*/
 			if ($this->accounts->has_session == false) {
@@ -112,18 +127,28 @@ class Basket extends My_Controller {
 				]);
 				// debug($other_orders, 'stop');
 				$hash = '';
-				$basket_ids = [$post['id']];
+				$basket_ids = [];
+				$basket_ids[$post['id']] = $post['id'];
 				if ($other_orders) {
-					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
+					foreach ($other_orders as $other) $basket_ids[$other['id']] = $other['id'];
 				}
-				$hash = (base64_encode(json_encode($basket_ids)));
+				$hash = (base64_encode(json_encode($basket_ids, JSON_NUMERIC_CHECK)));
 				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
-				$redirect = $post['status'] ? base_url('basket/checkout/'.$hash) : false;
-				$callback = $post['status'] ? false : 'stockChanged';;
+				$redirect = ($post['status'] == GM_VERIFIED_NOW) ? base_url('basket/checkout/'.$hash) : false;
+				$callback = ($post['status'] == GM_VERIFIED_NOW) ? false : 'stockChanged';;
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
+
+				/*send realtime basket*/
+				$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
+					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id']
+				]);
+				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
+				]);
 			}
 			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
 			// debug($post, 'stop');
+
 			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
 		}
 		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
@@ -177,7 +202,7 @@ class Basket extends My_Controller {
 					$this->session->unset_userdata('checkout_pricing_'.$row['location_id']);
 				}
 				unset($row['location_id']);
-				$this->baskets->save(['status' => -1], $row); /*removed*/
+				$this->baskets->save(['status' => GM_ITEM_REMOVED], $row); /*removed*/
 			}
 			$this->set_response('success', 'Product removed in basket', $post['data'], false, 'removeOnBasket');
 		} elseif ($get AND isset($get['data'])) {
@@ -204,9 +229,9 @@ class Basket extends My_Controller {
 					$basket_ids[] = $id;
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout']); exit();
+			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout'], JSON_NUMERIC_CHECK); exit();
 		} else {
-			echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!']);
+			echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!'], JSON_NUMERIC_CHECK);
 			exit();
 		}
 	}
@@ -399,12 +424,12 @@ class Basket extends My_Controller {
 
 				$place_order[$farm_location_id]['location_id'] = $farm_location_id;
 				$place_order[$farm_location_id]['status'] = 2;
-				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post));
-				$place_order[$farm_location_id]['seller'] = base64_encode(json_encode($place_order[$farm_location_id]['seller']));
+				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post, JSON_NUMERIC_CHECK));
+				$place_order[$farm_location_id]['seller'] = base64_encode(json_encode($place_order[$farm_location_id]['seller'], JSON_NUMERIC_CHECK));
 				$place_order[$farm_location_id]['seller_id'] = $seller['user_id'];
-				$place_order[$farm_location_id]['buyer'] = base64_encode(json_encode($place_order[$farm_location_id]['buyer']));
+				$place_order[$farm_location_id]['buyer'] = base64_encode(json_encode($place_order[$farm_location_id]['buyer'], JSON_NUMERIC_CHECK));
 				$place_order[$farm_location_id]['buyer_id'] = $buyer['id'];
-				$place_order[$farm_location_id]['order_details'] = base64_encode(json_encode($place_order[$farm_location_id]['order_details']));
+				$place_order[$farm_location_id]['order_details'] = base64_encode(json_encode($place_order[$farm_location_id]['order_details'], JSON_NUMERIC_CHECK));
 
 				$farm_location_ids[] = $farm_location_id;
 			}
@@ -425,6 +450,36 @@ class Basket extends My_Controller {
 			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
 			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
+
+			/*send realtime placed order*/
+			$this->senddataapi->trigger('placed-order', 'incoming-orders', [
+				'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'placed', 'remove' => false
+			]);
+			/*send realtime placed fulfillment*/
+			$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
+				'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'placed', 'remove' => false
+			]);
+
+			$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
+				'success' => true, 'ids' => $all_basket_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'orders/placed/'
+			]);
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
+			]);
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
+			]);
+			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
+			]);
+
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'orders', 'tab' => 'placed'
+			]);
+			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'placed'
+			]);
+
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
 			$this->set_response('info', 'No orders to be place, Redirecting to your basket...', false, 'basket/');
@@ -510,7 +565,7 @@ class Basket extends My_Controller {
 			$hash = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['hash'];
 			$price_and_directions = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
 
-			$params['f_post'] = json_encode(['hash' => $hash]);
+			$params['f_post'] = json_encode(['hash' => $hash], JSON_NUMERIC_CHECK);
 			$params['f_distance'] = $price_and_directions['distance']. ' km';
 			// $params['f_duration'] = format_duration($price_and_directions['duration']);
 			$params['f_duration'] = $price_and_directions['duration'];

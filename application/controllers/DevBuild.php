@@ -90,7 +90,11 @@ class DevBuild extends CI_Controller {
 									unset($row['added']); unset($row['updated']);
 								}
 								if (count($row)) {
-									$record = $this->gm_db->get($table, $row, 'row');
+									if ($table == 'admin_settings') {
+										$record = $this->gm_db->get($table, false, 'row');
+									} else {
+										$record = $this->gm_db->get($table, $row, 'row');
+									}
 									if ($record) {
 										// debug($record, 'stop');
 										if (isset($record['added']) AND isset($record['updated'])) {
@@ -166,7 +170,7 @@ class DevBuild extends CI_Controller {
 											$fetched = [
 												'city' => $tmp['city'],
 												'province' => $tmp['province'],
-												'latlng' => json_encode($google_data->geometry->location),
+												'latlng' => json_encode($google_data->geometry->location, JSON_NUMERIC_CHECK),
 												'place_id' => $google_data->place_id,
 											];
 											$this->gm_db->new('serviceable_areas', $fetched);
@@ -184,7 +188,7 @@ class DevBuild extends CI_Controller {
 							unset($toktok_data[$key]);
 							$total_remaining = (count($toktok_data) - 1 ?: 0);
 							$jsonfile = fopen(get_root_path('assets/data/deliveries-2021-04-19.json'), "w+");
-							$json_encoded = json_encode(['pickup_dropoff'=>$toktok_data]);
+							$json_encoded = json_encode(['pickup_dropoff'=>$toktok_data], JSON_NUMERIC_CHECK);
 							fwrite($jsonfile, $json_encoded);
 							fclose($jsonfile);
 						}

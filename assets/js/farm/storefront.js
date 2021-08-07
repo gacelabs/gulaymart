@@ -139,7 +139,7 @@ var changeUIImage = function(obj) {
 }
 
 var setStoreFarmLocation = function(obj) {
-	console.log(obj);
+	// console.log(obj);
 	if (obj && obj.loc_input) {
 		var input_id = obj.loc_input;
 		if ($(input_id).length) {
@@ -154,7 +154,7 @@ var setStoreFarmLocation = function(obj) {
 }
 
 var refreshStorePreview = function(obj) {
-	console.log(obj);
+	// console.log(obj);
 	if ($('form.storefront-forms').find('[name]').hasClass('error') == false) {
 		$('form.storefront-forms').each(function(i, elem) {
 			$(elem).find('.farm_id').val(obj.user_farms.id);

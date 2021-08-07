@@ -13,7 +13,11 @@
 					</a>
 				<?php endif ?>
 				<a href="profile/" class="v-top" style="display: inline-block; margin: 0px 0px 10px 10px; font-size: 25px;">
-					<div id="global_navbar_avatar" style="background-image: url('assets/images/avatar.jpg');"></div>
+					<?php if ($current_profile['farms']): ?>
+						<div id="global_navbar_avatar" style="background-image: url('<?php echo $current_profile['farms']['profile_pic'];?>');"></div>
+					<?php else: ?>
+						<div id="global_navbar_avatar" style="background-image: url('assets/images/avatar.jpg');"></div>
+					<?php endif ?>
 				</a>
 			</div>
 		</div>

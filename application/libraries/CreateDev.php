@@ -181,6 +181,11 @@ class CreateDev {
 				'type' => 'INT',
 				'constraint' => '10',
 			],
+			'name' => [
+				'type' => 'TEXT',
+				'default' => NULL,
+				'null' => true,
+			],
 			"lat VARCHAR(100) NULL DEFAULT NULL",
 			"lng VARCHAR(100) NULL DEFAULT NULL",
 			"address_1 VARCHAR(255) NULL DEFAULT NULL",
@@ -430,6 +435,11 @@ class CreateDev {
 			'label varchar(100) DEFAULT NULL',
 			'value varchar(50) DEFAULT NULL',
 			'photo longtext',
+			'version' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => 1,
+			],
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
@@ -839,7 +849,13 @@ class CreateDev {
 				'default' => '0',
 				'null' => false,
 			],
-			'user_id' => [
+			'to_id' => [
+				'type' => 'INT',
+				'constraint' => '10',
+				'default' => '0',
+				'null' => false,
+			],
+			'from_id' => [
 				'type' => 'INT',
 				'constraint' => '10',
 				'default' => '0',
@@ -1172,7 +1188,7 @@ class CreateDev {
 
 		sleep(5);
 		$attributes = [
-			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50])],
+			['setting' => 'automation', 'value' => json_encode(['switch'=>1,'booking_limit'=>100,'manual_interval'=>50], JSON_NUMERIC_CHECK)],
 		];
 		$this->class->db->insert_batch('admin_settings', $attributes);
 

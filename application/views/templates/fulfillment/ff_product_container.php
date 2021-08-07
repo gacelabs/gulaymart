@@ -10,7 +10,7 @@
 				<div class="order-table-item" data-merge-id="<?php echo $orders['id'];?>">
 					<div class="order-grid-column order-labels">
 						<div class="text-left">
-							<p><small class="elem-block"><b>PRODUCT</b></small></p>
+							<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($orders['added']));?></i></small></p>
 						</div>
 						<div class="text-right hidden-sm hidden-xs">
 							<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
@@ -54,7 +54,7 @@
 									'merge_id'=>$orders['id'],
 									'basket_id'=>$order['basket_id'],
 									'sub_total'=>$order['sub_total'],
-								]);
+								], JSON_NUMERIC_CHECK);
 
 								$status_array[] = $details['status'];
 							?>
@@ -71,7 +71,7 @@
 									</div>
 								</div>
 								<div class="text-right hidden-sm hidden-xs">
-									<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p>
+									<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
 								</div>
 								<div class="text-right hidden-sm hidden-xs">
 									<p class="zero-gaps"><?php echo $order['quantity'];?></p>
@@ -79,14 +79,14 @@
 								<div class="text-right" js-element="selectItems">
 									<?php if (in_array($details['status'], [2,6]) AND $data['status'] == 'placed') : ?>
 										<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(6, $details['status'], ' style="color: rgb(121, 153, 56);"');?> data-basket_id="<?php echo $order['basket_id'];?>" data-location_id="<?php echo $order['farm_location_id'];?>" data-product_id="<?php echo $product['id'];?>" data-sub_total="<?php echo $order['sub_total'];?>">
-											<option>Select Action</option>
+											<option value="2">Select Action</option>
 											<option value="6"<?php str_has_value_echo(6, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
 											<option value="5">Cancelled</option> <!-- cancelled -->
 										</select>
 										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
 											<option value="None">Select Reason</option>
-											<option value="Removed Product">Removed Product</option>
 											<option value="Out Of Stock">Out Of Stock</option>
+											<option value="Removed Product">Removed Product</option>
 										</select>
 									<?php else : ?>
 										<p class="zero-gaps">
@@ -105,7 +105,7 @@
 
 								<div class="visible-sm visible-xs">
 									<ul class="spaced-list between">
-										<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p></li>
+										<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p></li>
 										<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 									</ul>
 								</div>
@@ -127,13 +127,28 @@
 
 					<?php
 						$farm = $orders['seller'];
+						$buyer = $orders['buyer'];
+						// debug($buyer, 'stop');
 					?>
 
 					<div class="order-grid-footer">
-						<div class="order-footer-farm text-left hidden-xs">
+						<!-- <div class="order-footer-farm text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
 							<p class="zero-gaps"><a<?php if (!$this->agent->is_mobile()): ?> target="farm_<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
 							<p class="zero-gaps"><?php echo ucwords($farm['city_prov']);?></p>
+						</div> -->
+						<div class="order-footer-farm text-left hidden-xs">
+							<p class="zero-gaps"><small class="elem-block"><b>BUYER</b></small></p>
+							<p class="zero-gaps"><?php echo ucwords($buyer['fullname']);?></p>
+							<p class="zero-gaps">
+								<?php if ($buyer): ?>
+									<?php foreach ($buyer['shippings'] as $key => $shipping): ?>
+										<?php if ($shipping['active'] == 1): ?>
+											<?php echo ucwords($shipping['address_2']);?>
+										<?php endif ?>
+									<?php endforeach ?>
+								<?php endif ?>
+							</p>
 						</div>
 						<div class="order-footer-payment text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
@@ -163,9 +178,11 @@
 				</div>
 			<?php endforeach ?>
 		<?php endif ?>
-		<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
-			<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
-			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-		</div>
+		<?php if (!isset($data['no_rec_ui'])): ?>
+			<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
+				<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+				<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+			</div>
+		<?php endif ?>
 	</div>
 </div>

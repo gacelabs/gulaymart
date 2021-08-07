@@ -179,10 +179,12 @@ var appendComment = function(obj) {
 	if (obj.under != undefined) {
 		if (obj.under > 0) {
 			$('[js-element="comment-panel-'+obj.under+'"]').replaceWith(obj.html);
-			runFormValidation($('[js-element="comment-panel-'+obj.under+'"]').find('form'));
+			// runFormValidation($('[js-element="comment-panel-'+obj.under+'"]').find('form'));
 		} else {
-			$(obj.html).insertBefore($('[js-element="comment-panel-0"]'))
-			runFormValidation($('[js-element="comment-panel-'+obj.id+'"]').find('form'));
+			$('[js-element="comment-panel-0"]').parents('.comment-box').replaceWith(obj.html);
+			// $(obj.html).insertBefore($('[js-element="comment-panel-0"]'))
+			// runFormValidation($('[js-element="comment-panel-'+obj.id+'"]').find('form'));
 		}
+		$('[js-element="comment-panel-'+obj.under+'"]').remove();
 	}
 };

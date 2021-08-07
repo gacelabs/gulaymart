@@ -17,6 +17,19 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$user_timezone = get_cookie('user_timezone', true);
+		// debug(date_default_timezone_get(), $user_timezone, 'stop');
+		if (empty($user_timezone)) {
+			$zone_details = ip_info((bool)strstr($_SERVER['HTTP_HOST'], 'local') ? '120.29.109.66' : NULL);
+			// debug($zone_details, 'stop');
+			if (!empty($zone_details)) {
+				$user_timezone = $zone_details['timezone'];
+				set_cookie('user_timezone', $user_timezone, 7776000); // 90 days
+			}
+		}
+		if (!empty($user_timezone) AND $user_timezone != 'Asia/Manila') date_default_timezone_set($user_timezone);
+		// debug($user_timezone, date_default_timezone_get(), get_cookie('user_timezone', true), 'stop');
+
 		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
@@ -35,6 +48,11 @@ class MY_Controller extends CI_Controller {
 		if (!empty($current_city)) {
 			// debug($current_city, 'stop');
 			$this->current_city = urldecode($current_city);
+		}
+		$is_mobile = $this->agent->is_mobile();
+		if ($is_mobile == true) {
+			// debug($is_mobile, 'stop');
+			$this->config->set_item('sess_expire_on_close', '0');
 		}
 		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));
@@ -71,7 +89,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('users');
 		$this->load->library('products');
 		$this->load->library('SmtpEmail');
-		$this->load->library('SendDataApi', ['app_key'=>'A3193CF4AEC1ADD05F4B78C4E0C61C39']);
+		$this->load->library('SendDataApi', ['app_key'=>SENDDATA_APPKEY]);
 		// debug($this->class_name, $this->accounts->has_session, $this->accounts->profile);
 		$this->set_form_valid_fields();
 		$this->set_global_values();
@@ -98,7 +116,7 @@ class MY_Controller extends CI_Controller {
 				if ($this->input->get('callback') == 'gmCall') {
 					echo do_jsonp_callback('ajaxSuccessResponse', $data);
 				} else {
-					echo json_encode($data);
+					echo json_encode($data, JSON_NUMERIC_CHECK);
 				}
 				exit();
 			}
@@ -139,6 +157,7 @@ class MY_Controller extends CI_Controller {
 			're_password' => ['required' => TRUE],
 			'farmer_terms' => ['required' => TRUE],
 			'farmer_policy' => ['required' => TRUE],
+			'email' => ['required' => TRUE, 'emailExt' => TRUE],
 		];
 		if ($valids) {
 			foreach ($valids as $field => $variable) {
@@ -181,16 +200,19 @@ class MY_Controller extends CI_Controller {
 			}
 		}
 		/**/
-		$this->basket_count = $this->order_count = false;
+		$this->basket_count = $this->order_count = $this->fulfill_count = $this->message_count = false;
 		if ($this->accounts->has_session) {
-			$baskets = $this->gm_db->get_in('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
-			$this->basket_count = $baskets == false ? false : count($baskets);
+			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 5]);
+			$this->fulfill_count = $fulfill_count == 0 ? false : $fulfill_count;
 
-			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
-			$this->order_count = $order_count == false ? false : $order_count;
+			$baskets = $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
+			$this->basket_count = $baskets == 0 ? false : $baskets;
 
-			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status' => [2,3,4,6]]);
-			$this->fulfill_count = $fulfill_count == false ? false : $fulfill_count;
+			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 5]);
+			$this->order_count = $order_count == 0 ? false : $order_count;
+			
+			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $this->accounts->profile['id']]);
+			$this->message_count = $msg_count == 0 ? false : $msg_count;
 		}
 		// debug($products, 'stop');
 	}
@@ -325,7 +347,7 @@ class MY_Controller extends CI_Controller {
 					$meta_value = $view['top']['metas'][$key];
 					switch (strtolower($key)) {
 						case 'type':
-							$view['top']['metas'][$key] = str_replace('XXX', 'article', $meta_value);
+							$view['top']['metas'][$key] = str_replace('XXX', 'website', $meta_value);
 							break;
 						case 'url':
 							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);

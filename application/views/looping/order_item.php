@@ -13,7 +13,7 @@
 		'location_id'=>$order['farm_location_id'],
 		'merge_id'=>$orders['id'],
 		'basket_id'=>$order['basket_id'],
-	]);
+	], JSON_NUMERIC_CHECK);
 ?>
 <div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 	<div class="media">
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="text-right hidden-sm hidden-xs">
-		<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p>
+		<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
 	</div>
 	<div class="text-right hidden-sm hidden-xs">
 		<p class="zero-gaps"><?php echo $order['quantity'];?></p>
@@ -41,7 +41,7 @@
 
 	<div class="visible-sm visible-xs">
 		<ul class="spaced-list between">
-			<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo $order['measurement'];?></p></li>
+			<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p></li>
 			<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 		</ul>
 	</div>

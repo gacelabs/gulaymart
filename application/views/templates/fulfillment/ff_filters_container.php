@@ -5,11 +5,12 @@
 				<small class="elem-block" style="margin-bottom:5px;"><b>FARM LOCATIONS</b></small>
 				<select class="form-control ff-navbar-pill" name="location-id">
 					<option>All farms</option>
-					<?php if ($data['farm']): ?>
-						<?php foreach ($data['farm']['farm_locations'] as $key => $location): ?>
-							<option value="<?php echo $location['id'];?>"><?php echo $location['city'];?></option>
-						<?php endforeach ?>
-					<?php endif ?>
+					<?php
+						/*if ($data['farm']): 
+							foreach ($data['farm']['farm_locations'] as $key => $location):*/ ?>
+							<option value="<?php // echo $location['id'];?>"><?php // echo $location['city'];?></option>
+						<?php /*endforeach 
+						endif*/ ?>
 				</select>
 			</div>
 			<div class="grid-item">
@@ -29,43 +30,35 @@
 			<small class="elem-block"><b>FILTER STATUS</b></small>
 			<div class="ff-navbar-grid filter-status">
 				<div class="grid-item">
-					<a href="fulfillment/placed/" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
+					<a href="fulfillment/placed/" data-menu="fulfillments" data-nav="placed" class="ff-navbar-pill <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">
 						Placed
-						<?php if ($data['counts']['placed']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['placed'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right<?php if (!$data['counts']['placed']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['placed']): ?><?php echo $data['counts']['placed'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/for-pick-up" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
+					<a href="fulfillment/for-pick-up" data-menu="fulfillments" data-nav="for-pick-up" class="ff-navbar-pill <?php in_array_echo("ff-for+pick+up", $middle['body_class'], "active");?>">
 						For Pick Up
-						<?php if ($data['counts']['for+pick+up']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['for+pick+up'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right<?php if (!$data['counts']['for+pick+up']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['for+pick+up']): ?><?php echo $data['counts']['for+pick+up'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/on-delivery" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
+					<a href="fulfillment/on-delivery" data-menu="fulfillments" data-nav="on-delivery" class="ff-navbar-pill <?php in_array_echo("ff-on+delivery", $middle['body_class'], "active");?>">
 						On Delivery
-						<?php if ($data['counts']['on+delivery']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['on+delivery'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right<?php if (!$data['counts']['on+delivery']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['on+delivery']): ?><?php echo $data['counts']['on+delivery'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/received" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
+					<a href="fulfillment/received" data-menu="fulfillments" data-nav="received" class="ff-navbar-pill <?php in_array_echo("ff-received", $middle['body_class'], "active");?>">
 						Received
-						<?php if ($data['counts']['received']): ?>
-						<kbd class="pull-right"><?php echo $data['counts']['received'];?></kbd>
-						<?php endif; ?>
+						<kbd class="pull-right<?php if (!$data['counts']['received']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['received']): ?><?php echo $data['counts']['received'];?><?php endif; ?></kbd>
 					</a>
 				</div>
 				<div class="grid-item">
-					<a href="fulfillment/cancelled" data-nav="cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
+					<a href="fulfillment/cancelled" data-menu="fulfillments" data-nav="cancelled" class="ff-navbar-pill cancelled<?php in_array_echo("ff-cancelled", $middle['body_class'], " active");?>">
 						Cancelled
-						<?php if ($data['counts']['cancelled']): ?>
-						<kbd style="background-color:#a9a9a9;" class="pull-right"><?php echo $data['counts']['cancelled'];?></kbd>
-						<?php endif; ?>
+						
+						<kbd style="background-color:#a9a9a9;" class="pull-right<?php if (!$data['counts']['cancelled']): ?> no-count<?php endif; ?>"><?php if ($data['counts']['cancelled']): ?><?php echo $data['counts']['cancelled'];?><?php endif; ?></kbd>
+						
 					</a>
 				</div>
 			</div>

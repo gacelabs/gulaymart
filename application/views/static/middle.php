@@ -1,5 +1,5 @@
 <body class="<?php echo implode(' ', $middle['body_class']); echo(!empty($current_profile) ? ' is-logged' : '');?> <?php if (empty($current_profile)) {echo "check-loc-on";}?>" data-is-mobile="<?php echo $this->agent->is_mobile() ? 1 : 0;?>">
-	<?php if (!isset($data['for_email']) AND $this->action != 'store' AND (bool)strstr($_SERVER['HTTP_HOST'], 'local') == false): ?>
+	<?php if (!isset($data['for_email']) AND $this->action != 'store'): ?>
 		<?php $this->view('requires/fb_scripts'); ?>
 	<?php endif ?>
 	

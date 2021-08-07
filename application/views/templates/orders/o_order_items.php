@@ -6,7 +6,7 @@
 		<div class="order-table-item" data-merge-id="<?php echo $orders['id'];?>">
 			<div class="order-grid-column order-labels">
 				<div class="text-left">
-					<p><small class="elem-block"><b>PRODUCT</b></small></p>
+					<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($orders['added']));?></i></small></p>
 				</div>
 				<div class="text-right hidden-sm hidden-xs">
 					<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
@@ -51,7 +51,7 @@
 							'merge_id'=>$orders['id'],
 							'basket_id'=>$order['basket_id'],
 							'sub_total'=>$order['sub_total'],
-						]);
+						], JSON_NUMERIC_CHECK);
 						$status_array[] = $details['status'];
 					?>
 					<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket_id="<?php echo $order['basket_id'];?>">
@@ -69,7 +69,7 @@
 							</div>
 						</div>
 						<div class="text-right hidden-sm hidden-xs">
-							<p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo ucfirst($order['measurement']);?></p>
+							<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p>
 							<?php if ($details['status'] == 5): ?>
 								<?php if ($order['cancel_by'] == $current_profile['id']): ?>
 									<p class="zero-gaps"><small class="text-capsule status-cancelled">Removed by You</small></p>
@@ -89,7 +89,7 @@
 
 						<div class="visible-sm visible-xs">
 							<ul class="spaced-list between">
-								<li><p class="zero-gaps">&#x20b1; <?php echo $order['price'];?> / <?php echo ucfirst($order['measurement']);?></p></li>
+								<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p></li>
 								<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
 							</ul>
 						</div>
@@ -136,6 +136,9 @@
 					<p style="margin-bottom:5px;"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 					<p class="zero-gaps">
 						<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($data['status']));?></span>
+						<?php if ($data['status'] == 'on+delivery'): ?>
+							<!-- <a class="btn text-capsule bg-theme" js-data="received" href="orders/receive/<?php echo $orders['id'];?>" data-ajax="1" data-json='<?php echo json_encode(['confirm' => 1], JSON_NUMERIC_CHECK);?>'>Order Received</a> -->
+						<?php endif ?>
 						<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 					</p>
 				</div>
@@ -147,15 +150,17 @@
 					</p>
 					<div>
 						<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
-						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo number_format($orders['fee']);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo number_format($initial_total);?></span></p>
-						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
+						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo format_number($orders['fee'], 2);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo format_number($initial_total);?></span></p>
+						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo format_number($initial_total + (float)$orders['fee']);?></b></p>
 					</div>
 				</div>
 			</div>
 		</div>
 	<?php endforeach ?>
 <?php endif ?>
-<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
-	<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
-	<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-</div>
+<?php if (!isset($data['no_rec_ui'])): ?>
+	<div class="no-records-ui<?php if (!empty($data['orders'])): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
+		<img src="assets/images/helps/no-orders-found.png" class="img-responsive text-center" style="margin:0 auto 15px auto;">
+		<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+	</div>
+<?php endif ?>

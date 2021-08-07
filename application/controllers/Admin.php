@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends MY_Controller {
 
-	public $allowed_methods = ['post_deliveries'];
+	public $allowed_methods = ['push_orders_to_toktok', 'orders_to_receive'];
 	public $not_allowed_methods = [];
 
 	public function __construct()
@@ -171,143 +171,13 @@ class Admin extends MY_Controller {
 					$id = $data['id'];
 					if (!isset($data['value']['switch'])) $data['value']['switch'] = '0';
 					// debug($data, 'stop');
-					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'])], ['id' => $id]);
+					$this->gm_db->save('admin_settings', ['value' => json_encode($data['value'], JSON_NUMERIC_CHECK)], ['id' => $id]);
 				}
 				$this->set_response('success', 'Settings updated!', $post['admin_settings'], false, 'clearForm');
 			}
 		}
 		$this->set_response('error', 'Your admin password does not match!', 
 			(($post AND isset($post['admin_settings'])) ? $post['admin_settings'] : ''), false);
-	}
-
-	/*this will be run on cron job*/
-	public function post_deliveries()
-	{
-		$automation_settings = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
-		if ($automation_settings) {
-			$set = json_decode($automation_settings['value'], true);
-			$toktok_data = $this->gm_db->get('baskets_merge', [
-				'status' => 6, 'operator' => 0, 'is_sent' => 0,
-				'order_by' => 'added', 'direction' => 'ASC',/* 'limit' => $set['booking_limit'],*/
-			]);
-			// debug($automation_settings, $toktok_data, 'stop');
-			if ($toktok_data) {
-				$this->load->library('ToktokApi');
-				// $this->toktokapi->check_delivery();
-				/*do not start if switch is off*/
-				if ($set['switch'] == 1) {
-					$admin_turned_off = false;
-					foreach ($toktok_data as $key => $toktok) {
-						/*recheck automation settings if switched is on/off*/
-						$check = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
-						if ($check) {
-							$checkset = json_decode($check['value'], true);
-							if ($checkset['switch'] == 0) {
-								$admin_turned_off = true;
-								break; /*IF SET OFF*/
-							}
-						}
-						/*else continue to send toktok post deliveries*/
-						$post = json_decode(base64_decode($toktok['toktok_post']), true);
-						if ($post) {
-							$pricing = toktok_price_directions_format([
-								'sender_lat' => $post['f_sender_address_lat'],
-								'sender_lng' => $post['f_sender_address_lng'],
-								'receiver_lat' => $post['f_recepient_address_lat'],
-								'receiver_lng' => $post['f_recepient_address_lng'],
-							]);
-							$this->toktokapi->app_request('price_and_directions', $pricing);
-							if ($this->toktokapi->success) {
-								$toktok_dpd = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
-								unset($toktok_dpd['directions']);
-								// debug($toktok_dpd, 'stop');
-								$post['f_post'] = json_encode(['hash'=>$toktok_dpd['hash']]);
-								$post['f_distance'] = $toktok_dpd['pricing']['distance'] . ' km';
-								$post['f_duration'] = format_duration($toktok_dpd['pricing']['duration']);
-								$post['f_price'] = $toktok_dpd['pricing']['price'];
-								$post['f_sender_mobile'] = preg_replace('/-/', '', $post['f_sender_mobile']);
-								$post['f_recepient_mobile'] = preg_replace('/-/', '', $post['f_recepient_mobile']);
-
-								// GET RIDER
-								/*$rider = ['term'=>ltrim($set['rider_mobile'], '0'), '_type'=>'query', 'q'=>ltrim($set['rider_mobile'], '0')];
-								$this->toktokapi->app_request('rider', $rider);
-								if ($this->toktokapi->success) {
-									$post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
-								}
-								debug($post, 'stop');*/
-
-								if (ENVIRONMENT == 'production') {
-									$this->toktokapi->app_request('post_delivery', $post);
-									// debug($this->toktokapi, 'stop');
-									if ($this->toktokapi->success) {
-										$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
-									} else {
-										$raw = ['is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
-									}
-								} else {
-									$raw = ['is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
-								}
-								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
-							}
-						}
-					}
-					/*check first is the switch off by some admin*/
-					if ($admin_turned_off == false) {
-						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!']); exit();
-						return true; /*Disable OPERATOR distributions*/
-						/*booking_limit reached, turn off switch*/
-						$set['switch'] = 0;
-						$this->gm_db->save('admin_settings', ['value' => json_encode($set)], ['id' => $automation_settings['id']]);
-						
-						/*now if switch is off process the manual interval*/
-						$toktok_for_operators = $this->gm_db->get('baskets_merge', [
-							'status' => 6, 'operator' => 0, 'is_sent' => 0,
-							'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
-						]);
-						if ($toktok_for_operators) {
-							$operators = $this->gm_db->get('operators', ['active' => 1]);
-							if ($operators) {
-								$operator_cnt = count($operators);
-								$chunk_count = floor(count($toktok_for_operators) / $operator_cnt); /*this will be average*/
-								// debug($chunk_count, 'stop');
-								if ($chunk_count > 0) {
-									$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
-									// debug($toktok_for_operators, 'stop');
-									/*now loop from operators and give them bookings*/
-									foreach ($operators as $key => $operator) {
-										if (isset($toktok_for_operators[$key])) {
-											$deliveries = $toktok_for_operators[$key];
-											foreach ($deliveries as $delivery) {
-												/*update the baskets_merge data for this operator*/
-												$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
-												/*log here*/
-												operatorlogger($deliveries, $operator);
-											}
-										}
-									}
-								} else {
-									/*log here*/
-									operatorlogger('Operator count is greater than the records');
-								}
-							}
-						} else {
-							/*log here*/
-							operatorlogger('No records available for operators');
-						}
-						/*then let the cron job run this until all operator bookings are done*/
-						/*there will be another method that checks these and switches back ON again*/
-						$this->notify_operator_booking();
-					}
-				} else {
-					return true; /*Disable OPERATOR distributions*/
-					$this->notify_operator_booking();
-				}
-			} else {
-				echo json_encode(['status' => false, 'message' => 'no available post']); exit();
-			}
-		} else {
-			echo json_encode(['status' => false, 'message' => 'admin setting unknown']); exit();
-		}
 	}
 
 	public function notify_operator_booking()
@@ -323,13 +193,16 @@ class Admin extends MY_Controller {
 			if ($operators) {
 				foreach ($operators as $key => $operator_id) {
 					/*now send alerts to operators*/
-					$this->senddataapi->trigger('operator-bookings', 'send-bookings', [
+					$senddataapi = $this->senddataapi->trigger('operator-bookings', 'send-bookings', [
 						'message' => 'You have available bookings, please press on BOOK NOW',
 						'operator_id' => $operator_id,
 						'delivery' => $toktok_for_operators[0],
 						'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => 1]),
 						'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => [0,1]]),
 					]);
+					if (in_array($senddataapi->response_code, [403,404])) {
+						cronlogger($senddataapi->response_text, ['operator_id' => $operator_id], 'operator-bookings');
+					}
 				}
 			}
 		} else {
@@ -337,10 +210,10 @@ class Admin extends MY_Controller {
 			if ($automation_settings) {
 				$set = json_decode($automation_settings['value'], true);
 				$set['switch'] = 1; /*enable switch*/
-				$this->gm_db->save('admin_settings', ['value' => json_encode($set)], ['id' => $automation_settings['id']]);
+				$this->gm_db->save('admin_settings', ['value' => json_encode($set, JSON_NUMERIC_CHECK)], ['id' => $automation_settings['id']]);
 			}
 			/*when cron job runs again it will continue our bookings based on settings*/
-			// $this->post_deliveries();
+			// $this->push_orders_to_toktok();
 		}
 	}
 
@@ -369,7 +242,7 @@ class Admin extends MY_Controller {
 							$toktok_dpd = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
 							unset($toktok_dpd['directions']);
 							// debug($toktok_dpd, 'stop');
-							$toktok_post['f_post'] = json_encode(['hash'=>$toktok_dpd['hash']]);
+							$toktok_post['f_post'] = json_encode(['hash'=>$toktok_dpd['hash']], JSON_NUMERIC_CHECK);
 							$toktok_post['f_distance'] = $toktok_dpd['pricing']['distance'] . ' km';
 							$toktok_post['f_duration'] = format_duration($toktok_dpd['pricing']['duration']);
 							$toktok_post['f_price'] = $toktok_dpd['pricing']['price'];
@@ -392,14 +265,20 @@ class Admin extends MY_Controller {
 								$this->toktokapi->app_request('post_delivery', $toktok_post);
 								// debug($this->toktokapi, 'stop');
 								if ($this->toktokapi->success) {
-									$raw = ['is_sent' => 1];
+									$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1];
 								} else {
-									$raw = ['is_sent' => 2]; // 'is_sent' => 2 FAILED
+									$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 2]; // 'is_sent' => 2 FAILED
 								}
 							} else {
-								$raw = ['is_sent' => 1];
+								$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1];
 							}
 							$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+							$basket_ids = explode(',', $toktok['basket_ids']);
+							if ($basket_ids) {
+								foreach ($basket_ids as $basket_id) {
+									$this->gm_db->save('baskets', ['status' => GM_ON_DELIVERY_STATUS], ['id' => $basket_id]);
+								}
+							}
 
 							sleep(3);
 							$toktok_for_operators = $this->baskets->merge_disassembled([
@@ -407,6 +286,32 @@ class Admin extends MY_Controller {
 							], false, false, 'added');
 
 							if ($toktok_for_operators) {
+								$buyer_id = $toktok['buyer_id'];
+								$seller_id = $toktok['seller_id'];
+								$merge_id = $toktok['id'];
+								// send realtime on-delivery order
+								$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+									'success' => true, 'ids' => $merge_id, 'buyer_id' => $buyer_id, 'event' => 'on-delivery'
+								]);
+								// send realtime on-delivery fulfillment
+								$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+									'success' => true, 'ids' => $merge_id, 'seller_id' => $seller_id, 'event' => 'on-delivery'
+								]);
+
+								$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+									'success' => true, 'id' => $buyer_id, 'nav' => 'order'
+								]);
+								$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+									'success' => true, 'id' => $seller_id, 'nav' => 'fulfill'
+								]);
+
+								$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+									'success' => true, 'id' => $buyer_id, 'menu' => 'orders', 'tab' => 'on-delivery'
+								]);
+								$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+									'success' => true, 'id' => $seller_id, 'menu' => 'fulfillments', 'tab' => 'on-delivery'
+								]);
+
 								$this->set_response('success', false, [
 									'operator_id' => $operator['id'],
 									'delivery' => $toktok_for_operators[0],
@@ -416,6 +321,8 @@ class Admin extends MY_Controller {
 							} else {
 								$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
 							}
+						} else {
+							cronlogger('Error while pushing operator orders to toktok!', $operator, 'operator-bookings');
 						}
 					}
 				}
@@ -447,7 +354,7 @@ class Admin extends MY_Controller {
 					$response = 'Product '.$product['name'].($approved == 0 ? ' Drafted' : ($approved == 2 ? ' Rejected' : ($approved == 3 ? ' Deleted' : ' Approved')));
 				}
 			}
-			echo json_encode(['success' => true, 'data' => ['messages' => $response], 'callback' => 'removeItem']); exit();
+			echo json_encode(['success' => true, 'data' => ['messages' => $response], 'callback' => 'removeItem'], JSON_NUMERIC_CHECK); exit();
 		}
 		// debug(get_items('products'), 'stop');
 		$this->render_page([
@@ -477,5 +384,296 @@ class Admin extends MY_Controller {
 				'result' =>  get_products()
 			],
 		]);
+	}
+
+	/*this will be run on cron job*/
+	public function push_orders_to_toktok()
+	{
+		$automation_settings = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
+		if ($automation_settings) {
+			$set = json_decode($automation_settings['value'], true);
+			$toktok_data = $this->gm_db->get('baskets_merge', [
+				'status' => 6, 'operator' => 0, 'is_sent' => 0,
+				'order_by' => 'added', 'direction' => 'ASC',/* 'limit' => $set['booking_limit'],*/
+			]);
+			// debug($automation_settings, $toktok_data, 'stop');
+			if ($toktok_data) {
+				$this->load->library('ToktokApi');
+				// $this->toktokapi->check_delivery();
+				/*do not start if switch is off*/
+				if ($set['switch'] == 1) {
+					$admin_turned_off = false;
+					$buyer_ids = $seller_ids = $merge_ids = [];
+					foreach ($toktok_data as $key => $toktok) {
+						/*recheck automation settings if switched is on/off*/
+						$check = $this->gm_db->get('admin_settings', ['setting' => 'automation'], 'row');
+						if ($check) {
+							$checkset = json_decode($check['value'], true);
+							if ($checkset['switch'] == 0) {
+								$admin_turned_off = true;
+								break; /*IF SET OFF*/
+							}
+						}
+						/*else continue to send toktok post deliveries*/
+						$post = json_decode(base64_decode($toktok['toktok_post']), true);
+						if ($post) {
+							$pricing = toktok_price_directions_format([
+								'sender_lat' => $post['f_sender_address_lat'],
+								'sender_lng' => $post['f_sender_address_lng'],
+								'receiver_lat' => $post['f_recepient_address_lat'],
+								'receiver_lng' => $post['f_recepient_address_lng'],
+							]);
+							$this->toktokapi->app_request('price_and_directions', $pricing);
+							if ($this->toktokapi->success) {
+								$toktok_dpd = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
+								unset($toktok_dpd['directions']);
+								// debug($toktok_dpd, 'stop');
+								$post['f_post'] = json_encode(['hash'=>$toktok_dpd['hash']], JSON_NUMERIC_CHECK);
+								$post['f_distance'] = $toktok_dpd['pricing']['distance'] . ' km';
+								$post['f_duration'] = format_duration($toktok_dpd['pricing']['duration']);
+								$post['f_price'] = $toktok_dpd['pricing']['price'];
+								$post['f_sender_mobile'] = preg_replace('/-/', '', $post['f_sender_mobile']);
+								$post['f_recepient_mobile'] = preg_replace('/-/', '', $post['f_recepient_mobile']);
+
+								// GET RIDER
+								/*$rider = ['term'=>ltrim($set['rider_mobile'], '0'), '_type'=>'query', 'q'=>ltrim($set['rider_mobile'], '0')];
+								$this->toktokapi->app_request('rider', $rider);
+								if ($this->toktokapi->success) {
+									$post['f_driver_id'] = $this->toktokapi->response['results'][0]['id'];
+								}
+								debug($post, 'stop');*/
+
+								if (ENVIRONMENT == 'production') {
+									$this->toktokapi->app_request('post_delivery', $post);
+									// debug($this->toktokapi, 'stop');
+									if ($this->toktokapi->success) {
+										$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+									} else {
+										$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 2, 'operator' => -1]; // 'is_sent' => 2 FAILED
+									}
+								} else {
+									$raw = ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1, 'operator' => -1]; // 'operator' => -1 is us
+								}
+								$this->gm_db->save('baskets_merge', $raw, ['id' => $toktok['id']]);
+								$basket_ids = explode(',', $toktok['basket_ids']);
+								if ($basket_ids) {
+									foreach ($basket_ids as $basket_id) {
+										$this->gm_db->save('baskets', ['status' => GM_ON_DELIVERY_STATUS], ['id' => $basket_id]);
+									}
+								}
+								$buyer_ids[] = $toktok['buyer_id'];
+								$seller_ids[] = $toktok['seller_id'];
+								$merge_ids[] = $toktok['id'];
+							} else {
+								cronlogger('Error while pushing orders to toktok!', $toktok, 'gulaymart-bookings');
+							}
+						}
+					}
+
+					if (count($buyer_ids) AND count($seller_ids) AND count($merge_ids)) {
+						// send realtime on-delivery order
+						$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+							'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
+						]);
+						// send realtime on-delivery fulfillment
+						$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+							'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
+						]);
+
+						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+							'success' => true, 'id' => $buyer_ids, 'nav' => 'order'
+						]);
+						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+							'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
+						]);
+
+						$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+							'success' => true, 'id' => $buyer_ids, 'menu' => 'orders', 'tab' => 'on-delivery'
+						]);
+						$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+							'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'on-delivery'
+						]);
+					}
+					/*check first is the switch off by some admin*/
+					if ($admin_turned_off == false) {
+						echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!'], JSON_NUMERIC_CHECK); exit();
+						return true; /*Disable OPERATOR distributions*/
+						/*booking_limit reached, turn off switch*/
+						$set['switch'] = 0;
+						$this->gm_db->save('admin_settings', ['value' => json_encode($set, JSON_NUMERIC_CHECK)], ['id' => $automation_settings['id']]);
+						
+						/*now if switch is off process the manual interval*/
+						$toktok_for_operators = $this->gm_db->get('baskets_merge', [
+							'status' => 6, 'operator' => 0, 'is_sent' => 0,
+							'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
+						]);
+						if ($toktok_for_operators) {
+							$operators = $this->gm_db->get('operators', ['active' => 1]);
+							if ($operators) {
+								$operator_cnt = count($operators);
+								$chunk_count = floor(count($toktok_for_operators) / $operator_cnt); /*this will be average*/
+								// debug($chunk_count, 'stop');
+								if ($chunk_count > 0) {
+									$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
+									// debug($toktok_for_operators, 'stop');
+									/*now loop from operators and give them bookings*/
+									foreach ($operators as $key => $operator) {
+										if (isset($toktok_for_operators[$key])) {
+											$deliveries = $toktok_for_operators[$key];
+											foreach ($deliveries as $delivery) {
+												/*update the baskets_merge data for this operator*/
+												$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
+											}
+										}
+									}
+								} else {
+									/*log here*/
+									cronlogger('Operator count is greater than the records', $operators, 'operator-bookings');
+								}
+							}
+						} else {
+							/*log here*/
+							cronlogger('No records available for operators', $toktok_for_operators, 'operator-bookings');
+						}
+						/*then let the cron job run this until all operator bookings are done*/
+						/*there will be another method that checks these and switches back ON again*/
+						$this->notify_operator_booking();
+					}
+				} else {
+					return true; /*Disable OPERATOR distributions*/
+					$this->notify_operator_booking();
+				}
+			} else {
+				echo json_encode(['status' => false, 'message' => 'no available post'], JSON_NUMERIC_CHECK); exit();
+			}
+		} else {
+			echo json_encode(['status' => false, 'message' => 'admin setting unknown'], JSON_NUMERIC_CHECK); exit();
+		}
+	}
+
+	/*this will be run on cron job*/
+	public function orders_to_receive()
+	{
+		$baskets_merge = $this->gm_db->get('baskets_merge', [
+			'status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1,
+			'order_by' => 'added', 'direction' => 'ASC'
+		]);
+		// debug($baskets_merge, 'stop');
+		if ($baskets_merge) {
+			$baskets_merge_data = setup_orders_data($baskets_merge);
+			// debug($baskets_merge_data, 'stop');
+			$baskets_ids = $merge_ids = [];
+			if ($baskets_merge_data) {
+				$this->load->library('ToktokApi');
+				// debug($this->toktokapi, 'stop');
+				foreach ($baskets_merge_data as $key => $data) {
+					$toktok_status = TT_RECEIVED_STATUS; /*toktok order status for delivered*/
+					$valid = empty($data['delivery_id']); 
+					$GM_status = GM_RECEIVED_STATUS; /*to gm order status for delivered*/
+					if ($valid) {
+						$seller_name = remove_multi_space($data['seller']['profile']['firstname'].' '.$data['seller']['profile']['lastname'], true);
+
+						$seller_id = $data['seller']['profile']['id'];
+						$buyer_id = $data['buyer']['profile']['id'];
+
+						$date_range = false;
+						if (isset($data['schedule']) AND !empty($data['schedule'])) {
+							$date_range = [
+								'from' => date('m/d/Y', strtotime($data['schedule'])),
+								'to' => date('m/d/Y', strtotime($data['schedule'])),
+							];
+						}
+						// debug($date_range, $toktok_status, $seller_name, 'stop');
+						// check toktok delivery status
+						if (ENVIRONMENT == 'development') {
+							$delivery = $this->toktokapi->check_delivery();
+						} else {
+							$delivery = $this->toktokapi->check_delivery($date_range, '', $toktok_status, $seller_name);
+						}
+						// debug($seller_name, $delivery, 'stop');
+						if ($delivery->success AND count($delivery->response)) {
+							foreach ($delivery->response as $order) {
+								if (isset($order['details']) AND isset($order['details']['post'])) {
+									if (ENVIRONMENT == 'development') {
+										$order['details']['post']['notes'] = 'GulayMart Order#:'.$data['order_id'];
+									}
+									$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
+									$order_id = '';
+									if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
+									// debug($order_id, $data['order_id'], 'stop');
+									if ($order_id == $data['order_id']) {
+										/*set new status*/
+										$set = ['status' => $GM_status];
+										if (empty($data['delivery_id'])) {
+											/*delivery_id not set yet*/
+											$delivery_id = $order['details']['post']['delivery_id'];
+											$set['delivery_id'] = $delivery_id;
+											$set['toktok_data'] = base64_encode(json_encode($order, JSON_NUMERIC_CHECK));
+										}
+										/*update baskets*/
+										$ids = explode(',', $data['basket_ids']);
+										foreach ($ids as $id) {
+											if (GM_STATUSES_TEST != 1) {
+												$this->gm_db->save('baskets', ['status' => $GM_status], ['id' => $id]);
+											}
+											$baskets_ids[$id] = $id;
+										}
+										if (GM_STATUSES_TEST != 1) {
+											$this->gm_db->save('baskets_merge', $set, ['id' => $data['id']]);
+										}
+										$merge_ids[$data['id']]['seller_ids'][] = $seller_id;
+										$merge_ids[$data['id']]['buyer_ids'][] = $buyer_id;
+									}
+								}
+							}
+						} else {
+							cronlogger('Error while receiving orders from toktok!', $data, 'gulaymart-bookings');
+						}
+					} else {
+						echo json_encode(['status' => true, 'message' => 'delivery id "'.$data['delivery_id'].'" already exists!'], JSON_NUMERIC_CHECK);
+						echo "<br>";
+					}
+				}
+			}
+			// debug($merge_ids, $baskets_ids, 'stop');
+			if (count($merge_ids) > 0) {
+				foreach ($merge_ids as $id => $row) {
+					// send realtime on-delivery order
+					$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
+						'success' => true, 'ids' => $id, 'buyer_id' => $row['buyer_ids'], 'event' => 'received'
+					]);
+					// send realtime received order
+					$this->senddataapi->trigger('received-order', 'incoming-orders', [
+						'success' => true, 'ids' => $id, 'buyer_id' => $row['buyer_ids'], 'event' => 'received'
+					]);
+
+					// send realtime on-delivery fulfillment
+					$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
+						'success' => true, 'ids' => $id, 'seller_id' => $row['seller_ids'], 'event' => 'received'
+					]);
+					// send realtime received fulfillment
+					$this->senddataapi->trigger('received-fulfillment', 'incoming-fulfillment', [
+						'success' => true, 'ids' => $id, 'seller_id' => $row['seller_ids'], 'event' => 'received'
+					]);
+
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $row['buyer_ids'], 'nav' => 'order'
+					]);
+					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+						'success' => true, 'id' => $row['seller_ids'], 'nav' => 'fulfill'
+					]);
+
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $row['buyer_ids'], 'menu' => 'orders', 'tab' => 'on-delivery'
+					]);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $row['seller_ids'], 'menu' => 'fulfillments', 'tab' => 'received'
+					]);
+				}
+				echo json_encode(['status' => true, 'message' => 'successfull!, orders was received!'], JSON_NUMERIC_CHECK); exit();
+			}
+		} else {
+			echo json_encode(['status' => false, 'message' => 'baskets unknown'], JSON_NUMERIC_CHECK); exit();
+		}
 	}
 }

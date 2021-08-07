@@ -9,17 +9,17 @@
 					</ul>
 				</div>
 				<div class="dashboard-panel-middle">
-					<table class="table table-bordered table-striped render-datatable" id="inventory_table">
+					<table class="table table-bordered table-striped render-datatable" id="inventory_table" style="width: -webkit-fill-available;">
 						<?php if ($data['products']): ?>
 							<thead>
 								<tr>
 									<?php if ($this->agent->is_mobile()): ?>
-										<th class="for-responsive"></th>
+										<th class="for-responsive" width="10"></th>
 									<?php endif ?>
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
-											<th>Actions</th>
-										<?php else: ?>
+											<th width="50">Actions</th>
+										<?php elseif ($key != 'version'): ?>
 											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
 									<?php endforeach ?>
@@ -32,22 +32,25 @@
 										<td class="for-responsive"></td>
 									<?php endif ?>
 									<?php foreach ($product as $index => $value): ?>
-										<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
-											<?php if ($index == 'id'): ?>
-												<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
-													<a href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+										<?php if ($index != 'version'): ?>
+											<td<?php if ($index == 'updated'): ?> data-sort="<?php echo strtotime($value);?>"<?php endif ?>>
+												<?php if ($index == 'id'): ?>
+													<?php if ($this->agent->is_mobile()): ?>&nbsp;&nbsp;<?php endif ?>
+													<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
+														<a class="text-link normal-radius" href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
+													<?php endif ?>
+													<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
+												<?php elseif ($index == 'updated'): ?>
+													<?php echo date('M. j, Y | h:i:s a', strtotime($value));?>
+												<?php elseif ($index == 'name'): ?>
+													<div class="inventory-name-block">
+														<?php echo ucwords($value);?>
+													</div>
+												<?php else: ?>
+													<?php echo $value;?>
 												<?php endif ?>
-												<a href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
-											<?php elseif ($index == 'updated'): ?>
-												<?php echo date('M. j, Y | h:i a', strtotime($value));?>
-											<?php elseif ($index == 'name'): ?>
-												<div class="inventory-name-block">
-													<?php echo ucwords($value);?>
-												</div>
-											<?php else: ?>
-												<?php echo $value;?>
-											<?php endif ?>
-										</td>
+											</td>
+										<?php endif ?>
 									<?php endforeach ?>
 								</tr>
 							<?php endforeach ?>

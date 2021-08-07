@@ -320,7 +320,7 @@
 							<?php if ($data['product']['latlng']): ?>
 								<?php foreach ($data['product']['latlng'] as $key => $prod): ?>
 									<ul class="spaced-list between">
-										<li><p class="product-price">₱ <span class="order-price"><?php echo $prod['price'];?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
+										<li><p class="product-price">₱ <span class="order-price"><?php echo format_number($prod['price']);?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
 										<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration"><?php echo ucwords($prod['duration']);?></span></p></li>
 									</ul>
 								<?php endforeach ?>

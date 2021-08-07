@@ -97,7 +97,7 @@ function device_id()
 	return strtoupper(substr(md5($DEVICE), 0, 12));
 }
 
-function get_mac_address()
+function get_mac_address($find_ip=false)
 {
 	// debug(PHP_OS, 'stop');
 	$macaddress = false;
@@ -105,17 +105,29 @@ function get_mac_address()
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 		@system('ipconfig /all');
 		$mycomsys = ob_get_contents();  
-		ob_clean();  
-		$find_mac = "Physical";  
+		ob_clean();
+		if ($find_ip == false) {
+			$find_mac = "Physical";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);  
-		$macaddress = substr($mycomsys, ($pmac+36), 17);  
+		$macaddress = substr($mycomsys, ($pmac+36), $length);  
 	} elseif (strtoupper(PHP_OS) == 'LINUX') {
 		@system('ifconfig');
 		$mycomsys = ob_get_contents();
 		ob_clean();
-		$find_mac = "ether";
+		if ($find_ip == false) {
+			$find_mac = "ether";
+			$length = 17;
+		} else {
+			$find_mac = 'IPv4 Address';
+			$length = 14;
+		}
 		$pmac = strpos($mycomsys, $find_mac);
-		$macaddress = substr($mycomsys, ($pmac+6), 17);
+		$macaddress = substr($mycomsys, ($pmac+6), $length);
 	}
 	// Display Mac Address 
 	return $macaddress;
@@ -282,33 +294,37 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 
 function create_dirs($dir='')
 {
-	/*create the dirs*/
-	$folder_chunks = explode('/', 'assets/data/files/');
-	if (count($folder_chunks)) {
-		$uploaddir = get_root_path();
-		foreach ($folder_chunks as $key => $folder) {
-			$uploaddir .= $folder.'/';
-			// debug($uploaddir);
-			@mkdir($uploaddir);
-		}
-	}
-	@mkdir(get_root_path('assets/data/files/'));
-	$uploaddir = get_root_path('assets/data/files/'.$dir);
-	
-	if ($dir != '') {
+	if (is_dir('assets/data/files/'.$dir) == false) {
 		/*create the dirs*/
-		$folder_chunks = explode('/', str_replace(' ', '_', $dir));
-		// debug($folder_chunks);
+		$folder_chunks = explode('/', 'assets/data/files/');
 		if (count($folder_chunks)) {
-			$uploaddir = get_root_path('assets/data/files/');
+			$uploaddir = get_root_path();
 			foreach ($folder_chunks as $key => $folder) {
 				$uploaddir .= $folder.'/';
 				// debug($uploaddir);
 				@mkdir($uploaddir);
 			}
 		}
+		@mkdir(get_root_path('assets/data/files/'));
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
+		
+		if ($dir != '') {
+			/*create the dirs*/
+			$folder_chunks = explode('/', str_replace(' ', '_', $dir));
+			// debug($folder_chunks);
+			if (count($folder_chunks)) {
+				$uploaddir = get_root_path('assets/data/files/');
+				foreach ($folder_chunks as $key => $folder) {
+					$uploaddir .= $folder.'/';
+					// debug($uploaddir);
+					@mkdir($uploaddir);
+				}
+			}
+		}
+		@chmod($uploaddir, 0755);
+	} else {
+		$uploaddir = get_root_path('assets/data/files/'.$dir);
 	}
-	@chmod($uploaddir, 0755);
 
 	return $uploaddir;
 }
@@ -423,9 +439,13 @@ function current_full_url($uri='')
 	$url = $CI->config->site_url($CI->uri->uri_string()) . $uri;
 	// debug($url); debug($_SERVER); exit();
 	if ($_SERVER['QUERY_STRING']) {
-		$url .= $url.'?'.$_SERVER['QUERY_STRING'];
+		$url .= '?'.$_SERVER['QUERY_STRING'];
+		$new_url = rtrim(str_replace('/index.php', '', $url), '/');
+	} else {
+		$new_url = rtrim(str_replace('/index.php', '', $url), '/').'/';
 	}
-	return rtrim(str_replace('/index.php', '', $url), '/').'/';
+	// print_r($new_url);
+	return $new_url;
 }
 
 function parse_mtb_query($uri=FALSE)
@@ -538,8 +558,8 @@ function tinymce_upload($dir='', $filename='upload')
 		/*Respond to the successful upload with JSON.*/
 		/*Use a location key to specify the path to the saved image resource.*/
 		/*{ location : '/your/uploaded/image/file'}*/
-		return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$temp['name'])]);
-		// return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$filename.'.'.$ext)]);
+		return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$temp['name'])], JSON_NUMERIC_CHECK);
+		// return json_encode(['location' => base_url($imageFolderMain.'/'.$dir.'/'.$filename.'.'.$ext)], JSON_NUMERIC_CHECK);
 	} else {
 		/*Notify editor that the upload failed*/
 		header("HTTP/1.1 500 Server Error");
@@ -684,20 +704,20 @@ function do_curl($request=false, $object=false, $url='')
 				if (strtolower(trim($request)) == 'refresh') {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($object['parameters']));
 				} else {
-					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				}
 				break;
 			case 'update': /*PUT*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 			case 'modify': /*PATCH*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 			case 'remove': /*DELETE*/
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters']));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($object['parameters'], JSON_NUMERIC_CHECK));
 				break;
 		}
 
@@ -791,12 +811,12 @@ function do_jsonp_callback($js_function=false, $payload=['type'=>'info', 'messag
 	$callback = $ci->input->get('callback');
 	if ($callback) {
 		if ($js_function) {
-			echo $callback . '('.$js_function.'('.json_encode($payload).'), false)'; exit();
+			echo $callback . '('.$js_function.'('.json_encode($payload, JSON_NUMERIC_CHECK).'), false)'; exit();
 		} else {
-			echo $callback . '('.json_encode($payload).', false)'; exit();
+			echo $callback . '('.json_encode($payload, JSON_NUMERIC_CHECK).', false)'; exit();
 		}
 	}
-	echo json_encode($payload); exit();
+	echo json_encode($payload, JSON_NUMERIC_CHECK); exit();
 }
 
 function camel_to_dashed($className)
@@ -839,7 +859,7 @@ function get_machine($field='geoplugin_request')
 function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	$output = NULL;
 	$ci =& get_instance();
-	$IP_ADDRESS = $ci->accounts->has_session ? $ci->accounts->profile['ip_address'] : $_SERVER['REMOTE_ADDR'];
+	$IP_ADDRESS = $_SERVER['REMOTE_ADDR'];
 	if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
 		$ip = $_SERVER["REMOTE_ADDR"];
 		if ($deep_detect) {
@@ -849,7 +869,7 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 				$ip = $_SERVER['HTTP_CLIENT_IP'];
 		}
 		$ip = in_array($ip, ['::1', '[::1]', '127.0.0.1', 'localhost']) ? $IP_ADDRESS : $ip;
-	}
+	} 
 	$purpose    = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
 	$support    = array("country", "countrycode", "state", "region", "city", "location", "address");
 	$continents = array(
@@ -863,45 +883,47 @@ function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
 	);
 	if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
 		$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-		// debug($ipdat);
+		// debug($ipdat, 'stop');
 		if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
 			switch ($purpose) {
 				case "location":
-				$output = array(
-					"city"           => @$ipdat->geoplugin_city,
-					"state"          => @$ipdat->geoplugin_regionName,
-					"country"        => @$ipdat->geoplugin_countryName,
-					"country_code"   => @$ipdat->geoplugin_countryCode,
-					"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
-					"continent_code" => @$ipdat->geoplugin_continentCode
-				);
+					$output = array(
+						"city"           => @$ipdat->geoplugin_city,
+						"state"          => @$ipdat->geoplugin_regionName,
+						"country"        => @$ipdat->geoplugin_countryName,
+						"country_code"   => @$ipdat->geoplugin_countryCode,
+						"continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
+						"continent_code" => @$ipdat->geoplugin_continentCode,
+						"timezone" 		 => @$ipdat->geoplugin_timezone,
+					);
 				break;
 				case "address":
-				$address = array($ipdat->geoplugin_countryName);
-				if (@strlen($ipdat->geoplugin_regionName) >= 1)
-					$address[] = $ipdat->geoplugin_regionName;
-				if (@strlen($ipdat->geoplugin_city) >= 1)
-					$address[] = $ipdat->geoplugin_city;
-				$output = implode(", ", array_reverse($address));
+					$address = array($ipdat->geoplugin_countryName);
+					if (@strlen($ipdat->geoplugin_regionName) >= 1)
+						$address[] = $ipdat->geoplugin_regionName;
+					if (@strlen($ipdat->geoplugin_city) >= 1)
+						$address[] = $ipdat->geoplugin_city;
+					$output = implode(", ", array_reverse($address));
 				break;
 				case "city":
-				$output = @$ipdat->geoplugin_city;
+					$output = @$ipdat->geoplugin_city;
 				break;
 				case "state":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "region":
-				$output = @$ipdat->geoplugin_regionName;
+					$output = @$ipdat->geoplugin_regionName;
 				break;
 				case "country":
-				$output = @$ipdat->geoplugin_countryName;
+					$output = @$ipdat->geoplugin_countryName;
 				break;
 				case "countrycode":
-				$output = @$ipdat->geoplugin_countryCode;
+					$output = @$ipdat->geoplugin_countryCode;
 				break;
 			}
 		}
 	}
+	// debug($output, 'stop');
 	return $output;
 }
 
@@ -1637,19 +1659,18 @@ function get_fullname($data=false, $other='', $return=false)
 	}
 	$fullname = $other;
 	$ci =& get_instance();
+	if ($data == false) $data = $ci->accounts->has_session ? $ci->accounts->profile : false;
 	if ($data) {
-		if ($ci->accounts->has_session AND ($data['id'] == $ci->accounts->profile['id'])) {
-			$fullname = $ci->accounts->profile['firstname'];
-		} else {
+		if (isset($data['firstname']) AND isset($data['lastname'])) {
 			$fullname = remove_multi_space($data['firstname'].' '.$data['lastname'], true);
+		} elseif (isset($data['name'])) {
+			$fullname = remove_multi_space($data['name'], true);
 		}
-	} elseif (isset($ci->accounts) AND $ci->accounts->has_session AND $other == '') {
-		$fullname = remove_multi_space($ci->accounts->profile['firstname'].' '.$ci->accounts->profile['lastname'], true);
-	}
+	} 
 	if ($return == false) {
-		echo $fullname;
+		echo ucwords($fullname);
 	} else {
-		return $fullname;
+		return ucwords($fullname);
 	}
 }
 
@@ -1672,22 +1693,20 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 	}
 }
 
-function operatorlogger($data=false, $operator=false)
+function cronlogger($response=false, $data=false, $type='error')
 {
-	$logfile = fopen(get_root_path('assets/data/logs/operator-bookings.log'), "a+");
-	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	if ($data AND $operator) {
-		$ci =& get_instance();
-		/*log here*/
-		$merge_ids = $ci->gm_db->columns('id', $data);
-		$txt .= "Code: 200\n";
-		$txt .= "Response: " . json_encode(['operator'=>$operator['id'], 'merge_ids'=>$merge_ids]) . " \n";
-	} else {
-		$txt .= "Code: -1 \n";
-		$txt .= "Response: $data \n";
+	$filename = 'assets/data/logs/cron-'.$type.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
 	}
-	
-	$txt .= "---------------------------------------------------------------------------------" . "\n";
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	$txt .= "Code: $type\n";
+	$txt .= "Response: " . json_encode($response, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "Data: " . json_encode($data, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "----------------------------" . "\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
@@ -1762,4 +1781,49 @@ function get_products($where=[], $limit=20)
 	}
 
 	return $items;
+}
+
+function sort_by_date($array=false)
+{
+	if ($array) {
+		// Comparison function
+		function date_compare($element1, $element2) {
+			if (isset($element1['added']) AND isset($element2['added'])) {
+				$datetime1 = strtotime($element1['added']);
+				$datetime2 = strtotime($element2['added']);
+				return $datetime2 - $datetime1;
+			} else {
+				return false;
+			}
+		} 
+		// Sort the array 
+		usort($array, 'date_compare');
+	}
+
+	return $array;
+}
+
+function make_stream_context($data=false)
+{
+	$context = false;
+	if ($data) {
+		$data = http_build_query($data);
+		$context_options = [
+			'http' => [
+				'method' => 'POST',
+				'header'=> "Content-type: application/x-www-form-urlencoded\r\n".
+						   "Content-Length: " . strlen($data) . "\r\n"
+				,
+				'content' => $data
+			]
+		];
+		$context = stream_context_create($context_options);
+	}
+
+	return $context;
+}
+
+function clean_json_encode($data=false)
+{
+	return json_encode($data, JSON_NUMERIC_CHECK);
 }

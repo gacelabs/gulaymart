@@ -54,7 +54,7 @@ class ToktokApi {
 					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint);
 					curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($params));
 					// $this->curl_custom_postfields($params, $files);
-					// curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params));
+					// curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($params, JSON_NUMERIC_CHECK));
 				}
 				curl_setopt($this->ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 				curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
@@ -281,7 +281,7 @@ class ToktokApi {
 	{
 		$logfile = fopen(get_root_path('assets/data/logs/toktok-api.log'), "a+");
 		$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
-		$txt .= "Response: " . json_encode($this->response) . " \n";
+		$txt .= "Response: " . json_encode($this->response, JSON_NUMERIC_CHECK) . " \n";
 		$txt .= "--------------------------------" . "\n";
 		fwrite($logfile, $txt);
 		fclose($logfile);

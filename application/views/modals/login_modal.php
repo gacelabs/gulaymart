@@ -21,8 +21,9 @@
 					</div>
 
 					<div class="login-middle fb-login-panel hide">
-						<h1>Logging In thru Facebook</h1>
-						<p>We've detected your facebook login session, we are logging you in now, please wait.</p>
+						<h1>Logging in thru Facebook</h1>
+						<p id="fb-good">We've detected your Facebook login session, we are logging you in now, please wait.</p>
+						<p id="fb-bad" class="hide" style="color: #e43232; font-weight: 500;">It seems like your Email address has restricted access permission on Facebook?<br>Please enter the Email address to proceed into your account with GulayMart.</p>
 					</div>
 
 					<div class="login-footer">
@@ -45,6 +46,12 @@
 								</div>
 								<button type="submit" class="btn btn-danger btn-block resetpass-submit">Send Password</button>
 							</form>
+							<form action="no-action" method="post" id="invalid-fb-email-form" class="form-validate invalid-fb-email hide">
+								<div class="form-group">
+									<input type="email" name="email" class="form-control" placeholder="Email address" required="required">
+								</div>
+								<button type="submit" class="btn btn-success btn-block fbemail-submit">Set your Email Address</button>
+							</form>
 						</div>
 
 						<div class="login-with-social">
@@ -56,8 +63,8 @@
 								</ul>
 							</a>
 							<!-- <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY;?>" data-size="invisible"></div> -->
-							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to <b>Log In</b></button>
-							<button class="btn btn-default btn-block fb-signing-in hide"><span class="spinner-border spinner-border-sm"></span>&nbsp;Signing in with Facebook ...</button>
+							<button class="btn btn-default btn-block ask-sign-in hide"><i class="fa fa-chevron-left pull-left" style="color:#aaa;margin-top:3px;"></i>back to normal <b>Log In</b></button>
+							<button class="btn btn-default btn-block fb-signing-in hide"><span class="spinner-border spinner-border-sm"></span>&nbsp;Signing you in with Facebook...</button>
 						</div>
 					</div>
 				</div>

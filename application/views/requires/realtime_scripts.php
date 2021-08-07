@@ -4,12 +4,13 @@
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
-			autoConnect: true,
+			autoConnect: IS_LOCAL ? false : true,
 			autoRunStash: true,
-			/*afterInit: function() {
-				realtime.connect(function() {
-				});
-			},*/
+			afterInit: function() {
+				if (IS_LOCAL && '<?php echo SENDDATA_APPKEY;?>' == 'A3193CF4AEC1ADD05F4B78C4E0C61C39') {
+					realtime.connect();
+				}
+			},
 			afterConnect: function() {
 				if (realtime.app.connected) {
 					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
@@ -20,9 +21,9 @@
 					/*communicate from orders tab to fulfillment tab*/
 					if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 					/*communicate from fulfillment tab to orders tab*/
-					if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
+					// if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 					/*communicate from operators booking page*/
-					if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
+					// if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
 					
 					/*listen for incomming on delivery fulfillments*/
 					if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
@@ -31,6 +32,20 @@
 					/*listen for incomming on delivery orders*/
 					if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
 						orderProcess(runOrders);
+					}
+					/*listen for incomming on baskets*/
+					if (typeof basketProcess == 'function' && oSegments[1] == 'basket') {
+						basketProcess(runBaskets);
+					}
+
+					/*listen for incomming on menu counts*/
+					if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+						initMenuNavsCount();
+					}
+
+					/*listen for incomming on tab counts*/
+					if (typeof initStatusTabsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+						initStatusTabsCount();
 					}
 				}
 			}
@@ -76,19 +91,24 @@
 		};
 	}
 
+	var tagCount = 0;
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser) {
-				oUser.seller_id = oUser.id;
-				oUser.url = window.location.protocol + '//' + window.location.hostname + '/orders/messages/';
+				++tagCount;
+				var oData = {
+					seller_id: oUser.id,
+					tag: 'demo-notification',
+					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
+				};
 				realtime.trigger('ordered-notification', 'send-notification', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
 					body: '',
 					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'demo-notification',
+					tag: 'demo-notification'+tagCount,
 					renotify: true,
 					vibrate: [200, 100, 200, 100, 200, 100, 200],
-					data: oUser
+					data: oData
 				});
 			}
 		});
@@ -106,12 +126,16 @@
 					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) onServiceWorkerReady('fulfillment', oData);
+						if ('serviceWorker' in navigator) {
+							onServiceWorkerReady('fulfillment', oData);
+						}
 					});
 					realtime.bind('ordered-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) onServiceWorkerReady('order', oData);
+						if ('serviceWorker' in navigator) {
+							onServiceWorkerReady('order', oData);
+						}
 					});
 				}, 300);
 			}

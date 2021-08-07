@@ -24,7 +24,7 @@
 					</tr>
 					<tr>
 						<th style="vertical-align: top;">Price:&nbsp;</th>
-						<td>&#x20b1; <?php echo $data['price'];?> / <?php echo $data['measurement'];?></td>
+						<td>&#x20b1; <?php echo format_number($data['price']);?> / <?php echo $data['measurement'];?></td>
 					</tr>
 					<?php if (isset($data['distance']) AND isset($data['duration'])): ?>
 						<tr>

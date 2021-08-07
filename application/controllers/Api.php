@@ -73,6 +73,8 @@ class Api extends MY_Controller {
 			if (isset($post['email_address']) AND strlen(trim($post['email_address'])) > 0) {
 				unset($post['email_address']);
 			}
+			$post['firstname'] = ucwords($post['firstname']);
+			$post['lastname'] = ucwords($post['lastname']);
 			if (isset($post['id']) AND $post['id'] > 0) {
 				$id = $post['id']; unset($post['id']);
 				$this->gm_db->save('user_profiles', $post, ['id' => $id]);
@@ -270,13 +272,15 @@ class Api extends MY_Controller {
 						if (isset($post['identifier'])) {
 							$object['identifier'] = $post['identifier'];
 						}
-						$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
-						// debug($printable, 'stop');
-						create_dirs('invoices');
 						$filename = 'assets/data/files/invoices/'.$results['order_id'].'-invoice.html';
-						$handle = fopen($filename, "w+");
-						fwrite($handle, $printable);
-						fclose($handle);
+						// if (!file_exists($filename)) {
+							$printable = file_get_contents(base_url('support/view_invoice/'.$results['order_id']));
+							// debug($printable, 'stop');
+							create_dirs('invoices');
+							$handle = fopen($filename, "w+");
+							fwrite($handle, $printable);
+							fclose($handle);
+						// }
 						$object['printable_link'] = base_url($filename);
 						$this->set_response('error', false, $object, false, 'renderHTML');
 					}
@@ -286,18 +290,18 @@ class Api extends MY_Controller {
 		$this->set_response('error', false, $post);
 	}
 
-	public function fulfillment_process($profile_id=0)
+	public function fulfillment_process($seller_id=0)
 	{
-		if ($profile_id > 0 OR $this->accounts->has_session) {
-			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
+		if ($seller_id > 0 OR $this->accounts->has_session) {
+			if ($seller_id == 0 AND $this->accounts->has_session) $seller_id = $this->accounts->profile['id'];
 			$this->load->library('baskets');
 			$status_value = $this->input->post('status');
 			$segment = $this->input->post('segment');
 			$status_id = get_status_dbvalue($status_value);
-			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $profile_id, 'status' => $status_id]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['seller_id' => $seller_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_fulfillments_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
-			$baskets_merge_ids = [];
+			$baskets_merge_ids = $buyer_ids = [];
 			if ($baskets_merge_data) {
 				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
@@ -306,18 +310,19 @@ class Api extends MY_Controller {
 					$valid = false;
 					switch ($status_value) {
 						case 'for+pick+up': /*if status is now on-delivery*/
-							$toktok_status = 4;
+							$toktok_status = TT_ON_DELIVERY_STATUS;
 							$valid = empty($data['delivery_id']);
-							$GM_status = 3;
+							$GM_status = GM_ON_DELIVERY_STATUS;
 							break;
 						case 'on+delivery': /*if status is now received*/
-							$toktok_status = 6;
+							$toktok_status = TT_RECEIVED_STATUS;
 							$valid = !empty($data['delivery_id']);
-							$GM_status = 4;
+							$GM_status = GM_RECEIVED_STATUS;
 							break;
 					}
 					if ($valid) {
 						$buyer_name = $data['buyer']['fullname'];
+						$buyer_ids[] = $data['buyer']['id'];
 						$date_range = false;
 						if (isset($data['schedule']) AND !empty($data['schedule'])) {
 							$date_range = [
@@ -344,7 +349,7 @@ class Api extends MY_Controller {
 											/*delivery_id not set yet*/
 											$delivery_id = $order['details']['post']['delivery_id'];
 											$set['delivery_id'] = $delivery_id;
-											$set['toktok_data'] = base64_encode(json_encode($order));
+											$set['toktok_data'] = base64_encode(json_encode($order, JSON_NUMERIC_CHECK));
 											/*update baskets*/
 											$ids = explode(',', $data['basket_ids']);
 											foreach ($ids as $id) {
@@ -362,26 +367,26 @@ class Api extends MY_Controller {
 			}
 			/*$this->senddataapi->trigger($segment.'-fulfillment', 'send-bookings', [
 				'message' => 'You have available bookings passed from '.$segment,
-				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'event' => $segment],
+				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'buyer_id' => $buyer_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_merge_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}
 	}
 
-	public function order_process($profile_id=0)
+	public function order_process($buyer_id=0)
 	{
-		if ($profile_id > 0 OR $this->accounts->has_session) {
-			if ($this->accounts->has_session) $profile_id = $this->accounts->profile['id'];
+		if ($buyer_id > 0 OR $this->accounts->has_session) {
+			if ($buyer_id == 0 AND $this->accounts->has_session) $buyer_id = $this->accounts->profile['id'];
 			$this->load->library('baskets');
 			$status_value = $this->input->post('status');
 			$segment = $this->input->post('segment');
 			$status_id = get_status_dbvalue($status_value);
-			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id]);
+			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $buyer_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_orders_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
 			$baskets_ids = [];
@@ -393,14 +398,14 @@ class Api extends MY_Controller {
 					$valid = false;
 					switch ($status_value) {
 						case 'for+pick+up': /*if status is now on-delivery*/
-							$toktok_status = 4;
+							$toktok_status = TT_ON_DELIVERY_STATUS;
 							$valid = empty($data['delivery_id']);
-							$GM_status = 3;
+							$GM_status = GM_ON_DELIVERY_STATUS;
 							break;
 						case 'on+delivery': /*if status is now received*/
-							$toktok_status = 6;
+							$toktok_status = TT_RECEIVED_STATUS;
 							$valid = !empty($data['delivery_id']);
-							$GM_status = 4;
+							$GM_status = GM_RECEIVED_STATUS;
 							break;
 					}
 					if ($valid) {
@@ -432,7 +437,7 @@ class Api extends MY_Controller {
 											/*delivery_id not set yet*/
 											$delivery_id = $order['details']['post']['delivery_id'];
 											$set['delivery_id'] = $delivery_id;
-											$set['toktok_data'] = base64_encode(json_encode($order));
+											$set['toktok_data'] = base64_encode(json_encode($order, JSON_NUMERIC_CHECK));
 											/*update baskets*/
 											$ids = explode(',', $data['basket_ids']);
 											foreach ($ids as $id) {
@@ -453,9 +458,9 @@ class Api extends MY_Controller {
 				'data' => ['success' => false, 'ids' => $baskets_ids, 'event' => $segment],
 			]);*/
 			if (count($baskets_ids)) {
-				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
-				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'event' => $segment]); exit();
+				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			}
 			// debug($baskets_merge_data, 'stop');
 		}
@@ -508,6 +513,12 @@ class Api extends MY_Controller {
 						unset($post['fn']);
 					}
 					$this->gm_db->save($object, $post, $where);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'notifications'
+					]);
+					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'feedbacks'
+					]);
 					$this->set_response('success', false, $data, false, $fn);
 				}
 			}

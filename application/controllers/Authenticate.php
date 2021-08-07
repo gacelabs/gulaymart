@@ -229,18 +229,47 @@ class Authenticate extends MY_Controller {
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		// debug($post, 'stop');
-		$is_ok = $this->accounts->fb_login($post);
-		// debug($is_ok);
-		$to = '/';
-		if ($is_ok == false) {
-			$to = 'sign-out';
-			$type = 'error';
-			$message = 'Unable to login, clearing session';
-		} else {
-			$type = 'success';
-			$message = '';
+		$continue = true;
+		if ((bool)strstr($_SERVER['HTTP_HOST'], 'local') == false) { /*HACKER TO NAKAPASOK EH*/
+			if (!isset($post['fbauth']['status']) OR (isset($post['fbauth']['status']) AND $post['fbauth']['status'] == 'unknown')) {
+				$continue = false;
+				$this->set_response('error', 'Something went wrong, please try again.', $post, false, 'closeModals');
+			}
 		}
-		$this->set_response($type, $message, $post, base_url($to));
+		if ($post AND (!isset($post['email']) OR (isset($post['email']) AND empty($post['email'])))) {
+			/*check first the fb id*/
+			if (!empty($post['id'])) {
+				$test = $this->gm_db->get_in('users', ['fb_id' => $post['id']], 'row');
+				if ($test AND !empty($test['email_address'])) {
+					$post['email'] = $test['email_address'];
+				} else {
+					$continue = false;
+					$this->set_response(false, false, $post, false, 'enterFBEmailAddress');
+				}
+			} elseif (isset($post['error'])) {
+				$continue = false;
+				$this->set_response('error', $post['error']['message'], $post, false, 'closeModals');
+			} else {
+				$continue = false;
+				$this->set_response('error', 'Something went wrong, please try again.', $post, false, 'closeModals');
+			}
+		}
+		if ($continue) {
+			// debug($post, 'stop');
+			$is_ok = $this->accounts->fb_login($post);
+			// debug($is_ok);
+			$to = '/profile';
+			if ($is_ok == false) {
+				$to = 'sign-out';
+				$type = 'error';
+				$message = 'Unable to login, clearing session';
+			} else {
+				$type = 'success';
+				$message = '';
+			}
+			$this->set_response($type, $message, $post, base_url($to));
+		}
+
 	}
 
 	public function fb_deauthorize()

@@ -21,8 +21,8 @@
 		<p class="hidden-lg hidden-md hidden-sm text-center" style="padding-top:3px;margin:0;"><span class="text-capsule status-placed">Placed</span></p>
 		<div>
 			<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
-			<p class="zero-gaps"><i>Delivery Fee:</i> <?php echo number_format($orders['fee']);?> + &#x20b1; <?php echo number_format($initial_total);?></p>
-			<p style="border-top:1px solid #888;display:inline-block;padding:0 0 0 35px;margin:0;">&#x20b1; <b><?php echo number_format($initial_total + (float)$orders['fee']);?></b></p>
+			<p class="zero-gaps"><i>Delivery Fee:</i> <?php echo format_number($orders['fee']);?> + &#x20b1; <?php echo format_number($initial_total);?></p>
+			<p style="border-top:1px solid #888;display:inline-block;padding:0 0 0 35px;margin:0;">&#x20b1; <b><?php echo format_number($initial_total + (float)$orders['fee']);?></b></p>
 		</div>
 	</div>
 </div>

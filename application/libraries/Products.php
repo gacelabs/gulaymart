@@ -322,6 +322,7 @@ class Products {
 			]);
 			if ($products_location->num_rows()) {
 				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
+				// debug($product, 'stop');
 				if ($product) {
 					$product['product_url'] = product_url(['id'=>$product_id, 'farm_location_id'=>$farm_location_id, 'name'=>$product['name']]);
 					
@@ -338,27 +339,23 @@ class Products {
 					if ($feedbacks) {
 						$feedbacks_data = [];
 						foreach ($feedbacks as $key => $feedback) {
-							if ($feedback['under'] == 0) {
-								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
+							if ($feedback['under'] == 0) { /*to_id is the farmer*/
+								$feedback['is_buyer'] = 1;
+								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['to_id']], 'row');
+								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['from_id']], 'row');
 								$feedbacks_data[$feedback['id']]['first'] = $feedback;
-							}
-						}
-						foreach ($feedbacks as $key => $feedback) {
-							if ($feedback['under'] != 0) {
-								if (isset($feedbacks_data[$feedback['under']])) {
-									$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['user_id']], 'row');
-									$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
-								}
+							} else { /*to_id is the profile*/
+								$feedback['is_buyer'] = 0;
+								$feedback['farm'] = $this->class->gm_db->get('user_farms', ['user_id' => $feedback['from_id']], 'row');
+								$feedback['profile'] = $this->class->gm_db->get('user_profiles', ['user_id' => $feedback['to_id']], 'row');
+								$feedbacks_data[$feedback['under']]['replies'][] = $feedback;
 							}
 						}
 						// debug($feedbacks_data, $feedbacks, 'stop');
 					}
 					$product['feedbacks'] = $feedbacks_data;
 					if ($this->has_session) {
-						$product['can_comment'] =  $this->class->gm_db->count('baskets', ['product_id'=>$product_id,'location_id'=>$farm_location_id,'user_id'=>$this->profile['id'],'status'=>[3,4,6]]);
-						if ($product['can_comment'] == 0 AND $feedbacks_data) {
-							$product['can_comment'] = $this->class->gm_db->count('products', ['user_id'=>$this->profile['id'],'id'=>$product_id]);
-						}
+						$product['can_comment'] = $this->class->gm_db->count('messages', ['from_id'=>$this->profile['id'],'page_id'=>$product_id]);
 					} else {
 						$product['can_comment'] = 0;
 					}
@@ -436,14 +433,15 @@ class Products {
 						$content = "Product item <a href='".$base_url."'>$name</a> is low on stocks [<em>$stocks pcs remaining</em>]";
 						$check_msgs = $this->class->gm_db->get('messages', [
 							'tab' => 'Notifications', 'type' => 'Inventory',
-							'user_id' => $product['user_id'], 'unread' => 1,
+							'to_id' => $product['user_id'], 'unread' => 1,
 							'datestamp' => $datestamp,
 							'content' => $content,
 						], 'row');
 						if ($check_msgs == false) {
 							$this->class->gm_db->new('messages', [
 								'tab' => 'Notifications', 'type' => 'Inventory',
-								'user_id' => $product['user_id'], 'datestamp' => $datestamp,
+								'to_id' => $product['user_id'], 'datestamp' => $datestamp,
+								'page_id' => $product_id, 'entity_id' => $farm_location_id,
 								'content' => $content,
 							]);
 						}

@@ -17,10 +17,10 @@
 					<p><a href="<?php product_url($rawdata['product'], true);?>" class="text-link"><?php echo ucwords($rawdata['product']['name']);?></a></p>
 				</div>
 				<p class="zero-gaps">
-					&#x20b1; <b><?php echo number_format($rawdata['details']['price']);?></b> / <?php echo $rawdata['details']['measurement'];?> 
+					&#x20b1; <b><?php echo format_number($rawdata['details']['price']);?></b> / <?php echo $rawdata['details']['measurement'];?> 
 					<span class="qty-divider">x Quantity: 
 						<input type="number" name="order-qty-input" class="order-qty-input" value="<?php echo $item['quantity'];?>" min="1" max="<?php echo $rawdata['details']['stocks'];?>" js-event="qty" js-price="<?php echo $rawdata['details']['price'];?>" js-id="<?php echo $item['id'];?>" />
-					</span> Total: &#x20b1; <b js-element="itemtotal-<?php echo $item['id'];?>"><?php echo number_format((int)$item['quantity'] * (float)$rawdata['details']['price']);?></b>
+					</span> Total: &#x20b1; <b js-element="itemtotal-<?php echo $item['id'];?>"><?php echo format_number((int)$item['quantity'] * (float)$rawdata['details']['price']);?></b>
 				</p>
 			</div>
 		</div>

@@ -40,7 +40,7 @@ function toktok_post_delivery_format($data=false)
 	$params = [
 		'f_id' => '',
 		'referral_code' => REFERRAL_CODE,
-		'f_post' => $data ? json_encode(['hash' => $data['hash']]) : '',
+		'f_post' => $data ? json_encode(['hash' => $data['hash']], JSON_NUMERIC_CHECK) : '',
 		'pac-input' => $seller ? remove_multi_space($seller['address_1'].' '.$seller['address_2'], true) : '',
 		'pac-input2' => $shipping ? remove_multi_space($shipping['address_1'].' '.$shipping['address_2'], true) : '',
 		'f_distance' => $pricing ? $pricing['distance'] . ' km' : '0 km',
@@ -200,7 +200,7 @@ function get_session_baskets($where=false)
 		$where = ['status' => [0,1]];
 	}
 	if ($ci->accounts->has_session) {
-		$where['user_id'] = $ci->accounts->profile['id'];
+		if (!isset($where['user_id'])) $where['user_id'] = $ci->accounts->profile['id'];
 	} else {
 		$where['device_id'] = $ci->device_id;
 	}
@@ -228,7 +228,7 @@ function add_item_to_basket($post, $product_id)
 				$post['baskets']['user_id'] = $ci->accounts->has_session ? $ci->accounts->profile['id'] : 0;
 				$post['baskets']['at_date'] = $timestamp;
 				$post['baskets']['at_time'] = $time;
-				$post['baskets']['rawdata'] = base64_encode(json_encode($product));
+				$post['baskets']['rawdata'] = base64_encode(json_encode($product, JSON_NUMERIC_CHECK));
 				$post['baskets']['device_id'] = $ci->device_id;
 
 				$where = [
@@ -267,7 +267,7 @@ function add_item_to_basket($post, $product_id)
 						$price_and_directions = $ci->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['pricing'];
 						$post['baskets']['fee'] = $price_and_directions['price'];
 						$hash = $ci->toktokapi->response['result']['data']['getDeliveryPriceAndDirections']['hash'];
-						$post['baskets']['hash'] = json_encode(['hash' => $hash]);
+						$post['baskets']['hash'] = json_encode(['hash' => $hash], JSON_NUMERIC_CHECK);
 					}
 				}
 	
@@ -325,22 +325,22 @@ function get_status_value($status=false)
 	if ($status) {
 		$ci =& get_instance();
 		switch (strtolower(trim($status))) {
-			case '1': /*verified*/
+			case GM_VERIFIED_SCHED: case GM_VERIFIED_NOW: /*verified*/
 				return 'verified';
 			break;
-			case '2': /*placed*/
+			case GM_PLACED_STATUS: /*placed*/
 				return 'placed';
 			break;
-			case '3': /*on delivery*/
+			case GM_ON_DELIVERY_STATUS: /*on delivery*/
 				return 'on+delivery';
 			break;
-			case '4': /*received*/
+			case GM_RECEIVED_STATUS: /*received*/
 				return 'received';
 			break;
-			case '5': /*cancelled*/
+			case GM_CANCELLED_STATUS: /*cancelled*/
 				return 'cancelled';
 			break;
-			case '6': /*for pick up*/
+			case GM_FOR_PICK_UP_STATUS: /*for pick up*/
 				return 'for+pick+up';
 			break;
 		}
@@ -354,26 +354,26 @@ function get_status_dbvalue($status=false)
 		$ci =& get_instance();
 		switch (strtolower(trim($status))) {
 			case 'verified': /*verified*/
-				return 1;
+				return [GM_VERIFIED_SCHED, GM_VERIFIED_NOW];
 			break;
 			case 'placed': /*placed*/
-				return 2;
+				return GM_PLACED_STATUS;
 			break;
 			case 'on+delivery': /*on delivery*/
-				return 3;
+				return GM_ON_DELIVERY_STATUS;
 			break;
 			case 'received': /*received*/
-				return 4;
+				return GM_RECEIVED_STATUS;
 			break;
 			case 'cancelled': /*cancelled*/
-				return 5;
+				return GM_CANCELLED_STATUS;
 			break;
 			case 'for+pick+up': /*for pick up*/
-				return 6;
+				return GM_FOR_PICK_UP_STATUS;
 			break;
 		}
 	}
-	return 0;
+	return -1;
 }
 
 function get_toktokstatus_value($status=false)
@@ -481,17 +481,26 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 		}
 		// debug($settings, 'stop');
 		if ($settings) {
+			$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+				'success' => true, 'id' => $user_id, 'nav' => 'message'
+			]);
+			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'notifications'
+			]);
+			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
+				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'feedbacks'
+			]);
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
-				'user_id' => $user_id, 'unread' => 1,
+				'to_id' => $user_id, 'unread' => 1,
 				'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {
 				$ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
-					'user_id' => $user_id, 'datestamp' => $datestamp,
+					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
 				return true;
@@ -547,40 +556,43 @@ function count_by_status($where=false)
 
 function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 {
-	$html = file_get_contents(base_url('support/view_thankyou_page/'.$final_total));
-	// debug($html, 'stop');
-	/*create_dirs('placed_orders');
-	$all_orders_id = strtoupper(substr(md5(implode(',', $merge_ids)), 0, 10));
-	$filename = 'assets/data/files/placed_orders/'.$all_orders_id.'-placed.html';
-	$handle = fopen($filename, "w+");
-	fwrite($handle, $html);
-	fclose($handle);*/
+	// $html_email = file_get_contents(base_url('support/view_thankyou_page/'.$final_total));
+	$data = ['total' => $final_total, 'buyer' => $buyer];
+	$context = make_stream_context($data);
+	$html_email = file_get_contents(base_url('support/thankyou_page/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html, 'Your Order have been Placed, Thank you!');
-	$html = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	send_gm_email($buyer['id'], $html_email, 'Your Order have been Placed, Thank you!');
+	$html_buyer_gm = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
+	$context = make_stream_context($data);
+	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
+	$html_seller_gm = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
+
 	$ci =& get_instance();
-	$html = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
-		$ci->senddataapi->trigger('ordered-notification', 'send-notification', [
-			'badge' => base_url('assets/images/favicon.png'),
-			'body' => '',
-			'icon' => base_url('assets/images/favicon.png'),
-			'tag' => 'ordered-notification:send-notification',
-			'renotify' => true,
-			'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-			'data' => [
-				'final_total' => $final_total,
-				'merge_ids' => $merge_ids,
-				'seller_id' => $seller_id,
-				'buyer' => $buyer,
-				'url' => base_url('orders/messages'),
-			],
-		]);
+		send_gm_email($seller_id, $html_seller_email, 'Order(s) have been Placed!');
+		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders');
+		if ($sent) {
+			$ci->senddataapi->trigger('ordered-notification', 'send-notification', [
+				'badge' => base_url('assets/images/favicon.png'),
+				'body' => '',
+				'icon' => base_url('assets/images/favicon.png'),
+				'tag' => 'ordered-notification:send-notification',
+				'renotify' => true,
+				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+				'data' => [
+					'final_total' => $final_total,
+					'merge_ids' => $merge_ids,
+					'seller_id' => $seller_id,
+					'buyer' => $buyer,
+					'url' => base_url('orders/messages'),
+				],
+			]);
+		}
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
@@ -594,42 +606,46 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	fclose($logfile);
 }
 
-function notify_invoice_orders($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for+pick+up')
+function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for-pick-up')
 {
-	$html = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
-	// debug($printable, 'stop');
-	/*create_dirs('invoices');
-	$filename = 'assets/data/files/invoices/'.$merge['order_id'].'-invoice.html';
-	$handle = fopen($filename, "w+");
-	fwrite($handle, $printable);
-	fclose($handle);*/
+	// $html_email = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
+	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'buyer'];
+	$context = make_stream_context($data);
+	$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html, 'Your Order is '.$action.', Thank you!');
+	send_gm_email($buyer['id'], $html_email, 'Your Order is '.$action.', Thank you!');
 	$html = '<p>Order is '.$action.', <a href="orders/'.$status.'/">Check here</a></p>';
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
 	
 	/*message sellers*/
+	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'seller'];
+	$context = make_stream_context($data);
+	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
+
 	$ci =& get_instance();
 	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
-		$ci->senddataapi->trigger('fulfilled-notification', 'send-notification', [
-			'badge' => base_url('assets/images/favicon.png'),
-			'body' => '',
-			'icon' => base_url('assets/images/favicon.png'),
-			'tag' => 'fulfilled-notification:send-notification',
-			'renotify' => true,
-			'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-			'data' => [
-				'merge' => $merge,
-				'buyer' => $buyer,
-				'action' => $action,
-				'status' => $status,
-				'seller_id' => $seller_id,
-				'url' => base_url('orders/messages'),
-			],
-		]);
+		send_gm_email($seller_id, $html_seller_email, 'Order is '.$action.'!');
+		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+		if ($sent) {
+			$ci->senddataapi->trigger('fulfilled-notification', 'send-notification', [
+				'badge' => base_url('assets/images/favicon.png'),
+				'body' => '',
+				'icon' => base_url('assets/images/favicon.png'),
+				'tag' => 'fulfilled-notification:send-notification',
+				'renotify' => true,
+				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+				'data' => [
+					'merge' => $merge,
+					'buyer' => $buyer,
+					'action' => $action,
+					'status' => $status,
+					'seller_id' => $seller_id,
+					'url' => base_url('orders/messages'),
+				],
+			]);
+		}
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");
@@ -673,7 +689,7 @@ function setup_fulfillments_data($baskets_merge=false)
 			}
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function setup_orders_data($baskets_merge=false)
@@ -704,7 +720,7 @@ function setup_orders_data($baskets_merge=false)
 			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 		}
 	}
-	return $baskets_merge;
+	return sort_by_date($baskets_merge);
 }
 
 function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $keywords='')
@@ -730,50 +746,18 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 			$nearby_products = nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'limit' => false]);
 		}
 		// debug($nearby_products, 'stop');
-		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)]); exit();
+		echo json_encode(['success' => ($html != ''), 'html' => $html, 'count' => (is_array($nearby_products) ? count($nearby_products) : 0)], JSON_NUMERIC_CHECK); 
+		return false;
+		exit();
 	}
 	// debug(nearby_farms($latlng), nearby_products($latlng), 'stop');
-	$ci->render_page([
-		'top' => [
-			'metas' => [
-				'description' => APP_NAME.' is your neighborhood veggies supplier.',
-				'name' => APP_NAME.' is your neighborhood veggies supplier.',
-			],
-			'index_page' => 'yes',
-			'page_title' => APP_NAME.' | Veggies grown by community.',
-			'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
-		],
-		'middle' => [
-			'head' => ['../global/global_navbar'],
-			'body' => [
-				'marketplace/carousel',
-				'../global/veggy_nearby',
-				'marketplace/category',
-				'marketplace/products_container',
-				'marketplace/famers_container'
-			],
-			'footer' => [
-				'global/footer'
-			],
-		],
-		'bottom' => [
-			'modals' => ['check_loc_modal'],
-			'js' => [
-				'plugins/jquery.inputmask.min',
-				'plugins/inputmask.binding',
-				'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
-				'plugins/markerclustererplus.min',
-				'marketplace/main',
-			],
-		],
-		'data' => [
-			'nearby_veggies' => nearby_veggies($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
-			'nearby_products_count' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
-			'nearby_farms' => nearby_farms($latlng),
-			'keywords' => $keywords,
-		],
-	]);
+	return [
+		'nearby_veggies' => nearby_veggies($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+		'nearby_products' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => $not_ids, 'has_ids' => $has_ids]),
+		'nearby_products_count' => nearby_products($latlng, ['category_ids' => $category_ids, 'not_ids' => false, 'has_ids' => false, 'limit' => false]),
+		'nearby_farms' => nearby_farms($latlng),
+		'keywords' => $keywords,
+	];
 }
 
 function validate_recaptcha($CI_POST=false)
@@ -839,7 +823,7 @@ function check_device_agent() {
 	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?? null;
 
 	if (!$userAgent || !$httpAccept) {
-		return 'desktop_';
+		return 'desktop';
 	}
 
 	if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($userAgent))) {
@@ -882,12 +866,22 @@ function check_device_agent() {
 
 	if ($tablet_browser > 0) {
 		// do something for tablet devices
-		return 'tablet_';
+		return 'tablet';
 	} else if ($mobile_browser > 0) {
 		// do something for mobile devices
-		return 'mobile_';
+		return 'mobile';
 	} else {
 		// do something for everything else
-		return 'desktop_';
+		return 'desktop';
+	}
+}
+
+function format_number($value=0)
+{
+	// debug((is_numeric( $value ) && floor( $value ) != $value), 'stop');
+	if ((is_numeric( $value ) && floor( $value ) != $value)) {
+		return number_format($value, 2, '.', ',');
+	} else {
+		return number_format($value);
 	}
 }

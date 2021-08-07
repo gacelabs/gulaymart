@@ -47,7 +47,11 @@ class Accounts {
 						$allowed = TRUE;
 						$user = $query->row_array();
 					} else {
-						$msg = 'Invalid password!';
+						if ($allowed) {
+							$msg = $function == 'login' ? 'Email address does not exist!' : 'Email address already exist!';
+						} else {
+							$msg = 'Invalid password!';
+						}
 					}
 				} else {
 					$msg = $function == 'login' ? 'Email address does not exist!' : 'Email address already exist!';
@@ -140,17 +144,26 @@ class Accounts {
 	{
 		// debug($post);
 		if ($post != FALSE AND (is_array($post) AND count($post) > 0)) {
-			if (!isset($post['email']) OR (isset($post['email']) AND empty($post['email']))) $post['email'] = $post['id'].'@facebook.com';
-
+			$return = $this->check_credits(['email_address' => $post['email'], 'password' => ''], 'users', 'register');
+			$update_user = (isset($return['allowed']) AND $return['allowed'] AND $return['message'] == 'Email address already exist!');
+			// debug($update_user, $return, 'stop');
+			
 			$fbuser = $this->class->db->get_where('users', ['fb_id' => $post['id']]);
 			if ($fbuser->num_rows() == 0) {
-				$this->class->db->insert('users', [
-					'fb_id' => $post['id'],
-					'email_address' => $post['email'],
-				]);
-				$id = $this->class->db->insert_id();
-				$qry = $this->class->db->get_where('users', ['id' => $id]);
-				$user = $qry->row_array();
+				/*no fb_id yet*/
+				if ($update_user) { /*but email already exists*/
+					$qry = $this->class->db->get_where('users', ['email_address' => $post['email']]);
+					$user = $qry->row_array();
+					$this->class->db->update('users', ['fb_id' => $post['id']], ['id' => $user['id']]);
+				} else {
+					$this->class->db->insert('users', [
+						'fb_id' => $post['id'],
+						'email_address' => $post['email'],
+					]);
+					$id = $this->class->db->insert_id();
+					$qry = $this->class->db->get_where('users', ['id' => $id]);
+					$user = $qry->row_array();
+				}
 			} else {
 				$user = $fbuser->row_array();
 				if (empty($user['email_address'])) {
