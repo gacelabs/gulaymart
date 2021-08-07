@@ -11,7 +11,7 @@
 		FB.AppEvents.logPageView();
 
 		FB.getLoginStatus(function(response) {
-			fb_acc_response = response;
+			console.log(response);
 		});
 	};
 	(function(d, s, id){

@@ -1,19 +1,14 @@
 $(document).ready(function() {
 	if (oUser == false) {
 		$('.fb-login-btn').off('click').on('click', function(e) {
-			if (fb_acc_response.status != 'connected') {
-				FB.login(function(response) {
-					// console.log(response);
-					fb_acc_response = response;
-					if (response.status === 'connected') {
-						runFbLogin();
-					} else{
-						$('#login_modal').modal('hide');
-					}
-				}, {scope: 'public_profile, email'});
-			} else {
-				runFbLogin();
-			}
+			FB.login(function(response) {
+				// console.log(response);
+				if (response.status === 'connected') {
+					runFbLogin();
+				} else{
+					$('#login_modal').modal('hide');
+				}
+			}, {scope: 'public_profile, email'});
 		});
 	}
 });
