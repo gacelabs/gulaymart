@@ -3,7 +3,6 @@ $(document).ready(function() {
 	phrase = ['feed their family.', 'dream big.', 'live for a day.', 'to produce more.'],
 	sec = 4000,
 	i = 0;
-
 	setInterval(function() {
 		$('#subphrase').hide();
 		if (i < img.length) {
@@ -12,7 +11,6 @@ $(document).ready(function() {
 			++i;
 		}
 	}, sec);
-
 	setInterval(function(e) {
 		if (i == img.length) i = 0;
 	}, sec);
@@ -38,6 +36,7 @@ if ('serviceWorker' in navigator) {
 
 			window.addEventListener('appinstalled', (e) => {
 				deferredPrompt = null;
+				window.location = MAIN_URL;
 			});
 		});
 	}).catch(function(err) {

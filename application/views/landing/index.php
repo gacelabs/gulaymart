@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="robots" content="index, follow">
 	<meta name="description" content="GulayMart Add to Home Screen NOW!">
-	
+
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="<?php echo current_full_url();?>">
 	<meta property="og:title" content="GulayMart Marketplace » Add to Home Screen">
@@ -22,6 +22,9 @@
 	<link rel="canonical" href="<?php echo base_url();?>">
 	<link rel="stylesheet" type="text/css" href="assets/css/landing/landing.css">
 	<link rel="manifest" href="/public/manifest.webmanifest.json">
+	<script type="text/javascript">
+		var MAIN_URL = '<?php echo base_url();?>';
+	</script>
 </head>
 <body>
 	<section id="wrapper">
