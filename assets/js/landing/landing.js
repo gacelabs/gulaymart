@@ -11,6 +11,11 @@ $(document).ready(function() {
 			++i;
 		}
 	}, sec);
+	setInterval(function() {
+		if (i < img.length) {
+			$('#meta-image').attr({'content': MAIN_URL + 'assets/images/landing/'+img[i]});
+		}
+	}, 10000);
 	setInterval(function(e) {
 		if (i == img.length) i = 0;
 	}, sec);
