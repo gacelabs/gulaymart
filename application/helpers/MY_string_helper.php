@@ -439,9 +439,13 @@ function current_full_url($uri='')
 	$url = $CI->config->site_url($CI->uri->uri_string()) . $uri;
 	// debug($url); debug($_SERVER); exit();
 	if ($_SERVER['QUERY_STRING']) {
-		$url .= $url.'?'.$_SERVER['QUERY_STRING'];
+		$url .= '?'.$_SERVER['QUERY_STRING'];
+		$new_url = rtrim(str_replace('/index.php', '', $url), '/');
+	} else {
+		$new_url = rtrim(str_replace('/index.php', '', $url), '/').'/';
 	}
-	return rtrim(str_replace('/index.php', '', $url), '/').'/';
+	// print_r($new_url);
+	return $new_url;
 }
 
 function parse_mtb_query($uri=FALSE)

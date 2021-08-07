@@ -346,7 +346,7 @@ class MY_Controller extends CI_Controller {
 					$meta_value = $view['top']['metas'][$key];
 					switch (strtolower($key)) {
 						case 'type':
-							$view['top']['metas'][$key] = str_replace('XXX', 'article', $meta_value);
+							$view['top']['metas'][$key] = str_replace('XXX', 'website', $meta_value);
 							break;
 						case 'url':
 							$view['top']['metas'][$key] = str_replace('XXX', current_full_url(), $meta_value);

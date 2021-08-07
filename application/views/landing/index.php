@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<base href="<?php echo base_url(); ?>">
+	<base href="<?php echo base_url();?>">
+	<title>Gulaymart | Add to Home Screen</title>
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Gulaymart | Add to Home Screen</title>
+	<meta name="robots" content="index, follow">
+	<meta name="description" content="GulayMart Add to Home Screen NOW!">
+	
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="<?php echo current_full_url();?>">
+	<meta property="og:title" content="GulayMart Marketplace » Add to Home Screen">
+	<meta property="og:description" content="GulayMart Add to Home Screen NOW!">
+	<meta property="og:image" content="<?php echo base_url('assets/landing/images/0.png');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/landing/images/1.png');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/landing/images/2.png');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/landing/images/3.png');?>">
+
+	<link href="assets/images/favicon.png" rel="icon" type="image/x-icon">
+	<link rel="canonical" href="<?php echo base_url();?>">
 	<link rel="stylesheet" type="text/css" href="assets/css/landing/landing.css">
+	<link rel="manifest" href="/public/manifest.webmanifest.json">
 </head>
 <body>
 	<section id="wrapper">
