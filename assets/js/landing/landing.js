@@ -18,12 +18,12 @@ $(document).ready(function() {
 	}, sec);
 });
 
-/*if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		console.log("Registered:", registration);
 	}).catch(function(err) {
 		console.log("Issue happened:", err);
-	});*/
+	});
 
 	let deferredPrompt;
 	document.querySelector('.add-pwa').addEventListener('click', async () => {
@@ -40,4 +40,4 @@ $(document).ready(function() {
 	window.addEventListener('appinstalled', (e) => {
 		deferredPrompt = null;
 	});
-/*}*/
+}
