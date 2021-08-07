@@ -41,7 +41,9 @@
 													<li>
 														<p class="media-heading">
 															<b><?php get_fullname($feedback['first']['profile']);?></b>
-															<small class="text-gray">(Verified Customer)</small>
+															<?php if ($feedback['first']['is_buyer'][]): ?>
+																<small class="text-gray">(Verified Customer)</small>
+															<?php endif ?>
 														</p>
 													</li>
 													<li><small class="text-gray"><?php echo date('F j, Y | g:ia', strtotime($feedback['first']['added']));?></small></li>
