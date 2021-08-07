@@ -236,25 +236,28 @@ class Authenticate extends MY_Controller {
 				$this->set_response('error', 'Something went wrong, please try again.', $post, false, 'closeModals');
 			}
 		}
-
-		if ($continue) {
-			if ($post AND (!isset($post['email']) OR (isset($post['email']) AND empty($post['email'])))) {
+		if ($post AND (!isset($post['email']) OR (isset($post['email']) AND empty($post['email'])))) {
+			/*check first the fb id*/
+			$test = $this->gm_db->get('users', ['fb_id' => $post['id']], 'row');
+			if ($test == false) {
+				$continue = false;
 				$this->set_response(false, false, $post, false, 'enterFBEmailAddress');
-			} else {
-				// debug($post, 'stop');
-				$is_ok = $this->accounts->fb_login($post);
-				// debug($is_ok);
-				$to = '/profile';
-				if ($is_ok == false) {
-					$to = 'sign-out';
-					$type = 'error';
-					$message = 'Unable to login, clearing session';
-				} else {
-					$type = 'success';
-					$message = '';
-				}
-				$this->set_response($type, $message, $post, base_url($to));
 			}
+		}
+		if ($continue) {
+			// debug($post, 'stop');
+			$is_ok = $this->accounts->fb_login($post);
+			// debug($is_ok);
+			$to = '/profile';
+			if ($is_ok == false) {
+				$to = 'sign-out';
+				$type = 'error';
+				$message = 'Unable to login, clearing session';
+			} else {
+				$type = 'success';
+				$message = '';
+			}
+			$this->set_response($type, $message, $post, base_url($to));
 		}
 
 	}
