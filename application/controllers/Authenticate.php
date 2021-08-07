@@ -238,12 +238,20 @@ class Authenticate extends MY_Controller {
 		}
 		if ($post AND (!isset($post['email']) OR (isset($post['email']) AND empty($post['email'])))) {
 			/*check first the fb id*/
-			$test = $this->gm_db->get_in('users', ['fb_id' => $post['id']], 'row');
-			if ($test AND !empty($test['email_address'])) {
-				$post['email'] = $test['email_address'];
+			if (!empty($post['id'])) {
+				$test = $this->gm_db->get_in('users', ['fb_id' => $post['id']], 'row');
+				if ($test AND !empty($test['email_address'])) {
+					$post['email'] = $test['email_address'];
+				} else {
+					$continue = false;
+					$this->set_response(false, false, $post, false, 'enterFBEmailAddress');
+				}
+			} elseif (isset($post['error'])) {
+				$continue = false;
+				$this->set_response('error', $post['error']['message'], $post, false, 'closeModals');
 			} else {
 				$continue = false;
-				$this->set_response(false, false, $post, false, 'enterFBEmailAddress');
+				$this->set_response('error', 'Something went wrong, please try again.', $post, false, 'closeModals');
 			}
 		}
 		if ($continue) {
