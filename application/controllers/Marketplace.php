@@ -18,7 +18,42 @@ class Marketplace extends MY_Controller {
 		} else {
 			$category_ids = get_data_in('products_category', false, 'id');
 		}
-		marketplace_data($category_ids, $not_ids, $has_ids);
+		$data = marketplace_data($category_ids, $not_ids, $has_ids);
+		$this->render_page([
+			'top' => [
+				'metas' => [
+					'description' => APP_NAME.' is your neighborhood veggies supplier.',
+					'name' => APP_NAME.' is your neighborhood veggies supplier.',
+				],
+				'index_page' => 'yes',
+				'page_title' => APP_NAME.' | Veggies grown by community.',
+				'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
+			],
+			'middle' => [
+				'head' => ['../global/global_navbar'],
+				'body' => [
+					'marketplace/carousel',
+					'../global/veggy_nearby',
+					'marketplace/category',
+					'marketplace/products_container',
+					'marketplace/famers_container'
+				],
+				'footer' => [
+					'global/footer'
+				],
+			],
+			'bottom' => [
+				'modals' => ['check_loc_modal'],
+				'js' => [
+					'plugins/jquery.inputmask.min',
+					'plugins/inputmask.binding',
+					'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
+					'plugins/markerclustererplus.min',
+					'marketplace/main',
+				],
+			],
+			'data' => $data,
+		]);
 	}
 
 	public function category($category=false, $keywords=false)
@@ -58,7 +93,42 @@ class Marketplace extends MY_Controller {
 				}
 			}
 			// debug($has_ids, 'stop');
-			marketplace_data(false, false, $has_ids, $keywords);
+			$data = marketplace_data(false, false, $has_ids, $keywords);
+			$this->render_page([
+				'top' => [
+					'metas' => [
+						'description' => APP_NAME.' is your neighborhood veggies supplier.',
+						'name' => APP_NAME.' is your neighborhood veggies supplier.',
+					],
+					'index_page' => 'yes',
+					'page_title' => APP_NAME.' | Veggies grown by community.',
+					'css' => ['modal/modals', 'marketplace/main', 'looping/product-card', 'looping/farmer-card', 'global/veggy-nearby'],
+				],
+				'middle' => [
+					'head' => ['../global/global_navbar'],
+					'body' => [
+						'marketplace/carousel',
+						'../global/veggy_nearby',
+						'marketplace/category',
+						'marketplace/products_container',
+						'marketplace/famers_container'
+					],
+					'footer' => [
+						'global/footer'
+					],
+				],
+				'bottom' => [
+					'modals' => ['check_loc_modal'],
+					'js' => [
+						'plugins/jquery.inputmask.min',
+						'plugins/inputmask.binding',
+						'https://maps.googleapis.com/maps/api/js?key='.GOOGLEMAP_KEY.'&libraries=places',
+						'plugins/markerclustererplus.min',
+						'marketplace/main',
+					],
+				],
+				'data' => $data,
+			]);
 		} else {
 			redirect(base_url('/'));
 		}
