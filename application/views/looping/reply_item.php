@@ -8,7 +8,7 @@
 			<li>
 				<p class="media-heading">
 					<b><?php get_fullname($farm, 'Guest');?></b>
-					<?php if ($to_id == $profile['id'] AND $farm['user_id'] != $profile['id']): ?>
+					<?php if (isset($is_buyer)): ?>
 						<small class="text-gray">(Verified Customer)</small>
 					<?php endif ?>
 				</p>
