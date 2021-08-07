@@ -19,9 +19,7 @@
 	<link rel="canonical" href="<?php echo base_url();?>">
 	<link rel="stylesheet" type="text/css" href="assets/css/landing/landing.css">
 	<link rel="manifest" href="/public/manifest.webmanifest.json">
-	<script type="text/javascript">
-		var MAIN_URL = '<?php echo base_url();?>';
-	</script>
+	<script type="text/javascript">var MAIN_URL = '<?php echo base_url();?>';</script>
 </head>
 <body>
 	<section id="wrapper">
