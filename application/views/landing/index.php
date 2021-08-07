@@ -13,7 +13,10 @@
 	<meta property="og:url" content="<?php echo current_full_url();?>">
 	<meta property="og:title" content="GulayMart Marketplace » Add to Home Screen">
 	<meta property="og:description" content="GulayMart Add to Home Screen NOW!">
-	<meta id="meta-image" property="og:image" content="<?php echo base_url('assets/images/landing/0.jpg');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/images/landing/0.jpg');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/images/landing/1.jpg');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/images/landing/2.jpg');?>">
+	<meta property="og:image" content="<?php echo base_url('assets/images/landing/3.jpg');?>">
 
 	<link href="assets/images/favicon.png" rel="icon" type="image/x-icon">
 	<link rel="canonical" href="<?php echo base_url();?>">
