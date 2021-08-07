@@ -41,7 +41,7 @@
 													<li>
 														<p class="media-heading">
 															<b><?php get_fullname($feedback['first']['profile']);?></b>
-															<?php if ($feedback['first']['is_buyer']): ?>
+															<?php if ($feedback['first']['is_buyer'] AND $feedback['first']['under'] == 0): ?>
 																<small class="text-gray">(Verified Customer)</small>
 															<?php endif ?>
 														</p>
