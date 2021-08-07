@@ -10,7 +10,7 @@ $(document).ready(function() {
 						$('#login_modal').modal('hide');
 					}
 				}, {scope: 'public_profile, email'});
-			} else if (fbstatus == 'unknown') {
+			} else if (fbstatus != 'unknown') {
 				runFbLogin();
 			}
 		});
