@@ -52,7 +52,7 @@ $(document).ready(function() {
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
 	if (typeof $.ajax == 'function') {
-		if (form != undefined && form instanceof HTMLElement) {
+		if (form != undefined && form instanceof HTMLElement && form.action.indexOf('no-action') < 0) {
 			if (uploadFile == undefined) uploadFile = false;
 			$('form').removeClass('active-ajaxed-form');
 			var isClicked = parseInt($(form).find('[clicked]:visible').attr('clicked'))
@@ -131,7 +131,7 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 			if (oFormAjax != false && oFormAjax.readyState !== 4) oFormAjax.abort();
 			oFormAjax = $.ajax(oSettings);
 		} else {
-			console.log('form elements only!');
+			console.log('form elements only! or this has no-action attr');
 		}
 	} else {
 		console.log('ajax function not loaded!');
@@ -144,7 +144,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 	if (ui == undefined) ui = false;
 	if (keep_loading == undefined) keep_loading = false;
 	if (no_abort == undefined) no_abort = false;
-	if (url) {
+	if (url && url.indexOf('no-action') < 0) {
 		var sLastButtonText = '', loadingText = 'Processing ...';
 		if (ui) {
 			sLastButtonText = ui.html();
@@ -199,6 +199,8 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 		};
 		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4 && no_abort == false) oSimpleAjax.abort();
 		oSimpleAjax = $.ajax(oSettings);
+	} else {
+		console.log('form has no action to do');
 	}
 }
 
@@ -300,7 +302,7 @@ var runAlertBox = function(response, heading, bConfirmed) {
 				if (response.unclose == true) {
 					oSettings.hideAfter = false;
 				} else {
-					oSettings.hideAfter = 6000;
+					oSettings.hideAfter = 7000;
 				}
 				$.toast(oSettings);
 			break;
@@ -320,7 +322,7 @@ var runAlertBox = function(response, heading, bConfirmed) {
 				if (response.unclose == true) {
 					oSettings.hideAfter = false;
 				} else {
-					oSettings.hideAfter = 6000;
+					oSettings.hideAfter = 7000;
 				}
 				$.toast(oSettings);
 			break;
@@ -358,10 +360,23 @@ var runAlertBox = function(response, heading, bConfirmed) {
 						});
 					}
 				}
+				if (response && (typeof response.afterCallback == 'function')) {
+					oSettings.afterShown = function () {
+						if (response && (typeof response.afterCallback == 'string')) {
+							var fn = eval(response.afterCallback);
+							if (typeof fn == 'function') {
+								fn(response.data);
+							}
+						}
+						if (response && (typeof response.afterCallback == 'function')) {
+							response.afterCallback(response.data);
+						}
+					}
+				}
 				if (response.unclose == true) {
 					oSettings.hideAfter = false;
 				} else {
-					oSettings.hideAfter = 6000;
+					oSettings.hideAfter = 7000;
 				}
 				$.toast(oSettings);
 			break;
@@ -399,6 +414,70 @@ var runAlertBox = function(response, heading, bConfirmed) {
 						});
 					},
 				});
+			break;
+			case 'prompt': 
+				if (heading == undefined) heading = 'Proceed to Action';
+				bConfirmed = false;
+				if (response.data.form_ui != undefined) {
+					var formUI = response.data.form_ui;
+					$.toast({
+						heading: heading,
+						text: response.message+'<br><br>'+response.data.form_ui+'<br>',
+						icon: 'info',
+						loader: false,
+						stack: false,
+						position: 'top-center',
+						allowToastClose: true,
+						bgColor: '#b13d3d',
+						textColor: 'white',
+						hideAfter: false,
+						beforeShow: function () {
+							runFormValidation();
+						},
+						afterShown: function () {
+							$('#toast-ok').off('click').on('click', function(e) {
+								var bValid = true;
+								setTimeout(function() {
+									$(e.target).parents('form').find('[name]').each(function(i, elem) {
+										if ($(elem).hasClass('error')) bValid = false;
+									});
+									if (bValid) {
+										if (response && (typeof response.callback == 'string')) {
+											var fn = eval(response.callback);
+											if (typeof fn == 'function') {
+												fn(response.data, $(e.target).parents('form').serializeArray());
+											}
+										}
+										if (response && (typeof response.callback == 'function')) {
+											response.callback(response.data, $(e.target).parents('form').serializeArray());
+										}
+										$('#toast-cancel').off('click');
+										$('.close-jq-toast-single:visible').trigger('click');
+										setTimeout(function() {
+											if (response && (typeof response.redirect == 'string')) {
+												if (response.redirect) window.location = response.redirect;
+											}
+										}, 300);
+									}
+								}, 300);
+							});
+							$('#toast-cancel').off('click').on('click', function(e) {
+								if (response && (typeof response.cancel == 'function')) {
+									response.cancel(response.data);
+								}
+								$('#toast-ok').off('click');
+								$('.close-jq-toast-single:visible').trigger('click');
+								setTimeout(function() {
+									if (response && (typeof response.redirect == 'string')) {
+										if (response.redirect) window.location = response.redirect;
+									}
+								}, 300);
+							});
+						},
+					});
+				} else {
+					console.error('prompt form not supplied!');
+				}
 			break;
 		}
 	}

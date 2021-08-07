@@ -253,6 +253,7 @@ function modalCallbacks() {
 			break;
 			case 'login_modal':
 				if (mobileAndTabletCheck()) window.location.hash = 'm';
+				$('.ask-sign-in').click();
 			break;
 			case 'reply_modal':
 				if (mobileAndTabletCheck()) window.location.hash = 'm';
@@ -331,8 +332,14 @@ function modalCallbacks() {
 			break;
 			case 'login_modal':
 				setTimeout(function() {
+					$('.login-with-social').removeClass('hide');
+					$('.fb-login-panel').addClass('hide');
+					$('.fb-signing-in').addClass('hide');
+					$('.invalid-fb-email').addClass('hide');
+
 					$('.ask-sign-in').click();
 					$('[name="email_address"]').removeClass('error');
+					$('[name="email"]').removeClass('error');
 					$('[name="password"]').removeClass('error');
 				}, 1000);
 			break;
@@ -461,3 +468,6 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+var closeModals = function() {
+	$('.modal').modal('hide');
+}

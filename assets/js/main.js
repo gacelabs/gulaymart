@@ -20,6 +20,10 @@ $(document).ready(function() {
 		$('.fb-login-btn').removeClass('hide');
 		$('.login-detail').removeClass('hide');
 		$('.reset-detail').addClass('hide');
+
+		$('form.invalid-fb-email').addClass('hide');
+		$('.fb-login-panel').addClass('hide');
+		$('[name="email"]').removeClass('error');
 	});
 
 	$('form:not([data-ajax])').on('submit', function(e) {

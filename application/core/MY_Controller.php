@@ -157,6 +157,7 @@ class MY_Controller extends CI_Controller {
 			're_password' => ['required' => TRUE],
 			'farmer_terms' => ['required' => TRUE],
 			'farmer_policy' => ['required' => TRUE],
+			'email' => ['required' => TRUE, 'emailExt' => TRUE],
 		];
 		if ($valids) {
 			foreach ($valids as $field => $variable) {
