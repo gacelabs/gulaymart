@@ -21,12 +21,19 @@ var runFbLogin = function(data) {
 	$('.fb-login-btn').addClass('hide');
 	$('.fb-login-panel').removeClass('hide');
 	$('.fb-signing-in').removeClass('hide');
-	FB.api('/me?fields=id,email,name', function(data) {
+	if (data != undefined) {
 		FB.getLoginStatus(function(response) {
 			data.fbauth = response;
 			simpleAjax('authenticate/fb_login', data);
 		});
-	});
+	} else {
+		FB.api('/me?fields=id,email,name', function(data) {
+			FB.getLoginStatus(function(response) {
+				data.fbauth = response;
+				simpleAjax('authenticate/fb_login', data);
+			});
+		});
+	}
 };
 
 var ifb, fbCnt = 0;
@@ -68,10 +75,7 @@ var enterFBEmailAddress = function(oData) {
 			$('.login-form-body').find('form').removeClass('hide');
 			$('#fb-good').removeClass('hide');
 			// console.log(oData);
-			FB.getLoginStatus(function(response) {
-				oData.fbauth = response;
-				simpleAjax('authenticate/fb_login', oData);
-			});
+			runFbLogin(oData);
 		}
 	});
 
