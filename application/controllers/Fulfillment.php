@@ -51,7 +51,7 @@ class Fulfillment extends My_Controller {
 					],
 					'no_rec_ui' => true,
 				]
-			], true)], JSON_NUMERIC_CHECK);
+			], true), 'panel' => 'fulfillment'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -122,10 +122,8 @@ class Fulfillment extends My_Controller {
 					}
 				}
 				/*send it realtime to buyer*/
-				/*$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
-					'data' => $post['data'],
-					'buyer_id' => $merge['buyer_id']
-				]);*/
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge['id']]);
+
 				// debug($response, 'stop');
 				$this->set_response('success', 'Product status on Order(s) changed', $post['data'], false, 'changeOnFulfillment');
 			}
@@ -174,95 +172,20 @@ class Fulfillment extends My_Controller {
 
 				$status_value = GM_FOR_PICK_UP_STATUS;
 				if (count($post['data']) == count($cancelled)) $status_value = GM_CANCELLED_STATUS;
+				
+				/*send it realtime to buyer*/
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge['id']]);
 
 				$count = $this->gm_db->count('baskets_merge', ['id' => $post['merge_id'], 'status' => $status_value]);
 				if ($count == 0) {
 					// set status for pick-up this will now also send to toktok post delivery
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
-					/*send it realtime to buyer*/
-					/*$response = $this->senddataapi->trigger('status-ordered-items', 'change-order-status', [
-						'data' => $post,
-						'buyer_id' => $merge['buyer_id']
-					]);*/
 					$redirect = 'fulfillment/for-pick-up';
 					$action = 'Ready for Pick Up';
 					if ($status_value == GM_CANCELLED_STATUS) {
 						$redirect = 'fulfillment/cancelled';
 						$action = 'Cancelled';
 					}
-
-					switch ($status_value) {
-						case GM_FOR_PICK_UP_STATUS:
-							// send realtime placed order
-							$this->senddataapi->trigger('placed-order', 'incoming-orders', [
-								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'for-pick-up', 'remove' => 'placed'
-							]);
-							// send realtime for-pick-up order
-							$this->senddataapi->trigger('for-pick-up-order', 'incoming-orders', [
-								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'for-pick-up', 'remove' => false
-							]);
-							// send realtime placed fulfillment
-							$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
-								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'for-pick-up', 'remove' => 'placed'
-							]);
-							// send realtime for-pick-up fulfillment
-							$this->senddataapi->trigger('for-pick-up-fulfillment', 'incoming-fulfillment', [
-								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'for-pick-up', 'remove' => false
-							]);
-
-							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-								'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'for-pick-up'
-							]);
-							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-								'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'for-pick-up'
-							]);
-							break;
-						case GM_CANCELLED_STATUS:
-							// send realtime placed order
-							$this->senddataapi->trigger('placed-order', 'incoming-orders', [
-								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'cancelled', 'remove' => 'placed'
-							]);
-							// send realtime cancelled order
-							$this->senddataapi->trigger('cancelled-order', 'incoming-orders', [
-								'success' => true, 'ids' => $merge['id'], 'buyer_id' => $merge['buyer_id'], 'event' => 'cancelled', 'remove' => false
-							]);
-							// send realtime placed fulfillment
-							$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
-								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => 'placed'
-							]);
-							// send realtime cancelled fulfillment
-							$this->senddataapi->trigger('cancelled-fulfillment', 'incoming-fulfillment', [
-								'success' => true, 'ids' => $merge['id'], 'seller_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => false
-							]);
-
-							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-								'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'cancelled'
-							]);
-							$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-								'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'cancelled'
-							]);
-							break;
-					}
-
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
-					]);
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
-					]);
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $merge['buyer_id'], 'nav' => 'order'
-					]);
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $merge['buyer_id'], 'nav' => 'fulfill'
-					]);
-
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $merge['buyer_id'], 'menu' => 'orders', 'tab' => 'placed'
-					]);
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'fulfillments', 'tab' => 'placed'
-					]);
 
 					$buyer = json_decode(base64_decode($merge['buyer']), true);
 					$seller = json_decode(base64_decode($merge['seller']), true);

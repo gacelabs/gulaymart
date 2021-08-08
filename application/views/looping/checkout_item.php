@@ -14,13 +14,13 @@
 					</div>
 					<p class="text-gray zero-gaps"><i class="fa fa-map-marker"></i> <?php echo $farm['address_2'];?></p>
 					<div class="visible-sm visible-xs">
-						<p class="zero-gaps">&#x20b1; <span class="text-contrast"><?php echo format_number((int)$item['quantity'] * (float)$rawdata['details']['price']);?></span> x Qty: <?php echo $item['quantity'];?></p>
+						<p class="zero-gaps">&#x20b1; <span class="text-contrast"><?php echo format_number(/*(int)$item['quantity'] * */(float)$rawdata['details']['price']);?></span> x Qty: <?php echo $item['quantity'];?></p>
 					</div>
 				</div>
 			</div>
 
 			<div class="text-left hidden-sm hidden-xs">
-				<p>&#x20b1; <span class="text-contrast"><?php echo format_number((int)$item['quantity'] * (float)$rawdata['details']['price']);?></span></p>
+				<p>&#x20b1; <span class="text-contrast"><?php echo format_number(/*(int)$item['quantity'] * */(float)$rawdata['details']['price']);?></span></p>
 			</div>
 			<div class="text-right hidden-sm hidden-xs">
 				<p>Qty: <?php echo $item['quantity'];?></p>

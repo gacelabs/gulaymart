@@ -3,31 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
 
-	public $allowed_methods = ['fetch_coordinates'/*, 'test_mail'*/, 'test_msg'];
+	public $allowed_methods = ['fetch_coordinates'];
 
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	public function test_mail($type='hello')
-	{
-		$mail = $this->smtpemail->setup($type);
-		$email = ['email_body_message' => 'Test Email Sent!'];
-		$email['email_subject'] = 'Email Testing';
-		$email['email_to'] = 'gacelabs.inc@gmail.com';
-		$email['email_bcc'] = ['sirpoigarcia@gmail.com'];
-		// debug($email, 'stop');
-		// $mail->debug = TRUE;
-		$return = $mail->send($email, false, true);
-		debug($return, 'stop');
-	}
-
-	public function test_msg($id=0)
-	{
-		$id = $id == 0 ? $this->accounts->profile['id'] : $id;
-		$sent = send_gm_message($id, strtotime(date('Y-m-d')), 'TEST!', 'Notifications', 'Orders');
-		debug($sent, 'stop');
 	}
 
 	public function save_shipping()
@@ -372,11 +352,10 @@ class Api extends MY_Controller {
 					}
 				}
 			}
-			/*$this->senddataapi->trigger($segment.'-fulfillment', 'send-bookings', [
-				'message' => 'You have available bookings passed from '.$segment,
-				'data' => ['success' => false, 'ids' => $baskets_merge_ids, 'buyer_id' => $buyer_ids, 'event' => $segment],
-			]);*/
 			if (count($baskets_merge_ids)) {
+
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
+
 				echo json_encode(['success' => true, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
 				echo json_encode(['success' => false, 'ids' => $baskets_merge_ids, 'seller_id' => $seller_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
@@ -396,7 +375,7 @@ class Api extends MY_Controller {
 			$baskets_merge = $this->baskets->get_baskets_merge(['buyer_id' => $buyer_id, 'status' => $status_id]);
 			$baskets_merge_data = setup_orders_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
-			$baskets_ids = [];
+			$baskets_ids = $merge_ids = [];
 			if ($baskets_merge_data) {
 				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
@@ -452,6 +431,7 @@ class Api extends MY_Controller {
 											}
 										}
 										$response = $this->gm_db->save('baskets_merge', $set, ['id' => $data['id']]);
+										$merge_ids[] = $data['id'];
 										$baskets_ids[] = array_merge($baskets_ids, $ids);
 									}
 								}
@@ -460,11 +440,10 @@ class Api extends MY_Controller {
 					}
 				}
 			}
-			/*$this->senddataapi->trigger($segment.'-order', 'send-bookings', [
-				'message' => 'You have available bookings passed from '.$segment,
-				'data' => ['success' => false, 'ids' => $baskets_ids, 'event' => $segment],
-			]);*/
+
 			if (count($baskets_ids)) {
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
+
 				echo json_encode(['success' => true, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
 			} else {
 				echo json_encode(['success' => false, 'ids' => $baskets_ids, 'buyer_id' => $buyer_id, 'event' => $segment], JSON_NUMERIC_CHECK); exit();
@@ -520,12 +499,6 @@ class Api extends MY_Controller {
 						unset($post['fn']);
 					}
 					$this->gm_db->save($object, $post, $where);
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'notifications'
-					]);
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'messages', 'tab' => 'feedbacks'
-					]);
 					$this->set_response('success', false, $data, false, $fn);
 				}
 			}

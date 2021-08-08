@@ -1,7 +1,7 @@
 <div class="notif-list-container hide" id="msg_feedbacks">
 	<?php if ($feedbacks):
 		foreach ($feedbacks as $key => $feedback): ?>
-			<div class="notif-item">
+			<div class="notif-item" data-msg-id="<?php echo $message['id'];?>">
 				<div class="notif-item-top">
 					<p class="zero-gaps"><i class="fa fa-commenting-o icon-left"></i>
 						<?php if ($feedback['is_buyer'] == 0): ?>

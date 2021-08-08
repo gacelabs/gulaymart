@@ -18,53 +18,7 @@
 			</div>
 
 			<div id="link_panel_top">
-				<div class="hideshow-container">
-					<?php if ($data['messages']): ?>
-						<div id="msg_notifications">
-							<?php if (isset($data['messages']['Notifications'])): ?>
-								<?php foreach ($data['messages']['Notifications'] as $tab => $message): ?>
-									<div class="notif-item">
-										<div class="notif-item-top">
-											<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y | ', $message['datestamp']) . date('g:i a', strtotime($message['added']));?></span> </p>
-										</div>
-										<div class="notif-item-middle">
-											<?php if ($message['unread']): ?><strong><?php endif ?>
-											<?php echo $message['content'];?>
-											<?php if ($message['unread']): ?></strong><?php endif ?>
-										</div>
-										<div class="notif-item-footer">
-											<ul class="inline-list">
-												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => GM_MESSAGE_READ, 'fn' => 'readMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Mark as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-												<li><a href="api/update/messages/<?php echo $message['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $message['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a></li>
-											</ul>
-										</div>
-									</div>
-								<?php endforeach ?>
-							<?php else: ?>
-								<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-									<h1>Empty Notifications</h1>
-									<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-								</div>
-							<?php endif ?>
-						</div>
-						<?php
-							$feedbacks_data = false;
-							if (isset($data['messages']['Feedbacks'])) {
-								$feedbacks_data = $data['messages']['Feedbacks'];
-							}
-							$this->view('templates/orders/feedbacks', ['feedbacks' => $feedbacks_data]);
-						?>
-					<?php endif ?>
-				</div>
-
-				<?php if (!$data['messages']): ?>
-					<div>
-						<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-							<h1>Empty Messages</h1>
-							<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-						</div>
-					</div>
-				<?php endif ?>
+				<?php $this->view('templates/orders/messages_panel', ['data' => $data]); ?>
 			</div>
 		</div>
 	</div>

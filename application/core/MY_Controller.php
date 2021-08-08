@@ -202,17 +202,19 @@ class MY_Controller extends CI_Controller {
 		/**/
 		$this->basket_count = $this->order_count = $this->fulfill_count = $this->message_count = false;
 		if ($this->accounts->has_session) {
-			$fulfill_count = $this->gm_db->count('baskets_merge', ['seller_id' => $this->accounts->profile['id'], 'status !=' => 4, 'status !=' => 5]);
-			$this->fulfill_count = $fulfill_count == 0 ? false : $fulfill_count;
+			$fulfill_count = $this->gm_db->count_not_in('baskets_merge', 
+				['seller_id' => $this->accounts->profile['id'], 'status' => [4,5]]);
+			$this->fulfill_count = $fulfill_count;
 
 			$baskets = $this->gm_db->count('baskets', ['user_id' => $this->accounts->profile['id'], 'status' => [0,1]]);
-			$this->basket_count = $baskets == 0 ? false : $baskets;
+			$this->basket_count = $baskets;
 
-			$order_count = $this->gm_db->count('baskets_merge', ['buyer_id' => $this->accounts->profile['id'], 'status !=' => 4, 'status !=' => 5]);
-			$this->order_count = $order_count == 0 ? false : $order_count;
+			$order_count = $this->gm_db->count_not_in('baskets_merge', 
+				['buyer_id' => $this->accounts->profile['id'], 'status' => [4,5]]);
+			$this->order_count = $order_count;
 			
 			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $this->accounts->profile['id']]);
-			$this->message_count = $msg_count == 0 ? false : $msg_count;
+			$this->message_count = $msg_count;
 		}
 		// debug($products, 'stop');
 	}

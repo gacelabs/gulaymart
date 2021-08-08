@@ -1803,7 +1803,7 @@ function sort_by_date($array=false)
 	return $array;
 }
 
-function make_stream_context($data=false)
+function make_stream_context($data=false, $content_type='application/x-www-form-urlencoded')
 {
 	$context = false;
 	if ($data) {
@@ -1811,7 +1811,7 @@ function make_stream_context($data=false)
 		$context_options = [
 			'http' => [
 				'method' => 'POST',
-				'header'=> "Content-type: application/x-www-form-urlencoded\r\n".
+				'header'=> "Content-type: $content_type\r\n".
 						   "Content-Length: " . strlen($data) . "\r\n"
 				,
 				'content' => $data

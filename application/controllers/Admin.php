@@ -289,28 +289,8 @@ class Admin extends MY_Controller {
 								$buyer_id = $toktok['buyer_id'];
 								$seller_id = $toktok['seller_id'];
 								$merge_id = $toktok['id'];
-								// send realtime on-delivery order
-								$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
-									'success' => true, 'ids' => $merge_id, 'buyer_id' => $buyer_id, 'event' => 'on-delivery'
-								]);
-								// send realtime on-delivery fulfillment
-								$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
-									'success' => true, 'ids' => $merge_id, 'seller_id' => $seller_id, 'event' => 'on-delivery'
-								]);
-
-								$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-									'success' => true, 'id' => $buyer_id, 'nav' => 'order'
-								]);
-								$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-									'success' => true, 'id' => $seller_id, 'nav' => 'fulfill'
-								]);
-
-								$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-									'success' => true, 'id' => $buyer_id, 'menu' => 'orders', 'tab' => 'on-delivery'
-								]);
-								$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-									'success' => true, 'id' => $seller_id, 'menu' => 'fulfillments', 'tab' => 'on-delivery'
-								]);
+								// send realtime 
+								$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_id]);
 
 								$this->set_response('success', false, [
 									'operator_id' => $operator['id'],
@@ -470,29 +450,9 @@ class Admin extends MY_Controller {
 						}
 					}
 
-					if (count($buyer_ids) AND count($seller_ids) AND count($merge_ids)) {
-						// send realtime on-delivery order
-						$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
-							'success' => true, 'ids' => $merge_ids, 'buyer_id' => $buyer_ids, 'event' => 'on-delivery'
-						]);
-						// send realtime on-delivery fulfillment
-						$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
-							'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'on-delivery'
-						]);
-
-						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-							'success' => true, 'id' => $buyer_ids, 'nav' => 'order'
-						]);
-						$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-							'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
-						]);
-
-						$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-							'success' => true, 'id' => $buyer_ids, 'menu' => 'orders', 'tab' => 'on-delivery'
-						]);
-						$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-							'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'on-delivery'
-						]);
+					if (count($merge_ids)) {
+						// send realtime process
+						$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
 					}
 					/*check first is the switch off by some admin*/
 					if ($admin_turned_off == false) {
@@ -565,7 +525,7 @@ class Admin extends MY_Controller {
 		if ($baskets_merge) {
 			$baskets_merge_data = setup_orders_data($baskets_merge);
 			// debug($baskets_merge_data, 'stop');
-			$baskets_ids = $merge_ids = [];
+			$baskets_ids = $merge_ids = $baskets_merge_ids = [];
 			if ($baskets_merge_data) {
 				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
@@ -624,8 +584,7 @@ class Admin extends MY_Controller {
 										if (GM_STATUSES_TEST != 1) {
 											$this->gm_db->save('baskets_merge', $set, ['id' => $data['id']]);
 										}
-										$merge_ids[$data['id']]['seller_ids'][] = $seller_id;
-										$merge_ids[$data['id']]['buyer_ids'][] = $buyer_id;
+										$baskets_merge_ids[$id] = $data['id'];
 									}
 								}
 							}
@@ -639,40 +598,8 @@ class Admin extends MY_Controller {
 				}
 			}
 			// debug($merge_ids, $baskets_ids, 'stop');
-			if (count($merge_ids) > 0) {
-				foreach ($merge_ids as $id => $row) {
-					// send realtime on-delivery order
-					$this->senddataapi->trigger('on-delivery-order', 'incoming-orders', [
-						'success' => true, 'ids' => $id, 'buyer_id' => $row['buyer_ids'], 'event' => 'received'
-					]);
-					// send realtime received order
-					$this->senddataapi->trigger('received-order', 'incoming-orders', [
-						'success' => true, 'ids' => $id, 'buyer_id' => $row['buyer_ids'], 'event' => 'received'
-					]);
-
-					// send realtime on-delivery fulfillment
-					$this->senddataapi->trigger('on-delivery-fulfillment', 'incoming-fulfillment', [
-						'success' => true, 'ids' => $id, 'seller_id' => $row['seller_ids'], 'event' => 'received'
-					]);
-					// send realtime received fulfillment
-					$this->senddataapi->trigger('received-fulfillment', 'incoming-fulfillment', [
-						'success' => true, 'ids' => $id, 'seller_id' => $row['seller_ids'], 'event' => 'received'
-					]);
-
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $row['buyer_ids'], 'nav' => 'order'
-					]);
-					$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-						'success' => true, 'id' => $row['seller_ids'], 'nav' => 'fulfill'
-					]);
-
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $row['buyer_ids'], 'menu' => 'orders', 'tab' => 'on-delivery'
-					]);
-					$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-						'success' => true, 'id' => $row['seller_ids'], 'menu' => 'fulfillments', 'tab' => 'received'
-					]);
-				}
+			if (count($baskets_merge_ids) > 0) {
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
 				echo json_encode(['status' => true, 'message' => 'successfull!, orders was received!'], JSON_NUMERIC_CHECK); exit();
 			}
 		} else {

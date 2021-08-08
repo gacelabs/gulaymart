@@ -106,15 +106,17 @@ defined('MYSQL_ROOT_PASS') OR define('MYSQL_ROOT_PASS', 'pHPMy_@DM!n-R00t-p@55-K
 
 defined('DROP_ALL_TABLE') OR define('DROP_ALL_TABLE', 1);
 if ((bool)strstr($_SERVER['HTTP_HOST'], 'local')) {
-	defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
-	defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
+	// defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
+	// defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
 	// defined('REALTIME_URL') OR define('REALTIME_URL', 'http://local.app.send.data/get/jsfile/1E56FA5E54577C98A5FF31F577DFAE75');
 	// defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '1E56FA5E54577C98A5FF31F577DFAE75');
-	// defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/DA772D289F150555D5A58473E97EF4AF');
-	// defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'DA772D289F150555D5A58473E97EF4AF');
+	defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/9C0CA25AB5C84B3D6BB27AAD2C7139C8');
+	defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '9C0CA25AB5C84B3D6BB27AAD2C7139C8');
+	defined('IS_LOCAL') OR define('IS_LOCAL', 1);
 } else {
 	defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/2DBC7E5261EF425D3D1CF990E3682F56');
 	defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', '2DBC7E5261EF425D3D1CF990E3682F56');
+	defined('IS_LOCAL') OR define('IS_LOCAL', 0);
 	// defined('REALTIME_URL') OR define('REALTIME_URL', 'https://app.send-data.co/get/jsfile/A3193CF4AEC1ADD05F4B78C4E0C61C39');
 	// defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
 }
@@ -174,6 +176,10 @@ defined('TT_FOR_PICK_UP_STATUS') OR define('TT_FOR_PICK_UP_STATUS', 3);
 defined('TT_PICKED_UP_STATUS')	 OR	define('TT_PICKED_UP_STATUS', 	4);
 defined('TT_ON_DELIVERY_STATUS') OR	define('TT_ON_DELIVERY_STATUS',	5);
 defined('TT_RECEIVED_STATUS')	 OR	define('TT_RECEIVED_STATUS', 	6);
+
+/*ORDER TYPES STATUS*/
+defined('GM_BUY_NOW') OR define('GM_BUY_NOW', 1);
+defined('GM_SCHEDULED') OR define('GM_SCHEDULED', 2);
 
 /*MESSAGES STATUS*/
 defined('GM_MESSAGE_READ')	 OR	define('GM_MESSAGE_READ', 	0);

@@ -60,6 +60,10 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
 						foreach ($where['order_by'] as $key => $order_by) {
@@ -103,6 +107,10 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
 						foreach ($where['order_by'] as $key => $order_by) {
@@ -145,6 +153,10 @@ class MY_Model extends CI_Model {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 					$where['activity'] = 1;
 				}
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
 						foreach ($where['order_by'] as $key => $order_by) {
@@ -186,6 +198,10 @@ class MY_Model extends CI_Model {
 			if (is_array($where)) {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 					$where['activity'] = 1;
+				}
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
 				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
@@ -230,6 +246,10 @@ class MY_Model extends CI_Model {
 				$where['activity'] = 1;
 			}
 			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
 				if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
 						foreach ($where['order_by'] as $key => $order_by) {
@@ -414,6 +434,10 @@ class MY_Model extends CI_Model {
 	{
 		if ($table) {
 			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
 				foreach ($where as $key => $row) {
 					if (is_array($row) AND count($row) > 0) {
 						$data = $this->db->where_in($key, $row);
@@ -422,6 +446,28 @@ class MY_Model extends CI_Model {
 					}
 				}
 			}
+			return $this->db->from($table)->count_all_results();
+		}
+		return 0;
+	}
+
+	public function count_not_in($table=false, $where=false)
+	{
+		if ($table) {
+			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
+				foreach ($where as $key => $row) {
+					if (is_array($row) AND count($row) > 0) {
+						$this->db->where_not_in($key, $row);
+					} else {
+						$this->db->where([$key => $row]);
+					}
+				}
+			}
+			// debug($this->db, 'stop');
 			return $this->db->from($table)->count_all_results();
 		}
 		return 0;

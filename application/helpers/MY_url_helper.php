@@ -481,7 +481,7 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 		}
 		// debug($settings, 'stop');
 		if ($settings) {
-			$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
+			/*$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
 				'success' => true, 'id' => $user_id, 'nav' => 'message'
 			]);
 			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
@@ -489,22 +489,22 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			]);
 			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
 				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'feedbacks'
-			]);
+			]);*/
 			// send message to the user has to replenish the needed stocks for delivery
-			/*$check_msgs = $ci->gm_db->get('messages', [
+			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
 				'to_id' => $user_id, 'unread' => 1,
 				'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
-			if ($check_msgs == false) {*/
+			if ($check_msgs == false) {
 				$ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
 				return true;
-			/*}*/
+			}
 		}
 	}
 	return false;
@@ -536,7 +536,7 @@ function send_gm_email($user_id=false, $content=false, $subject='Email Notificat
 	return false;
 }
 
-function count_by_status($where=false)
+function count_by_status($where=false, $not_in=false)
 {
 	$ci =& get_instance();
 	if ($where !== false) {

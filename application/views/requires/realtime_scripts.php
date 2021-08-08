@@ -7,9 +7,7 @@
 			autoConnect: IS_LOCAL ? false : true,
 			autoRunStash: true,
 			afterInit: function() {
-				if (IS_LOCAL && '<?php echo SENDDATA_APPKEY;?>' == 'A3193CF4AEC1ADD05F4B78C4E0C61C39') {
-					realtime.connect();
-				}
+				if (IS_LOCAL) realtime.connect();
 			},
 			afterConnect: function() {
 				if (realtime.app.connected) {
@@ -19,33 +17,42 @@
 				}
 				if (oUser) {
 					/*communicate from orders tab to fulfillment tab*/
-					if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
+					// if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
 					/*communicate from fulfillment tab to orders tab*/
 					// if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
 					/*communicate from operators booking page*/
 					// if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
 					
 					/*listen for incomming on delivery fulfillments*/
-					if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
-						fulfillmentProcess(runFulfillments);
-					}
-					/*listen for incomming on delivery orders*/
-					if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
-						orderProcess(runOrders);
-					}
-					/*listen for incomming on baskets*/
-					if (typeof basketProcess == 'function' && oSegments[1] == 'basket') {
-						basketProcess(runBaskets);
-					}
+					// if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
+					// 	fulfillmentProcess(runFulfillments);
+					// }
+					// /*listen for incomming on delivery orders*/
+					// if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
+					// 	orderProcess(runOrders);
+					// }
+					// /*listen for incomming on baskets*/
+					// if (typeof basketProcess == 'function' && oSegments[1] == 'basket') {
+					// 	basketProcess(runBaskets);
+					// }
 
-					/*listen for incomming on menu counts*/
-					if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
-						initMenuNavsCount();
-					}
+					// /*listen for incomming on menu counts*/
+					// if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+					// 	initMenuNavsCount();
+					// }
 
-					/*listen for incomming on tab counts*/
-					if (typeof initStatusTabsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
-						initStatusTabsCount();
+					// /*listen for incomming on tab counts*/
+					// if (typeof initStatusTabsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+					// 	initStatusTabsCount();
+					// }
+
+					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
+							var oData = object.data;
+							console.log(oData);
+							fetchOrderCycles(oData);
+						});
+						// fetchOrderCycles({merge_id: [47,48]});
 					}
 				}
 			}
@@ -122,11 +129,6 @@
 			if (realtime != false) {
 				clearInterval(i);
 				setTimeout(function() {
-					if (realtime.app.connected) {
-						$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
-					} else {
-						$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
-					}
 					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
 						var oData = object.data;
 						// console.log(oData);

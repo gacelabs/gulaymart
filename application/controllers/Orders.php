@@ -43,7 +43,7 @@ class Orders extends MY_Controller {
 					],
 					'no_rec_ui' => true,
 				]
-			], true), 'ids' => $this->input->post('ids')], JSON_NUMERIC_CHECK);
+			], true), 'ids' => $this->input->post('ids'), 'panel' => 'orders'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -79,25 +79,42 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
-		$data_messages = false;
-		if ($this->farms) {
-			$messages = $this->gm_db->get_in('messages', [
-				'to_id' => $this->accounts->profile['id'],
-				'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
-				'order_by' => ['under', 'added'],
-				'direction' => ['ASC', 'DESC'],
-			]);
-		} else {
-			$messages = $this->gm_db->get_in('messages', [
-				'to_id' => $this->accounts->profile['id'],
-				'unread' => [GM_MESSAGE_UNREAD],
-				'order_by' => ['under', 'added'],
-				'direction' => ['ASC', 'DESC'],
-			]);
+		$data_messages = false; $filters = [];
+		if ($this->input->is_ajax_request() AND $this->input->post('user_id')) {
+			$filters['to_id'] = $this->input->post('user_id');
 		}
+		if ($this->farms) {
+			if (count($filters)) {
+				$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
+				$filters['order_by'] = ['under', 'added'];
+				$filters['direction'] = ['ASC', 'DESC'];
+			} else {
+				$filters = [
+					'to_id' => $this->accounts->profile['id'],
+					'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
+					'order_by' => ['under', 'added'],
+					'direction' => ['ASC', 'DESC'],
+				];
+			}
+		} else {
+			if (count($filters)) {
+				$filters['unread'] = [GM_MESSAGE_UNREAD];
+				$filters['order_by'] = ['under', 'added'];
+				$filters['direction'] = ['ASC', 'DESC'];
+			} else {
+				$filters = [
+					'to_id' => $this->accounts->profile['id'],
+					'unread' => [GM_MESSAGE_UNREAD],
+					'order_by' => ['under', 'added'],
+					'direction' => ['ASC', 'DESC'],
+				];
+			}
+		}
+		$messages = $this->gm_db->get_in('messages', $filters);
 		// debug($messages, 'stop');
+		$message_ids = [];
 		if ($messages) {
-			$data_messages = [];
+			$data_messages = []; 
 			foreach ($messages as $key => $message) {
 				if ($message['under'] == 0) { /*to_id is the farmer*/
 					$message['is_buyer'] = 1;
@@ -180,29 +197,40 @@ class Orders extends MY_Controller {
 					}
 				}
 				$data_messages[$message['tab']][] = $message;
+				$message_ids[] = $message['id'];
 			}
 		}
+
 		// debug($data_messages, 'stop');
-		$this->render_page([
-			'top' => [
-				'css' => ['dashboard/main', 'orders/main', 'orders/messages']
-			],
-			'middle' => [
-				'body_class' => ['dashboard', 'messages'],
-				'head' => ['dashboard/navbar'],
-				'body' => [
-					'dashboard/navbar_aside',
-					'orders/messages_container',
+		if ($this->input->is_ajax_request()) {
+			echo json_encode([
+				'html' => $this->load->view('templates/orders/messages_panel', ['data' => ['messages' => $data_messages]], true),
+				'panel' => 'messages',
+				'message_ids' => array_unique($message_ids)
+			], JSON_NUMERIC_CHECK);
+			exit();
+		} else {
+			$this->render_page([
+				'top' => [
+					'css' => ['dashboard/main', 'orders/main', 'orders/messages']
 				],
-			],
-			'bottom' => [
-				'modals' => ['reply_modal'],
-				'js' => ['hideshow', 'plugins/readmore.min', 'orders/messages', 'dashboard/main'],
-			],
-			'data' => [
-				'messages' => $data_messages
-			]
-		]);
+				'middle' => [
+					'body_class' => ['dashboard', 'messages'],
+					'head' => ['dashboard/navbar'],
+					'body' => [
+						'dashboard/navbar_aside',
+						'orders/messages_container',
+					],
+				],
+				'bottom' => [
+					'modals' => ['reply_modal'],
+					'js' => ['hideshow', 'plugins/readmore.min', 'orders/messages', 'dashboard/main'],
+				],
+				'data' => [
+					'messages' => $data_messages
+				]
+			]);
+		}
 	}
 
 	public function thankyou()
@@ -282,25 +310,7 @@ class Orders extends MY_Controller {
 			$post['product']['entity_id'] = $post['entity_id'];
 			$post['html'] = $this->load->view('static/commented', $post, true);
 
-			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $post['buyer_id'], 'nav' => 'messages'
-			]);
-			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $post['seller_id'], 'nav' => 'messages'
-			]);
-
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $post['buyer_id'], 'menu' => 'messages', 'tab' => 'notifications'
-			]);
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $post['buyer_id'], 'menu' => 'messages', 'tab' => 'feedbacks'
-			]);
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $post['seller_id'], 'menu' => 'messages', 'tab' => 'notifications'
-			]);
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $post['seller_id'], 'menu' => 'messages', 'tab' => 'feedbacks'
-			]);
+			$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['message_id' => $post['id']]);
 
 			$this->set_response('success', false, $post, false, 'appendComment');
 		}
@@ -369,48 +379,8 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			if (count($merge_ids) AND count($seller_ids)) {
-				$senddata = $this->senddataapi->trigger('remove-fulfilled-items', 'remove-item', [
-					'all' => $all, 
-					'data' => $post['data'],
-					'seller_id' => $seller_ids
-				]);
-				// send realtime placed order
-				$this->senddataapi->trigger('placed-order', 'incoming-orders', [
-					'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => 'placed'
-				]);
-				// send realtime cancelled order
-				$this->senddataapi->trigger('cancelled-order', 'incoming-orders', [
-					'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'cancelled', 'remove' => false
-				]);
-				// send realtime placed fulfillment
-				$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
-					'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'cancelled', 'remove' => 'placed'
-				]);
-				// send realtime cancelled fulfillment
-				$this->senddataapi->trigger('cancelled-fulfillment', 'incoming-fulfillment', [
-					'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'cancelled', 'remove' => false
-				]);
-
-				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
-				]);
-				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $seller_ids, 'nav' => 'fulfill'
-				]);
-
-				$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'orders', 'tab' => 'placed'
-				]);
-				$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-					'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'placed'
-				]);
-				$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'orders', 'tab' => 'cancelled'
-				]);
-				$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-					'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'cancelled'
-				]);
+			if (count($merge_ids)) {
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
 			}
 
 			// debug($senddata, 'stop');

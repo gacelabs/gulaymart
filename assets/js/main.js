@@ -46,47 +46,7 @@ $(document).ready(function() {
 	});
 	/*end for checkbox switch*/
 
-	var oPauseAjax = false;
-	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
-		e.preventDefault();
-		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
-		var isJsonPCallback = $(e.target).data('call-jsonp') != undefined ? $(e.target).data('call-jsonp') : 1;
-		var oSettings = {
-			url: $(e.target).data('href') == undefined ? e.target.href : $(e.target).data('href'),
-			type: 'get',
-			data: oData,
-			dataType: 'json',
-			success: function(response) {
-				var bConfirmed = true;
-				if (response && response.type && response.type.length && response.message.length) {
-					bConfirmed = runAlertBox(response, undefined, bConfirmed);
-				}
-				if (bConfirmed) {
-					setTimeout(function() {
-						if (response && (typeof response.redirect == 'string')) {
-							if (response.redirect) window.location = response.redirect;
-						}
-					}, 3000);
-					if (response && (typeof response.callback == 'string')) {
-						var fn = eval(response.callback);
-						if (typeof fn == 'function') {
-							// console.log(response.callback, 'function');
-							fn(response.data, e);
-						}
-					}
-				}
-			},/*
-			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
-			}*/
-		};
-		if (isJsonPCallback) {
-			oSettings.dataType = 'jsonp';
-			oSettings.jsonpCallback = 'gmCall';
-		}
-		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
-		oPauseAjax = $.ajax(oSettings);
-	});
+	runATagAjax();
 
 	if (oUser && oUser.is_profile_complete == 0) {
 		runAlertBox({type:'info', message: PROFILE_INFO_MESSAGE});
@@ -297,16 +257,16 @@ var runSwiper = function() {
 }
 
 var reCountMenuNavs = function(sNav, totalItems) {
-	if (totalItems.toString().length > 4) totalItems = Number(totalItems).toExponential();
+	// if (totalItems.toString().length > 4) totalItems = Number(totalItems).toExponential();
 	switch (sNav) {
-		case 'fulfill': case 'fulfills': case 'fulfillments':
-			if ($('#nav-fulfill-count').length == 0) $('[data-menu-nav=""fulfillments]]').find('span').append('<kbd id="nav-fulfill-count"></kbd>');
+		case 'fulfill': case 'fulfills': case 'fulfillment': case 'fulfillments':
+			if ($('#nav-fulfill-count').length == 0) $('[data-menu-nav="fulfillments"]').find('span').append('<kbd id="nav-fulfill-count"></kbd>');
 			if (totalItems) {
 				$('#nav-fulfill-count').removeClass('hide').text(totalItems);
 			} else {
 				$('#nav-fulfill-count').addClass('hide').text('');
 			}
-			if ($('kbd.nav-fulfill-count').length == 0) $('[data-menu-nav="fulfills"]').find('span').append('<kbd class="nav-fulfill-count hidden-lg hidden-md hidden-sm"></kbd>');
+			if ($('kbd.nav-fulfill-count').length == 0) $('[data-menu-nav="fulfillments"]').find('span').append('<kbd class="nav-fulfill-count hidden-lg hidden-md hidden-sm"></kbd>');
 			if (totalItems) {
 				$('kbd.nav-fulfill-count').removeClass('hide').text(totalItems);
 			} else {
@@ -348,13 +308,20 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('#nav-messages-count').addClass('hide').text('');
 			}
-			if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messagess"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
+			if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
 			if (totalItems) {
 				$('kbd.nav-messages-count').removeClass('hide').text(totalItems);
 			} else {
 				$('kbd.nav-messages-count').addClass('hide').text('');
 			}
 		break;
+	}
+	/*tABS*/
+	if (totalItems) {
+		console.log(sNav, totalItems);
+		$('[data-nav="'+sNav+'"]').find('kbd').removeClass('no-count').text(totalItems);
+	} else {
+		$('[data-nav="'+sNav+'"]').find('kbd').addClass('no-count').text('');
 	}
 }
 
@@ -390,7 +357,8 @@ var initMenuNavsCount = function() {
 	});
 }
 
-var reCountStatusTabs = function(sMenu, sTab, totalItems) {
+var reCountStatusTabs = function(response) {
+	var sMenu = response.menu, sTab = response.tab, totalItems = response.total_items;
 	if (totalItems.toString().length > 4) totalItems = Number(totalItems).toExponential();
 	var sClass = 'no-count';
 	if (sMenu == 'messages') sClass = 'hide';
@@ -399,6 +367,8 @@ var reCountStatusTabs = function(sMenu, sTab, totalItems) {
 	} else {
 		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').addClass(sClass).text('');
 	}
+
+	console.log(response);
 }
 
 var checkCountStatusTabs = function(oData) {
@@ -411,7 +381,7 @@ var checkCountStatusTabs = function(oData) {
 			// console.log(response);
 			if (response) {
 				if (response.menu && response.tab && response.id == oUser.id) {
-					reCountStatusTabs(response.menu, response.tab, response.total_items);
+					reCountStatusTabs(response);
 				}
 			}
 		}
@@ -430,5 +400,298 @@ var initStatusTabsCount = function() {
 				if (oData.id == oUser.id) checkCountStatusTabs(oData);
 			}
 		}
+	});
+}
+
+var fetchOrderCycles = function(oData) {
+	var oSettings = {
+		url: 'support/fetch_order_cycles/',
+		type: 'post',
+		dataType: 'json',
+		data: oData,
+		success: function(oResponse) {
+			if (oResponse) {
+				console.log(oResponse);
+				if (oResponse) {
+					if (oResponse.mode == 'basket') {
+						if ($.inArray(oUser.id, oResponse.id) >= 0) {
+							sendRequestOrderCycles(oResponse);
+						}
+					} else {
+						if (oSegments[1] == 'fulfillment' && $.inArray(oUser.id, oResponse.seller) >= 0 && $.inArray(oUser.id, oResponse.buyer) >= 0) {
+							if ($.inArray(oUser.id, oResponse.seller) >= 0) {
+								sendRequestOrderCycles(oResponse, oUser.id, 'seller');
+							}
+						} else if (oSegments[1] == 'orders' && $.inArray(oUser.id, oResponse.seller) >= 0 && $.inArray(oUser.id, oResponse.buyer) >= 0) {
+							if ($.inArray(oUser.id, oResponse.buyer) >= 0) {
+								sendRequestOrderCycles(oResponse, oUser.id, 'buyer');
+							}
+						} else {
+							if ($.inArray(oUser.id, oResponse.seller) >= 0) {
+								sendRequestOrderCycles(oResponse, oUser.id, 'seller');
+							}
+							if ($.inArray(oUser.id, oResponse.buyer) >= 0) {
+								sendRequestOrderCycles(oResponse, oUser.id, 'buyer');
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+	$.ajax(oSettings);
+}
+
+var sendRequestOrderCycles = function(oData, iUser, type) {
+	switch (oData.mode) {
+		case 'basket':
+			for (var x in oData.url) {
+				let url = oData.url[x];
+				var oSettings = {
+					url: url,
+					type: 'post',
+					dataType: 'json',
+					data: oData.params,
+					success: function(oResponse) {
+						reDrawOrderCycles(oData, oResponse);
+					}
+				};
+				$.ajax(oSettings);
+			}
+			let oCounts = oData.counts;
+			/*just count*/
+			if (Object.keys(oCounts).length) {
+				for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
+			}
+		break;
+		default:
+			console.log(type);
+			if (oData.counts && oData.counts[type]['user_'+iUser] != undefined) {
+				let oCounts = oData.counts[type]['user_'+iUser];
+				function getCountData(oData, type, userHash) {
+					if (oData.mode == 'on-delivery') {
+						oCounts = oData.counts['seller'][userHash];
+					}
+				}
+				for (let x in oData.requests) {
+					if (x == type) {
+						var oItem = oData.requests[x];
+						if (oItem['user_'+iUser] != undefined) {
+							var oPages = oItem['user_'+iUser];
+							for (name in oPages) {
+								let sName = name;
+								var oPage = oPages[name];
+								if ($.inArray(sName, Object.values(oSegments)) >= 0) {
+									console.log(oPage, x);
+									var oSettings = {
+										url: oPage.url,
+										type: 'post',
+										dataType: 'json',
+										data: oPage.params,
+										success: function(oResponse) {
+											reDrawOrderCycles(oData, oResponse, oCounts, sName);
+										}
+									};
+									$.ajax(oSettings);
+								}
+							}
+						}
+					}
+				}
+				/*just count*/
+				oCounts = getCountData(oData, type, 'user_'+iUser);
+				if (Object.keys(oCounts).length) {
+					for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
+				}
+			}
+		break;
+	}
+}
+
+var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
+	var sMode = oData.mode;
+	switch (sMode) {
+		case 'basket':
+			// console.log(oResponse);
+			var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
+			if (oResponse.html.length) {
+				var oArr = [];
+				if (Object.keys(oData.post.basket_id).length) {
+					oArr = oData.post.basket_id;
+				} else if (!isNaN(oData.post.basket_id)) {
+					oArr = [oData.post.basket_id];
+				}
+				if (typeof oArr == 'object') {
+					var arrRemoved = [];
+					for (var x in oArr) {
+						var id = oArr[x];
+						var item = $('[data-basket-id="'+id+'"]');
+						if (item.length) {
+							arrRemoved.push(1);
+							item.parents('.order-table-item').remove();
+						}
+					}
+					if (uiBasketPanel.find('.no-records-ui:visible').length && arrRemoved.length == 0) {
+						uiBasketPanel.html(oResponse.html);
+					} else {
+						uiBasketPanel.prepend(oResponse.html);
+						if (uiBasketPanel.find('.no-records-ui').length > 1) {
+							uiBasketPanel.find('.no-records-ui.hide:last').remove();
+						}
+					}
+					if (typeof runDomReady == 'function') runDomReady();
+				}
+			} else {
+				uiBasketPanel.find('.no-records-ui').removeClass('hide');
+			}
+		break;
+		default:
+			console.log(oData, oResponse, oCounts, sPageName);
+			var uiPanel = [], isActive = null;
+			// console.log(sMode);
+			switch (sPageName) {
+				case 'fulfillment':
+					uiPanel = $('.ff-product-container');
+					isActive = $('[data-nav="'+sMode+'"]').hasClass('active');
+				break;
+				case 'orders':
+					uiPanel = $('#dashboard_panel_right [js-element="orders-panel"]');
+					isActive = $('[data-nav="'+sMode+'"]').find('.trans-navbar-pill').hasClass('active');
+				break;
+				case 'basket':
+					uiPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
+					isActive = sMode != 'placed';
+				break;
+			}
+
+			if (oResponse.panel === 'messages') {
+				uiPanel = $('.hideshow-container');
+			}
+			// console.log(isActive);
+			if (uiPanel.length) {
+				if (oResponse.html.length) {
+					var oArr = [];
+					if (oResponse.panel === 'messages') {
+						if (Object.keys(oResponse.message_ids).length) {
+							oArr = oResponse.message_ids;
+						} else if (!isNaN(oResponse.message_ids)) {
+							oArr = [oResponse.message_ids];
+						}
+					} else if (oResponse.panel === 'basket') {
+						if (Object.keys(oResponse.ids).length) {
+							oArr = oResponse.ids;
+						} else if (!isNaN(oResponse.ids)) {
+							oArr = [oResponse.ids];
+						}
+					} else {
+						if (Object.keys(oData.post.merge_id).length) {
+							oArr = oData.post.merge_id;
+						} else if (!isNaN(oData.post.merge_id)) {
+							oArr = [oData.post.merge_id];
+						}
+					}
+					// console.log(oArr);
+					if (typeof oArr == 'object') {
+						let arrRemoved = [];
+						for (var x in oArr) {
+							var id = oArr[x];
+							if (oResponse.panel === 'messages') {
+								var item = $('[data-msg-id="'+id+'"]');
+							} else if (oResponse.panel === 'basket') {
+								var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
+							} else {
+								var item = $('[data-merge-id="'+id+'"]');
+							}
+							if (item.length) {
+								if (oSegments[2] != sMode) {
+									arrRemoved.push(1);
+									item.remove();
+								}
+							}
+						}
+						// console.log(isActive);
+						if (isActive == true) {
+							if (uiPanel.find('.no-records-ui:visible').length) {
+								if (oResponse.panel == 'messages' || sPageName == 'fulfillment') {
+									uiPanel.replaceWith(oResponse.html);
+								} else {
+									uiPanel.html(oResponse.html);
+								}
+								console.log('rendered', sMode);
+							} else {
+								if (sPageName == 'fulfillment') {
+									var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
+									uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
+								} else if (oResponse.panel === 'messages') {
+									uiPanel.replaceWith(oResponse.html);
+								} else {
+									uiPanel.prepend(oResponse.html);
+								}
+								if (uiPanel.find('.no-records-ui').length > 1 && oResponse.panel != 'messages') {
+									uiPanel.find('.no-records-ui.hide:last').remove();
+								}
+								console.log('re-rendered', sMode);
+							}
+							if (typeof runATagAjax == 'function') runATagAjax();
+							if (typeof runDomShowHide == 'function') runDomShowHide();
+							if (typeof runDomReady == 'function') runDomReady();
+						} else {
+							console.log('not in page', sMode);
+							if (uiPanel.find('.no-records-ui').siblings().length == 0) {
+								uiPanel.find('.no-records-ui').removeClass('hide');
+							}
+						}
+					} else {
+						uiPanel.find('.no-records-ui').removeClass('hide');
+					}
+				} else {
+					uiPanel.find('.no-records-ui').removeClass('hide');
+				}
+			}
+		break;
+	}
+}
+
+var runATagAjax = function () {
+	var oPauseAjax = false;
+	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
+		e.preventDefault();
+		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
+		var isJsonPCallback = $(e.target).data('call-jsonp') != undefined ? $(e.target).data('call-jsonp') : 1;
+		var oSettings = {
+			url: $(e.target).data('href') == undefined ? e.target.href : $(e.target).data('href'),
+			type: 'get',
+			data: oData,
+			dataType: 'json',
+			success: function(response) {
+				var bConfirmed = true;
+				if (response && response.type && response.type.length && response.message.length) {
+					bConfirmed = runAlertBox(response, undefined, bConfirmed);
+				}
+				if (bConfirmed) {
+					setTimeout(function() {
+						if (response && (typeof response.redirect == 'string')) {
+							if (response.redirect) window.location = response.redirect;
+						}
+					}, 3000);
+					if (response && (typeof response.callback == 'string')) {
+						var fn = eval(response.callback);
+						if (typeof fn == 'function') {
+							// console.log(response.callback, 'function');
+							fn(response.data, e);
+						}
+					}
+				}
+			},/*
+			error: function(xhr, status, thrown) {
+				console.log(status, thrown);
+			}*/
+		};
+		if (isJsonPCallback) {
+			oSettings.dataType = 'jsonp';
+			oSettings.jsonpCallback = 'gmCall';
+		}
+		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
+		oPauseAjax = $.ajax(oSettings);
 	});
 }

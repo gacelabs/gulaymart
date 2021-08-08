@@ -63,7 +63,7 @@ class Basket extends My_Controller {
 			if ($items_by_farm AND isset($items_by_farm['checkout_data'])) $total_items = count($items_by_farm['checkout_data']);
 			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/basket/basket_items', [
 				'data_baskets' => $items_by_farm
-			], true), 'ids' => $this->input->post('ids')], JSON_NUMERIC_CHECK);
+			], true), 'ids' => $this->input->post('ids'), 'panel' => 'basket'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -95,7 +95,7 @@ class Basket extends My_Controller {
 		}
 	}
 
-	public function add($product_id=0)
+	public function add($product_id=0, $is_test=0)
 	{
 		$data = $this->input->post() ?: $this->input->get();
 		$post = $this->baskets->prepare_to_basket($data, $product_id);
@@ -139,17 +139,16 @@ class Basket extends My_Controller {
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 
 				/*send realtime basket*/
-				$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
-					'success' => true, 'ids' => $basket_ids, 'buyer_id' => $this->accounts->profile['id']
-				]);
-				$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-					'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
-				]);
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['basket_id' => $basket_ids]);
 			}
 			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
 			// debug($post, 'stop');
 
-			$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
+			if ($is_test) {
+				redirect(base_url('test/send/tambay'));
+			} else {
+				$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
+			}
 		}
 		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
 	}
@@ -212,9 +211,9 @@ class Basket extends My_Controller {
 		$this->set_response('error', remove_multi_space('Unable to remove product(s)'), $post);
 	}
 
-	public function verify($is_checkout=0)
+	public function verify($is_not_test=1)
 	{
-		$post = $this->input->post();
+		$post = $this->input->post() ?: $this->input->get();
 		if ($post AND isset($post['data'])) {
 			// debug($post, 'stop');
 			$basket_ids = [];
@@ -223,20 +222,24 @@ class Basket extends My_Controller {
 				$basket = $this->baskets->get(['id' => $id], true);
 				// debug($basket, 'stop');
 				if ($basket) {
-					$row['status'] = 1;
-					if ($row['order_type'] == 1) $row['schedule'] = NULL;
+					$row['status'] = GM_VERIFIED_NOW;
+					if ($row['order_type'] == GM_BUY_NOW) $row['schedule'] = NULL;
 					$this->baskets->save($row, ['id' => $id]);
 					$basket_ids[] = $id;
 				}
 			}
-			echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout'], JSON_NUMERIC_CHECK); exit();
+			if ($is_not_test == 0) {
+				redirect(base_url('basket/checkout/'.(base64_encode(json_encode($basket_ids)))));
+			} else {
+				echo json_encode(['success' => true, 'type' => 'success', 'redirect' => 'basket/checkout/'.(base64_encode(json_encode($basket_ids))), 'message' => 'Basket verified!, Proceeding checkout'], JSON_NUMERIC_CHECK); exit();
+			}
 		} else {
 			echo json_encode(['success' => true, 'type' => 'error', 'redirect' => false, 'message' => 'Unable to proceed for checkout!'], JSON_NUMERIC_CHECK);
 			exit();
 		}
 	}
 
-	public function checkout($base64_basket_ids=false)
+	public function checkout($base64_basket_ids=false, $is_test=0)
 	{
 		if ($base64_basket_ids) {
 			$ids = json_decode(base64_decode($base64_basket_ids), true);
@@ -259,7 +262,7 @@ class Basket extends My_Controller {
 			foreach ($basket_session as $date => $baskets) {
 				foreach ($baskets as $key => $basket) {
 					$scheduled_value = 'SCHEDULED';
-					if ($basket['order_type'] == 2) {
+					if ($basket['order_type'] == GM_SCHEDULED) {
 						if (!is_null($basket['schedule'])) {
 							$scheduled_value .= ' | '.date('F j, Y', strtotime($basket['schedule']));
 						} else {
@@ -290,7 +293,7 @@ class Basket extends My_Controller {
 							$this->session->set_userdata('checkout_pricing_'.$basket['location_id'], $checkout_pricing);
 						}
 					}
-					$type_name = $basket['order_type'] == 1 ? 'TODAY' : $scheduled_value;
+					$type_name = $basket['order_type'] == GM_BUY_NOW ? 'TODAY' : $scheduled_value;
 					$items_by_farm[$basket['location_id']]['order_type'] = ['id'=>$basket['order_type'], 'type_name'=>$type_name];
 					$items_by_farm[$basket['location_id']]['order_details'][$basket['order_type']][] = $basket;
 					$items_by_farm[$basket['location_id']]['toktok_details'] = $checkout_pricing;
@@ -388,7 +391,7 @@ class Basket extends My_Controller {
 							'stocks' => $order['rawdata']['details']['stocks'],
 							'sub_total' => $sub_total,
 							'timestamp' => $timestamp,
-							'status' => 2,
+							'status' => GM_PLACED_STATUS,
 							'when' => $order_type,
 							'schedule' => $order['schedule'],
 							'basket_id' => $order['id'],
@@ -397,7 +400,7 @@ class Basket extends My_Controller {
 						$all_basket_ids[] = $order['id'];
 						$initial_total += $sub_total;
 
-						if ($order_type == 2 AND (empty($toktok_post['f_sender_date']) AND empty($toktok_post['f_recepient_date']))) {
+						if ($order_type == GM_SCHEDULED AND (empty($toktok_post['f_sender_date']) AND empty($toktok_post['f_recepient_date']))) {
 							$receive_time = date('H:i:s', strtotime('+1 hour'));
 
 							$toktok_post['f_sender_date'] = date('d/m/Y', strtotime($order['schedule']));
@@ -423,7 +426,7 @@ class Basket extends My_Controller {
 				$place_order[$farm_location_id]['duration'] = $pricing['duration'];
 
 				$place_order[$farm_location_id]['location_id'] = $farm_location_id;
-				$place_order[$farm_location_id]['status'] = 2;
+				$place_order[$farm_location_id]['status'] = GM_PLACED_STATUS;
 				$place_order[$farm_location_id]['toktok_post'] = base64_encode(json_encode($toktok_post, JSON_NUMERIC_CHECK));
 				$place_order[$farm_location_id]['seller'] = base64_encode(json_encode($place_order[$farm_location_id]['seller'], JSON_NUMERIC_CHECK));
 				$place_order[$farm_location_id]['seller_id'] = $seller['user_id'];
@@ -445,40 +448,13 @@ class Basket extends My_Controller {
 			/*email and add notification here*/
 			notify_placed_orders($final_total, $merge_ids, $seller_ids, $this->accounts->profile);
 
+			$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
+
 			// debug($place_order, $all_basket_ids, 'stop');
-			foreach ($all_basket_ids as $id) $this->baskets->save(['status' => 2], ['id' => $id]);
+			foreach ($all_basket_ids as $id) $this->baskets->save(['status' => GM_PLACED_STATUS], ['id' => $id]);
 			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
 			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
-
-			/*send realtime placed order*/
-			$this->senddataapi->trigger('placed-order', 'incoming-orders', [
-				'success' => true, 'ids' => $merge_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'placed', 'remove' => false
-			]);
-			/*send realtime placed fulfillment*/
-			$this->senddataapi->trigger('placed-fulfillment', 'incoming-fulfillment', [
-				'success' => true, 'ids' => $merge_ids, 'seller_id' => $seller_ids, 'event' => 'placed', 'remove' => false
-			]);
-
-			$this->senddataapi->trigger('listen-baskets-activity', 'incoming-baskets', [
-				'success' => true, 'ids' => $all_basket_ids, 'buyer_id' => $this->accounts->profile['id'], 'event' => 'orders/placed/'
-			]);
-			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'basket'
-			]);
-			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'order'
-			]);
-			$this->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'nav' => 'fulfill'
-			]);
-
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $this->accounts->profile['id'], 'menu' => 'orders', 'tab' => 'placed'
-			]);
-			$this->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $seller_ids, 'menu' => 'fulfillments', 'tab' => 'placed'
-			]);
 
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');
 		} else {
@@ -511,7 +487,7 @@ class Basket extends My_Controller {
 			'f_sender_address' => 'Tierra Benita Subdivision, San Jose del Monte City, Bulacan, Philippines',
 			'f_sender_address_lat' => 14.7860947,
 			'f_sender_address_lng' => 121.0322675,
-			'f_order_type_send' => 1,
+			'f_order_type_send' => GM_BUY_NOW,
 			'f_sender_date' => '',
 			'f_sender_datetime_from' => '',
 			'f_sender_datetime_to' => '',
@@ -525,7 +501,7 @@ class Basket extends My_Controller {
 			'f_recepient_address' => 'Our Lady of Fatima University - Valenzuela Campus, MacArthur Highway, Valenzuela, Metro Manila, Philippines',
 			'f_recepient_address_lat' => 14.6778115,
 			'f_recepient_address_lng' => 120.9803312,
-			'f_order_type_rec' => 1,
+			'f_order_type_rec' => GM_BUY_NOW,
 			'f_recepient_date' => '',
 			'f_recepient_datetime_from' => '',
 			'f_recepient_datetime_to' => '',
@@ -572,13 +548,13 @@ class Basket extends My_Controller {
 			$params['f_price'] = $price_and_directions['price'];
 		}
 		// if Sender Order Type is SCHEDULED
-		if ($params['f_order_type_send'] == 2) {
+		if ($params['f_order_type_send'] == GM_SCHEDULED) {
 			$params['f_sender_date'] = "03/02/2021";
 			$params['f_sender_datetime_from'] = "02:13:23";
 			$params['f_sender_datetime_to'] = "03:13:27";
 		}
 		// if Recepient Order Type is SCHEDULED
-		if ($params['f_order_type_rec'] == 2) {
+		if ($params['f_order_type_rec'] == GM_SCHEDULED) {
 			$params['f_recepient_date'] = "03/02/2021";
 			$params['f_recepient_datetime_from'] = "02:13:23";
 			$params['f_recepient_datetime_to'] = "03:13:27";
