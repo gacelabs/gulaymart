@@ -75,18 +75,21 @@
 				}).then(function(currentNotification) {
 					let notificationTitle = '';
 					const options = oData;
-					console.log(options);
+					let notify = false;
 					if (currentNotification) {
 						const messageCount = currentNotification.data.newMessageCount + 1;
 						notificationTitle = 'New Message';
 						options.body = 'You have '+messageCount+' new '+type+'s';
 						options.data.newMessageCount = messageCount;
-					} else {
+						notify = true;
+					} else if (options.data && oUser.id == options.data.seller_id) {
 						notificationTitle = 'New Message';
 						options.body = 'You have a new '+type;
 						options.data.newMessageCount = 1;
+						notify = true;
 					}
-					if (typeof currentNotification != 'boolean') {
+					console.log(notify, options);
+					if (notify) {
 						return registration.showNotification(notificationTitle, options);
 					}
 				});
