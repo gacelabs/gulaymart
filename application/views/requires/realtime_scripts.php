@@ -66,6 +66,7 @@
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
 					let currentNotification = false;
+					console.log(notifications);
 					for(let i = 0; i < notifications.length; i++) {
 						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
 							currentNotification = notifications[i];
