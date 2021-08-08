@@ -98,13 +98,13 @@ class Orders extends MY_Controller {
 			}
 		} else {
 			if (count($filters)) {
-				$filters['unread'] = [GM_MESSAGE_UNREAD];
+				$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
 				$filters['order_by'] = ['under', 'added'];
 				$filters['direction'] = ['ASC', 'DESC'];
 			} else {
 				$filters = [
 					'to_id' => $this->accounts->profile['id'],
-					'unread' => [GM_MESSAGE_UNREAD],
+					'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
 					'order_by' => ['under', 'added'],
 					'direction' => ['ASC', 'DESC'],
 				];
