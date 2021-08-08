@@ -458,7 +458,7 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 				};
 				$.ajax(oSettings);
 			}
-			let oCounts = oData.counts;
+			var oCounts = oData.counts;
 			/*just count*/
 			if (Object.keys(oCounts).length) {
 				for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
@@ -467,11 +467,10 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 		default:
 			console.log(type);
 			if (oData.counts && oData.counts[type]['user_'+iUser] != undefined) {
-				let oCounts = oData.counts[type]['user_'+iUser];
-				function getCountData(oData, type, userHash) {
-					if (oData.mode == 'on-delivery') {
-						oCounts = oData.counts['seller'][userHash];
-					}
+				/*just count*/
+				var oCounts = oData.counts[type]['user_'+iUser];
+				if ($.inArray(oData.mode, ['on-delivery']) >= 0) {
+					oCounts = oData.counts['seller']['user_'+iUser];
 				}
 				for (let x in oData.requests) {
 					if (x == type) {
@@ -497,11 +496,6 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 							}
 						}
 					}
-				}
-				/*just count*/
-				oCounts = getCountData(oData, type, 'user_'+iUser);
-				if (Object.keys(oCounts).length) {
-					for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
 				}
 			}
 		break;
@@ -649,6 +643,9 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				}
 			}
 		break;
+	}
+	if (Object.keys(oCounts).length) {
+		for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
 	}
 }
 
