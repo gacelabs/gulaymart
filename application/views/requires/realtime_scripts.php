@@ -97,7 +97,6 @@
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser) {
-				++tagCount;
 				var oData = {
 					seller_id: oUser.id,
 					tag: 'demo-notification',
