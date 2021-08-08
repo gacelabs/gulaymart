@@ -83,32 +83,17 @@ class Orders extends MY_Controller {
 		if ($this->input->is_ajax_request() AND $this->input->post('user_id')) {
 			$filters['to_id'] = $this->input->post('user_id');
 		}
-		if ($this->farms) {
-			if (count($filters)) {
-				$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
-				$filters['order_by'] = ['under', 'added'];
-				$filters['direction'] = ['ASC', 'DESC'];
-			} else {
-				$filters = [
-					'to_id' => $this->accounts->profile['id'],
-					'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
-					'order_by' => ['under', 'added'],
-					'direction' => ['ASC', 'DESC'],
-				];
-			}
+		if (count($filters)) {
+			$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
+			$filters['order_by'] = ['under', 'added'];
+			$filters['direction'] = ['ASC', 'DESC'];
 		} else {
-			if (count($filters)) {
-				$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
-				$filters['order_by'] = ['under', 'added'];
-				$filters['direction'] = ['ASC', 'DESC'];
-			} else {
-				$filters = [
-					'to_id' => $this->accounts->profile['id'],
-					'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
-					'order_by' => ['under', 'added'],
-					'direction' => ['ASC', 'DESC'],
-				];
-			}
+			$filters = [
+				'to_id' => $this->accounts->profile['id'],
+				'unread' => [GM_MESSAGE_READ, GM_MESSAGE_UNREAD],
+				'order_by' => ['under', 'added'],
+				'direction' => ['ASC', 'DESC'],
+			];
 		}
 		$messages = $this->gm_db->get_in('messages', $filters);
 		// debug($messages, 'stop');
