@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
 
-	public $allowed_methods = ['fetch_coordinates'/*, 'test_mail'*/];
+	public $allowed_methods = ['fetch_coordinates'/*, 'test_mail'*/, 'test_msg'];
 
 	public function __construct()
 	{
@@ -21,6 +21,13 @@ class Api extends MY_Controller {
 		// $mail->debug = TRUE;
 		$return = $mail->send($email, false, true);
 		debug($return, 'stop');
+	}
+
+	public function test_msg($id=0)
+	{
+		$id = $id == 0 ? $this->accounts->profile['id'] : $id;
+		$sent = send_gm_message($id, strtotime(date('Y-m-d')), 'TEST!', 'Notifications', 'Orders');
+		debug($sent, 'stop');
 	}
 
 	public function save_shipping()
