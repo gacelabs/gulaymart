@@ -88,7 +88,7 @@
 						options.data.newMessageCount = 1;
 						notify = true;
 					}
-					console.log(notify, options);
+					// console.log(notify, options);
 					if (notify) {
 						return registration.showNotification(notificationTitle, options);
 					}

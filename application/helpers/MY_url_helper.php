@@ -491,20 +491,20 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'feedbacks'
 			]);
 			// send message to the user has to replenish the needed stocks for delivery
-			$check_msgs = $ci->gm_db->get('messages', [
+			/*$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
 				'to_id' => $user_id, 'unread' => 1,
 				'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
-			if ($check_msgs == false) {
+			if ($check_msgs == false) {*/
 				$ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
 				return true;
-			}
+			/*}*/
 		}
 	}
 	return false;
