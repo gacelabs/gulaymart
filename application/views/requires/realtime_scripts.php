@@ -105,15 +105,27 @@
 					tag: 'demo-notification',
 					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
 				};
-				realtime.trigger('ordered-notification', 'send-notification', {
-					badge: 'https://gulaymart.com/assets/images/favicon.png',
-					body: '',
-					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'demo-notification',
-					renotify: true,
-					vibrate: [200, 100, 200, 100, 200, 100, 200],
-					data: oData
-				});
+				if ('serviceWorker' in navigator) {
+					onServiceWorkerReady('order', {
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: '',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						tag: 'demo-notification',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: oData
+					});
+				} else {
+					realtime.trigger('ordered-notification', 'send-notification', {
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: '',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						tag: 'demo-notification',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: oData
+					});
+				}
 			}
 		});
 	};
