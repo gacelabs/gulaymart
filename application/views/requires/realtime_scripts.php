@@ -64,7 +64,7 @@
 		var onServiceWorkerReady = function(type, oData) {
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
-				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
+				registration.getNotifications(/*{tag:oData.tag}*/).then(function(notifications) {
 					let currentNotification = false;
 					console.log(notifications);
 					for(let i = 0; i < notifications.length; i++) {
