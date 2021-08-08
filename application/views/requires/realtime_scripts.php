@@ -64,9 +64,8 @@
 		var onServiceWorkerReady = function(type, oData) {
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
-				registration.getNotifications(/*{tag:oData.tag}*/).then(function(notifications) {
+				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
 					let currentNotification = false;
-					console.log(notifications);
 					for(let i = 0; i < notifications.length; i++) {
 						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
 							currentNotification = notifications[i];
@@ -76,21 +75,19 @@
 				}).then(function(currentNotification) {
 					let notificationTitle = '';
 					const options = oData;
-					console.log(currentNotification);
+					console.log(options);
 					if (currentNotification) {
-						if (currentNotification.data.newMessageCount == undefined || currentNotification.data.newMessageCount == 0) {
-							notificationTitle = 'New Message';
-							options.body = 'You have a new '+type;
-							options.data.newMessageCount = 1;
-						} else {
-							const messageCount = currentNotification.data.newMessageCount + 1;
-							notificationTitle = 'New Message';
-							options.body = 'You have '+messageCount+' new '+type+'s';
-							options.data.newMessageCount = messageCount;
-						}
-						return registration.showNotification(notificationTitle, options);
+						const messageCount = currentNotification.data.newMessageCount + 1;
+						notificationTitle = 'New Message';
+						options.body = 'You have '+messageCount+' new '+type+'s';
+						options.data.newMessageCount = messageCount;
 					} else {
-						console.log('!notify');
+						notificationTitle = 'New Message';
+						options.body = 'You have a new '+type;
+						options.data.newMessageCount = 1;
+					}
+					if (typeof currentNotification != 'boolean') {
+						return registration.showNotification(notificationTitle, options);
 					}
 				});
 			});
@@ -100,32 +97,21 @@
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser) {
+				++tagCount;
 				var oData = {
 					seller_id: oUser.id,
 					tag: 'demo-notification',
 					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
 				};
-				if ('serviceWorker' in navigator) {
-					onServiceWorkerReady('order', {
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: '',
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						tag: 'demo-notification',
-						renotify: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: oData
-					});
-				} else {
-					realtime.trigger('ordered-notification', 'send-notification', {
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: '',
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						tag: 'demo-notification',
-						renotify: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: oData
-					});
-				}
+				realtime.trigger('ordered-notification', 'send-notification', {
+					badge: 'https://gulaymart.com/assets/images/favicon.png',
+					body: '',
+					icon: 'https://gulaymart.com/assets/images/favicon.png',
+					tag: 'demo-notification',
+					renotify: true,
+					vibrate: [200, 100, 200, 100, 200, 100, 200],
+					data: oData
+				});
 			}
 		});
 	};
