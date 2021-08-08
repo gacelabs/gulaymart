@@ -65,7 +65,7 @@
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
-					let currentNotification;
+					let currentNotification = false;
 					for(let i = 0; i < notifications.length; i++) {
 						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
 							currentNotification = notifications[i];
@@ -75,17 +75,22 @@
 				}).then(function(currentNotification) {
 					let notificationTitle = '';
 					const options = oData;
+					console.log(currentNotification);
 					if (currentNotification) {
-						const messageCount = currentNotification.data.newMessageCount + 1;
-						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+type+'s';
-						options.data.newMessageCount = messageCount;
+						if (currentNotification.data.newMessageCount == undefined || currentNotification.data.newMessageCount == 0) {
+							notificationTitle = 'New Message';
+							options.body = 'You have a new '+type;
+							options.data.newMessageCount = 1;
+						} else {
+							const messageCount = currentNotification.data.newMessageCount + 1;
+							notificationTitle = 'New Message';
+							options.body = 'You have '+messageCount+' new '+type+'s';
+							options.data.newMessageCount = messageCount;
+						}
+						return registration.showNotification(notificationTitle, options);
 					} else {
-						notificationTitle = 'New Message';
-						options.body = 'You have a new '+type;
-						options.data.newMessageCount = 1;
+						console.log('!notify');
 					}
-					return registration.showNotification(notificationTitle, options);
 				});
 			});
 		};

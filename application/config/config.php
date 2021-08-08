@@ -388,9 +388,11 @@ $config['encryption_key'] = '';
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 if(check_device() == 'mobile') {
-	$config['sess_expiration'] = 0;
+	// $config['sess_expiration'] = 7200; /*DON'T SET FOR NO EXPIRE ON MOBILE*/
+	$config['sess_expire_on_close'] = TRUE;
 } else {
 	$config['sess_expiration'] = 7200;
+	$config['sess_expire_on_close'] = FALSE;
 }
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;

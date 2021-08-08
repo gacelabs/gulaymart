@@ -544,11 +544,14 @@ class Admin extends MY_Controller {
 					$this->notify_operator_booking();
 				}
 			} else {
+				cronlogger('push_orders_to_toktok 547: no available post!', false, 'gulaymart-bookings');
 				echo json_encode(['status' => false, 'message' => 'no available post'], JSON_NUMERIC_CHECK); exit();
 			}
 		} else {
+			cronlogger('push_orders_to_toktok 551: admin setting unknown!', false, 'gulaymart-bookings');
 			echo json_encode(['status' => false, 'message' => 'admin setting unknown'], JSON_NUMERIC_CHECK); exit();
 		}
+		cronlogger('push_orders_to_toktok 554: did not run any, baskets_merge are empty!', false, 'gulaymart-bookings');
 	}
 
 	/*this will be run on cron job*/
@@ -673,7 +676,9 @@ class Admin extends MY_Controller {
 				echo json_encode(['status' => true, 'message' => 'successfull!, orders was received!'], JSON_NUMERIC_CHECK); exit();
 			}
 		} else {
+			cronlogger('orders_to_receive 679: baskets unknown!', false, 'gulaymart-bookings');
 			echo json_encode(['status' => false, 'message' => 'baskets unknown'], JSON_NUMERIC_CHECK); exit();
 		}
+		cronlogger('orders_to_receive 682: did not run any, baskets_merge are empty!', false, 'gulaymart-bookings');
 	}
 }

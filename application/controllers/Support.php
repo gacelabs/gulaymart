@@ -88,13 +88,13 @@ class Support extends MY_Controller {
 					$data['nav'] = $nav = $post['nav'];
 					switch (strtolower($nav)) {
 						case 'fulfill': case 'fulfills': case 'fulfillments':
-							$data['total_items'] = $this->gm_db->count('baskets_merge', ['seller_id' => $user_ids, 'status !=' => 5]);
+							$data['total_items'] = $this->gm_db->count('baskets_merge', ['seller_id' => $user_ids, 'status !=' => 4, 'status !=' => 5]);
 							break;
 						case 'basket': case 'baskets':
 							$data['total_items'] = $this->gm_db->count('baskets', ['user_id' => $user_ids, 'status' => [0,1]]);
 							break;
 						case 'order': case 'orders':
-							$data['total_items'] = $this->gm_db->count('baskets_merge', ['buyer_id' => $user_ids, 'status !=' => 5]);
+							$data['total_items'] = $this->gm_db->count('baskets_merge', ['buyer_id' => $user_ids, 'status !=' => 4, 'status !=' => 5]);
 							break;
 						case 'message': case 'messages':
 							$data['total_items'] = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]);
