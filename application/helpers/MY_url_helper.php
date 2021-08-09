@@ -498,7 +498,7 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
 				'to_id' => $user_id, 'unread' => 1,
-				'datestamp' => $datestamp,
+				// 'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {

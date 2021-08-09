@@ -1,3 +1,3 @@
 $(document).ready(function() {
-	if (typeof runDomReady == 'function') runDomReady();
+	if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
 });

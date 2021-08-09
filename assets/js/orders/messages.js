@@ -1,62 +1,40 @@
 $(document).ready(function() {
-	runDomReady();
+	msgRunDomReady();
 });
 
+var changeMessagesCount = function() {
+	var sTabName = $($('[id^="msg_"]:visible').get(1)).attr('element-name');
+	var uiTab = $('[data-nav="'+sTabName+'"]');
+	var totalItems = parseInt(uiTab.find('kbd').text());
+	if (!isNaN(totalItems) && totalItems != 0) totalItems = totalItems - 1;
+
+	reCountMenuNavs('message', totalItems);
+	reCountMenuNavs(sTabName, totalItems);
+}
+
 var readMessage = function(data, ui) {
-	var uiParent = $(ui.target).parents('.notif-item').parent('[id^="msg_"]');
-	console.log(uiParent);
 	$(ui.target).parents('.notif-item').find('.notif-item-middle').html('');
 	for(var x in data) {
 		var item = data[x];
 		$(ui.target).parents('.notif-item').find('.notif-item-middle').html(item.content);
 	}
-	if ($('#nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd id="nav-messages-count"></kbd>');
-	var totalItems = parseInt($('#nav-messages-count').text());
-	if (!isNaN(totalItems) && totalItems != 0) totalItems = totalItems - 1;
-	if (totalItems) {
-		$('#nav-messages-count').removeClass('hide').text(totalItems);
-	} else {
-		$('#nav-messages-count').addClass('hide').text('');
-	}
-	if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messagess"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
-	if (totalItems) {
-		$('kbd.nav-messages-count').removeClass('hide').text(totalItems);
-	} else {
-		$('kbd.nav-messages-count').addClass('hide').text('');
-	}
+	changeMessagesCount();
 }
 
 var deleteMessage = function(data, ui) {
-	if ($('#nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd id="nav-messages-count"></kbd>');
-	if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messagess"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
-	for(var x in data) {
-		var item = data[x];
-		$(ui.target).parents('.notif-item').fadeOut('fast', function() {
-			if ($(this).parents('div[id]:first').length) {
-				var id = $(this).parents('div[id]:first').attr('id');
-				var lastCount = parseInt($('#'+id+'-count').text());
-				if (!isNaN(lastCount) && lastCount != 0) lastCount = lastCount - 1;
-				if (lastCount) {
-					$('#'+id+'-count').removeClass('hide').text(lastCount);
-					$('#nav-messages-count').removeClass('hide').text(lastCount);
-					$('kbd.nav-messages-count').removeClass('hide').text(lastCount);
-				} else {
-					$('#'+id+'-count').addClass('hide').text('');
-					$('#nav-messages-count').addClass('hide').text('');
-					$('kbd.nav-messages-count').addClass('hide').text('');
-
-					if ($('#'+id).find('.no-records-ui').length == 0) {
-						var sText = capitalizeFirstLetter($.trim($('[hideshow-target="#msg_feedbacks"]').text().replace(/\d+/g, '').replace(/(\r\n\t|\n|\r|\t)/gm, "").replace(/(<([^>]+)>)/gi, "")));
-						var notice = '<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;"><h1>Empty '+sText+'</h1><p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p></div>';
-					} else {
-						var notice = $('#'+id).find('.no-records-ui').removeClass('hide');
-					}
-					$('#'+id).html(notice);
-				}
-			}
-			$(this).remove();
+	var wait = new Promise((resolve, reject) => {
+		data.forEach((item, index, array) => {
+			var msg = $('[data-msg-id="'+item.id+'"]');
+			msg.remove();
+			if (index === array.length -1) resolve();
 		});
-	}
+	});
+	wait.then(() => {
+		if ($($('[id^="msg_"]:visible').get(0)).find('.no-records-ui').siblings().length == 0) {
+			$($('[id^="msg_"]:visible').get(0)).find('.no-records-ui').removeClass('hide');
+		}
+		changeMessagesCount();
+	});
 }
 
 var appendComment = function(obj) {
@@ -78,7 +56,7 @@ var appendComment = function(obj) {
 	}
 };
 
-var runDomReady = function() {
+var msgRunDomReady = function() {
 	$readMoreJS.init({
 		target: '.notif-item-middle p',
 		numOfWords: 15,
@@ -90,5 +68,4 @@ var runDomReady = function() {
 	$('.rm-link').off('click').on('click', function() {
 		$(this).parents('.notif-item-middle').next('.notif-item-footer').removeClass('hide');
 	});
-
 }

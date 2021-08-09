@@ -1,8 +1,8 @@
 $(document).ready(function() {
-	runDomReady();
+	basketsRunDomReady();
 });
 
-var runDomReady = function() {
+var basketsRunDomReady = function() {
 	$('[js-event="orderWhenSelect"]').off('change').on('change', function() {
 		if ($(this).val() == 2) {
 			$(this).next('.date-input').removeClass('hide');
@@ -201,67 +201,4 @@ var runQtyDefaults = function(ui) {
 			}
 		});
 	});
-}
-
-var basketProcess = function() {
-	realtime.bind('listen-baskets-activity', 'incoming-baskets', function(object) {
-		var oData = object.data;
-		// console.log(oData);
-		if (oData.success) {
-			if (Object.keys(oData.buyer_id).length) {
-				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runBaskets(oData);
-			} else {
-				if (oData.buyer_id == oUser.id) runBaskets(oData);
-			}
-		}
-	});
-}
-
-var runBaskets = function(data) {
-	var action = data.event;
-	var oSettings = {
-		url: action == undefined ? 'basket/' : action,
-		type: 'post',
-		dataType: 'json',
-		data: { ids: data.ids, buyer_id: data.buyer_id },
-		success: function(response) {
-			console.log(response);
-			if (response.html.length) {
-				var oArr = [];
-				if (Object.keys(response.ids).length) {
-					oArr = response.ids;
-				} else if (!isNaN(data.ids)) {
-					oArr = [response.ids];
-				}
-				console.log(oArr);
-				if (typeof oArr == 'object') {
-					for (var x in oArr) {
-						var id = oArr[x];
-						var item = $('[data-basket-id="'+id+'"]');
-						if (item.length) {
-							console.log('removed', item);
-							item.parents('.order-table-item').remove();
-						}
-					}
-					var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
-					console.log(action);
-					if (action == undefined) {
-						if (uiBasketPanel.length) {
-							if (uiBasketPanel.find('.no-records-ui:visible').length) {
-								uiBasketPanel.html(response.html);
-							} else {
-								uiBasketPanel.prepend(response.html);
-							}
-							runDomReady();
-						}
-					} else {
-						if (uiBasketPanel.find('.order-table-item').length == 0) {
-							uiBasketPanel.find('.no-records-ui').removeClass('hide');
-						}
-					}
-				}
-			}
-		}
-	};
-	$.ajax(oSettings);
 }

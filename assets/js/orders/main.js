@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	if (typeof runDomReady == 'function') runDomReady();
+	if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
 });
 
 var renderHTML = function(obj) {
@@ -39,7 +39,7 @@ var renderHTML = function(obj) {
 	});
 }
 
-var runDomReady = function() {
+var ordersRunDomReady = function() {
 	$(document.body).find('[js-event="showOrderFooter"]').off('click').on('click', function() {
 		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
 		$(this).parents('[js-element]:first').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');

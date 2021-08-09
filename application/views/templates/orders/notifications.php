@@ -1,10 +1,10 @@
 
-<div id="msg_notifications">
+<div id="msg_notifications" element-name="notifications">
 	<?php if ($notifications): ?>
 		<?php foreach ($notifications as $tab => $message): ?>
 			<div class="notif-item" data-msg-id="<?php echo $message['id'];?>">
 				<div class="notif-item-top">
-					<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y | ', $message['datestamp']) . date('g:i a', strtotime($message['added']));?></span> </p>
+					<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $message['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y | ', $message['datestamp']) . date('g:i:s a', strtotime($message['added']));?></span> </p>
 				</div>
 				<div class="notif-item-middle">
 					<?php if ($message['unread']): ?><strong><?php endif ?>
@@ -19,10 +19,9 @@
 				</div>
 			</div>
 		<?php endforeach ?>
-	<?php else: ?>
-		<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
-			<h1>Empty Notifications</h1>
-			<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
-		</div>
 	<?php endif ?>
+	<div class="no-records-ui<?php if ($notifications): ?> hide<?php endif ?>" style="text-align:center;background-color:#fff;padding:40px 10px;">
+		<h1>Empty Notifications</h1>
+		<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
+	</div>
 </div>

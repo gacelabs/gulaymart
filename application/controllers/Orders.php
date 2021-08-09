@@ -80,8 +80,12 @@ class Orders extends MY_Controller {
 	public function messages()
 	{
 		$data_messages = false; $filters = [];
-		if ($this->input->is_ajax_request() AND $this->input->post('user_id')) {
-			$filters['to_id'] = $this->input->post('user_id');
+		if ($this->input->is_ajax_request() AND $this->input->post()) {
+			if ($this->input->post('ids')) {
+				$filters['id'] = $this->input->post('ids');
+			} elseif ($this->input->post('user_id')) {
+				$filters['to_id'] = $this->input->post('user_id');
+			}
 		}
 		if (count($filters)) {
 			$filters['unread'] = [GM_MESSAGE_READ, GM_MESSAGE_UNREAD];
@@ -110,6 +114,7 @@ class Orders extends MY_Controller {
 					$message['farm'] = $this->gm_db->get('user_farms', ['user_id' => $message['from_id']], 'row');
 					$message['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $message['to_id']], 'row');
 				}
+				$message['product'] = $message['location'] = $message['bought'] = $message['photo'] = [];
 				if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 					$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
 					$message['product']['photos'] = false;
@@ -147,6 +152,9 @@ class Orders extends MY_Controller {
 							$reply['is_buyer'] = 0;
 							$reply['farm'] = $this->gm_db->get('user_farms', ['user_id' => $reply['from_id']], 'row');
 							$reply['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $reply['to_id']], 'row');
+
+							$reply['product'] = $reply['location'] = $reply['bought'] = $reply['photo'] = [];
+
 							if ($reply['tab'] == 'Feedbacks' AND $reply['type'] == 'Comments') {
 								$reply['product'] = $this->gm_db->get('products', ['id' => $reply['page_id']], 'row');
 								$reply['product']['photos'] = false;
@@ -188,11 +196,12 @@ class Orders extends MY_Controller {
 
 		// debug($data_messages, 'stop');
 		if ($this->input->is_ajax_request()) {
-			echo json_encode([
-				'html' => $this->load->view('templates/orders/messages_panel', ['data' => ['messages' => $data_messages]], true),
-				'panel' => 'messages',
-				'message_ids' => array_unique($message_ids)
-			], JSON_NUMERIC_CHECK);
+			$htmls = [];
+			foreach ($data_messages as $tab => $msgs) {
+				$htmls[strtolower($tab)] = $this->load->view('looping/message_cards', ['tab' => strtolower($tab), 'messages' => $msgs], true);
+			}
+			// debug($htmls, 'stop');
+			echo json_encode(['html' => $htmls, 'panel' => 'messages', 'message_ids' => array_unique($message_ids)], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([

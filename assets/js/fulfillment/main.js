@@ -100,7 +100,7 @@ var isAllSelected = function(merge_id) {
 	});
 }
 
-var runDomReady = function() {
+var fulfillmentsRunDomReady = function() {
 	$(document.body).find('[js-event="actionSelect"]').off('change').on('change', function() {
 		var actionVal = $(this).val();
 		if (actionVal == "5") {

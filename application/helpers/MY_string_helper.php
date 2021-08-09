@@ -1827,3 +1827,24 @@ function clean_json_encode($data=false)
 {
 	return json_encode($data, JSON_NUMERIC_CHECK);
 }
+
+function setup_db_timezone()
+{
+	$ci =& get_instance();
+	$db_timezone = $ci->gm_db->query("SELECT @@global.time_zone AS global, @@session.time_zone AS local;", 'row');
+	if ($db_timezone) {
+		$now = new DateTime();
+		$mins = $now->getOffset() / 60;
+		$sgn = ($mins < 0 ? -1 : 1);
+		$mins = abs($mins);
+		$hrs = floor($mins / 60);
+		$mins -= $hrs * 60;
+		$offset = sprintf('%+d:%02d', $hrs*$sgn, $mins);
+		if ($db_timezone['local'] != $offset) {
+			// debug($offset, $db_timezone['local'], 'stop');
+			$ci->db->query("SET @@session.time_zone='$offset';");
+			return true;
+		}
+	}
+	return false;
+}

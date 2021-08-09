@@ -26,7 +26,7 @@ class Test extends MY_Controller {
 	public function msg($id=0)
 	{
 		$id = $id == 0 ? $this->accounts->profile['id'] : $id;
-		$sent = send_gm_message($id, strtotime(date('Y-m-d')), 'TEST!', 'Notifications', 'Orders');
+		$sent = send_gm_message($id, strtotime(date('Y-m-d')), 'TEST!!!', 'Notifications', 'Orders');
 		debug($sent, 'stop');
 	}
 

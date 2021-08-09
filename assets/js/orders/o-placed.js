@@ -1,7 +1,7 @@
 
 var oRemoveAjax = false;
 $(document).ready(function() {
-	runDomReady();
+	if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
 });
 
 if ($('body').hasClass('orders-placed')) {
