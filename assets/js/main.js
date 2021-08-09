@@ -496,7 +496,10 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						});
 
 						removeMethod.then(() => {
+							if (typeof runATagAjax == 'function') runATagAjax();
+							if (typeof runDomShowHide == 'function') runDomShowHide();
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
+							
 							console.log(arrToRemoved);
 							if (arrToRemoved.length == 0) {
 								uiParent.find('.no-records-ui').addClass('hide');

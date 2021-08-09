@@ -14,7 +14,6 @@ var msgRunDomReady = function() {
 	$('.rm-link').off('click').on('click', function() {
 		$(this).parents('.notif-item-middle').next('.notif-item-footer').removeClass('hide');
 	});
-	alert('OK');
 }
 
 var changeMessagesCount = function() {
