@@ -2,6 +2,21 @@ $(document).ready(function() {
 	msgRunDomReady();
 });
 
+var msgRunDomReady = function() {
+	$readMoreJS.init({
+		target: '.notif-item-middle p',
+		numOfWords: 15,
+		toggle: true,
+		moreLink: 'Read More',
+		lessLink: 'Show Less'
+	});
+
+	$('.rm-link').off('click').on('click', function() {
+		$(this).parents('.notif-item-middle').next('.notif-item-footer').removeClass('hide');
+	});
+	alert('OK');
+}
+
 var changeMessagesCount = function() {
 	var sTabName = $($('[id^="msg_"]:visible').get(1)).attr('element-name');
 	var uiTab = $('[data-nav="'+sTabName+'"]');
@@ -55,17 +70,3 @@ var appendComment = function(obj) {
 		}
 	}
 };
-
-var msgRunDomReady = function() {
-	$readMoreJS.init({
-		target: '.notif-item-middle p',
-		numOfWords: 15,
-		toggle: true,
-		moreLink: 'Read More',
-		lessLink: 'Show Less'
-	});
-
-	$('.rm-link').off('click').on('click', function() {
-		$(this).parents('.notif-item-middle').next('.notif-item-footer').removeClass('hide');
-	});
-}
