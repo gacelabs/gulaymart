@@ -499,6 +499,9 @@ class Api extends MY_Controller {
 						unset($post['fn']);
 					}
 					$this->gm_db->save($object, $post, $where);
+					if ($object == 'messages') {
+						$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['message_id' => $id]);
+					}
 					$this->set_response('success', false, $data, false, $fn);
 				}
 			}
