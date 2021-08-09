@@ -497,7 +497,8 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
-				'to_id' => $user_id, 'unread' => 1,
+				'to_id' => $user_id,
+				// 'unread' => 1,
 				// 'datestamp' => $datestamp,
 				'content' => $content,
 			], 'row');
