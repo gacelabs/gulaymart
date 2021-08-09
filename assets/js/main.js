@@ -498,10 +498,9 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						removeMethod.then(() => {
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
 							console.log(arrToRemoved);
-							if (uiParent.find('.no-records-ui').length > 1) {
-								uiMsgPanel.find('.no-records-ui.hide:last').remove();
-							}
-							if (arrToRemoved.length) {
+							if (arrToRemoved.length == 0) {
+								uiParent.find('.no-records-ui').addClass('hide');
+							} else {
 								uiParent.find('.no-records-ui').removeClass('hide');
 							}
 							console.log(tab, 'All done!');
