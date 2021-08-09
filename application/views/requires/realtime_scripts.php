@@ -57,12 +57,12 @@
 					if (currentNotification) {
 						const messageCount = currentNotification.data.newMessageCount + 1;
 						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+options.type+'s';
+						options.body = 'You have '+messageCount+' new '+options.data.type+'s';
 						options.data.newMessageCount = messageCount;
 						notify = true;
 					} else if (options.data && oUser.id == options.data.id) {
 						notificationTitle = 'New Message';
-						options.body = 'You have a new '+options.type;
+						options.body = 'You have a new '+options.data.type;
 						options.data.newMessageCount = 1;
 						notify = true;
 					}
