@@ -482,13 +482,13 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							oArr.forEach((id, index, array) => {
 								var item = $('[data-msg-id="'+id+'"]');
 								if (item.length) {
-									console.log('found!', item);
-									item.replaceWith(newUI.find('[data-msg-id="'+id+'"]'));
+									// console.log('found!', item);
+									item.replaceWith(newUI);
 								} else if (newUI.length) {
-									console.log('new ui!', newUI.length);
+									// console.log('new ui!', newUI.length);
 									uiParent.prepend(newUI);
 								} else {
-									console.log('not found!', item);
+									// console.log('not found!', item);
 									arrToRemoved.push(true);
 								}
 								if (index === array.length -1) resolve();
@@ -499,8 +499,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							if (typeof runATagAjax == 'function') runATagAjax();
 							if (typeof runDomShowHide == 'function') runDomShowHide();
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
-							
-							console.log(arrToRemoved);
+							// console.log(arrToRemoved);
 							if (arrToRemoved.length == 0) {
 								uiParent.find('.no-records-ui').addClass('hide');
 							} else {
