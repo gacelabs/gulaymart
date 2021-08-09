@@ -35,7 +35,7 @@
 								<!-- per order -->
 								<?php
 									$row_cnt++;
-									if ($order['status'] == GM_CANCELLED_STATUS AND !in_array($data['status'], ['placed','cancelled'])) continue;
+									// if ($order['status'] == GM_CANCELLED_STATUS AND !in_array($data['status'], ['placed','cancelled'])) continue;
 									$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 									$product = $order['product'];
 									if ($product['photos'] AND isset($product['photos']['main'])) {
