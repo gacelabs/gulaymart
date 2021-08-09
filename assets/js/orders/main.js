@@ -39,6 +39,7 @@ var renderHTML = function(obj) {
 	});
 }
 
+var oRemoveAjax = false;
 var ordersRunDomReady = function() {
 	$(document.body).find('[js-event="showOrderFooter"]').off('click').on('click', function() {
 		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');

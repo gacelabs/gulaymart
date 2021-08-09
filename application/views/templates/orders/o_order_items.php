@@ -156,9 +156,13 @@
 						<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 					</p>
 					<div>
+						<?php
+						$fee = $orders['fee'];
+						if ($initial_total == 0) $fee = 0;
+						?>
 						<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
-						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo format_number($orders['fee'], 2);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo format_number($initial_total);?></span></p>
-						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo format_number($initial_total + (float)$orders['fee']);?></b></p>
+						<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo format_number($fee, 2);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo format_number($initial_total);?></span></p>
+						<p class="item-final-total">&#x20b1; <b js-element="item-finaltotal"><?php echo format_number($initial_total + (float)$fee);?></b></p>
 					</div>
 				</div>
 			</div>
