@@ -320,10 +320,10 @@ class Orders extends MY_Controller {
 						foreach ($order_details as $index => $detail) {
 							if ($all == 0) {
 								if ($detail['product_id'] == $row['product_id']) {
-									$order_details[$index]['status'] = 5;
+									$order_details[$index]['status'] = GM_CANCELLED_STATUS;
 								}
 							} else {
-								$order_details[$index]['status'] = 5;
+								$order_details[$index]['status'] = GM_CANCELLED_STATUS;
 							}
 						}
 						// debug($order_details, 'stop');
@@ -332,18 +332,18 @@ class Orders extends MY_Controller {
 							['id' => $row['merge_id']]
 						);
 					}
+					$basket_ids = explode(',', $merge['basket_ids']);
 					if ($all == 0) {
 						$this->baskets->save([
-							'status' => 5,
+							'status' => GM_CANCELLED_STATUS,
 							'cancel_by' => $this->accounts->profile['id'],
 							'reason' => 'Removed by buyer',
 						], ['id' => $row['basket_id']]);
 					} else {
-						$basket_ids = explode(',', $merge['basket_ids']);
 						if (count($basket_ids)) {
 							foreach ($basket_ids as $basket_id) {
 								$this->baskets->save([
-									'status' => 5,
+									'status' => GM_CANCELLED_STATUS,
 									'cancel_by' => $this->accounts->profile['id'],
 									'reason' => 'Removed by buyer',
 								], ['id' => $basket_id]);
@@ -352,24 +352,22 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			$callback = 'removeOnOrder';
-			if ($all) { /*do this when all items was deleted*/
-				$callback = 'removeOnAllOrder';
-				/*check here if all baskets have placed order status*/
-				$basket_count = $this->baskets->count(['status' => 2, 'id' => $basket_ids, 'user_id' => $this->accounts->profile['id']]);
-				if ($basket_count == 0) {
-					/*now set all merged basket to cancelled*/
-					foreach ($post['data'] as $key => $row) {
-						$this->gm_db->save('baskets_merge', ['status' => 5], ['id' => $row['merge_id']]);
-					}
+			
+			/*check here if all baskets have placed order status*/
+			$basket_count = $this->gm_db->count('baskets', ['status' => GM_PLACED_STATUS, 'id' => $basket_ids]);
+			// debug($basket_count, 'stop');
+			if ($basket_count == 0) {
+				/*now set all merged basket to cancelled*/
+				foreach ($merge_ids as $key => $merge_id) {
+					$this->gm_db->save('baskets_merge', ['status' => GM_CANCELLED_STATUS], ['id' => $merge_id]);
 				}
 			}
+
 			if (count($merge_ids)) {
 				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
 			}
 
-			// debug($senddata, 'stop');
-			$this->set_response('success', 'Product removed on Order(s)', $post['data'], false, $callback);
+			$this->set_response('success', 'Product removed on Order(s)', $post['data']);
 		} elseif ($get AND isset($get['data'])) {
 			// debug($get, 'stop');
 			$callback = 'removeOrderItem';

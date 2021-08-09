@@ -1,8 +1,5 @@
 $(document).ready(function() {
-	$('[js-event="showOrderFooter"]').click(function() {
-		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
-		$(this).parents('[js-element]:first').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
-	});
+	if (typeof runDomReady == 'function') runDomReady();
 });
 
 var renderHTML = function(obj) {
@@ -42,73 +39,12 @@ var renderHTML = function(obj) {
 	});
 }
 
-var order_process = false;
-function orderProcess() {
-	var sSegment2 = oSegments[2];
-	if (sSegment2 == undefined) sSegment2 = 'placed';
-	realtime.bind(sSegment2+'-order', 'incoming-orders', function(object) {
-		var oData = object.data;
-		// console.log(oData);
-		if (oData.success) {
-			if (Object.keys(oData.buyer_id).length) {
-				if ($.inArray(oUser.id, oData.buyer_id) >= 0) runOrders(oData);
-			} else {
-				if (oData.buyer_id == oUser.id) runOrders(oData);
-			}
-		}
-	});
-}
-
-function runOrders(data) {
-	var method = data.event, oSettings = {
-		url: 'orders/'+method+'/',
-		type: 'post',
-		dataType: 'json',
-		data: { ids: data.ids, buyer_id: data.buyer_id },
-		success: function(response) {
-			// console.log(response);
-			if (response.html.length) {
-				if (data.remove == false) {
-					/*just add it*/
-					if ($('#dashboard_panel_right [js-element="orders-panel"]').find('.no-records-ui:visible').length) {
-						$('#dashboard_panel_right [js-element="orders-panel"]').html(response.html);
-					} else {
-						$('#dashboard_panel_right [js-element="orders-panel"]').prepend(response.html);
-					}
-					runDomReady();
-				} else {
-					/*just remove it*/
-					var oArr = [];
-					if (Object.keys(data.ids).length) {
-						oArr = data.ids;
-					} else if (!isNaN(data.ids)) {
-						oArr = [data.ids];
-					}
-					if (typeof oArr == 'object') {
-						for (var x in oArr) {
-							var id = oArr[x];
-							var item = $('[data-merge-id="'+id+'"]');
-							if (item.length) {
-								item.fadeOut('slow', function() {
-									$(this).remove();
-									setTimeout(function() {
-										if ($('[data-merge-id]').length == 0) {
-											$('#dashboard_panel_right [js-element="orders-panel"]')
-												.find('.no-records-ui').removeClass('hide');
-										}
-									}, 300);
-								});
-							}
-						}
-					}
-				}
-			}
-		}
-	};
-	$.ajax(oSettings);
-}
-
 var runDomReady = function() {
+	$(document.body).find('[js-event="showOrderFooter"]').off('click').on('click', function() {
+		$(this).find('i.fa').toggleClass('fa-angle-down fa-angle-up');
+		$(this).parents('[js-element]:first').find('.order-footer-farm, .order-footer-payment').toggleClass('hidden-xs');
+	});
+	
 	$(document.body).find('[js-element="remove-product"]').off('click').on('click', function(e) {
 		var arData = [];
 		arData.push($(this).data('json'));

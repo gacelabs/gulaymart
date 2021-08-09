@@ -46,7 +46,7 @@ $(document).ready(function() {
 	});
 	/*end for checkbox switch*/
 
-	runATagAjax();
+	if (typeof runATagAjax == 'function') runATagAjax();
 
 	if (oUser && oUser.is_profile_complete == 0) {
 		runAlertBox({type:'info', message: PROFILE_INFO_MESSAGE});
@@ -86,20 +86,8 @@ $(document).ready(function() {
 			var text = $.trim($(elem).find('tr:first th:first').text());
 			// console.log(text);
 			var blanks = {targets: []}, currency = {targets: []};
-			/*if ($.inArray(text.toLowerCase(), ['actions','activity']) >= 0) {
-				if (blanks.orderable == undefined) blanks.orderable = false;
-				blanks.targets.push(i);
-			}
-			var text2 = $.trim($(elem).find('tr:first th:last').text());
-			if ($.inArray(text2.toLowerCase(), ['photo','image','']) >= 0) {
-				var last_cnt = $(elem).find('tr:first th').length - 1;
-				blanks.targets.push(last_cnt);
-			}*/
-			var /*text3 = $.trim($(elem).find('tr:first th:last').text()),*/ aaSort = 1, aaSortDir = 'asc';
-			/*if ($.inArray(text3.toLowerCase(), ['updated']) >= 0) {
-				aaSort = $(elem).find('tr:first th').length - 1;
-				aaSortDir = 'desc';
-			}*/
+			var aaSort = 1, aaSortDir = 'asc';
+
 			$(elem).find('tr:first th').each(function(i, unit) {
 				var text = $.trim($(unit).text());
 				if ($.inArray(text.toLowerCase(), ['actions','']) >= 0) {
@@ -196,6 +184,13 @@ $(document).ready(function() {
 
 	// if (mobileAndTabletCheck()) runSwiper();
 });
+
+var toggleBlink = function (ui, callback) {
+	if (ui != undefined && ui.length) {
+		for(i=0;i<3;i++) ui.fadeTo('slow', 0.5).fadeTo('slow', 1.0);
+		if (typeof callback == 'function') callback(ui);
+	}
+}
 
 var runSwiper = function() {
 	var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
@@ -318,89 +313,11 @@ var reCountMenuNavs = function(sNav, totalItems) {
 	}
 	/*tABS*/
 	if (totalItems) {
-		console.log(sNav, totalItems);
+		// console.log(sNav, totalItems);
 		$('[data-nav="'+sNav+'"]').find('kbd').removeClass('no-count').text(totalItems);
 	} else {
 		$('[data-nav="'+sNav+'"]').find('kbd').addClass('no-count').text('');
 	}
-}
-
-var checkCountMenuNavs = function(oData) {
-	var oSettings = {
-		url: 'support/check_menunav_counts/',
-		type: 'post',
-		dataType: 'json',
-		data: oData,
-		success: function(response) {
-			// console.log(response);
-			if (response) {
-				if (response.nav && response.id == oUser.id) {
-					reCountMenuNavs(response.nav, response.total_items);
-				}
-			}
-		}
-	};
-	$.ajax(oSettings);
-}
-
-var initMenuNavsCount = function() {
-	realtime.bind('count-item-in-menu', 'incoming-menu-counts', function(object) {
-		var oData = object.data;
-		// console.log(oData);
-		if (oData.success) {
-			if (Object.keys(oData.id).length) {
-				if ($.inArray(oUser.id, oData.id) >= 0) checkCountMenuNavs(oData);
-			} else {
-				if (oData.id == oUser.id) checkCountMenuNavs(oData);
-			}
-		}
-	});
-}
-
-var reCountStatusTabs = function(response) {
-	var sMenu = response.menu, sTab = response.tab, totalItems = response.total_items;
-	if (totalItems.toString().length > 4) totalItems = Number(totalItems).toExponential();
-	var sClass = 'no-count';
-	if (sMenu == 'messages') sClass = 'hide';
-	if (totalItems) {
-		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').removeClass(sClass).text(totalItems);
-	} else {
-		$('[data-menu="'+sMenu+'"][data-nav="'+sTab+'"]').find('kbd').addClass(sClass).text('');
-	}
-
-	console.log(response);
-}
-
-var checkCountStatusTabs = function(oData) {
-	var oSettings = {
-		url: 'support/check_stattab_counts/',
-		type: 'post',
-		dataType: 'json',
-		data: oData,
-		success: function(response) {
-			// console.log(response);
-			if (response) {
-				if (response.menu && response.tab && response.id == oUser.id) {
-					reCountStatusTabs(response);
-				}
-			}
-		}
-	};
-	$.ajax(oSettings);
-}
-
-var initStatusTabsCount = function() {
-	realtime.bind('count-item-in-tab', 'incoming-tab-counts', function(object) {
-		var oData = object.data;
-		// console.log(oData);
-		if (oData.success) {
-			if (Object.keys(oData.id).length) {
-				if ($.inArray(oUser.id, oData.id) >= 0) checkCountStatusTabs(oData);
-			} else {
-				if (oData.id == oUser.id) checkCountStatusTabs(oData);
-			}
-		}
-	});
 }
 
 var fetchOrderCycles = function(oData) {
@@ -411,7 +328,7 @@ var fetchOrderCycles = function(oData) {
 		data: oData,
 		success: function(oResponse) {
 			if (oResponse) {
-				console.log(oResponse);
+				// console.log(oResponse);
 				if (oResponse) {
 					if (oResponse.mode == 'basket') {
 						if ($.inArray(oUser.id, oResponse.id) >= 0) {
@@ -465,7 +382,7 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 			}
 		break;
 		default:
-			console.log(type);
+			// console.log(type);
 			if (oData.counts && oData.counts[type]['user_'+iUser] != undefined) {
 				/*just count*/
 				var oCounts = oData.counts[type]['user_'+iUser];
@@ -481,7 +398,7 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 								let sName = name;
 								var oPage = oPages[name];
 								if ($.inArray(sName, Object.values(oSegments)) >= 0) {
-									console.log(oPage, x);
+									// console.log(oPage, x);
 									var oSettings = {
 										url: oPage.url,
 										type: 'post',
@@ -522,7 +439,11 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						var item = $('[data-basket-id="'+id+'"]');
 						if (item.length) {
 							arrRemoved.push(1);
-							item.parents('.order-table-item').remove();
+							toggleBlink(item, function(ui) {
+								ui.parents('.order-table-item').fadeOut('fast', function() {
+									$(this).remove();
+								});
+							})
 						}
 					}
 					if (uiBasketPanel.find('.no-records-ui:visible').length && arrRemoved.length == 0) {
@@ -540,7 +461,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			}
 		break;
 		default:
-			console.log(oData, oResponse, oCounts, sPageName);
+			// console.log(oData, oResponse, oCounts, sPageName);
 			var uiPanel = [], isActive = null;
 			// console.log(sMode);
 			switch (sPageName) {
@@ -596,11 +517,12 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							} else {
 								var item = $('[data-merge-id="'+id+'"]');
 							}
+							// console.log(item);
 							if (item.length) {
-								if (oSegments[2] != sMode) {
-									arrRemoved.push(1);
-									item.remove();
-								}
+								arrRemoved.push(1);
+								item.fadeOut('fast', function() {
+									$(this).remove();
+								});
 							}
 						}
 						// console.log(isActive);
@@ -631,7 +553,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							if (typeof runDomReady == 'function') runDomReady();
 						} else {
 							console.log('not in page', sMode);
-							if (uiPanel.find('.no-records-ui').siblings().length == 0) {
+							if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
 								uiPanel.find('.no-records-ui').removeClass('hide');
 							}
 						}
@@ -644,7 +566,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			}
 		break;
 	}
-	if (Object.keys(oCounts).length) {
+	if (oCounts != undefined && Object.keys(oCounts).length) {
 		for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
 	}
 }

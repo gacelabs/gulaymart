@@ -15,7 +15,7 @@
 		'basket_id'=>$order['basket_id'],
 	], JSON_NUMERIC_CHECK);
 ?>
-<div class="order-grid-column order-item<?php str_has_value_echo(5, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
+<div class="order-grid-column order-item<?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], ' was-cancelled');?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
 	<div class="media">
 		<div class="media-left media-top">
 			<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">

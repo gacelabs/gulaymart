@@ -28,94 +28,103 @@
 					</div>
 
 					<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
-						<?php foreach ($orders['order_details'] as $index => $order): ?>
-							<!-- per order -->
-							<?php
-								if ($order['status'] == 5 AND !in_array($data['status'], ['placed','cancelled'])) continue;
-								$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
-								$product = $order['product'];
-								if ($product['photos'] AND isset($product['photos']['main'])) {
-									$photo_url = $product['photos']['main']['url_path'];
-								}
-								$initial_total += (float)$order['sub_total'];
-								$details = $order; unset($details['product']);
-								$details['merge_id'] = $orders['id'];
-								$details['basket_ids'] = $orders['basket_ids'];
+						<div>
+							<?php 
+								$row_cnt = 0;
+								foreach ($orders['order_details'] as $index => $order): ?>
+								<!-- per order -->
+								<?php
+									$row_cnt++;
+									if ($order['status'] == GM_CANCELLED_STATUS AND !in_array($data['status'], ['placed','cancelled'])) continue;
+									$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
+									$product = $order['product'];
+									if ($product['photos'] AND isset($product['photos']['main'])) {
+										$photo_url = $product['photos']['main']['url_path'];
+									}
+									$initial_total += (float)$order['sub_total'];
+									$details = $order; unset($details['product']);
+									$details['merge_id'] = $orders['id'];
+									$details['basket_ids'] = $orders['basket_ids'];
 
-								$reason = '';
-								if ($details['status'] == 5) {
-									$data_product = $this->gm_db->get('baskets', ['id' => $order['basket_id']], 'row');
-									$reason = $data_product['reason'];
-								}
+									$reason = '';
+									if ($details['status'] == GM_CANCELLED_STATUS) {
+										$data_product = $this->gm_db->get('baskets', ['id' => $order['basket_id']], 'row');
+										$reason = $data_product['reason'];
+									}
 
-								$json = json_encode([
-									'product_id'=>$order['product_id'],
-									'location_id'=>$order['farm_location_id'],
-									'merge_id'=>$orders['id'],
-									'basket_id'=>$order['basket_id'],
-									'sub_total'=>$order['sub_total'],
-								], JSON_NUMERIC_CHECK);
+									$json = json_encode([
+										'product_id'=>$order['product_id'],
+										'location_id'=>$order['farm_location_id'],
+										'merge_id'=>$orders['id'],
+										'basket_id'=>$order['basket_id'],
+										'sub_total'=>$order['sub_total'],
+									], JSON_NUMERIC_CHECK);
 
-								$status_array[] = $details['status'];
-							?>
-							<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>">
-								<div class="media">
-									<div class="media-left media-top">
-										<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
-									</div>
-									<div class="media-body">
-										<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
-										<div class="ellipsis-container">
-											<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
+									$status_array[] = $details['status'];
+									$cancelled_class = ' was-cancelled';
+									if ($row_cnt == count($orders['order_details'])) {
+										$cancelled_class = ' was-cancelled-last-child';
+									}
+								?>
+								<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
+									<div class="media">
+										<div class="media-left media-top">
+											<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
+										</div>
+										<div class="media-body">
+											<p class="zero-gaps media-heading text-ellipsis"><a href="<?php product_url($product, true);?>" class="text-link"><?php echo ucwords($product['name']);?></a></p>
+											<div class="ellipsis-container">
+												<p class="zero-gaps"><?php echo ucfirst($product['description']);?></p>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="text-right hidden-sm hidden-xs">
-									<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
-								</div>
-								<div class="text-right hidden-sm hidden-xs">
-									<p class="zero-gaps"><?php echo $order['quantity'];?></p>
-								</div>
-								<div class="text-right" js-element="selectItems">
-									<?php if (in_array($details['status'], [2,6]) AND $data['status'] == 'placed') : ?>
-										<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(6, $details['status'], ' style="color: rgb(121, 153, 56);"');?> data-basket_id="<?php echo $order['basket_id'];?>" data-location_id="<?php echo $order['farm_location_id'];?>" data-product_id="<?php echo $product['id'];?>" data-sub_total="<?php echo $order['sub_total'];?>">
-											<option value="2">Select Action</option>
-											<option value="6"<?php str_has_value_echo(6, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
-											<option value="5">Cancelled</option> <!-- cancelled -->
-										</select>
-										<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
-											<option value="None">Select Reason</option>
-											<option value="Out Of Stock">Out Of Stock</option>
-											<option value="Removed Product">Removed Product</option>
-										</select>
-									<?php else : ?>
-										<p class="zero-gaps">
-											<?php if ($details['status'] == 5): ?>
-												<small class="text-capsule status-cancelled">
-													<?php echo $reason;?>
-												</small>
-											<?php else: ?>
-												<small class="text-capsule bg-theme" js-data="confirmed">
-													Confirmed
-												</small>
-											<?php endif ?>
-										</p>
-									<?php endif ; ?>
-								</div>
+									<div class="text-right hidden-sm hidden-xs">
+										<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
+									</div>
+									<div class="text-right hidden-sm hidden-xs">
+										<p class="zero-gaps"><?php echo $order['quantity'];?></p>
+									</div>
+									<div class="text-right" js-element="selectItems">
+										<?php if (in_array($details['status'], [GM_PLACED_STATUS,GM_FOR_PICK_UP_STATUS]) AND $data['status'] == 'placed') : ?>
+											<select class="form-control" js-event="actionSelect"<?php str_has_value_echo(GM_FOR_PICK_UP_STATUS, $details['status'], ' style="color: rgb(121, 153, 56);"');?> data-basket_id="<?php echo $order['basket_id'];?>" data-location_id="<?php echo $order['farm_location_id'];?>" data-product_id="<?php echo $product['id'];?>" data-sub_total="<?php echo $order['sub_total'];?>">
+												<option value="2">Select Action</option>
+												<option value="6"<?php str_has_value_echo(GM_FOR_PICK_UP_STATUS, $details['status'], ' selected');?>>Confirm</option> <!-- for pick up -->
+												<option value="5">Cancelled</option> <!-- cancelled -->
+											</select>
+											<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
+												<option value="None">Select Reason</option>
+												<option value="Out Of Stock">Out Of Stock</option>
+												<option value="Removed Product">Removed Product</option>
+											</select>
+										<?php else : ?>
+											<p class="zero-gaps">
+												<?php if ($details['status'] == GM_CANCELLED_STATUS): ?>
+													<small class="text-capsule status-cancelled">
+														<?php echo $reason;?>
+													</small>
+												<?php else: ?>
+													<small class="text-capsule bg-theme" js-data="confirmed">
+														Confirmed
+													</small>
+												<?php endif ?>
+											</p>
+										<?php endif ; ?>
+									</div>
 
-								<div class="visible-sm visible-xs">
-									<ul class="spaced-list between">
-										<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p></li>
-										<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
-									</ul>
+									<div class="visible-sm visible-xs">
+										<ul class="spaced-list between">
+											<li><p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p></li>
+											<li class="icon-right"><p class="zero-gaps">x <?php echo $order['quantity'];?> QTY</p></li>
+										</ul>
+									</div>
 								</div>
-							</div>
-						<?php endforeach ?>
+							<?php endforeach ?>
+						</div>
 
 						<div class="order-deliver-note">
 							<small class="elem-block">DELIVERY SCHEDULE:
 								<?php
-									if ($orders['order_type'] == 1) {
+									if ($orders['order_type'] == GM_BUY_NOW) {
 										echo " <b>SAME DAY</b>";
 									} else {
 										echo " <b>".strtoupper($orders['schedule']."</b>");
@@ -132,11 +141,6 @@
 					?>
 
 					<div class="order-grid-footer">
-						<!-- <div class="order-footer-farm text-left hidden-xs">
-							<p class="zero-gaps"><small class="elem-block"><b>FARM</b></small></p>
-							<p class="zero-gaps"><a<?php if (!$this->agent->is_mobile()): ?> target="farm_<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>" class="text-link"><?php echo ucwords($farm['name']);?></a></p>
-							<p class="zero-gaps"><?php echo ucwords($farm['city_prov']);?></p>
-						</div> -->
 						<div class="order-footer-farm text-left hidden-xs">
 							<p class="zero-gaps"><small class="elem-block"><b>BUYER</b></small></p>
 							<p class="zero-gaps"><?php echo ucwords($buyer['fullname']);?></p>

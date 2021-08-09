@@ -18,7 +18,7 @@
 					$forpickup = false;
 					$status_array = [];
 					foreach ($orders['order_details'] as $order) {
-						if ($order['status'] == 6) {
+						if ($order['status'] == GM_FOR_PICK_UP_STATUS) {
 							$forpickup = true;
 							break;
 						}
@@ -32,16 +32,19 @@
 			</div>
 
 			<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
-				<?php foreach ($orders['order_details'] as $index => $order): ?>
+				<?php 
+					$row_cnt = 0;
+					foreach ($orders['order_details'] as $index => $order): ?>
 					<!-- per order -->
 					<?php
+						$row_cnt++;
 						if ($order['status'] == 5 AND !in_array($data['status'], ['placed','cancelled'])) continue;
 						$photo_url = 'https://via.placeholder.com/50x50.png?text=No+Image';
 						$product = $order['product'];
 						if ($product['photos'] AND isset($product['photos']['main'])) {
 							$photo_url = $product['photos']['main']['url_path'];
 						}
-						/*if ($order['status'] != 5 OR $data['status'] == 'cancelled') */$initial_total += (float)$order['sub_total'];
+						$initial_total += (float)$order['sub_total'];
 						$details = $order; unset($details['product']);
 						$details['merge_id'] = $orders['id'];
 						$details['basket_ids'] = $orders['basket_ids'];
@@ -53,8 +56,12 @@
 							'sub_total'=>$order['sub_total'],
 						], JSON_NUMERIC_CHECK);
 						$status_array[] = $details['status'];
+						$cancelled_class = ' was-cancelled';
+						if ($row_cnt == count($orders['order_details'])) {
+							$cancelled_class = ' was-cancelled-last-child';
+						}
 					?>
-					<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(5, $details['status'], ' was-cancelled');?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket_id="<?php echo $order['basket_id'];?>">
+					<div class="order-grid-column order-item<?php if ($data['status'] != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
 						<div class="media">
 							<div class="media-left media-top">
 								<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
@@ -70,7 +77,7 @@
 						</div>
 						<div class="text-right hidden-sm hidden-xs">
 							<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p>
-							<?php if ($details['status'] == 5): ?>
+							<?php if ($details['status'] == GM_CANCELLED_STATUS): ?>
 								<?php if ($order['cancel_by'] == $current_profile['id']): ?>
 									<p class="zero-gaps"><small class="text-capsule status-cancelled">Removed by You</small></p>
 								<?php elseif ($order['cancel_by'] > 0 AND $order['cancel_by'] != $current_profile['id']): ?>
@@ -81,7 +88,7 @@
 						<div class="text-right hidden-sm hidden-xs">
 							<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 						</div>
-						<?php if ($details['status'] == 2 AND in_array($data['status'], ['placed'])): ?>
+						<?php if ($details['status'] == GM_PLACED_STATUS AND in_array($data['status'], ['placed'])): ?>
 							<div class="text-right">
 								<button class="btn btn-xs btn-default order-remove-btn<?php if (count($orders['order_details']) == 1): ?> hide<?php endif ?>" data-toggle="tooltip" data-placement="top" title="Cancel item?" js-element="remove-product" data-json='<?php echo $json;?>' loading-text=""><span class="text-danger">&times;</span></button>
 							</div>

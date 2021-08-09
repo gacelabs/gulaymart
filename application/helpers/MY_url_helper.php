@@ -469,7 +469,7 @@ function product_url($item=false, $echo=false)
 	}
 }
 
-function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory')
+function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory', $notifType='message')
 {
 	$ci =& get_instance();
 	if ($user_id AND $datestamp AND $content) {
@@ -481,15 +481,19 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 		}
 		// debug($settings, 'stop');
 		if ($settings) {
-			/*$ci->senddataapi->trigger('count-item-in-menu', 'incoming-menu-counts', [
-				'success' => true, 'id' => $user_id, 'nav' => 'message'
+			$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
+				'badge' => base_url('assets/images/favicon.png'),
+				'body' => '',
+				'icon' => base_url('assets/images/favicon.png'),
+				'tag' => 'notif:'.$notifType.'-id:'.$user_id,
+				'renotify' => true,
+				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+				'data' => [
+					'id' => $user_id,
+					'url' => base_url('orders/messages'),
+					'type' => $notifType,
+				],
 			]);
-			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'notifications'
-			]);
-			$ci->senddataapi->trigger('count-item-in-tab', 'incoming-tab-counts', [
-				'success' => true, 'id' => $user_id, 'menu' => 'message', 'tab' => 'feedbacks'
-			]);*/
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
@@ -564,7 +568,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Your Order have been Placed, Thank you!');
 	$html_buyer_gm = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders');
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
 	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
@@ -575,24 +579,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	$ci =& get_instance();
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Order(s) have been Placed!');
-		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders');
-		if ($sent) {
-			$ci->senddataapi->trigger('ordered-notification', 'send-notification', [
-				'badge' => base_url('assets/images/favicon.png'),
-				'body' => '',
-				'icon' => base_url('assets/images/favicon.png'),
-				'tag' => 'ordered-notification:send-notification',
-				'renotify' => true,
-				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-				'data' => [
-					'final_total' => $final_total,
-					'merge_ids' => $merge_ids,
-					'seller_id' => $seller_id,
-					'buyer' => $buyer,
-					'url' => base_url('orders/messages'),
-				],
-			]);
-		}
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
@@ -616,7 +603,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Your Order is '.$action.', Thank you!');
 	$html = '<p>Order is '.$action.', <a href="orders/'.$status.'/">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
 	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'seller'];
@@ -627,25 +614,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Order is '.$action.'!');
-		$sent = send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders');
-		if ($sent) {
-			$ci->senddataapi->trigger('fulfilled-notification', 'send-notification', [
-				'badge' => base_url('assets/images/favicon.png'),
-				'body' => '',
-				'icon' => base_url('assets/images/favicon.png'),
-				'tag' => 'fulfilled-notification:send-notification',
-				'renotify' => true,
-				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-				'data' => [
-					'merge' => $merge,
-					'buyer' => $buyer,
-					'action' => $action,
-					'status' => $status,
-					'seller_id' => $seller_id,
-					'url' => base_url('orders/messages'),
-				],
-			]);
-		}
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders', 'fulfillment');
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");

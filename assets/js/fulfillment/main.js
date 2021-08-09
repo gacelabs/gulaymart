@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
 	$('[js-event="moreInfoBtn"]').click(function(e) {
 		var thisParent = $(this).parents('.ff-item-container');
 
@@ -39,7 +38,6 @@ $(document).ready(function() {
 			$('[js-event="cancelReasonSelect"]').addClass('error');
 		}
 	});
-
 });
 
 var renderHTML = function(obj) {
@@ -78,71 +76,6 @@ var renderHTML = function(obj) {
 	});
 }
 
-var fulfillment_process = false;
-function fulfillmentProcess(callback) {
-	var sSegment2 = oSegments[2];
-	if (sSegment2 == undefined) sSegment2 = 'placed';
-	realtime.bind(sSegment2+'-fulfillment', 'incoming-fulfillment', function(object) {
-		var oData = object.data;
-		// console.log(oData);
-		if (oData.success) {
-			if (Object.keys(oData.seller_id).length) {
-				if ($.inArray(oUser.id, oData.seller_id) >= 0) runFulfillments(oData);
-			} else {
-				if (oData.seller_id == oUser.id) runFulfillments(oData);
-			}
-		}
-	});
-}
-
-function runFulfillments(data) {
-	var method = data.event, oSettings = {
-		url: 'fulfillment/'+method+'/',
-		type: 'post',
-		dataType: 'json',
-		data: { ids: data.ids, seller_id: data.seller_id },
-		success: function(response) {
-			// console.log(response);
-			if (response.html.length) {
-				if (data.remove == false) {
-					/*just add it*/
-					if ($('.ff-product-container').find('.no-records-ui:visible').length) {
-						$('.ff-product-container').replaceWith(response.html);
-					} else {
-						$('.ff-product-container').find('[js-element="fulfill-panel"]').prepend(response.html);
-					}
-					runDomReady();
-				} else {
-					var oArr = [];
-					if (Object.keys(data.ids).length) {
-						oArr = data.ids;
-					} else if (!isNaN(data.ids)) {
-						oArr = [data.ids];
-					}
-					if (typeof oArr == 'object') {
-						for (var x in oArr) {
-							var id = oArr[x];
-							var item = $('[data-merge-id="'+id+'"]');
-							if (item.length) {
-								item.fadeOut('slow', function() {
-									$(this).remove();
-									setTimeout(function() {
-										if ($('[data-merge-id]').length == 0) {
-											$('.ff-product-container [js-element="fulfill-panel"]')
-												.find('.no-records-ui').removeClass('hide');
-										}
-									}, 300);
-								});
-							}
-						}
-					}
-				}
-			}
-		}
-	};
-	$.ajax(oSettings);
-}
-
 var isAllSelected = function(merge_id) {
 	$('[data-merge-id="'+merge_id+'"]').each(function(i, elem) {
 		var iRecordCount = parseInt($(elem).find('.order-item-list [js-element="selectItems"] [js-event="actionSelect"]').length);
@@ -166,7 +99,6 @@ var isAllSelected = function(merge_id) {
 		}
 	});
 }
-
 
 var runDomReady = function() {
 	$(document.body).find('[js-event="actionSelect"]').off('change').on('change', function() {

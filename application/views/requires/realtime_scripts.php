@@ -16,40 +16,11 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 				if (oUser) {
-					/*communicate from orders tab to fulfillment tab*/
-					// if (typeof runOrdersToFulfillments == 'function') runOrdersToFulfillments(realtime);
-					/*communicate from fulfillment tab to orders tab*/
-					// if (typeof runFulfillmentsToOrders == 'function') runFulfillmentsToOrders(realtime);
-					/*communicate from operators booking page*/
-					// if (typeof runOperatorBookings == 'function') runOperatorBookings(realtime);
-					
-					/*listen for incomming on delivery fulfillments*/
-					// if (typeof fulfillmentProcess == 'function' && oSegments[1] == 'fulfillment') {
-					// 	fulfillmentProcess(runFulfillments);
-					// }
-					// /*listen for incomming on delivery orders*/
-					// if (typeof runOrders == 'function' && oSegments[1] == 'orders') {
-					// 	orderProcess(runOrders);
-					// }
-					// /*listen for incomming on baskets*/
-					// if (typeof basketProcess == 'function' && oSegments[1] == 'basket') {
-					// 	basketProcess(runBaskets);
-					// }
-
-					// /*listen for incomming on menu counts*/
-					// if (typeof initMenuNavsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
-					// 	initMenuNavsCount();
-					// }
-
-					// /*listen for incomming on tab counts*/
-					// if (typeof initStatusTabsCount == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
-					// 	initStatusTabsCount();
-					// }
-
+					/*communicate from orders cycle*/
 					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
 							var oData = object.data;
-							console.log(oData);
+							// console.log(oData);
 							fetchOrderCycles(oData);
 						});
 						// fetchOrderCycles({merge_id: [47,48]});
@@ -68,13 +39,13 @@
 	}(document, "script", "sd-sdk"));
 
 	if ('serviceWorker' in navigator) {
-		var onServiceWorkerReady = function(type, oData) {
+		var onServiceWorkerReady = function(oData) {
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
 					let currentNotification = false;
 					for(let i = 0; i < notifications.length; i++) {
-						if (notifications[i].data && oUser.id == notifications[i].data.seller_id) {
+						if (notifications[i].data && oUser.id == notifications[i].data.id) {
 							currentNotification = notifications[i];
 						}
 					}
@@ -86,12 +57,12 @@
 					if (currentNotification) {
 						const messageCount = currentNotification.data.newMessageCount + 1;
 						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+type+'s';
+						options.body = 'You have '+messageCount+' new '+options.type+'s';
 						options.data.newMessageCount = messageCount;
 						notify = true;
-					} else if (options.data && oUser.id == options.data.seller_id) {
+					} else if (options.data && oUser.id == options.data.id) {
 						notificationTitle = 'New Message';
-						options.body = 'You have a new '+type;
+						options.body = 'You have a new '+options.type;
 						options.data.newMessageCount = 1;
 						notify = true;
 					}
@@ -108,15 +79,16 @@
 		$('#install-app').bind('click', function() {
 			if (oUser) {
 				var oData = {
-					seller_id: oUser.id,
-					tag: 'demo-notification',
+					id: oUser.id,
+					tag: 'notif:test-id:notification',
 					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
+					type: 'test message',
 				};
-				realtime.trigger('ordered-notification', 'send-notification', {
+				realtime.trigger('gm-push-notification', 'notifications', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
 					body: '',
 					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'demo-notification',
+					tag: 'notif:test-id:notification',
 					renotify: true,
 					vibrate: [200, 100, 200, 100, 200, 100, 200],
 					data: oData
@@ -124,29 +96,22 @@
 			}
 		});
 	};
+
 	var runNotificationListeners = function() {
 		var i = setInterval(function() {
 			if (realtime != false) {
 				clearInterval(i);
 				setTimeout(function() {
-					realtime.bind('fulfilled-notification', 'send-notification', function(object) {
+					realtime.bind('gm-push-notification', 'notifications', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) {
-							onServiceWorkerReady('fulfillment', oData);
-						}
-					});
-					realtime.bind('ordered-notification', 'send-notification', function(object) {
-						var oData = object.data;
-						// console.log(oData);
-						if ('serviceWorker' in navigator) {
-							onServiceWorkerReady('order', oData);
-						}
+						if ('serviceWorker' in navigator) onServiceWorkerReady(oData);
 					});
 				}, 300);
 			}
 		}, 1000);
 	};
+
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('sw.js').then(function(reg){
 			serviceWorker = reg;
