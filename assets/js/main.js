@@ -507,56 +507,60 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					}
 					// console.log(oArr);
 					if (typeof oArr == 'object') {
-						let arrRemoved = [];
-						for (var x in oArr) {
-							var id = oArr[x];
-							if (oResponse.panel === 'messages') {
-								var item = $('[data-msg-id="'+id+'"]');
-							} else if (oResponse.panel === 'basket') {
-								var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
-							} else {
-								var item = $('[data-merge-id="'+id+'"]');
-							}
-							// console.log(item);
-							if (item.length) {
-								arrRemoved.push(1);
-								item.fadeOut('fast', function() {
-									$(this).remove();
-								});
-							}
-						}
-						// console.log(isActive);
-						if (isActive == true) {
-							if (uiPanel.find('.no-records-ui:visible').length) {
-								if (oResponse.panel == 'messages' || sPageName == 'fulfillment') {
-									uiPanel.replaceWith(oResponse.html);
+						var arrRemoved = [];
+						var removeMethod = new Promise((resolve, reject) => {
+							oArr.forEach((id, index, array) => {
+								if (oResponse.panel === 'messages') {
+									var item = $('[data-msg-id="'+id+'"]');
+								} else if (oResponse.panel === 'basket') {
+									var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
 								} else {
-									uiPanel.html(oResponse.html);
+									var item = $('[data-merge-id="'+id+'"]');
 								}
-								console.log('rendered', sMode);
-							} else {
-								if (sPageName == 'fulfillment') {
-									var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
-									uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
-								} else if (oResponse.panel === 'messages') {
-									uiPanel.replaceWith(oResponse.html);
+								// console.log(item, index);
+								if (item.length) {
+									arrRemoved.push(1);
+									item.remove();
+								}
+								if (index === array.length -1) resolve();
+							});
+						});
+
+						removeMethod.then(() => {
+							// console.log(isActive);
+							if (isActive == true) {
+								if (uiPanel.find('.no-records-ui:visible').length) {
+									if (oResponse.panel == 'messages' || sPageName == 'fulfillment') {
+										uiPanel.replaceWith(oResponse.html);
+									} else {
+										uiPanel.html(oResponse.html);
+									}
+									console.log('rendered:', sMode);
 								} else {
-									uiPanel.prepend(oResponse.html);
+									if (sPageName == 'fulfillment') {
+										var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
+										uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
+									} else if (oResponse.panel === 'messages') {
+										uiPanel.replaceWith(oResponse.html);
+									} else {
+										uiPanel.prepend(oResponse.html);
+									}
+									if (uiPanel.find('.no-records-ui').length > 1 && oResponse.panel != 'messages') {
+										uiPanel.find('.no-records-ui.hide:last').remove();
+									}
+									console.log('re-rendered:', sMode);
 								}
-								if (uiPanel.find('.no-records-ui').length > 1 && oResponse.panel != 'messages') {
-									uiPanel.find('.no-records-ui.hide:last').remove();
+								if (typeof runATagAjax == 'function') runATagAjax();
+								if (typeof runDomShowHide == 'function') runDomShowHide();
+								if (typeof runDomReady == 'function') runDomReady();
+							} else {
+								console.log('not in page:', sMode);
+								if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
+									uiPanel.find('.no-records-ui').removeClass('hide');
 								}
-								console.log('re-rendered', sMode);
 							}
-							if (typeof runATagAjax == 'function') runATagAjax();
-							if (typeof runDomShowHide == 'function') runDomShowHide();
-							if (typeof runDomReady == 'function') runDomReady();
-						} else {
-							console.log('not in page', sMode);
-							if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
-								uiPanel.find('.no-records-ui').removeClass('hide');
-							}
-						}
+							console.log('All done!');
+						});
 					} else {
 						uiPanel.find('.no-records-ui').removeClass('hide');
 					}
