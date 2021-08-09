@@ -502,11 +502,12 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {
-				$ci->gm_db->new('messages', [
+				$message_id = $ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => $content,
 				]);
+				$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['message_id' => $message_id]);
 				return true;
 			}
 		}
