@@ -1,7 +1,11 @@
 
 <div class="media">
 	<div class="media-left">
-		<img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true">
+		<?php if (isset($is_buyer) AND $is_buyer == 0): ?>
+			<img class="media-object" src="<?php echo $farm['profile_pic'];?>" data-holder-rendered="true">
+		<?php else: ?>
+			<img class="media-object" src="assets/images/noavatar.png" data-holder-rendered="true">
+		<?php endif ?>
 	</div>
 	<div class="media-body">
 		<ul class="spaced-list between">
