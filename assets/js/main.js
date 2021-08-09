@@ -500,10 +500,10 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							if (typeof runDomShowHide == 'function') runDomShowHide();
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
 							// console.log(arrToRemoved);
-							if (arrToRemoved.length == 0) {
-								uiParent.find('.no-records-ui').addClass('hide');
-							} else {
+							if (uiParent.find('.notif-item').length == 0) {
 								uiParent.find('.no-records-ui').removeClass('hide');
+							} else {
+								uiParent.find('.no-records-ui').addClass('hide');
 							}
 							console.log(tab, 'All done!');
 						});
@@ -537,7 +537,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			}
 			// console.log(isActive);
 			if (uiPanel.length) {
-				if (oResponse.html.length) {
+				if (oResponse.html) {
 					var oArr = [];
 					if (oResponse.panel === 'messages') {
 						if (Object.keys(oResponse.message_ids).length) {
@@ -561,69 +561,99 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					// console.log(oArr);
 					if (typeof oArr == 'object') {
 						var arrRemoved = [];
-						var removeMethod = new Promise((resolve, reject) => {
-							oArr.forEach((id, index, array) => {
-								if (oResponse.panel === 'messages') {
-									var item = $('[data-msg-id="'+id+'"]');
-								} else if (oResponse.panel === 'basket') {
-									var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
-								} else {
-									var item = $('[data-merge-id="'+id+'"]');
-								}
-								// console.log(item, index);
-								if (item.length) {
-									arrRemoved.push(1);
-									item.remove();
-								}
-								if (index === array.length -1) resolve();
-							});
-						});
-
-						removeMethod.then(() => {
-							// console.log(isActive);
-							if (isActive == true) {
-								if (uiPanel.find('.no-records-ui:visible').length) {
-									if (oResponse.panel == 'messages' || sPageName == 'fulfillment') {
-										uiPanel.replaceWith(oResponse.html);
+						if (oResponse.panel === 'messages') {
+							for (var tab in oResponse.html) {
+								var newUI = oResponse.html[tab], uiParent = $('#msg_'+tab);
+								var removeMethod = new Promise((resolve, reject) => {
+									oArr.forEach((id, index, array) => {
+										var item = $('[data-msg-id="'+id+'"]');
+										if (item.length) {
+											// console.log('found!', item);
+											item.replaceWith(newUI);
+										} else if (newUI.length) {
+											// console.log('new ui!', newUI.length);
+											uiParent.prepend(newUI);
+										} else {
+											// console.log('not found!', item);
+											arrToRemoved.push(true);
+										}
+										if (index === array.length -1) resolve();
+									});
+								});
+								removeMethod.then(() => {
+									if (typeof runATagAjax == 'function') runATagAjax();
+									if (typeof runDomShowHide == 'function') runDomShowHide();
+									if (typeof msgRunDomReady == 'function') msgRunDomReady();
+									// console.log(arrToRemoved);
+									if (uiParent.find('.notif-item').length == 0) {
+										uiParent.find('.no-records-ui').removeClass('hide');
 									} else {
-										uiPanel.html(oResponse.html);
+										uiParent.find('.no-records-ui').addClass('hide');
 									}
-									console.log('rendered:', sMode);
-								} else {
-									if (sPageName == 'fulfillment') {
-										var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
-										uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
-									} else if (oResponse.panel === 'messages') {
-										uiPanel.replaceWith(oResponse.html);
-									} else {
-										uiPanel.prepend(oResponse.html);
-									}
-									if (uiPanel.find('.no-records-ui').length > 1 && oResponse.panel != 'messages') {
-										uiPanel.find('.no-records-ui.hide:last').remove();
-									}
-									console.log('re-rendered:', sMode);
-								}
-								if (typeof runATagAjax == 'function') runATagAjax();
-								if (typeof runDomShowHide == 'function') runDomShowHide();
-								switch (sPageName) {
-									case 'fulfillment':
-										if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
-									break;
-									case 'orders':
-										if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
-									break;
-									case 'basket':
-										if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
-									break;
-								}
-							} else {
-								console.log('not in page:', sMode);
-								if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
-									uiPanel.find('.no-records-ui').removeClass('hide');
-								}
+									console.log(tab, 'All done!');
+								});
 							}
-							console.log('All done!');
-						});
+						} else {
+							var removeMethod = new Promise((resolve, reject) => {
+								oArr.forEach((id, index, array) => {
+									if (oResponse.panel === 'basket') {
+										var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
+									} else {
+										var item = $('[data-merge-id="'+id+'"]');
+									}
+									// console.log(item, index);
+									if (item.length) {
+										arrRemoved.push(1);
+										item.remove();
+									}
+									if (index === array.length -1) resolve();
+								});
+							});
+
+							removeMethod.then(() => {
+								// console.log(isActive);
+								if (isActive == true) {
+									if (uiPanel.find('.no-records-ui:visible').length) {
+										if (sPageName == 'fulfillment') {
+											uiPanel.replaceWith(oResponse.html);
+										} else {
+											uiPanel.html(oResponse.html);
+										}
+										console.log('rendered:', sMode);
+									} else {
+										if (sPageName == 'fulfillment') {
+											var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
+											uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
+										} else {
+											uiPanel.prepend(oResponse.html);
+										}
+										if (uiPanel.find('.no-records-ui').length > 1) {
+											uiPanel.find('.no-records-ui.hide:last').remove();
+										}
+										console.log('re-rendered:', sMode);
+									}
+									if (typeof runATagAjax == 'function') runATagAjax();
+									if (typeof runDomShowHide == 'function') runDomShowHide();
+									switch (sPageName) {
+										case 'fulfillment':
+											if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
+										break;
+										case 'orders':
+											if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
+										break;
+										case 'basket':
+											if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
+										break;
+									}
+								} else {
+									console.log('not in page:', sMode);
+									if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
+										uiPanel.find('.no-records-ui').removeClass('hide');
+									}
+								}
+								console.log('All done!');
+							});
+						}
 					} else {
 						uiPanel.find('.no-records-ui').removeClass('hide');
 					}

@@ -16,25 +16,6 @@ var msgRunDomReady = function() {
 	});
 }
 
-var changeMessagesCount = function() {
-	var sTabName = $($('[id^="msg_"]:visible').get(1)).attr('element-name');
-	var uiTab = $('[data-nav="'+sTabName+'"]');
-	var totalItems = parseInt(uiTab.find('kbd').text());
-	if (!isNaN(totalItems) && totalItems != 0) totalItems = totalItems - 1;
-
-	reCountMenuNavs('message', totalItems);
-	reCountMenuNavs(sTabName, totalItems);
-}
-
-var readMessage = function(data, ui) {
-	$(ui.target).parents('.notif-item').find('.notif-item-middle').html('');
-	for(var x in data) {
-		var item = data[x];
-		$(ui.target).parents('.notif-item').find('.notif-item-middle').html(item.content);
-	}
-	changeMessagesCount();
-}
-
 var deleteMessage = function(data, ui) {
 	var wait = new Promise((resolve, reject) => {
 		data.forEach((item, index, array) => {
@@ -43,12 +24,7 @@ var deleteMessage = function(data, ui) {
 			if (index === array.length -1) resolve();
 		});
 	});
-	wait.then(() => {
-		if ($($('[id^="msg_"]:visible').get(0)).find('.no-records-ui').siblings().length == 0) {
-			$($('[id^="msg_"]:visible').get(0)).find('.no-records-ui').removeClass('hide');
-		}
-		changeMessagesCount();
-	});
+	wait.then(() => {});
 }
 
 var appendComment = function(obj) {

@@ -197,8 +197,10 @@ class Orders extends MY_Controller {
 		// debug($data_messages, 'stop');
 		if ($this->input->is_ajax_request()) {
 			$htmls = [];
-			foreach ($data_messages as $tab => $msgs) {
-				$htmls[strtolower($tab)] = $this->load->view('looping/message_cards', ['tab' => strtolower($tab), 'messages' => $msgs], true);
+			if (!empty($data_messages)) {
+				foreach ($data_messages as $tab => $msgs) {
+					$htmls[strtolower($tab)] = $this->load->view('looping/message_cards', ['tab' => strtolower($tab), 'messages' => $msgs], true);
+				}
 			}
 			// debug($htmls, 'stop');
 			echo json_encode(['html' => $htmls, 'panel' => 'messages', 'message_ids' => array_unique($message_ids)], JSON_NUMERIC_CHECK);
