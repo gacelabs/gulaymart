@@ -38,46 +38,65 @@
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
 
-	if ('serviceWorker' in navigator) {
-		var onServiceWorkerReady = function(oData) {
+	let iLocalMessageCount = '';
+	var onServiceWorkerReady = function(oData) {
+		if ('serviceWorker' in navigator) {
 			navigator.serviceWorker.ready.then(function(registration) {
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
 					let currentNotification = false;
-					for(let i = 0; i < notifications.length; i++) {
+					for (let i = 0; i < notifications.length; i++) {
 						if (notifications[i].data && oUser.id == notifications[i].data.id) {
 							currentNotification = notifications[i];
 						}
 					}
 					return currentNotification;
 				}).then(function(currentNotification) {
-					let notificationTitle = '';
-					const options = oData;
-					let notify = false;
-					if (currentNotification) {
-						const messageCount = currentNotification.data.newMessageCount + 1;
-						notificationTitle = 'New Message';
-						options.body = 'You have '+messageCount+' new '+options.data.type+'s';
-						options.data.newMessageCount = messageCount;
-						notify = true;
-					} else if (options.data && oUser.id == options.data.id) {
-						notificationTitle = 'New Message';
-						options.body = 'You have a new '+options.data.type;
-						options.data.newMessageCount = 1;
-						notify = true;
+					const oOptions = oData;
+					let bNotify = false;
+					if (oOptions.data && oUser.id == oOptions.data.id) {
+						bNotify = true;
+						let iMessageCount = '';
+						let sType = oOptions.data.type;
+						if (currentNotification) {
+							iMessageCount = currentNotification.data.newMessageCount + 1;
+							oOptions.data.newMessageCount = iMessageCount;
+							oOptions.body = 'You have '+iMessageCount+' new '+sType+'s';
+						} else {
+							oOptions.data.newMessageCount = 1;
+							oOptions.body = 'You have a new '+sType;
+						}
 					}
-					// console.log(notify, options);
-					if (notify) {
-						return registration.showNotification(notificationTitle, options);
+					// console.log(bNotify, oOptions);
+					if (bNotify) {
+						return registration.showNotification('New Message', oOptions);
 					}
 				});
 			});
-		};
-	}
+		} else {
+			const localOptions = oData;
+			let localNotify = false;
+			if (localOptions.data && oUser.id == localOptions.data.id) {
+				localNotify = true;
+				let localType = localOptions.data.type;
+				if (typeof iLocalMessageCount == 'number') {
+					iLocalMessageCount += 1;
+					localType = localOptions.data.type+'s';
+					localOptions.body = 'You have '+iLocalMessageCount+' new '+localType+'.';
+				} else {
+					iLocalMessageCount = 1;
+					localOptions.body = 'You have a new '+localType+'.';
+				}
+			}
+			if (localNotify) {
+				runAlertBox({type:'success', message: localOptions.body});
+			}
+		}
+	};
 
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
-			if (oUser) {
+			if (oUser && oUser.is_admin) {
 				var oData = {
 					id: oUser.id,
 					tag: 'notif:test-id:notification',
@@ -105,7 +124,7 @@
 					realtime.bind('gm-push-notification', 'notifications', function(object) {
 						var oData = object.data;
 						// console.log(oData);
-						if ('serviceWorker' in navigator) onServiceWorkerReady(oData);
+						onServiceWorkerReady(oData);
 					});
 				}, 300);
 			}
@@ -129,8 +148,8 @@
 						} else {
 							runAlertBox({
 								type:'info',
-								message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.', 
-								unclose: true
+								message: 'Please enable Notification permission to use realtime messaging Service.<br>This can be reset in Page Info which can be accessed by clicking the lock icon next to the URL.'/*, 
+								unclose: true*/
 							});
 						}
 					});
