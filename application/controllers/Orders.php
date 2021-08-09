@@ -79,10 +79,11 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
-		$data_messages = false; $filters = [];
+		$data_messages = false; $filters = $ids = [];
 		if ($this->input->is_ajax_request() AND $this->input->post()) {
 			if ($this->input->post('ids')) {
 				$filters['id'] = $this->input->post('ids');
+				$ids = $this->input->post('ids');
 			} elseif ($this->input->post('user_id')) {
 				$filters['to_id'] = $this->input->post('user_id');
 			}
@@ -203,7 +204,8 @@ class Orders extends MY_Controller {
 				}
 			}
 			// debug($htmls, 'stop');
-			echo json_encode(['html' => $htmls, 'panel' => 'messages', 'message_ids' => array_unique($message_ids)], JSON_NUMERIC_CHECK);
+			if (count($message_ids)) $ids = array_unique($message_ids);
+			echo json_encode(['html' => $htmls, 'panel' => 'messages', 'message_ids' => $ids], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([

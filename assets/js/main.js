@@ -466,15 +466,15 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 		break;
 		case 'message':
 			var uiMsgPanel = $('.hideshow-container');
-			if (Object.keys(oResponse.html).length) {
-				var oArr = [];
-				if (Object.keys(oResponse.message_ids).length) {
-					oArr = oResponse.message_ids;
-				} else if (!isNaN(oResponse.message_ids)) {
-					oArr = [oResponse.message_ids];
-				}
-				if (typeof oArr == 'object') {
-					var arrToRemoved = [];
+			var oArr = [];
+			if (Object.keys(oResponse.message_ids).length) {
+				oArr = oResponse.message_ids;
+			} else if (!isNaN(oResponse.message_ids)) {
+				oArr = [oResponse.message_ids];
+			}
+			if (typeof oArr == 'object') {
+				var arrToRemoved = [];
+				if (Object.keys(oResponse.html).length) {
 					for (var tab in oResponse.html) {
 						var newUI = oResponse.html[tab], uiParent = $('#msg_'+tab);
 
@@ -508,9 +508,29 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							console.log(tab, 'All done!');
 						});
 					}
+				} else {
+					var uiParent = []
+					var removeMethod = new Promise((resolve, reject) => {
+						oArr.forEach((id, index, array) => {
+							var item = $('[data-msg-id="'+id+'"]');
+							if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
+							if (item.length) {
+								// console.log('found!', item);
+								item.remove();
+								arrToRemoved.push(true);
+							}
+							if (index === array.length -1) resolve();
+						});
+					});
+					removeMethod.then(() => {
+						if (uiParent.find('.notif-item').length == 0) {
+							uiParent.find('.no-records-ui').removeClass('hide');
+						} else {
+							uiParent.find('.no-records-ui').addClass('hide');
+						}
+						console.log(tab, 'All done!');
+					});
 				}
-			} else {
-				uiMsgPanel.find('.no-records-ui').removeClass('hide');
 			}
 		break;
 		default:

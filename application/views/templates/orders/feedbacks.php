@@ -47,7 +47,7 @@
 							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 						<?php endif ?>
 						<li>
-							<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => 'deleteMessage'], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
+							<a href="api/update/messages/<?php echo $feedback['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $feedback['id'], 'unread' => GM_MESSAGE_DELETE, 'fn' => false], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Delete</a>
 						</li>
 					</ul>
 				</div>

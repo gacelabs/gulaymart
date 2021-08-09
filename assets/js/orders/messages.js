@@ -16,17 +16,6 @@ var msgRunDomReady = function() {
 	});
 }
 
-var deleteMessage = function(data, ui) {
-	var wait = new Promise((resolve, reject) => {
-		data.forEach((item, index, array) => {
-			var msg = $('[data-msg-id="'+item.id+'"]');
-			msg.remove();
-			if (index === array.length -1) resolve();
-		});
-	});
-	wait.then(() => {});
-}
-
 var appendComment = function(obj) {
 	// console.log(obj);
 	$('#seller_content').addClass('hide');
