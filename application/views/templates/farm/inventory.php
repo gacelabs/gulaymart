@@ -18,7 +18,7 @@
 									<?php endif ?>
 									<?php foreach ($data['products'][0] as $key => $value): ?>
 										<?php if ($key == 'id'): ?>
-											<th width="50">Actions</th>
+											<th<?php if ($this->agent->is_mobile()): ?> width="50"<?php endif ?>>Actions</th>
 										<?php elseif ($key != 'version'): ?>
 											<th><?php echo fix_title($key);?></th>
 										<?php endif ?>
