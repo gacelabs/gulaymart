@@ -81,8 +81,8 @@
 				var oData = {
 					id: oUser.id,
 					tag: 'notif:test-id:notification',
-					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/'
-					type: 'test message',
+					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/',
+					type: 'test message'
 				};
 				realtime.trigger('gm-push-notification', 'notifications', {
 					badge: 'https://gulaymart.com/assets/images/favicon.png',
