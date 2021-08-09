@@ -117,7 +117,7 @@
 							</small>
 						</li>
 						<li>
-							<small class="elem-block" style="cursor:pointer; font-weight: bold;" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE</small>
+							<a class="elem-block" style="cursor:pointer; font-weight: bold; font-size: 10px;" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE</a>
 						</li>
 					</ul>
 				</div>
