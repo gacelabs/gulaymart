@@ -633,10 +633,8 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						removeMethod.then(() => {
 							if (typeof runATagAjax == 'function') runATagAjax();
 							if (typeof runDomShowHide == 'function') runDomShowHide();
-							if (typeof msgRunDomReady == 'function') msgRunDomReady();
 							if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
 							if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
-							if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
 							// console.log(arrNotFound);
 							if (uiParent.find('.order-table-item').length == 0) {
 								uiParent.find('.no-records-ui').removeClass('hide');
