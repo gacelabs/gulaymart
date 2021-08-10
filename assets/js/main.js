@@ -530,7 +530,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						var uiParent = []
 						var removeMethod = new Promise((resolve, reject) => {
 							oArr.forEach((id, index, array) => {
-								var item = uiParent.find('[data-msg-id="'+id+'"]');
+								var item = $('[data-msg-id="'+id+'"]');
 								if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
 								if (item.length) {
 									item.remove();

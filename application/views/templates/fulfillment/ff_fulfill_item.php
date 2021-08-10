@@ -57,9 +57,9 @@
 
 					$status_array[] = $details['status'];
 					$cancelled_class = ' was-cancelled';
-					if ($row_cnt == count($orders['order_details'])) {
+					/*if ($row_cnt == count($orders['order_details'])) {
 						$cancelled_class = ' was-cancelled-last-child';
-					}
+					}*/
 				?>
 				<div class="order-grid-column order-item<?php if ($status_text != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
 					<div class="media">

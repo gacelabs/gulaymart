@@ -4,9 +4,9 @@
 		<p class="zero-gaps"><i class="fa fa-leaf color-theme icon-left"></i><b><?php echo $notifications['type'];?></b> - <span class="color-grey"><?php echo date('F j, Y | ', $notifications['datestamp']) . date('g:i:s a', strtotime($notifications['added']));?></span> </p>
 	</div>
 	<div class="notif-item-middle">
-		<?php if ($notifications['unread']): ?><strong><?php endif ?>
+		<?php if ($notifications['unread'] == GM_MESSAGE_UNREAD): ?><strong><?php endif ?>
 		<?php echo $notifications['content'];?>
-		<?php if ($notifications['unread']): ?></strong><?php endif ?>
+		<?php if ($notifications['unread'] == GM_MESSAGE_UNREAD): ?></strong><?php endif ?>
 	</div>
 	<div class="notif-item-footer">
 		<ul class="inline-list">

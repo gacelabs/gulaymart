@@ -22,7 +22,7 @@ class Orders extends MY_Controller {
 		$ids = [];
 		$filters = ['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
-			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $ids;
+			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $this->input->post('ids');
 			$filters['id'] = $this->input->post('ids');
 			$filters['buyer_id'] = $this->input->post('buyer_id');
 		}
@@ -77,10 +77,11 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
-		$data_messages = false; $filters = [];
+		$data_messages = false; $filters = $ids = [];
 		if ($this->input->is_ajax_request() AND $this->input->post()) {
 			if ($this->input->post('ids')) {
 				$filters['id'] = $this->input->post('ids');
+				$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $this->input->post('ids');
 			} elseif ($this->input->post('user_id')) {
 				$filters['to_id'] = $this->input->post('user_id');
 			}
@@ -97,6 +98,7 @@ class Orders extends MY_Controller {
 				'direction' => ['ASC', 'DESC'],
 			];
 		}
+		// debug($filters, 'stop');
 		$messages = $this->gm_db->get_in('messages', $filters);
 		// debug($messages, 'stop');
 		$message_ids = [];
@@ -203,8 +205,11 @@ class Orders extends MY_Controller {
 					}
 				}
 			}
-			// debug($htmls, 'stop');
-			if (count($message_ids)) $message_ids = array_unique($message_ids);
+			if (count($message_ids)) {
+				$message_ids = array_unique($message_ids);
+			} else {
+				$message_ids = $ids;
+			}
 			echo json_encode(['html' => $htmls, 'tabs' => $tabs, 'panel' => 'messages', 'message_ids' => $message_ids], JSON_NUMERIC_CHECK);
 			exit();
 		} else {

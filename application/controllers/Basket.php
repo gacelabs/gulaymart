@@ -19,7 +19,7 @@ class Basket extends My_Controller {
 	{
 		$filters = $ids = [];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
-			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $ids;
+			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $this->input->post('ids');
 			$filters['id'] = $this->input->post('ids');
 			$filters['user_id'] = $this->input->post('buyer_id');
 		}

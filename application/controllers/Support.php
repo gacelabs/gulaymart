@@ -284,7 +284,7 @@ class Support extends MY_Controller {
 					case 'message_id':
 						$datatable = $this->gm_db->get_in('messages', ['id' => $ids]);
 						$user_ids = [];
-						foreach ($datatable as $row) $user_ids[] = $row['user_id'];
+						foreach ($datatable as $row) $user_ids[] = $row['to_id'];
 						$user_ids = array_unique($user_ids);
 						$data = [
 							'mode' => 'message',
