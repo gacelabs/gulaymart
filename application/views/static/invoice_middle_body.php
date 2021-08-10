@@ -22,18 +22,19 @@
 			<div class="zig-top">
 				<div class="text-center" style="margin-bottom:15px;">
 					<?php switch ($status) {
-						case 3:
+						case GM_ON_DELIVERY_STATUS:
 							echo '<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;transform:scaleX(-1);-webkit-transform: scaleX(-1);">';
 							echo "<h4>Order is now On Delivery!</h4>";
 							break;
-						case 4:
+						case GM_RECEIVED_STATUS:
+							echo '<img src="assets/images/icons/received.png" width="70" style="margin-bottom:15px;">';
 							echo "<h4>Order Received!</h4>";
 							break;
-						case 5:
+						case GM_CANCELLED_STATUS:
 							echo "<h4>Order was Cancelled!</h4>";
 							break;
 						default:
-							echo '<img src="assets/images/icons/deliver.png" width="70" style="margin-bottom:15px;">';
+							echo '<img src="assets/images/icons/ordered.png" width="70" style="margin-bottom:15px;">';
 							echo "<h4>Order is Ready for Pick Up!</h4>";
 							break;
 					}?>
@@ -85,10 +86,24 @@
 					<div class="text-center" style="margin:15px 0;">
 						<h4 class="zero-gaps">ORDER SUMMARY</h4>
 					</div>
-					<?php $total = 0;?>
+					<?php
+						$total = 0;
+						$referrer = str_replace(base_url(), '', strtolower($this->agent->referrer()));
+					?>
 					<?php if ($order_details): ?>
 						<?php foreach ($order_details as $key => $details): ?>
-							<?php /*if ($details['status'] == 5) continue;*/ ?>
+							<?php 
+								$dont_count = false;
+								if ($details['status'] == GM_CANCELLED_STATUS) {
+									if ((bool)strstr($referrer, 'for-pick-up') OR 
+										(bool)strstr($referrer, 'on-delivery') OR 
+										(bool)strstr($referrer, 'received')) {
+										$dont_count = true;
+									}
+								}
+								// debug($dont_count, 'stop');
+								if ($dont_count) continue;
+							?>
 							<div class="invoice-summary-grid">
 								<div>
 									<p class="text-ellipsis"><?php echo ucwords($details['product']['name']);?></p>
