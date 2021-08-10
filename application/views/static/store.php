@@ -17,8 +17,8 @@
 		<div class="storefront-middle">
 			<ul class="spaced-list around" id="storefront_navbar">
 				<li class="sf-navbar-btn active" container-name="#product_item_container"><a>PRODUCTS</a></li>
-				<li class="sf-navbar-btn" container-name="#stories_item_container"><a>STORIES</a></li>
-				<li class="sf-navbar-btn" container-name="#galleries_item_container"><a>GALLERY</a></li>
+				<!-- <li class="sf-navbar-btn" container-name="#stories_item_container"><a>STORIES</a></li> -->
+				<!-- <li class="sf-navbar-btn" container-name="#galleries_item_container"><a>GALLERY</a></li> -->
 				<li class="sf-navbar-btn" container-name="#about_item_container"><a>ABOUT</a></li>
 			</ul>
 

@@ -1,4 +1,7 @@
 RewriteEngine On
+RewriteCond %{HTTP_HOST} ^gulaymart.com [NC] 
+RewriteCond %{HTTPS} off 
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 #RewriteBase /
 #RewriteCond $1 !^(index\.php|assets|images|js|css|uploads|favicon.png)
 RewriteCond %{REQUEST_FILENAME} !-f
