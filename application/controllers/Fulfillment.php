@@ -24,8 +24,10 @@ class Fulfillment extends My_Controller {
 	{
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
+		$ids = [];
 		$filters = ['seller_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
+			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $ids;
 			$filters['id'] = $this->input->post('ids');
 			$filters['seller_id'] = $this->input->post('seller_id');
 			// $filters['id'] = ["25", "28", "31", "41"];
@@ -35,23 +37,19 @@ class Fulfillment extends My_Controller {
 		$farm = $this->farmers->get(['user_id' => $this->accounts->profile['id']], true);
 		// debug($farm, 'stop');
 		if ($this->input->is_ajax_request()) {
-				$total_items = 0;
-				if (is_array($baskets_merge)) $total_items = count($baskets_merge);
-				echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/fulfillment/ff_product_container', [
-				'data' => [
-					'farm' => $farm,
-					'orders' => $baskets_merge,
-					'status' => $status,
-					'counts' => [
-						'placed' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 2]),
-						'for+pick+up' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 6]),
-						'on+delivery' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 3]),
-						'received' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 4]),
-						'cancelled' => count_by_status(['seller_id' => $filters['seller_id'], 'status' => 5]),
-					],
-					'no_rec_ui' => true,
-				]
-			], true), 'panel' => 'fulfillment'], JSON_NUMERIC_CHECK);
+			$htmls = [];
+			if ($baskets_merge) {
+				foreach ($baskets_merge as $key => $merge) {
+					$htmls[$merge['id']] = $this->load->view('templates/fulfillment/ff_fulfill_item', [
+						'farm' => $farm,
+						'orders' => $merge,
+						'status_text' => $status,
+						'status_id' => $status_id,
+					], true);
+				}
+			}
+			// debug($htmls, 'stop');
+			echo json_encode(['html' => $htmls, 'merge_ids' => $ids, 'panel' => 'fulfillment'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -75,6 +73,7 @@ class Fulfillment extends My_Controller {
 					'farm' => $farm,
 					'orders' => $baskets_merge,
 					'status' => $status,
+					'status_id' => $status_id,
 					'counts' => [
 						'placed' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 2]),
 						'for+pick+up' => count_by_status(['seller_id' => $this->accounts->profile['id'], 'status' => 6]),

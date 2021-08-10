@@ -204,7 +204,7 @@ function get_session_baskets($where=false)
 	} else {
 		$where['device_id'] = $ci->device_id;
 	}
-	$baskets = $ci->baskets->get_in($where, false, false, 'added:DESC');
+	$baskets = $ci->baskets->get_in($where, false, false, 'updated:DESC');
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
 			$date = date('F j, Y', $basket['at_date']);
@@ -567,19 +567,19 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	$html_email = file_get_contents(base_url('support/thankyou_page/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html_email, 'Your Order have been Placed, Thank you!');
-	$html_buyer_gm = '<p>Order have been placed, <a href="orders/placed/">Check here</a></p>';
+	send_gm_email($buyer['id'], $html_email, 'Check your Placed Order(s) here, Thank you!');
+	$html_buyer_gm = '<p>Your Placed Order(s), <a href="orders/placed/">Check here</a></p>';
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
 	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
 	$context = make_stream_context($data);
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
-	$html_seller_gm = '<p>Order from '.$buyer['fullname'].' have been placed, <a href="fulfillment/placed/">Check here</a></p>';
+	$html_seller_gm = '<p>Your Placed Order(s) from '.$buyer['fullname'].', <a href="fulfillment/placed/">Check here</a></p>';
 
 	$ci =& get_instance();
 	foreach ($seller_ids as $seller_id) {
-		send_gm_email($seller_id, $html_seller_email, 'Order(s) have been Placed!');
+		send_gm_email($seller_id, $html_seller_email, 'Check your Placed Order(s) from '.$buyer['fullname'].', Thank you!');
 		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');
 	}
 	/*LOGS FOR TRACKING*/
@@ -602,9 +602,9 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
 	
 	/*message buyer*/
-	send_gm_email($buyer['id'], $html_email, 'Your Order is '.$action.', Thank you!');
-	$html = '<p>Order is '.$action.', <a href="orders/'.$status.'/">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders', 'order');
+	send_gm_email($buyer['id'], $html_email, 'Check your '.$action.' Order(s) here, Thank you!');
+	$html_buyer_gm = '<p>Your '.$action.' Order(s), <a href="orders/'.$status.'/">Check here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
 	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'seller'];
@@ -612,10 +612,10 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
 
 	$ci =& get_instance();
-	$html = '<p>Order from '.$buyer['fullname'].' are '.$action.', <a href="fulfillment/'.$status.'/">Check here</a></p>';
+	$html_seller_gm = '<p>Your '.$action.' Order(s) from '.$buyer['fullname'].', <a href="fulfillment/'.$status.'/">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
-		send_gm_email($seller_id, $html_seller_email, 'Order is '.$action.'!');
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html, 'Notifications', 'Orders', 'fulfillment');
+		send_gm_email($seller_id, $html_seller_email, 'Check your '.$action.' Order(s) from '.$buyer['fullname'].', Thank you!');
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");
@@ -668,6 +668,10 @@ function setup_orders_data($baskets_merge=false)
 		$ci =& get_instance();
 		foreach ($baskets_merge as $key => $merged) {
 			$baskets_merge[$key]['seller'] = json_decode(base64_decode($baskets_merge[$key]['seller']), true);
+			if (empty($baskets_merge[$key]['seller']['name'])) {
+				$user_farms = $ci->gm_db->get('user_farms', ['id' => $baskets_merge[$key]['seller']['farm_id']], 'row');
+				$baskets_merge[$key]['seller']['name'] = $user_farms ? $user_farms['name'] : '';
+			}
 			$baskets_merge[$key]['buyer'] = json_decode(base64_decode($baskets_merge[$key]['buyer']), true);
 			$baskets_merge[$key]['order_details'] = json_decode(base64_decode($baskets_merge[$key]['order_details']), true);
 			foreach ($baskets_merge[$key]['order_details'] as $index => $details) {
@@ -675,8 +679,10 @@ function setup_orders_data($baskets_merge=false)
 				if (!isset($baskets_merge[$key]['order_type'])) {
 					$baskets_merge[$key]['order_type'] = $details['when'];
 					$baskets_merge[$key]['schedule'] = '';
-					if ($details['when'] == 2) {
+					if ($details['when'] == GM_SCHEDULED) {
 						$baskets_merge[$key]['schedule'] = date('F j, Y', strtotime($details['schedule']));
+					} else {
+						$baskets_merge[$key]['order_type'] = GM_BUY_NOW;
 					}
 				}
 				$basket = $ci->gm_db->get('baskets', ['id' => $details['basket_id']], 'row');
@@ -689,8 +695,9 @@ function setup_orders_data($baskets_merge=false)
 			}
 			$baskets_merge[$key]['toktok_post'] = json_decode(base64_decode($baskets_merge[$key]['toktok_post']), true);
 		}
+		$baskets_merge = sort_by_date($baskets_merge);
 	}
-	return sort_by_date($baskets_merge);
+	return $baskets_merge;
 }
 
 function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $keywords='')

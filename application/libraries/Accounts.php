@@ -221,8 +221,12 @@ class Accounts {
 		}
 	}
 
-	public function refetch()
+	public function refetch($user_id=0)
 	{
+		if ($user_id > 0 AND $this->has_session == FALSE) {
+			$mobile_user = $this->class->gm_db->get('users', ['id' => $user_id], 'row');
+			$this->login($mobile_user);
+		}
 		$user = $this->class->db->get_where('users', ['id' => $this->profile['id']]);
 		if ($user->num_rows()) {
 			$request = $user->row_array();
@@ -309,6 +313,7 @@ class Accounts {
 
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
+			$this->has_session = TRUE;
 			// debug($this->profile, 'stop');
 			return $this;
 		} else {

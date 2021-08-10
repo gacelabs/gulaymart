@@ -314,7 +314,7 @@ class MY_Model extends CI_Model {
 				$post = (array)$post;
 				$post['version'] = 1;
 			}
-			// $post['last_updated'] = date('Y-m-d H:i:s');
+			if (isset($post['updated'])) unset($post['updated']);
 			$this->db->insert($table, $post);
 			$insert_id = $this->db->insert_id();
 			if ($redirect_url != '') {
@@ -333,6 +333,7 @@ class MY_Model extends CI_Model {
 				$post = (array)$post;
 				foreach ($post as $key => $row) {
 					$post[$key]['version'] = 1;
+					if (isset($post[$key]['updated'])) unset($post[$key]['updated']);
 				}
 			}
 			// $post['last_updated'] = date('Y-m-d H:i:s');
@@ -354,6 +355,7 @@ class MY_Model extends CI_Model {
 				$set = (array)$set;
 				$set['version'] = $data ? (int)$data['version'] + 1 : 1;
 			}
+			if (isset($set['updated'])) unset($set['updated']);
 			$this->db->update($table, $set, $where);
 			if ($redirect_url != '') {
 				redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
@@ -373,6 +375,7 @@ class MY_Model extends CI_Model {
 					if (isset($set[$key])) {
 						$set[$key] = (array)$set[$key];
 						$set[$key]['version'] = $row ? (int)$row['version'] + 1 : 1;
+						if (isset($set[$key]['updated'])) unset($set[$key]['updated']);
 					}
 				}
 			}

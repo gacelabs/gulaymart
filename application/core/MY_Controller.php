@@ -55,7 +55,7 @@ class MY_Controller extends CI_Controller {
 		$is_mobile = $this->agent->is_mobile();
 		if ($is_mobile == true) {
 			// debug($is_mobile, 'stop');
-			$this->config->set_item('sess_expire_on_close', '0');
+			$this->config->set_item('sess_expire_on_close', FALSE);
 		}
 		// debug($this->latlng, 'stop');
 		$this->class_name = strtolower(trim($this->router->class));

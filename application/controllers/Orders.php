@@ -19,31 +19,28 @@ class Orders extends MY_Controller {
 	{
 		$status_id = get_status_dbvalue($status);
 		// debug($status_id, 'stop');
+		$ids = [];
 		$filters = ['buyer_id' => $this->accounts->profile['id'], 'status' => $status_id];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
+			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $ids;
 			$filters['id'] = $this->input->post('ids');
 			$filters['buyer_id'] = $this->input->post('buyer_id');
-			// $filters['id'] = ["25", "28", "31", "41"];
 		}
 		$baskets_merge = setup_orders_data($this->baskets->get_baskets_merge($filters));
 		// debug($baskets_merge, 'stop');
 		if ($this->input->is_ajax_request()) {
-			$total_items = 0;
-			if (is_array($baskets_merge)) $total_items = count($baskets_merge);
-			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/orders/o_order_items', [
-				'data' => [
-					'orders' => $baskets_merge,
-					'status' => $status,
-					'counts' => [
-						'placed' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 2]),
-						'for+pick+up' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 6]),
-						'on+delivery' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 3]),
-						'received' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 4]),
-						'cancelled' => count_by_status(['buyer_id' => $filters['buyer_id'], 'status' => 5]),
-					],
-					'no_rec_ui' => true,
-				]
-			], true), 'ids' => $this->input->post('ids'), 'panel' => 'orders'], JSON_NUMERIC_CHECK);
+			$htmls = [];
+			if ($baskets_merge) {
+				foreach ($baskets_merge as $key => $merge) {
+					$htmls[$merge['id']] = $this->load->view('templates/orders/o_order_items', [
+						'orders' => $merge,
+						'status' => $status,
+						'status_id' => $status_id,
+					], true);
+				}
+			}
+			// debug($htmls, 'stop');
+			echo json_encode(['html' => $htmls, 'merge_ids' => $ids, 'panel' => 'orders'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -65,12 +62,13 @@ class Orders extends MY_Controller {
 				'data' => [
 					'orders' => $baskets_merge,
 					'status' => $status,
+					'status_id' => $status_id,
 					'counts' => [
-						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 2]),
-						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 6]),
-						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 3]),
-						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 4]),
-						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => 5]),
+						'placed' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => GM_PLACED_STATUS]),
+						'for+pick+up' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => GM_FOR_PICK_UP_STATUS]),
+						'on+delivery' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => GM_ON_DELIVERY_STATUS]),
+						'received' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => GM_RECEIVED_STATUS]),
+						'cancelled' => count_by_status(['buyer_id' => $this->accounts->profile['id'], 'status' => GM_CANCELLED_STATUS]),
 					],
 				]
 			]);
@@ -79,11 +77,10 @@ class Orders extends MY_Controller {
 
 	public function messages()
 	{
-		$data_messages = false; $filters = $ids = [];
+		$data_messages = false; $filters = [];
 		if ($this->input->is_ajax_request() AND $this->input->post()) {
 			if ($this->input->post('ids')) {
 				$filters['id'] = $this->input->post('ids');
-				$ids = $this->input->post('ids');
 			} elseif ($this->input->post('user_id')) {
 				$filters['to_id'] = $this->input->post('user_id');
 			}
@@ -197,15 +194,18 @@ class Orders extends MY_Controller {
 
 		// debug($data_messages, 'stop');
 		if ($this->input->is_ajax_request()) {
-			$htmls = [];
+			$htmls = $tabs = [];
 			if (!empty($data_messages)) {
 				foreach ($data_messages as $tab => $msgs) {
-					$htmls[strtolower($tab)] = $this->load->view('looping/message_cards', ['tab' => strtolower($tab), 'messages' => $msgs], true);
+					foreach ($msgs as $key => $msg) {
+						$tabs[$msg['id']] = trim(strtolower($tab));
+						$htmls[$msg['id']] = $this->load->view('templates/orders/'.strtolower($tab), [strtolower($tab) => $msg], true);
+					}
 				}
 			}
 			// debug($htmls, 'stop');
-			if (count($message_ids)) $ids = array_unique($message_ids);
-			echo json_encode(['html' => $htmls, 'panel' => 'messages', 'message_ids' => $ids], JSON_NUMERIC_CHECK);
+			if (count($message_ids)) $message_ids = array_unique($message_ids);
+			echo json_encode(['html' => $htmls, 'tabs' => $tabs, 'panel' => 'messages', 'message_ids' => $message_ids], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([

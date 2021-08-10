@@ -78,14 +78,12 @@
 			let localNotify = false;
 			if (localOptions.data && oUser.id == localOptions.data.id) {
 				localNotify = true;
-				let localType = localOptions.data.type;
 				if (typeof iLocalMessageCount == 'number') {
 					iLocalMessageCount += 1;
-					localType = localOptions.data.type+'s';
-					localOptions.body = 'You have '+iLocalMessageCount+' new '+localType+'.';
+					localOptions.body = 'You have '+iLocalMessageCount+' new messages.';
 				} else {
 					iLocalMessageCount = 1;
-					localOptions.body = 'You have a new '+localType+'.';
+					localOptions.body = 'You have a new message.';
 				}
 			}
 			if (localNotify) {

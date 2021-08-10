@@ -394,9 +394,9 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 			if (oData.counts && oData.counts[type]['user_'+iUser] != undefined) {
 				/*just count*/
 				var oCounts = oData.counts[type]['user_'+iUser];
-				if ($.inArray(oData.mode, ['on-delivery']) >= 0) {
+				/*if ($.inArray(oData.mode, ['on-delivery']) >= 0) {
 					oCounts = oData.counts['seller']['user_'+iUser];
-				}
+				}*/
 				for (let x in oData.requests) {
 					if (x == type) {
 						var oItem = oData.requests[x];
@@ -429,177 +429,110 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 
 var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 	var sMode = oData.mode;
+	if (oResponse.panel === 'messages') {
+		sMode = 'message';
+		oResponse.panel = sMode;
+	}
+	if (oResponse.panel === 'basket') {
+		sMode = 'basket';
+		oResponse.panel = sMode;
+	}
 	switch (sMode) {
 		case 'basket':
-			// console.log(oResponse);
-			var uiBasketPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
-			if (oResponse.html.length) {
-				var oArr = [];
-				if (Object.keys(oData.post.basket_id).length) {
-					oArr = oData.post.basket_id;
-				} else if (!isNaN(oData.post.basket_id)) {
-					oArr = [oData.post.basket_id];
-				}
-				if (typeof oArr == 'object') {
-					var arrRemoved = [];
-					for (var x in oArr) {
-						var id = oArr[x];
-						var item = $('[data-basket-id="'+id+'"]');
-						if (item.length) {
-							arrRemoved.push(1);
-							item.parents('.order-table-item').remove();
-						}
-					}
-					if (uiBasketPanel.find('.no-records-ui:visible').length) {
-						uiBasketPanel.html(oResponse.html);
-					} else {
-						uiBasketPanel.prepend(oResponse.html);
-						if (uiBasketPanel.find('.no-records-ui').length > 1) {
-							uiBasketPanel.find('.no-records-ui.hide:last').remove();
-						}
-					}
-					if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
-				}
-			} else {
-				uiBasketPanel.find('.no-records-ui').removeClass('hide');
-			}
-		break;
-		case 'message':
-			var uiMsgPanel = $('.hideshow-container');
-			var oArr = [];
-			if (Object.keys(oResponse.message_ids).length) {
-				oArr = oResponse.message_ids;
-			} else if (!isNaN(oResponse.message_ids)) {
-				oArr = [oResponse.message_ids];
-			}
-			if (typeof oArr == 'object') {
-				var arrToRemoved = [];
-				if (Object.keys(oResponse.html).length) {
-					for (var tab in oResponse.html) {
-						var newUI = oResponse.html[tab], uiParent = $('#msg_'+tab);
-
-						var removeMethod = new Promise((resolve, reject) => {
-							oArr.forEach((id, index, array) => {
-								var item = $('[data-msg-id="'+id+'"]');
-								if (item.length) {
-									// console.log('found!', item);
-									item.replaceWith(newUI);
-								} else if (newUI.length) {
-									// console.log('new ui!', newUI.length);
-									uiParent.prepend(newUI);
-								} else {
-									// console.log('not found!', item);
-									arrToRemoved.push(true);
-								}
-								if (index === array.length -1) resolve();
-							});
-						});
-
-						removeMethod.then(() => {
-							if (typeof runATagAjax == 'function') runATagAjax();
-							if (typeof runDomShowHide == 'function') runDomShowHide();
-							if (typeof msgRunDomReady == 'function') msgRunDomReady();
-							// console.log(arrToRemoved);
-							if (uiParent.find('.notif-item').length == 0) {
-								uiParent.find('.no-records-ui').removeClass('hide');
-							} else {
-								uiParent.find('.no-records-ui').addClass('hide');
-							}
-							console.log(tab, 'All done!');
-						});
-					}
-				} else {
-					var uiParent = []
-					var removeMethod = new Promise((resolve, reject) => {
-						oArr.forEach((id, index, array) => {
-							var item = $('[data-msg-id="'+id+'"]');
-							if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
-							if (item.length) {
-								// console.log('found!', item);
-								item.remove();
-								arrToRemoved.push(true);
-							}
-							if (index === array.length -1) resolve();
-						});
-					});
-					removeMethod.then(() => {
-						if (uiParent.find('.notif-item').length == 0) {
-							uiParent.find('.no-records-ui').removeClass('hide');
-						} else {
-							uiParent.find('.no-records-ui').addClass('hide');
-						}
-						console.log(tab, 'All done!');
-					});
-				}
-			}
-		break;
-		default:
-			// console.log(oData, oResponse, oCounts, sPageName);
-			var uiPanel = [], isActive = null;
-			// console.log(sMode);
-			switch (sPageName) {
-				case 'fulfillment':
-					uiPanel = $('.ff-product-container');
-					isActive = $('[data-nav="'+sMode+'"]').hasClass('active');
-				break;
-				case 'orders':
-					uiPanel = $('#dashboard_panel_right [js-element="orders-panel"]');
-					isActive = $('[data-nav="'+sMode+'"]').find('.trans-navbar-pill').hasClass('active');
-				break;
-				case 'basket':
-					uiPanel = $('#dashboard_panel_right [js-element="baskets-panel"]');
-					isActive = sMode != 'placed';
-				break;
-			}
-
-			if (oResponse.panel === 'messages') {
-				uiPanel = $('.hideshow-container');
-			}
-			// console.log(isActive);
-			if (uiPanel.length) {
-				if (oResponse.html) {
+			if ($.inArray(sMode, Object.values(oSegments)) >= 0) {
+				// console.log(oResponse);
+				var uiParent = $('#dashboard_panel_right [js-element="baskets-panel"]');
+				if (oResponse.html.length && uiParent.length) {
 					var oArr = [];
-					if (oResponse.panel === 'messages') {
-						if (Object.keys(oResponse.message_ids).length) {
-							oArr = oResponse.message_ids;
-						} else if (!isNaN(oResponse.message_ids)) {
-							oArr = [oResponse.message_ids];
-						}
-					} else if (oResponse.panel === 'basket') {
-						if (Object.keys(oResponse.ids).length) {
-							oArr = oResponse.ids;
-						} else if (!isNaN(oResponse.ids)) {
-							oArr = [oResponse.ids];
+					if (Array.isArray(oResponse.basket_ids) == false) {
+						if (typeof oResponse.basket_ids == 'object') {
+							oArr = Object.values(oResponse.basket_ids);
+						} else if (typeof oResponse.basket_ids == 'number') {
+							oArr = [oResponse.basket_ids];
 						}
 					} else {
-						if (Object.keys(oData.post.merge_id).length) {
-							oArr = oData.post.merge_id;
-						} else if (!isNaN(oData.post.merge_id)) {
-							oArr = [oData.post.merge_id];
-						}
+						oArr = oResponse.basket_ids;
 					}
-					// console.log(oArr);
-					if (typeof oArr == 'object') {
+					if (oArr.length) {
 						var arrRemoved = [];
-						if (oResponse.panel === 'messages') {
-							for (var tab in oResponse.html) {
-								var newUI = oResponse.html[tab], uiParent = $('#msg_'+tab);
+						if (Object.keys(oResponse.html).length) {
+							for (var x in oResponse.html) {
+								var newUI = oResponse.html[x], arrNotFound = [];
 								var removeMethod = new Promise((resolve, reject) => {
 									oArr.forEach((id, index, array) => {
-										var item = $('[data-msg-id="'+id+'"]');
+										var item = uiParent.find('[data-basket-id="'+id+'"]').parents('.order-table-item');
 										if (item.length) {
-											// console.log('found!', item);
+											console.log('replace ui!', item);
 											item.replaceWith(newUI);
 										} else if (newUI.length) {
-											// console.log('new ui!', newUI.length);
+											console.log('new ui!', uiParent);
 											uiParent.prepend(newUI);
 										} else {
-											// console.log('not found!', item);
-											arrToRemoved.push(true);
+											console.log('ui not found!', item);
+											arrNotFound.push(id);
 										}
 										if (index === array.length -1) resolve();
 									});
 								});
+
+								removeMethod.then(() => {
+									if (typeof runATagAjax == 'function') runATagAjax();
+									if (typeof runDomShowHide == 'function') runDomShowHide();
+									if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
+									// console.log(arrNotFound);
+									if (uiParent.find('.order-table-item').length == 0) {
+										uiParent.find('.no-records-ui').removeClass('hide');
+									} else {
+										uiParent.find('.no-records-ui').addClass('hide');
+									}
+									console.log(oResponse.panel, 'All done!');
+								});
+
+							}
+						}
+					}
+				} else {
+					// uiParent.find('.no-records-ui').removeClass('hide');
+				}
+			}
+		break;
+		case 'message':
+			if ($.inArray('messages', Object.values(oSegments)) >= 0) {
+				var oArr = [];
+				if (Array.isArray(oResponse.message_ids) == false) {
+					if (typeof oResponse.message_ids == 'object') {
+						oArr = Object.values(oResponse.message_ids);
+					} else if (typeof oResponse.message_ids == 'number') {
+						oArr = [oResponse.message_ids];
+					}
+				} else {
+					oArr = oResponse.message_ids;
+				}
+				if (oArr.length) {
+					var arrToRemoved = [];
+					if (Object.keys(oResponse.html).length) {
+						for (var uiID in oResponse.html) {
+							var newUI = oResponse.html[uiID], uiParent = $('#msg_'+oResponse.tabs[uiID]);
+							if (uiParent.length) {
+								var removeMethod = new Promise((resolve, reject) => {
+									oArr.forEach((id, index, array) => {
+										if (uiID == id) {
+											var item = uiParent.find('[data-msg-id="'+id+'"]');
+											if (item.length) {
+												console.log('replace ui!', item);
+												item.replaceWith(newUI);
+											} else if (newUI.length) {
+												console.log('new ui!', uiParent);
+												uiParent.prepend(newUI);
+											} else {
+												console.log('ui not found!', item);
+												arrToRemoved.push(true);
+											}
+										}
+										if (index === array.length -1) resolve();
+									});
+								});
+
 								removeMethod.then(() => {
 									if (typeof runATagAjax == 'function') runATagAjax();
 									if (typeof runDomShowHide == 'function') runDomShowHide();
@@ -610,75 +543,111 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 									} else {
 										uiParent.find('.no-records-ui').addClass('hide');
 									}
-									console.log(tab, 'All done!');
+									console.log('All done!');
 								});
 							}
-						} else {
-							var removeMethod = new Promise((resolve, reject) => {
-								oArr.forEach((id, index, array) => {
-									if (oResponse.panel === 'basket') {
-										var item = $('[data-basket-id="'+id+'"]').parents('.order-table-item');
-									} else {
-										var item = $('[data-merge-id="'+id+'"]');
-									}
-									// console.log(item, index);
-									if (item.length) {
-										arrRemoved.push(1);
-										item.remove();
-									}
-									if (index === array.length -1) resolve();
-								});
-							});
-
-							removeMethod.then(() => {
-								// console.log(isActive);
-								if (isActive == true) {
-									if (uiPanel.find('.no-records-ui:visible').length) {
-										if (sPageName == 'fulfillment') {
-											uiPanel.replaceWith(oResponse.html);
-										} else {
-											uiPanel.html(oResponse.html);
-										}
-										console.log('rendered:', sMode);
-									} else {
-										if (sPageName == 'fulfillment') {
-											var uiOrderItem = $(oResponse.html).find('[js-element="fulfill-panel"]').find('.order-table-item');
-											uiPanel.find('[js-element="fulfill-panel"]').prepend(uiOrderItem);
-										} else {
-											uiPanel.prepend(oResponse.html);
-										}
-										if (uiPanel.find('.no-records-ui').length > 1) {
-											uiPanel.find('.no-records-ui.hide:last').remove();
-										}
-										console.log('re-rendered:', sMode);
-									}
-									if (typeof runATagAjax == 'function') runATagAjax();
-									if (typeof runDomShowHide == 'function') runDomShowHide();
-									switch (sPageName) {
-										case 'fulfillment':
-											if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
-										break;
-										case 'orders':
-											if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
-										break;
-										case 'basket':
-											if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
-										break;
-									}
-								} else {
-									console.log('not in page:', sMode);
-									if (uiPanel.find('.no-records-ui').siblings().length == 0 || sMode == 'cancelled') {
-										uiPanel.find('.no-records-ui').removeClass('hide');
-									}
-								}
-								console.log('All done!');
-							});
 						}
 					} else {
-						uiPanel.find('.no-records-ui').removeClass('hide');
+						var uiParent = []
+						var removeMethod = new Promise((resolve, reject) => {
+							oArr.forEach((id, index, array) => {
+								var item = uiParent.find('[data-msg-id="'+id+'"]');
+								if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
+								if (item.length) {
+									// console.log('replace ui!', item);
+									item.remove();
+									arrToRemoved.push(true);
+								}
+								if (index === array.length -1) resolve();
+							});
+						});
+						removeMethod.then(() => {
+							if (uiParent.find('.notif-item').length == 0) {
+								uiParent.find('.no-records-ui').removeClass('hide');
+							} else {
+								uiParent.find('.no-records-ui').addClass('hide');
+							}
+							console.log('All done!');
+						});
+					}
+				}
+			}
+		break;
+		default:
+			// console.log(oData, oResponse, oCounts, sPageName);
+			var uiParent = [],
+			bIsRemoveUI = ($.inArray(oResponse.panel, Object.values(oSegments)) >= 0 && $.inArray(sMode, Object.values(oSegments)) < 0);
+			switch (oResponse.panel) {
+				case 'fulfillment':
+					uiParent = $('.ff-product-container [js-element="fulfill-panel"]');
+				break;
+				case 'orders':
+					uiParent = $('#dashboard_panel_right [js-element="orders-panel"]');
+				break;
+			}
+			// console.log(uiParent);
+			if (uiParent.length) {
+				var oArr = [];
+				// console.log(oArr);
+				if (Array.isArray(oResponse.merge_ids) == false) {
+					if (typeof oResponse.merge_ids == 'object') {
+						oArr = Object.values(oResponse.merge_ids);
+					} else if (typeof oResponse.merge_ids == 'number') {
+						oArr = [oResponse.merge_ids];
 					}
 				} else {
-					uiPanel.find('.no-records-ui').removeClass('hide');
+					oArr = oResponse.merge_ids;
+				}
+				if (Object.keys(oResponse.html).length) {
+					for (var uiID in oResponse.html) {
+						var newUI = oResponse.html[uiID]
+						var arrNotFound = [];
+
+						var removeMethod = new Promise((resolve, reject) => {
+							oArr.forEach((id, index, array) => {
+								if (uiID == id) {
+									console.log(uiID, '==', id);
+									var item = uiParent.find('[data-merge-id="'+id+'"]');
+									if (bIsRemoveUI == true) {
+										if (item.length) {
+											console.log('removed ui!', item);
+											item.remove();
+										}
+									} else {
+										if (item.length) {
+											console.log('replace ui!', item);
+											item.replaceWith(newUI);
+										} else if (newUI.length) {
+											console.log('new ui!', $(newUI));
+											uiParent.prepend(newUI);
+										} else {
+											console.log('ui not found!', item);
+											arrNotFound.push(id);
+										}
+									}
+								}
+								if (index === array.length -1) resolve();
+							});
+						});
+
+						removeMethod.then(() => {
+							if (typeof runATagAjax == 'function') runATagAjax();
+							if (typeof runDomShowHide == 'function') runDomShowHide();
+							if (typeof msgRunDomReady == 'function') msgRunDomReady();
+							if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
+							if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
+							if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
+							// console.log(arrNotFound);
+							if (uiParent.find('.order-table-item').length == 0) {
+								uiParent.find('.no-records-ui').removeClass('hide');
+							} else {
+								uiParent.find('.no-records-ui').addClass('hide');
+							}
+							console.log(oResponse.panel, 'All done!');
+						});
+					}
+				} else {
+					// uiParent.find('.no-records-ui').removeClass('hide');
 				}
 			}
 		break;

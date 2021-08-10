@@ -151,6 +151,7 @@ class Baskets {
 	public function new($new=false)
 	{
 		if ($new) {
+			if (isset($new['updated'])) unset($new['updated']);
 			$this->class->db->insert('baskets', $new);
 			$id = $this->class->db->insert_id();
 			if ($id) return $id;
@@ -161,6 +162,7 @@ class Baskets {
 	public function save($set=false, $where=[])
 	{
 		if ($set) {
+			if (isset($set['updated'])) unset($set['updated']);
 			$this->class->db->update('baskets', $set, $where);
 			return true;
 		}
@@ -257,6 +259,7 @@ class Baskets {
 	public function new_baskets_merge($data=false)
 	{
 		if ($data) {
+			if (isset($data['updated'])) unset($data['updated']);
 			$this->class->db->insert('baskets_merge', $data);
 			$id = $this->class->db->insert_id();
 			if ($id) return $id;
@@ -267,6 +270,7 @@ class Baskets {
 	public function save_baskets_merge($set=false, $where=[])
 	{
 		if ($set) {
+			if (isset($set['updated'])) unset($set['updated']);
 			$this->class->db->update('baskets_merge', $set, $where);
 			return true;
 		}

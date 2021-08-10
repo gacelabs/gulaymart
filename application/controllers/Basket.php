@@ -17,8 +17,9 @@ class Basket extends My_Controller {
 
 	public function index()
 	{
-		$filters = [];
+		$filters = $ids = [];
 		if ($this->input->is_ajax_request() AND $this->input->post('ids')) {
+			$ids = is_array($this->input->post('ids')) ? array_values($this->input->post('ids')) : $ids;
 			$filters['id'] = $this->input->post('ids');
 			$filters['user_id'] = $this->input->post('buyer_id');
 		}
@@ -32,6 +33,10 @@ class Basket extends My_Controller {
 				foreach ($baskets as $key => $basket) {
 					$rawdata = $basket['rawdata'];
 					$farm = $rawdata['farm'];
+					if (empty($farm['name'])) {
+						$user_farms = $this->gm_db->get('user_farms', ['id' => $farm['id']], 'row');
+						$farm['name'] = $user_farms ? $user_farms['name'] : '';
+					}
 					$basket['rawdata']['product']['farm_location_id'] = $farm['farm_location_id'] = $basket['location_id'];
 					unset($basket['rawdata']['farm']);
 
@@ -53,17 +58,17 @@ class Basket extends My_Controller {
 						'order_type' => $basket['order_type'],
 						'schedule' => $basket['schedule'],
 					];
-					$items_by_farm[$location_and_sched]['added'] = $basket['added'];
+					if (!isset($items_by_farm[$location_and_sched]['updated'])) {
+						$items_by_farm[$location_and_sched]['updated'] = $basket['updated'];
+					}
 				}
 			}
 		}
 		// debug($items_by_farm, 'stop');
 		if ($this->input->is_ajax_request()) {
-			$total_items = 0;
-			if ($items_by_farm AND isset($items_by_farm['checkout_data'])) $total_items = count($items_by_farm['checkout_data']);
-			echo json_encode(['total_items' => $total_items, 'html' => $this->load->view('templates/basket/basket_items', [
-				'data_baskets' => $items_by_farm
-			], true), 'ids' => $this->input->post('ids'), 'panel' => 'basket'], JSON_NUMERIC_CHECK);
+			echo json_encode(['html' => [$this->load->view('templates/basket/b_item_container', [
+				'baskets' => $items_by_farm
+			], true)], 'basket_ids' => $ids, 'panel' => 'basket'], JSON_NUMERIC_CHECK);
 			exit();
 		} else {
 			$this->render_page([
@@ -113,6 +118,7 @@ class Basket extends My_Controller {
 				$redirect = base_url('register');
 				$callback = false;
 			} else {
+				unset($post['added']); unset($post['updated']);
 				if ($post['existing'] == 1) {
 					unset($post['existing']);
 					$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
