@@ -127,25 +127,25 @@ class Basket extends My_Controller {
 					$post['id'] = $this->gm_db->new('baskets', $post);
 				}
 				$other_orders = $this->gm_db->get('baskets', [
+					'status' => $post['status'],
 					'user_id' => $post['user_id'],
 					'order_type' => $post['order_type'],
 					'at_date' => $post['at_date'],
 				]);
 				// debug($other_orders, 'stop');
 				$hash = '';
-				$basket_ids = [];
-				$basket_ids[$post['id']] = $post['id'];
+				$basket_ids = [$post['id']];
 				if ($other_orders) {
-					foreach ($other_orders as $other) $basket_ids[$other['id']] = $other['id'];
+					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
 				}
-				$hash = (base64_encode(json_encode($basket_ids, JSON_NUMERIC_CHECK)));
+				$hash = (base64_encode(json_encode(array_unique($basket_ids), JSON_NUMERIC_CHECK)));
 				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
 				$redirect = ($post['status'] == GM_VERIFIED_NOW) ? base_url('basket/checkout/'.$hash) : false;
 				$callback = ($post['status'] == GM_VERIFIED_NOW) ? false : 'stockChanged';;
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 
 				/*send realtime basket*/
-				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['basket_id' => $basket_ids]);
+				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['basket_id' => array_unique($basket_ids)]);
 			}
 			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
 			// debug($post, 'stop');

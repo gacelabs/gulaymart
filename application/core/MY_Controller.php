@@ -27,9 +27,9 @@ class MY_Controller extends CI_Controller {
 				set_cookie('user_timezone', $user_timezone, 7776000); // 90 days
 			}
 		}
-		if (!empty($user_timezone) AND $user_timezone != 'Asia/Manila') {
+		if (!empty($user_timezone)) {
 			@ini_set('date.timezone', $user_timezone);
-			date_default_timezone_set($user_timezone);
+			if ($user_timezone != 'Asia/Manila') date_default_timezone_set($user_timezone);
 		}
 		setup_db_timezone();
 		// debug($user_timezone, date_default_timezone_get(), get_cookie('user_timezone', true), 'stop');

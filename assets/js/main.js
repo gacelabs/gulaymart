@@ -185,21 +185,6 @@ $(document).ready(function() {
 	// if (mobileAndTabletCheck()) runSwiper();
 });
 
-var toggleBlink = function (ui, callback) {
-	if (ui != undefined && ui.length) {
-		var removeMethod = new Promise((resolve, reject) => {
-			[1,2,3].forEach((id, index, array) => {
-				ui.fadeTo('slow', 0.5).fadeTo('slow', 1.0);
-				if (index === array.length -1) resolve();
-			});
-		});
-		removeMethod.then(() => {
-			if (typeof callback == 'function') callback(ui);
-			console.log('All done!');
-		});
-	}
-}
-
 var runSwiper = function() {
 	var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
 	var currentPage = $.inArray(window.location.pathname, pageLinks);
@@ -511,42 +496,36 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				if (oArr.length) {
 					var arrToRemoved = [];
 					if (Object.keys(oResponse.html).length) {
-						for (var uiID in oResponse.html) {
-							var newUI = oResponse.html[uiID], uiParent = $('#msg_'+oResponse.tabs[uiID]);
-							if (uiParent.length) {
-								var removeMethod = new Promise((resolve, reject) => {
-									oArr.forEach((id, index, array) => {
-										if (uiID == id) {
-											var item = uiParent.find('[data-msg-id="'+id+'"]');
-											if (item.length) {
-												console.log('replace ui!', item);
-												item.replaceWith(newUI);
-											} else if (newUI.length) {
-												console.log('new ui!', uiParent);
-												uiParent.prepend(newUI);
-											} else {
-												console.log('ui not found!', item);
-												arrToRemoved.push(true);
-											}
-										}
-										if (index === array.length -1) resolve();
-									});
-								});
-
-								removeMethod.then(() => {
-									if (typeof runATagAjax == 'function') runATagAjax();
-									if (typeof runDomShowHide == 'function') runDomShowHide();
-									if (typeof msgRunDomReady == 'function') msgRunDomReady();
-									// console.log(arrToRemoved);
-									if (uiParent.find('.notif-item').length == 0) {
-										uiParent.find('.no-records-ui').removeClass('hide');
+						var removeMethod = new Promise((resolve, reject) => {
+							oArr.forEach((id, index, array) => {
+								var newUI = oResponse.html[id],
+								uiParent = $('#msg_'+oResponse.tabs[id]);
+								if (newUI.length) {
+									var item = uiParent.find('[data-msg-id="'+id+'"]');
+									if (item.length) {
+										console.log('replace ui!', item);
+										item.replaceWith(newUI);
 									} else {
-										uiParent.find('.no-records-ui').addClass('hide');
+										console.log('new ui!', uiParent);
+										uiParent.prepend(newUI);
 									}
-									console.log('All done!');
-								});
+								}
+								if (index === array.length -1) resolve();
+							});
+						});
+
+						removeMethod.then(() => {
+							if (typeof runATagAjax == 'function') runATagAjax();
+							if (typeof runDomShowHide == 'function') runDomShowHide();
+							if (typeof msgRunDomReady == 'function') msgRunDomReady();
+							// console.log(arrToRemoved);
+							if (uiParent.find('.notif-item').length == 0) {
+								uiParent.find('.no-records-ui').removeClass('hide');
+							} else {
+								uiParent.find('.no-records-ui').addClass('hide');
 							}
-						}
+							console.log('All done!');
+						});
 					} else {
 						var uiParent = []
 						var removeMethod = new Promise((resolve, reject) => {
@@ -554,7 +533,6 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 								var item = uiParent.find('[data-msg-id="'+id+'"]');
 								if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
 								if (item.length) {
-									// console.log('replace ui!', item);
 									item.remove();
 									arrToRemoved.push(true);
 								}
@@ -599,51 +577,42 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					oArr = oResponse.merge_ids;
 				}
 				if (Object.keys(oResponse.html).length) {
-					for (var uiID in oResponse.html) {
-						var newUI = oResponse.html[uiID]
-						var arrNotFound = [];
-
-						var removeMethod = new Promise((resolve, reject) => {
-							oArr.forEach((id, index, array) => {
-								if (uiID == id) {
-									console.log(uiID, '==', id);
-									var item = uiParent.find('[data-merge-id="'+id+'"]');
-									if (bIsRemoveUI == true) {
-										if (item.length) {
-											console.log('removed ui!', item);
-											item.remove();
-										}
+					var removeMethod = new Promise((resolve, reject) => {
+						oArr.forEach((id, index, array) => {
+							var newUI = oResponse.html[id];
+							if (newUI.length) {
+								var item = uiParent.find('[data-merge-id="'+id+'"]');
+								if (bIsRemoveUI == true) {
+									if (item.length) {
+										console.log('removed ui!', item);
+										item.remove();
+									}
+								} else {
+									if (item.length) {
+										console.log('replace ui!', item);
+										item.replaceWith(newUI);
 									} else {
-										if (item.length) {
-											console.log('replace ui!', item);
-											item.replaceWith(newUI);
-										} else if (newUI.length) {
-											console.log('new ui!', $(newUI));
-											uiParent.prepend(newUI);
-										} else {
-											console.log('ui not found!', item);
-											arrNotFound.push(id);
-										}
+										console.log('new ui!', $(newUI));
+										uiParent.prepend(newUI);
 									}
 								}
-								if (index === array.length -1) resolve();
-							});
-						});
-
-						removeMethod.then(() => {
-							if (typeof runATagAjax == 'function') runATagAjax();
-							if (typeof runDomShowHide == 'function') runDomShowHide();
-							if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
-							if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
-							// console.log(arrNotFound);
-							if (uiParent.find('.order-table-item').length == 0) {
-								uiParent.find('.no-records-ui').removeClass('hide');
-							} else {
-								uiParent.find('.no-records-ui').addClass('hide');
 							}
-							console.log(oResponse.panel, 'All done!');
+							if (index === array.length -1) resolve();
 						});
-					}
+					});
+
+					removeMethod.then(() => {
+						if (typeof runATagAjax == 'function') runATagAjax();
+						if (typeof runDomShowHide == 'function') runDomShowHide();
+						if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
+						if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
+						if (uiParent.find('.order-table-item').length == 0) {
+							uiParent.find('.no-records-ui').removeClass('hide');
+						} else {
+							uiParent.find('.no-records-ui').addClass('hide');
+						}
+						console.log(oResponse.panel, 'All done!');
+					});
 				} else {
 					// uiParent.find('.no-records-ui').removeClass('hide');
 				}

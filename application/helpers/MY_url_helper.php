@@ -204,7 +204,7 @@ function get_session_baskets($where=false)
 	} else {
 		$where['device_id'] = $ci->device_id;
 	}
-	$baskets = $ci->baskets->get_in($where, false, false, 'updated:DESC');
+	$baskets = $ci->baskets->get_in($where, false, false, 'added:DESC');
 	if (is_array($baskets)) {
 		foreach ($baskets as $key => $basket) {
 			$date = date('F j, Y', $basket['at_date']);
