@@ -89,7 +89,7 @@
 									<?php if ($data['is_edit']): ?>
 										<input type="reset" class="btn btn-default icon-left" value="Reset" />
 									<?php endif ?>
-									<button class='btn btn-theme'>Next<i class='fa fa-chevron-right icon-right'></i></button>
+									<button class='btn btn-theme' type="submit" loading-text>Next<i class='fa fa-chevron-right icon-right'></i></button>
 								</div>
 							</div>
 						</form>
@@ -133,7 +133,7 @@
 							<?php if ($data['is_edit']): ?>
 								<div id='attr_btn_container' style='margin-top:15px;text-align:right;'>
 									<input type="reset" class="btn btn-default icon-left" value="Reset" />
-									<button class='btn btn-theme normal-radius'>Next<i class='fa fa-chevron-right icon-right'></i></button>
+									<button class='btn btn-theme normal-radius' type="submit" loading-text>Next<i class='fa fa-chevron-right icon-right'></i></button>
 								</div>
 							<?php endif ?>
 						</form>
@@ -223,7 +223,7 @@
 								<?php if ($data['is_edit']): ?>
 									<input type="reset" class="btn btn-default icon-left" value="Reset" />
 								<?php endif ?>
-								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
+								<button class="btn btn-theme" type="submit" loading-text>Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>
 						</form>
 					</div>
@@ -249,7 +249,7 @@
 								<?php if ($data['is_edit']): ?>
 									<input type="reset" class="btn btn-default icon-left" value="Reset" />
 								<?php endif ?>
-								<button class="btn btn-theme ">Next<i class="fa fa-chevron-right icon-right"></i></button>
+								<button class="btn btn-theme" type="submit" loading-text>Next<i class="fa fa-chevron-right icon-right"></i></button>
 							</div>
 						</form>
 					</div>

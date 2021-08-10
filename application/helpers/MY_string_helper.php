@@ -221,7 +221,7 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 							$pathname = basename($name);
 						}
 						$pathname = preg_replace('/\s+/', '-', $pathname);
-						$uploadfile = $uploaddir . $pathname;
+						$uploadfile = $uploaddir  . '/' . $pathname;
 						if (@move_uploaded_file($_files[$input]['tmp_name'][$key], $uploadfile)) {
 							// "File is valid, and was successfully uploaded.\n";
 							$status = TRUE;
@@ -248,7 +248,7 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 						$pathname = basename($_files[$input]['name']);
 					}
 					$pathname = preg_replace('/\s+/', '-', $pathname);
-					$uploadfile = $uploaddir . $pathname;
+					$uploadfile = $uploaddir  . '/' . $pathname;
 					// debug($ext);
 					// debug($uploadfile, 1);
 					if (@move_uploaded_file($_files[$input]['tmp_name'], $uploadfile)) {
@@ -269,9 +269,7 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 				}
 			}
 		}
-		// debug($uploaddir, 1);
-		// debug(array_keys($result), 1);
-		// debug($_files, 1);
+		// debug($uploaddir, $result, $_files, 'stop');
 		if ($return_path AND isset($input)) {
 			$data = '';
 			$set = array_keys($result);
@@ -381,6 +379,7 @@ function clean_string_name($string=FALSE, $replaced=FALSE, $delimiter='-')
 {
 	if ($string) {
 		/*now replace space and underscores with the delimiter*/
+		$string = preg_replace('/[^A-Za-z0-9\-]/', ' ', $string);
 		$string = preg_replace('/\s/', $delimiter, $string);
 		$string = preg_replace('/_/', $delimiter, $string);
 		/*clean all unnecessary symbols and characters*/

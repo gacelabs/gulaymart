@@ -439,25 +439,26 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						oArr = oResponse.basket_ids;
 					}
 					if (oArr.length) {
+						oArr = oArr.sort();
 						var arrRemoved = [];
 						if (Object.keys(oResponse.html).length) {
 							for (var x in oResponse.html) {
 								var newUI = oResponse.html[x], arrNotFound = [];
 								var removeMethod = new Promise((resolve, reject) => {
+									var found = false;
 									oArr.forEach((id, index, array) => {
-										var item = uiParent.find('[data-basket-id="'+id+'"]').parents('.order-table-item');
+										var item = uiParent.find('[data-'+id+'-id]');
 										if (item.length) {
-											console.log('replace ui!', item);
+											// console.log('replace ui!', item);
 											item.replaceWith(newUI);
-										} else if (newUI.length) {
-											console.log('new ui!', uiParent);
-											uiParent.prepend(newUI);
-										} else {
-											console.log('ui not found!', item);
-											arrNotFound.push(id);
+											found = true;
 										}
-										if (index === array.length -1) resolve();
 									});
+									if (found == false) {
+										// console.log('new ui!', uiParent);
+										uiParent.prepend(newUI);
+									}
+									resolve();
 								});
 
 								removeMethod.then(() => {
@@ -470,9 +471,8 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 									} else {
 										uiParent.find('.no-records-ui').addClass('hide');
 									}
-									console.log(oResponse.panel, 'All done!');
+									// console.log(oResponse.panel, 'All done!');
 								});
-
 							}
 						}
 					}
@@ -503,10 +503,10 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 								if (newUI.length) {
 									var item = uiParent.find('[data-msg-id="'+id+'"]');
 									if (item.length) {
-										console.log('replace ui!', item);
+										// console.log('replace ui!', item);
 										item.replaceWith(newUI);
 									} else {
-										console.log('new ui!', uiParent);
+										// console.log('new ui!', uiParent);
 										uiParent.prepend(newUI);
 									}
 								}
@@ -524,7 +524,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							} else {
 								uiParent.find('.no-records-ui').addClass('hide');
 							}
-							console.log('All done!');
+							// console.log('All done!');
 						});
 					} else {
 						var uiParent = []
@@ -545,7 +545,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							} else {
 								uiParent.find('.no-records-ui').addClass('hide');
 							}
-							console.log('All done!');
+							// console.log('All done!');
 						});
 					}
 				}
@@ -589,10 +589,10 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 									}
 								} else {
 									if (item.length) {
-										console.log('replace ui!', item);
+										// console.log('replace ui!', item);
 										item.replaceWith(newUI);
 									} else {
-										console.log('new ui!', $(newUI));
+										// console.log('new ui!', $(newUI));
 										uiParent.prepend(newUI);
 									}
 								}
@@ -611,7 +611,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						} else {
 							uiParent.find('.no-records-ui').addClass('hide');
 						}
-						console.log(oResponse.panel, 'All done!');
+						// console.log(oResponse.panel, 'All done!');
 					});
 				} else {
 					// uiParent.find('.no-records-ui').removeClass('hide');

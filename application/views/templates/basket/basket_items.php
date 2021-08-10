@@ -1,8 +1,8 @@
 
-<div class="order-table-item">
+<div class="order-table-item" <?php echo $id_combi;?>>
 	<div class="order-grid-column order-labels">
 		<div class="text-left">
-			<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($baskets['updated']));?></i></small></p>
+			<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i:s a', strtotime($baskets['updated']));?></i></small></p>
 		</div>
 		<div class="text-right hidden-sm hidden-xs">
 			<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>

@@ -61,6 +61,7 @@ class Basket extends My_Controller {
 					if (!isset($items_by_farm[$location_and_sched]['updated'])) {
 						$items_by_farm[$location_and_sched]['updated'] = $basket['updated'];
 					}
+					$items_by_farm[$location_and_sched]['basket_ids'][] = $basket['id'];
 				}
 			}
 		}
