@@ -20,6 +20,7 @@
 	<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
 		<?php 
 			$row_cnt = 0;
+			$cancelled_items = false;
 			foreach ($orders['order_details'] as $index => $order): ?>
 			<!-- per order -->
 			<?php
@@ -42,10 +43,11 @@
 					'sub_total'=>$order['sub_total'],
 				], JSON_NUMERIC_CHECK);
 				$status_array[] = $details['status'];
+				if ($details['status'] == GM_CANCELLED_STATUS) {
+					if ($cancelled_items == false) $cancelled_items = [];
+					$cancelled_items[$order['basket_id']] = (float)$order['sub_total'];
+				}
 				$cancelled_class = ' was-cancelled';
-				/*if ($row_cnt == count($orders['order_details'])) {
-					$cancelled_class = ' was-cancelled-last-child';
-				}*/
 			?>
 			<div class="order-grid-column order-item<?php if ($status != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
 				<div class="media">
@@ -143,6 +145,12 @@
 			</p>
 			<div>
 				<?php
+				// debug($cancelled_items, 'stop');
+				if ($cancelled_items AND in_array($status_id, [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS])) {
+					foreach ($cancelled_items as $amount) {
+						$initial_total -= $amount;
+					}
+				}
 				$fee = $orders['fee'];
 				if ($initial_total == 0) $fee = 0;
 				?>

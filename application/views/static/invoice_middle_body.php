@@ -31,6 +31,7 @@
 							echo "<h4>Order Received!</h4>";
 							break;
 						case GM_CANCELLED_STATUS:
+							echo '<img src="assets/images/icons/cancelled.png" width="70" style="margin-bottom:15px;">';
 							echo "<h4>Order was Cancelled!</h4>";
 							break;
 						default:
