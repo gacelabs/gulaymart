@@ -43,6 +43,8 @@ class Authenticate extends MY_Controller {
 				} else {
 					$to = $this->session->userdata('referrer') ?: 'orders/';
 				}
+				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
+				if ($has_notifs) $to = 'orders/messages';
 			} else {
 				$to = '?error=Invalid credentials';
 			}
@@ -266,6 +268,7 @@ class Authenticate extends MY_Controller {
 			} else {
 				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
 				if ($has_notifs) $to = 'orders/messages';
+				debug($has_notifs, $to, 'stop');
 				$type = 'success';
 				$message = '';
 			}

@@ -211,18 +211,20 @@ var ajaxSuccessResponse = function(response, e) {
 		bConfirmed = runAlertBox(response, undefined, bConfirmed);
 	}
 	if (bConfirmed) {
-		setTimeout(function() {
+		var wait = new Promise((resolve, reject) => {
+			if (response && (typeof response.callback == 'string')) {
+				var fn = eval(response.callback);
+				if (typeof fn == 'function') {
+					// console.log(response.callback, 'function');
+					fn(response.data, e);
+				}
+			}
+			resolve();
+		}).then(() => {
 			if (response && (typeof response.redirect == 'string')) {
 				if (response.redirect) window.location = response.redirect;
 			}
-		}, 3000);
-		if (response && (typeof response.callback == 'string')) {
-			var fn = eval(response.callback);
-			if (typeof fn == 'function') {
-				// console.log(response.callback, 'function');
-				fn(response.data, e);
-			}
-		}
+		});
 	}
 }
 
