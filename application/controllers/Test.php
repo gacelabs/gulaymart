@@ -8,6 +8,9 @@ class Test extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if (!$this->accounts->has_session) {
+			redirect(base_url('/'));
+		}
 	}
 
 	public function mail($type='hello')
