@@ -17,7 +17,10 @@
 				}
 				if (oUser) {
 					if (badge) {
-						favicon = new Favico({animation : 'popFade'});
+						console.log(badge);
+						if (badge > 0) {
+							favicon = new Favico({animation : 'popFade'});
+						}
 						favicon.badge(badge == 0 ? '' : badge);
 					}
 					/*communicate from orders cycle*/
