@@ -1,6 +1,7 @@
 
 <script type="text/javascript">
 	var realtime = false, serviceWorker, isSubscribed, favicon = {badge: function() {}};
+	let iLocalMessageCount = '';
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
@@ -16,11 +17,8 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 				if (oUser) {
-					if (badge) {
-						console.log(badge);
-						if (badge > 0) {
-							favicon = new Favico({animation : 'popFade'});
-						}
+					favicon = new Favico({animation : 'popFade'});
+					if (badge > 0) {
 						favicon.badge(badge == 0 ? '' : badge);
 					}
 					/*communicate from orders cycle*/
@@ -45,7 +43,6 @@
 		me.parentNode.insertBefore(js, me);
 	}(document, "script", "sd-sdk"));
 
-	let iLocalMessageCount = '';
 	var onServiceWorkerReady = function(oData) {
 		if ('serviceWorker' in navigator) {
 			navigator.serviceWorker.ready.then(function(registration) {
@@ -61,9 +58,9 @@
 				}).then(function(currentNotification) {
 					const oOptions = oData;
 					let bNotify = false;
+					let iMessageCount = '';
 					if (oOptions.data && oUser.id == oOptions.data.id) {
 						bNotify = true;
-						let iMessageCount = '';
 						let sType = oOptions.data.type;
 						if (currentNotification) {
 							iMessageCount = currentNotification.data.newMessageCount + 1;
