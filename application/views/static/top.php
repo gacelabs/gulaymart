@@ -48,6 +48,6 @@
 		var APPNAME = '<?php echo APP_NAME;?>';
 		var IS_LOCAL = <?php echo IS_LOCAL;?>;
 		var TIMEZONE = '<?php echo date_default_timezone_get();?>';
-		var badge = '<?php echo $this->message_count;?>';
+		var badge = <?php echo $this->message_count;?>;
 	</script>
 </head>
