@@ -568,14 +568,14 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Check your Placed Order(s) here, Thank you!');
-	$html_buyer_gm = '<p>Your Placed Order(s), <a href="orders/placed/">Check here</a></p>';
+	$html_buyer_gm = '<p>Your Placed Order(s), <a href="orders/placed/" data-readit="1">Check here</a></p>';
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
 	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
 	$context = make_stream_context($data);
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
-	$html_seller_gm = '<p>Your Placed Order(s) from '.$buyer['fullname'].', <a href="fulfillment/placed/">Check here</a></p>';
+	$html_seller_gm = '<p>Your Placed Order(s) from '.$buyer['fullname'].', <a href="fulfillment/placed/" data-readit="1">Check here</a></p>';
 
 	$ci =& get_instance();
 	foreach ($seller_ids as $seller_id) {
@@ -603,7 +603,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Check your '.$action.' Order(s) here, Thank you!');
-	$html_buyer_gm = '<p>Your '.$action.' Order(s), <a href="orders/'.$status.'/">Check here</a></p>';
+	$html_buyer_gm = '<p>Your '.$action.' Order(s), <a href="orders/'.$status.'/" data-readit="1">Check here</a></p>';
 	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
 	
 	/*message sellers*/
@@ -612,7 +612,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
 
 	$ci =& get_instance();
-	$html_seller_gm = '<p>Your '.$action.' Order(s) from '.$buyer['fullname'].', <a href="fulfillment/'.$status.'/">Check here</a></p>';
+	$html_seller_gm = '<p>Your '.$action.' Order(s) from '.$buyer['fullname'].', <a href="fulfillment/'.$status.'/" data-readit="1">Check here</a></p>';
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Check your '.$action.' Order(s) from '.$buyer['fullname'].', Thank you!');
 		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');

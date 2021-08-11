@@ -14,6 +14,20 @@ var msgRunDomReady = function() {
 	$('.rm-link').off('click').on('click', function() {
 		$(this).parents('.notif-item-middle').next('.notif-item-footer').removeClass('hide');
 	});
+
+	$('[data-readit="1"]').off('click').on('click', function(e) {
+		e.preventDefault();
+		var oThis = $(this);
+		var msg_id = oThis.parents('.notif-item:first').data('msg-id');
+		console.log(msg_id, oThis);
+		if (msg_id != undefined && oThis.prop('tagName') == 'A') {
+			$('[data-toread="'+msg_id+'"]').bind('click', function() {
+				setTimeout(function() {
+					window.location = oThis.attr('href');
+				}, 300);
+			}).trigger('click');
+		}
+	});
 }
 
 var appendComment = function(obj) {
