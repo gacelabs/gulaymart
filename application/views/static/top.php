@@ -20,21 +20,21 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/defaults.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/globals.css'); ?>">
 
 	<?php
-	$this->minify->css([ 'global/defaults.css', 'global/globals.css']);
 	if (count($top['css'])) {
 		foreach ($top['css'] as $value) {
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
 			} elseif ((bool)strstr($value, '.min') == true) {
-				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'').'.css">';
+				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'.css').'">';
 			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
-				$this->minify->add_css($value.'.css');
+				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'.css').'">';
 			} 
 			echo "\r\n";
 		}
-		echo $this->minify->deploy_css(false);
 	}
 	?>
 	<link rel="manifest" href="/public/manifest.webmanifest.json">

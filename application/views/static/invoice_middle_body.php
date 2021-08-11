@@ -93,17 +93,14 @@
 					?>
 					<?php if ($order_details): ?>
 						<?php foreach ($order_details as $key => $details): ?>
-							<?php 
-								$dont_count = false;
+							<?php
 								if ($details['status'] == GM_CANCELLED_STATUS) {
 									if ((bool)strstr($referrer, 'for-pick-up') OR 
 										(bool)strstr($referrer, 'on-delivery') OR 
 										(bool)strstr($referrer, 'received')) {
-										$dont_count = true;
+										continue;
 									}
 								}
-								// debug($dont_count, 'stop');
-								if ($dont_count) continue;
 							?>
 							<div class="invoice-summary-grid">
 								<div>

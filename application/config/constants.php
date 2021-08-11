@@ -121,7 +121,7 @@ if ((bool)strstr($_SERVER['HTTP_HOST'], 'local')) {
 	// defined('SENDDATA_APPKEY') OR define('SENDDATA_APPKEY', 'A3193CF4AEC1ADD05F4B78C4E0C61C39');
 }
 defined('MONTHS') OR define('MONTHS', serialize([
-	'January','February','March','April','May','June','July','August','September','October','November','December'
+	'1'=>'January', '2'=>'February', '3'=>'March', '4'=>'April', '5'=>'May', '6'=>'June', '7'=>'July', '8'=>'August', '9'=>'September', '10'=>'October', '11'=>'November', '12'=>'December'
 ]));
 
 defined('PROFILE_INFO_MESSAGE') OR define('PROFILE_INFO_MESSAGE', 'Your Profile information is important, and will only be used for delivery purposes.');

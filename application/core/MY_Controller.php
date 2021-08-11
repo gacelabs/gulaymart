@@ -83,9 +83,9 @@ class MY_Controller extends CI_Controller {
 		/*debug($this->allowed_methods, $this->action, $this->no_entry_for_signed_out, $this->session);*/
 
 		/*DEPLOY CSS AND JS MINIFIER WHEN IN PRODUCTION ONLY*/
-		$this->load->library('minify');
+		// $this->load->library('minify');
 		// debug($this->minify, 'stop');
-		if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development') $this->minify->enabled = FALSE;
+		// if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development') $this->minify->enabled = FALSE;
 
 		// debug($this);
 		$this->load->library('accounts');
@@ -189,7 +189,7 @@ class MY_Controller extends CI_Controller {
 			}
 		}
 		/*set minify folders*/
-		foreach (['assets/css/compiled/', 'assets/js/compiled/'] as $path) {
+		/*foreach (['assets/css/compiled/', 'assets/js/compiled/'] as $path) {
 			if (is_dir(get_root_path($path)) == false) {
 				$folder_chunks = explode('/', $path);
 				if (count($folder_chunks)) {
@@ -201,7 +201,7 @@ class MY_Controller extends CI_Controller {
 				}
 				@chmod($uploaddir, 0755);
 			}
-		}
+		}*/
 		/**/
 		$this->basket_count = $this->order_count = $this->fulfill_count = $this->message_count = false;
 		if ($this->accounts->has_session) {

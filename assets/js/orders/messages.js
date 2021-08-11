@@ -25,6 +25,7 @@ var appendComment = function(obj) {
 			$('#seller_comments').text(obj.content);
 			// $('#seller_buyer_date').text($.format.date(obj.added, "- ddd, MMMM d, yyyy | hh:ss p"));
 			$('#seller_farm_name').text(obj.farm.name);
+			$('#seller_content').find('img.media-object').attr('src', obj.farm.profile_pic);
 			$('#seller_buyer_date').text(timeZoneFormatDate(obj.added));
 			$('#is_seller').text((obj.from_id == oUser.id ? '(You)' : ''));
 			$('#seller_reply').val('');

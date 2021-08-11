@@ -16,6 +16,7 @@
 		<?php endif ?>
 
 		<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+		<?php $months = unserialize(MONTHS);?>
 
 			<?php if ($current_profile['profile']) : ?>
 			<div class="dashboard-panel">
@@ -33,7 +34,8 @@
 						<div class="text-left">
 							<p class="zero-gaps">
 								<?php
-									$month_name = date("F", mktime(0, 0, 0, $current_profile['profile']['birth_month']+1, 10));
+									// $month_name = date("F", mktime(0, 0, 0, $current_profile['profile']['birth_month']+1, 10));
+									$month_name = isset($months[$current_profile['profile']['birth_month']]) ? $months[$current_profile['profile']['birth_month']] : '';
 									echo ucfirst($month_name)." ".$current_profile['profile']['birth_year'];
 								?>
 							</p>
@@ -84,7 +86,6 @@
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">
-									<?php $months = unserialize(MONTHS);?>
 									<select name="birth_month" class="form-control" placeholder="Birth Month" required="required">
 										<?php foreach ($months as $id => $month): ?>
 											<?php if ($current_profile['profile']): ?>

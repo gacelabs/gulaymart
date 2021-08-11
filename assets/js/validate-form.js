@@ -6,6 +6,10 @@ jQuery.validator.addMethod("emailExt", function(value, element, param) {
 	return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
 },'Your E-mail is wrong');
 
+jQuery.validator.addMethod("birthPlace", function(value, element, param) {
+	return /^\d*[1-9]\d*$/.test(value);
+},'Your Birth Place is wrong');
+
 function runFormValidation(forms) {
 	if (forms == undefined) {
 		forms = $(document.body).find('.form-validate');
@@ -34,6 +38,15 @@ function runFormValidation(forms) {
 				}
 			}
 		}
+		var fields = form.find('[name][required]');
+		if (fields.length) {
+			fields.each(function(i, el) {
+				if (oValidationRules[el.name] == undefined) {
+					oValidationRules[el.name] = {required:true};
+				}
+			});
+		}
+		
 		var recaptcha = form.find('.g-recaptcha');
 		form.validate({
 			ignore: '.ignore',

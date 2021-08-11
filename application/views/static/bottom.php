@@ -6,23 +6,20 @@
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/jquery-dateformat.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/plugins/favico-0.3.10.min.js'); ?>"></script>
 		<script type="text/javascript" src="<?php echo base_url('assets/js/toast.min.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('assets/js/global.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('assets/js/validate-form.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('assets/js/common.js'); ?>"></script>
+		<script type="text/javascript" src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
 		<?php
-			$this->minify->add_js('global.js');
-			$this->minify->add_js('validate-form.js');
-			$this->minify->add_js('common.js');
-			$this->minify->add_js('main.js');
 			foreach ($bottom['js'] as $value) {
 				if (filter_var($value, FILTER_VALIDATE_URL)) {
 					echo '<script type="text/javascript" src="'.$value.'"></script>';
-				} elseif ((bool)strstr($value, '.min') == false) {
-					$this->minify->add_js($value.'.js');
 				} else {
-					echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'').'.js"></script>';
+					echo '<script type="text/javascript" src="'.base_url('assets/js/'.$value.'.js').'"></script>';
 				}
 				echo "\r\n";
 			}
-			echo $this->minify->deploy_js(false);
 		?>
 		
 		<?php

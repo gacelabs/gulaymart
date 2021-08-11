@@ -86,13 +86,13 @@ $config['compress'] = TRUE;
 
 // compression engine setting (default values: 'minify' and 'closurecompiler')
 $config['compression_engine'] = array(
-	'css' => 'cssmin', // minify || cssmin
-	'js'  => 'closurecompiler' // closurecompiler || jsmin || jsminplus
+    'css' => 'minify', // minify || cssmin
+    'js'  => 'closurecompiler' // closurecompiler || jsmin || jsminplus
 );
 
 // when you use closurecompiler as compression engine you can choose compression level (default value: 'SIMPLE_OPTIMIZATIONS')
 // avaliable options: "WHITESPACE_ONLY", "SIMPLE_OPTIMIZATIONS" or "ADVANCED_OPTIMIZATIONS"
-$config['closurecompiler']['compilation_level'] = 'SIMPLE_OPTIMIZATIONS';
+$config['closurecompiler']['compilation_level'] = 'WHITESPACE_ONLY';
 
 
 // End of file minify.php
