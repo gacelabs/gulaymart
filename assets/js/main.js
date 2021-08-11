@@ -628,13 +628,21 @@ var runATagAjax = function () {
 	var oPauseAjax = false;
 	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault();
-		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
-		var isJsonPCallback = $(e.target).data('call-jsonp') != undefined ? $(e.target).data('call-jsonp') : 1;
+		var oThis = $(e.target);
+		if ($(e.target).prop('tagName') != 'A') {
+			oThis = $(e.target).parent('a');
+		}
+		var oData = oThis.data('json') != undefined ? oThis.data('json') : {};
+		var isJsonPCallback = oThis.data('call-jsonp') != undefined ? oThis.data('call-jsonp') : 1;
+		var origText = oThis.html();
 		var oSettings = {
-			url: $(e.target).data('href') == undefined ? e.target.href : $(e.target).data('href'),
+			url: oThis.data('href') == undefined ? e.target.href : oThis.data('href'),
 			type: 'get',
 			data: oData,
 			dataType: 'json',
+			beforeSend: function() {
+				oThis.html('<span class="spinner-border spinner-border-sm"></span> '+origText);
+			},
 			success: function(response) {
 				var bConfirmed = true;
 				if (response && response.type && response.type.length && response.message.length) {
@@ -654,10 +662,15 @@ var runATagAjax = function () {
 						}
 					}
 				}
-			},/*
+			},
+			complete: function(xhr, status) {
+				setTimeout(function() {
+					oThis.html(origText);
+				}, 1000);
+			},
 			error: function(xhr, status, thrown) {
 				console.log(status, thrown);
-			}*/
+			}
 		};
 		if (isJsonPCallback) {
 			oSettings.dataType = 'jsonp';
