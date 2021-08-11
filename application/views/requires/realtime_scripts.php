@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, isSubscribed, favicon;
+	var realtime = false, serviceWorker, isSubscribed, favicon = {badge: function() {}};
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
@@ -16,8 +16,10 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 				if (oUser) {
-					favicon = new Favico({animation : 'popFade'});
-					favicon.badge(badge == 0 ? '' : badge);
+					if (badge) {
+						favicon = new Favico({animation : 'popFade'});
+						favicon.badge(badge == 0 ? '' : badge);
+					}
 					/*communicate from orders cycle*/
 					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {						
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
