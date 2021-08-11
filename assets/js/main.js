@@ -302,6 +302,8 @@ var reCountMenuNavs = function(sNav, totalItems) {
 			} else {
 				$('kbd.nav-messages-count').addClass('hide').text('');
 			}
+			badge = totalItems == 0 ? '' : totalItems;
+			favicon.badge(totalItems == 0 ? '' : totalItems);
 		break;
 	}
 	/*tABS*/

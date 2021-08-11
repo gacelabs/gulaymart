@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-	var realtime = false, serviceWorker, isSubscribed;
+	var realtime = false, serviceWorker, isSubscribed, favicon;
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
@@ -16,8 +16,10 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 				if (oUser) {
+					favicon = new Favico({animation : 'up'});
+					favicon.badge(badge == 0 ? '' : badge);
 					/*communicate from orders cycle*/
-					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {						
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
 							var oData = object.data;
 							// console.log(oData);
@@ -69,6 +71,8 @@
 					}
 					// console.log(bNotify, oOptions);
 					if (bNotify) {
+						badge = iMessageCount;
+						favicon.badge(iMessageCount == 0 ? '' : iMessageCount);
 						return registration.showNotification('New Message', oOptions);
 					}
 				});
@@ -87,6 +91,8 @@
 				}
 			}
 			if (localNotify) {
+				badge = iLocalMessageCount;
+				favicon.badge(iLocalMessageCount == 0 ? '' : iLocalMessageCount);
 				runAlertBox({type:'success', message: localOptions.body});
 			}
 		}

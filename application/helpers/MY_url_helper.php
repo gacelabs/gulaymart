@@ -481,19 +481,6 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 		}
 		// debug($settings, 'stop');
 		if ($settings) {
-			$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
-				'badge' => base_url('assets/images/favicon.png'),
-				'body' => '',
-				'icon' => base_url('assets/images/favicon.png'),
-				'tag' => 'notif:'.$notifType.'-id:'.$user_id,
-				'renotify' => true,
-				'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-				'data' => [
-					'id' => $user_id,
-					'url' => base_url('orders/messages'),
-					'type' => $notifType,
-				],
-			]);
 			// send message to the user has to replenish the needed stocks for delivery
 			$check_msgs = $ci->gm_db->get('messages', [
 				'tab' => $tab, 'type' => $type,
@@ -502,6 +489,19 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				'content' => $content,
 			], 'row');
 			if ($check_msgs == false) {
+				$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
+					'badge' => base_url('assets/images/favicon.png'),
+					'body' => '',
+					'icon' => base_url('assets/images/favicon.png'),
+					'tag' => 'notif:'.$notifType.'-id:'.$user_id,
+					'renotify' => true,
+					'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+					'data' => [
+						'id' => $user_id,
+						'url' => base_url('orders/messages'),
+						'type' => $notifType,
+					],
+				]);
 				$message_id = $ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,

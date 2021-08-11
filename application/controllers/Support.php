@@ -137,7 +137,9 @@ class Support extends MY_Controller {
 					case 'basket_id':
 						$datatable = $this->gm_db->get_in('baskets', ['id' => $ids]);
 						$user_ids = [];
-						foreach ($datatable as $row) $user_ids[] = $row['user_id'];
+						if ($datatable) {
+							foreach ($datatable as $row) $user_ids[] = $row['user_id'];
+						}
 						$user_ids = array_unique($user_ids);
 						$data = [
 							'mode' => 'basket',
@@ -284,7 +286,9 @@ class Support extends MY_Controller {
 					case 'message_id':
 						$datatable = $this->gm_db->get_in('messages', ['id' => $ids]);
 						$user_ids = [];
-						foreach ($datatable as $row) $user_ids[] = $row['to_id'];
+						if ($datatable) {
+							foreach ($datatable as $row) $user_ids[] = $row['to_id'];
+						}
 						$user_ids = array_unique($user_ids);
 						$data = [
 							'mode' => 'message',
