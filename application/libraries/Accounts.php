@@ -185,9 +185,9 @@ class Accounts {
 				}
 			}
 			// debug($user);
-			$this->class->session->set_userdata('profile', $user);
-			$this->profile = $user;
 			$this->has_session = true;
+			$this->profile = $user;
+			$this->refetch();
 			return TRUE;
 		}
 		/*else the user is logged in or session active*/
@@ -226,7 +226,7 @@ class Accounts {
 	{
 		if ($user_id > 0 AND $this->has_session == FALSE) {
 			$mobile_user = $this->class->gm_db->get('users', ['id' => $user_id], 'row');
-			$this->login($mobile_user);
+			if ($mobile_user) $this->login($mobile_user);
 		}
 		$user = $this->class->db->get_where('users', ['id' => $this->profile['id']]);
 		if ($user->num_rows()) {
@@ -315,7 +315,6 @@ class Accounts {
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			$this->has_session = TRUE;
-			$this->device_id = device_id();
 			// debug($this->profile, 'stop');
 			return $this;
 		} else {
