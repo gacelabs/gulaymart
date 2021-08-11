@@ -483,7 +483,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 		break;
 		case 'message':
 			if ($.inArray('messages', Object.values(oSegments)) >= 0) {
-				var oArr = [];
+				var oArr = [], uiParent = $('#link_panel_top .hideshow-container');
 				if (Array.isArray(oResponse.message_ids) == false) {
 					if (typeof oResponse.message_ids == 'object') {
 						oArr = Object.values(oResponse.message_ids);
