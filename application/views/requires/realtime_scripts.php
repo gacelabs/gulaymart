@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
 	var realtime = false, serviceWorker, isSubscribed, favicon = {badge: function() {}};
-	let iLocalMessageCount = '';
+	let iLocalMessageCount = '', iRealtimeCnt = 0;
 	window.initSendData = function() {
 		realtime = new SendData({
 			// debug: true,
