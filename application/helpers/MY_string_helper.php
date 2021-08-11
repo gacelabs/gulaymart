@@ -2,72 +2,138 @@
 
 function debug()
 {
+	$ci =& get_instance();
+	$is_ajax = $ci->input->is_ajax_request();
 	$args = func_get_args();
-	echo "<pre>";
-	foreach ($args as $index => $data) {
-		if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
-			$trace = debug_backtrace();
-			try {
-				if (!empty($trace)) {
-					foreach ($trace as $key => $row) {
-						$separator = '------';
-						for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
-						
-						if ($key == 0) {
-							echo ($key==0?'<h1 style="margin:0;">DEBUGGER</h1>':'').$separator."<br /><b>PATH:</b> ".$row['file'];
-							echo "<br /><b>LINE:</b> ".$row['line']."<br />";
-						
-							if (is_bool($data)) {
-								echo "<b>DATA TYPE:</b> BOOLEAN<br />";
-								if ($data) {
-									echo "<b>DATA:</b> TRUE<br />";
-								} else {
-									echo "<b>DATA:</b> FALSE<br />";
-								}
-							} else {
-								if (is_object($data) OR is_null($data)) echo "<b>DATA TYPE:</b> OBJECT<br />";
-								if (is_array($data)) echo "<b>DATA TYPE:</b> ARRAY<br />";
-								if (is_numeric($data)) {
-									echo "<b>DATA TYPE:</b> NUMBER<br />";
-								} elseif (is_string($data)) {
-									echo "<b>DATA TYPE:</b> STRING<br />";
-								}
-								if (empty($data) AND $data != 0) {
-									if (is_object($data) OR is_null($data)) echo "<b>DATA:</b> NULL<br />";
-									if (is_array($data)) echo "<b>DATA:</b> EMPTY<br />";
-									if (is_string($data)) echo "<b>DATA:</b> BLANK<br />";
-								} else {
-									echo "<b>DATA:</b> ";
-									if (is_null($data)) {
-										var_dump($data);
-									} else if (is_string($data)) {
-										echo '<code>';
-										print_r($data);
-										echo '</code>';
+	if (!$is_ajax) {
+		echo "<pre>";
+		foreach ($args as $index => $data) {
+			if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
+				$trace = debug_backtrace();
+				try {
+					if (!empty($trace)) {
+						foreach ($trace as $key => $row) {
+							$separator = '------';
+							for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
+							
+							if ($key == 0) {
+								echo ($key==0?'<h1 style="margin:0;">DEBUGGER</h1>':'').$separator."<br /><b>PATH:</b> ".$row['file'];
+								echo "<br /><b>LINE:</b> ".$row['line']."<br />";
+							
+								if (is_bool($data)) {
+									echo "<b>DATA TYPE:</b> BOOLEAN<br />";
+									if ($data) {
+										echo "<b>DATA:</b> TRUE<br />";
 									} else {
-										print_r($data);
+										echo "<b>DATA:</b> FALSE<br />";
 									}
-									echo "<br />";
+								} else {
+									if (is_object($data) OR is_null($data)) echo "<b>DATA TYPE:</b> OBJECT<br />";
+									if (is_array($data)) echo "<b>DATA TYPE:</b> ARRAY<br />";
+									if (is_numeric($data)) {
+										echo "<b>DATA TYPE:</b> NUMBER<br />";
+									} elseif (is_string($data)) {
+										echo "<b>DATA TYPE:</b> STRING<br />";
+									}
+									if (empty($data) AND $data != 0) {
+										if (is_object($data) OR is_null($data)) echo "<b>DATA:</b> NULL<br />";
+										if (is_array($data)) echo "<b>DATA:</b> EMPTY<br />";
+										if (is_string($data)) echo "<b>DATA:</b> BLANK<br />";
+									} else {
+										echo "<b>DATA:</b> ";
+										if (is_null($data)) {
+											var_dump($data);
+										} else if (is_string($data)) {
+											echo '<code>';
+											print_r($data);
+											echo '</code>';
+										} else {
+											print_r($data);
+										}
+										echo "<br />";
+									}
 								}
 							}
 						}
+					} else {
+						echo "<b>DATA:</b> NULL<br />";
 					}
-				} else {
-					echo "<b>DATA:</b> NULL<br />";
-				}
-			} catch (Exception $e) {
-				foreach ($trace as $key => $row) {
-					$separator = '------';
-					for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
-						echo '<h1 style="margin:0;">DEBUGGER</h1>'.$separator."<br /><b>PATH:</b> ".$row['file'];
-					echo "<br /><b>LINE:</b> ".$row['line']."<br />";
-					echo "<b>DATA:</b> ".$e->getMessage()."<br />";
+				} catch (Exception $e) {
+					foreach ($trace as $key => $row) {
+						$separator = '------';
+						for ($i=0; $i < strlen($row['file']); $i++) $separator .= '-';
+							echo '<h1 style="margin:0;">DEBUGGER</h1>'.$separator."<br /><b>PATH:</b> ".$row['file'];
+						echo "<br /><b>LINE:</b> ".$row['line']."<br />";
+						echo "<b>DATA:</b> ".$e->getMessage()."<br />";
+					}
 				}
 			}
 		}
+		echo "</pre>";
+		if (end($args) == 'stop' OR end($args) === true) exit();
+	} else {
+		$debugger = [];
+		foreach ($args as $index => $data) {
+			if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
+				$trace = debug_backtrace();
+				try {
+					if (!empty($trace)) {
+						foreach ($trace as $key => $row) {
+							if ($key == 0) {
+								$row['file'] = str_replace([BASEPATH,APPPATH.'controllers\\',VIEWPATH], '', $row['file']);
+								$debugger[$key]['method'] = 'debugger';
+								$debugger[$key]['path'] = $row['file'];
+								$debugger[$key]['line'] = $row['line'];
+								
+								if (is_bool($data)) {
+									$debugger[$key]['datatype'] = 'boolean';
+									if ($data) {
+										$debugger[$key]['data'] = true;
+									} else {
+										$debugger[$key]['data'] = false;
+									}
+								} else {
+									if (is_object($data) OR is_null($data)) $debugger[$key]['datatype'] = 'object';
+									if (is_array($data)) $debugger[$key]['datatype'] = 'array';
+									if (is_numeric($data)) {
+										$debugger[$key]['datatype'] = 'number';
+									} elseif (is_string($data)) {
+										$debugger[$key]['datatype'] = 'string';
+									}
+									if (empty($data) AND $data != 0) {
+										if (is_object($data) OR is_null($data)) $debugger[$key]['datatype'] = 'null';
+										if (is_array($data)) $debugger[$key]['datatype'] = 'empty';
+										if (is_string($data)) $debugger[$key]['datatype'] = 'blank';
+									} else {
+										if (is_null($data)) {
+											$debugger[$key]['data'] = 'null';
+										} else {
+											$debugger[$key]['data'] = $data;
+										}
+									}
+								}
+							}
+						}
+					} else {
+						$debugger[$key]['method'] = 'debugger';
+						$debugger[$key]['path'] = 'unknown';
+						$debugger[$key]['line'] = 0;
+						$debugger[$key]['data'] = 'empty';
+					}
+				} catch (Exception $e) {
+					foreach ($trace as $key => $row) {
+						$debugger[$key]['method'] = 'debugger';
+						$debugger[$key]['path'] = $row['file'];
+						$debugger[$key]['line'] = $row['line'];
+						$debugger[$key]['data'] = $e->getMessage();
+					}
+				}
+			}
+		}
+		echo json_encode($debugger, JSON_NUMERIC_CHECK);
+		http_response_code(503);
+		exit();
 	}
-	echo "</pre>";
-	if (end($args) == 'stop' OR end($args) === true) exit();
 }
 
 function check_instance($obj=FALSE, $class=NULL)

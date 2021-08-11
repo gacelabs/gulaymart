@@ -97,7 +97,11 @@ var oFormAjax = false, formAjax = function(form, uploadFile) {
 					}
 				},
 				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
+					if (thrown == 'Service Unavailable') {
+						console.log('Debug called');
+					} else {
+						console.log(status, thrown);
+					}
 				},
 				complete: function(xhr, status) {
 					if (uiButtonSubmit && keep_loading == false) {
@@ -188,7 +192,11 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 				}
 			},
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				if (thrown == 'Service Unavailable') {
+					console.log('Debug called');
+				} else {
+					console.log(status, thrown);
+				}
 			},
 			complete: function(xhr, status) {
 				var wait = new Promise((resolve, reject) => {

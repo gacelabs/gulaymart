@@ -95,23 +95,22 @@
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
 			if (oUser && oUser.is_admin) {
-				var oData = {
+				simpleAjax('test/msg');
+				/*var oData = {
 					id: oUser.id,
 					tag: 'notif:test-id:notification',
 					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/',
 					type: 'test message'
 				};
-				simpleAjax('test/msg', {ajax_complete: function() {
-					realtime.trigger('gm-push-notification', 'notifications', {
-						badge: 'https://gulaymart.com/assets/images/favicon.png',
-						body: '',
-						icon: 'https://gulaymart.com/assets/images/favicon.png',
-						tag: 'notif:test-id:notification',
-						renotify: true,
-						vibrate: [200, 100, 200, 100, 200, 100, 200],
-						data: oData
-					});
-				}});
+				realtime.trigger('gm-push-notification', 'notifications', {
+					badge: 'https://gulaymart.com/assets/images/favicon.png',
+					body: '',
+					icon: 'https://gulaymart.com/assets/images/favicon.png',
+					tag: 'notif:test-id:notification',
+					renotify: true,
+					vibrate: [200, 100, 200, 100, 200, 100, 200],
+					data: oData
+				});*/
 			}
 		});
 	};

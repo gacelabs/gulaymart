@@ -16,7 +16,11 @@ if ($('body').hasClass('orders-placed')) {
 				dataType: 'jsonp',
 				jsonpCallback: 'gmCall',
 				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
+					if (thrown == 'Service Unavailable') {
+						console.log('Debug called');
+					} else {
+						console.log(status, thrown);
+					}
 				},
 				success: function(data) {}
 			};
@@ -35,7 +39,11 @@ if ($('body').hasClass('orders-placed')) {
 				dataType: 'jsonp',
 				jsonpCallback: 'gmCall',
 				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
+					if (thrown == 'Service Unavailable') {
+						console.log('Debug called');
+					} else {
+						console.log(status, thrown);
+					}
 				},
 				success: function(data) {}
 			};

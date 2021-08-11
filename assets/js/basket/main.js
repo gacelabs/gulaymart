@@ -73,7 +73,11 @@ var basketsRunDomReady = function() {
 				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
 			},
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				if (thrown == 'Service Unavailable') {
+					console.log('Debug called');
+				} else {
+					console.log(status, thrown);
+				}
 			},
 			complete: function(xhr, status) {
 				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
@@ -103,7 +107,11 @@ var basketsRunDomReady = function() {
 				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
 			},
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				if (thrown == 'Service Unavailable') {
+					console.log('Debug called');
+				} else {
+					console.log(status, thrown);
+				}
 			},
 			complete: function(xhr, status) {
 				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
@@ -126,7 +134,11 @@ var removeBasketItem = function(post) {
 			dataType: 'jsonp',
 			jsonpCallback: 'gmCall',
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				if (thrown == 'Service Unavailable') {
+					console.log('Debug called');
+				} else {
+					console.log(status, thrown);
+				}
 			},
 			success: function(data) {
 

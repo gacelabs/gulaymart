@@ -44,7 +44,11 @@ var removeItem = function(id) {
 		data: {id: id},
 		dataType: 'jsonp',
 		error: function(xhr, status, thrown) {
-			console.log(status, thrown);
+			if (thrown == 'Service Unavailable') {
+				console.log('Debug called');
+			} else {
+				console.log(status, thrown);
+			}
 		}
 	};
 	if (oRemoveAjax != false && oRemoveAjax.readyState !== 4) oRemoveAjax.abort();

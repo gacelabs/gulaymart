@@ -63,7 +63,11 @@ var ordersRunDomReady = function() {
 				uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
 			},
 			error: function(xhr, status, thrown) {
-				console.log(status, thrown);
+				if (thrown == 'Service Unavailable') {
+					console.log('Debug called');
+				} else {
+					console.log(status, thrown);
+				}
 			},
 			complete: function(xhr, status) {
 				uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
@@ -95,7 +99,11 @@ var ordersRunDomReady = function() {
 					uiButtonSubmit.attr('disabled', 'disabled').html('<span class="spinner-border spinner-border-sm"></span>');
 				},
 				error: function(xhr, status, thrown) {
-					console.log(status, thrown);
+					if (thrown == 'Service Unavailable') {
+						console.log('Debug called');
+					} else {
+						console.log(status, thrown);
+					}
 				},
 				complete: function(xhr, status) {
 					uiButtonSubmit.html(uiButtonSubmit.data('orig-ui'));
