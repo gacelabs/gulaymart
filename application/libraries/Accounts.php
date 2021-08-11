@@ -187,6 +187,7 @@ class Accounts {
 			// debug($user);
 			$this->class->session->set_userdata('profile', $user);
 			$this->profile = $user;
+			$this->has_session = true;
 			return TRUE;
 		}
 		/*else the user is logged in or session active*/
@@ -314,6 +315,7 @@ class Accounts {
 			$this->class->session->set_userdata('profile', $request);
 			$this->profile = $request;
 			$this->has_session = TRUE;
+			$this->device_id = device_id();
 			// debug($this->profile, 'stop');
 			return $this;
 		} else {

@@ -268,7 +268,7 @@ class Authenticate extends MY_Controller {
 			} else {
 				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
 				if ($has_notifs) $to = 'orders/messages';
-				debug($has_notifs, $to, user('id'), 'stop');
+				// debug($has_notifs, $to, $this->accounts->has_session, user('id'), 'stop');
 				$type = 'success';
 				$message = '';
 			}
