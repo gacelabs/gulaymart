@@ -69,19 +69,21 @@
 
 						<?php if ($stocks > 0): ?>
 							<div class="add-basket-btn" js-element="basket-btns"<?php if ($this->agent->is_mobile()): ?> style="width: 305px;"<?php endif ?>>
-								<button type="submit" class="btn btn-lg btn-default" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
+								<button type="submit" class="btn btn-lg btn-default<?php if (DISABLE_DISTANCE_COMPARING): ?> pull-right" style="margin: 0 25% 15px 0;<?php endif ?>" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
 									<ul class="spaced-list between text-left">
 										<li><i class="fa fa-calendar icon-left"></i></li>
 										<li><p class="zero-gaps">Add to Basket</p><small style="vertical-align:top;font-size:10px;">SCHEDULED DELIVERY</small></li>
 									</ul>
 									<input type="hidden" name="order_type" value="2" />
 								</button>
+								<?php if (DISABLE_DISTANCE_COMPARING == 0): ?>
 								<button href="basket/add/<?php echo $product['id'];?>" type="button" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
 									<ul class="spaced-list between text-left">
 										<li><i class="fa fa-clock-o icon-left text-white"></i></li>
 										<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
 									</ul>
 								</button>
+								<?php endif ?>
 								<!-- <a href="basket/add/<?php //echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php //echo $product['basket_details']['farm_location_id'];?>">
 									<ul class="spaced-list between">
 										<li><p class="zero-gaps">Buy Now</p>
@@ -161,7 +163,7 @@
 							<div class="productpage-summary-grid">
 								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
 								<div>
-									<p class="zero-gaps">Today</p>
+									<p class="zero-gaps"><?php if (DISABLE_DISTANCE_COMPARING): ?>Arrival<?php else: ?>Today<?php endif ?></p>
 									<?php if ($product['farm_location']['durationval']): ?>
 										<small class="text-gray elem-block">Earliest: <?php compute_eta($product['farm_location']['durationval'], true, true);?></small>									
 									<?php endif ?>

@@ -134,6 +134,7 @@ defined('NON_LOCATION_KEYS') OR define('NON_LOCATION_KEYS', serialize(['id','lat
 defined('METERS_DISTANCE_TO_USER') OR define('METERS_DISTANCE_TO_USER', 30000);
 defined('NON_PRODUCT_KEYS') OR define('NON_PRODUCT_KEYS', serialize(['user_id', 'category_id', 'subcategory_id', 'added']));
 defined('SECONDS_DISTANCE_TO_USER') OR define('SECONDS_DISTANCE_TO_USER', 3600);
+defined('DISABLE_DISTANCE_COMPARING') OR define('DISABLE_DISTANCE_COMPARING', 0);
 defined('ADMIN_PASS') OR define('ADMIN_PASS', '2');
 
 defined('MARKETPLACE_MAX_ITEMS') OR define('MARKETPLACE_MAX_ITEMS', 10);

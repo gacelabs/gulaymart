@@ -1307,6 +1307,11 @@ function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH')
 
 function get_driving_distance($coordinates=false, $mode='driving', $language='ph') {
 	if ($coordinates) {
+		$latlng = get_cookie('prev_latlng', true);
+		if (!empty($latlng) AND DISABLE_DISTANCE_COMPARING) {
+			$coordinates[0] = unserialize($latlng);
+		}
+		// debug($coordinates, 'stop');
 		$origins = $destinations = false;
 		foreach ($coordinates as $key => $coordinate) {
 			if ($key == 0) {
@@ -1417,7 +1422,7 @@ function nearby_farms($data=false, $user_id=false)
 function get_farms_by_distance($farms, $row, $driving_distance, $user_id, $compare_1, $compare_2)
 {
 	$ci =& get_instance();
-	if ($compare_1 <= $compare_2) {
+	if ($compare_1 <= $compare_2 || DISABLE_DISTANCE_COMPARING) {
 		$where = ['id' => $row['farm_id']];
 		if ($user_id) {
 			$where['user_id'] = $user_id;
@@ -1527,7 +1532,7 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false, $bypass=false)
 {
 	$ci =& get_instance();
-	if ($compare_1 <= $compare_2) {
+	if ($compare_1 <= $compare_2 || DISABLE_DISTANCE_COMPARING) {
 		$items_locations = $ci->gm_db->get('products_location', ['farm_location_id' => $row['id']]);
 		if ($conditions != false) {
 			if (isset($conditions['not_ids']) AND $conditions['not_ids'] !== false) {

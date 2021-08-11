@@ -65,7 +65,7 @@
 										</div>
 									<?php endforeach ?>
 								<?php elseif (!$current_profile): ?>
-									Be the first to make a feedback. <button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button>
+									Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
 								<?php endif ?>
 								<?php if ($can_comment == 0 AND $current_profile): ?>
 									<div class="comment-box" style="margin-left:-15px;margin-right:-15px;">
