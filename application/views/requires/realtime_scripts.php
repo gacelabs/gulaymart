@@ -101,15 +101,17 @@
 					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/',
 					type: 'test message'
 				};
-				realtime.trigger('gm-push-notification', 'notifications', {
-					badge: 'https://gulaymart.com/assets/images/favicon.png',
-					body: '',
-					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'notif:test-id:notification',
-					renotify: true,
-					vibrate: [200, 100, 200, 100, 200, 100, 200],
-					data: oData
-				});
+				simpleAjax('test/msg', {ajax_complete: function() {
+					realtime.trigger('gm-push-notification', 'notifications', {
+						badge: 'https://gulaymart.com/assets/images/favicon.png',
+						body: '',
+						icon: 'https://gulaymart.com/assets/images/favicon.png',
+						tag: 'notif:test-id:notification',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: oData
+					});
+				}});
 			}
 		});
 	};

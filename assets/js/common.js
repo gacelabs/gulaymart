@@ -156,6 +156,11 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 				loadingText = 'Processing ...';
 			}
 		}
+		var ajax_complete_fn = false;
+		if (data && typeof data.ajax_complete == 'function') {
+			ajax_complete_fn = data.ajax_complete;
+			delete data.ajax_complete;
+		}
 		var oSettings = {
 			url: url,
 			type: 'post',
@@ -186,15 +191,20 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 				console.log(status, thrown);
 			},
 			complete: function(xhr, status) {
-				if (ui && keep_loading == false) {
-					ui.html(ui.data('orig-ui'));
-					ui.removeAttr('disabled');
-				} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
-					setTimeout(function() {
-						if (ui) ui.html(ui.data('orig-ui'));
-						$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
-					}, keep_loading);
-				}
+				var wait = new Promise((resolve, reject) => {
+					if (ui && keep_loading == false) {
+						ui.html(ui.data('orig-ui'));
+						ui.removeAttr('disabled');
+					} else if (typeof keep_loading != 'boolean' && typeof keep_loading == 'number') {
+						setTimeout(function() {
+							if (ui) ui.html(ui.data('orig-ui'));
+							$('a,select,button,input:button,input:submit').removeClass('stop').prop('disabled', false).removeAttr('disabled');
+						}, keep_loading);
+					}
+					resolve();
+				}).then(() => {
+					if (typeof ajax_complete_fn == 'function') ajax_complete_fn(xhr, status);
+				});
 			}
 		};
 		if (oSimpleAjax != false && oSimpleAjax.readyState !== 4 && no_abort == false) oSimpleAjax.abort();

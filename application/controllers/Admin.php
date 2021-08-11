@@ -213,7 +213,6 @@ class Admin extends MY_Controller {
 				$this->gm_db->save('admin_settings', ['value' => json_encode($set, JSON_NUMERIC_CHECK)], ['id' => $automation_settings['id']]);
 			}
 			/*when cron job runs again it will continue our bookings based on settings*/
-			// $this->push_orders_to_toktok();
 		}
 	}
 
