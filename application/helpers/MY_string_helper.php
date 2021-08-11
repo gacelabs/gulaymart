@@ -80,7 +80,11 @@ function debug()
 					if (!empty($trace)) {
 						foreach ($trace as $key => $row) {
 							if ($key == 0) {
-								$row['file'] = str_replace([BASEPATH,APPPATH.'controllers\\',VIEWPATH], '', $row['file']);
+								$row['file'] = str_replace([
+									BASEPATH,APPPATH,VIEWPATH,'var','www','system','config',
+									'controllers','core','gulaymart.com','helpers','libraries',
+									'models','view','\\'
+								], '', $row['file']);
 								$debugger[$key]['method'] = 'debugger';
 								$debugger[$key]['path'] = $row['file'];
 								$debugger[$key]['line'] = $row['line'];
