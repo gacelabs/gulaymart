@@ -41,10 +41,12 @@ $(document).ready(function() {
 		});
 	}
 
-	if ($('.simple-marquee-container').SimpleMarquee != undefined) {
-		$('.simple-marquee-container').SimpleMarquee({
-			duration: 40000,
-		});
+	if (!oUser) {
+		if ($('.simple-marquee-container').SimpleMarquee != undefined) {
+			$('.simple-marquee-container').SimpleMarquee({
+				duration: 40000,
+			});
+		}
 	}
 });
 
