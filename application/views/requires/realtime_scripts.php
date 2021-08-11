@@ -16,7 +16,7 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
 				}
 				if (oUser) {
-					favicon = new Favico({animation : 'up'});
+					favicon = new Favico({animation : 'popFade'});
 					favicon.badge(badge == 0 ? '' : badge);
 					/*communicate from orders cycle*/
 					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {						
