@@ -83,7 +83,7 @@ function debug()
 								$row['file'] = str_replace([
 									BASEPATH,APPPATH,VIEWPATH,'var','www','system','config',
 									'controllers','core','gulaymart.com','helpers','libraries',
-									'models','view','\\'
+									'models','view','\\','/'
 								], '', $row['file']);
 								$debugger[$key]['method'] = 'debugger';
 								$debugger[$key]['path'] = $row['file'];
