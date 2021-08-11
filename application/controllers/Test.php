@@ -10,6 +10,8 @@ class Test extends MY_Controller {
 		parent::__construct();
 		if (!$this->accounts->has_session) {
 			redirect(base_url('/'));
+		} elseif (!user('is_admin')) {
+			redirect(base_url('/'));
 		}
 	}
 
