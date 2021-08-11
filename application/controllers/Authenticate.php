@@ -264,6 +264,8 @@ class Authenticate extends MY_Controller {
 				$type = 'error';
 				$message = 'Unable to login, clearing session';
 			} else {
+				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
+				if ($has_notifs) $to = 'orders/messages';
 				$type = 'success';
 				$message = '';
 			}

@@ -7,10 +7,17 @@ $(document).ready(function() {
 					if (response.status === 'connected') {
 						runFbLogin();
 					} else{
-						$('#login_modal').modal('hide');
+						runAlertBox({
+							type: 'info',
+							message: 'Unable to connect on <a href="//www.facebook.com">Facebook</a>', 
+							unclose: true,
+							callback: function() {
+								$('#login_modal').modal('hide');
+							}
+						});
 					}
 				}, {scope: 'public_profile, email'});
-			} else if (fbstatus != 'unknown') {
+			} else if (fbstatus == 'connected') {
 				runFbLogin();
 			}
 		});
@@ -27,15 +34,26 @@ var runFbLogin = function(data) {
 	$('.fb-signing-in').removeClass('hide');
 	if (data != undefined) {
 		FB.getLoginStatus(function(response) {
-			data.fbauth = response;
-			simpleAjax('authenticate/fb_login', data);
-		});
-	} else {
-		FB.api('/me?fields=id,email,name', function(data) {
-			FB.getLoginStatus(function(response) {
+			if (response.status == 'connected') {
 				data.fbauth = response;
 				simpleAjax('authenticate/fb_login', data);
-			});
+			} else {
+				console.log(response);
+				runAlertBox({type: 'error', message: 'Your account is not yet connected on <a href="//www.facebook.com">Facebook</a>', unclose: true});
+			}
+		});
+	} else {
+		FB.getLoginStatus(function(response) {
+			if (response.status == 'connected') {
+				var loginFunction = function(data) {
+					data.fbauth = response;
+					simpleAjax('authenticate/fb_login', data);
+				};
+				FB.api('/me?fields=id,email,name', loginFunction);
+			} else {
+				console.log(response);
+				runAlertBox({type: 'error', message: 'Your account is not yet connected on <a href="//www.facebook.com">Facebook</a>', unclose: true});
+			}
 		});
 	}
 };

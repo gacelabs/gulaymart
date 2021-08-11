@@ -256,7 +256,7 @@ $config['log_path'] = '';
 | Note: Leaving it blank will default to 'php'.
 |
 */
-$config['log_file_extension'] = '';
+$config['log_file_extension'] = 'log';
 
 /*
 |--------------------------------------------------------------------------
@@ -387,13 +387,7 @@ $config['encryption_key'] = '';
 */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
-if(check_device() == 'mobile') {
-	// $config['sess_expiration'] = 7200; /*DON'T SET FOR NO EXPIRE ON MOBILE*/
-	$config['sess_expire_on_close'] = FALSE;
-} else {
-	$config['sess_expiration'] = 7200;
-	$config['sess_expire_on_close'] = TRUE;
-}
+$config['sess_expiration'] = 0;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
@@ -534,64 +528,3 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
-
-function check_device() {
-	$tablet_browser = 0;
-	$mobile_browser = 0;
-
-	$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?? null;
-
-	if (!$userAgent || !$httpAccept) {
-		return 'desktop';
-	}
-
-	if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($userAgent))) {
-		$tablet_browser++;
-	}
-
-	if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile|iphone)/i', strtolower($userAgent))) {
-		$mobile_browser++;
-	}
-
-	if ((strpos(strtolower($httpAccept),'application/vnd.wap.xhtml+xml') > 0) OR ((isset($_SERVER['HTTP_X_WAP_PROFILE']) OR isset($_SERVER['HTTP_PROFILE'])))) {
-		$mobile_browser++;
-	}
-
-	$mobile_ua = trim(strtolower(substr($userAgent, 0, 4)));
-	$mobile_agents = [
-		'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
-		'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
-		'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
-		'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
-		'newt','noki','palm','pana','pant','phil','play','port','prox',
-		'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
-		'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
-		'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
-		'wapr','webc','winw','winw','xda ','xda-'
-	];
-
-	if (in_array($mobile_ua, $mobile_agents)) {
-		$mobile_browser++;
-	}
-
-	if (strpos(strtolower($userAgent),'opera mini') > 0) {
-		$mobile_browser++;
-		// Check for tablets on opera mini alternative headers
-		$stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?$_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:(isset($_SERVER['HTTP_DEVICE_STOCK_UA'])?$_SERVER['HTTP_DEVICE_STOCK_UA']:''));
-		if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
-			$tablet_browser++;
-		}
-	}
-
-	if ($tablet_browser > 0) {
-		// do something for tablet devices
-		return 'tablet';
-	} else if ($mobile_browser > 0) {
-		// do something for mobile devices
-		return 'mobile';
-	} else {
-		// do something for everything else
-		return 'desktop';
-	}
-}

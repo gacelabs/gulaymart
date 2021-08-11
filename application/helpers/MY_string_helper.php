@@ -1847,3 +1847,16 @@ function setup_db_timezone()
 	}
 	return false;
 }
+
+function user($field=false)
+{
+	$ci =& get_instance();
+	if ($ci->accounts->has_session) {
+		if ($field == false) {
+			return $ci->accounts->profile;
+		} elseif (isset($ci->accounts->profile[$field])) {
+			return $ci->accounts->profile[$field];
+		}
+	}
+	return false;
+}

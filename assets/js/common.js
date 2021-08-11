@@ -330,7 +330,7 @@ var runAlertBox = function(response, heading, bConfirmed) {
 				if (heading == undefined) heading = 'Information';
 				var oSettings = {
 					heading: heading,
-					text: response.message,
+					text: response.message+'<div id="information-ok" class="hide"><br><button class="btn btn-xs btn-success pull-right" style="padding: 0 10px; margin-right: 10px;" id="toast-ok">ok</button><br></div>',
 					icon: 'info',
 					loader: (response.unclose == true) ? false : true,
 					stack: false,
@@ -341,6 +341,7 @@ var runAlertBox = function(response, heading, bConfirmed) {
 				};
 				if (response && (typeof response.callback == 'function')) {
 					oSettings.beforeShow = function () {
+						$('#information-ok').removeClass('hide');
 						$('#toast-ok').off('click').on('click', function(e) {
 							if (response && (typeof response.callback == 'string')) {
 								var fn = eval(response.callback);
