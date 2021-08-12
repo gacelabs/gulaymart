@@ -175,9 +175,6 @@
 				<p class="zero-gaps" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
 				<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge_id="<?php echo $orders['id'];?>" data-default-html='READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i>'>READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>
 			<?php else : ?>
-				<?php 
-				if ($initial_total <= 0) $status_text = 'cancelled';
-				?>
 				<p class="zero-gaps"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 				<p class="zero-gaps"><span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($status_text)));?>"><?php echo ucwords(urldecode($status_text));?></span></p>
 			<?php endif ; ?>

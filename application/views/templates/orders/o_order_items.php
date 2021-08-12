@@ -123,9 +123,6 @@
 	<?php
 		$farm = $orders['seller'];
 		$nospace_status = str_replace(" ", "", strtolower(urldecode($status)));
-		if ($initial_total <= 0) {
-			$nospace_status = $status = 'cancelled';
-		}
 	?>
 
 	<div class="order-grid-footer" js-element="farm-<?php echo $orders['id'];?>-<?php echo $farm['farm_location_id'];?>">
