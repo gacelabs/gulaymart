@@ -10,10 +10,10 @@
 
 			<div class="carousel-inner" role="listbox" style="border-radius:0;">
 				<div class="item active">
-					<img src="assets/images/carousel/support.png" alt="...">
+					<img src="assets/images/carousel/support.png" alt="Support">
 				</div>
 				<div class="item">
-					<img src="assets/images/carousel/be-farmer-2.png" alt="...">
+					<img src="assets/images/carousel/be-farmer-2.png" alt="Be a farmer">
 				</div>
 			</div>
 		</div>

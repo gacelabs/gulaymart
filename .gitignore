@@ -45,3 +45,4 @@ assets/data/logs/
 *.webmanifest
 .next/
 node_modules/
+assets/fixes/
