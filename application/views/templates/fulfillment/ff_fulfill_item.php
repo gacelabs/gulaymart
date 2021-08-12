@@ -160,8 +160,8 @@
 			<p class="zero-gaps">Cash On Delivery</p>
 			<p class="zero-gaps"></p>
 		</div>
-		<?php if ($status_text != 'cancelled' AND $initial_total > 0): ?>
-			<div class="text-left hidden-xs">
+		<?php if ($status_text != 'cancelled'): ?>
+			<div class="text-left hidden-xs"<?php if ($initial_total <= 0): ?> style="visibility: hidden;"<?php endif ?>>
 				<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 				<?php if ($status_text == 'placed') : ?>
 					Available upon Pick Up (Status)
