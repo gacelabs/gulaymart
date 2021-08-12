@@ -161,13 +161,15 @@
 			<p class="zero-gaps"></p>
 		</div>
 		<?php if ($status_text != 'cancelled'): ?>
-			<div class="text-left hidden-xs"<?php if ($initial_total <= 0): ?> style="visibility: hidden;"<?php endif ?>>
-				<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
-				<?php if ($status_text == 'placed') : ?>
-					Available upon Pick Up (Status)
-				<?php else : ?>
-					<button class="btn btn-xs btn-contrast" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
-				<?php endif ; ?>
+			<div class="text-left hidden-xs">
+				<?php if ($initial_total > 0): ?>
+					<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
+					<?php if ($status_text == 'placed') : ?>
+						Available upon Pick Up (Status)
+					<?php else : ?>
+						<button class="btn btn-xs btn-contrast" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
+					<?php endif ; ?>
+				<?php endif ?>
 			</div>
 		<?php endif ?>
 		<div class="text-left hidden-xs">
