@@ -67,9 +67,6 @@ class Authenticate extends MY_Controller {
 				],
 				'footer' => ['global/footer']
 			],
-			'bottom' => [
-				'js' => ['global'],
-			],
 			'data' => [
 				'is_login' => 0
 			]

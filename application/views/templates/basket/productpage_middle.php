@@ -64,6 +64,10 @@
 											</div>
 										</div>
 									<?php endforeach ?>
+									<?php if (!user()): ?>
+										<br>
+										You can make a feedback too! <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
+									<?php endif ?>
 								<?php elseif (!$current_profile): ?>
 									Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
 								<?php endif ?>

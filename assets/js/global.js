@@ -32,7 +32,13 @@ $(document).ready(function() {
 	$('form.sign-in-form').bind('submit', function(e) {
 		bLoginTriggered = true;
 	});
+
+	if ($('[has-basket-session="1"]').length) {
+		console.log($('[has-basket-session="1"]'), 'has basket orders');
+		// runAlertBox({type:'info', message: 'nope not so fast!', unclose: true});
+	}
 });
+
 
 window.onpopstate = function(e) {
 	if (mobileAndTabletCheck()) {

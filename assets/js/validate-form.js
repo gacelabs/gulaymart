@@ -6,9 +6,9 @@ jQuery.validator.addMethod("emailExt", function(value, element, param) {
 	return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
 },'Your E-mail is wrong');
 
-jQuery.validator.addMethod("birthPlace", function(value, element, param) {
+jQuery.validator.addMethod("birthMonth", function(value, element, param) {
 	return /^\d*[1-9]\d*$/.test(value);
-},'Your Birth Place is wrong');
+},'Your Birth month is wrong');
 
 function runFormValidation(forms) {
 	if (forms == undefined) {
@@ -26,7 +26,7 @@ function runFormValidation(forms) {
 				if (typeof item == 'string') {
 					switch ($.trim(item.toLowerCase())) {
 						case 'enter':
-							form.on('keyup keypress', function(e) {
+							form.bind('keyup keypress', function(e) {
 								var keyCode = e.keyCode || e.which;
 								if (keyCode === 13) { 
 									e.preventDefault();
@@ -43,6 +43,9 @@ function runFormValidation(forms) {
 			fields.each(function(i, el) {
 				if (oValidationRules[el.name] == undefined) {
 					oValidationRules[el.name] = {required:true};
+					if (el.name == 'birth_month') {
+						oValidationRules[el.name].birthMonth = true;
+					}
 				}
 			});
 		}

@@ -10,9 +10,6 @@ class Admin extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->library('baskets');
-		// INITIALIZING TOKTOK OBJECT
-		// $this->load->library('ToktokApi');
-		// debug($this->toktokapi, 'stop');
 		$this->load->library('accounts');
 		if ($this->accounts->has_session AND $this->accounts->profile['is_admin'] != 1) {
 			redirect(base_url('profile'));

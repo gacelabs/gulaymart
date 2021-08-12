@@ -796,8 +796,8 @@ function check_device_agent() {
 	$tablet_browser = 0;
 	$mobile_browser = 0;
 
-	$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?? null;
+	$userAgent = $_SERVER['HTTP_USER_AGENT'] ?: false;
+	$httpAccept = $_SERVER['HTTP_ACCEPT'] ?: false;
 
 	if (!$userAgent || !$httpAccept) {
 		return 'desktop';
@@ -855,8 +855,8 @@ function check_device_agent() {
 
 function format_number($value=0)
 {
-	// debug((is_numeric( $value ) && floor( $value ) != $value), 'stop');
-	if ((is_numeric( $value ) && floor( $value ) != $value)) {
+	// debug((is_numeric( $value ) AND floor( $value ) != $value), 'stop');
+	if ((is_numeric( $value ) AND floor( $value ) != $value)) {
 		return number_format($value, 2, '.', ',');
 	} else {
 		return number_format($value);
