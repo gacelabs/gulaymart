@@ -26,6 +26,7 @@
 		<div>
 			<?php 
 				$row_cnt = 0;
+				$cancelled_items = false;
 				foreach ($orders['order_details'] as $index => $order): ?>
 				<!-- per order -->
 				<?php
@@ -45,6 +46,8 @@
 					if ($details['status'] == GM_CANCELLED_STATUS) {
 						$data_product = $this->gm_db->get('baskets', ['id' => $order['basket_id']], 'row');
 						$reason = $data_product ? ($data_product['reason'] == 'None' ? 'No reason selected' : $data_product['reason']) : 'No reason selected';
+						if ($cancelled_items == false) $cancelled_items = [];
+						$cancelled_items[$order['basket_id']] = (float)$order['sub_total'];
 					}
 
 					$json = json_encode([
@@ -57,9 +60,6 @@
 
 					$status_array[] = $details['status'];
 					$cancelled_class = ' was-cancelled';
-					/*if ($row_cnt == count($orders['order_details'])) {
-						$cancelled_class = ' was-cancelled-last-child';
-					}*/
 				?>
 				<div class="order-grid-column order-item<?php if ($status_text != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
 					<div class="media">
@@ -133,6 +133,12 @@
 		$farm = $orders['seller'];
 		$buyer = $orders['buyer'];
 		// debug($buyer, 'stop');
+		// debug($cancelled_items, 'stop');
+		if ($cancelled_items AND in_array($status_id, [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS])) {
+			foreach ($cancelled_items as $amount) {
+				$initial_total -= $amount;
+			}
+		}
 	?>
 
 	<div class="order-grid-footer">
@@ -159,7 +165,7 @@
 				<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 				<?php if ($status_text == 'placed') : ?>
 					Available upon Pick Up (Status)
-				<?php else : ?>
+				<?php elseif ($initial_total > 0) : ?>
 					<button class="btn btn-xs btn-contrast" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE<i class="fa fa-file-text-o icon-right"></i></button>
 				<?php endif ; ?>
 			</div>

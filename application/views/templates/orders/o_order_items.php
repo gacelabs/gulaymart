@@ -90,7 +90,14 @@
 				</div>
 			</div>
 		<?php endforeach ?>
-
+		<?php
+		// debug($cancelled_items, 'stop');
+		if ($cancelled_items AND in_array($status_id, [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS])) {
+			foreach ($cancelled_items as $amount) {
+				$initial_total -= $amount;
+			}
+		}
+		?>
 		<div class="order-deliver-note">
 			<ul class="spaced-list between">
 				<li>
@@ -104,9 +111,11 @@
 						?>
 					</small>
 				</li>
-				<li>
-					<a class="elem-block" style="cursor:pointer; font-weight: bold; font-size: 10px;" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE</a>
-				</li>
+				<?php if ($initial_total > 0): ?>
+					<li>
+						<a class="elem-block" style="cursor:pointer; font-weight: bold; font-size: 10px;" data-toggle="modal" data-target="#ff_invoice_modal" data-basket-merge-id="<?php echo $orders['id'];?>">INVOICE</a>
+					</li>
+				<?php endif ?>
 			</ul>
 		</div>
 	</div>
@@ -145,14 +154,8 @@
 			</p>
 			<div>
 				<?php
-				// debug($cancelled_items, 'stop');
-				if ($cancelled_items AND in_array($status_id, [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS])) {
-					foreach ($cancelled_items as $amount) {
-						$initial_total -= $amount;
-					}
-				}
 				$fee = $orders['fee'];
-				if ($initial_total == 0) $fee = 0;
+				if ($initial_total <= 0) $fee = 0;
 				?>
 				<p class="hidden-xs" style="margin-bottom:3px;"><small class="elem-block"><b>TOTAL</b></small></p>
 				<p class="zero-gaps"><i>Delivery Fee:</i> <span js-element="item-fee"><?php echo format_number($fee, 2);?></span> + &#x20b1; <span js-element="item-subtotal"><?php echo format_number($initial_total);?></span></p>
