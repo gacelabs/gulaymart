@@ -24,13 +24,10 @@ if ('serviceWorker' in navigator) {
 		window.addEventListener('beforeinstallprompt', (e) => {
 			e.preventDefault();
 			deferredPrompt = e;
-			console.log(e, registration);
 		});
 
 		window.addEventListener('appinstalled', (e) => {
 			console.log(e, deferredPrompt, registration);
-			deferredPrompt = null;
-			// window.localStorage.setItem('appinstalled', 1);
 		});
 
 		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
@@ -38,8 +35,12 @@ if ('serviceWorker' in navigator) {
 				if (deferredPrompt != undefined) {
 					deferredPrompt.prompt();
 					const { outcome } = await deferredPrompt.userChoice;
+					registration.waiting = true;
+					if (outcome == 'accepted') {
+						registration.installing = true;
+						registration.waiting = false;
+					}
 					console.log(outcome, deferredPrompt, registration);
-					deferredPrompt = null;
 				} else {
 					elem.innerText = 'GO TO HOME PAGE';
 					elem.addEventListener('click', async (e) => {
@@ -48,6 +49,7 @@ if ('serviceWorker' in navigator) {
 					document.querySelectorAll('p').forEach(function(elem, i) {
 						elem.innerText = 'App already installed!';
 					});
+					console.log(deferredPrompt, registration);
 				}
 			});
 		});
