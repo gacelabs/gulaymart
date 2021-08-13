@@ -48,7 +48,7 @@ if ('serviceWorker' in navigator) {
 			});
 		} else {
 			document.querySelectorAll('p').forEach(function(elem, i) {
-				elem.remove();
+				elem.innerText = 'App already installed!';
 			});
 			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
 				elem.innerText = 'GO TO HOME PAGE';
