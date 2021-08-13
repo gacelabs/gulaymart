@@ -28,10 +28,10 @@ class Test extends MY_Controller {
 		debug($return, 'stop');
 	}
 
-	public function msg($id=0)
+	public function msg($notes='TEST!!!!', $id=0)
 	{
 		$id = $id == 0 ? $this->accounts->profile['id'] : $id;
-		$sent = send_gm_message($id, strtotime(date('Y-m-d')), 'TEST!!!!', 'Notifications', 'Orders', 'test message');
+		$sent = send_gm_message($id, strtotime(date('Y-m-d')), $notes, 'Notifications', 'Orders', 'test message');
 		debug($sent, 'stop');
 	}
 
