@@ -33,16 +33,7 @@ if ('serviceWorker' in navigator) {
 		});
 
 		window.addEventListener('appinstalled', (e) => {
-			// console.log(e, deferredPrompt, registration);
-			registration.showNotification('App Installed', {
-				badge: MAIN_URL+'assets/images/favicon.png',
-				body: 'Welcome to GulayMart!😊',
-				icon: MAIN_URL+'assets/images/favicon.png',
-				tag: 'app:installed',
-				renotify: true,
-				vibrate: [200, 100, 200, 100, 200, 100, 200],
-				data: {app:'installed', url:MAIN_URL}
-			});
+			deferredPrompt = null;
 		});
 
 		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
@@ -56,15 +47,13 @@ if ('serviceWorker' in navigator) {
 					document.querySelectorAll('.add-pwa').forEach(function(el, i) {
 						el.innerText = 'GO TO HOME PAGE';
 					});
-					elem.addEventListener('click', async (e) => {
-						window.location = MAIN_URL;
-					});
+					elem.addEventListener('click', async (e) => { window.location = MAIN_URL; });
 					document.querySelectorAll('p').forEach(function(elem, i) {
 						elem.innerText = 'App already installed!';
 					});
 					registration.showNotification('App already Installed', {
 						badge: MAIN_URL+'assets/images/favicon.png',
-						body: 'Continue supporting local farmers on GulayMart!😊',
+						body: 'Continue supporting local farmers on GulayMart.com! 😊',
 						icon: MAIN_URL+'assets/images/favicon.png',
 						tag: 'app:installed',
 						renotify: true,
