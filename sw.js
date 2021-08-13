@@ -24,34 +24,19 @@ self.addEventListener('notificationclick', function(event) {
 	event.waitUntil(event.target.clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
-		// console.log(oData);
 		if (oData) {
-			if (oData.app == 'installed') {
-				for (var i = 0; i < clientList.length; i++) {
-					var client = clientList[i];
-					if ('focus' in client) {
-						console.log(client);
-						/*client.focus();
-						setTimeout(function() {
-							client.navigate(oData.url);
-						}, 1);
-						return;*/
-					}
+			for (var i = 0; i < clientList.length; i++) {
+				var client = clientList[i];
+				if ('focus' in client) {
+					client.focus();
+					setTimeout(function() {
+						client.navigate(oData.url);
+					}, 1);
+					return;
 				}
-			} else {
-				for (var i = 0; i < clientList.length; i++) {
-					var client = clientList[i];
-					if ('focus' in client) {
-						client.focus();
-						setTimeout(function() {
-							client.navigate(oData.url);
-						}, 1);
-						return;
-					}
-				}
-				if (event.target.clients.openWindow && oData.url) {
-					return event.waitUntil(event.target.clients.openWindow(oData.url));
-				}
+			}
+			if (event.target.clients.openWindow && oData.url) {
+				return event.waitUntil(event.target.clients.openWindow(oData.url));
 			}
 		}
 	}));
