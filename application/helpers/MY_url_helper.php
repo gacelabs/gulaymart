@@ -486,7 +486,7 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				'tab' => $tab, 'type' => $type,
 				'to_id' => $user_id, 'unread' => 1,
 				// 'datestamp' => $datestamp,
-				'content' => $content,
+				'content' => urldecode($content),
 			], 'row');
 			if ($check_msgs == false) {
 				$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
@@ -505,7 +505,7 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				$message_id = $ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
-					'content' => $content,
+					'content' => urldecode($content),
 				]);
 				$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['message_id' => $message_id]);
 				return true;
