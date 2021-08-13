@@ -19,61 +19,44 @@ $(document).ready(function() {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
-		// console.log("Registered:", registration);
-		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
-			// console.log(elem, i);
-			let deferredPrompt;
-			elem.addEventListener('click', async (e) => {
-				if (deferredPrompt != undefined) {
-					deferredPrompt.prompt();
-					const { outcome } = await deferredPrompt.userChoice;
-					console.log(outcome);
-				} else {
-					document.querySelectorAll('.add-pwa').forEach(function(el, j) {
-						el.innerText = 'GO TO HOME PAGE';
-						el.removeEventListener('click', () => {
-							window.location = MAIN_URL;
-						});
-					});
-					elem.removeEventListener('click', () => {
-						window.location = MAIN_URL;
-					});
-					alert('App already added to home page.');
-				}
-				console.log(deferredPrompt, registration);
-				// deferredPrompt = null;
-			});
+		if (window.localStorage.getItem('appinstalled') == null) {
+			// console.log("Registered:", registration);
+			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
+				// console.log(elem, i);
+				let deferredPrompt;
+				elem.addEventListener('click', async (e) => {
+					if (deferredPrompt != undefined) {
+						deferredPrompt.prompt();
+						const { outcome } = await deferredPrompt.userChoice;
+						console.log(outcome);
+					}
+					console.log(deferredPrompt, registration);
+					deferredPrompt = null;
+				});
 
-			window.addEventListener('beforeinstallprompt', (e) => {
-				e.preventDefault();
-				deferredPrompt = e;
-				console.log(e, registration);
-			});
+				window.addEventListener('beforeinstallprompt', (e) => {
+					e.preventDefault();
+					deferredPrompt = e;
+					console.log(e, registration);
+				});
 
-			window.addEventListener('appinstalled', (e) => {
-				console.log(e, deferredPrompt, registration);
-				deferredPrompt = null;
-				// window.location = MAIN_URL;
-				// registration.getNotifications().then(function(notifications) {
-				// 	let currentNotification = false;
-				// 	if (notifications.length) {
-				// 		var total = notifications.length - 1;
-				// 		if (notifications[total] != undefined) {
-				// 			currentNotification = notifications[total];
-				// 		}
-				// 		/*clear all except the last*/
-				// 		for (let i = 0; i < total; i++) {
-				// 			if (notifications[i].data && oUser.id == notifications[i].data.id) {
-				// 				notifications[i].close();
-				// 			}
-				// 		}
-				// 	}
-				// 	return currentNotification;
-				// }).then(function(currentNotification) {
-				// 	if (currentNotification) currentNotification.click();
-				// });
+				window.addEventListener('appinstalled', (e) => {
+					console.log(e, deferredPrompt, registration);
+					deferredPrompt = null;
+					window.localStorage.setItem('appinstalled', 1);
+				});
 			});
-		});
+		} else {
+			document.querySelectorAll('p').forEach(function(elem, i) {
+				elem.remove();
+			});
+			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
+				elem.innerText = 'GO TO HOME PAGE';
+				elem.addEventListener('click', async (e) => {
+					window.location = MAIN_URL;
+				});
+			});
+		}
 	}).catch(function(err) {
 		console.log("Issue happened:", err);
 	});
