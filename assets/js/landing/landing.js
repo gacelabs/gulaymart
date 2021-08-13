@@ -20,7 +20,7 @@ if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
 		// console.log("Registered:", registration);
-		registration.getNotifications({tag:'app:installed'}).then(function(notifications) {
+		registration.getNotifications(/*{tag:'app:installed'}*/).then(function(notifications) {
 			notifications.forEach((obj, index) => {
 				obj.close();
 			});
