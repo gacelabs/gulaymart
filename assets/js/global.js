@@ -179,9 +179,11 @@ function modalCallbacks() {
 							execLocation(place.geometry.location);
 						});
 
-						$('#my-curr-loc').off('click').on('click', function() {
-							execLocation(oLatLong);
-						});
+						if (mobileAndTabletCheck()) {
+							$('#my-curr-loc').off('click').on('click', function() {
+								execLocation(oLatLong);
+							});
+						}
 					}
 				}, 1000);
 			break;
