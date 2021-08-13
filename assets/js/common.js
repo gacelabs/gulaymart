@@ -5,22 +5,7 @@ $(document).ready(function() {
 
 	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
-		function findMe(oLocation) {
-			if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
-				$('.close-jq-toast-single:visible').trigger('click');
-				navigator.geolocation.getCurrentPosition(function(response) {
-					if (response != undefined) {
-						oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
-						initMapLocations();
-					}
-				}, function () {
-					runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
-				}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
-			} else if (oLocation.state == 'denied') {
-				runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.', unclose: true});
-			}
-		}
-		if (window.location.protocol == 'https:'/* && mobileAndTabletCheck()*/) {
+		if (window.location.protocol == 'https:') {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
 				oLocation.onchange = function() { findMe(oLocation); }
 				findMe(oLocation);
@@ -28,6 +13,14 @@ $(document).ready(function() {
 		} else {
 			initMapLocations();
 		}
+	} else if (IS_LOCAL == 0) {
+		navigator.geolocation.getCurrentPosition(function(response) {
+			if (response != undefined) {
+				oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+			}
+		}, function () {
+			runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
+		}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 	}
 
 	if ($('form').length) {
@@ -49,6 +42,22 @@ $(document).ready(function() {
 		}
 	}
 });
+
+var findMe = function(oLocation) {
+	if (oLocation.state == 'granted' || oLocation.state == 'prompt') {
+		$('.close-jq-toast-single:visible').trigger('click');
+		navigator.geolocation.getCurrentPosition(function(response) {
+			if (response != undefined) {
+				oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
+				initMapLocations();
+			}
+		}, function () {
+			runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
+		}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+	} else if (oLocation.state == 'denied') {
+		runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.', unclose: true});
+	}
+}
 
 var oFormAjax = false, formAjax = function(form, uploadFile) {
 	if (typeof $.ajax == 'function') {
