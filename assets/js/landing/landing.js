@@ -28,9 +28,13 @@ if ('serviceWorker' in navigator) {
 					deferredPrompt.prompt();
 					const { outcome } = await deferredPrompt.userChoice;
 				} else {
-					elem.innerText = 'GO TO HOME PAGE';
-					elem.addEventListener('click', () => {
-						window.location = MAIN_URL;
+					elem.removeEventListener();
+					document.querySelectorAll('.add-pwa').forEach(function(el, j) {
+						el.removeEventListener();
+						el.innerText = 'GO TO HOME PAGE';
+						el.addEventListener('click', () => {
+							window.location = MAIN_URL;
+						});
 					});
 					alert('App already added to home page.');
 				}
