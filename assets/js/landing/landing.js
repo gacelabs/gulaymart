@@ -20,7 +20,7 @@ if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
 		// console.log("Registered:", registration);
-		registration.getNotifications(/*{tag:'app:installed'}*/).then(function(notifications) {
+		registration.getNotifications().then(function(notifications) {
 			notifications.forEach((obj, index) => {
 				obj.close();
 			});
@@ -33,15 +33,15 @@ if ('serviceWorker' in navigator) {
 		});
 
 		window.addEventListener('appinstalled', (e) => {
-			console.log(e, deferredPrompt, registration);
+			// console.log(e, deferredPrompt, registration);
 			registration.showNotification('App Installed', {
 				badge: MAIN_URL+'assets/images/favicon.png',
-				body: 'Welcome to GulayMart',
+				body: 'Welcome to GulayMart!😊',
 				icon: MAIN_URL+'assets/images/favicon.png',
 				tag: 'app:installed',
 				renotify: true,
 				vibrate: [200, 100, 200, 100, 200, 100, 200],
-				data: {app:'installed'}
+				data: {app:'installed', url:MAIN_URL}
 			});
 		});
 
@@ -50,14 +50,6 @@ if ('serviceWorker' in navigator) {
 				if (deferredPrompt != undefined) {
 					deferredPrompt.prompt();
 					const { outcome } = await deferredPrompt.userChoice;
-					registration.waiting = true;
-					if (outcome == 'accepted') {
-						registration.installing = true;
-						registration.waiting = false;
-					} else {
-						registration.installing = false;
-						registration.waiting = null;
-					}
 					// console.log(outcome, deferredPrompt, registration);
 				} else {
 					elem.innerText = 'GO TO HOME PAGE';
@@ -70,7 +62,15 @@ if ('serviceWorker' in navigator) {
 					document.querySelectorAll('p').forEach(function(elem, i) {
 						elem.innerText = 'App already installed!';
 					});
-					// console.log(deferredPrompt, registration);
+					registration.showNotification('App already Installed', {
+						badge: MAIN_URL+'assets/images/favicon.png',
+						body: 'Continue supporting local farmers on GulayMart!😊',
+						icon: MAIN_URL+'assets/images/favicon.png',
+						tag: 'app:installed',
+						renotify: true,
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+						data: {app:'installed', url:MAIN_URL}
+					});
 				}
 			});
 		});
