@@ -27,7 +27,7 @@ self.addEventListener('notificationclick', function(event) {
 		// console.log(oData);
 		if (oData) {
 			if (oData.app == 'installed') {
-				console.log(event.target.clients);
+				console.log(clientList);
 				// return event.waitUntil(event.target.clients.openWindow(oData.url));
 			} else {
 				for (var i = 0; i < clientList.length; i++) {
