@@ -19,7 +19,7 @@ $(document).ready(function() {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
-		// console.log("Registered:", registration);
+		console.log("Registered:", registration);
 		let deferredPrompt;
 		window.addEventListener('beforeinstallprompt', (e) => {
 			e.preventDefault();
@@ -46,6 +46,9 @@ if ('serviceWorker' in navigator) {
 					console.log(outcome, deferredPrompt, registration);
 				} else {
 					elem.innerText = 'GO TO HOME PAGE';
+					document.querySelectorAll('.add-pwa').forEach(function(el, i) {
+						el.innerText = 'GO TO HOME PAGE';
+					});
 					elem.addEventListener('click', async (e) => {
 						window.location = MAIN_URL;
 					});
