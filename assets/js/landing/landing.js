@@ -36,7 +36,10 @@ if ('serviceWorker' in navigator) {
 
 			window.addEventListener('appinstalled', (e) => {
 				deferredPrompt = null;
-				window.location = MAIN_URL;
+				// window.location = MAIN_URL;
+				registration.getNotifications().then(function(notifications) {
+					console.log(notifications);
+				});
 			});
 		});
 	}).catch(function(err) {
