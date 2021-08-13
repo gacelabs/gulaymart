@@ -19,7 +19,7 @@ $(document).ready(function() {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
-		console.log("Registered:", registration);
+		// console.log("Registered:", registration);
 		let deferredPrompt;
 		window.addEventListener('beforeinstallprompt', (e) => {
 			e.preventDefault();
@@ -28,6 +28,11 @@ if ('serviceWorker' in navigator) {
 
 		window.addEventListener('appinstalled', (e) => {
 			console.log(e, deferredPrompt, registration);
+			registration.getNotifications().then(function(notifications) {
+				console.log(notifications);
+			}).then(function(e) {
+				console.log(e);
+			});
 		});
 
 		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
@@ -43,7 +48,7 @@ if ('serviceWorker' in navigator) {
 						registration.installing = false;
 						registration.waiting = null;
 					}
-					console.log(outcome, deferredPrompt, registration);
+					// console.log(outcome, deferredPrompt, registration);
 				} else {
 					elem.innerText = 'GO TO HOME PAGE';
 					document.querySelectorAll('.add-pwa').forEach(function(el, i) {
@@ -55,13 +60,8 @@ if ('serviceWorker' in navigator) {
 					document.querySelectorAll('p').forEach(function(elem, i) {
 						elem.innerText = 'App already installed!';
 					});
-					console.log(deferredPrompt, registration);
+					// console.log(deferredPrompt, registration);
 				}
-				registration.getNotifications().then(function(notifications) {
-					console.log(notifications);
-				}).then(function(e) {
-					console.log(e);
-				});
 			});
 		});
 	}).catch(function(err) {
