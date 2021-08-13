@@ -20,6 +20,12 @@ if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
 		// console.log("Registered:", registration);
+		registration.getNotifications({tag:'app:installed'}).then(function(notifications) {
+			notifications.forEach((obj, index) => {
+				obj.close();
+			});
+		});
+
 		let deferredPrompt;
 		window.addEventListener('beforeinstallprompt', (e) => {
 			e.preventDefault();
@@ -28,10 +34,13 @@ if ('serviceWorker' in navigator) {
 
 		window.addEventListener('appinstalled', (e) => {
 			console.log(e, deferredPrompt, registration);
-			registration.getNotifications().then(function(notifications) {
-				console.log(notifications);
-			}).then(function(e) {
-				console.log(e);
+			registration.showNotification('App Installed', {
+				badge: MAIN_URL+'assets/images/favicon.png',
+				body: 'Welcome to GulayMart',
+				icon: MAIN_URL+'assets/images/favicon.png',
+				tag: 'app:installed',
+				renotify: true,
+				vibrate: [200, 100, 200, 100, 200, 100, 200],
 			});
 		});
 
