@@ -19,31 +19,27 @@ $(document).ready(function() {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js').then(function(registration){
 		registration.update();
-		if (window.localStorage.getItem('appinstalled') == null) {
-			// console.log("Registered:", registration);
+		// console.log("Registered:", registration);
+		let deferredPrompt;
+		window.addEventListener('beforeinstallprompt', (e) => {
+			e.preventDefault();
+			deferredPrompt = e;
+			console.log(e, registration);
+		});
+
+		window.addEventListener('appinstalled', (e) => {
+			console.log(e, deferredPrompt, registration);
+			deferredPrompt = null;
+			// window.localStorage.setItem('appinstalled', 1);
+		});
+
+		if (deferredPrompt != undefined) {
 			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
-				// console.log(elem, i);
-				let deferredPrompt;
 				elem.addEventListener('click', async (e) => {
-					if (deferredPrompt != undefined) {
-						deferredPrompt.prompt();
-						const { outcome } = await deferredPrompt.userChoice;
-						console.log(outcome);
-					}
-					console.log(deferredPrompt, registration);
+					deferredPrompt.prompt();
+					const { outcome } = await deferredPrompt.userChoice;
+					console.log(outcome, deferredPrompt, registration);
 					deferredPrompt = null;
-				});
-
-				window.addEventListener('beforeinstallprompt', (e) => {
-					e.preventDefault();
-					deferredPrompt = e;
-					console.log(e, registration);
-				});
-
-				window.addEventListener('appinstalled', (e) => {
-					console.log(e, deferredPrompt, registration);
-					deferredPrompt = null;
-					window.localStorage.setItem('appinstalled', 1);
 				});
 			});
 		} else {
