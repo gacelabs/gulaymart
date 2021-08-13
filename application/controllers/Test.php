@@ -32,7 +32,7 @@ class Test extends MY_Controller {
 	{
 		$id = $id == 0 ? $this->accounts->profile['id'] : $id;
 		$sent = send_gm_message($id, strtotime(date('Y-m-d')), $notes, 'Notifications', 'Orders', 'test message');
-		debug($sent, 'stop');
+		debug($sent, $id, 'stop');
 	}
 
 	public function send($mode='basket', $other=0)
