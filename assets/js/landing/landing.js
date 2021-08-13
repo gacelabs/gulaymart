@@ -33,26 +33,24 @@ if ('serviceWorker' in navigator) {
 			// window.localStorage.setItem('appinstalled', 1);
 		});
 
-		if (deferredPrompt != undefined) {
-			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
-				elem.addEventListener('click', async (e) => {
+		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
+			elem.addEventListener('click', async (e) => {
+				if (deferredPrompt != undefined) {
 					deferredPrompt.prompt();
 					const { outcome } = await deferredPrompt.userChoice;
 					console.log(outcome, deferredPrompt, registration);
 					deferredPrompt = null;
-				});
+				} else {
+					elem.innerText = 'GO TO HOME PAGE';
+					elem.addEventListener('click', async (e) => {
+						window.location = MAIN_URL;
+					});
+					document.querySelectorAll('p').forEach(function(elem, i) {
+						elem.innerText = 'App already installed!';
+					});
+				}
 			});
-		} else {
-			document.querySelectorAll('p').forEach(function(elem, i) {
-				elem.innerText = 'App already installed!';
-			});
-			document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
-				elem.innerText = 'GO TO HOME PAGE';
-				elem.addEventListener('click', async (e) => {
-					window.location = MAIN_URL;
-				});
-			});
-		}
+		});
 	}).catch(function(err) {
 		console.log("Issue happened:", err);
 	});
