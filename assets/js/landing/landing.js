@@ -23,9 +23,17 @@ if ('serviceWorker' in navigator) {
 		document.querySelectorAll('.add-pwa').forEach(function(elem, i) {
 			// console.log(elem, i);
 			let deferredPrompt;
-			elem.addEventListener('click', async () => {
-				deferredPrompt.prompt();
-				const { outcome } = await deferredPrompt.userChoice;
+			elem.addEventListener('click', async (e) => {
+				if (deferredPrompt != undefined) {
+					deferredPrompt.prompt();
+					const { outcome } = await deferredPrompt.userChoice;
+				} else {
+					elem.innerText = 'GO TO HOME PAGE';
+					elem.addEventListener('click', () => {
+						window.location = MAIN_URL;
+					});
+					alert('App already added to home page.');
+				}
 				console.log(outcome, deferredPrompt, registration);
 				// deferredPrompt = null;
 			});
