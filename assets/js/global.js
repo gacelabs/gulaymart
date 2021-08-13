@@ -180,6 +180,8 @@ function modalCallbacks() {
 						});
 
 						if (mobileAndTabletCheck()) {
+							$('#my-curr-loc').tooltip().mouseover();
+							setTimeout(function(){ $('#my-curr-loc').tooltip().mouseleave(); }, 7000);
 							$('#my-curr-loc').off('click').on('click', function() {
 								execLocation(oLatLong);
 							});
