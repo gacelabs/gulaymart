@@ -56,12 +56,12 @@ if ('serviceWorker' in navigator) {
 						elem.innerText = 'App already installed!';
 					});
 					console.log(deferredPrompt, registration);
-					registration.getNotifications().then(function(notifications) {
-						console.log(notifications);
-					}).then(function(e) {
-						console.log(e);
-					});
 				}
+				registration.getNotifications().then(function(notifications) {
+					console.log(notifications);
+				}).then(function(e) {
+					console.log(e);
+				});
 			});
 		});
 	}).catch(function(err) {
