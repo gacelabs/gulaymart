@@ -1,5 +1,5 @@
 
-<script type="text/javascript">
+<script type="text/javascript" async crossorigin="anonymous">
 	var realtime = false, serviceWorker, isSubscribed, favicon = {badge: function() {}};
 	let iLocalMessageCount = '', iRealtimeCnt = 0;
 	window.initSendData = function() {
@@ -22,7 +22,7 @@
 						favicon.badge(badge == 0 ? '' : badge);
 					}
 					/*communicate from orders cycle*/
-					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {						
+					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
 							var oData = object.data;
 							// console.log(oData);
@@ -31,6 +31,10 @@
 						// fetchOrderCycles({merge_id: [47,48]});
 					}
 				}
+				realtime.bind('info-updates', 'incoming-gm-infos', function(object) {
+					var oData = object.data;
+					console.log(oData);
+				});
 			}
 		});
 	};
@@ -149,7 +153,9 @@
 			console.log("Issue happened", err);
 		});
 	} else {
-		runNotificationListeners();
-		runSampleNotif();
+		if (oUser) {
+			runNotificationListeners();
+			runSampleNotif();
+		}
 	}
 </script>
