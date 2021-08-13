@@ -12,9 +12,9 @@
 			},
 			afterConnect: function() {
 				if (realtime.app.connected) {
-					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link');
+					$('#is-connected').removeAttr('class').addClass('text-success fa fa-link').attr('title', 'connected');
 				} else {
-					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken');
+					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken').attr('title', 'disconnected');
 				}
 				if (oUser) {
 					favicon = new Favico({animation : 'popFade'});
@@ -102,24 +102,7 @@
 
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
-			if (oUser && oUser.is_admin) {
-				simpleAjax('test/msg');
-				/*var oData = {
-					id: oUser.id,
-					tag: 'notif:test-id:notification',
-					url: window.location.protocol + '//' + window.location.hostname + '/orders/messages/',
-					type: 'test message'
-				};
-				realtime.trigger('gm-push-notification', 'notifications', {
-					badge: 'https://gulaymart.com/assets/images/favicon.png',
-					body: '',
-					icon: 'https://gulaymart.com/assets/images/favicon.png',
-					tag: 'notif:test-id:notification',
-					renotify: true,
-					vibrate: [200, 100, 200, 100, 200, 100, 200],
-					data: oData
-				});*/
-			}
+			if (oUser && oUser.is_admin) simpleAjax('test/msg');
 		});
 	};
 
