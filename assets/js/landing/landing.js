@@ -41,6 +41,7 @@ if ('serviceWorker' in navigator) {
 				tag: 'app:installed',
 				renotify: true,
 				vibrate: [200, 100, 200, 100, 200, 100, 200],
+				data: {app:'installed'}
 			});
 		});
 

@@ -24,6 +24,7 @@ self.addEventListener('notificationclick', function(event) {
 	event.waitUntil(event.target.clients.matchAll({
 		type: "window"
 	}).then(function(clientList) {
+		console.log(oData);
 		if (oData) {
 			for (var i = 0; i < clientList.length; i++) {
 				var client = clientList[i];
