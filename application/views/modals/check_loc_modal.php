@@ -17,6 +17,9 @@
 					<div>
 						<span id="basic-addon1" style="font-size:18px;">My City is</span>
 						<input type="text" class="form-control" id="check-place" placeholder="Enter your current city here..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+						<span class="input-group-btn" style="font-size:18px;" data-toggle="tooltip" data-placement="top" title="My Current Location">
+							<button class="btn btn-default btn-lg" id="my-curr-loc" type="button"><i class="fa fa-map-marker text-danger"></i></button>
+						</span>
 					</div>
 					<br>
 				<?php endif ?>
@@ -33,6 +36,9 @@
 					<div class="input-group">
 						<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My City is</span>
 						<input type="text" class="form-control" id="check-place" placeholder="Enter your current city here..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+						<span class="input-group-btn" style="font-size:18px;" data-toggle="tooltip" data-placement="top" title="My Current Location">
+							<button class="btn btn-default btn-lg" id="my-curr-loc" type="button"><i class="fa fa-map-marker text-danger"></i></button>
+						</span>
 					</div>
 				<?php endif ?>
 				<?php if (!$current_profile): ?>

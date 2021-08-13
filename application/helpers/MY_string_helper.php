@@ -1404,13 +1404,17 @@ function nearby_farms($data=false, $user_id=false)
 				]);
 				// debug($driving_distance, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (int)$driving_distance['distanceval'];
-					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER);
+					if (SWITCH_DISTANCE) { /*DISTANCE*/
+						$compare_1 = (int)$driving_distance['distanceval'];
+						$compare_2 = METERS_DISTANCE_TO_USER;
+					} else { /*DURATION*/
+						$compare_1 = (int)$driving_distance['durationval'];
+						$compare_2 = SECONDS_DISTANCE_TO_USER;
+					}
+					$farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $compare_1, $compare_2);
 					if (count($farms) == MARKETPLACE_MAX_FARMERS) {
 						break;
 					}
-					// $duration = (int)$driving_distance['durationval'];
-					// $farms = get_farms_by_distance($farms, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
 				}
 			}
 		}
@@ -1474,8 +1478,14 @@ function nearby_veggies($data=false, $conditions=false, $user_id=false)
 				]);
 				// var_dump($driving_distance);
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$duration = (int)$driving_distance['durationval'];
-					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER, MARKETPLACE_MAX_VEGGIES, $conditions);
+					if (SWITCH_DISTANCE) { /*DISTANCE*/
+						$compare_1 = (int)$driving_distance['distanceval'];
+						$compare_2 = METERS_DISTANCE_TO_USER;
+					} else { /*DURATION*/
+						$compare_1 = (int)$driving_distance['durationval'];
+						$compare_2 = SECONDS_DISTANCE_TO_USER;
+					}
+					$veggies = get_items_by_distance($veggies, $row, $driving_distance, $user_id, $compare_1, $compare_2, MARKETPLACE_MAX_VEGGIES, $conditions);
 				}
 			}
 		}
@@ -1517,10 +1527,14 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 				}
 				// debug($driving_distance, METERS_DISTANCE_TO_USER, 'stop');
 				if ($driving_distance['distance'] AND $driving_distance['duration']) {
-					$distance = (int)$driving_distance['distanceval'];
-					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $distance, METERS_DISTANCE_TO_USER, MARKETPLACE_MAX_ITEMS, $conditions, $bypass_data);
-					// $duration = (int)$driving_distance['durationval'];
-					// $products = get_items_by_distance($products, $row, $driving_distance, $user_id, $duration, SECONDS_DISTANCE_TO_USER);
+					if (SWITCH_DISTANCE) { /*DISTANCE*/
+						$compare_1 = (int)$driving_distance['distanceval'];
+						$compare_2 = METERS_DISTANCE_TO_USER;
+					} else { /*DURATION*/
+						$compare_1 = (int)$driving_distance['durationval'];
+						$compare_2 = SECONDS_DISTANCE_TO_USER;
+					}
+					$products = get_items_by_distance($products, $row, $driving_distance, $user_id, $compare_1, $compare_2, MARKETPLACE_MAX_ITEMS, $conditions, $bypass_data);
 				}
 			}
 		}

@@ -216,15 +216,13 @@ function modalCallbacks() {
 							componentRestrictions: {country: "ph"},
 						});
 
-						google.maps.event.addListener(autocomplete, 'place_changed', function() {
-							var place = autocomplete.getPlace();
-							// console.log(place.geometry.location.lat(), place.geometry.location.lng());
+						var execLocation = function(latlng) {
 							var geocoder = new google.maps.Geocoder();
 							geocoder.geocode({
-								latLng: place.geometry.location
+								latLng: latlng
 							}, function(results, status) {
+								console.log(results);
 								if (status == google.maps.GeocoderStatus.OK) {
-									// console.log(results);
 									if (results[1]) {
 										var arVal = [];
 										var city = null;
@@ -253,6 +251,16 @@ function modalCallbacks() {
 									}
 								}
 							});
+						}
+
+						google.maps.event.addListener(autocomplete, 'place_changed', function() {
+							var place = autocomplete.getPlace();
+							// console.log(place.geometry.location.lat(), place.geometry.location.lng());
+							execLocation(place.geometry.location);
+						});
+
+						$('#my-curr-loc').off('click').on('click', function() {
+							execLocation(oLatLong);
 						});
 					}
 				}, 1000);

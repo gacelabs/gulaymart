@@ -131,10 +131,11 @@ defined('PRODUCTSDATALIMIT') OR define('PRODUCTSDATALIMIT', 4);
 defined('GOOGLEMAP_KEY') OR define('GOOGLEMAP_KEY', 'AIzaSyBbNbxnm4HQLyFO4FkUOpam3Im14wWY0MA');
 defined('REFERRAL_CODE') OR define('REFERRAL_CODE', 'PPS8083189');
 defined('NON_LOCATION_KEYS') OR define('NON_LOCATION_KEYS', serialize(['id','lat','lng','address_1','address_2']));
-defined('METERS_DISTANCE_TO_USER') OR define('METERS_DISTANCE_TO_USER', 30000);
+defined('METERS_DISTANCE_TO_USER') OR define('METERS_DISTANCE_TO_USER', 30000); /*30 KM*/
 defined('NON_PRODUCT_KEYS') OR define('NON_PRODUCT_KEYS', serialize(['user_id', 'category_id', 'subcategory_id', 'added']));
-defined('SECONDS_DISTANCE_TO_USER') OR define('SECONDS_DISTANCE_TO_USER', 3600);
-defined('DISABLE_DISTANCE_COMPARING') OR define('DISABLE_DISTANCE_COMPARING', 0);
+defined('SECONDS_DISTANCE_TO_USER') OR define('SECONDS_DISTANCE_TO_USER', 7200); /*2 hours*/
+defined('SWITCH_DISTANCE') OR define('SWITCH_DISTANCE', 0); /*1 = DISTANCE, 0 = DURATION*/
+defined('DISABLE_DISTANCE_COMPARING') OR define('DISABLE_DISTANCE_COMPARING', 0); /*0 = DISABLED*/
 defined('ADMIN_PASS') OR define('ADMIN_PASS', '2');
 
 defined('MARKETPLACE_MAX_ITEMS') OR define('MARKETPLACE_MAX_ITEMS', 10);
