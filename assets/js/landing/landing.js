@@ -26,8 +26,8 @@ if ('serviceWorker' in navigator) {
 			elem.addEventListener('click', async () => {
 				deferredPrompt.prompt();
 				const { outcome } = await deferredPrompt.userChoice;
-				console.log(outcome, deferredPrompt);
-				deferredPrompt = null;
+				console.log(outcome, deferredPrompt, registration);
+				// deferredPrompt = null;
 			});
 
 			window.addEventListener('beforeinstallprompt', (e) => {
@@ -36,15 +36,27 @@ if ('serviceWorker' in navigator) {
 			});
 
 			window.addEventListener('appinstalled', (e) => {
+				console.log(e, deferredPrompt, registration);
 				deferredPrompt = null;
 				// window.location = MAIN_URL;
-				registration.getNotifications().then(function(notifications) {
-					console.log(notifications);
-					for(let i = 0; i < notifications.length; i++) {
-						notifications[i].close();
-					}
-					console.log(notifications, e);
-				});
+				// registration.getNotifications().then(function(notifications) {
+				// 	let currentNotification = false;
+				// 	if (notifications.length) {
+				// 		var total = notifications.length - 1;
+				// 		if (notifications[total] != undefined) {
+				// 			currentNotification = notifications[total];
+				// 		}
+				// 		/*clear all except the last*/
+				// 		for (let i = 0; i < total; i++) {
+				// 			if (notifications[i].data && oUser.id == notifications[i].data.id) {
+				// 				notifications[i].close();
+				// 			}
+				// 		}
+				// 	}
+				// 	return currentNotification;
+				// }).then(function(currentNotification) {
+				// 	if (currentNotification) currentNotification.click();
+				// });
 			});
 		});
 	}).catch(function(err) {

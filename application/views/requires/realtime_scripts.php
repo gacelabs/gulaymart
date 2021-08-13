@@ -53,9 +53,18 @@
 				registration.update();
 				registration.getNotifications({tag:oData.tag}).then(function(notifications) {
 					let currentNotification = false;
-					for (let i = 0; i < notifications.length; i++) {
-						if (notifications[i].data && oUser.id == notifications[i].data.id) {
-							currentNotification = notifications[i];
+					if (notifications.length) {
+						var total = notifications.length - 1;
+						if (notifications[total] != undefined) {
+							if (notifications[total].data && oUser.id == notifications[total].data.id) {
+								currentNotification = notifications[total];
+							}
+						}
+						/*clear all except the last*/
+						for (let i = 0; i < total; i++) {
+							if (notifications[i].data && oUser.id == notifications[i].data.id) {
+								notifications[i].close();
+							}
 						}
 					}
 					return currentNotification;

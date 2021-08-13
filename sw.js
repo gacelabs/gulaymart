@@ -1,15 +1,15 @@
 self.addEventListener('install', function(event) {
-	console.log("installed");
+	// console.log("installed");
 	// event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', function(event) {
-	console.log("activated");
+	// console.log("activated");
 	// event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', function(event) {
-	console.log("fetched");
+	// console.log("fetched");
 	/*event.respondWith(
 		fetch(event.request).catch(function() {
 			return caches.match(event.request);
