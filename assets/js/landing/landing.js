@@ -47,6 +47,7 @@ if ('serviceWorker' in navigator) {
 			window.addEventListener('beforeinstallprompt', (e) => {
 				e.preventDefault();
 				deferredPrompt = e;
+				console.log(e, registration);
 			});
 
 			window.addEventListener('appinstalled', (e) => {
