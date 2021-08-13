@@ -27,8 +27,17 @@ self.addEventListener('notificationclick', function(event) {
 		// console.log(oData);
 		if (oData) {
 			if (oData.app == 'installed') {
-				console.log(clientList);
-				// return event.waitUntil(event.target.clients.openWindow(oData.url));
+				for (var i = 0; i < clientList.length; i++) {
+					var client = clientList[i];
+					if ('focus' in client) {
+						console.log(client);
+						/*client.focus();
+						setTimeout(function() {
+							client.navigate(oData.url);
+						}, 1);
+						return;*/
+					}
+				}
 			} else {
 				for (var i = 0; i < clientList.length; i++) {
 					var client = clientList[i];
