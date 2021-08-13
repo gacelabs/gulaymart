@@ -39,6 +39,9 @@ if ('serviceWorker' in navigator) {
 					if (outcome == 'accepted') {
 						registration.installing = true;
 						registration.waiting = false;
+					} else {
+						registration.installing = false;
+						registration.waiting = null;
 					}
 					console.log(outcome, deferredPrompt, registration);
 				} else {
