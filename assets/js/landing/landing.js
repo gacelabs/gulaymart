@@ -27,6 +27,7 @@ if ('serviceWorker' in navigator) {
 				if (deferredPrompt != undefined) {
 					deferredPrompt.prompt();
 					const { outcome } = await deferredPrompt.userChoice;
+					console.log(outcome);
 				} else {
 					document.querySelectorAll('.add-pwa').forEach(function(el, j) {
 						el.innerText = 'GO TO HOME PAGE';
@@ -39,7 +40,7 @@ if ('serviceWorker' in navigator) {
 					});
 					alert('App already added to home page.');
 				}
-				console.log(outcome, deferredPrompt, registration);
+				console.log(deferredPrompt, registration);
 				// deferredPrompt = null;
 			});
 
