@@ -26,6 +26,7 @@ if ('serviceWorker' in navigator) {
 			elem.addEventListener('click', async () => {
 				deferredPrompt.prompt();
 				const { outcome } = await deferredPrompt.userChoice;
+				console.log(outcome, deferredPrompt);
 				deferredPrompt = null;
 			});
 
@@ -39,6 +40,10 @@ if ('serviceWorker' in navigator) {
 				// window.location = MAIN_URL;
 				registration.getNotifications().then(function(notifications) {
 					console.log(notifications);
+					for(let i = 0; i < notifications.length; i++) {
+						notifications[i].close();
+					}
+					console.log(notifications, e);
 				});
 			});
 		});
