@@ -18,7 +18,7 @@
 						<span id="basic-addon1" style="font-size:18px;">My City is</span>
 						<div class="input-group">
 							<input type="text" class="form-control" id="check-place" placeholder="Enter your current city..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
-							<span class="input-group-btn" style="font-size:18px;" data-toggle="tooltip" data-placement="top" title="OR Just Click here for your Current City">
+							<span class="input-group-btn" style="font-size:18px;" data-toggle="tooltip" data-placement="top" title="Click for Current City">
 								<button class="btn btn-default btn-lg" id="my-curr-loc" type="button"><i class="fa fa-map-marker text-danger"></i></button>
 							</span>
 						</div>

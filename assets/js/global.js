@@ -141,7 +141,7 @@ function modalCallbacks() {
 							geocoder.geocode({
 								latLng: latlng
 							}, function(results, status) {
-								console.log(results);
+								// console.log(results);
 								if (status == google.maps.GeocoderStatus.OK) {
 									if (results[1]) {
 										var arVal = [];
@@ -180,8 +180,7 @@ function modalCallbacks() {
 						});
 
 						if (mobileAndTabletCheck()) {
-							$('#my-curr-loc').tooltip().mouseover();
-							setTimeout(function(){ $('#my-curr-loc').tooltip().mouseleave(); }, 7000);
+							$('#my-curr-loc').tooltip().focus();
 							$('#my-curr-loc').off('click').on('click', function() {
 								execLocation(oLatLong);
 							});
