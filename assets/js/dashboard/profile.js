@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 	var oPauseInputAjax = false;
 	$('input[name="active"][data-ajax]').off('change').on('change', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oData = $(e.target).data('json') != undefined ? $(e.target).data('json') : {};
 		var oSettings = {
 			url: $(e.target).data('url'),
@@ -121,7 +121,7 @@ function updateSavedObjects(data) {
 
 var runAddRiders = function() {
 	$('[js-element="action"]').off('click').on('click', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oThis = $(this),
 			action = oThis.attr('js-event'),
 			parent = oThis.parents('[js-element*="riders"]:first');

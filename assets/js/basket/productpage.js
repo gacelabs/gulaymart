@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 	//http://jsfiddle.net/laelitenetwork/puJ6G/
 	$('.btn-number').click(function(e){
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oThis = $(this);
 
 		fieldName = oThis.attr('data-field');
@@ -99,7 +99,7 @@ $(document).ready(function() {
 		}
 
 		if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-			e.preventDefault();
+			e.preventDefault(); e.returnValue = false;
 		}
 
 		$('.max-qty').removeClass('text-danger');
@@ -127,7 +127,7 @@ $(document).ready(function() {
 	});
 
 	$('#buy_now_btn').bind('click', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oThis = $(e.target);
 		var tagName = oThis.prop('tagName');
 		if (tagName != 'A') oThis = $('#buy_now_btn');

@@ -197,6 +197,7 @@ var oSimpleAjax = false, simpleAjax = function(url, data, ui, keep_loading, no_a
 					} else if (response) {
 						response.elem = ui;
 					}
+					response.keep_loading = keep_loading;
 					ajaxSuccessResponse(response);
 				}
 			},
@@ -249,7 +250,15 @@ var ajaxSuccessResponse = function(response, e) {
 			resolve();
 		}).then(() => {
 			if (response && (typeof response.redirect == 'string')) {
-				if (response.redirect) window.location = response.redirect;
+				if (!response.redirect.isEmpty()) {
+					if (response.keep_loading != false) {
+						setTimeout(function() {
+							window.location = response.redirect;
+						}, 2000);
+					} else {
+						window.location = response.redirect;
+					}
+				}
 			}
 		});
 	}

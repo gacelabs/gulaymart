@@ -74,7 +74,7 @@ function debug()
 	} else {
 		$debugger = [];
 		foreach ($args as $index => $data) {
-			if ($data !== 'stop' AND ($index >= 0 AND $index < count($args)-1)) {
+			if ($data !== 'stop') {
 				$trace = debug_backtrace();
 				try {
 					if (!empty($trace)) {
@@ -85,51 +85,51 @@ function debug()
 									'controllers','core','gulaymart.com','helpers','libraries',
 									'models','view'
 								], '', $row['file']);
-								$debugger[$key]['method'] = 'debugger';
-								$debugger[$key]['path'] = $row['file'];
-								$debugger[$key]['line'] = $row['line'];
+								$debugger[$index]['method'] = 'debugger';
+								$debugger[$index]['path'] = $row['file'];
+								$debugger[$index]['line'] = $row['line'];
 								
 								if (is_bool($data)) {
-									$debugger[$key]['datatype'] = 'boolean';
+									$debugger[$index]['datatype'] = 'boolean';
 									if ($data) {
-										$debugger[$key]['data'] = true;
+										$debugger[$index]['data'] = true;
 									} else {
-										$debugger[$key]['data'] = false;
+										$debugger[$index]['data'] = false;
 									}
 								} else {
-									if (is_object($data) OR is_null($data)) $debugger[$key]['datatype'] = 'object';
-									if (is_array($data)) $debugger[$key]['datatype'] = 'array';
+									if (is_object($data) OR is_null($data)) $debugger[$index]['datatype'] = 'object';
+									if (is_array($data)) $debugger[$index]['datatype'] = 'array';
 									if (is_numeric($data)) {
-										$debugger[$key]['datatype'] = 'number';
+										$debugger[$index]['datatype'] = 'number';
 									} elseif (is_string($data)) {
-										$debugger[$key]['datatype'] = 'string';
+										$debugger[$index]['datatype'] = 'string';
 									}
 									if (empty($data) AND $data != 0) {
-										if (is_object($data) OR is_null($data)) $debugger[$key]['datatype'] = 'null';
-										if (is_array($data)) $debugger[$key]['datatype'] = 'empty';
-										if (is_string($data)) $debugger[$key]['datatype'] = 'blank';
+										if (is_object($data) OR is_null($data)) $debugger[$index]['datatype'] = 'null';
+										if (is_array($data)) $debugger[$index]['datatype'] = 'empty';
+										if (is_string($data)) $debugger[$index]['datatype'] = 'blank';
 									} else {
 										if (is_null($data)) {
-											$debugger[$key]['data'] = 'null';
+											$debugger[$index]['data'] = 'null';
 										} else {
-											$debugger[$key]['data'] = $data;
+											$debugger[$index]['data'] = $data;
 										}
 									}
 								}
 							}
 						}
 					} else {
-						$debugger[$key]['method'] = 'debugger';
-						$debugger[$key]['path'] = 'unknown';
-						$debugger[$key]['line'] = 0;
-						$debugger[$key]['data'] = 'empty';
+						$debugger[$index]['method'] = 'debugger';
+						$debugger[$index]['path'] = 'unknown';
+						$debugger[$index]['line'] = 0;
+						$debugger[$index]['data'] = 'empty';
 					}
 				} catch (Exception $e) {
 					foreach ($trace as $key => $row) {
-						$debugger[$key]['method'] = 'debugger';
-						$debugger[$key]['path'] = $row['file'];
-						$debugger[$key]['line'] = $row['line'];
-						$debugger[$key]['data'] = $e->getMessage();
+						$debugger[$index]['method'] = 'debugger';
+						$debugger[$index]['path'] = $row['file'];
+						$debugger[$index]['line'] = $row['line'];
+						$debugger[$index]['data'] = $e->getMessage();
 					}
 				}
 			}

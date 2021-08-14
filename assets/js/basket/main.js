@@ -22,7 +22,7 @@ var basketsRunDomReady = function() {
 	});
 
 	$('[js-element="checkout-data"]').off('click').on('click', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oCheckoutData = $.parseJSON($(e.target).attr('js-json'));
 		if (Object.keys(oCheckoutData).length) {
 			var uiOrderItemParent = $(e.target).parents('.order-table-item:first');

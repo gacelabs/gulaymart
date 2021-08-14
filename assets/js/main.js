@@ -629,7 +629,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 var runATagAjax = function () {
 	var oPauseAjax = false;
 	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oThis = $(e.target);
 		if ($(e.target).prop('tagName') != 'A') {
 			oThis = $(e.target).parent('a');

@@ -63,7 +63,7 @@ var enterFBEmailAddress = function(oData) {
 	delete oData.elem;
 	// console.log(oData);
 	$('#invalid-fb-email-form').off('submit').on('submit', function(e) {
-		e.preventDefault(); e.returnValue;
+		e.preventDefault(); e.returnValue = false;
 		var bValid = true;
 		$(e.target).find('[name]').each(function(i, elem) {
 			$(elem).off('input blur').on('input blur', function(f) {

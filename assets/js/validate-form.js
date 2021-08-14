@@ -29,7 +29,7 @@ function runFormValidation(forms) {
 							form.bind('keyup keypress', function(e) {
 								var keyCode = e.keyCode || e.which;
 								if (keyCode === 13) { 
-									e.preventDefault();
+									e.preventDefault(); e.returnValue = false;
 									return false;
 								}
 							});
@@ -102,7 +102,7 @@ function runFormValidation(forms) {
 			rules: oValidationRules, /*find in mainpage.php head tag*/
 			submitHandler: function(form, e) {
 				if ($(form).data('ajax')) {
-					e.preventDefault();
+					e.preventDefault(); e.returnValue = false;
 					var isFileExists = $(form).find('input:file').length > 0 ? $(form).find('input:file') : false;
 					formAjax(form, isFileExists);
 				} else if (recaptcha.length == 0) {

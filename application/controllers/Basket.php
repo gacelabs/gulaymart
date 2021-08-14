@@ -115,7 +115,7 @@ class Basket extends My_Controller {
 			/*check if the user is logged in if false save post to session*/
 			if ($this->accounts->has_session == false) {
 				$this->session->set_userdata('basket_session', ['baskets'=>$post]);
-				$message = 'Item added to basket, Redirecting to the registration / login page!';
+				$message = 'Item added to basket, Redirecting to the registration or login page!';
 				$redirect = base_url('register');
 				$callback = false;
 			} else {
@@ -140,7 +140,7 @@ class Basket extends My_Controller {
 					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
 				}
 				$hash = (base64_encode(json_encode(array_unique($basket_ids), JSON_NUMERIC_CHECK)));
-				$message = $post['status'] ? 'Item added into your basket!, Proceeding checkout' : 'Item added to basket! <a href="basket/">Check here</a>';
+				$message = $post['status'] == GM_VERIFIED_SCHED ? 'Item added to basket! <a href="basket/">Check it here</a>' : 'Item added into your basket!, Proceeding checkout';
 				$redirect = ($post['status'] == GM_VERIFIED_NOW) ? base_url('basket/checkout/'.$hash) : false;
 				$callback = ($post['status'] == GM_VERIFIED_NOW) ? false : 'stockChanged';;
 				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);

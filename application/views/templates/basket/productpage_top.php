@@ -77,19 +77,14 @@
 									<input type="hidden" name="order_type" value="2" />
 								</button>
 								<?php if (DISABLE_DISTANCE_COMPARING == 0): ?>
-								<button href="basket/add/<?php echo $product['id'];?>" type="button" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
-									<ul class="spaced-list between text-left">
-										<li><i class="fa fa-clock-o icon-left text-white"></i></li>
-										<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
-									</ul>
-								</button>
+									<!-- this cant be a button tag it should not action the form -->
+									<a href="basket/add/<?php echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php echo $product['basket_details']['farm_location_id'];?>">
+										<ul class="spaced-list between text-left">
+											<li><i class="fa fa-clock-o icon-left text-white"></i></li>
+											<li><p class="zero-gaps">Buy Now</p><small style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
+										</ul>
+									</a>
 								<?php endif ?>
-								<!-- <a href="basket/add/<?php //echo $product['id'];?>" class="btn btn-lg btn-contrast" id="buy_now_btn" data-location-id="<?php //echo $product['basket_details']['farm_location_id'];?>">
-									<ul class="spaced-list between">
-										<li><p class="zero-gaps">Buy Now</p>
-										<small class="elem-block" style="vertical-align:top;font-size:10px;">DELIVERED TODAY</small></li>
-									</ul>
-								</a> -->
 							</div>
 						<?php endif ?>
 					</form>

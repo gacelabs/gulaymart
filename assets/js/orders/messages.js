@@ -16,7 +16,7 @@ var msgRunDomReady = function() {
 	});
 
 	$('[data-readit="1"]').off('click').on('click', function(e) {
-		e.preventDefault();
+		e.preventDefault(); e.returnValue = false;
 		var oThis = $(this);
 		var msg_id = oThis.parents('.notif-item:first').data('msg-id');
 		console.log(msg_id, oThis);
