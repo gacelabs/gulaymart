@@ -24,7 +24,7 @@
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
-								Gulaymart's core values is to serve the people within your community, so having even just the City or Barangay included in your farm's name is like telling your customers that you are just around the corner and can deliver fresh veggies in minutes.
+								GulayMart's core values is to serve the people within your community, so having even just the City or Barangay included in your farm's name is like telling your customers that you are just around the corner and can deliver fresh veggies in minutes.
 							</div>
 						</div>
 					</div>
@@ -65,7 +65,7 @@
 					<div>
 						<p class="zero-gaps">The guidelines above are just suggestions to kickstart your creative mind to come up with a good farm name. However, these guidelines does not guarrantee you success. Hardwork and perseverance still are the most effective tools to succeed. Good luck!</p>
 						<br>
-						<p>Your Gulaymart team.</p>
+						<p>Your GulayMart team.</p>
 					</div>
 				</div>
 			</div>

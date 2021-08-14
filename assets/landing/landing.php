@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Gulaymart | Add to Home Screen</title>
+	<title>GulayMart | Add to Home Screen</title>
 	<link rel="stylesheet" type="text/css" href="landing.css">
 	<script type="text/javascript" src="js/jquery.js"></script>
 </head>
@@ -15,7 +15,7 @@
 		<div class="grid-parent">
 			<div class="grid-child" id="bg_box">
 				<div id="first">
-					<h1 class="grid-subtitle">When you buy from Gulaymart,<br>you helped our local <span id="subphrase">farmers to produce more.</span></h1>
+					<h1 class="grid-subtitle">When you buy from GulayMart,<br>you helped our local <span id="subphrase">farmers to produce more.</span></h1>
 				</div>
 			</div>
 			<div class="grid-child" id="preview">

@@ -6,7 +6,7 @@
 				<h4 class="modal-title">Product Pricing (Location based)</h4>
 			</div>
 			<div class="modal-body">
-				<p>Gulaymart understands that not all veggies are sold at the same price. Prices may be higher for some places, while cheaper in other locations.</p>
+				<p>GulayMart understands that not all veggies are sold at the same price. Prices may be higher for some places, while cheaper in other locations.</p>
 				<img src="assets/images/helps/product-pricing.gif" class="img-responsive" style="margin-bottom:15px;">
 				<p>This is where the <b>Product Pricing (Location based)</b> option comes in. This option allows you to save different prices, unit of measurement, and number of stocks based on your farm's market location.</p>
 			</div>
@@ -24,7 +24,7 @@
 				<h4 class="modal-title">Categories</h4>
 			</div>
 			<div class="modal-body">
-				<p>Help Gulaymart understand your listing better by selecting the right category for your veggies. Find out what <b>category</b> your product fits in.</p>
+				<p>Help GulayMart understand your listing better by selecting the right category for your veggies. Find out what <b>category</b> your product fits in.</p>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="headingOne">

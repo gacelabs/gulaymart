@@ -89,8 +89,8 @@ defined('FB_APPID') OR define('FB_APPID', '298098848531584');
 defined('FB_VERSION') OR define('FB_VERSION', 'v10.0');
 defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b68e02c6434');
 
-defined('APP_NAME') OR define('APP_NAME', 'Gulay Mart');
-defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'Gulay Mart an Online Supermarket near you.');
+defined('APP_NAME') OR define('APP_NAME', 'GulayMart');
+defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'GulayMart an Online Supermarket near you.');
 defined('APP_VERSION') OR define('APP_VERSION', '3.9');
 
 /*IMPORTANT PASSSWORDS*/

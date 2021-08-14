@@ -27,7 +27,7 @@
 			<p style="margin-bottom:5px;"><a href="">Messenger</a></p>
 			<p style="margin-bottom:5px;"><a href="">Email us</a></p>
 			<p style="margin-bottom:5px;"><a href="">Blog articles</a></p>
-			<p style="margin-bottom:5px;"><a href="">Gulaymart &copy; <?php echo date('Y'); ?></a></p>
+			<p style="margin-bottom:5px;"><a href="">GulayMart &copy; <?php echo date('Y'); ?></a></p>
 		</div>
 	</div>
 	<hr class="visible-xs" style="clear:both;border-color:transparent;">

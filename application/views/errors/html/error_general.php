@@ -13,10 +13,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<meta name="robots" content="noindex, nofollow">
 	<meta property="og:type" content="article">
 	<meta property="og:url" content="https://gulaymart.com">
-	<meta property="og:title" content="Gulay Mart Marketplace">
-	<meta property="og:description" content="Gulay Mart is your neighborhood veggies supplier.">
+	<meta property="og:title" content="GulayMart Marketplace">
+	<meta property="og:description" content="GulayMart is your neighborhood veggies supplier.">
 	<meta property="og:image" content="https://gulaymart.com/assets/images/logo.png">
-	<meta name="description" content="Gulay Mart is your neighborhood veggies supplier.">
+	<meta name="description" content="GulayMart is your neighborhood veggies supplier.">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">

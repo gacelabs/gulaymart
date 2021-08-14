@@ -26,7 +26,7 @@
 					<br>
 				<?php endif ?>
 
-				<p class="zero-gaps">As part of Gulaymart's core values to <b>support local farmers</b>, we urge everyone to filter the products based on your residing city. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
+				<p class="zero-gaps">As part of GulayMart's core values to <b>support local farmers</b>, we urge everyone to filter the products based on your residing city. This way, we can be sure that the products shown are produced by the farmers within your local community.</p>
 				<img src="assets/images/banner/check-location.png" class="img-responsive" style="margin: 20px 0;">
 
 				<?php if (!$this->agent->is_mobile()):?>

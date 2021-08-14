@@ -2,7 +2,7 @@
 <html>
 <head>
 	<base href="<?php echo base_url();?>">
-	<title>Gulaymart | Add to Home Screen</title>
+	<title>GulayMart | Add to Home Screen</title>
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">

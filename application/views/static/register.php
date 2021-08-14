@@ -2,7 +2,7 @@
 	<?php if (empty($current_profile)): ?>
 	<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
 		<div id="register_welcome">
-			<h1 style="margin-bottom:20px;"><a href=""><i class="fa fa-leaf my-logo"></i></a> <b>Gulaymart</b></h1>
+			<h1 style="margin-bottom:20px;"><a href=""><i class="fa fa-leaf my-logo"></i></a> <b>GulayMart</b></h1>
 			<h3>Find the freshest vegetables grown by the farmers within your community.</h3>
 		</div>
 		<div class="hidden-xs">

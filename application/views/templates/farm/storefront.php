@@ -9,7 +9,7 @@
 					<div class="dashboard-panel">
 						<div class="dashboard-panel-top">
 							<h3 style="margin:15px 0;">Welcome to Storefront!</h3>
-							<p class="zero-gaps">This is your first step to becoming a seller on Gulaymart!</p>
+							<p class="zero-gaps">This is your first step to becoming a seller on GulayMart!</p>
 							<p>Customize your farm's online store, upload photos and videos, share your stories and more!</p>
 							<div style="margin-top:15px;">
 								<button class="btn btn-lg btn-theme" data-toggle="modal" data-target="#farmer_terms_modal" style="margin-bottom:15px;">Create My Store<i class="fa fa-angle-right icon-right"></i></button>
@@ -303,7 +303,7 @@
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<h4 class="farm_name" style="margin-top: 0;"><?php echo(!empty($data['farms']['name']) ? $data['farms']['name'] : "The Humble Farm"); ?></h4>
-								<p class="zero-gaps" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+								<p class="zero-gaps" style="color: #a7a7a7;">By <a href="">GulayMart</a></p>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
 								<h4 style="color: #fff;margin: 0 0 5px 0;">Connect with us!</h4>

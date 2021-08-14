@@ -4,7 +4,7 @@
 			<div class="text-step-basic">
 				<p class="text-center"><i class="fa fa-info-circle"></i></p>
 				<div>
-					<p>We are working hard to make Gulaymart a mobile friendly web app. In case of missing features, please use a desktop/ laptop.</p>
+					<p>We are working hard to make GulayMart a mobile friendly web app. In case of missing features, please use a desktop/ laptop.</p>
 					<small>Back to <a href="marketplace" class="text-link">Marketplace</a></small>
 				</div>
 			</div>
@@ -149,7 +149,7 @@
 								<p><b>Delivery Information</b></p>
 								<form action="admin/run_operator_booking" class="booking-form-grid form-validate" data-ajax="1" data-disable="enter" js-form="booking-form">
 									<div class="booking-form-grid-item">
-										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Delivery Code" data-content="Gulaymart's posted Delivery Code.">Delivery Code <i class="fa fa-question-circle"></i></small>
+										<small class="elem-block" tabindex="0" data-toggle="popover" data-placement="bottom" title="Delivery Code" data-content="GulayMart's posted Delivery Code.">Delivery Code <i class="fa fa-question-circle"></i></small>
 										<div class="form-group zero-gaps" js-event="awaiting-code"><p class="zero-gaps">Awaiting...</p></div>
 									</div>
 									<div class="booking-form-grid-item">

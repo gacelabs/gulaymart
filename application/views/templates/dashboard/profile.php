@@ -4,7 +4,7 @@
 		<?php if (isset($current_profile['shippings']) AND $current_profile['shippings']): ?>
 		<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
 			<?php if (empty($this->farms)) : ?>
-				<h4>Hoorah! You're all set. <br class="visible-xs"><br class="visible-xs">Selling veggies in Gulaymart is easy, be a <a href="farm/storefront/" class="text-link">veggie seller now!</a></h4>
+				<h4>Hoorah! You're all set. <br class="visible-xs"><br class="visible-xs">Selling veggies in GulayMart is easy, be a <a href="farm/storefront/" class="text-link">veggie seller now!</a></h4>
 			<?php endif ?>
 			
 			<?php if (empty($data['baskets'])): ?>
@@ -82,7 +82,7 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth day will help Gulaymart curate contents for you."></small></label>
+								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth day will help GulayMart curate contents for you."></small></label>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">

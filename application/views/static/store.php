@@ -130,7 +130,7 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<h4 class="farm_name" style="margin-top: 0;"><?php echo $data['farm']['name'];?></h4>
-					<p class="zero-gaps" style="color: #a7a7a7;">By <a href="">Gulaymart</a></p>
+					<p class="zero-gaps" style="color: #a7a7a7;">By <a href="">GulayMart</a></p>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<?php if (!empty($data['farm']['facebook']) OR !empty($data['farm']['instagram']) OR !empty($data['farm']['youtube']) OR !empty($data['farm']['messenger'])) : ?>
