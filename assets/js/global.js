@@ -159,15 +159,13 @@ function modalCallbacks() {
 													}
 												}
 											}
-											if (city) {
-												break;
-											}
+											if (city) break;
 										}
 										if (city) {
 											$('#check-place').prop('value', city).val(city);
+											// console.log("City: " + city, arVal);
+											simpleAjax('api/fetch_coordinates', {city: city});
 										}
-										// console.log("City: " + city);
-										simpleAjax('api/fetch_coordinates', {city: city});
 									}
 								}
 							});
