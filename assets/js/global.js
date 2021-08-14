@@ -37,6 +37,8 @@ $(document).ready(function() {
 		console.log('has basket orders');
 		// runAlertBox({type:'info', message: 'has basket orders!', unclose: true});
 	}
+
+	if ($('.g-recaptcha').length) downloadJSAtOnload();
 });
 
 window.onpopstate = function(e) {
@@ -326,15 +328,6 @@ var reloadState = function(data) {
 		});*/
 		window.location.reload(true);
 	}, 2000);
-}
-
-// Check for browser support of event handling capability
-if (window.addEventListener) {
-	window.addEventListener("load", downloadJSAtOnload, false);
-} else if (window.attachEvent) {
-	window.attachEvent("onload", downloadJSAtOnload);
-} else {
-	window.onload = downloadJSAtOnload;
 }
 
 // Add a script element as a child of the body

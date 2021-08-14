@@ -99,7 +99,7 @@ class Accounts {
 							redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 						}
 					} else {
-						$msg = 'Account already exist! Try signing in';
+						$msg = '<p class="text-left">Account already exist! Please try Logging In...</p>';
 					}
 				}
 			} else {
