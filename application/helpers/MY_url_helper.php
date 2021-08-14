@@ -130,19 +130,19 @@ function compute_eta($eta=0, $noprefix=false, $echo=true)
 		switch ($key) {
 			case '0':
 				if ($value > 0) {
-					$duration[] = (int)$value.' hr'.((int)$value > 1 ? 's' : '');
+					$duration[$key] = (int)$value.' hr'.((int)$value > 1 ? 's' : '');
 				}
 				break;
 			case '1':
 				if ($value > 0) {
-					$duration[] = $value.' min'.($value > 1 ? 's' : '');
+					$duration[$key] = $value.' min'.($value > 1 ? 's' : '');
 				}
 				break;
-			/*case '2':
+			case '2':
 				if ($value > 0) {
-					$duration[] = $value.' sec'.($value > 1 ? 's' : '');
+					$duration[$key] = $value.' sec'.($value > 1 ? 's' : '');
 				}
-				break;*/
+				break;
 		}
 	}
 	// debug($chunks, $duration, 'stop');
