@@ -165,7 +165,8 @@ body.basket #footer_page_container {
 }
 .add-basket-btn .btn {
 	margin-right: 5px;
-	padding: 8px 12px;
+	padding: 8px 12px 0 8px;
+	margin-bottom: 10px;
 }
 .productpage-basic-grid {
 	display: grid;
@@ -264,7 +265,7 @@ body.basket #footer_page_container {
 		padding-bottom: 10px;
 	}
 	.add-basket-btn .btn {
-		margin: 0 auto;
+		margin: 0 auto 10px auto;
 		display: inline-block;
 		font-size: 15px;
 	}
