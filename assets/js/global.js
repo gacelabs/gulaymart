@@ -38,6 +38,27 @@ $(document).ready(function() {
 		// runAlertBox({type:'info', message: 'has basket orders!', unclose: true});
 	}
 
+	/*check FB signout process*/
+	if ($('a.sign-out-process').length) {
+		$('a.sign-out-process').bind('click', function(e) {
+			e.preventDefault(); e.returnValue = false;
+			var oThis = $(e.target);
+			if (oThis.prop('tagName') != 'A') oThis = oThis.parent('a');
+			var href = oThis.attr('href');
+			FB.getLoginStatus(function(response) {
+				if (response.status == 'connected') {
+					FB.logout(function(fbresponse) {
+						fbstatus = fbresponse.status;
+						window.location = href;
+					});
+				} else {
+					fbstatus = 'unknown';
+					window.location = href;
+				}
+			});
+		});
+	}
+
 	if ($('.g-recaptcha').length) downloadJSAtOnload();
 });
 

@@ -13,6 +13,7 @@ $(document).ready(function() {
 							unclose: true,
 							callback: function() {
 								$('#login_modal').modal('hide');
+								$('.close-jq-toast-single:visible').trigger('click');
 							}
 						});
 					}
@@ -38,8 +39,7 @@ var runFbLogin = function(data) {
 				data.fbauth = response;
 				simpleAjax('authenticate/fb_login', data);
 			} else {
-				console.log(response);
-				runAlertBox({type: 'error', message: 'Your account is not yet connected on <a href="//www.facebook.com">Facebook</a>', unclose: true});
+				$('.fb-login-btn').trigger('click');
 			}
 		});
 	} else {
@@ -51,8 +51,7 @@ var runFbLogin = function(data) {
 				};
 				FB.api('/me?fields=id,email,name', loginFunction);
 			} else {
-				console.log(response);
-				runAlertBox({type: 'error', message: 'Your account is not yet connected on <a href="//www.facebook.com">Facebook</a>', unclose: true});
+				$('.fb-login-btn').trigger('click');
 			}
 		});
 	}

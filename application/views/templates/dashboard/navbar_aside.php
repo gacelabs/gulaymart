@@ -108,7 +108,7 @@
 				<i class="fa fa-question-circle" style="background-color:#cacaca;"></i>Help Center
 			</a>
 
-			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm">
+			<a href="sign-out" class="aside-nav-item hidden-lg hidden-md hidden-sm sign-out-process">
 				<i class="fa fa-sign-out" style="background-color:#cacaca;"></i>Sign out
 			</a>
 		</div>
@@ -116,7 +116,7 @@
 		<a href="//help.gulaymart.com"<?php if (!$this->agent->is_mobile()): ?> target="_blank"<?php endif ?> class="aside-nav-item hidden-xs">
 			<i class="fa fa-question-circle"></i><span class="hidden-xs">Help Center</span>
 		</a>
-		<a href="sign-out" class="aside-nav-item hidden-xs">
+		<a href="sign-out" class="aside-nav-item hidden-xs sign-out-process">
 			<i class="fa fa-sign-out" style="background-color:#cacaca;"></i><span class="hidden-xs">Sign out</span>
 		</a>
 	</div>
