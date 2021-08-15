@@ -32,7 +32,7 @@
 						<input type="password" class="form-control" name="re_password" placeholder="Confirm" />
 					</div>
 					<div class="form-group">
-						<p id="character_challenge" class="zero-gaps hide text-danger text-center" style="font-size: x-small;">Password require atleast 8 letters, 1 numeric, 1 special characters.</p>
+						<p id="character_challenge" class="zero-gaps hide text-danger text-center" style="font-size: x-small;">Password require atleast 8 letters, 1 numeric, 1 special character.</p>
 					</div>
 					<div class="form-group" style="margin-bottom: 0;">
 						<button type="submit" data-keep-loading="5000" loading-text="Signing up..." class="btn btn-theme btn-lg btn-block">Sign Up</button>
