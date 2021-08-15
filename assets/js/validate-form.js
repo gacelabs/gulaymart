@@ -11,6 +11,24 @@ jQuery.validator.addMethod("birthMonth", function(value, element, param) {
 },'Your Birth month is wrong');
 
 function runFormValidation(forms) {
+	var isRegistrationPage = false;
+	if ($.inArray('register', Object.values(oSegments)) >= 0) {
+		isRegistrationPage = true;
+		jQuery.validator.addMethod("passwordChallenge", function(value, element, param) {
+			var specialChars = /\W|_/g.test(value);
+			if (specialChars) {
+				value = value.replace(value.match(/\W|_/g), '');
+			}
+			var eightChars = /^[a-zA-Z0-9]{8,}$/.test(value);
+			var numberChars = /^.*(?=.*\d).*$/.test(value);
+			return eightChars && numberChars && specialChars;
+		}, 'Password require atleast 8 letters, 1 numeric, 1 special characters');
+
+		if ($.inArray('re_password', Object.keys(oValidationRules)) >= 0) {
+			oValidationRules['password'].passwordChallenge = true;
+			oValidationRules['re_password'].passwordChallenge = true;
+		}
+	}
 	if (forms == undefined) {
 		forms = $(document.body).find('.form-validate');
 	} else {
@@ -49,7 +67,6 @@ function runFormValidation(forms) {
 				}
 			});
 		}
-		
 		var recaptcha = form.find('.g-recaptcha');
 		form.validate({
 			ignore: '.ignore',
@@ -65,6 +82,11 @@ function runFormValidation(forms) {
 					element.addClass('error').parent().addClass('error').siblings().addClass('error');
 				} else {
 					element.addClass('error');
+				}
+				// console.log(element);
+				$('#character_challenge').addClass('hide');
+				if (element.attr('type') == 'password') {
+					$('#character_challenge').removeClass('hide');
 				}
 			},
 			highlight: function (element, errorClass, validClass) {
@@ -82,6 +104,9 @@ function runFormValidation(forms) {
 				} else {
 					$(element).addClass('error');
 				}
+				if ($(element).attr('type') == 'password') {
+					$('#character_challenge').removeClass('hide');
+				}
 			},
 			unhighlight: function (element, errorClass, validClass) {
 				if ($(element).hasClass('chosen')) {
@@ -98,6 +123,9 @@ function runFormValidation(forms) {
 				} else {
 					$(element).removeClass('error');
 				}
+				if ($(element).attr('type') == 'password') {
+					$('#character_challenge').addClass('hide');
+				}
 			},
 			rules: oValidationRules, /*find in mainpage.php head tag*/
 			submitHandler: function(form, e) {
@@ -111,6 +139,4 @@ function runFormValidation(forms) {
 			}
 		});
 	});
-
-
 }
