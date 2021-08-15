@@ -46,13 +46,12 @@ $(document).ready(function() {
 			if (oThis.prop('tagName') != 'A') oThis = oThis.parent('a');
 			var href = oThis.attr('href');
 			FB.getLoginStatus(function(response) {
-				if (response.status == 'connected') {
+				if (response.status != 'connected') {
 					FB.logout(function(fbresponse) {
 						fbstatus = fbresponse.status;
 						window.location = href;
 					});
 				} else {
-					fbstatus = 'unknown';
 					window.location = href;
 				}
 			});

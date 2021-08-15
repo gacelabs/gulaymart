@@ -38,7 +38,7 @@ class Authenticate extends MY_Controller {
 		$is_basket_session = redirect_basket_orders();
 		if ($is_basket_session == false) {
 			if ($is_ok) {
-				if ($this->accounts->profile['is_profile_complete'] === 0) {
+				if ($this->accounts->profile['is_profile_complete'] == 0) {
 					$to = 'profile/';
 				} else {
 					$to = $this->get_proper_redirect();
@@ -261,7 +261,7 @@ class Authenticate extends MY_Controller {
 				$type = 'error';
 				$message = 'Unable to login, clearing session';
 			} else {
-				if ($this->accounts->profile['is_profile_complete'] === 0) {
+				if ($this->accounts->profile['is_profile_complete'] == 0) {
 					$to = 'profile/';
 				} else {
 					$to = $this->get_proper_redirect();
