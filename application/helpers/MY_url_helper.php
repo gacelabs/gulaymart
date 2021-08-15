@@ -138,11 +138,11 @@ function compute_eta($eta=0, $noprefix=false, $echo=true)
 					$duration[$key] = $value.' min'.($value > 1 ? 's' : '');
 				}
 				break;
-			case '2':
+			/*case '2':
 				if ($value > 0) {
 					$duration[$key] = $value.' sec'.($value > 1 ? 's' : '');
 				}
-				break;
+				break;*/
 		}
 	}
 	// debug($chunks, $duration, 'stop');
