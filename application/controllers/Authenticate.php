@@ -39,14 +39,12 @@ class Authenticate extends MY_Controller {
 		if ($is_basket_session == false) {
 			if ($is_ok) {
 				if ($this->accounts->profile['is_profile_complete'] === 0) {
-					$to = 'profile';
+					$to = 'profile/';
 				} else {
-					$to = $this->session->userdata('referrer') ?: 'orders/';
+					$to = $this->get_proper_redirect();
 				}
-				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
-				if ($has_notifs) $to = 'orders/messages';
 			} else {
-				$to = '?error=Invalid credentials';
+				$to = '?error=Invalid credentials!';
 			}
 			// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
 			$this->session->unset_userdata('referrer');
@@ -155,7 +153,7 @@ class Authenticate extends MY_Controller {
 
 	public function sign_out()
 	{
-		return $this->accounts->logout(str_replace(base_url('/'), '', $this->agent->referrer())); /*this will redirect to default page */
+		return $this->accounts->logout();
 	}
 
 	public function save($id=false)
@@ -257,26 +255,42 @@ class Authenticate extends MY_Controller {
 			// debug($post, 'stop');
 			$is_ok = $this->accounts->fb_login($post);
 			// debug($is_ok);
-			$to = '/profile';
+			$to = '/';
 			if ($is_ok == false) {
-				$to = 'sign-out';
+				$to = 'sign-out/';
 				$type = 'error';
 				$message = 'Unable to login, clearing session';
 			} else {
-				$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
-				if ($has_notifs) $to = 'orders/messages';
-				// debug($has_notifs, $to, $this->accounts->has_session, user('id'), 'stop');
+				if ($this->accounts->profile['is_profile_complete'] === 0) {
+					$to = 'profile/';
+				} else {
+					$to = $this->get_proper_redirect();
+				}
 				$type = 'success';
 				$message = '';
 			}
 			$this->set_response($type, $message, $post, base_url($to));
 		}
-
 	}
 
 	public function fb_deauthorize()
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		debug($post, 'stop');
+	}
+
+	private function get_proper_redirect()
+	{
+		$to = $this->session->userdata('referrer') ?: 'orders/';
+		$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
+		// debug($this->session->userdata('referrer'), 'stop');
+		if ($this->farms AND $this->products->count()) {
+			$to = $this->session->userdata('referrer') ?: 'fulfillment/';
+		} elseif ($this->farms AND $this->products->count() == 0) {
+			$to = $this->session->userdata('referrer') ?: 'farm/my-veggies/?success=Add-in your veggies!';
+		} elseif ($has_notifs) {
+			$to = $this->session->userdata('referrer') ?: 'orders/messages/';
+		}
+		return $to;
 	}
 }

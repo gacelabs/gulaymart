@@ -140,13 +140,6 @@
 									<small class="text-gray elem-block">Pay upon deliver</small>
 								</div>
 							</div>
-							<!-- <div class="productpage-summary-grid">
-								<img src="assets/images/icons/transfer.png" class="mini-img-icon" align="left">
-								<div>
-									<p class="zero-gaps">Wire Transfer</p>
-									<small class="text-gray elem-block">GCash, Paymaya</small>
-								</div>
-							</div> -->
 						</div>
 					</div>
 					<div class="productpage-summary-parent productpage-delivery">
@@ -159,9 +152,13 @@
 								<img src="assets/images/icons/today.png" class="mini-img-icon" align="left">
 								<div>
 									<p class="zero-gaps"><?php if (DISABLE_DISTANCE_COMPARING): ?>Arrival<?php else: ?>Today<?php endif ?></p>
-									<?php if ($product['farm_location']['durationval']): ?>
-										<small class="text-gray elem-block">Earliest: <?php compute_eta($product['farm_location']['durationval'], true, true);?></small>									
-									<?php endif ?>
+									<small class="text-gray elem-block">
+										<?php if ($product['farm_location']['durationval']): ?>
+											Earliest: <?php compute_eta($product['farm_location']['durationval'], true, true);?>
+										<?php else: ?>
+											ETA: <?php echo ucwords($product['farm_location']['duration']) ?>
+										<?php endif ?>
+									</small>									
 								</div>
 							</div>
 							<div class="productpage-summary-grid">

@@ -36,11 +36,6 @@ class MY_Controller extends CI_Controller {
 		// debug($this->session->userdata(), 'stop');
 		// $this->session->sess_destroy();
 		// debug($this->latlng, 'stop');
-		$referrer = $this->session->userdata('referrer');
-		if (empty($referrer)) {
-			$this->referrer = str_replace(base_url('/'), '', $this->agent->referrer());
-			$this->session->set_userdata('referrer', $this->referrer);
-		}
 		$latlng = get_cookie('prev_latlng', true);
 		// $latlng = $this->session->userdata('prev_latlng');
 		if (!empty($latlng)) {
@@ -108,7 +103,19 @@ class MY_Controller extends CI_Controller {
 			if ($results AND $this->accounts->profile['is_profile_complete'] == 0 AND !in_array($this->class_name, ['profile', 'api', 'authenticate'])) {
 				redirect(base_url('profile/'));
 			}
+			// debug(get_class($this), $this->session->userdata('referrer'), 'stop');
 		} else {
+			$referrer = $this->session->userdata('referrer');
+			if (get_class($this) != 'Authenticate') {
+				if (!empty($referrer)) {
+					$this->referrer = $referrer;
+				} else {
+					$this->referrer = str_replace(base_url('/'), '', current_full_url());
+				}
+				$this->session->set_userdata('referrer', $this->referrer);
+			}
+			// debug($this->referrer, 'stop');
+
 			/*now if ajax and ajax_no_entry_for_signed_out is TRUE redirect*/
 			if ($this->input->is_ajax_request() AND $this->ajax_no_entry_for_signed_out) {
 				$data = [

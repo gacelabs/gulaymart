@@ -196,25 +196,11 @@ class Accounts {
 
 	public function logout($redirect_url='')
 	{
-		// debug($redirect_url, 'stop');
-		$profile = $this->class->session->userdata('profile');
+		// $profile = $this->class->session->userdata('profile');
 		$this->class->session->unset_userdata('profile');
 		// $this->class->session->sess_destroy();
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
-
-		$referrer = str_replace(base_url('/'), '', $redirect_url);
-		$this->class->session->set_userdata('referrer', $referrer);
-
-		$prev_latlng = ['lat' => $profile['lat'], 'lng' => $profile['lng']];
-		// $this->class->session->set_userdata('prev_latlng', serialize($prev_latlng));
-		// debug($this->class->session->userdata('prev_latlng'), $redirect_url, 'stop');
-		// debug(get_cookie('prev_latlng'), $redirect_url, 'stop');
-		set_cookie('prev_latlng', serialize($prev_latlng), 7776000); // 90 days
-		set_cookie('current_city', trim($profile['current_city']), 7776000); // 90 days
-		
-		// $this->class->senddata->trigger('session', 'auth-logout', ['device_id' => $profile['device_id']]);
-		// redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
 		if (is_bool($redirect_url) AND $redirect_url == TRUE) {
 			return TRUE;
 		} else {
