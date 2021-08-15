@@ -39,6 +39,7 @@ var runFbLogin = function(data) {
 				data.fbauth = response;
 				simpleAjax('authenticate/fb_login', data);
 			} else {
+				fbstatus = 'unknown';
 				$('.fb-login-btn').trigger('click');
 			}
 		});
@@ -51,6 +52,7 @@ var runFbLogin = function(data) {
 				};
 				FB.api('/me?fields=id,email,name', loginFunction);
 			} else {
+				fbstatus = 'unknown';
 				$('.fb-login-btn').trigger('click');
 			}
 		});
