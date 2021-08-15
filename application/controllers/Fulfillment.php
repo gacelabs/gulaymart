@@ -191,7 +191,7 @@ class Fulfillment extends My_Controller {
 					notify_order_details($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
 
 					$redirect = false;
-					$this->set_response('success', 'Order is now Set For Pick Up!', $post, $redirect);
+					$this->set_response('success', 'Order is now '.$action.'!', $post, $redirect);
 				} else {
 					$this->set_response('info', 'Order Already set For Pick Up!', $post, false);
 				}
