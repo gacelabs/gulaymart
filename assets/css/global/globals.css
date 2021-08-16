@@ -30,6 +30,7 @@ body.check-loc-on {
 	padding: 9px 0;
 	text-align: center;
 	width: 34px;
+	border-radius: 4px;
 }
 #global_search_form {
 	margin: 0;
@@ -40,10 +41,17 @@ body.check-loc-on {
 }
 #global_search_form input, #global_search_form button {
 	border: none;
-	border-radius: 0;
 	box-shadow: none;
 	outline: none;
 	padding: 7px 12px;
+}
+#global_search_form input {
+	border-top-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
+}
+#global_search_form button {
+	border-top-right-radius: 4px !important;
+	border-bottom-right-radius: 4px !important;	
 }
 #global_navbar_btn_list {
 	margin: 0;
@@ -52,6 +60,7 @@ body.check-loc-on {
 }
 #global_navbar_btn_list>li {
 	background: #fff;
+	border-radius: 4px;
 	color: #799938;
 	cursor: pointer;
 	display: inline-block;
@@ -76,7 +85,7 @@ body.is-logged #global_navbar_btn_list>li {
 	padding: 7px 0;
 }
 body.is-logged #global_navbar_btn_list>li:first-child {
-	margin-left: 0;
+	margin: 0;
 }
 #global_navbar_avatar {
 	background-position: center center;
@@ -94,7 +103,7 @@ body.is-logged #global_navbar_btn_list>li:first-child {
 	border-radius: 100%;
 	box-shadow: 0px 2px 2px 1px #33333380;
 	font-size: 11px;
-	left: -5px;
+	left: -1px;
 	position: absolute;
 	text-align: center;
 	top: -2px !important;
@@ -208,6 +217,10 @@ body.check-loc-on #global_navbar>.container {
 	color: #111;
 	font-size: 12px;
 }
+.icon-gradient {
+	background: #799938;
+	background: linear-gradient(45deg, rgb(47 230 25) 0%, rgb(33 150 243) 100%);
+}
 @media (max-width: 991px) {
 	body .container {
 		padding: 0;
@@ -243,7 +256,7 @@ body.check-loc-on #global_navbar>.container {
 	}
 	body.is-logged #global_navbar_grid {
 		grid-template-columns: auto 1fr auto;
-		grid-gap: 12px;
+		grid-gap: 8px;
 	}
 	#global_search_form input {
 		border-radius: 4px !important;
@@ -258,6 +271,12 @@ body.check-loc-on #global_navbar>.container {
 	#global_search_form input, #global_search_form button {
 		height: 35px;
 		padding: 4px 12px;
+	}
+	#global_search_form input {
+		padding-right: 0;
+	}
+	#global_search_form button {
+		padding-left: 5px;
 	}
 	body.is-logged #global_navbar_btn_list>li {
 		margin-left: 4px;

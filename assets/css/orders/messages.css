@@ -36,7 +36,11 @@
 	padding: 10px;
 }
 @media (max-width: 767px) {
+	.no-records-ui h1 {
+		font-size: 1.5em;
+	}
 	.messages-nav-grid {
-		grid-template-columns: repeat(3, auto);
+		grid-template-columns: repeat(2, auto);
+		padding: 0 10px;
 	}
 }

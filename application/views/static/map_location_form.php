@@ -27,7 +27,7 @@
 
 	<div class="dashboard-panel-footer text-right">
 		<?php if ((isset($current_profile['profile']) AND $current_profile['profile']) AND $this->action != 'storefront'): ?>
-			<button type="button" class="btn normal-radius" id="reset-to-prev-btn">New</button>
+			<button type="button" class="btn normal-radius" id="reset-to-prev-btn" style="background-color:#fff;">New</button>
 		<?php endif ?>
 		<button type="submit" class="btn btn-contrast icon-right" id="map-submit-btn"><?php if ($this->action != 'storefront'): ?>Save Address<?php else: ?>Set Address<?php endif ?></button>
 	</div>

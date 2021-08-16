@@ -5,7 +5,7 @@
 			<i class="fa fa-id-badge"></i><span class="hidden-xs">Profile</span>
 		</a>
 		<a href="" class="hidden-lg hidden-md hidden-sm aside-nav-item">
-			<i class="fa fa-leaf"></i>
+			<i class="fa fa-leaf icon-gradient"></i>
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
 		<?php if ($this->farms AND $this->products->count()): ?>

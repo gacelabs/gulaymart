@@ -79,6 +79,9 @@
 		padding: 5px;
 		margin: 5px 5px 30px 5px;
 	}
+	#marketplace_header_carousel .carousel-indicators {
+		display: none;
+	}
 	#category_container, #farmers_container {
 		padding: 0 10px;
 	}
@@ -102,5 +105,8 @@
 	#farmer_list_container {
 		margin-left: -5px;
 		margin-right: -5px;
+	}
+	.veggy-category-item-inner {
+		padding: 7px 0;
 	}
 }

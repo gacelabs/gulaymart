@@ -10,7 +10,7 @@ body {
 	padding-top: 54px;
 }
 input, select, textarea, button, .btn, .input-group-addon {
-	border-radius: 0 !important;
+	/*border-radius: 0 !important;*/
 	box-shadow: none !important;
 	outline: none !important;
 }

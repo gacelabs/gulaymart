@@ -19,7 +19,7 @@
 				$keywords = isset($data['keywords']) ? $data['keywords'] : '';?>
 				<form action="marketplace/search" method="get" name="search" class="form-validate" id="global_search_form">
 					<div class="input-group">
-						<input type="text" class="form-control" name="keywords" placeholder="Search veggies..." value="<?php echo $keywords;?>">
+						<input type="text" class="form-control" name="keywords" placeholder="Search veggies" value="<?php echo $keywords;?>">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="submit" loading-text style="background-color:#fff;"><i class="fa fa-search" style="color:#a8d253;"></i></button>
 						</span>
@@ -31,8 +31,10 @@
 					<li id="nav_basket">
 						<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
 					</li>
+					<li id="nav_orders">
+						<a href="orders/placed/"><i class="fa fa-cart-arrow-down"></i></a>
+					</li>
 					<?php endif ; ?>
-
 					<li <?php echo(empty($current_profile) ? 'data-toggle="modal" data-target="#login_modal"' : 'style="background-color:transparent;"'); ?>>
 						<?php if ($current_profile) : ?>
 							<a href="profile/">
