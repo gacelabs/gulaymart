@@ -98,7 +98,6 @@
 		color: #2196F3;
 	}
 	#veggy_categories {
-		grid-template-columns: minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px) minmax(max-content, 120px);
 	    grid-gap: 10px;
 		overflow-y: auto;
 	}
