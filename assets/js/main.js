@@ -566,6 +566,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				break;
 			}
 			// console.log(uiParent);
+			// console.log(oSegments, oResponse.panel, sMode, bIsRemoveUI);
 			if (uiParent.length) {
 				var oArr = [];
 				// console.log(oArr);
@@ -582,11 +583,11 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					var removeMethod = new Promise((resolve, reject) => {
 						oArr.forEach((id, index, array) => {
 							var newUI = oResponse.html[id];
-							if (newUI.length) {
+							if (newUI != undefined && newUI.length) {
 								var item = uiParent.find('[data-merge-id="'+id+'"]');
 								if (bIsRemoveUI == true) {
 									if (item.length) {
-										console.log('removed ui!', item);
+										// console.log('removed ui!', item);
 										item.remove();
 									}
 								} else {

@@ -179,19 +179,16 @@ class Fulfillment extends My_Controller {
 				if ($count == 0) {
 					// set status for pick-up this will now also send to toktok post delivery
 					$this->gm_db->save('baskets_merge', ['status' => $status_value], ['id' => $post['merge_id']]);
-					$redirect = 'fulfillment/for-pick-up';
+					
 					$action = 'Ready for Pick Up';
-					if ($status_value == GM_CANCELLED_STATUS) {
-						$redirect = 'fulfillment/cancelled';
-						$action = 'Cancelled';
-					}
+					if ($status_value == GM_CANCELLED_STATUS) $action = 'Cancelled';
 
 					$buyer = json_decode(base64_decode($merge['buyer']), true);
 					$seller = json_decode(base64_decode($merge['seller']), true);
-					notify_order_details($merge, $buyer, [$seller['user_id']], $action, str_replace(' ', '-', urldecode(get_status_value($status_value))));
+					$status_text = str_replace(' ', '-', urldecode(get_status_value($status_value)));
+					notify_order_details($merge, $buyer, [$seller['user_id']], $action, $status_text, ($status_value == GM_CANCELLED_STATUS));
 
-					$redirect = false;
-					$this->set_response('success', 'Order is now '.$action.'!', $post, $redirect);
+					$this->set_response('success', 'Order is now '.$action.'!', $post, false);
 				} else {
 					$this->set_response('info', 'Order Already set For Pick Up!', $post, false);
 				}

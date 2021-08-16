@@ -469,7 +469,7 @@ function product_url($item=false, $echo=false)
 	}
 }
 
-function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory', $notifType='message')
+function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory', $notifType='message', $dont_notif=false)
 {
 	$ci =& get_instance();
 	if ($user_id AND $datestamp AND $content) {
@@ -489,24 +489,28 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 				'content' => urldecode($content),
 			], 'row');
 			if ($check_msgs == false) {
-				$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
-					'badge' => base_url('assets/images/favicon.png'),
-					'body' => '',
-					'icon' => base_url('assets/images/favicon.png'),
-					'tag' => 'notif:'.$notifType.'-id:'.$user_id,
-					'renotify' => true,
-					'vibrate' => [200, 100, 200, 100, 200, 100, 200],
-					'data' => [
-						'id' => $user_id,
-						'url' => base_url('orders/messages'),
-						'type' => $notifType,
-					],
-				]);
 				$message_id = $ci->gm_db->new('messages', [
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => urldecode($content),
 				]);
+				if ($dont_notif == false) {
+					$msg_count = $ci->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_id]);
+					$ci->senddataapi->trigger('gm-push-notification', 'notifications', [
+						'badge' => base_url('assets/images/favicon.png'),
+						'body' => '',
+						'icon' => base_url('assets/images/favicon.png'),
+						'tag' => 'notif:'.$notifType.'-id:'.$user_id,
+						'renotify' => true,
+						'vibrate' => [200, 100, 200, 100, 200, 100, 200],
+						'data' => [
+							'id' => $user_id,
+							'url' => base_url('orders/messages'),
+							'type' => $notifType,
+							'count' => $msg_count,
+						],
+					]);
+				}
 				$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['message_id' => $message_id]);
 				return true;
 			}
@@ -568,19 +572,19 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Check your Placed Order(s) here, Thank you!');
-	$html_buyer_gm = '<p>Your Placed Order(s), <a href="orders/placed/" data-readit="1">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
+	$html_buyer_gm = '<p>View Placed Order(s) <a href="orders/placed/" data-readit="1">here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders');
 	
 	/*message sellers*/
 	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
 	$context = make_stream_context($data);
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
-	$html_seller_gm = '<p>Your Placed Order(s) from '.$buyer['fullname'].', <a href="fulfillment/placed/" data-readit="1">Check here</a></p>';
+	$html_seller_gm = '<p>View Placed Order(s) from '.$buyer['fullname'].' <a href="fulfillment/placed/" data-readit="1">here</a></p>';
 
 	$ci =& get_instance();
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Check your Placed Order(s) from '.$buyer['fullname'].', Thank you!');
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders');
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
@@ -594,7 +598,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	fclose($logfile);
 }
 
-function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for-pick-up')
+function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for-pick-up', $was_cancelled=false)
 {
 	// $html_email = file_get_contents(base_url('support/view_invoice/'.$merge['order_id']));
 	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'buyer'];
@@ -603,8 +607,8 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	
 	/*message buyer*/
 	send_gm_email($buyer['id'], $html_email, 'Check your '.$action.' Order(s) here, Thank you!');
-	$html_buyer_gm = '<p>Your '.$action.' Order(s), <a href="orders/'.$status.'/" data-readit="1">Check here</a></p>';
-	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'order');
+	$html_buyer_gm = '<p>View '.$action.' Order(s) <a href="orders/'.$status.'/" data-readit="1">here</a></p>';
+	send_gm_message($buyer['id'], strtotime(date('Y-m-d')), $html_buyer_gm, 'Notifications', 'Orders', 'message', $was_cancelled);
 	
 	/*message sellers*/
 	$data = ['id' => $merge['id'], 'action' => $action, 'status' => $status, 'for' => 'seller'];
@@ -612,10 +616,10 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
 
 	$ci =& get_instance();
-	$html_seller_gm = '<p>Your '.$action.' Order(s) from '.$buyer['fullname'].', <a href="fulfillment/'.$status.'/" data-readit="1">Check here</a></p>';
+	$html_seller_gm = '<p>View your '.$action.' Order(s) from '.$buyer['fullname'].' <a href="fulfillment/'.$status.'/" data-readit="1">here</a></p>';
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Check your '.$action.' Order(s) from '.$buyer['fullname'].', Thank you!');
-		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'fulfillment');
+		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'message', $was_cancelled);
 	}
 	/*LOGS FOR TRACKING*/
 	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");

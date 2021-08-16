@@ -75,12 +75,12 @@
 					if (oOptions.data && oUser.id == oOptions.data.id) {
 						bNotify = true;
 						let sType = oOptions.data.type;
-						if (currentNotification) {
-							iMessageCount = currentNotification.data.newMessageCount + 1;
-							oOptions.data.newMessageCount = iMessageCount;
+						iMessageCount = oOptions.data.count;
+						iMessageCount = iMessageCount == 0 ? '' : iMessageCount;
+						oOptions.data.newMessageCount = iCount;
+						if (iCount > 1) {
 							oOptions.body = 'You have '+iMessageCount+' new '+sType+'s';
 						} else {
-							oOptions.data.newMessageCount = 1;
 							oOptions.body = 'You have a new '+sType;
 						}
 					}

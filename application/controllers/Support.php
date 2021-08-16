@@ -155,6 +155,26 @@ class Support extends MY_Controller {
 							]
 						];
 					break;
+					case 'message_id':
+						$datatable = $this->gm_db->get_in('messages', ['id' => $ids]);
+						$user_ids = [];
+						if ($datatable) {
+							foreach ($datatable as $row) $user_ids[] = $row['to_id'];
+						}
+						$user_ids = array_unique($user_ids);
+						$data = [
+							'mode' => 'message',
+							'post' => $post,
+							'id' => is_array($user_ids) ? $user_ids : [$user_ids],
+							'url' => [base_url('orders/messages')],
+							'params' => ['ids' => $ids],
+							'counts' => [
+								'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]),
+								'notifications' => $this->gm_db->count('messages', ['unread'=>1, 'tab'=>'Notifications', 'to_id'=>$user_ids]),
+								'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
+							],
+						];
+					break;
 					case 'merge_id':
 						$datatable = $this->gm_db->get_in('baskets_merge', ['id' => $ids]);
 						// $datatable = $this->gm_db->get_in('baskets_merge');
@@ -282,26 +302,6 @@ class Support extends MY_Controller {
 							}
 							$data = $results;
 						}
-					break;
-					case 'message_id':
-						$datatable = $this->gm_db->get_in('messages', ['id' => $ids]);
-						$user_ids = [];
-						if ($datatable) {
-							foreach ($datatable as $row) $user_ids[] = $row['to_id'];
-						}
-						$user_ids = array_unique($user_ids);
-						$data = [
-							'mode' => 'message',
-							'post' => $post,
-							'id' => is_array($user_ids) ? $user_ids : [$user_ids],
-							'url' => [base_url('orders/messages')],
-							'params' => ['ids' => $ids],
-							'counts' => [
-								'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]),
-								'notifications' => $this->gm_db->count('messages', ['unread'=>1, 'tab'=>'Notifications', 'to_id'=>$user_ids]),
-								'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
-							],
-						];
 					break;
 				}
 			}
