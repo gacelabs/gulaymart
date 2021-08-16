@@ -64,12 +64,12 @@
 								<div class="custom-item-child">
 									<div class="form-group">
 										<label for="farm_name">Farm name</label>
-										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters. <span class="text-link" data-toggle="modal" data-target="#farm_identity_help">NEED HELP?</span></small>
+										<small class="elem-block text-gray" style="margin-bottom:5px;"><i class="fa fa-exclamation-circle"></i> No special characters. Max 30 characters. <span class="text-link" data-toggle="modal" data-target="#farm_identity_help">NEED HELP?</span></small>
 										<input type="text" name="user_farms[name]" id="farm_name" class="input-keyup form-control" placeholder="The Humble Farm" required="required" value="<?php isset_echo($data['farms'], 'name');?>" style="text-transform:capitalize;">
 									</div>
 									<div class="form-group">
 										<label for="tagline">Tagline</label>
-										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
+										<small class="elem-block text-gray" style="margin-bottom:5px;"><i class="fa fa-exclamation-circle"></i> Max 50 characters.</small>
 										<input type="text" name="user_farms[tagline]" id="tagline" class="input-keyup form-control" placeholder="Your friendly neighborhood farmer" value="<?php isset_echo($data['farms'], 'tagline');?>">
 									</div>
 								</div>
@@ -82,7 +82,7 @@
 								</ul>
 								<div class="custom-item-child">
 									<div class="form-group">
-										<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Tell something about your farm.</small>
+										<small class="elem-block text-gray" style="margin-bottom:5px;"><i class="fa fa-exclamation-circle"></i> Tell something about your farm.</small>
 										<textarea type="text" name="user_farms[about]" class="form-control" placeholder="About your farm." rows="4" required="required"><?php isset_echo($data['farms'], 'about');?></textarea>
 									</div>
 								</div>
@@ -119,7 +119,7 @@
 									<li><i class="fa fa-angle-right"></i></li>
 								</ul>
 								<div class="custom-item-child">
-									<small class="elem-block text-gray"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">NEED HELP?</span></small>
+									<small class="elem-block text-gray" style="margin-bottom:5px;"><i class="fa fa-exclamation-circle"></i> Where to pick up your products? <span class="text-link" data-toggle="modal" data-target="#farm_location_help">NEED HELP?</span></small>
 									<div id="location_container">
 										<div class="input-group hide" id="clone_me">
 											<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly">
@@ -135,7 +135,7 @@
 										}
 										?>
 										<label style="margin-top:5px;">
-											<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="0"<?php str_has_value_echo(0, $farm_loc, ' checked');?>> Use my shipping address.
+											<input type="radio" class="pick-up-loc" name="farm_loc" id="same_loc" value="0"<?php str_has_value_echo(0, $farm_loc, ' checked');?>> Same as my shipping address.
 										</label>
 										<div class="<?php str_not_value_echo(0, $farm_loc, 'hide');?>" id="same_loc_container">
 											<div class="row">

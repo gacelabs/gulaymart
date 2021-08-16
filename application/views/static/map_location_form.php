@@ -20,7 +20,7 @@
 				<input type="text" class="form-control" name="address_1" id="address_1" placeholder="Enter the complete address." required="required">
 			</div>
 			<div class="form-group zero-gaps">
-				<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1 or Step 2" required="required">
+				<input type="text" readonly="readonly" name="address_2" id="address_2" class="form-control" placeholder="Go to Step 1" required="required">
 			</div>
 		</div>
 	</div>

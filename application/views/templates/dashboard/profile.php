@@ -82,7 +82,7 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth day will help GulayMart curate contents for you."></small></label>
+								<label>Birthday <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="Your birth day helps GulayMart curate contents for you."></small></label>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 								<div class="form-group">
@@ -121,7 +121,7 @@
 								<?php endif ?>
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-								<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries."></small></label>
+								<label>Cellphone <small class="fa fa-question-circle text-gray" data-toggle="tooltip" data-placement="right" title="A valid contact number for deliveries. Hidden from all sellers."></small></label>
 								<div class="form-group zero-gaps">
 									<?php if ($current_profile['profile']): ?>
 										<input type="text" class="form-control" name="phone" data-inputmask="'mask': '0999-999-9999'" placeholder="09xx-xxx-xxxx" required="required" value="<?php echo $current_profile['profile']['phone'];?>">
