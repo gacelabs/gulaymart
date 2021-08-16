@@ -97,11 +97,10 @@
 			let localNotify = false;
 			if (localOptions.data && oUser.id == localOptions.data.id) {
 				localNotify = true;
-				if (typeof iLocalMessageCount == 'number') {
-					iLocalMessageCount += 1;
+				iLocalMessageCount = localOptions.data.count;
+				if (iLocalMessageCount > 1) {
 					localOptions.body = 'You have '+iLocalMessageCount+' new messages.';
 				} else {
-					iLocalMessageCount = 1;
 					localOptions.body = 'You have a new message.';
 				}
 			}
@@ -115,7 +114,7 @@
 
 	var runSampleNotif = function() {
 		$('#install-app').bind('click', function() {
-			if (oUser && oUser.is_admin) simpleAjax('test/msg');
+			if (oUser && oUser.is_admin) simpleAjax('test/msg/test-notification'+iLocalMessageCount);
 		});
 	};
 
