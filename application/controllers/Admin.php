@@ -369,7 +369,7 @@ class Admin extends MY_Controller {
 		if ($automation_settings) {
 			$set = json_decode($automation_settings['value'], true);
 			$toktok_data = $this->gm_db->get('baskets_merge', [
-				'status' => 6, 'operator' => 0, 'is_sent' => 0,
+				'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0,
 				'order_by' => 'added', 'direction' => 'ASC',/* 'limit' => $set['booking_limit'],*/
 			]);
 			// debug($automation_settings, $toktok_data, 'stop');

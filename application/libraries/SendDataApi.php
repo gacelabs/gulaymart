@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2016 - 2018.
+ * Copyright (c) 2016 - 2021.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the 'Software'), to deal
@@ -28,10 +28,10 @@
  *
  * @package	GaceLabs
  * @author	GaceLabs Dev Team
- * @copyright	Copyright (c) 2016 - 2018, GaceLabs, Inc. (https://gacelabs.com/)
+ * @copyright	Copyright (c) 2016 - 2021, GaceLabs, Inc. (https://gacelabs.com/)
  * @license	http://opensource.org/licenses/MIT	MIT License
  * @link	https://send-data.co
- * @since	Version 1.0.0
+ * @since	Version 4.0.0
  * @filesource
  */
 

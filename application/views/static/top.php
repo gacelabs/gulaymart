@@ -3,7 +3,7 @@
 <head>
 	<base href="<?php echo base_url(); ?>">
 	<meta charset="utf-8">
-	<meta name="theme-color" content="#799938">
+	<meta name="theme-color" content="#ABE147">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title><?php if ($top['page_title']) { echo $top['page_title'];} ?></title> 
