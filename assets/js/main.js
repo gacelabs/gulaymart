@@ -445,36 +445,38 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						var arrRemoved = [];
 						if (Object.keys(oResponse.html).length) {
 							for (var x in oResponse.html) {
-								var newUI = oResponse.html[x], arrNotFound = [];
-								var removeMethod = new Promise((resolve, reject) => {
-									var found = false;
-									oArr.forEach((id, index, array) => {
-										var item = uiParent.find('[data-'+id+'-id]');
-										if (item.length) {
-											// console.log('replace ui!', item);
-											item.replaceWith(newUI);
-											found = true;
+								var newUI = oResponse.html[x];
+								if (newUI != undefined && newUI.length) {
+									var removeMethod = new Promise((resolve, reject) => {
+										var found = false;
+										oArr.forEach((id, index, array) => {
+											var item = uiParent.find('[data-'+id+'-id]');
+											if (item.length) {
+												// console.log('replace ui!', item);
+												item.replaceWith(newUI);
+												found = true;
+											}
+										});
+										if (found == false) {
+											// console.log('new ui!', uiParent);
+											uiParent.prepend(newUI);
 										}
+										resolve();
 									});
-									if (found == false) {
-										// console.log('new ui!', uiParent);
-										uiParent.prepend(newUI);
-									}
-									resolve();
-								});
 
-								removeMethod.then(() => {
-									if (typeof runATagAjax == 'function') runATagAjax();
-									if (typeof runDomShowHide == 'function') runDomShowHide();
-									if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
-									// console.log(arrNotFound);
-									if (uiParent.find('.order-table-item').length == 0) {
-										uiParent.find('.no-records-ui').removeClass('hide');
-									} else {
-										uiParent.find('.no-records-ui').addClass('hide');
-									}
-									// console.log(oResponse.panel, 'All done!');
-								});
+									removeMethod.then(() => {
+										if (typeof runATagAjax == 'function') runATagAjax();
+										if (typeof runDomShowHide == 'function') runDomShowHide();
+										if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
+
+										if (uiParent.find('.order-table-item').length == 0) {
+											uiParent.find('.no-records-ui').removeClass('hide');
+										} else {
+											uiParent.find('.no-records-ui').addClass('hide');
+										}
+										// console.log(oResponse.panel, 'All done!');
+									});
+								}
 							}
 						}
 					}
@@ -502,7 +504,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							oArr.forEach((id, index, array) => {
 								var newUI = oResponse.html[id],
 								uiParent = $('#msg_'+oResponse.tabs[id]);
-								if (newUI.length) {
+								if (newUI != undefined && newUI.length) {
 									var item = uiParent.find('[data-msg-id="'+id+'"]');
 									if (item.length) {
 										// console.log('replace ui!', item);
@@ -520,11 +522,13 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							if (typeof runATagAjax == 'function') runATagAjax();
 							if (typeof runDomShowHide == 'function') runDomShowHide();
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
-							// console.log(arrToRemoved);
-							if (uiParent.find('.notif-item').length == 0) {
-								uiParent.find('.no-records-ui').removeClass('hide');
-							} else {
-								uiParent.find('.no-records-ui').addClass('hide');
+
+							if (uiParent.length && uiParent.is('visible')) {
+								if (uiParent.find('.notif-item').length == 0) {
+									uiParent.find('.no-records-ui').removeClass('hide');
+								} else {
+									uiParent.find('.no-records-ui').addClass('hide');
+								}
 							}
 							// console.log('All done!');
 						});
@@ -533,8 +537,9 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						var removeMethod = new Promise((resolve, reject) => {
 							oArr.forEach((id, index, array) => {
 								var item = $('[data-msg-id="'+id+'"]');
-								if (uiParent.length == 0) uiParent = item.parent('[element-name="notifications"]');
+								if (uiParent.length == 0) uiParent = item.parent('[element-name="messages"]');
 								if (item.length) {
+									// console.log('removed ui!', item);
 									item.remove();
 									arrToRemoved.push(true);
 								}
@@ -542,10 +547,12 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							});
 						});
 						removeMethod.then(() => {
-							if (uiParent.find('.notif-item').length == 0) {
-								uiParent.find('.no-records-ui').removeClass('hide');
-							} else {
-								uiParent.find('.no-records-ui').addClass('hide');
+							if (uiParent.length) {
+								if (uiParent.find('.notif-item').length == 0) {
+									uiParent.find('.no-records-ui').removeClass('hide');
+								} else {
+									uiParent.find('.no-records-ui').addClass('hide');
+								}
 							}
 							// console.log('All done!');
 						});
@@ -566,7 +573,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				break;
 			}
 			// console.log(uiParent);
-			// console.log(oSegments, oResponse.panel, sMode, bIsRemoveUI);
+			console.log(oSegments, oResponse.panel, sMode, bIsRemoveUI);
 			if (uiParent.length) {
 				var oArr = [];
 				// console.log(oArr);
@@ -609,6 +616,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						if (typeof runDomShowHide == 'function') runDomShowHide();
 						if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
 						if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
+						
 						if (uiParent.find('.order-table-item').length == 0) {
 							uiParent.find('.no-records-ui').removeClass('hide');
 						} else {

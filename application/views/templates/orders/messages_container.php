@@ -19,7 +19,7 @@
 
 			<div id="link_panel_top">
 				<div class="hideshow-container">
-					<div id="msg_notifications" element-name="notifications">
+					<div id="msg_notifications" element-name="messages">
 						<?php
 						$notifications = false;
 						if ($data['messages'] AND isset($data['messages']['Notifications'])) {
@@ -34,7 +34,7 @@
 							<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace</a></p>
 						</div>
 					</div>
-					<div class="notif-list-container hide" id="msg_feedbacks" element-name="notifications">
+					<div class="notif-list-container hide" id="msg_feedbacks" element-name="messages">
 						<?php 
 						$feedbacks = false;
 						if ($data['messages'] AND isset($data['messages']['Feedbacks'])) {

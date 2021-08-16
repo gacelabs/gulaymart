@@ -10,7 +10,7 @@ var runDomShowHide = function() {
 		// console.log(target);
 		$('.hideshow-btn').removeClass('active');
 		oThis.addClass('active');
-		$('[element-name="notifications"]').addClass('hide');
+		$('[element-name="messages"]').addClass('hide');
 		if ($('.hideshow-container').find('.no-records-ui:last').is('visible') == false) {
 			$('.hideshow-container').find(target).removeClass('hide');
 		}
