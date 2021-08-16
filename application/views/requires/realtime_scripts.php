@@ -77,8 +77,8 @@
 						let sType = oOptions.data.type;
 						iMessageCount = oOptions.data.count;
 						iMessageCount = iMessageCount == 0 ? '' : iMessageCount;
-						oOptions.data.newMessageCount = iCount;
-						if (iCount > 1) {
+						oOptions.data.newMessageCount = iMessageCount;
+						if (iMessageCount > 1) {
 							oOptions.body = 'You have '+iMessageCount+' new '+sType+'s';
 						} else {
 							oOptions.body = 'You have a new '+sType;
