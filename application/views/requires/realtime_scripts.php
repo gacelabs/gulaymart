@@ -80,9 +80,10 @@
 						oOptions.data.newMessageCount = iMessageCount;
 						if (iMessageCount > 1) {
 							oOptions.body = 'You have '+iMessageCount+' new '+sType+'s';
-						} else {
+						} else if (typeof iMessageCount == 'number') {
 							oOptions.body = 'You have a new '+sType;
 						}
+						if (oOptions.body.length == 0) bNotify = false;
 					}
 					// console.log(bNotify, oOptions);
 					if (bNotify) {
@@ -98,11 +99,13 @@
 			if (localOptions.data && oUser.id == localOptions.data.id) {
 				localNotify = true;
 				iLocalMessageCount = localOptions.data.count;
+				iLocalMessageCount = iLocalMessageCount == 0 ? '' : iLocalMessageCount;
 				if (iLocalMessageCount > 1) {
 					localOptions.body = 'You have '+iLocalMessageCount+' new messages.';
-				} else {
+				} else if (typeof iLocalMessageCount == 'number') {
 					localOptions.body = 'You have a new message.';
 				}
+				if (localOptions.body.length == 0) localNotify = false;
 			}
 			if (localNotify) {
 				badge = iLocalMessageCount;
