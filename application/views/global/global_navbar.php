@@ -31,16 +31,16 @@
 						<?php if (($this->farms AND $this->products->count())): ?>
 							<li id="nav_fulfillment" class="hidden-xs hidden-sm">
 								<a href="fulfillment/placed/"><i class="fa fa-exchange"></i></a>
-								<i class="fa fa-circle text-success notif-dot<?php echo $this->fulfill_count == false ? ' hide' : '';?>"></i>
+								<i data-home-nav="fulfillment" class="fa fa-circle text-success notif-dot<?php echo $this->fulfill_count == false ? ' hide' : '';?>"></i>
 							</li>
 						<?php endif ?>
 						<li id="nav_basket">
 							<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
-							<i class="fa fa-circle text-success notif-dot<?php echo $this->basket_count == false ? ' hide' : '';?>"></i>
+							<i data-home-nav="baskets" class="fa fa-circle text-success notif-dot<?php echo $this->basket_count == false ? ' hide' : '';?>"></i>
 						</li>
 						<li id="nav_orders">
 							<a href="orders/placed/"><i class="fa fa-cart-arrow-down"></i></a>
-							<i class="fa fa-circle text-success notif-dot<?php echo $this->order_count == false ? ' hide' : '';?>"></i>
+							<i data-home-nav="orders" class="fa fa-circle text-success notif-dot<?php echo $this->order_count == false ? ' hide' : '';?>"></i>
 						</li>
 					<?php endif ; ?>
 					<li <?php echo(empty($current_profile) ? 'data-toggle="modal" data-target="#login_modal"' : 'style="background-color:transparent;"'); ?>>

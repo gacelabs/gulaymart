@@ -110,12 +110,6 @@ $(document).ready(function() {
 		$(this).next('.productpage-summary-inner').toggleClass('active');
 	});
 
-	$('#add_product_btn').click(function(e) {
-		e.stopPropagation();
-		$('#nav_basket').find('.notif-dot').remove();	
-		$('#nav_basket').append('<i class="fa fa-circle text-success notif-dot"></i>');
-	});
-
 	// thubmnail preview
 	$('#img_thumb_list>li').click(function() {
 		var imgSrc = $(this).find('div.img-thumb-item').css('background-image'),

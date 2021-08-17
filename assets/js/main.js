@@ -308,21 +308,25 @@ var reCountMenuNavs = function(sNav, totalItems) {
 				$('#nav-messages-count').addClass('hide').text('');
 			}
 			if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
+			console.log(sNav, totalItems);
 			if (totalItems) {
 				$('kbd.nav-messages-count').removeClass('hide').text(totalItems);
+				$('i.notif-dot[data-home-nav="'+sNav+'"]').removeClass('hide');
 			} else {
 				$('kbd.nav-messages-count').addClass('hide').text('');
+				$('i.notif-dot[data-home-nav="'+sNav+'"]').addClass('hide');
 			}
 			badge = totalItems == 0 ? '' : totalItems;
 			favicon.badge(totalItems == 0 ? '' : totalItems);
 		break;
 	}
-	/*tABS*/
+	/*TABS*/
 	if (totalItems) {
-		// console.log(sNav, totalItems);
 		$('[data-nav="'+sNav+'"]').find('kbd').removeClass('hide').removeClass('no-count').text(totalItems);
+		$('i.notif-dot[data-home-nav="'+sNav+'"]').removeClass('hide');
 	} else {
 		$('[data-nav="'+sNav+'"]').find('kbd').addClass('hide').addClass('no-count').text('');
+		$('i.notif-dot[data-home-nav="'+sNav+'"]').addClass('hide');
 	}
 }
 
