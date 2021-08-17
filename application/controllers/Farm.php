@@ -592,13 +592,16 @@ class Farm extends MY_Controller {
 			} else {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
 			}
-			if ($farm_location_id == 0) {
-				$farm_location_id = $user_farm['farm_location_id'] = $farm_location['id'];
+			if ($farm_location_id == 0 AND $farm_location) {
+				$farm_location_id = $farm_location['id'];
 				$this->store_location($id, $farm_location_id, $name);
 			} elseif ($farm_location == false) {
 				/*wrong farm location*/
 				show_404();
+			} else {
+				$user_farm['farm_location_id'] = $farm_location['id'];
 			}
+			// debug($user_farm, 'stop');
 
 			$destinations = $this->latlng;
 			if (isset($farm_location['lat']) AND isset($farm_location['lng'])) {
