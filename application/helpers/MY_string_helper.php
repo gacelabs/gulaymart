@@ -816,27 +816,22 @@ function linking_mode($link=null)
 	return false;
 }
 
-function get_data_in($table=false, $where=false, $field=false, $order=2)
+function get_data_in($table=false, $where=false, $field=false)
 {
 	if ($table) {
 		$ci =& get_instance();
-		if ($where != false) $ci->db->where($where);
-		if ($order) {
-			$data = $ci->db->order_by($order)->get($table);
-		} else {
-			$data = $ci->db->get($table);
-		}
-		if ($data->num_rows()) {
+		$data = $ci->gm_db->get_in($table, $where);
+		if ($data) {
 			if ($field) {
 				$result = [];
-				foreach ($data->result_array() as $key => $row) {
+				foreach ($data as $key => $row) {
 					if (isset($row[$field])) {
 						$result[] = $row[$field];
 					}
 				}
 				return $result;
 			} else {
-				return $data->result_array();
+				return $data;
 			}
 		}
 	}

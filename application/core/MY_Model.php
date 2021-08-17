@@ -96,6 +96,55 @@ class MY_Model extends CI_Model {
 		return false;
 	}
 
+	public function get_like($table=false, $where=false, $func='result', $field=false, $redirect_url='')
+	{
+		if ($table) {
+			if ($field) {
+				$this->db->select($field);
+			}
+			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				$where = (array)$where;
+				$where['activity'] = 1;
+			}
+			if ($where) {
+				if (isset($where['limit'])) {
+					$this->db->limit($where['limit']);
+					unset($where['limit']);
+				}
+				if (isset($where['order_by']) AND isset($where['direction'])) {
+					if (is_array($where['order_by'])) {
+						foreach ($where['order_by'] as $key => $order_by) {
+							$this->db->order_by($order_by, $where['direction'][$key]);
+						}
+					} else {
+						$this->db->order_by($where['order_by'], $where['direction']);
+					}
+					unset($where['order_by']);
+					unset($where['direction']);
+				}
+				foreach ($where as $key => $row) {
+					if (is_array($row) AND count($row) > 0) {
+						foreach ($row as $value) {
+							$this->db->like($key, $value);
+						}
+					} else {
+						$this->db->like($key, $row);
+					}
+				}
+			}
+			$data = $this->db->get($table);
+			// debug($data);
+			if ($data->num_rows()) {
+				if ($redirect_url != '') {
+					redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+				} else {
+					return $data->{$func.'_array'}();
+				}
+			}
+		}
+		return false;
+	}
+
 	public function get_not_in($table=false, $where=false, $func='result', $field=false, $redirect_url='')
 	{
 		if ($table) {
