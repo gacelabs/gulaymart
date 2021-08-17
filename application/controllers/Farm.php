@@ -592,10 +592,10 @@ class Farm extends MY_Controller {
 			} else {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
 			}
-			if ($farm_location) {
+			if ($farm_location_id == 0) {
 				$farm_location_id = $user_farm['farm_location_id'] = $farm_location['id'];
 				$this->store_location($id, $farm_location_id, $name);
-			} else {
+			} elseif ($farm_location == false) {
 				/*wrong farm location*/
 				show_404();
 			}
