@@ -57,7 +57,7 @@
 															$farm = $data['farms'];
 															$farm['farm_location_id'] = $location['id'];
 														?>
-														<li><a id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>"><?php echo $farm['name'];?></a></li>
+														<li><a id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'].'-'.$location['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>"><?php echo $farm['name'];?></a></li>
 													<?php endforeach ?>
 												</ul>
 											</div>
