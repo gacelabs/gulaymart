@@ -160,18 +160,18 @@ class Basket extends My_Controller {
 		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
 	}
 
-	public function view($product_id=0, $farm_location_id=0, $product_name='')
+	public function view($product_id=0, $farm_location_id=0, $product_name=false)
 	{
 		$product = false;
 		if ($product_id AND $farm_location_id) {
 			// debug($product_id, $farm_location_id, 'stop');
 			$product = $this->products->product_by_farm_location($product_id, $farm_location_id);
+			if ($product_name == false AND $product) {
+				redirect(base_url('basket/view/'.$product['id'].'/'.$product['farm_location']['id'].'/'.$product['name']));
+			}
 		}
 		// debug($product, 'stop');
-		if ($product == false) {
-			show_404();
-			// redirect(base_url('/'));
-		}
+		if ($product == false) show_404();
 		$this->render_page([
 			'top' => [
 				'css' => ['modal/modals', 'basket/productpage', 'static/store']
