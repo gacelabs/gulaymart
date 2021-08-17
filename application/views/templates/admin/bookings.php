@@ -191,7 +191,7 @@
 						</div>
 						<div class="booking-body">
 							<div class="sender-info-form">
-								<p><b>Pushing Information</b><b class="pull-right">Every: <i id="cron-sequence-next">5 minutes</i></b></p>
+								<p><b>Pushing Information</b><b class="pull-right">Every: <i id="cron-sequence-next">2 minutes</i></b></p>
 								<div id="cron-sequence" style="background-color: black; color: whitesmoke; padding: 10px; position: relative; height: 100px; overflow-y: scroll;">
 									<?php print_cron_log('sequence');?>
 								</div>
@@ -212,7 +212,7 @@
 						</div>
 						<div class="booking-body">
 							<div class="sender-info-form">
-								<p><b>Pulling Information</b><b class="pull-right">Every: <i id="cron-returns-next">10 minutes</i></b></p>
+								<p><b>Pulling Information</b><b class="pull-right">Every: <i id="cron-returns-next">4 minutes</i></b></p>
 								<div id="cron-returns" style="background-color: black; color: whitesmoke; padding: 10px; position: relative; height: 100px; overflow-y: scroll;">
 									<?php print_cron_log('returns');?>
 								</div>
