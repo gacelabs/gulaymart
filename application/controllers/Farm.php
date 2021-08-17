@@ -594,6 +594,7 @@ class Farm extends MY_Controller {
 			}
 			if ($farm_location) {
 				$farm_location_id = $user_farm['farm_location_id'] = $farm_location['id'];
+				$this->store_location($id, $farm_location_id, $name);
 			} else {
 				/*wrong farm location*/
 				show_404();
