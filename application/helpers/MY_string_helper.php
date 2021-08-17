@@ -1944,3 +1944,12 @@ function user($field=false)
 	}
 	return false;
 }
+
+function git_changes($cmd='git diff')
+{
+	ob_start();
+	@system($cmd);
+	$mycomsys = ob_get_contents();  
+	ob_clean();
+	return $mycomsys;
+}
