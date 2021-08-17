@@ -46,10 +46,29 @@
 									<?php endif ?>
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
-									<li class="text-right">
-										<a class="text-link btn btn-default icon-left" id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $data['farms']['id'];?>"<?php endif ?> href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
-										<button type="submit" class="btn btn-contrast">Update</button>
-									</li>
+									<?php if (count($data['farm_locations']) > 1): ?>
+										<li class="text-right">
+											<div class="btn-group">
+												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i>&nbsp;View Stores&nbsp;&nbsp;<span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu">
+													<?php foreach ($data['farm_locations'] as $location): ?>
+														<?php
+															$farm = $data['farms'];
+															$farm['farm_location_id'] = $location['id'];
+														?>
+														<li><a id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>"><?php echo $farm['name'];?></a></li>
+													<?php endforeach ?>
+												</ul>
+											</div>
+											<button type="submit" class="btn btn-contrast">Update</button>
+										</li>
+									<?php else: ?>
+										<li class="text-right">
+											<a class="text-link btn btn-default icon-left" id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $data['farms']['id'];?>"<?php endif ?> href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
+											<button type="submit" class="btn btn-contrast">Update</button>
+										</li>
+									<?php endif ?>
 								<?php else: ?>
 									<li><button type="submit" class="btn btn-contrast">Create</button></li>
 								<?php endif ?>
