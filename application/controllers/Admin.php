@@ -76,7 +76,7 @@ class Admin extends MY_Controller {
 		if ($post) {
 			if ($mode == 'UpdatedLogs') {
 				$post['logs'] = print_cron_log($post['name'], false, $post['date']);
-				$post['next'] = date('g:i:s a', (time() + 120));
+				$post['next'] = date('g:i:s a', (time() + CRON_RERUN_SECONDS));
 				$this->set_response('success', '', $post, false, 'drawData'.ucfirst($mode));
 			} else {
 				// debug($post, 'stop');
