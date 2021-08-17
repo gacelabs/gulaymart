@@ -25,7 +25,7 @@ class MY_Controller extends CI_Controller {
 			$this->has_commits = TRUE;
 			set_cookie('gm_gc', $hash, 7776000); // 90 days
 		}
-		$this->versioning = '?v='.strtoupper(substr(md5($gm_gc), 0, 12));
+		$this->versioning = '?v='.strtolower(substr(md5($gm_gc), 0, 12));
 		$user_timezone = get_cookie('user_timezone', true);
 		// debug(date_default_timezone_get(), $user_timezone, 'stop');
 		if (empty($user_timezone)) {

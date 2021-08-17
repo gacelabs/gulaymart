@@ -17,9 +17,9 @@
 	
 	<?php foreach ($top['metas'] as $value) { echo "<meta ".$value.">\r\n"; } ?>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'.$this->versioning); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'.$this->versioning); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'.$this->versioning); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/defaults.css'.$this->versioning); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/globals.css'.$this->versioning); ?>">
 
@@ -29,7 +29,7 @@
 			if (filter_var($value, FILTER_VALIDATE_URL)) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$value.'">';
 			} elseif ((bool)strstr($value, '.min') == true) {
-				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'.css'.$this->versioning).'">';
+				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'.css').'">';
 			} elseif (in_array($value, ['main', 'global', 'rwd']) == false) {
 				echo '<link rel="stylesheet" type="text/css" href="'.base_url('assets/css/'.$value.'.css'.$this->versioning).'">';
 			} 
