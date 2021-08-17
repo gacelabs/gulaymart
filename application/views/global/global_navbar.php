@@ -28,12 +28,17 @@
 				
 				<ul id="global_navbar_btn_list">
 					<?php if ($current_profile) : ?>
-					<li id="nav_basket">
-						<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
-					</li>
-					<li id="nav_orders">
-						<a href="orders/placed/"><i class="fa fa-cart-arrow-down"></i></a>
-					</li>
+						<?php if (($this->farms AND $this->products->count())): ?>
+							<li id="nav_fulfillment" class="hidden-xs hidden-sm">
+								<a href="fulfillment/placed/"><i class="fa fa-exchange"></i></a>
+							</li>
+						<?php endif ?>
+						<li id="nav_basket">
+							<a href="basket/"><i class="fa fa-shopping-basket"></i></a>
+						</li>
+						<li id="nav_orders">
+							<a href="orders/placed/"><i class="fa fa-cart-arrow-down"></i></a>
+						</li>
 					<?php endif ; ?>
 					<li <?php echo(empty($current_profile) ? 'data-toggle="modal" data-target="#login_modal"' : 'style="background-color:transparent;"'); ?>>
 						<?php if ($current_profile) : ?>

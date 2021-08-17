@@ -17,7 +17,7 @@
 					$('#is-connected').removeAttr('class').addClass('text-danger fa fa-chain-broken').attr('title', 'disconnected');
 				}
 				if (oUser) {
-					favicon = new Favico({animation : 'popFade'});
+					favicon = new Favico({animation : 'none'});
 					if (badge > 0) {
 						favicon.badge(badge == 0 ? '' : badge);
 					}

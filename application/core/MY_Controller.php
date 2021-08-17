@@ -106,7 +106,7 @@ class MY_Controller extends CI_Controller {
 			// debug(get_class($this), $this->session->userdata('referrer'), 'stop');
 		} else {
 			$referrer = $this->session->userdata('referrer');
-			if (get_class($this) != 'Authenticate') {
+			if (!in_array(get_class($this), ['Admin','Api','App','Authenticate','DevBuild','Sitemap','Test'])) {
 				if (!empty($referrer)) {
 					$this->referrer = $referrer;
 				} else {
