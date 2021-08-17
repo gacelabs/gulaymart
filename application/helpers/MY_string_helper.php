@@ -2002,7 +2002,14 @@ function get_current_git_commit($branch='main') {
 
 function print_cron_log($name='sequence', $echo=true, $date=false) {
 	if ($date == false) $date = date('Y-m-d');
-	$printable = file_get_contents(base_url('assets/data/logs/cron-'.$name.'-'.$date.'.log'));
+
+	$filename = 'assets/data/logs/cron-'.$name.'-'.$date.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+
+	$printable = file_get_contents(base_url($filename));
 	if ($echo) {
 		echo $printable;
 	} else {
