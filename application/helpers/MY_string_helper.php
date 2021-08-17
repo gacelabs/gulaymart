@@ -158,11 +158,11 @@ function check_instance($obj=FALSE, $class=NULL)
 
 function device_id()
 {
-	$DEVICE = get_mac_address();
-	if ($DEVICE == false) {
+	// $DEVICE = get_mac_address();
+	// if ($DEVICE == false) {
 		$IP = trim($_SERVER['REMOTE_ADDR']);
 		$DEVICE = trim(GACELABS_KEY.'|'.$IP.'|'.GACELABS_SUPER_KEY);
-	}
+	// }
 	// debug(strtoupper(substr(md5($DEVICE), 0, 12)), true);
 	return strtoupper(substr(md5($DEVICE), 0, 12));
 }
@@ -192,12 +192,14 @@ function get_mac_address($find_ip=false)
 		if ($find_ip == false) {
 			$find_mac = "ether";
 			$length = 17;
+			$plus = 6;
 		} else {
-			$find_mac = 'IPv4 Address';
+			$find_mac = 'inet';
 			$length = 14;
+			$plus = 5;
 		}
 		$pmac = strpos($mycomsys, $find_mac);
-		$macaddress = substr($mycomsys, ($pmac+6), $length);
+		$macaddress = substr($mycomsys, ($pmac+$plus), $length);
 	}
 	// Display Mac Address 
 	return $macaddress;
