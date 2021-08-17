@@ -308,13 +308,10 @@ var reCountMenuNavs = function(sNav, totalItems) {
 				$('#nav-messages-count').addClass('hide').text('');
 			}
 			if ($('kbd.nav-messages-count').length == 0) $('[data-menu-nav="messages"]').find('span').append('<kbd class="nav-messages-count hidden-lg hidden-md hidden-sm"></kbd>');
-			console.log(sNav, totalItems);
 			if (totalItems) {
 				$('kbd.nav-messages-count').removeClass('hide').text(totalItems);
-				$('i.notif-dot[data-home-nav="'+sNav+'"]').removeClass('hide');
 			} else {
 				$('kbd.nav-messages-count').addClass('hide').text('');
-				$('i.notif-dot[data-home-nav="'+sNav+'"]').addClass('hide');
 			}
 			badge = totalItems == 0 ? '' : totalItems;
 			favicon.badge(totalItems == 0 ? '' : totalItems);
@@ -352,6 +349,19 @@ var fetchOrderCycles = function(oData) {
 						} else if (oSegments[1] == 'orders' && $.inArray(oUser.id, oResponse.seller) >= 0 && $.inArray(oUser.id, oResponse.buyer) >= 0) {
 							if ($.inArray(oUser.id, oResponse.buyer) >= 0) {
 								sendRequestOrderCycles(oResponse, oUser.id, 'buyer');
+							}
+						} else if ($.inArray(oSegments[1], ['','marketplace']) >= 0 && ($.inArray(oUser.id, oResponse.seller) >= 0 || $.inArray(oUser.id, oResponse.buyer) >= 0)) {
+							var oCounts = oResponse.counts['seller']['user_'+oUser.id];
+							/*just count*/
+							if (Object.keys(oCounts).length == 0) {
+								oCounts = oResponse.counts['buyer']['user_'+oUser.id];
+							}
+							if (Object.keys(oCounts).length == 0) {
+								oCounts = oResponse.counts;
+							}
+							// console.log(oCounts);
+							if (Object.keys(oCounts).length) {
+								for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
 							}
 						} else {
 							if ($.inArray(oUser.id, oResponse.seller) >= 0) {
@@ -423,6 +433,10 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 							}
 						}
 					}
+				}
+				/*just count*/
+				if (Object.keys(oCounts).length) {
+					for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
 				}
 			}
 		break;
@@ -645,9 +659,9 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			}
 		break;
 	}
-	if (oCounts != undefined && Object.keys(oCounts).length) {
+	/*if (oCounts != undefined && Object.keys(oCounts).length) {
 		for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
-	}
+	}*/
 }
 
 var runATagAjax = function () {

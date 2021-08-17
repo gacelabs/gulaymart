@@ -22,7 +22,7 @@
 						favicon.badge(badge == 0 ? '' : badge);
 					}
 					/*communicate from orders cycle*/
-					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['','marketplace']) < 0) {
+					if (typeof fetchOrderCycles == 'function'/* && $.inArray(oSegments[1], ['','marketplace']) < 0*/) {
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
 							var oData = object.data;
 							// console.log(oData);

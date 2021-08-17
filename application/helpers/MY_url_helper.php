@@ -579,7 +579,7 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 	$data = ['id' => $merge_ids, 'action' => 'Placed', 'status' => 'placed', 'for' => 'seller'];
 	$context = make_stream_context($data);
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
-	$html_seller_gm = '<p>View Placed Order(s) from '.$buyer['fullname'].' <a href="fulfillment/placed/" data-readit="1">here</a></p>';
+	$html_seller_gm = '<p>View Placed Order(s) <a href="fulfillment/placed/" data-readit="1">here</a></p>';
 
 	$ci =& get_instance();
 	foreach ($seller_ids as $seller_id) {
@@ -616,7 +616,7 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 	$html_seller_email = file_get_contents(base_url('support/order_details/'), false, $context);
 
 	$ci =& get_instance();
-	$html_seller_gm = '<p>View your '.$action.' Order(s) from '.$buyer['fullname'].' <a href="fulfillment/'.$status.'/" data-readit="1">here</a></p>';
+	$html_seller_gm = '<p>View your '.$action.' Order(s) <a href="fulfillment/'.$status.'/" data-readit="1">here</a></p>';
 	foreach ($seller_ids as $seller_id) {
 		send_gm_email($seller_id, $html_seller_email, 'Check your '.$action.' Order(s) from '.$buyer['fullname'].', Thank you!');
 		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'message', $was_cancelled);
