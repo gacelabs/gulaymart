@@ -193,6 +193,8 @@ $(document).ready(function() {
 			break;
 		}
 	}
+	alert(gmgc);
+	if (gmgc) window.location.reload(true);
 });
 
 var runSwiper = function() {

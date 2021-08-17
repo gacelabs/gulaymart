@@ -49,5 +49,6 @@
 		var IS_LOCAL = <?php echo IS_LOCAL;?>;
 		var TIMEZONE = '<?php echo date_default_timezone_get();?>';
 		var badge = <?php echo (!empty($this->message_count)) ? $this->message_count : '""';?>;
+		var gmgc = <?php echo $this->has_commits ? 'true' : 'false';?>;
 	</script>
 </head>

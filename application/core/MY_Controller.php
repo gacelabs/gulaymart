@@ -13,10 +13,17 @@ class MY_Controller extends CI_Controller {
 	public $referrer = FALSE;
 	public $latlng = ['lat' => 14.628538456333938, 'lng' => 120.97507784318562];
 	public $current_city = FALSE;
+	public $has_commits = FALSE;
 
 	public function __construct()
 	{
 		parent::__construct();
+		$hash = get_current_git_commit();
+		$gm_gc = get_cookie('gm_gc', true);
+		if ($gm_gc !== $hash) {
+			$this->has_commits = TRUE;
+			set_cookie('gm_gc', $hash, 7776000); // 90 days
+		}
 		$user_timezone = get_cookie('user_timezone', true);
 		// debug(date_default_timezone_get(), $user_timezone, 'stop');
 		if (empty($user_timezone)) {

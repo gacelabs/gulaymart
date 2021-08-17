@@ -1945,11 +1945,10 @@ function user($field=false)
 	return false;
 }
 
-function git_changes($cmd='git diff')
-{
-	ob_start();
-	@system($cmd);
-	$mycomsys = ob_get_contents();  
-	ob_clean();
-	return $mycomsys;
+function get_current_git_commit($branch='main') {
+	if ($hash = file_get_contents(sprintf('.git/refs/heads/%s', $branch))) {
+		return base64_encode(trim($hash));
+	} else {
+		return false;
+	}
 }
