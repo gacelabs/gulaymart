@@ -1,6 +1,23 @@
 $(document).ready(function() {
-	
+	$('.cron-infos').each(function(i, elem) {
+		setInterval(function() {
+			var today = new Date();
+			$(elem).find('[js-date]').text($.format.date(today, "ddd, MMMM d, yyyy"));
+			$(elem).find('[js-time]').text($.format.date(today, "hh:mm:ss p"));
+		}, 1000);
+	});
+	$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
+	$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
 });
+
+var drawDataUpdatedLogs = function(obj) {
+	// console.log(obj);
+	if ($('#cron-'+obj.name).length) {
+		$('#cron-'+obj.name).html(obj.logs);
+		$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
+		$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
+	}
+};
 
 var clearForm = function(obj) {
 	// console.log(obj);

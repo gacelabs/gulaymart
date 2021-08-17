@@ -139,7 +139,7 @@ var fulfillmentsRunDomReady = function() {
 			});
 			// console.log({merge_id: id, data: arFulfillments});
 			$('[data-merge-id="'+id+'"]').find('a,select.button,input:submit,input:button,input:text').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
-			simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), 12000);
+			simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), true, true);
 		}
 	});
 }

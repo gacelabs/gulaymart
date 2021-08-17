@@ -135,7 +135,7 @@
 			</div>
 
 			<div class="col-lg-8 col-md-8">
-				<div>
+				<div class="row">
 					<div class="booking-parent">
 						<div class="booking-heading">
 							<ul class="spaced-list between">
@@ -174,6 +174,48 @@
 										<button data-keep-loading="true" type="submit" class="btn btn-contrast" disabled="disabled" js-element="operator-bookings"><span class="spinner-border spinner-border-sm"></span> Awaiting bookings...</button>
 									</div>
 								</form>
+							</div>
+						</div>
+						<div class="booking-footer"></div>
+					</div>
+				</div>
+
+				<div class="row" style="margin-top: 10px;">
+					<div class="booking-parent">
+						<div class="booking-heading">
+							<ul class="spaced-list between cron-infos">
+								<li><small>Pushing Orders...</small></li>
+								<li><small js-date><?php echo date('l, F j, Y');?></small></li>
+								<li><small>Time: <span js-time><?php echo date('g:i:s a');?></span></small></li>
+							</ul>
+						</div>
+						<div class="booking-body">
+							<div class="sender-info-form">
+								<p><b>Pushing Information</b></p>
+								<div id="cron-sequence" style="background-color: black; color: whitesmoke; padding: 10px; position: relative; height: 500px; overflow-y: scroll;">
+									<?php print_cron_log('sequence');?>
+								</div>
+							</div>
+						</div>
+						<div class="booking-footer"></div>
+					</div>
+				</div>
+
+				<div class="row" style="margin-top: 10px;">
+					<div class="booking-parent">
+						<div class="booking-heading">
+							<ul class="spaced-list between cron-infos">
+								<li><small>Receiving Orders...</small></li>
+								<li><small js-date><?php echo date('l, F j, Y');?></small></li>
+								<li><small>Time: <span js-time><?php echo date('g:i:s a');?></span></small></li>
+							</ul>
+						</div>
+						<div class="booking-body">
+							<div class="sender-info-form">
+								<p><b>Pulling Information</b></p>
+								<div id="cron-returns" style="background-color: black; color: whitesmoke; padding: 10px; position: relative; height: 500px; overflow-y: scroll;">
+									<?php print_cron_log('returns');?>
+								</div>
 							</div>
 						</div>
 						<div class="booking-footer"></div>

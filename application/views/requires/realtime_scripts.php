@@ -22,13 +22,24 @@
 						favicon.badge(badge == 0 ? '' : badge);
 					}
 					/*communicate from orders cycle*/
-					if (typeof fetchOrderCycles == 'function'/* && $.inArray(oSegments[1], ['','marketplace']) < 0*/) {
+					if (typeof fetchOrderCycles == 'function' && $.inArray(oSegments[1], ['admin']) < 0) {
 						realtime.bind('order-cycle', 'incoming-gm-process', function(object) {
 							var oData = object.data;
 							// console.log(oData);
 							fetchOrderCycles(oData);
 						});
 						// fetchOrderCycles({merge_id: [47,48]});
+					}
+					if ($.inArray(oSegments[1], ['admin']) >= 0 && $.inArray(oSegments[2], ['bookings']) >= 0) {
+						realtime.bind('booking-log', 'incoming-gm-logs', function(object) {
+							var oData = object.data;
+							// console.log(oData);
+							var today = new Date();
+							simpleAjax('admin/bookings/UpdatedLogs', {
+								date: $.format.date(today, "yyyy-MM-dd"),
+								name: oData.type
+							}, false, true, true);
+						});
 					}
 				}
 				realtime.bind('info-updates', 'incoming-gm-infos', function(object) {
@@ -123,7 +134,7 @@
 
 	var runNotificationListeners = function() {
 		var i = setInterval(function() {
-			if (realtime != false) {
+			if (realtime != false && $.inArray(oSegments[1], ['admin']) < 0) {
 				clearInterval(i);
 				setTimeout(function() {
 					realtime.bind('gm-push-notification', 'notifications', function(object) {

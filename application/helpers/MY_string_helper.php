@@ -1796,6 +1796,51 @@ function cronlogger($response=false, $data=false, $type='error')
 	fclose($logfile);
 }
 
+function cronsequence($data=false, $type='info', $date=false)
+{
+	if ($date == false) $date = date('Y-m-d');
+	$filename = 'assets/data/logs/cron-sequence-'.$date.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt = '<div class="text-'.$type.'">' . $data . '</div>'."\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
+function cronreturns($data=false, $type='info', $date=false)
+{
+	if ($date == false) $date = date('Y-m-d');
+	$filename = 'assets/data/logs/cron-returns-'.$date.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt = '<div class="text-'.$type.'">' . $data . '</div>'."\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
+function cron_finished($data=false, $date=false)
+{
+	if ($date == false) $date = date('Y-m-d');
+	$filename = 'assets/data/logs/cron-finish-'.$date.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt = json_encode(['datetime'=>date('Y-m-d H:i:s'), 'data'=>$data], JSON_NUMERIC_CHECK) . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
 function get_products($where=[], $limit=20)
 {
 	$ci =& get_instance();
@@ -1952,5 +1997,15 @@ function get_current_git_commit($branch='main') {
 		return base64_encode(trim($hash));
 	} else {
 		return false;
+	}
+}
+
+function print_cron_log($name='sequence', $echo=true, $date=false) {
+	if ($date == false) $date = date('Y-m-d');
+	$printable = file_get_contents(base_url('assets/data/logs/cron-'.$name.'-'.$date.'.log'));
+	if ($echo) {
+		echo $printable;
+	} else {
+		return $printable;
 	}
 }

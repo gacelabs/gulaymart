@@ -76,8 +76,12 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
-						$this->db->where_in($key, $row);
+					if (is_array($row)) {
+						if (count($row) > 0) {
+							$data = $this->db->where_in($key, $row);
+						} else {
+							$data = $this->db->where_in($key, 0);
+						}
 					} else {
 						$this->db->where([$key => $row]);
 					}
@@ -123,7 +127,7 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
+					if (is_array($row)) {
 						foreach ($row as $value) {
 							$this->db->like($key, $value);
 						}
@@ -172,8 +176,12 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
-						$this->db->where_not_in($key, $row);
+					if (is_array($row)) {
+						if (count($row) > 0) {
+							$data = $this->db->where_not_in($key, $row);
+						} else {
+							$data = $this->db->where_not_in($key, 0);
+						}
 					} else {
 						$this->db->where([$key => $row]);
 					}
@@ -311,8 +319,12 @@ class MY_Model extends CI_Model {
 					unset($where['direction']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
-						$this->db->where_in($key, $row);
+					if (is_array($row)) {
+						if (count($row) > 0) {
+							$data = $this->db->where_in($key, $row);
+						} else {
+							$data = $this->db->where_in($key, 0);
+						}
 					} else {
 						$this->db->where([$key => $row]);
 					}
@@ -491,8 +503,12 @@ class MY_Model extends CI_Model {
 					unset($where['limit']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
-						$data = $this->db->where_in($key, $row);
+					if (is_array($row)) {
+						if (count($row) > 0) {
+							$data = $this->db->where_in($key, $row);
+						} else {
+							$data = $this->db->where_in($key, 0);
+						}
 					} else {
 						$data = $this->db->where([$key => $row]);
 					}
@@ -512,8 +528,12 @@ class MY_Model extends CI_Model {
 					unset($where['limit']);
 				}
 				foreach ($where as $key => $row) {
-					if (is_array($row) AND count($row) > 0) {
-						$this->db->where_not_in($key, $row);
+					if (is_array($row)) {
+						if (count($row) > 0) {
+							$data = $this->db->where_not_in($key, $row);
+						} else {
+							$data = $this->db->where_not_in($key, 0);
+						}
 					} else {
 						$this->db->where([$key => $row]);
 					}
