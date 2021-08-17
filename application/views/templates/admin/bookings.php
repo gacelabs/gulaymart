@@ -135,7 +135,7 @@
 			</div>
 
 			<div class="col-lg-8 col-md-8">
-				<div class="row">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="booking-parent">
 						<div class="booking-heading">
 							<ul class="spaced-list between">
@@ -180,7 +180,7 @@
 					</div>
 				</div>
 
-				<div class="row" style="margin-top: 10px;">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="booking-parent">
 						<div class="booking-heading">
 							<ul class="spaced-list between cron-infos">
@@ -201,7 +201,7 @@
 					</div>
 				</div>
 
-				<div class="row" style="margin-top: 10px;">
+				<div class="row" style="margin-bottom: 10px;">
 					<div class="booking-parent">
 						<div class="booking-heading">
 							<ul class="spaced-list between cron-infos">
