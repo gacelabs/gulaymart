@@ -183,6 +183,16 @@ $(document).ready(function() {
 	});
 
 	// if (mobileAndTabletCheck()) runSwiper();
+
+	var sFlush = getParameterByName('flush');
+	if ($.trim(sFlush).length) {
+		switch ($.trim(sFlush).toLowerCase()) {
+			case 'cache':
+				history.replaceState({}, '', '/');
+				window.location.reload(true);
+			break;
+		}
+	}
 });
 
 var runSwiper = function() {
