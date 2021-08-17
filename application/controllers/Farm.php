@@ -588,11 +588,15 @@ class Farm extends MY_Controller {
 		// debug($user_farm, 'stop');
 		if ($user_farm) {
 			if (is_numeric($farm_location_id) AND $farm_location_id > 0) {
-				$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $farm_location_id], 'row');
-				$user_farm['farm_location_id'] = $farm_location_id;
+				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id'], 'id' => $farm_location_id], 'row');
 			} else {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id']], 'row');
-				$farm_location_id = $user_farm['farm_location_id'] = ($farm_location ? $farm_location['id'] : 0);
+			}
+			if ($farm_location) {
+				$farm_location_id = $user_farm['farm_location_id'] = $farm_location['id'];
+			} else {
+				/*wrong farm location*/
+				show_404();
 			}
 
 			$destinations = $this->latlng;
