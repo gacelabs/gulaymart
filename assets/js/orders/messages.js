@@ -21,11 +21,15 @@ var msgRunDomReady = function() {
 		var msg_id = oThis.parents('.notif-item:first').data('msg-id');
 		console.log(msg_id, oThis);
 		if (msg_id != undefined && oThis.prop('tagName') == 'A') {
-			$('[data-toread="'+msg_id+'"]').bind('click', function() {
-				setTimeout(function() {
-					window.location = oThis.attr('href');
-				}, 300);
-			}).trigger('click');
+			if ($('[data-toread="'+msg_id+'"]').length) {
+				$('[data-toread="'+msg_id+'"]').bind('click', function() {
+					setTimeout(function() {
+						window.location = oThis.attr('href');
+					}, 300);
+				}).trigger('click');
+			} else {
+				window.location = oThis.attr('href');
+			}
 		}
 	});
 }
