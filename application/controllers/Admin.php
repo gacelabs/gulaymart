@@ -410,7 +410,7 @@ class Admin extends MY_Controller {
 								'receiver_lat' => $post['f_recepient_address_lat'],
 								'receiver_lng' => $post['f_recepient_address_lng'],
 							]);
-							cronsequence('Fecthing prices and directions...');
+							cronsequence('Fetching prices and directions...');
 							$this->toktokapi->app_request('price_and_directions', $pricing);
 							if ($this->toktokapi->success) {
 								$toktok_dpd = $this->toktokapi->response['result']['data']['getDeliveryPriceAndDirections'];
@@ -615,7 +615,7 @@ class Admin extends MY_Controller {
 										cronreturns('GulayMart order id:'.$data['order_id'].' updated!', 'success');
 									}
 								} else {
-									cronlogger('Error: while Fecthing orders from toktok!', $data, 'gulaymart-bookings');
+									cronlogger('Error: while Fetching orders from toktok!', $data, 'gulaymart-bookings');
 									cronreturns('No delivery fetched for order_id:'.$data['order_id'], 'danger');
 								}
 							}
