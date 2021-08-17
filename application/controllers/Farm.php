@@ -580,6 +580,10 @@ class Farm extends MY_Controller {
 		} else {
 			$user_farm = $this->gm_db->get('user_farms', ['id' => $id], 'row');
 		}
+		if (empty($name) AND $user_farm) {
+			$name = nice_url($user_farm['name'], true);
+			$this->store_location($id, $farm_location_id, $name);
+		}
 		$data = false;
 		// debug($user_farm, 'stop');
 		if ($user_farm) {
