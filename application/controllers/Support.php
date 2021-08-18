@@ -5,7 +5,7 @@ class Support extends MY_Controller {
 
 	public $allowed_methods = ['order_details', 'thankyou_page', 'view_invoice', 'terms', 'policy', 'fetch_order_cycles'];
 
-	public function index()
+	/*public function index()
 	{
 		$this->help_center();
 	}
@@ -24,7 +24,7 @@ class Support extends MY_Controller {
 				],
 			],
 		]);
-	}
+	}*/
 
     public function view_invoice($order_id=false)
     {
@@ -48,6 +48,8 @@ class Support extends MY_Controller {
                     'data' => $results,
                 ]);
             }
+        } else {
+        	show_404();
         }
     }
 
@@ -131,7 +133,11 @@ class Support extends MY_Controller {
 		$post = $this->input->get() ?: $this->input->post();
 		$data = false;
 		if ($post) {
-			$stat_qry = ['fulfillment' => [4,5], 'baskets' => [0,1], 'orders' => [4,5]];
+			$stat_qry = [
+				'fulfillment' => [GM_RECEIVED_STATUS, GM_CANCELLED_STATUS],
+				'baskets' => [GM_VERIFIED_SCHED, GM_VERIFIED_NOW],
+				'orders' => [GM_RECEIVED_STATUS, GM_CANCELLED_STATUS]
+			];
 			foreach ($post as $what_id => $ids) {
 				switch (trim(strtolower($what_id))) {
 					case 'basket_id':
@@ -149,9 +155,9 @@ class Support extends MY_Controller {
 							'id' => is_array($user_ids) ? $user_ids : [$user_ids],
 							'counts' => [
 								'baskets' => $this->gm_db->count('baskets', ['user_id' => $user_ids, 'status' => $stat_qry['baskets']]),
-								'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]),
-								'notifications' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Notifications', 'to_id' => $user_ids]),
-								'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
+								'messages' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'to_id' => $user_ids]),
+								'notifications' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Notifications', 'to_id' => $user_ids]),
+								'feedbacks' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
 							]
 						];
 					break;
@@ -169,9 +175,9 @@ class Support extends MY_Controller {
 							'url' => [base_url('orders/messages')],
 							'params' => ['ids' => $ids],
 							'counts' => [
-								'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_ids]),
+								'messages' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'to_id' => $user_ids]),
 								'notifications' => $this->gm_db->count('messages', ['unread'=>1, 'tab'=>'Notifications', 'to_id'=>$user_ids]),
-								'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
+								'feedbacks' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Feedbacks', 'to_id' => $user_ids]),
 							],
 						];
 					break;
@@ -219,14 +225,14 @@ class Support extends MY_Controller {
 													'fulfillment' => $this->gm_db->count_not_in('baskets_merge', ['seller_id' => $seller_id, 'status' => $stat_qry['fulfillment']]),
 													'baskets' => $this->gm_db->count('baskets', ['user_id' => $seller_id, 'status' => $stat_qry['baskets']]),
 													'orders' => $this->gm_db->count_not_in('baskets_merge', ['buyer_id' => $seller_id, 'status' => $stat_qry['orders']]),
-													'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $seller_id]),
+													'messages' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'to_id' => $seller_id]),
 													'placed' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_id, 'status' => GM_PLACED_STATUS]),
 													'for-pick-up' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_id, 'status' => GM_FOR_PICK_UP_STATUS]),
 													'on-delivery' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_id, 'status' => GM_ON_DELIVERY_STATUS]),
 													'received' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_id, 'status' => GM_RECEIVED_STATUS]),
 													'cancelled' => $this->gm_db->count('baskets_merge', ['seller_id' => $seller_id, 'status' => GM_CANCELLED_STATUS]),
-													'notifications' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Notifications', 'to_id' => $seller_id]),
-													'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $seller_id]),
+													'notifications' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Notifications', 'to_id' => $seller_id]),
+													'feedbacks' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Feedbacks', 'to_id' => $seller_id]),
 												]
 											];
 											$seller_requests['user_'.$seller_id] = [
@@ -254,14 +260,14 @@ class Support extends MY_Controller {
 													'fulfillment' => $this->gm_db->count_not_in('baskets_merge', ['seller_id' => $buyer_id, 'status' => $stat_qry['fulfillment']]),
 													'baskets' => $this->gm_db->count('baskets', ['user_id' => $buyer_id, 'status' => $stat_qry['baskets']]),
 													'orders' => $this->gm_db->count_not_in('baskets_merge', ['buyer_id' => $buyer_id, 'status' => $stat_qry['orders']]),
-													'messages' => $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $buyer_id]),
+													'messages' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'to_id' => $buyer_id]),
 													'placed' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_id, 'status' => GM_PLACED_STATUS]),
 													'for-pick-up' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_id, 'status' => GM_FOR_PICK_UP_STATUS]),
 													'on-delivery' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_id, 'status' => GM_ON_DELIVERY_STATUS]),
 													'received' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_id, 'status' => GM_RECEIVED_STATUS]),
 													'cancelled' => $this->gm_db->count('baskets_merge', ['buyer_id' => $buyer_id, 'status' => GM_CANCELLED_STATUS]),
-													'notifications' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Notifications', 'to_id' => $buyer_id]),
-													'feedbacks' => $this->gm_db->count('messages', ['unread' => 1, 'tab' => 'Feedbacks', 'to_id' => $buyer_id]),
+													'notifications' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Notifications', 'to_id' => $buyer_id]),
+													'feedbacks' => $this->gm_db->count('messages', ['unread' => GM_MESSAGE_UNREAD, 'tab' => 'Feedbacks', 'to_id' => $buyer_id]),
 												],
 											];
 											$buyer_requests['user_'.$buyer_id] = [
