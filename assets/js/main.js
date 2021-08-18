@@ -193,6 +193,7 @@ $(document).ready(function() {
 			break;
 		}
 	}
+	
 	if (gmgc && oSegments[2] != 'view_invoice') window.location.reload(true);
 });
 

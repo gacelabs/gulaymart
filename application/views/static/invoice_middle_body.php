@@ -138,6 +138,7 @@
 					</li>
 					<?php if ($is_data_set == false): ?>
 						<li class="text-right">
+							<button class="btn btn-sm" js-element="share-action" data-html2canvas-ignore>Share<i class="fa fa-share icon-right"></i></button>
 							<button class="btn btn-sm" js-element="print-action" data-html2canvas-ignore>Print<i class="fa fa-print icon-right"></i></button>
 						</li>
 					<?php endif ?>
@@ -152,13 +153,15 @@
 
 <hr class="carved">
 
-<div class="text-step-basic" style="margin:0;">
-	<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
-	<div>
-		<?php if ($current_profile AND ($current_profile['id'] == $buyer['id'])): ?>
-			<p class="zero-gaps">Invoice was sent to your email.</p>
-		<?php else: ?>
-			<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
-		<?php endif; ?>
+<?php if ($is_data_set == false): ?>
+	<div class="text-step-basic" style="margin:0;">
+		<p class="text-center zero-gaps"><i class="fa fa-info-circle"></i></p>
+		<div>
+			<?php if ($current_profile AND ($current_profile['id'] == $buyer['id'])): ?>
+				<p class="zero-gaps">Invoice was sent to your email.</p>
+			<?php else: ?>
+				<p class="zero-gaps">Invoice wil be sent to customer's email.</p>
+			<?php endif; ?>
+		</div>
 	</div>
-</div>
+<?php endif ?>

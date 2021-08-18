@@ -74,6 +74,21 @@ var renderHTML = function(obj) {
 			});
 		});*/
 	});
+
+	if (typeof navigator.share == 'function') {
+		$('[js-element="share-action"]').show();
+		var oLinkToShare = {title: 'Invoice', text: 'Order Summary', url: obj.printable_link};
+		$('[js-element="share-action"]').off('click').on('click', async (e) => {
+			try {
+				await navigator.share(oLinkToShare);
+				console.log(true);
+			} catch(err) {
+				console.log(false, err);
+			}
+		});
+	} else {
+		$('[js-element="share-action"]').hide();
+	}
 }
 
 var isAllSelected = function(merge_id) {
