@@ -30,7 +30,7 @@
 						});
 						// fetchOrderCycles({merge_id: [47,48]});
 					}
-					if ($.inArray(oSegments[1], ['admin']) >= 0 && $.inArray(oSegments[2], ['bookings']) >= 0) {
+					if ($.inArray(oSegments[1], ['admin']) >= 0 && $.inArray(oSegments[2], ['','dash']) >= 0) {
 						realtime.bind('booking-log', 'incoming-gm-logs', function(object) {
 							var oData = object.data;
 							// console.log(oData);

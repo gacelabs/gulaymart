@@ -22,7 +22,29 @@ $(document).ready(function() {
 		// console.log(iID, $(this).data('url'));
 		simpleAjax($(this).data('url'), {id: iID}, $(this), false, true);
 	});
+
+	if ($('.cron-infos').length) {
+		$('.cron-infos').each(function(i, elem) {
+			setInterval(function() {
+				var today = new Date();
+				$(elem).find('[js-date]').text($.format.date(today, "ddd, MMMM d, yyyy"));
+				$(elem).find('[js-time]').text($.format.date(today, "h:mm:ss a"));
+			}, 1000);
+		});
+		$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
+		$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
+	}
 });
+
+var drawDataUpdatedLogs = function(obj) {
+	// console.log(obj);
+	if ($('#cron-'+obj.name).length) {
+		$('#cron-'+obj.name).html(obj.logs);
+		$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
+		$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
+		$('#cron-'+obj.name+'-next').removeClass('hide').find('i').text(obj.next);
+	}
+};
 
 var removeItem = function(data) {
 	// console.log(data);
