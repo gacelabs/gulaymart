@@ -50,7 +50,7 @@ class Admin extends MY_Controller {
 				'farmers_count' => $this->gm_db->count('user_farms', ['user_id >' => 0]),
 				'bookings_count' => [
 					'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1]),
-					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
+					'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 2]),
 				],
 			],
 		]);
@@ -122,7 +122,7 @@ class Admin extends MY_Controller {
 					'bookings_count' => [
 						'succeeded' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator' => -1]),
 						'manual' => $this->gm_db->count('baskets_merge', ['status' => GM_RECEIVED_STATUS, 'is_sent' => 1, 'operator >' => 0]),
-						'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 0]),
+						'failed' => $this->gm_db->count('baskets_merge', ['status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 2]),
 					],
 				],
 			]);
@@ -187,7 +187,7 @@ class Admin extends MY_Controller {
 	{
 		return false; /*Disable OPERATOR distributions*/
 		$toktok_for_operators = $this->baskets->merge_disassembled([
-			'status' => 6, 'operator >' => 0, 'is_sent' => 0,
+			'status' => GM_FOR_PICK_UP_STATUS, 'operator >' => 0, 'is_sent' => 0,
 		], false, false, 'added');
 		// debug($toktok_for_operators, 'stop');
 		if ($toktok_for_operators) {
@@ -200,8 +200,8 @@ class Admin extends MY_Controller {
 						'message' => 'You have available bookings, please press on BOOK NOW',
 						'operator_id' => $operator_id,
 						'delivery' => $toktok_for_operators[0],
-						'count' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => 1]),
-						'total' => $this->gm_db->count('baskets_merge', ['status' => 6, 'operator' => $operator_id, 'is_sent' => [0,1]]),
+						'count' => $this->gm_db->count('baskets_merge', ['status' => GM_FOR_PICK_UP_STATUS, 'operator' => $operator_id, 'is_sent' => 1]),
+						'total' => $this->gm_db->count('baskets_merge', ['status' => GM_FOR_PICK_UP_STATUS, 'operator' => $operator_id, 'is_sent' => [0,1]]),
 					]);
 					if (in_array($senddataapi->response_code, [403,404])) {
 						cronlogger($senddataapi->response_text, ['operator_id' => $operator_id], 'operator-bookings');
@@ -284,7 +284,7 @@ class Admin extends MY_Controller {
 
 							sleep(3);
 							$toktok_for_operators = $this->baskets->merge_disassembled([
-								'status' => 6, 'operator' => $operator['id'], 'is_sent' => 0,
+								'status' => GM_FOR_PICK_UP_STATUS, 'operator' => $operator['id'], 'is_sent' => 0,
 							], false, false, 'added');
 
 							if ($toktok_for_operators) {
@@ -463,7 +463,7 @@ class Admin extends MY_Controller {
 								cronlogger('Error while pushing orders to toktok!', $toktok, 'gulaymart-bookings');
 							}
 						} else {
-							cronlogger('Error: unable to parse totok data!', $toktok, 'gulaymart-bookings');
+							cronlogger('Error unable to parse totok data!', $toktok, 'gulaymart-bookings');
 							cronsequence('Unable to parse totok data...');
 						}
 					}
@@ -482,7 +482,7 @@ class Admin extends MY_Controller {
 						
 					// 	/*now if switch is off process the manual interval*/
 					// 	$toktok_for_operators = $this->gm_db->get('baskets_merge', [
-					// 		'status' => 6, 'operator' => 0, 'is_sent' => 0,
+					// 		'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0,
 					// 		'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
 					// 	]);
 					// 	if ($toktok_for_operators) {
@@ -554,9 +554,7 @@ class Admin extends MY_Controller {
 				$this->load->library('ToktokApi');
 				// debug($this->toktokapi, 'stop');
 				foreach ($baskets_merge_data as $key => $data) {
-					$toktok_status = TT_RECEIVED_STATUS; /*toktok order status for delivered*/
 					$valid = empty($data['delivery_id']); 
-					$GM_status = GM_RECEIVED_STATUS; /*to gm order status for delivered*/
 					if ($valid) {
 						$seller_name = remove_multi_space($data['seller']['profile']['firstname'].' '.$data['seller']['profile']['lastname'], true);
 
@@ -570,13 +568,13 @@ class Admin extends MY_Controller {
 								'to' => date('m/d/Y', strtotime($data['schedule'])),
 							];
 						}
-						// debug($date_range, $toktok_status, $seller_name, 'stop');
+						// debug($date_range, TT_RECEIVED_STATUS, $seller_name, 'stop');
 						// check toktok delivery status
 						cronreturns('Checking up delivery...');
 						if (ENVIRONMENT == 'development') {
 							$delivery = $this->toktokapi->check_delivery();
 						} else {
-							$delivery = $this->toktokapi->check_delivery($date_range, '', $toktok_status, $seller_name);
+							$delivery = $this->toktokapi->check_delivery($date_range, '', TT_RECEIVED_STATUS, $seller_name);
 						}
 						// debug($seller_name, $delivery, 'stop');
 						if ($delivery->success AND count($delivery->response)) {
@@ -587,14 +585,14 @@ class Admin extends MY_Controller {
 										$order['details']['post']['notes'] = 'GulayMart Order#:'.$data['order_id'];
 									}
 									$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
-									$order_id = '';
+									$order_id = 0;
 									if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
 									// debug($order_id, $data['order_id'], 'stop');
 									cronreturns('Comparing order...');
 									if ($order_id == $data['order_id']) {
 										cronreturns('Order matched!', 'success');
 										/*set new status*/
-										$set = ['status' => $GM_status];
+										$set = ['status' => GM_RECEIVED_STATUS];
 										if (empty($data['delivery_id'])) {
 											/*delivery_id not set yet*/
 											$delivery_id = $order['details']['post']['delivery_id'];
@@ -605,7 +603,7 @@ class Admin extends MY_Controller {
 										$ids = explode(',', $data['basket_ids']);
 										foreach ($ids as $id) {
 											if (GM_STATUSES_TEST != 1) {
-												$this->gm_db->save('baskets', ['status' => $GM_status], ['id' => $id]);
+												$this->gm_db->save('baskets', ['status' => GM_RECEIVED_STATUS], ['id' => $id]);
 											}
 											$baskets_ids[$id] = $id;
 										}
@@ -614,9 +612,12 @@ class Admin extends MY_Controller {
 										}
 										$baskets_merge_ids[$id] = $data['id'];
 										cronreturns('GulayMart order id:'.$data['order_id'].' updated!', 'success');
+									} else {
+										cronlogger('Error order ids not match!', $data, 'gulaymart-bookings');
+										cronreturns('Order '.$order_id.' != '.$data['order_id'].' not match!', 'danger');
 									}
 								} else {
-									cronlogger('Error: while Fetching orders from toktok!', $data, 'gulaymart-bookings');
+									cronlogger('Error while Fetching orders from toktok!', $data, 'gulaymart-bookings');
 									cronreturns('No delivery fetched for order_id:'.$data['order_id'], 'danger');
 								}
 							}
@@ -627,7 +628,7 @@ class Admin extends MY_Controller {
 					} else {
 						// echo json_encode(['status' => true, 'message' => 'delivery id "'.$data['delivery_id'].'" already exists!'], JSON_NUMERIC_CHECK);
 						// echo "<br>";
-						cronlogger('Error: Delivery ID existing!', $data, 'gulaymart-bookings');
+						cronlogger('Error Delivery ID existing!', $data, 'gulaymart-bookings');
 						cronreturns('Delivery '.$data['delivery_id'].' already exist.', 'warning');
 					}
 				}
