@@ -78,5 +78,5 @@ a, a:hover, a:focus {
 }
 
 .product-list-card.selected {
-	box-shadow: 0 2px 4px rgb(0 0 0), 0 8px 16px rgb(0 0 0 / 85%);
+	border: 1px solid #75ca9b;
 }

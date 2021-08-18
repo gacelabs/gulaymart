@@ -1,5 +1,5 @@
 <?php if (isset($data['category'])): ?>
-	<div class="product-list-card" data-id="<?php echo $data['id'];?>" style="cursor: pointer;">
+	<div class="product-list-card" data-id="<?php echo $data['id'];?>" style="cursor: pointer;margin: 10px;padding: 0;">
 		<?php $no_main = true;?>
 		<div class="product-list-photo" style="background-image: url(<?php identify_main_photo($data, false, $no_main);?>);">
 			<div class="img-thumb-container">
@@ -13,48 +13,46 @@
 				</ul>
 			</div>
 		</div>
-		<div class="product-desc-body" style="height: 250px;">
+		<div class="product-desc-body">
 			<div class="product-title-container" style="height: auto;">
 				<h1 class="zero-gaps"><?php echo ucwords($data['name']);?></h1>
 				<br>
-				<table>
-					<tr>
-						<th style="vertical-align: top;">Description:&nbsp;</th>
-						<td><?php echo ucwords($data['description']);?></td>
-					</tr>
-					<tr>
-						<th style="vertical-align: top;">Price:&nbsp;</th>
-						<td>&#x20b1; <?php echo format_number($data['price']);?> / <?php echo $data['measurement'];?></td>
-					</tr>
+				<div>
+					<div>
+						<small class="text-gray" style="margin-bottom: 5px;">DESCRIPTION</small>
+						<p class="text-ellipsis"><?php echo ucwords($data['description']);?></p>
+					</div>
+					<div>
+						<small class="text-gray" style="margin-bottom: 5px;">PRICE</small>
+						<p class="text-ellipsis"><?php echo ucwords($data['price']);?> / <?php echo $data['measurement'];?></p>
+					</div>
 					<?php if (isset($data['distance']) AND isset($data['duration'])): ?>
-						<tr>
-							<th style="vertical-align: top;">Estimated:&nbsp;</th>
-							<td><i class="fa fa-clock-o"></i> <?php echo ucwords($data['duration']);?></td>
-						</tr>
+					<div>
+						<small class="text-gray" style="margin-bottom: 5px;">ESTIMATED</small>
+						<p class="text-ellipsis"><i class="fa fa-clock-o"></i> <?php echo ucwords($data['duration']);?></p>
+					</div>
 					<?php endif ?>
-					<tr>
-						<th style="vertical-align: top;">Activity:&nbsp;</th>
-						<td><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : ($data['activity'] == 3 ? 'Deleted' : 'Drafted'));?></td>
-					</tr>
-				</table>
+					<div>
+						<small class="text-gray" style="margin-bottom: 5px;">STATUS</small>
+						<p class="text-ellipsis"><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : ($data['activity'] == 3 ? 'Deleted' : 'Drafted'));?></p>
+					</div>
+				</div>
 				<p class="messages"></p>
 			</div>
-			<div class="product-list-footer" style="position: absolute; margin: 5px auto; bottom: 0;">
-				<ul class="spaced-list between">
+			<ul class="spaced-list between">
+				<li>
+					<button data-url="admin/approvals/1" class="send-approval btn btn-sm btn-success">Allow</button>
+				</li>
+				<?php if ($data['activity'] == 2): ?>
 					<li>
-						<button data-url="admin/approvals/1" class="send-approval btn btn-sm btn-success">Allow</button>
+						<button data-url="admin/approvals/0" class="send-approval btn btn-sm btn-warning">Add to Draft</button>
 					</li>
-					<?php if ($data['activity'] == 2): ?>
-						<li>
-							<button data-url="admin/approvals/0" class="send-approval btn btn-sm btn-warning">Add to Draft</button>
-						</li>
-					<?php else: ?>
-						<li>
-							<button data-url="admin/approvals/2" class="send-approval btn btn-sm btn-danger">Reject</button>
-						</li>
-					<?php endif ?>
-				</ul>
-			</div>
+				<?php else: ?>
+					<li>
+						<button data-url="admin/approvals/2" class="send-approval btn btn-sm btn-danger">Reject</button>
+					</li>
+				<?php endif ?>
+			</ul>
 		</div>
 	</div>
 <?php endif ?>
