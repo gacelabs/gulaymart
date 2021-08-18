@@ -52,13 +52,13 @@
 #category_container {
 	margin-bottom: 10px;
 }
-#farmer_list_container {
+/*#farmer_list_container {
 	display: grid;
 	grid-template-columns: repeat(5, 20%);
 	margin-left: -10px;
 	margin-right: -10px;
 	margin-top: -2px;
-}
+}*/
 #marketplace_header_carousel {
 	margin-bottom: 30px;
 }
@@ -101,10 +101,10 @@
 	    grid-gap: 10px;
 		overflow-y: auto;
 	}
-	#farmer_list_container {
+	/*#farmer_list_container {
 		margin-left: -5px;
 		margin-right: -5px;
-	}
+	}*/
 	.veggy-category-item-inner {
 		padding: 7px 0;
 	}

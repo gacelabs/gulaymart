@@ -10,4 +10,5 @@
 			<?php endforeach ?>
 		</div>
 	<?php endif ?>
+	<div class="clearfix"></div>
 </div>

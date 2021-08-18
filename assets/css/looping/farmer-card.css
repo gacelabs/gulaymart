@@ -1,6 +1,9 @@
 .farmer-list-card {
 	padding: 0 10px;
 	position: relative;
+	float: left;
+	width: 33.33%;
+	margin-bottom: 10px;
 }
 .farmer-list-cover {
 	background-position: center center;
@@ -52,6 +55,7 @@
 	.farmer-list-card {
 		padding: 0 5px;
 		position: relative;
+		width: 50%;
 	}
 	.farmer-list-cover {
 		padding-top: 100px;
