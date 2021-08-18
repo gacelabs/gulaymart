@@ -79,7 +79,7 @@
 		transform: none;
 	}
 	#veggy_nearby_right_container {
-		grid-template-columns: repeat(6, 110px);
+		grid-template-columns: repeat(6, 115px);
 		white-space: nowrap;
 		overflow-x: auto;
 	}
