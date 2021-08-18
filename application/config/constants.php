@@ -91,7 +91,7 @@ defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b6
 
 defined('APP_NAME') OR define('APP_NAME', 'GulayMart');
 defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'GulayMart an Online Supermarket near you.');
-defined('APP_VERSION') OR define('APP_VERSION', '3.9');
+defined('APP_VERSION') OR define('APP_VERSION', '3.9.16');
 
 /*IMPORTANT PASSSWORDS*/
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y'); // also the ssh root password
@@ -181,7 +181,7 @@ defined('TT_ON_DELIVERY_STATUS') OR	define('TT_ON_DELIVERY_STATUS',	5);
 defined('TT_RECEIVED_STATUS')	 OR	define('TT_RECEIVED_STATUS', 	6);
 
 /*ORDER TYPES STATUS*/
-defined('GM_BUY_NOW') OR define('GM_BUY_NOW', 1);
+defined('GM_BUY_NOW') 	OR define('GM_BUY_NOW',   1);
 defined('GM_SCHEDULED') OR define('GM_SCHEDULED', 2);
 
 /*MESSAGES STATUS*/

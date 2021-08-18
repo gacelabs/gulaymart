@@ -35,7 +35,7 @@
 							var oData = object.data;
 							// console.log(oData);
 							var today = new Date();
-							simpleAjax('admin/bookings/UpdatedLogs', {
+							simpleAjax('admin/bookings/updatedLogs', {
 								date: $.format.date(today, "yyyy-MM-dd"),
 								name: oData.type
 							}, false, true, true);
