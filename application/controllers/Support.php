@@ -26,32 +26,34 @@ class Support extends MY_Controller {
 		]);
 	}*/
 
-    public function view_invoice($order_id=false)
-    {
-        if ($order_id) {
-            $results = $this->gm_db->get_in('baskets_merge', ['order_id' => $order_id], 'row');
-            // debug($results, 'stop');
-            if ($results) {
-                $results['for_email'] = true;
-                $this->render_page([
-                    'top' => [
-                        'css' => ['modal/invoice-modal', 'global/zigzag', 'global/order-table', 'print.min']
-                    ],
-                    'middle' => [
-                        'body' => [
-                            '../static/invoice_middle_body'
-                        ],
-                    ],
-                    'bottom' => [
-                        'js' => ['plugins/print.min', 'plugins/html2canvas.min'],
-                    ],
-                    'data' => $results,
-                ]);
-            }
-        } else {
-        	show_404();
-        }
-    }
+	public function view_invoice($order_id=false)
+	{
+		if ($order_id) {
+			$results = $this->gm_db->get_in('baskets_merge', ['order_id' => $order_id], 'row');
+			// debug($results, 'stop');
+			if ($results) {
+				$results['for_email'] = true;
+				$this->render_page([
+					'top' => [
+						'css' => ['modal/invoice-modal', 'global/zigzag', 'global/order-table', 'print.min']
+					],
+					'middle' => [
+						'body' => [
+							'../static/invoice_middle_body'
+						],
+					],
+					'bottom' => [
+						'js' => ['plugins/print.min', 'plugins/html2canvas.min'],
+					],
+					'data' => $results,
+				]);
+			} else {
+				show_404();
+			}
+		} else {
+			show_404();
+		}
+	}
 
 	public function order_details()
 	{
