@@ -384,7 +384,6 @@ class Admin extends MY_Controller {
 			if ($toktok_data) {
 				cronsequence('Preparing toktok data...');
 				$this->load->library('ToktokApi');
-				// $this->toktokapi->check_delivery();
 				/*do not start if switch is off*/
 				if ($set['switch'] == 1) {
 					cronsequence('Posting is switched on...');
@@ -472,64 +471,59 @@ class Admin extends MY_Controller {
 						// send realtime process
 						$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
 					}
+					// Disable OPERATOR distributions FOR NOW
 					/*check first is the switch off by some admin*/
-					// if ($admin_turned_off == false) {
-					// 	// echo json_encode(['status' => true, 'message' => 'successfull!, all admin post was sent!'], JSON_NUMERIC_CHECK); exit();
-					// 	return true; /*Disable OPERATOR distributions*/
-					// 	/*booking_limit reached, turn off switch*/
-					// 	$set['switch'] = 0;
-					// 	$this->gm_db->save('admin_settings', ['value' => json_encode($set, JSON_NUMERIC_CHECK)], ['id' => $automation_settings['id']]);
+					/*if ($admin_turned_off == false) {
+						// booking_limit reached, turn off switch
+						$set['switch'] = 0;
+						$this->gm_db->save('admin_settings', [
+							'value' => json_encode($set, JSON_NUMERIC_CHECK)
+						], ['id' => $automation_settings['id']]);
 						
-					// 	/*now if switch is off process the manual interval*/
-					// 	$toktok_for_operators = $this->gm_db->get('baskets_merge', [
-					// 		'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0,
-					// 		'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
-					// 	]);
-					// 	if ($toktok_for_operators) {
-					// 		$operators = $this->gm_db->get('operators', ['active' => 1]);
-					// 		if ($operators) {
-					// 			$operator_cnt = count($operators);
-					// 			$chunk_count = floor(count($toktok_for_operators) / $operator_cnt); /*this will be average*/
-					// 			// debug($chunk_count, 'stop');
-					// 			if ($chunk_count > 0) {
-					// 				$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
-					// 				// debug($toktok_for_operators, 'stop');
-					// 				/*now loop from operators and give them bookings*/
-					// 				foreach ($operators as $key => $operator) {
-					// 					if (isset($toktok_for_operators[$key])) {
-					// 						$deliveries = $toktok_for_operators[$key];
-					// 						foreach ($deliveries as $delivery) {
-					// 							/*update the baskets_merge data for this operator*/
-					// 							$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
-					// 						}
-					// 					}
-					// 				}
-					// 			} else {
-					// 				/*log here*/
-					// 				cronlogger('Operator count is greater than the records', $operators, 'operator-bookings');
-					// 			}
-					// 		}
-					// 	} else {
-					// 		/*log here*/
-					// 		cronlogger('No records available for operators', $toktok_for_operators, 'operator-bookings');
-					// 	}
-					// 	/*then let the cron job run this until all operator bookings are done*/
-					// 	/*there will be another method that checks these and switches back ON again*/
-					// 	$this->notify_operator_booking();
-					// }
+						// now if switch is off process the manual interval
+						$toktok_for_operators = $this->gm_db->get('baskets_merge', [
+							'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0,
+							'order_by' => 'added', 'direction' => 'ASC', 'limit' => $set['manual_interval'],
+						]);
+						if ($toktok_for_operators) {
+							$operators = $this->gm_db->get('operators', ['active' => 1]);
+							if ($operators) {
+								$operator_cnt = count($operators);
+								$chunk_count = floor(count($toktok_for_operators) / $operator_cnt); // this will be average
+								if ($chunk_count > 0) {
+									$toktok_for_operators = array_chunk($toktok_for_operators, $chunk_count);
+									// now loop from operators and give them bookings
+									foreach ($operators as $key => $operator) {
+										if (isset($toktok_for_operators[$key])) {
+											$deliveries = $toktok_for_operators[$key];
+											foreach ($deliveries as $delivery) {
+												// update the baskets_merge data for this operator
+												$this->gm_db->save('baskets_merge', ['operator' => $operator['id']], ['id' => $delivery['id']]);
+											}
+										}
+									}
+								} else {
+									cronlogger('Operator count is greater than the records', $operators, 'operator-bookings');
+								}
+							}
+						} else {
+							cronlogger('No records available for operators', $toktok_for_operators, 'operator-bookings');
+						}
+						// then let the cron job run this until all operator bookings are done
+						// there will be another method that checks these and switches back ON again
+						$this->notify_operator_booking();
+					}*/
 				} else {
 					cronsequence('Posting is switched off!', 'danger');
-					// return true; // Disable OPERATOR distributions
-					// $this->notify_operator_booking();
+					// Disable OPERATOR distributions FOR NOW
+					/*$this->notify_operator_booking();*/
 				}
 			} else {
 				cronlogger('push_orders_to_toktok 547: no available post!', false, 'gulaymart-bookings');
-				// echo json_encode(['status' => false, 'message' => 'no available post'], JSON_NUMERIC_CHECK); exit();
 				cronsequence('No available orders to post...', 'warning');
 			}
 		} else {
 			cronlogger('push_orders_to_toktok 551: admin setting unknown!', false, 'gulaymart-bookings');
-			// echo json_encode(['status' => false, 'message' => 'admin setting unknown'], JSON_NUMERIC_CHECK); exit();
 			cronsequence('Unable to run empty orders...', 'danger');
 		}
 		$this->senddataapi->trigger('booking-log', 'incoming-gm-logs', ['type' => 'sequence']);
@@ -626,8 +620,6 @@ class Admin extends MY_Controller {
 							cronreturns('No delivery fetched for order_id:'.$data['order_id'], 'danger');
 						}
 					} else {
-						// echo json_encode(['status' => true, 'message' => 'delivery id "'.$data['delivery_id'].'" already exists!'], JSON_NUMERIC_CHECK);
-						// echo "<br>";
 						cronlogger('Error Delivery ID existing!', $data, 'gulaymart-bookings');
 						cronreturns('Delivery '.$data['delivery_id'].' already exist.', 'warning');
 					}
@@ -635,7 +627,6 @@ class Admin extends MY_Controller {
 				// debug($merge_ids, $baskets_ids, 'stop');
 				if (count($baskets_merge_ids) > 0) {
 					$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
-					// echo json_encode(['status' => true, 'message' => 'successfull!, orders was received!'], JSON_NUMERIC_CHECK); exit();
 					cronreturns('All Deliveries updated!', 'success');
 				}
 			} else {
@@ -644,7 +635,6 @@ class Admin extends MY_Controller {
 			}
 		} else {
 			cronlogger('orders_to_receive 679: baskets unknown!', false, 'gulaymart-bookings');
-			// echo json_encode(['status' => false, 'message' => 'baskets unknown'], JSON_NUMERIC_CHECK); exit();
 			cronreturns('No available orders from now...', 'danger');
 		}
 		$this->senddataapi->trigger('booking-log', 'incoming-gm-logs', ['type' => 'returns']);
