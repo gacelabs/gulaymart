@@ -441,7 +441,7 @@ class Products {
 					$sold = $products_location['sold'];
 					$basket = $this->class->gm_db->get_in('baskets', [
 						'product_id' => $product_id,
-						'status' => [0,1],
+						'status' => [GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS, GM_FOR_PICK_UP_STATUS],
 						// 'at_date' => strtotime(date('Y-m-d'))
 					], 'result', 'quantity');
 					if ($basket) {
@@ -450,6 +450,7 @@ class Products {
 						}
 					}
 					$products_location['stocks'] = ($stocks <= 0) ? 0 : $stocks; /*set no available*/
+					// debug($products_location, 'stop');
 					if ($stocks <= 0) {
 						/*update product stocks*/
 						$sold += abs($stocks);
@@ -462,20 +463,8 @@ class Products {
 						$base_url = base_url('farm/save-veggy/'.$product_id.'/'.nice_url($name, true).'#score-2');
 						$datestamp = strtotime(date('Y-m-d'));
 						$content = "Product item <a href='".$base_url."'>$name</a> is low on stocks [<em>$stocks pcs remaining</em>]";
-						$check_msgs = $this->class->gm_db->get('messages', [
-							'tab' => 'Notifications', 'type' => 'Inventory',
-							'to_id' => $product['user_id'], 'unread' => 1,
-							'datestamp' => $datestamp,
-							'content' => $content,
-						], 'row');
-						if ($check_msgs == false) {
-							$this->class->gm_db->new('messages', [
-								'tab' => 'Notifications', 'type' => 'Inventory',
-								'to_id' => $product['user_id'], 'datestamp' => $datestamp,
-								'page_id' => $product_id, 'entity_id' => $farm_location_id,
-								'content' => $content,
-							]);
-						}
+						send_gm_email($this->profile['id'], $content, 'Product item '.$name.' is low on stocks, Thank you!');
+						send_gm_message($this->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $product_id, 'entity_id' => $farm_location_id]);
 					}
 					// debug($products_location, 'stop');
 					$product['basket_details'] = $products_location;

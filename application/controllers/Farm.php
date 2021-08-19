@@ -201,6 +201,7 @@ class Farm extends MY_Controller {
 								/*email admins here*/
 								$content = '<p>'.$message.'</p><p>Check product <a href="'.base_url('farm/save-veggy/'.$product_id.'/').'">here</a>.</p>';
 								send_gm_email($profile['id'], $content);
+								send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $product_id]);
 							}
 						} else {
 							$passed = 0;
@@ -406,18 +407,17 @@ class Farm extends MY_Controller {
 			if (check_data_values($post)) {
 				// unset($post['_']); unset($post['callback']);
 				// debug($post, 'stop');
-				$this->products->save(['activity' => GM_ITEM_DELETED], $post);
+				$this->products->save(['activity' => GM_ITEM_DELETED], ['id' => $post['id']]);
 				/*email admins here*/
-				$content = remove_multi_space('<p>Product '.$name.' has been removed.</p>', true);
+				$content = remove_multi_space('<p>Product '.$post['name'].' has been removed.</p>', true);
 				// debug($content, 'stop');
-				if (send_gm_email($this->accounts->profile['id'], $content)) {
-					send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content);
-				}
+				send_gm_email($this->accounts->profile['id'], $content);
+				send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $post['id']]);
 				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
 			}
-			$this->set_response('error', remove_multi_space('Unable to remove '.$name.' product'), $post);
+			$this->set_response('error', remove_multi_space('Unable to remove '.$post['name'].' product'), $post);
 		} else {
-			$this->set_response('confirm', 'Want to remove this item?', $id, false, 'removeItem');
+			$this->set_response('confirm', 'Want to remove this item?', ['id' => $id, 'name' => $name], false, 'removeItem');
 		}
 	}
 
@@ -504,9 +504,8 @@ class Farm extends MY_Controller {
 					if ($user_farm) {
 						$content = '<p>You have created your Storefront!</p><p>Please check it <a href="'.base_url('store/'.$farm_id.'/'.$farm_location_id.'/'.nice_url($user_farm['name'], true)).'" data-readit="1">here</a>.</p>';
 						// debug($content, 'stop');
-						if (send_gm_email($profile['id'], $content)) {
-							send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'System Update');
-						}
+						send_gm_email($profile['id'], $content);
+						send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'System Update', 'message', false, ['page_id' => $farm_id, 'entity_id' => $farm_location_id]);
 					}
 					$this->set_response('info', $message, $post, 'farm/storefront');
 				} else {

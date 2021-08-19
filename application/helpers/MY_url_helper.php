@@ -469,16 +469,11 @@ function product_url($item=false, $echo=false)
 	}
 }
 
-function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory', $notifType='message', $dont_notif=false)
+function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab='Notifications', $type='Inventory', $notifType='message', $dont_notif=false, $other_data=false)
 {
 	$ci =& get_instance();
 	if ($user_id AND $datestamp AND $content) {
-		$settings = false;
-		if (strtolower($type) == 'orders' AND strtolower($tab) == 'notifications') {
-			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_email', 'value' => 'checked']);
-		} elseif (strtolower($tab) == 'notifications' AND strtolower($type) == 'inventory') {
-			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_cp', 'value' => 'checked']);
-		}
+		$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_cp', 'value' => 'checked']);
 		// debug($settings, 'stop');
 		if ($settings) {
 			// send message to the user has to replenish the needed stocks for delivery
@@ -493,6 +488,8 @@ function send_gm_message($user_id=false, $datestamp=false, $content=false, $tab=
 					'tab' => $tab, 'type' => $type,
 					'to_id' => $user_id, 'datestamp' => $datestamp,
 					'content' => urldecode($content),
+					'page_id' => $other_data ? (isset($other_data['page_id']) ? $other_data['page_id'] : 0) : 0, 
+					'entity_id' => $other_data ? (isset($other_data['entity_id']) ? $other_data['entity_id'] : 0) : 0,
 				]);
 				if ($dont_notif == false) {
 					$msg_count = $ci->gm_db->count('messages', ['unread' => 1, 'to_id' => $user_id]);
@@ -526,7 +523,7 @@ function send_gm_email($user_id=false, $content=false, $subject='Email Notificat
 		$user = $ci->gm_db->get('users', ['id' => $user_id], 'row');
 		// debug($post, 'stop');
 		if ($user AND filter_var($user['email_address'], FILTER_VALIDATE_EMAIL)) {
-			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_cp', 'value' => 'checked']);
+			$settings = $ci->gm_db->count('user_settings', ['user_id' => $user_id, 'setting' => 'notif_email', 'value' => 'checked']);
 			// debug($settings, 'stop');
 			if ($settings) {
 				$mail = $ci->smtpemail->setup('admin');

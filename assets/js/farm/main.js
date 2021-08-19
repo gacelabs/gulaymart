@@ -37,11 +37,11 @@ $(document).ready(function() {
 });
 
 var oRemoveAjax = false;
-var removeItem = function(id) {
+var removeItem = function(obj) {
 	var oSettings = {
 		url: 'farm/remove_veggy',
 		type: 'post',
-		data: {id: id},
+		data: obj,
 		dataType: 'jsonp',
 		error: function(xhr, status, thrown) {
 			if (thrown == 'Service Unavailable') {
