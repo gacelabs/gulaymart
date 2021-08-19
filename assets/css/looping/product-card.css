@@ -78,6 +78,9 @@
 
 }
 @media (max-width: 991px) {
+	.product-list-card {
+		width: 33.33%;
+	}
 	.product-list-footer>ul {
 		display: block;
 	}

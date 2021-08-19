@@ -1,9 +1,11 @@
+#farmer_list_container {
+	display: flex;
+	flex-flow: row wrap;
+}
 .farmer-list-card {
-	padding: 0 10px;
 	position: relative;
-	float: left;
-	width: 33.33%;
-	margin-bottom: 10px;
+	flex-basis: 20%;
+	border: 3px solid #eeefec;
 }
 .farmer-list-cover {
 	background-position: center center;
@@ -25,7 +27,7 @@
 	position: absolute;
 	right: 50%;
 	transform: translateX(50%);
-	top: 70px;
+	top: 75px;
 }
 .farmer-list-footer {
 	background-color: #fff;
@@ -39,23 +41,17 @@
 }
 @media (max-width: 991px) {
 	.farmer-list-card {
-		padding: 0 5px;
+		flex-basis: 33.33%;
 	}
 	.farmer-list-profile-photo {
-		height: 40px;
-		width: 40px;
-		top: 60px;
+		height: 60px;
+		width: 60px;
+		top: 95px;
 	}
 }
 @media (max-width: 767px) {
-	#farmer_list_container {
-		grid-template-columns: repeat(5, 190px);
-		overflow-y: auto;
-	}
 	.farmer-list-card {
-		padding: 0 5px;
-		position: relative;
-		width: 50%;
+		flex-basis: 50%;
 	}
 	.farmer-list-cover {
 		padding-top: 100px;
