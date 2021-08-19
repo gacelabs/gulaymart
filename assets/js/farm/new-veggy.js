@@ -295,7 +295,7 @@ var redirectNewProduct = function(obj) {
 				window.history.replaceState({}, document.title, sUrl);
 			}
 		});*/
-		// window.location.href = sUrl;
+		window.location.href = sUrl;
 	}, 2000);
 }
 
