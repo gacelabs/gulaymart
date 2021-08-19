@@ -149,14 +149,15 @@ class MY_Controller extends CI_Controller {
 	public function set_response($type='error', $message='Error occured!', $data=[], $redirect_url=false, $callback=false, $unclose=false)
 	{
 		if ($this->input->is_ajax_request()) {
-			echo do_jsonp_callback('ajaxSuccessResponse', [
+			$js_method = do_jsonp_callback('ajaxSuccessResponse', [
 				'type' => $type,
 				'message' => $message,
 				'data' => $data,
 				'redirect' => $redirect_url,
 				'callback' => $callback,
 				'unclose' => $unclose,
-			]); exit();
+			]);
+			echo $js_method; exit();
 		} else {
 			if (is_string($redirect_url)) {
 				redirect(base_url($redirect_url.'?'.$type.'='.$message));

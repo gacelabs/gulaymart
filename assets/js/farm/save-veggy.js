@@ -101,10 +101,37 @@ var redirectNewProduct = function(obj) {
 		$.each(obj.products_location, function(i, data) {
 			if ($('.order-price').eq(cnt).length) {
 				$('.order-price').eq(cnt).text(data.price);
-				$('.order-unit').eq(cnt).text(data.measurement);
-				$('.order-duration').eq(cnt).text(data.duration);
+				$('.order-unit').eq(cnt).text(ucWords(data.measurement));
+				$('.order-duration').eq(cnt).text(ucWords(data.duration));
+			} else {
+				if ($('.product-list-footer').find('ul:first').length > 1) {
+					var ulUI = $('.product-list-footer').find('ul:first').clone();
+				} else {
+					var ulUI = $('.product-list-footer').find('ul:first');
+					$('.product-list-footer').find('ul:first').remove();
+				}
+				ulUI.find('.order-price').text(data.price);
+				ulUI.find('.order-unit').text(ucWords(data.measurement));
+				ulUI.find('.order-duration').text(ucWords(data.duration));
+				$('.product-list-footer').append(ulUI);
 			}
 			cnt++;
 		});
+	}
+
+	if ($('.order-status').length) {
+		var status = 'For review';
+		switch (obj.activity) {
+			case '1':
+				status = 'Approved';
+			break;
+			case '2':
+				status = 'Rejected';
+			break;
+			case '3':
+				status = 'Deleted';
+			break;
+		}
+		$('.order-status').text(status);
 	}
 }

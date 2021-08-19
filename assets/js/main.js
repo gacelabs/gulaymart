@@ -670,9 +670,7 @@ var runATagAjax = function () {
 	$(document.body).find('a[data-ajax]').off('click').on('click', function(e) {
 		e.preventDefault(); e.returnValue = false;
 		var oThis = $(e.target);
-		if ($(e.target).prop('tagName') != 'A') {
-			oThis = $(e.target).parent('a');
-		}
+		if ($(e.target).prop('tagName') != 'A') oThis = $(e.target).parent('a');
 		var oData = oThis.data('json') != undefined ? oThis.data('json') : {};
 		var isJsonPCallback = oThis.data('call-jsonp') != undefined ? oThis.data('call-jsonp') : 1;
 		var origText = oThis.html();
@@ -682,7 +680,9 @@ var runATagAjax = function () {
 			data: oData,
 			dataType: 'json',
 			beforeSend: function() {
-				oThis.html('<span class="spinner-border spinner-border-sm"></span> '+origText);
+				if (oThis.attr('no-spinner') == undefined) {
+					oThis.html('<span class="spinner-border spinner-border-sm"></span> '+origText);
+				}
 			},
 			success: function(response) {
 				var bConfirmed = true;

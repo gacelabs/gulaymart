@@ -188,3 +188,9 @@ defined('GM_SCHEDULED') OR define('GM_SCHEDULED', 2);
 defined('GM_MESSAGE_READ')	 OR	define('GM_MESSAGE_READ', 	0);
 defined('GM_MESSAGE_UNREAD') OR define('GM_MESSAGE_UNREAD', 1);
 defined('GM_MESSAGE_DELETE') OR define('GM_MESSAGE_DELETE', 2);
+
+/*PRODUCTS ACTIVITY*/
+defined('GM_ITEM_DRAFT')	OR define('GM_ITEM_DRAFT',		0);
+defined('GM_ITEM_APPROVED')	OR define('GM_ITEM_APPROVED',	1);
+defined('GM_ITEM_REJECTED')	OR define('GM_ITEM_REJECTED',	2);
+defined('GM_ITEM_DELETED')	OR define('GM_ITEM_DELETED',	3);

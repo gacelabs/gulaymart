@@ -317,21 +317,26 @@
 								</div>
 							</div>
 							<div class="product-list-footer">
-							<?php if ($data['product']['latlng']): ?>
+							<?php if (isset($data['product']) AND (isset($data['product']['latlng']) AND $data['product']['latlng'])): ?>
 								<?php foreach ($data['product']['latlng'] as $key => $prod): ?>
 									<ul class="spaced-list between">
 										<li><p class="product-price">₱ <span class="order-price"><?php echo format_number($prod['price']);?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
 										<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration"><?php echo ucwords($prod['duration']);?></span></p></li>
 									</ul>
 								<?php endforeach ?>
+							<?php else: ?>
+								<ul class="spaced-list between">
+									<li><p class="product-price">₱ <span class="order-price">--</span> / <span class="order-unit">--</span></p></li>
+									<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration">--</span></p></li>
+								</ul>
 							<?php endif ?>
 							</div>
 						</div>
 						<div class="new-veggy-status-container">
 							<?php
 							$status = 'For review';
-							if (isset($data['product']) AND $data['product']['activity']) {
-								$status = ($data['product']['activity'] == 0 ? 'For review' : ($data['product']['activity'] == 2 ? 'Rejected' : ($data['product']['activity'] == 3 ? 'Deleted' : 'Approved')));
+							if (isset($data['product']) AND (isset($data['product']['activity']) AND $data['product']['activity'])) {
+								$status = ($data['product']['activity'] == GM_ITEM_DRAFT ? 'For review' : ($data['product']['activity'] == GM_ITEM_REJECTED ? 'Unpublished' : ($data['product']['activity'] == GM_ITEM_DELETED ? 'Deleted' : 'Published')));
 							}
 							?>
 							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>

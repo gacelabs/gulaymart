@@ -48,7 +48,7 @@ class Farm extends MY_Controller {
 
 	public function new_veggy()
 	{
-		$post = $this->input->post();
+		$post = $this->input->post() ?: $this->input->get();
 		if ($post) {
 			$message = 'Sorry product invalid values, request failed!';
 			$successFunction = 'setProductScore';
@@ -173,21 +173,25 @@ class Farm extends MY_Controller {
 								$ids[] = $this->products->new($upload, 'products_photo');
 							}
 							$this->products->save(['activity' => $post['activity']], ['id' => $product_id]);
-							$products_locations = $this->gm_db->get('products_location', ['product_id' => $product_id]);
-							if ($products_locations) {
-								foreach ($products_locations as $key => $location) {
-									$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
-									if ($farm_location) {
-										$driving_distance = get_driving_distance([
-											['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
-											['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-										]);
-										$products_locations[$key]['duration'] = $driving_distance['duration'];
-									}
-								}
-								$post['products_location'] = $products_locations;
-							}
 							$post['file_photos'] = $this->gm_db->get('products_photo', ['product_id' => $product_id]);
+						}
+						$products_locations = $this->gm_db->get('products_location', ['product_id' => $product_id]);
+						if ($products_locations) {
+							foreach ($products_locations as $key => $location) {
+								$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+								if ($farm_location) {
+									$driving_distance = get_driving_distance([
+										['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+										['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+									]);
+									$address = explode(',', $farm_location['address_2']);
+									$products_locations[$key]['city'] = isset($address[0]) ? $address[0] : '';
+									$products_locations[$key]['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+									$products_locations[$key]['province'] = isset($address[1]) ? trim($address[1]) : '';
+									$products_locations[$key]['duration'] = $driving_distance['duration'];
+								}
+							}
+							$post['products_location'] = $products_locations;
 						}
 						if (count($ids) AND !in_array(false, $ids)) {
 							if ($passed == 0) {
@@ -248,11 +252,12 @@ class Farm extends MY_Controller {
 
 	public function save_veggy($id=0, $name='')
 	{
-		$post = $this->input->post();
+		$post = $this->input->post() ?: $this->input->get();
 		if ($post AND $id > 0) {
 			if (check_data_values($post)) {
 				// debug($post, $_FILES, 'stop');
-				$product = $this->products->get(['id' => $id])[0];
+				$product = $this->products->get(['id' => $id], false, true, true);
+				// debug($product, 'stop');
 				if (isset($post['products'])) {
 					$products = $post['products'];
 					if ($this->products->save($products, ['id' => $id])) {
@@ -321,7 +326,7 @@ class Farm extends MY_Controller {
 						}
 					}
 					/*email admins here*/
-					$content = '<p>Product saved!</p><p>It is now being reviewed for approval.</p><p>Please check product <a href="'.base_url('farm/save-veggy/'.$id.'/'.strtolower($product['name'])).'" data-readit="1">here</a>.</p>';
+					$content = '<p>Product '.ucwords($product['name']).' saved!</p><p>It is now being reviewed for approval.</p><p>Please check product <a href="'.base_url('farm/save-veggy/'.$id.'/'.nice_url($product['name'], true)).'" data-readit="1">here</a>.</p>';
 					// debug($content, 'stop');
 					if (send_gm_email($this->accounts->profile['id'], $content)) {
 						send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content);
@@ -330,6 +335,24 @@ class Farm extends MY_Controller {
 				$post['product_id'] = $id;
 				$post['updated'] = 1;
 				$post['products'] = $product;
+				$products_locations = $this->gm_db->get('products_location', ['product_id' => $id]);
+				if ($products_locations) {
+					foreach ($products_locations as $key => $location) {
+						$farm_location = $this->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
+						if ($farm_location) {
+							$driving_distance = get_driving_distance([
+								['lat' => $this->latlng['lat'], 'lng' => $this->latlng['lng']],
+								['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
+							]);
+							$address = explode(',', $farm_location['address_2']);
+							$products_locations[$key]['city'] = isset($address[0]) ? $address[0] : '';
+							$products_locations[$key]['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
+							$products_locations[$key]['province'] = isset($address[1]) ? trim($address[1]) : '';
+							$products_locations[$key]['duration'] = $driving_distance['duration'];
+						}
+					}
+					$post['products_location'] = $products_locations;
+				}
 				// $this->set_response('success', 'Veggie Updated', $post, 'farm/inventory');
 				$this->set_response('success', 'Veggie Updated', $post, false, 'redirectNewProduct');
 			}
@@ -339,6 +362,9 @@ class Farm extends MY_Controller {
 			$product = $this->products->products_with_location(['id' => $id, 'user_id' => $this->accounts->profile['id']], true);
 			// debug($product, 'stop');
 			if ($product) {
+				if ($name !== nice_url($product['name'], true)) {
+					redirect(base_url('farm/save-veggy/'.$id.'/'.nice_url($product['name'], true).'/'));
+				}
 				$this->render_page([
 					'top' => [
 						'css' => ['dashboard/main', 'looping/product-card', 'farm/new-veggy']
@@ -368,11 +394,7 @@ class Farm extends MY_Controller {
 					],
 				]);
 			} else {
-				if (!$this->accounts->profile['farms']) {
-					redirect(base_url('farm/storefront?info=Please fill-out your farm details'));
-				} else {
-					redirect(base_url('farm/storefront?error=Accessed item does not exist!'));
-				}
+				show_404();
 			}
 		}
 	}
@@ -384,7 +406,7 @@ class Farm extends MY_Controller {
 			if (check_data_values($post)) {
 				// unset($post['_']); unset($post['callback']);
 				// debug($post, 'stop');
-				$this->products->save(['activity' => 3], $post);
+				$this->products->save(['activity' => GM_ITEM_DELETED], $post);
 				/*email admins here*/
 				$content = remove_multi_space('<p>Product '.$name.' has been removed.</p>', true);
 				// debug($content, 'stop');
@@ -480,10 +502,10 @@ class Farm extends MY_Controller {
 					/*email admins here*/
 					$user_farm = $this->gm_db->get('user_farms', ['id' => $farm_id], 'row');
 					if ($user_farm) {
-						$content = '<p>You have created your Storefront!</p><p>Please check it <a href="'.base_url('store/'.$farm_id.'/'.$farm_location_id.'/'.strtolower($user_farm['name'])).'" data-readit="1">here</a>.</p>';
+						$content = '<p>You have created your Storefront!</p><p>Please check it <a href="'.base_url('store/'.$farm_id.'/'.$farm_location_id.'/'.nice_url($user_farm['name'], true)).'" data-readit="1">here</a>.</p>';
 						// debug($content, 'stop');
 						if (send_gm_email($profile['id'], $content)) {
-							send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content);
+							send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'System Update');
 						}
 					}
 					$this->set_response('info', $message, $post, 'farm/storefront');
@@ -580,13 +602,10 @@ class Farm extends MY_Controller {
 		} else {
 			$user_farm = $this->gm_db->get('user_farms', ['id' => $id], 'row');
 		}
-		if (empty($name) AND $user_farm) {
-			$name = nice_url($user_farm['name'], true);
-			$this->store_location($id, $farm_location_id, $name);
-		}
 		$data = false;
 		// debug($user_farm, 'stop');
 		if ($user_farm) {
+			if (empty($name)) $name = nice_url($user_farm['name'], true);
 			if (is_numeric($farm_location_id) AND $farm_location_id > 0) {
 				$farm_location = $this->gm_db->get('user_farm_locations', ['farm_id' => $user_farm['id'], 'id' => $farm_location_id], 'row');
 			} else {

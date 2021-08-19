@@ -23,6 +23,19 @@ class Products {
 					$this->class->db->limit($limit);
 				}
 			}
+			if (is_array($where)) {
+				foreach ($where as $field => $wrow) {
+					if (is_array($wrow)) {
+						if (count($wrow)) {
+							$this->class->db->where($field, $wrow);
+						} else {
+							$this->class->db->where($field, 0);
+						}
+					} else {
+						$this->class->db->where([$field => $wrow]);
+					}
+				}
+			}
 			$data = $this->class->db->get('products');
 			if (isset($data) AND $data->num_rows()) {
 				$products = $data->result_array();
@@ -32,7 +45,7 @@ class Products {
 					$products[$key] = $this->products_assemble($products[$key], $justdata);
 					$products[$key]['id'] = $product_id;
 				}
-				// debug($products, 'stop');
+				// debug($products, $row, 'stop');
 				if ($row) {
 					return $products[0];
 				} else {
@@ -52,7 +65,11 @@ class Products {
 			if (is_array($where)) {
 				foreach ($where as $field => $wrow) {
 					if (is_array($wrow)) {
-						$this->class->db->where_in($field, $wrow);
+						if (count($wrow)) {
+							$this->class->db->where_in($field, $wrow);
+						} else {
+							$this->class->db->where_in($field, 0);
+						}
 					} else {
 						$this->class->db->where([$field => $wrow]);
 					}
@@ -164,7 +181,11 @@ class Products {
 		if (!is_bool($where)) {
 			foreach ($where as $key => $row) {
 				if (is_array($row)) {
-					$this->class->db->where_in($key, $row);
+					if (count($row)) {
+						$this->class->db->where_in($field, $row);
+					} else {
+						$this->class->db->where_in($field, 0);
+					}
 				} else {
 					$this->class->db->where([$key => $row]);
 				}
@@ -355,9 +376,16 @@ class Products {
 					}
 					$product['feedbacks'] = $feedbacks_data;
 					if ($this->has_session) {
-						$product['can_comment'] = $this->class->gm_db->count('messages', ['from_id'=>$this->profile['id'],'page_id'=>$product_id]);
+						$product_not_cancelled = $this->class->gm_db->count('baskets', [
+							'user_id' => $this->profile['id'],
+							'product_id' => $product_id,
+							'status !=' => GM_CANCELLED_STATUS,
+						]);
+						$has_message = $this->class->gm_db->count('messages', ['from_id'=>$this->profile['id'],'page_id'=>$product_id]);
+						$is_not_owner = $this->class->gm_db->count('products', ['user_id'=>$this->profile['id'],'id'=>$product_id]);
+						$product['can_comment'] = ($product_not_cancelled > 0 AND $has_message == 0 AND $is_not_owner == 0);
 					} else {
-						$product['can_comment'] = 0;
+						$product['can_comment'] = false;
 					}
 
 					$product['category'] = false;
@@ -376,10 +404,13 @@ class Products {
 						$address = explode(',', $farm_location['address_2']);
 						$farm_location['city'] = isset($address[0]) ? $address[0] : '';
 						$farm_location['city_prov'] = (isset($address[0]) AND isset($address[1])) ? $address[0] .','. $address[1] : '';
-						$driving_distance = get_driving_distance([
+						$coordinates = [
 							['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
 							['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
-						]);
+						];
+						$latlng = get_cookie('prev_latlng', true);
+						if (!empty($latlng)) $coordinates[0] = unserialize($latlng);
+						$driving_distance = get_driving_distance($coordinates);
 						$farm_location['distance'] = $driving_distance['distance'];
 						$farm_location['duration'] = $driving_distance['duration'];
 						$farm_location['distanceval'] = $driving_distance['distanceval'];

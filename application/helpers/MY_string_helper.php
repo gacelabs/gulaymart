@@ -428,9 +428,9 @@ function nice_url($title=FALSE, $return=false) {
 		$echo = '';
 	}
 	if ($return == false) {
-		echo $echo;
+		echo trim($echo);
 	} else {
-		return $echo;
+		return trim($echo);
 	}
 }
 
@@ -877,12 +877,12 @@ function do_jsonp_callback($js_function=false, $payload=['type'=>'info', 'messag
 	$callback = $ci->input->get('callback');
 	if ($callback) {
 		if ($js_function) {
-			echo $callback . '('.$js_function.'('.json_encode($payload, JSON_NUMERIC_CHECK).'), false)'; exit();
+			return $callback . '('.$js_function.'('.json_encode($payload, JSON_NUMERIC_CHECK).'), false)'; exit();
 		} else {
-			echo $callback . '('.json_encode($payload, JSON_NUMERIC_CHECK).', false)'; exit();
+			return $callback . '('.json_encode($payload, JSON_NUMERIC_CHECK).', false)'; exit();
 		}
 	}
-	echo json_encode($payload, JSON_NUMERIC_CHECK); exit();
+	return json_encode($payload, JSON_NUMERIC_CHECK); exit();
 }
 
 function camel_to_dashed($className)
@@ -1848,7 +1848,7 @@ function get_products($where=[], $limit=20)
 	$items = [];
 
 	if ($items_locations) {
-		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [0,2,3];
+		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [GM_ITEM_DRAFT, GM_ITEM_REJECTED];
 		foreach ($items_locations as $index => $location) {
 			$where['id'] = $location['product_id'];
 			$item = $ci->gm_db->get_in('products', $where, 'row');

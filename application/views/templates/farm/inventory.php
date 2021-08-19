@@ -39,7 +39,7 @@
 													<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
 														<a class="text-link normal-radius" href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
 													<?php endif ?>
-													<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Remove</a>
+													<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1" no-spinner>Remove</a>
 												<?php elseif ($index == 'updated'): ?>
 													<?php echo date('M. j, Y | h:i:s a', strtotime($value));?>
 												<?php elseif ($index == 'name'): ?>
