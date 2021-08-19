@@ -301,7 +301,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12<?php if ($data['is_edit'] == false): ?> hide<?php endif ?>" id="preview_container">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
 				<div class="dashboard-panel">
 					<div class="dashboard-panel-top">
 						<ul class="spaced-list between">
@@ -313,7 +313,7 @@
 							</div>
 							<div class="product-desc-body">
 								<div class="product-title-container ellipsis-container">
-									<h1 class="zero-gaps order-title"><?php check_value('name', $data['product']);?></h1>
+									<h1 class="zero-gaps order-title"><?php isset_echo($data['product'], 'name', 'No name');?></h1>
 								</div>
 							</div>
 							<div class="product-list-footer">
@@ -334,7 +334,7 @@
 						</div>
 						<div class="new-veggy-status-container">
 							<?php
-							$status = 'For review';
+							$status = 'None';
 							if (isset($data['product']) AND (isset($data['product']['activity']) AND $data['product']['activity'])) {
 								$status = ($data['product']['activity'] == GM_ITEM_DRAFT ? 'For review' : ($data['product']['activity'] == GM_ITEM_REJECTED ? 'Unpublished' : ($data['product']['activity'] == GM_ITEM_DELETED ? 'Deleted' : 'Published')));
 							}
