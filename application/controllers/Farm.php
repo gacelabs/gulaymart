@@ -409,13 +409,13 @@ class Farm extends MY_Controller {
 				// debug($post, 'stop');
 				$this->products->save(['activity' => GM_ITEM_DELETED], ['id' => $post['id']]);
 				/*email admins here*/
-				$content = remove_multi_space('<p>Product '.$post['name'].' has been removed.</p>', true);
+				$content = remove_multi_space('<p>Product item '.ucwords($post['name']).' has been removed.</p>', true);
 				// debug($content, 'stop');
 				send_gm_email($this->accounts->profile['id'], $content);
 				send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $post['id']]);
 				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
 			}
-			$this->set_response('error', remove_multi_space('Unable to remove '.$post['name'].' product'), $post);
+			$this->set_response('error', remove_multi_space('Unable to remove '.ucwords($post['name']).' product'), $post);
 		} else {
 			$this->set_response('confirm', 'Want to remove this item?', ['id' => $id, 'name' => $name], false, 'removeItem');
 		}
