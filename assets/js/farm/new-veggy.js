@@ -296,7 +296,7 @@ var redirectNewProduct = function(obj) {
 			}
 		});*/
 		window.location.href = sUrl;
-	}, 2000);
+	}, 1000);
 }
 
 // var lastScrollTop = 0;
