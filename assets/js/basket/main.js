@@ -181,7 +181,7 @@ var removeOnBasket = function(obj) {
 
 var oSavedData = {};
 var runQtyDefaults = function(ui) {
-	ui.first().each(function(i, elem) {
+	ui.each(function(i, elem) {
 		oSavedData[i] = {
 			ui: elem,
 			id: $(elem).attr('js-id'),
@@ -191,9 +191,10 @@ var runQtyDefaults = function(ui) {
 		}
 	});
 
-	ui.off('input, change').on('input, change', function() {
+	ui.off('input').on('input', function() {
 		var oThis = $(this), iVal = parseInt(oThis.val()),
 		uiItems = oThis.parents('.order-item:first');
+		if (isNaN(iVal)) iVal = 1; /*default to 1*/
 		oThis.val(iVal); /*no decimals allowed*/
 		uiItems.find('[js-event="qty"]').prop('value', iVal).val(iVal);
 		/*preventing changes done in console*/
@@ -212,5 +213,7 @@ var runQtyDefaults = function(ui) {
 				}
 			}
 		});
+	}).off('change').on('change', function() {
+		$(this).trigger('input');
 	});
 }
