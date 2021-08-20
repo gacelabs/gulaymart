@@ -1,5 +1,5 @@
-<div class="row hidden-xs ff-product-container">
-	<div class="col-lg-12 col-md-12 hidden-sm hidden-xs" js-element="fulfill-panel">
+<div class="row ff-product-container">
+	<div class="col-lg-12 col-md-12" js-element="fulfill-panel">
 		<?php if ($data['orders']): ?>
 			<!-- per farm location -->
 			<?php foreach ($data['orders'] as $key => $orders): ?>

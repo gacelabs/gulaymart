@@ -7,10 +7,10 @@
 		<div class="text-left">
 			<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($orders['updated']));?></i></small></p>
 		</div>
-		<div class="text-right hidden-sm hidden-xs">
+		<div class="text-right hidden-sm">
 			<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
 		</div>
-		<div class="text-right hidden-sm hidden-xs">
+		<div class="text-right hidden-sm">
 			<p><small class="elem-block"><b>QUANTITY</b></small></p>
 		</div>
 		<div class="text-right">
@@ -73,10 +73,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="text-right hidden-sm hidden-xs">
+					<div class="text-right hidden-sm">
 						<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
 					</div>
-					<div class="text-right hidden-sm hidden-xs">
+					<div class="text-right hidden-sm">
 						<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 					</div>
 					<div class="text-right" js-element="selectItems">
@@ -142,7 +142,7 @@
 	?>
 
 	<div class="order-grid-footer">
-		<div class="order-footer-farm text-left hidden-xs">
+		<div class="order-footer-farm text-left">
 			<p class="zero-gaps"><small class="elem-block"><b>BUYER</b></small></p>
 			<p class="zero-gaps"><?php echo ucwords($buyer['fullname']);?></p>
 			<p class="zero-gaps">
@@ -155,13 +155,13 @@
 				<?php endif ?>
 			</p>
 		</div>
-		<div class="order-footer-payment text-left hidden-xs">
+		<div class="order-footer-payment text-left">
 			<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
 			<p class="zero-gaps">Cash On Delivery</p>
 			<p class="zero-gaps"></p>
 		</div>
 		<?php if ($status_text != 'cancelled'): ?>
-			<div class="text-left hidden-xs">
+			<div class="text-left">
 				<?php if ($initial_total > 0): ?>
 					<p class="zero-gaps"><small class="elem-block"><b>ORDER INVOICE</b></small></p>
 					<?php if ($status_text == 'placed') : ?>
@@ -172,7 +172,7 @@
 				<?php endif ?>
 			</div>
 		<?php endif ?>
-		<div class="text-left hidden-xs">
+		<div class="text-left">
 			<?php if ($status_text == 'placed') : ?>
 				<p class="zero-gaps" js-element="proceed-panel"><small class="elem-block"><b>PROCEED</b></small></p>
 				<button class="btn btn-sm btn-contrast" js-element="proceed-btn" data-merge_id="<?php echo $orders['id'];?>" data-default-html='READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i>'>READY FOR PICK UP<i class="fa fa-angle-right icon-right"></i></button>

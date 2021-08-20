@@ -54,7 +54,7 @@ class Fulfillment extends My_Controller {
 		} else {
 			$this->render_page([
 				'top' => [
-					'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table', 'print.min']
+					'css' => ['dashboard/main', 'fulfillment/index', 'global/zigzag', 'modal/invoice-modal', 'print.min']
 				],
 				'middle' => [
 					'body_class' => ['dashboard', 'fulfillment', 'ff-'.$status],
