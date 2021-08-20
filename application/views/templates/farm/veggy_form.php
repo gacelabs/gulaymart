@@ -342,9 +342,9 @@
 							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>
 						</div>
 					</div>
-					<div class="dashboard-panel-footer visible-xs">
+					<!-- <div class="dashboard-panel-footer visible-xs">
 						<a href="farm/my-veggies" class="btn btn-default btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
