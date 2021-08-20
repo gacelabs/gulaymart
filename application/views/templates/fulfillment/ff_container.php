@@ -1,7 +1,7 @@
 <div class="fulfillment-container" id="dashboard_panel_right">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="trans-navbar-container">
+			<div class="trans-navbar-container filter-status-container">
 				<small class="elem-block"><b>FILTER STATUS</b></small>
 				<div class="trans-navbar-grid ff-navbar-grid filter-status">
 					<div class="trans-navbar-pill grid-item <?php in_array_echo("ff-placed", $middle['body_class'], "active");?>">

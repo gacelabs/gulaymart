@@ -93,10 +93,10 @@ var renderHTML = function(obj) {
 
 var isAllSelected = function(merge_id) {
 	$('[data-merge-id="'+merge_id+'"]').each(function(i, elem) {
-		var iRecordCount = parseInt($(elem).find('.order-item-list [js-element="selectItems"] [js-event="actionSelect"]').length);
-		var iRecordConfirmHave = $(elem).find('.order-item-list [js-element="selectItems"] select:not(.hide) option[value="6"]:selected').length;
-		var iRecordCancelHave = $(elem).find('.order-item-list [js-element="selectItems"] select:not(.hide) option[value="5"]:selected').length;
-		var iRecordOrHave = $(elem).find('.order-item-list [js-element="selectItems"] [js-data="confirmed"]').length;
+		var iRecordCount = parseInt($(elem).find('.fulfillment-item-list [js-element="selectItems"] [js-event="actionSelect"]').length);
+		var iRecordConfirmHave = $(elem).find('.fulfillment-item-list [js-element="selectItems"] select:not(.hide) option[value="6"]:selected').length;
+		var iRecordCancelHave = $(elem).find('.fulfillment-item-list [js-element="selectItems"] select:not(.hide) option[value="5"]:selected').length;
+		var iRecordOrHave = $(elem).find('.fulfillment-item-list [js-element="selectItems"] [js-data="confirmed"]').length;
 		var iAll = iRecordConfirmHave + iRecordCancelHave + iRecordOrHave;
 		// console.log(iRecordCount, iAll);
 		if (iRecordCount == iAll) {
@@ -126,7 +126,7 @@ var fulfillmentsRunDomReady = function() {
 			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#799938');
 			$(this).next('[js-event="reasonSelect"]').val('None');
 		}
-		isAllSelected($(this).parents('.order-table-item').data('merge-id'));
+		isAllSelected($(this).parents('.fulfillment-table-item').data('merge-id'));
 	});
 
 	$(document.body).find('[js-event="cancelReasonSelect"]').off('change').on('change', function() {
