@@ -470,6 +470,28 @@ class Admin extends MY_Controller {
 					if (count($merge_ids)) {
 						// send realtime process
 						$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $merge_ids]);
+						/*email admins here*/
+						foreach ($merge_ids as $merge_id) {
+							$order = $this->gm_db->get('baskets_merge', ['id' => $merge_id], 'row');
+							if ($order AND $order['status'] == GM_ON_DELIVERY_STATUS) {
+								$data = ['id' => $merge_id, 'action' => 'On Delivery', 'status' => 'on-delivery'];
+								/*message buyer*/
+								$data['for'] = 'buyer';
+								$context = make_stream_context($data);
+								$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
+								$html_notif = '<p>View On Delivery Order(s) <a href="orders/on-delivery/" data-readit="1">here</a></p>';
+								send_gm_email($order['buyer_id'], $html_email);
+								send_gm_message($order['buyer_id'], strtotime(date('Y-m-d')), $html_notif);
+
+								/*message sellers*/
+								$data['for'] = 'seller';
+								$context = make_stream_context($data);
+								$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
+								$html_notif = '<p>View your On Delivery Order(s) <a href="fulfillment/on-delivery/" data-readit="1">here</a></p>';
+								send_gm_email($order['seller_id'], $html_email);
+								send_gm_message($order['seller_id'], strtotime(date('Y-m-d')), $html_notif);
+							}
+						}
 					}
 					// Disable OPERATOR distributions FOR NOW
 					/*check first is the switch off by some admin*/
@@ -627,6 +649,28 @@ class Admin extends MY_Controller {
 				// debug($merge_ids, $baskets_ids, 'stop');
 				if (count($baskets_merge_ids) > 0) {
 					$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
+					/*email admins here*/
+					foreach ($baskets_merge_ids as $merge_id) {
+						$order = $this->gm_db->get('baskets_merge', ['id' => $merge_id], 'row');
+						if ($order AND $order['status'] == GM_RECEIVED_STATUS) {
+							$data = ['id' => $merge_id, 'action' => 'Received', 'status' => 'received'];
+							/*message buyer*/
+							$data['for'] = 'buyer';
+							$context = make_stream_context($data);
+							$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
+							$html_notif = '<p>View Received Order(s) <a href="orders/received/" data-readit="1">here</a></p>';
+							send_gm_email($order['buyer_id'], $html_email);
+							send_gm_message($order['buyer_id'], strtotime(date('Y-m-d')), $html_notif);
+
+							/*message sellers*/
+							$data['for'] = 'seller';
+							$context = make_stream_context($data);
+							$html_email = file_get_contents(base_url('support/order_details/'), false, $context);
+							$html_notif = '<p>View your Received Order(s) <a href="fulfillment/received/" data-readit="1">here</a></p>';
+							send_gm_email($order['seller_id'], $html_email);
+							send_gm_message($order['seller_id'], strtotime(date('Y-m-d')), $html_notif);
+						}
+					}
 					cronreturns('All Deliveries updated!', 'success');
 				}
 			} else {
