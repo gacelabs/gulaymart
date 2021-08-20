@@ -603,7 +603,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				break;
 			}
 			// console.log(uiParent);
-			console.log(oSegments, oResponse.panel, sMode, bIsRemoveUI);
+			// console.log(oSegments, oResponse.panel, sMode, bIsRemoveUI);
 			if (uiParent.length) {
 				var oArr = [];
 				// console.log(oArr);
