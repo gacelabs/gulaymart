@@ -144,17 +144,27 @@ var fulfillmentsRunDomReady = function() {
 		var id = $(this).data('merge_id');
 		if (id) {
 			var arFulfillments = [];
-			$('[data-merge-id="'+id+'"]').find('[js-element="selectItems"]').each(function(i, elem) {
-				var oData = $(elem).find('[js-event="actionSelect"]').data();
-				if (oData != undefined) {
-					oData.status = $(elem).find('[js-event="actionSelect"]').val();
-					oData.reason = $(elem).find('[js-event="reasonSelect"]').val();
-					arFulfillments.push(oData);
+			// console.log(arFulfillments);
+			var wait = new Promise((resolve, reject) => {
+				var oArray = $('[data-merge-id="'+id+'"]').find('[js-element="selectItems"]');
+				oArray.each(function(i, elem) {
+					var oData = $(elem).find('[js-event="actionSelect"]').data();
+					if (oData != undefined) {
+						oData.status = parseInt($(elem).find('[js-event="actionSelect"]').val());
+						oData.reason = $(elem).find('[js-event="reasonSelect"]').val();
+						arFulfillments.push(oData);
+					}
+					if (i === oArray.length -1) resolve();
+				});
+			}).then(() => {
+				// console.log(arFulfillments);
+				if (arFulfillments.length) {
+					console.log({merge_id: id, data: arFulfillments});
+					$('[data-merge-id="'+id+'"]').find('a,select.button,input:submit,input:button,input:text')
+						.addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
+					simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), true, true);
 				}
 			});
-			// console.log({merge_id: id, data: arFulfillments});
-			$('[data-merge-id="'+id+'"]').find('a,select.button,input:submit,input:button,input:text').addClass('stop').prop('disabled', true).attr('disabled', 'disabled');
-			simpleAjax('fulfillment/ready/', {merge_id: id, data: arFulfillments}, $(this), true, true);
 		}
 	});
 }

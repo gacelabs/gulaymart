@@ -143,7 +143,7 @@ class Fulfillment extends My_Controller {
 				if ($order_details) {
 					/*modify the status of the product*/
 					foreach ($post['data'] as $key => $row) {
-						if ($row['status'] == 5) $cancelled[] = $row['basket_id'];
+						if ($row['status'] == GM_CANCELLED_STATUS) $cancelled[] = $row['basket_id'];
 
 						foreach ($order_details as $index => $detail) {
 							if ($detail['product_id'] == $row['product_id']) {
