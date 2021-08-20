@@ -29,14 +29,6 @@ $(document).ready(function() {
 		$(this).toggleClass('active');
 		$('[js-event="navbarFarmMenuContainer"]').toggleClass('active');
 	});
-	$(document.body).bind('click', function(e) {
-		e.stopPropagation();
-		if ($('[js-event="navbarFarmMenuContainer"]').hasClass('active')) {
-			setTimeout(function() {
-				$('[js-event="farmMenuTrigger"]').click();
-			}, 90);
-		}
-	});
 
 	$('form.sign-in-form').bind('submit', function(e) {
 		bLoginTriggered = true;
