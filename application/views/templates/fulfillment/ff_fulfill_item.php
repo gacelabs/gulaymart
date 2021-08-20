@@ -2,8 +2,8 @@
 	$initial_total = 0;
 	$status_array = [];
 ?>
-<div class="order-table-item" data-merge-id="<?php echo $orders['id'];?>">
-	<div class="order-grid-column order-labels">
+<div class="fulfillment-table-item" data-merge-id="<?php echo $orders['id'];?>">
+	<div class="fulfillment-grid-column fulfillment-labels">
 		<div class="text-left">
 			<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($orders['updated']));?></i></small></p>
 		</div>
@@ -22,7 +22,7 @@
 		</div>
 	</div>
 
-	<div class="order-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
+	<div class="fulfillment-item-list" js-data-count="<?php echo count($orders['order_details']);?>">
 		<div>
 			<?php 
 				$row_cnt = 0;
@@ -61,7 +61,7 @@
 					$status_array[] = $details['status'];
 					$cancelled_class = ' was-cancelled';
 				?>
-				<div class="order-grid-column order-item<?php if ($status_text != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
+				<div class="fulfillment-grid-column fulfillment-item<?php if ($status_text != 'cancelled'): ?><?php str_has_value_echo(GM_CANCELLED_STATUS, $details['status'], $cancelled_class);?><?php endif ?>" js-element="item-id-<?php echo $orders['id'];?>-<?php echo $product['id'];?>" data-basket-id="<?php echo $order['basket_id'];?>">
 					<div class="media">
 						<div class="media-left media-top">
 							<img class="media-object" width="50" height="50" src="<?php echo $photo_url;?>">
@@ -116,7 +116,7 @@
 			<?php endforeach ?>
 		</div>
 
-		<div class="order-deliver-note">
+		<div class="fulfillment-deliver-note">
 			<small class="elem-block">DELIVERY SCHEDULE:
 				<?php
 					if ($orders['order_type'] == GM_BUY_NOW) {
@@ -141,8 +141,8 @@
 		}
 	?>
 
-	<div class="order-grid-footer">
-		<div class="order-footer-farm text-left">
+	<div class="fulfillment-grid-footer">
+		<div class="fulfillment-footer-farm text-left">
 			<p class="zero-gaps"><small class="elem-block"><b>BUYER</b></small></p>
 			<p class="zero-gaps"><?php echo ucwords($buyer['fullname']);?></p>
 			<p class="zero-gaps">
@@ -155,7 +155,7 @@
 				<?php endif ?>
 			</p>
 		</div>
-		<div class="order-footer-payment text-left">
+		<div class="fulfillment-footer-payment text-left">
 			<p class="zero-gaps"><small class="elem-block"><b>PAYMENT METHOD</b></small></p>
 			<p class="zero-gaps">Cash On Delivery</p>
 			<p class="zero-gaps"></p>

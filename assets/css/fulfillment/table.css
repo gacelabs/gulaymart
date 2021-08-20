@@ -1,0 +1,108 @@
+.fulfillment-table-item {
+  margin-bottom: 20px;
+}
+.fulfillment-table-item:last-child {
+  margin-bottom: 0;
+}
+.fulfillment-grid-column {
+  display: grid;
+  grid-gap: 10px;
+}
+.fulfillment-labels {
+  background-color: #d0d0d0;
+  border: 1px solid #aaa;
+  padding: 7px 20px;
+}
+.fulfillment-grid-column.fulfillment-labels, .fulfillment-grid-column.fulfillment-item {
+  grid-template-columns: minmax(0, 1fr) 150px 150px 170px 50px;
+}
+.fulfillment-labels p {
+  color: #333;
+  margin: 5px 0 0;
+}
+.fulfillment-grid-column .fulfillment-remove-btn {
+  height: 25px;
+  width: 25px;
+}
+.fulfillment-item-list {
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  padding: 10px;
+}
+.fulfillment-item {
+  padding: 10px;
+}
+.fulfillment-item button.btn {
+  border-radius: 0;
+  outline: none !important;
+}
+.fulfillment-item .quantity {
+  margin-bottom: 5px;
+}
+.fulfillment-item select {
+  border-radius: 0;
+  box-shadow: none !important;
+  font-family: 'Roboto', sans-serif;
+  float: right;
+  height: 25px;
+  margin-bottom: 5px;
+  outline: none !important;
+  padding: 0px 5px;
+  width: auto;
+}
+.fulfillment-item input[type="date"] {
+  border-color: #2195f1;
+  border-radius: 0;
+  float: right;
+  height: 25px;
+  padding: 5px;
+  width: 145px;
+}
+.fulfillment-item:nth-child(odd) {
+  background-color: #fff;
+}
+.fulfillment-item:nth-child(even) {
+  background-color: #f8f8f8;
+}
+.fulfillment-grid-footer {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  padding: 10px 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+@media (max-width: 1024px) {
+  .fulfillment-grid-column.fulfillment-labels, .fulfillment-grid-column.fulfillment-item {
+    grid-template-columns: minmax(0, 1fr) 80px 90px 145px 25px;
+  }
+  .fulfillment-item input[type="date"] {
+    width: auto;
+  }
+}
+
+@media (max-width: 991px) {
+  .fulfillment-grid-column.fulfillment-labels, .fulfillment-grid-column.fulfillment-item {
+    grid-template-columns: minmax(0, 1fr) 80px 90px 145px 25px;
+  }
+  .fulfillment-item input[type="date"] {
+    width: auto;
+  }
+  .fulfillment-item .ellipsis-container {
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 767px) {
+  .fulfillment-item input[type="date"] {
+    width: 155px;
+  }
+  .fulfillment-grid-column .fulfillment-remove-btn {
+    height: 20px;
+    line-height: 1;
+    width: 20px;
+  }
+  .fulfillment-labels p {
+    margin: 2px 0 0;
+  }
+}

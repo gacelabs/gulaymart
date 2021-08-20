@@ -38,10 +38,10 @@
   float: right;
   vertical-align: middle;
 }
-.orders-container .order-grid-column.order-labels, .orders-container .order-grid-column.order-item {
+.fulfillment-container .fulfillment-grid-column.fulfillment-labels, .fulfillment-container .fulfillment-grid-column.fulfillment-item {
   grid-template-columns: minmax(0, 1fr) 150px 150px 50px;
 }
-.order-footer-total {
+.fulfillment-footer-total {
   text-align: right;
 }
 .item-final-total {
@@ -55,20 +55,20 @@
   }
 }
 @media (max-width: 991px) {
-  .orders-container .order-grid-column.order-labels {
+  .fulfillment-container .fulfillment-grid-column.fulfillment-labels {
     grid-template-columns: minmax(0, 1fr) 25px;
   }
-  .orders-container .order-grid-column.order-item {
+  .fulfillment-container .fulfillment-grid-column.fulfillment-item {
     display: block;
   }
-  .orders-container .order-grid-column.order-item .spaced-list {
+  .fulfillment-container .fulfillment-grid-column.fulfillment-item .spaced-list {
     display: block;
     text-align: right;
   }
-  .orders-container .order-grid-column.order-item {
+  .fulfillment-container .fulfillment-grid-column.fulfillment-item {
     display: block;
   }
-  .orders-container .order-grid-column.order-item .spaced-list>li {
+  .fulfillment-container .fulfillment-grid-column.fulfillment-item .spaced-list>li {
     display: inline-block;
   }
   .trans-navbar-grid {
@@ -76,7 +76,7 @@
   }
 }
 @media (max-width: 767px) {
-  .orders-container .col-xs-12 {
+  .fulfillment-container .col-xs-12 {
     padding-left: 0;
     padding-right: 0;
   }
@@ -94,16 +94,16 @@
   .trans-navbar-pill kbd {
     font-size: 8px;
   }
-  .orders-container .order-grid-footer {
+  .fulfillment-container .fulfillment-grid-footer {
     display: block;
     padding: 10px;
   }
-  .order-footer-total {
+  .fulfillment-footer-total {
     display: grid;
     grid-template-columns: 22px 95px auto;
     grid-gap: 10px;
   }
-  .order-footer-farm, .order-footer-payment {
+  .fulfillment-footer-farm, .fulfillment-footer-payment {
     margin-bottom: 15px;
   }
 }
