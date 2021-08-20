@@ -350,13 +350,15 @@ class Basket extends My_Controller {
 	public function place_order()
 	{
 		$place_order_session = $this->session->userdata('place_order_session');
+		/*unset it, run once only*/
+		$this->session->unset_userdata('place_order_session');
+		sleep(3);
 		// debug($place_order_session, 'stop');
 		$place_order = $basket_ids = $all_basket_ids = $farm_location_ids = $seller_ids = $order_ids = false;
 		$final_total = 0;
 		if ($place_order_session) {
 			$place_order = $farm_location_ids = $seller_ids = $order_ids = [];
 			$timestamp = strtotime(date('Y-m-d H:i:s'));
-
 			foreach ($place_order_session as $farm_location_id => $session) {
 				$place_order[$farm_location_id]['basket_ids'] = [];
 
@@ -467,7 +469,6 @@ class Basket extends My_Controller {
 			// debug($place_order, $all_basket_ids, 'stop');
 			foreach ($all_basket_ids as $id) $this->baskets->save(['status' => GM_PLACED_STATUS], ['id' => $id]);
 			foreach ($farm_location_ids as $location_id) $this->session->unset_userdata('checkout_pricing_'.$location_id);
-			$this->session->unset_userdata('place_order_session');
 			$this->session->set_userdata('typage_session', $order_ids);
 
 			$this->set_response('success', 'Orders have been Placed!', false, 'orders/thank-you/');

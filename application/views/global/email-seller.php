@@ -213,7 +213,7 @@
               <tr>
                <td style="overflow-wrap: break-word; word-break: break-word; padding: 40px 40px 30px; font-family: 'Lato', sans-serif;" align="left">
                 <div style="line-height: 140%; text-align: center; word-wrap: break-word;">
-                 <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Hello <?php echo ucwords($data['name']);?>! You've got order(s) in <?php echo $action;?>!</span></p>
+                 <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Hello <?php echo ucwords($data['name']);?>! You've got order(s) <?php echo $action;?>!</span></p>
                 </div>
                </td>
               </tr>

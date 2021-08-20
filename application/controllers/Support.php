@@ -65,13 +65,15 @@ class Support extends MY_Controller {
 				$results['action'] = $post['action'];
 				$results['for'] = $post['for'];
 				$results['status'] = $post['status'];
-				$results['data'] = ['name' => 'There'];
 				if ($post['for'] == 'seller') {
 					$results['data'] = json_decode(base64_decode($results['seller']), true);
 				}
 				if ($post['for'] == 'buyer') {
 					$results['data'] = json_decode(base64_decode($results['buyer']), true);
 					$results['data']['name'] = $results['data']['fullname'];
+				}
+				if (isset($results['data']) AND (isset($results['data']['name']) AND strlen(trim($results['data']['name'])) == 0)) {
+					$results['data'] = ['name' => 'There'];
 				}
 				// debug($results, 'stop');
 				$this->load->view('global/email-seller', $results);
