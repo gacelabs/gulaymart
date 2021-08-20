@@ -245,10 +245,18 @@ class Basket extends My_Controller {
 		}
 	}
 
-	public function checkout($base64_basket_ids=false, $is_test=0)
+	public function checkout($base64_basket_ids=false, $multi=0)
 	{
 		if ($base64_basket_ids) {
 			$ids = json_decode(base64_decode($base64_basket_ids), true);
+			if (empty($ids)) $ids = [0]; 
+			$baskets = $this->baskets->get_in(['status' => [GM_VERIFIED_SCHED, GM_VERIFIED_NOW]]);
+			if ($baskets AND $multi == 0) {
+				$base64_basket_ids = $this->gm_db->columns('id', $baskets);
+				$new_ids = array_unique(array_merge($ids, $base64_basket_ids));
+				$ids = array_values($new_ids);
+				redirect(base_url('basket/checkout/'.(base64_encode(json_encode($ids))).'/1'));
+			}
 			// debug(array_unique($ids), 'stop');
 			$where = ['id' => array_unique($ids), 'status' => 1];
 			// $baskets = $this->baskets->get_in($where);
@@ -335,7 +343,7 @@ class Basket extends My_Controller {
 				],
 			]);
 		} else {
-			$this->set_response('info', 'No more Orders to Checkout, Shop more!', false, 'marketplace/');
+			$this->set_response('info', 'No more Orders to Checkout!', false, 'basket/');
 		}
 	}
 

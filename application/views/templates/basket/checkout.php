@@ -38,7 +38,7 @@
 					<div class="price-summary-body">
 						<form action="basket/place_order" method="post">
 							<div class="price-summary-top hidden-xs">
-								<button class="btn btn-block btn-cta"><b>PLACE ORDER NOW<i class="fa fa-chevron-right icon-right"></i></b></button>
+								<button type="submit" class="btn btn-block btn-cta"><b>PLACE ORDER NOW<i class="fa fa-chevron-right icon-right"></i></b></button>
 							</div>
 							<div class="price-summary-middle">
 								<ul class="spaced-list between" style="margin-bottom:5px;">
@@ -107,7 +107,7 @@
 							</div>
 							<div class="cta-bottom-container">
 								<small class="price-tally-pull-up hidden-lg hidden-md hidden-sm" js-event="priceTallyPullUp"><i class="fa fa-angle-right"></i></small>
-								<button class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo format_number($final_total);?></b></button>
+								<button type="submit" class="btn btn-block btn-lg btn-cta"><b>PLACE ORDER <span style="font-family: sans-serif;">&#x20b1;</span> <?php echo format_number($final_total);?></b></button>
 							</div>
 						</form>
 					</div>
