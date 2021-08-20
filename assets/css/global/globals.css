@@ -373,3 +373,6 @@ a.stop {
 	background-color: #fff;
 	color: #f35151;
 }
+kbd.no-count {
+  display: none !important;
+}
