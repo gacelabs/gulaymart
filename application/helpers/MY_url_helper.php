@@ -709,6 +709,7 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 		$latlng = $ci->latlng;
 	} else {
 		$latlng = unserialize($latlng);
+		// debug($latlng, $ci->latlng, 'stop');
 	}
 	// debug($category_ids, 'stop');
 	if ($ci->input->is_ajax_request()) {
@@ -736,6 +737,15 @@ function marketplace_data($category_ids=false, $not_ids=false, $has_ids=false, $
 		'nearby_farms' => nearby_farms($latlng),
 		'keywords' => $keywords,
 	];
+}
+
+function sort_by_x($array=false, $field='id', $direction=SORT_ASC)
+{
+	if ($array) {
+		$sort = array_column($array, $field);
+		array_multisort($sort, $direction, $array);
+	}
+	return $array;
 }
 
 function validate_recaptcha($CI_POST=false)

@@ -200,12 +200,12 @@ $(document).ready(function() {
 		switch ($.trim(sFlush).toLowerCase()) {
 			case 'cache':
 				history.replaceState({}, '', '/');
-				window.location.reload(true);
+				reloadState();
 			break;
 		}
 	}
 	
-	if (gmgc && oSegments[2] != 'view_invoice') window.location.reload(true);
+	if (gmgc && oSegments[2] != 'view_invoice') reloadState();
 });
 
 var runSwiper = function() {

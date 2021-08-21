@@ -30,36 +30,6 @@ $(document).ready(function() {
 		$('[js-event="navbarFarmMenuContainer"]').toggleClass('active');
 	});
 
-	$('form.sign-in-form').bind('submit', function(e) {
-		bLoginTriggered = true;
-	});
-
-	if ($('[has-basket-session="1"]').length) {
-		console.log('has basket orders');
-		// runAlertBox({type:'info', message: 'has basket orders!', unclose: true});
-	}
-
-	/*check FB signout process*/
-	if ($('a.sign-out-process').length) {
-		/*$('a.sign-out-process').bind('click', function(e) {
-			e.preventDefault(); e.returnValue = false;
-			var oThis = $(e.target);
-			if (oThis.prop('tagName') != 'A') oThis = oThis.parent('a');
-			var href = oThis.attr('href');
-			FB.getLoginStatus(function(response) {
-				if (response.status == 'connected') {
-					FB.logout(function(fbresponse) {
-						fbstatus = fbresponse.status;
-						window.location = href;
-					});
-				} else {
-					fbstatus = 'unknown';
-					window.location = href;
-				}
-			});
-		});*/
-	}
-
 	if ($('.g-recaptcha').length) downloadJSAtOnload();
 
 	if ($('.toggle-password').length) {
@@ -81,6 +51,10 @@ window.onpopstate = function(e) {
 	if (mobileAndTabletCheck()) {
 		if (e.target.location.hash != '#m' && bLoginTriggered == false) {
 			if ($('.modal').length) $('.modal').modal('hide');
+		} else if (bLoginTriggered) {
+			setTimeout(function() {
+				window.location.reload(true);
+			}, 1);
 		}
 	}
 };
@@ -117,6 +91,7 @@ function checkCookie(cname) {
 }
 
 function modalCallbacks() {
+	if (window.location.hash == '#m') window.history.replaceState({}, document.title, '/');
 	$('div.modal').on('show.bs.modal', function(e) {
 		if (mobileAndTabletCheck()) window.location.hash = 'm';
 		switch (e.target.id) {
@@ -174,7 +149,7 @@ function modalCallbacks() {
 							geocoder.geocode({
 								latLng: latlng
 							}, function(results, status) {
-								// console.log(results);
+								console.log(results);
 								if (status == google.maps.GeocoderStatus.OK) {
 									if (results[1]) {
 										var arVal = [];
@@ -197,7 +172,12 @@ function modalCallbacks() {
 										if (city) {
 											$('#check-place').prop('value', city).val(city);
 											// console.log("City: " + city, arVal);
-											simpleAjax('api/fetch_coordinates', {city: city});
+											var oDataLatLng = {
+												lat: results[0].geometry.location.lat(),
+												lng: results[0].geometry.location.lng(),
+												city: city,
+											};
+											simpleAjax('api/fetch_coordinates', oDataLatLng);
 										}
 									}
 								}
@@ -210,17 +190,22 @@ function modalCallbacks() {
 							execLocation(place.geometry.location);
 						});
 
-						if (mobileAndTabletCheck()) {
-							$('#my-curr-loc').tooltip().focus();
-							$('#my-curr-loc').off('click').on('click', function() {
-								execLocation(oLatLong);
-							});
-						}
+						var oGeoLatLong = oLatLong;
+						if (oUser != false) oGeoLatLong = {lat: oUser.lat, lng: oUser.lng};
+						$('#my-curr-loc').tooltip().focus();
+						$('#my-curr-loc').off('click').on('click', function() {
+							execLocation(oGeoLatLong);
+						});
 					}
 				}, 1000);
 			break;
 			case 'login_modal':
 				$('.ask-sign-in').click();
+				$('form.sign-in-form').bind('submit', function(e) {
+					if ($(this).find('.error').length == 0) {
+						bLoginTriggered = true;
+					}
+				});
 			break;
 			case 'reply_modal':
 				var oReply = JSON.parse($(e.relatedTarget).attr('data-reply'));
@@ -272,7 +257,8 @@ function modalCallbacks() {
 			break;
 		}
 	}).on('hide.bs.modal', function(e) {
-		console.log(e);
+		// console.log(e);
+		if (window.location.hash == '#m') window.history.replaceState({}, document.title, '/');
 		switch (e.target.id) {
 			case 'farm_location_modal':
 				$(e.target).find('form input[name="loc_input"]').remove();
@@ -359,7 +345,7 @@ var reloadState = function(data) {
 			}
 		});*/
 		window.location.reload(true);
-	}, 2000);
+	}, 300);
 }
 
 // Add a script element as a child of the body

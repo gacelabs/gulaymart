@@ -335,7 +335,7 @@
 						<div class="new-veggy-status-container">
 							<?php
 							$status = 'None';
-							if (isset($data['product']) AND (isset($data['product']['activity']) AND $data['product']['activity'])) {
+							if (isset($data['product'])) {
 								$status = ($data['product']['activity'] == GM_ITEM_DRAFT ? 'For review' : ($data['product']['activity'] == GM_ITEM_REJECTED ? 'Unpublished' : ($data['product']['activity'] == GM_ITEM_DELETED ? 'Deleted' : 'Published')));
 							}
 							?>

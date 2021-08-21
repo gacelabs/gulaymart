@@ -1277,7 +1277,7 @@ function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH')
 			$latlng = implode(',', $data);
 			$url = "https://maps.google.com/maps/api/geocode/json?key=".GOOGLEMAP_KEY."&latlng=".$latlng."&sensor=".($sensor ? 'true' : 'false')."&region=".$region.'&alternatives=true';
 		}
-		// debug($url, 'stop');
+		// debug($url, $data, 'stop');
 		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1295,7 +1295,7 @@ function get_coordinates($data=false, $is_address=true, $sensor=0, $region='PH')
 				$coordinates = $googlemap->geometry->location;
 				return $coordinates;
 			} else {
-				return isset($response->results[1]) ? $response->results[1] : $response->results[0];
+				return isset($response->results[0]) ? $response->results[0] : false;
 			}
 		}
 	}
@@ -1417,7 +1417,7 @@ function nearby_farms($data=false, $user_id=false)
 		}
 	}
 	// debug($farms, 'stop');
-	return $farms;
+	return sort_by_x($farms, 'durationval');
 }
 
 function get_farms_by_distance($farms, $row, $driving_distance, $user_id, $compare_1, $compare_2)
@@ -1488,7 +1488,7 @@ function nearby_veggies($data=false, $conditions=false, $user_id=false)
 		}
 	}
 	// debug($veggies, 'stop');
-	return $veggies;
+	return sort_by_x($veggies, 'durationval');
 }
 
 function nearby_products($data=false, $conditions=false, $user_id=false, $farm_location_id=false, $bypass=false)
@@ -1537,7 +1537,7 @@ function nearby_products($data=false, $conditions=false, $user_id=false, $farm_l
 		}
 	}
 	// debug($products, 'stop');
-	return $products;
+	return sort_by_x($products, 'durationval');
 }
 
 function get_items_by_distance($items, $row, $driving_distance, $user_id, $compare_1, $compare_2, $limit=false, $conditions=false, $bypass=false)
@@ -1918,9 +1918,9 @@ function sort_by_date($array=false)
 	if ($array) {
 		// Comparison function
 		function date_compare($element1, $element2) {
-			if (isset($element1['added']) AND isset($element2['added'])) {
-				$datetime1 = strtotime($element1['added']);
-				$datetime2 = strtotime($element2['added']);
+			if (isset($element1['updated']) AND isset($element2['updated'])) {
+				$datetime1 = strtotime($element1['updated']);
+				$datetime2 = strtotime($element2['updated']);
 				return $datetime2 - $datetime1;
 			} else {
 				return false;
