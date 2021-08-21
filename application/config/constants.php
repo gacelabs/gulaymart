@@ -91,7 +91,7 @@ defined('FBTOKEN') OR define('FBTOKEN', '298098848531584|0aa86567bb40e83406930b6
 
 defined('APP_NAME') OR define('APP_NAME', 'GulayMart');
 defined('APP_DESCRIPTION') OR define('APP_DESCRIPTION', 'GulayMart an Online Supermarket near you.');
-defined('APP_VERSION') OR define('APP_VERSION', '3.9.16');
+defined('APP_VERSION') OR define('APP_VERSION', '3.9.19');
 
 /*IMPORTANT PASSSWORDS*/
 defined('GACELABS_SUPER_KEY') OR define('GACELABS_SUPER_KEY', '&@c3L4b$-5uP3R-k3y'); // also the ssh root password
