@@ -49,7 +49,7 @@ class Farm extends MY_Controller {
 	public function new_veggy()
 	{
 		$post = $this->input->post() ?: $this->input->get();
-		if ($post) {
+		if ($post AND isset($post['pos'])) {
 			$message = 'Sorry product invalid values, request failed!';
 			$successFunction = 'setProductScore';
 			// debug($post, 'stop');

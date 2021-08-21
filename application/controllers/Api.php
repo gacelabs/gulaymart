@@ -193,12 +193,6 @@ class Api extends MY_Controller {
 			$coordinates = get_coordinates($post);
 			// debug($coordinates, 'stop');
 			if ($coordinates) {
-				/*if ($this->accounts->has_session) {
-					$this->accounts->refetch();
-				} else {
-					$this->latlng = (array) $coordinates;
-				}*/
-				// $this->session->set_userdata('prev_latlng', serialize($this->latlng));
 				set_cookie('prev_latlng', serialize((array) $coordinates), 7776000); // 90 days
 				$city = remove_multi_space(str_replace('city of', '', strtolower($post['city'])), true);
 				$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);

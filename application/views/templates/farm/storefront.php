@@ -1,10 +1,10 @@
 <div id="dashboard_panel_right">
 
-	<?php $this->view('global/mobile_note'); ?>
+	<?php // $this->view('global/mobile_note'); ?>
 
-	<div class="row hidden-xs" id="storefront">
+	<div class="row" id="storefront">
 		<?php if ($current_profile AND (isset($current_profile['is_agreed_terms']) AND !$current_profile['is_agreed_terms'])): ?>
-			<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
+			<div class="col-lg-12 col-md-12 col-sm-12">
 				<div class="center-panel-md">
 					<div class="dashboard-panel">
 						<div class="dashboard-panel-top">
@@ -21,13 +21,13 @@
 			</div>
 		<?php else: ?>
 			<?php if ($this->farms AND empty($this->products->count())): ?>
-				<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs">
+				<div class="col-lg-12 col-md-12 col-sm-12">
 					<h4 class="zero-gaps">Add a new product <a href="farm/my-veggies" class="btn btn-contrast">My Veggies</a></h4>
 					<hr class="carved">
 				</div>
 			<?php endif ?>
 
-			<div class="col-lg-5 col-md-5 col-sm-12 hidden-xs" id="storefront_customs_parent">
+			<div class="col-lg-5 col-md-5 col-sm-12" id="storefront_customs_parent">
 				<div class="dashboard-panel theme">
 					<form action="farm/storefront" method="post" class="form-validate storefront-forms" data-ajax="1">
 						<input type="hidden" class="farm_id" name="user_farms[id]" value="<?php isset_echo($data['farms'], 'id', 0);?>">
@@ -46,10 +46,10 @@
 									<?php endif ?>
 								</li>
 								<?php if (isset($data['farms']) AND $data['farms']): ?>
-									<?php if (count($data['farm_locations']) > 1): ?>
-										<li class="text-right">
+									<li class="text-right">
+										<?php if (count($data['farm_locations']) > 1): ?>
 											<div class="btn-group">
-												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i>&nbsp;View Stores&nbsp;&nbsp;<span class="caret"></span>
+												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i><span class="hidden-xs">View Stores</span><span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu">
 													<?php foreach ($data['farm_locations'] as $location): ?>
@@ -61,14 +61,11 @@
 													<?php endforeach ?>
 												</ul>
 											</div>
-											<button type="submit" class="btn btn-contrast">Update</button>
-										</li>
-									<?php else: ?>
-										<li class="text-right">
-											<a class="text-link btn btn-default icon-left" id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $data['farms']['id'];?>"<?php endif ?> href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i> View Store</a>
-											<button type="submit" class="btn btn-contrast">Update</button>
-										</li>
-									<?php endif ?>
+										<?php else: ?>
+											<a class="text-link btn btn-default icon-left" id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $data['farms']['id'];?>"<?php endif ?> href="<?php storefront_url($data['farms'], true);?>"><i class="fa fa-external-link-square"></i><span class="hidden-xs"> View Store</span></a>
+										<?php endif ?>
+										<button type="submit" class="btn btn-success">Update</button>
+									</li>
 								<?php else: ?>
 									<li><button type="submit" class="btn btn-contrast">Create</button></li>
 								<?php endif ?>
@@ -282,7 +279,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-7 col-md-7 col-sm-12 hidden-xs">
+			<div class="col-lg-7 col-md-7 col-sm-12">
 				<div class="cover_image" id="storefront_page_container">
 					<div class="storefront-top">
 						<div class="storefront-img-bg" style="background-image: url(<?php echo(!empty($data['farms']['cover_pic']) ? $data['farms']['cover_pic'] : "assets/images/storefront-top.jpg"); ?>);">
@@ -301,8 +298,8 @@
 					<div class="storefront-middle">
 						<ul class="spaced-list around" id="storefront_navbar">
 							<li class="sf-navbar-btn active">PRODUCTS</a></li>
-							<li class="sf-navbar-btn">STORIES</a></li>
-							<li class="sf-navbar-btn">GALLERY</a></li>
+							<!-- <li class="sf-navbar-btn">STORIES</a></li> -->
+							<!-- <li class="sf-navbar-btn">GALLERY</a></li> -->
 							<li class="sf-navbar-btn">ABOUT</a></li>
 						</ul>
 

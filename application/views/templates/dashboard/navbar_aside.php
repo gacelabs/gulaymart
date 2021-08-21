@@ -50,7 +50,7 @@
 				?>
 			</a>
 		</div>
-		<?php if (!$this->farms AND !$this->products->count()): ?>
+		<?php if (!$this->farms OR !$this->products->count()): ?>
 			<div class="aside-nav-child">
 				<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
 					<i class="fa fa-comment-o"></i>
@@ -60,7 +60,7 @@
 						?>
 					</span>
 					<?php
-						echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm hidden-xs".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
+						echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
 					?>
 				</a>
 			</div>
@@ -73,20 +73,20 @@
 		</div>
 		<div id="navbar_farm_menu_container" js-event="navbarFarmMenuContainer">
 			<?php if ($this->farms): ?>
-				<div class="aside-nav-child">
-					<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
-						<i class="fa fa-comment-o"></i>
-						<span>Messages
-							<?php 
-								echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
-							?>
-						</span>
-						<?php
-							echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm hidden-xs".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
-						?>
-					</a>
-				</div>
 				<?php if ($this->products->count()): ?>
+					<div class="aside-nav-child">
+						<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+							<i class="fa fa-comment-o"></i>
+							<span>Messages
+								<?php 
+									echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
+								?>
+							</span>
+							<?php
+								echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm hidden-xs".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
+							?>
+						</a>
+					</div>
 					<!-- <div class="aside-nav-child">
 						<a href="farm/sales/" class="aside-nav-item <?php in_array_echo("sales", $middle['body_class'], "active");?>">
 							<i class="fa fa-tachometer"></i><span>Sales</span>
@@ -107,7 +107,7 @@
 				</div>
 			<?php endif ?>
 			<div class="aside-nav-child">
-				<a href="farm/storefront" class="aside-nav-item hidden-xs <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
+				<a href="farm/storefront" class="aside-nav-item <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
 					<i class="fa fa-flag-o"></i><span>Storefront <?php if(empty($this->farms) AND $current_profile['shippings']) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Sell & Earn!</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";} ?></span>
 				</a>
 			</div>

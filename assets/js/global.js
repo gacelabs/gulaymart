@@ -61,14 +61,26 @@ $(document).ready(function() {
 	}
 
 	if ($('.g-recaptcha').length) downloadJSAtOnload();
+
+	if ($('.toggle-password').length) {
+		$('.toggle-password').bind('click', function (e) {
+			var password = $(this).parent().find('input').get(0);
+			const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+			password.setAttribute('type', type);
+			$(this).removeClass('bi-eye bi-eye-slash');
+			if (type == 'text') {
+				$(this).addClass('bi-eye-slash');
+			} else {
+				$(this).addClass('bi-eye');
+			}
+		});
+	}
 });
 
 window.onpopstate = function(e) {
 	if (mobileAndTabletCheck()) {
-		if (e.target.location.hash != '#login' && bLoginTriggered == false) {
+		if (e.target.location.hash != '#m' && bLoginTriggered == false) {
 			if ($('.modal').length) $('.modal').modal('hide');
-		} else {
-			e.target.location.reload(true);
 		}
 	}
 };
@@ -105,10 +117,10 @@ function checkCookie(cname) {
 }
 
 function modalCallbacks() {
-	$('div.modal').on('show.bs.modal', function(e) { 
+	$('div.modal').on('show.bs.modal', function(e) {
+		if (mobileAndTabletCheck()) window.location.hash = 'm';
 		switch (e.target.id) {
 			case 'farm_location_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				// console.log($(e.relatedTarget));
 				var input = $('<input />', {type: 'hidden', name: 'loc_input', value: '#'+e.relatedTarget.id});
 				$(e.target).find('form').prepend(input);
@@ -134,7 +146,6 @@ function modalCallbacks() {
 				}
 			break;
 			case 'media_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				if ($(e.relatedTarget).data('change-ui').length) {
 					var value = $(e.relatedTarget).data('change-ui');
 					$(e.target).find('form').prepend($('<input />', {type: 'hidden', name: 'ui', value: value}));
@@ -143,14 +154,12 @@ function modalCallbacks() {
 				}
 			break;
 			case 'ff_invoice_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
 				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 			case 'check_loc_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				var input = $('#check-place').get(0);
 				// input.focus();
 				var i = setInterval(function() {
@@ -211,11 +220,9 @@ function modalCallbacks() {
 				}, 1000);
 			break;
 			case 'login_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				$('.ask-sign-in').click();
 			break;
 			case 'reply_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				var oReply = JSON.parse($(e.relatedTarget).attr('data-reply'));
 				var oFeedback = JSON.parse($(e.relatedTarget).attr('data-feedback'));
 				// console.log(oReply, oFeedback);
@@ -258,20 +265,19 @@ function modalCallbacks() {
 				}
 			break;
 			case 'ff_received_modal':
-				if (mobileAndTabletCheck()) window.location.hash = 'm';
 				// console.log($(e.relatedTarget).data('basket-merge-id'));
 				var merge_id = $(e.relatedTarget).data('basket-merge-id');
 				$(e.target).find('p[js-data="loader"]').removeClass('hide');
 				simpleAjax('api/set_invoice_html/invoice_middle_body', {table:'baskets_merge', data:{id: merge_id}, row: true, identifier:merge_id}, $(e.relatedTarget));
 			break;
 		}
-	}).on('hide.bs.modal', function(e) { 
+	}).on('hide.bs.modal', function(e) {
+		console.log(e);
 		switch (e.target.id) {
 			case 'farm_location_modal':
 				$(e.target).find('form input[name="loc_input"]').remove();
 			break;
 			case 'media_modal':
-				// console.log(e);
 				$(e.target).find('form input[name="ui"]').remove();
 				$(e.target).find('form input[name="col"]').remove();
 				
@@ -291,15 +297,19 @@ function modalCallbacks() {
 			break;
 			case 'login_modal':
 				setTimeout(function() {
-					$('.login-with-social').removeClass('hide');
-					$('.fb-login-panel').addClass('hide');
-					$('.fb-signing-in').addClass('hide');
-					$('.invalid-fb-email').addClass('hide');
+					$('#login_body').find('.login-with-social').removeClass('hide');
+					$('#login_body').find('.fb-login-panel').addClass('hide');
+					$('#login_body').find('.fb-signing-in').addClass('hide');
+					$('#login_body').find('.invalid-fb-email').addClass('hide');
 
-					$('.ask-sign-in').click();
-					$('[name="email_address"]').removeClass('error');
-					$('[name="email"]').removeClass('error');
-					$('[name="password"]').removeClass('error');
+					$('#login_body').find('.ask-sign-in').click();
+					$('#login_body').find('[name="email_address"]').removeClass('error');
+					$('#login_body').find('[name="email"]').removeClass('error');
+					$('#login_body').find('[name="password"]').removeClass('error').val('');
+					$('#login_body').find('[name="password"]').parents('form').find('.toggle-password').removeClass('invalid');
+					if ($('#login_body').find('[name="password"]').attr('type') === 'text') {
+						$('#login_body').find('[name="password"]').parents('form').find('.toggle-password').click();
+					}
 				}, 1000);
 			break;
 			case 'reply_modal':

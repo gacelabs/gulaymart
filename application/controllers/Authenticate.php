@@ -44,7 +44,8 @@ class Authenticate extends MY_Controller {
 					$to = $this->get_proper_redirect();
 				}
 			} else {
-				$to = '?error=Invalid credentials!';
+				unset($post['password']);
+				$to = '?error=Invalid credentials!&'.http_build_query($post);
 			}
 			// debug($post, $this->accounts->profile['is_profile_complete'], $is_ok, $to, 'stop');
 			$this->session->unset_userdata('referrer');
@@ -83,7 +84,8 @@ class Authenticate extends MY_Controller {
 				if ($this->accounts->has_session) {
 					redirect(base_url('profile/?error='.$return['message']));
 				} else {
-					redirect(base_url('register?error='.$return['message']));
+					unset($post['password']); unset($post['re_password']);
+					redirect(base_url('register?error='.$return['message'].'&'.http_build_query($post)));
 				}
 			}
 		} else {
@@ -285,7 +287,7 @@ class Authenticate extends MY_Controller {
 		$has_notifs = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => user('id')]);
 		// debug($this->session->userdata('referrer'), 'stop');
 		if ($this->farms AND $this->products->count()) {
-			$to = $this->session->userdata('referrer') ?: 'fulfillment/';
+			$to = $this->session->userdata('referrer') ?: 'fulfillment/placed/';
 		} elseif ($this->farms AND $this->products->count() == 0) {
 			$to = $this->session->userdata('referrer') ?: 'farm/my-veggies/?success=Add-in your veggies!';
 		} elseif ($has_notifs) {

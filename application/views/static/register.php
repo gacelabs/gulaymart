@@ -25,11 +25,13 @@
 					<div class="form-group">
 						<input type="email" class="form-control" name="email_address" placeholder="Email address" />
 					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" name="password" placeholder="Password" />
+					<div class="form-group" style="position: relative;">
+						<i class="bi bi-eye toggle-password"></i>
+						<input type="password" class="form-control password" name="password" id="reg-password" placeholder="Password" />
 					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" name="re_password" placeholder="Confirm" />
+					<div class="form-group" style="position: relative;">
+						<i class="bi bi-eye toggle-password"></i>
+						<input type="password" class="form-control password" name="re_password" id="reg-re-password" placeholder="Confirm" />
 					</div>
 					<div class="form-group">
 						<p id="character_challenge" class="zero-gaps hide text-danger text-center" style="font-size: x-small;">Password require atleast 8 letters, 1 numeric, 1 special character.</p>

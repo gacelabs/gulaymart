@@ -13,6 +13,8 @@ class Fulfillment extends My_Controller {
 		// debug($this->products->count(), 'stop');
 		if (empty($this->farms) AND $this->products->count() == 0) {
 			redirect(base_url('basket/'));
+		} elseif (!empty($this->farms) AND $this->products->count() == 0) {
+			redirect(base_url('farm/my-veggies/?success=Add-in your veggies!'));
 		}
 		$this->load->library('farmers');
 		// INITIALIZING TOKTOK OBJECT

@@ -54,6 +54,7 @@ var basketsRunDomReady = function() {
 		}
 	});
 
+	runMobileDateInput($('[js-element="schedule-value"][data-mobile="1"]'));
 	runQtyDefaults($('[js-event="qty"]'));
 
 	$('[js-event="removeBasketItemBtn"]').off('click').on('click', function(e) {
@@ -213,5 +214,18 @@ var runQtyDefaults = function(ui) {
 				}
 			}
 		});
+	});
+}
+
+var runMobileDateInput = function(ui) {
+	ui.unbind('blur input').bind('blur input', function(e) {
+		if ($(this).val() == '') {
+			$(this).attr({'type':'text'});
+		} else {
+			$('.close-jq-toast-single:visible').trigger('click');
+			$(this).removeClass('error');
+		}
+	}).bind('click', function(e) {
+		$(this).attr({'type':'date'});
 	});
 }

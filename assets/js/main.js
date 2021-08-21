@@ -73,6 +73,17 @@ $(document).ready(function() {
 			runAlertBox({type:'confirm', message: sConfirmMessage});
 			removeUrlParams();
 		} else if ($.trim(sErrorMessage).length) {
+			if (oSegments[1] == 'register' || oSegments.length == 0) {
+				var email_address = getParameterByName('email_address');
+				if (email_address != '') {
+					if (oSegments.length == 0) {
+						$('#global_navbar_btn_list li:first').trigger('click');
+					}
+					setTimeout(function() {
+						$('[name="email_address"]:visible').attr('value', email_address).val(email_address);
+					}, 300);
+				}
+			}
 			runAlertBox({type:'error', message: sErrorMessage});
 			removeUrlParams();
 		}
