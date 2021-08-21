@@ -267,11 +267,11 @@ var redirectNewProduct = function(obj) {
 		});
 	}
 
-	if ($('.order-status').length) {
+	if ($('.order-status').length && obj.activity != undefined) {
 		var status = 'For review';
 		switch (obj.activity) {
 			case '1':
-				status = 'Approved';
+				status = 'Published';
 			break;
 			case '2':
 				status = 'Rejected';
