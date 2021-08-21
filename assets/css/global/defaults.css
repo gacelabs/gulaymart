@@ -71,7 +71,7 @@ kbd {
 	border-radius: 0 !important;
 }
 .stop {
-	cursor: not-allowed;
+	cursor: wait !important;
 }
 .text-step-basic {
 	background-color: #fff;

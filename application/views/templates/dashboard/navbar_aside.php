@@ -9,7 +9,7 @@
 		</a>
 		<div class="navbar-aside-divider"><hr></div>
 		<?php if ($this->farms AND $this->products->count()): ?>
-		<div class="aside-nav-child hidden-xs">
+		<div class="aside-nav-child">
 			<a data-menu-nav="fulfillments" href="fulfillment/placed/" class="aside-nav-item <?php in_array_echo("fulfillment", $middle['body_class'], "active");?>">
 				<i class="fa fa-exchange"></i>
 				<span class="hidden-xs">Fulfillment 
@@ -50,19 +50,21 @@
 				?>
 			</a>
 		</div>
-		<div class="aside-nav-child">
-			<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
-				<i class="fa fa-comment-o"></i>
-				<span class="hidden-xs">Messages
-					<?php 
-						echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
+		<?php if (!$this->farms OR !$this->products->count()): ?>
+			<div class="aside-nav-child">
+				<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+					<i class="fa fa-comment-o"></i>
+					<span class="hidden-xs">Messages
+						<?php 
+							echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
+						?>
+					</span>
+					<?php
+						echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
 					?>
-				</span>
-				<?php
-					echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
-				?>
-			</a>
-		</div>
+				</a>
+			</div>
+		<?php endif ?>
 		<div class="navbar-aside-divider"><hr></div>
 		<div class="aside-nav-child hidden-lg hidden-md hidden-sm">
 			<a href="javascript:;" class="aside-nav-item" id="farm_menu_trigger" js-event="farmMenuTrigger">
@@ -72,6 +74,19 @@
 		<div id="navbar_farm_menu_container" js-event="navbarFarmMenuContainer">
 			<?php if ($this->farms): ?>
 				<?php if ($this->products->count()): ?>
+					<div class="aside-nav-child">
+						<a data-menu-nav="messages" href="orders/messages/" class="aside-nav-item <?php in_array_echo("messages", $middle['body_class'], "active");?>">
+							<i class="fa fa-comment-o"></i>
+							<span>Messages
+								<?php 
+									echo "<kbd id='nav-messages-count'".($this->message_count == false ? ' class="hide"' : '').">".$this->message_count."</kbd>";
+								?>
+							</span>
+							<?php
+								echo "<kbd class='nav-messages-count hidden-lg hidden-md hidden-sm hidden-xs".($this->message_count == false ? ' hide' : '')."'>".$this->message_count."</kbd>";
+							?>
+						</a>
+					</div>
 					<!-- <div class="aside-nav-child">
 						<a href="farm/sales/" class="aside-nav-item <?php in_array_echo("sales", $middle['body_class'], "active");?>">
 							<i class="fa fa-tachometer"></i><span>Sales</span>
@@ -79,7 +94,7 @@
 					</div> -->
 				<?php endif ?>
 				<div class="aside-nav-child">
-					<a href="farm/my-veggies/" class="aside-nav-item hidden-xs <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
+					<a href="farm/my-veggies/" class="aside-nav-item <?php in_array_echo("new-veggy", $middle['body_class'], "active");?>">
 						<i class="fa fa-pencil"></i><span>My Veggies <?php if(empty($this->products->count())) {echo "<i class='fa fa-circle text-danger'></i>";} ?></span>
 					</a>
 				</div>
@@ -92,7 +107,7 @@
 				</div>
 			<?php endif ?>
 			<div class="aside-nav-child">
-				<a href="farm/storefront" class="aside-nav-item hidden-xs <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
+				<a href="farm/storefront" class="aside-nav-item <?php in_array_echo("storefront", $middle['body_class'], "active");?>">
 					<i class="fa fa-flag-o"></i><span>Storefront <?php if(empty($this->farms) AND $current_profile['shippings']) {echo "<kbd class='hidden-md hidden-sm hidden-xs'>Sell & Earn!</kbd>"; echo "<i class='fa fa-circle hidden-lg text-danger'></i>";} ?></span>
 				</a>
 			</div>

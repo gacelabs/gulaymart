@@ -32,8 +32,15 @@
 								<div class="form-group">
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
-								<div class="form-group" style="margin-bottom: 5px;">
-									<input type="password" name="password" class="form-control" placeholder="Password">
+								<div class="form-group" style="margin-bottom: 5px; position: relative;">
+									<i class="bi bi-eye toggle-password"></i>
+									<input type="password" name="password" id="log-password" class="form-control password" placeholder="Password">
+								</div>
+								<div class="checkbox<?php if ($this->agent->is_mobile()): ?> hide<?php endif ?>">
+									<label class="pull-left remember-tick">
+										<input type="checkbox" name="remember_me"<?php if ($this->agent->is_mobile()): ?> checked<?php endif ?> />
+										<span>Remember me</span>
+									</label>
 								</div>
 								<div style="text-align: right;margin-bottom: 10px;">
 									<a href="javascript:;" class="resetpass-btn" style="font-size: 11px;">Forgot Password?</a>

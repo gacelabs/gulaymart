@@ -20,6 +20,9 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/toast.min.css'); ?>">
+	<?php if (!$current_profile): ?>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<?php endif ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/defaults.css'.$this->versioning); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/global/globals.css'.$this->versioning); ?>">
 

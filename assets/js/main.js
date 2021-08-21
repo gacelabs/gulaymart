@@ -73,6 +73,17 @@ $(document).ready(function() {
 			runAlertBox({type:'confirm', message: sConfirmMessage});
 			removeUrlParams();
 		} else if ($.trim(sErrorMessage).length) {
+			if (oSegments[1] == 'register' || oSegments.length == 0) {
+				var email_address = getParameterByName('email_address');
+				if (email_address != '') {
+					if (oSegments.length == 0) {
+						$('#global_navbar_btn_list li:first').trigger('click');
+					}
+					setTimeout(function() {
+						$('[name="email_address"]:visible').attr('value', email_address).val(email_address);
+					}, 300);
+				}
+			}
 			runAlertBox({type:'error', message: sErrorMessage});
 			removeUrlParams();
 		}
@@ -189,12 +200,12 @@ $(document).ready(function() {
 		switch ($.trim(sFlush).toLowerCase()) {
 			case 'cache':
 				history.replaceState({}, '', '/');
-				window.location.reload(true);
+				reloadState();
 			break;
 		}
 	}
 	
-	if (gmgc && oSegments[2] != 'view_invoice') window.location.reload(true);
+	if (gmgc && oSegments[2] != 'view_invoice') reloadState();
 });
 
 var runSwiper = function() {
@@ -596,7 +607,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			bIsRemoveUI = ($.inArray(oResponse.panel, Object.values(oSegments)) >= 0 && $.inArray(sMode, Object.values(oSegments)) < 0);
 			switch (oResponse.panel) {
 				case 'fulfillment':
-					uiParent = $('.ff-product-container [js-element="fulfill-panel"]');
+					uiParent = $('#dashboard_panel_right [js-element="fulfill-panel"]');
 				break;
 				case 'orders':
 					uiParent = $('#dashboard_panel_right [js-element="orders-panel"]');
@@ -647,7 +658,10 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
 						if (typeof ordersRunDomReady == 'function') ordersRunDomReady();
 						
-						if (uiParent.find('.order-table-item').length == 0) {
+						var sClass = '.fulfillment-table-item';
+						if (oResponse.panel == 'orders') sClass = '.order-table-item';
+						
+						if (uiParent.find(sClass).length == 0) {
 							uiParent.find('.no-records-ui').removeClass('hide');
 						} else {
 							uiParent.find('.no-records-ui').addClass('hide');

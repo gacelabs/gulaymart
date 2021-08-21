@@ -13,6 +13,8 @@ class Fulfillment extends My_Controller {
 		// debug($this->products->count(), 'stop');
 		if (empty($this->farms) AND $this->products->count() == 0) {
 			redirect(base_url('basket/'));
+		} elseif (!empty($this->farms) AND $this->products->count() == 0) {
+			redirect(base_url('farm/my-veggies/?success=Add-in your veggies!'));
 		}
 		$this->load->library('farmers');
 		// INITIALIZING TOKTOK OBJECT
@@ -54,7 +56,7 @@ class Fulfillment extends My_Controller {
 		} else {
 			$this->render_page([
 				'top' => [
-					'css' => ['dashboard/main', 'fulfillment/main', 'global/zigzag', 'modal/invoice-modal', 'global/order-table', 'print.min']
+					'css' => ['dashboard/main', 'fulfillment/index', 'global/zigzag', 'modal/invoice-modal', 'fulfillment/table', 'print.min']
 				],
 				'middle' => [
 					'body_class' => ['dashboard', 'fulfillment', 'ff-'.$status],
@@ -143,7 +145,7 @@ class Fulfillment extends My_Controller {
 				if ($order_details) {
 					/*modify the status of the product*/
 					foreach ($post['data'] as $key => $row) {
-						if ($row['status'] == 5) $cancelled[] = $row['basket_id'];
+						if ($row['status'] == GM_CANCELLED_STATUS) $cancelled[] = $row['basket_id'];
 
 						foreach ($order_details as $index => $detail) {
 							if ($detail['product_id'] == $row['product_id']) {

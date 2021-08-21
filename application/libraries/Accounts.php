@@ -32,17 +32,20 @@ class Accounts {
 
 				$enter = FALSE;
 				if ($email_address_query->num_rows() > 0) {
-					if ($function == 'register') {
+					if ($function === 'register') {
 						$enter = $allowed = TRUE;
-					} elseif ($function == 'login') {
+					} elseif ($function === 'login') {
 						$enter = TRUE;
 					}
 				}
 				// debug($enter, 'stop');
 
 				if ($enter) {
-					$query = $this->class->db->get_where($table, $credits);
-					// debug($query->row_array(), 'stop');
+					$query = $this->class->db->get_where($table, [
+						'email_address' => $credits['email_address'], 
+						'password' => $credits['password']
+					]);
+					// debug($query->row_array(), $credits, 'stop');
 					if ($query->num_rows()) {
 						$allowed = TRUE;
 						$user = $query->row_array();
@@ -64,7 +67,7 @@ class Accounts {
 
 	public function register($post=FALSE, $redirect_url='', $table='users')
 	{
-		$allowed = FALSE; $user = FALSE;; $passed = TRUE; $msg = '';
+		$allowed = FALSE; $user = FALSE; $passed = TRUE; $msg = '';
 		if ($post) {
 			// debug($post);
 			if (isset($post['password']) AND isset($post['re_password'])) {
@@ -73,42 +76,44 @@ class Accounts {
 					$msg = 'Password mismatch!';
 				}
 			}
-			if (isset($post['email_address']) AND (isset($post['password']) AND strlen(trim($post['password'])) > 0)) {
-				$credits = ['email_address'=>$post['email_address'], 'password'=>$post['password']];
-				$return = $this->check_credits($credits, $table, __FUNCTION__);
-				// debug(isset($return['allowed']) AND $return['allowed'] == FALSE);
-				if ($passed) {
-					if (isset($return['allowed']) AND $return['allowed'] == FALSE) {
-						$post['password'] = md5($post['password']);
-						$query = $this->class->db->insert($table, $post);
-						$id = $this->class->db->insert_id();
-						// debug($id);
-						if ($id) {
-							$msg = '';
-							$allowed = TRUE;
-							$qry = $this->class->db->get_where($table, ['id' => $id]);
-							$user = $qry->row_array();
-							// debug($user);
-							unset($user['password']);
-							unset($user['re_password']);
-							$this->class->session->set_userdata('profile', $user);
-							$this->profile = $user;
-							$this->has_session = true;
+			if ($msg == '') {
+				if (isset($post['email_address']) AND (isset($post['password']) AND strlen(trim($post['password'])) > 0)) {
+					$credits = ['email_address'=>$post['email_address'], 'password'=>$post['password']];
+					$return = $this->check_credits($credits, $table, 'register');
+					// debug(isset($return['allowed']) AND $return['allowed'] == FALSE);
+					if ($passed) {
+						if (isset($return['allowed']) AND $return['allowed'] == FALSE) {
+							$post['password'] = md5($post['password']);
+							$query = $this->class->db->insert($table, $post);
+							$id = $this->class->db->insert_id();
+							// debug($id);
+							if ($id) {
+								$msg = '';
+								$allowed = TRUE;
+								$qry = $this->class->db->get_where($table, ['id' => $id]);
+								$user = $qry->row_array();
+								// debug($user);
+								unset($user['password']);
+								unset($user['re_password']);
+								$this->class->session->set_userdata('profile', $user);
+								$this->profile = $user;
+								$this->has_session = true;
+							}
+							if ($redirect_url != '') {
+								redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
+							}
+						} else {
+							$msg = '<p class="text-left">Account already exist! Please try Logging In...</p>';
 						}
-						if ($redirect_url != '') {
-							redirect(base_url($redirect_url == '/' ? '' : $redirect_url));
-						}
-					} else {
-						$msg = '<p class="text-left">Account already exist! Please try Logging In...</p>';
 					}
-				}
-			} else {
-				if (isset($post['email_address']) AND empty(trim($post['email_address']))) {
-					$msg = 'Email address is required!';
-				} elseif (isset($post['password']) AND empty(trim($post['password']))) {
-					$msg = 'Password is required!';
 				} else {
-					$msg = 'Email address and password are required!';
+					if (isset($post['email_address']) AND empty(trim($post['email_address']))) {
+						$msg = 'Email address is required!';
+					} elseif (isset($post['password']) AND empty(trim($post['password']))) {
+						$msg = 'Password is required!';
+					} else {
+						$msg = 'Email address and password are required!';
+					}
 				}
 			}
 		} else {
@@ -122,10 +127,15 @@ class Accounts {
 	{
 		if ($credits != FALSE AND is_array($credits)) {
 			/*user is logging in*/
-			$return = $this->check_credits($credits, $table, __FUNCTION__);
+			$return = $this->check_credits($credits, $table, 'login');
 			if (isset($return['allowed']) AND $return['allowed']) {
 				unset($return['profile']['password']);
 				unset($return['profile']['re_password']);
+				if (isset($credits['remember_me']) AND $credits['remember_me'] == 'on') {
+					set_cookie('remember', $return['profile']['id'], 7776000); // 90 days
+				} else {
+					delete_cookie('remember');
+				}
 				$this->class->session->set_userdata('profile', $return['profile']);
 				$this->has_session = true;
 				$this->profile = $return['profile'];
@@ -154,7 +164,11 @@ class Accounts {
 				if ($update_user) { /*but email already exists*/
 					$qry = $this->class->db->get_where('users', ['email_address' => $post['email']]);
 					$user = $qry->row_array();
-					$this->class->db->update('users', ['fb_id' => $post['id']], ['id' => $user['id']]);
+					if (empty($user['fb_id']) OR (isset($user['fb_id']) AND $user['fb_id'] == $post['id'])) {
+						$this->class->db->update('users', ['fb_id' => $post['id']], ['id' => $user['id']]);
+					} else {
+						$user = FALSE;
+					}
 				} else {
 					$this->class->db->insert('users', [
 						'fb_id' => $post['id'],
@@ -174,8 +188,8 @@ class Accounts {
 			if (isset($post['name'])) {
 				$fullname = explode(' ', trim($post['name']));
 				if (count($fullname)) {
-					$fbprofile = $this->class->db->get_where('user_profiles', ['user_id' => $user['id']]);
-					if ($fbprofile->num_rows() == 0) {
+					$fbprofile = $this->class->gm_db->get('user_profiles', ['user_id' => $user['id']], 'row');
+					if ($fbprofile AND (isset($fbprofile['firstname']) AND empty($fbprofile['firstname']))) {
 						$this->class->db->insert('user_profiles', [
 							'firstname' => trim($fullname[0]),
 							'lastname' => trim($fullname[count($fullname)-1]),
@@ -187,7 +201,10 @@ class Accounts {
 			// debug($user);
 			$this->has_session = true;
 			$this->profile = $user;
-			$this->refetch();
+			if (!empty($user)) {
+				set_cookie('remember', $user['id'], 7776000); // 90 days
+				$this->refetch();
+			}
 			return TRUE;
 		}
 		/*else the user is logged in or session active*/
@@ -201,6 +218,7 @@ class Accounts {
 		// $this->class->session->sess_destroy();
 		$this->profile = FALSE;
 		$this->has_session = FALSE;
+		delete_cookie('remember');
 		if (is_bool($redirect_url) AND $redirect_url == TRUE) {
 			return TRUE;
 		} else {

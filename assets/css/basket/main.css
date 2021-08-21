@@ -54,3 +54,8 @@
 		text-align: right;
 	}
 }
+input[js-element="schedule-value"][data-mobile="1"] {
+	width: 163px !important;
+	height: 33px !important;
+	padding: 2px !important;
+}

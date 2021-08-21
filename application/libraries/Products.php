@@ -408,8 +408,8 @@ class Products {
 							['lat' => $this->class->latlng['lat'], 'lng' => $this->class->latlng['lng']],
 							['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']],
 						];
-						$latlng = get_cookie('prev_latlng', true);
-						if (!empty($latlng)) $coordinates[0] = unserialize($latlng);
+						// $latlng = get_cookie('prev_latlng', true);
+						// if (!empty($latlng)) $coordinates[0] = unserialize($latlng);
 						$driving_distance = get_driving_distance($coordinates);
 						$farm_location['distance'] = $driving_distance['distance'];
 						$farm_location['duration'] = $driving_distance['duration'];

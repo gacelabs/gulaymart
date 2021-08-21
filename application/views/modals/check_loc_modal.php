@@ -35,10 +35,19 @@
 						<p class="zero-gaps">Use the box below to search the <b class="text-contrast">city</b> where you live in.</p>
 					</div>
 
-					<div class="input-group">
-						<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My City is</span>
-						<input type="text" class="form-control" id="check-place" placeholder="Enter your current city here..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
-					</div>
+					<?php if (!$current_profile): ?>
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon1" style="font-size:18px;">My City is</span>
+							<input type="text" class="form-control" id="check-place" placeholder="Enter your current city here..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+						</div>
+					<?php else: ?>
+						<div class="input-group">
+							<input type="text" class="form-control" id="check-place" placeholder="Enter your current city..." aria-describedby="basic-addon1" style="height:45px;font-size:18px;">
+							<span class="input-group-btn" style="font-size:18px;" data-toggle="tooltip" data-placement="top" title="Click for Current City">
+								<button class="btn btn-default btn-lg" id="my-curr-loc" type="button"><i class="fa fa-map-marker text-danger"></i></button>
+							</span>
+						</div>
+					<?php endif ?>
 				<?php endif ?>
 				<?php if (!$current_profile): ?>
 					<div class="text-center" style="margin-top:20px;background-color:#eaeaea;padding:15px;border-radius:4px;">

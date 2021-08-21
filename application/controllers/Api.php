@@ -190,20 +190,15 @@ class Api extends MY_Controller {
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		// debug($post, 'stop');
 		if ($post) {
-			$coordinates = get_coordinates($post);
+			$city = $post['city']; unset($post['city']);
+			$coordinates = get_coordinates($post, false);
 			// debug($coordinates, 'stop');
 			if ($coordinates) {
-				/*if ($this->accounts->has_session) {
-					$this->accounts->refetch();
-				} else {
-					$this->latlng = (array) $coordinates;
-				}*/
-				// $this->session->set_userdata('prev_latlng', serialize($this->latlng));
-				set_cookie('prev_latlng', serialize((array) $coordinates), 7776000); // 90 days
-				$city = remove_multi_space(str_replace('city of', '', strtolower($post['city'])), true);
+				set_cookie('prev_latlng', serialize((array) $coordinates->geometry->location), 7776000); // 90 days
+				$city = remove_multi_space(str_replace('city of', '', strtolower($city)), true);
 				$city = remove_multi_space(str_replace('city', '', strtolower($city)), true);
 				set_cookie('current_city', trim($city), 7776000); // 90 days
-				$this->set_response('success', 'You have set your residing address at '.ucwords($city).' City!', $coordinates, false, 'reloadState');
+				$this->set_response('success', 'You have set your residing address at '.ucwords($city).' City!', $coordinates->geometry->location, false, 'reloadState');
 			}
 		}
 		$this->set_response('error', 'City not existing!', $post);

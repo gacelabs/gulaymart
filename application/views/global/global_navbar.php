@@ -29,7 +29,7 @@
 				<ul id="global_navbar_btn_list">
 					<?php if ($current_profile) : ?>
 						<?php if (($this->farms AND $this->products->count())): ?>
-							<li id="nav_fulfillment" class="hidden-xs hidden-sm">
+							<li id="nav_fulfillment">
 								<a href="fulfillment/placed/"><i class="fa fa-exchange"></i></a>
 								<i data-home-nav="fulfillment" class="fa fa-circle text-success notif-dot<?php echo $this->fulfill_count == false ? ' hide' : '';?>"></i>
 							</li>

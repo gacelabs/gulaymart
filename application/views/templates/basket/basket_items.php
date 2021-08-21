@@ -40,7 +40,7 @@
 			<?php if ($order_type == 1): ?>
 				<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 			<?php else: ?>
-			<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+			<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>" placeholder="Enter schedule...">
 			<?php endif; ?>
 		</div>
 		<div class="order-footer-total">
@@ -50,7 +50,7 @@
 				<?php if ($order_type == 1): ?>
 					<p class="zero-gaps">Today <span class="text-gray"><i><?php compute_eta($item['duration']);?></i></span></p>
 				<?php else: ?>
-				<input type="date" js-element="schedule-value" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-31"; ?>">
+				<input type="<?php echo empty($schedule) ? 'text' : 'date';?>" js-element="schedule-value" data-mobile="1" value="<?php echo $schedule;?>" class="form-control" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y')."-12-t"; ?>" placeholder="Enter schedule...">
 				<?php endif; ?>
 			</div>
 			<div>

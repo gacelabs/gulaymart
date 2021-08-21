@@ -4,9 +4,11 @@ $(document).ready(function() {
 			if (fbstatus != 'connected') {
 				FB.login(function(response) {
 					// console.log(response);
+					fbstatus = response.status;
 					if (response.status === 'connected') {
 						runFbLogin();
 					} else{
+						bLoginTriggered = false;
 						runAlertBox({
 							type: 'info',
 							message: 'Unable to connect on <a href="//www.facebook.com">Facebook</a>', 
@@ -35,24 +37,40 @@ var runFbLogin = function(data) {
 	$('.fb-signing-in').removeClass('hide');
 	if (data != undefined) {
 		FB.getLoginStatus(function(response) {
+			fbstatus = response.status;
 			if (response.status == 'connected') {
+				bLoginTriggered = true;
 				data.fbauth = response;
 				simpleAjax('authenticate/fb_login', data);
 			} else {
-				fbstatus = 'unknown';
+				bLoginTriggered = false;
 				$('.fb-login-btn').trigger('click');
 			}
 		});
 	} else {
 		FB.getLoginStatus(function(response) {
+			fbstatus = response.status;
 			if (response.status == 'connected') {
+				bLoginTriggered = true;
 				var loginFunction = function(data) {
 					data.fbauth = response;
-					simpleAjax('authenticate/fb_login', data);
+					if (data.error != undefined) {
+						runAlertBox({
+							type: 'info',
+							message: data.error.message,
+							unclose: true,
+							callback: function() {
+								$('#login_modal').modal('hide');
+								$('.close-jq-toast-single:visible').trigger('click');
+							}
+						});
+					} else {
+						simpleAjax('authenticate/fb_login', data);
+					}
 				};
 				FB.api('/me?fields=id,email,name', loginFunction);
 			} else {
-				fbstatus = 'unknown';
+				bLoginTriggered = false;
 				$('.fb-login-btn').trigger('click');
 			}
 		});

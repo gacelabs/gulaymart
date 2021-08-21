@@ -49,7 +49,7 @@ class Farm extends MY_Controller {
 	public function new_veggy()
 	{
 		$post = $this->input->post() ?: $this->input->get();
-		if ($post) {
+		if ($post AND isset($post['pos'])) {
 			$message = 'Sorry product invalid values, request failed!';
 			$successFunction = 'setProductScore';
 			// debug($post, 'stop');
@@ -199,7 +199,7 @@ class Farm extends MY_Controller {
 								$message = 'Product Succesfully Added!';
 								$successFunction = 'redirectNewProduct';
 								/*email admins here*/
-								$content = '<p>'.$message.'</p><p>Check product <a href="'.base_url('farm/save-veggy/'.$product_id.'/').'">here</a>.</p>';
+								$content = '<p>'.$message.'</p><p>Check product <a href="'.base_url('farm/save-veggy/'.$product_id.'/').'" data-readit="1">here</a>.</p>';
 								send_gm_email($profile['id'], $content);
 								send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $product_id]);
 							}

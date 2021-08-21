@@ -272,7 +272,7 @@ body.check-loc-on #global_navbar>.container {
 	}
 	#global_search_form input, #global_search_form button {
 		height: 35px;
-		padding: 4px 12px;
+		padding: 4px 5px;
 	}
 	#global_search_form input {
 		padding-right: 0;
@@ -282,6 +282,7 @@ body.check-loc-on #global_navbar>.container {
 	}
 	body.is-logged #global_navbar_btn_list>li {
 		margin-left: 2px;
+		border-radius: 50px !important;
 	}
 	body.is-logged #global_navbar_btn_list>li, #global_navbar_btn_list>li, #global_navbar_logo {
 		border-radius: 4px;
@@ -299,7 +300,7 @@ body.check-loc-on #global_navbar>.container {
 		width: 35px;
 	}
 	body.is-logged #nav_basket {
-		margin-left: 8px !important;
+		/*margin-left: 8px !important;*/
 	}
 	body.is-logged #nav_basket, body.is-logged #nav_orders {
 		border-radius: 50px !important;
@@ -375,4 +376,31 @@ a.stop {
 }
 kbd.no-count {
   display: none !important;
+}
+i.toggle-password {
+	cursor: pointer;
+	position: absolute;
+	right: 8px;
+	top: 10px;
+}
+i.toggle-password.invalid {
+	color: #dc6765;
+}
+.login-form-body i.toggle-password {
+	top: 5px !important;
+}
+i.toggle-password + input.error {
+	background-image: none !important;
+}
+.remember-tick {
+	font-family: auto;
+	font-size: 13px;
+	letter-spacing: 0px;
+	cursor: pointer;
+}
+.remember-tick span {
+	vertical-align: middle;
+}
+.remember-tick span:hover {
+	text-decoration: underline;
 }

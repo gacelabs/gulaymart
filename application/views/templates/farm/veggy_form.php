@@ -1,7 +1,7 @@
 <div id="dashboard_panel_right">
-	<?php $this->view('global/mobile_note'); ?>
+	<?php // $this->view('global/mobile_note'); ?>
 
-		<div class="row hidden-xs" id="new_veggy">
+		<div class="row" id="new_veggy">
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
 				<?php if ($data['is_edit'] == false): ?>
 					<div class="dashboard-panel" id="score-detail-panel">
@@ -335,16 +335,16 @@
 						<div class="new-veggy-status-container">
 							<?php
 							$status = 'None';
-							if (isset($data['product']) AND (isset($data['product']['activity']) AND $data['product']['activity'])) {
+							if (isset($data['product'])) {
 								$status = ($data['product']['activity'] == GM_ITEM_DRAFT ? 'For review' : ($data['product']['activity'] == GM_ITEM_REJECTED ? 'Unpublished' : ($data['product']['activity'] == GM_ITEM_DELETED ? 'Deleted' : 'Published')));
 							}
 							?>
 							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>
 						</div>
 					</div>
-					<div class="dashboard-panel-footer visible-xs">
+					<!-- <div class="dashboard-panel-footer visible-xs">
 						<a href="farm/my-veggies" class="btn btn-default btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

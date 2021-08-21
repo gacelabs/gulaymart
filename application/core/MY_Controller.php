@@ -143,6 +143,10 @@ class MY_Controller extends CI_Controller {
 			if (!$this->input->is_ajax_request() AND $this->no_entry_for_signed_out) {
 				redirect(base_url());
 			}
+			$remember = get_cookie('remember', true);
+			if (!empty($remember)) {
+				$this->accounts->refetch($remember);
+			}
 		}
 	}
 
@@ -236,7 +240,7 @@ class MY_Controller extends CI_Controller {
 			$msg_count = $this->gm_db->count('messages', ['unread' => 1, 'to_id' => $this->accounts->profile['id']]);
 			$this->message_count = $msg_count;
 		}
-		// debug($products, 'stop');
+		// debug($this->message_count, 'stop');
 	}
 
 	public function render_page($rawdata=false, $variable=false)
