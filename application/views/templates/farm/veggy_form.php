@@ -314,6 +314,7 @@
 							<div class="product-desc-body">
 								<div class="product-title-container ellipsis-container">
 									<h1 class="zero-gaps order-title"><?php isset_echo($data['product'], 'name', 'No name');?></h1>
+									<p><?php isset_echo($data['product'], 'description', '');?></p>
 								</div>
 							</div>
 							<div class="product-list-footer">
