@@ -2059,7 +2059,7 @@ function get_activity_text($approved=false)
 	return $activity;
 }
 
-function time_elapsed_string($datetime, $full=false, $echo=true) {
+function time_elapsed_string($datetime, $echo=false, $full=false) {
 	$now = new DateTime;
 	$ago = new DateTime($datetime);
 	$diff = $now->diff($ago);

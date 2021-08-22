@@ -215,7 +215,9 @@ function modalCallbacks() {
 					// $('#buyer_photo').attr('src', oFeedback.profile.photo_url);
 					$('#buyer_fullname').text(oFeedback.profile.firstname+' '+oFeedback.profile.lastname);
 					// $('#buyer_date').text($.format.date(oFeedback.added, "- ddd, MMMM d, yyyy | hh:ss p"));
-					$('#buyer_date').text(timeZoneFormatDate(oFeedback.added));
+					timeLapseString(oFeedback.added, function(sDate) {
+						$('#buyer_date').text(sDate);
+					})
 					$('#buyer_comments').text(oFeedback.content);
 					$('#to_id').val(oFeedback.from_id);
 					
@@ -243,7 +245,9 @@ function modalCallbacks() {
 						$('#seller_content').find('img.media-object').attr('src', oReply.farm.profile_pic);
 						// $('#seller_buyer_date').text($.format.date(oReply.added, "- ddd, MMMM d, yyyy | hh:ss p"));
 						$('#seller_farm_name').text(oReply.farm.name);
-						$('#seller_buyer_date').text(timeZoneFormatDate(oReply.added));
+						timeLapseString(oReply.added, function(sDate) {
+							$('#seller_buyer_date').text(sDate);
+						});
 						$('#seller_comments').text(oReply.content);
 						$('#is_seller').text((oReply.from_id == oUser.id ? '(You)' : ''));
 					}
@@ -408,6 +412,27 @@ var timeZoneFormatDate = function(sDate, options) {
 	var oObject = new Date(sDate), 
 	sNewDate = oObject.toLocaleString('en-US', options);
 	return sNewDate;
+}
+
+var timeLapseString = function(sDate, callback) {
+	var sNewDate = timeZoneFormatDate(sDate);
+	var oSettings = {
+		url: 'support/helper/time_elapsed_string',
+		type: 'post',
+		data: {'data': sDate},
+		dataType: 'json',
+		success: function(data) {
+			if (data) {
+				callback(data);
+			} else {
+				callback(sNewDate);
+			}
+		},
+		error: function() {
+			callback(sNewDate);
+		}
+	};
+	$.ajax(oSettings);
 }
 
 function capitalizeFirstLetter(string) {

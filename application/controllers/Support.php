@@ -92,6 +92,18 @@ class Support extends MY_Controller {
 		return '';
 	}
 
+	public function helper($function=false)
+	{
+		$post = $this->input->get() ?: $this->input->post();
+		// debug($post, 'stop');
+		if ($post) {
+			if ($function) {
+				echo json_encode($function($post['data'])); exit();
+			}
+		}
+		echo json_encode(false); exit();
+	}
+
 	public function terms()
 	{
 		$this->render_page([

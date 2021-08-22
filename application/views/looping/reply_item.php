@@ -17,7 +17,7 @@
 					<?php endif ?>
 				</p>
 			</li>
-			<li><small class="text-gray"><?php time_elapsed_string($added);?></small></li>
+			<li><small class="text-gray"><?php time_elapsed_string($added, true);?></small></li>
 		</ul>
 		<p><?php echo $content;?></p>
 	</div>
