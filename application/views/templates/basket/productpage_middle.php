@@ -46,7 +46,7 @@
 														<?php endif ?>
 													</p>
 												</li>
-												<li><small class="text-gray"><?php echo date('F j, Y | g:ia', strtotime($feedback['first']['added']));?></small></li>
+												<li><small class="text-gray"><?php time_elapsed_string($feedback['first']['added']);?></small></li>
 											</ul>
 											<p><?php echo $feedback['first']['content'];?></p>
 											<?php if (isset($feedback['replies'])): ?>
