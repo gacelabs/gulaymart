@@ -5,6 +5,7 @@
 			<div class="product-desc-body">
 				<div class="product-title-container ellipsis-container">
 					<h1 class="zero-gaps"><?php echo ucwords($data['name']);?></h1>
+					<p><?php echo ucwords($data['description']);?></p>
 				</div>
 				<div class="product-list-footer">
 					<ul class="spaced-list between">
