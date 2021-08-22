@@ -17,6 +17,7 @@ $route['store_location/(:num)/(:num)/(:any)'] = 'Farm/store_location/$1/$2/$3';
 $route['farm/save-veggy/(:num)'] = 'Farm/save_veggy/$1';
 $route['farm/save-veggy/(:num)/(:any)'] = 'Farm/save_veggy/$1/$2';
 $route['farm/remove-veggy/(:num)/(:any)'] = 'Farm/remove_veggy/$1/$2';
+$route['farm/remove-veggy/(:num)/(:any)/(:num)'] = 'Farm/remove_veggy/$1/$2/$3';
 
 $route['help-center'] = 'Support/help_center';
 $route['support/help-center'] = 'Support/help_center';

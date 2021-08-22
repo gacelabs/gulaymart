@@ -34,7 +34,7 @@
 					<?php endif ?>
 					<div>
 						<small class="text-gray" style="margin-bottom: 5px;">STATUS</small>
-						<p class="text-ellipsis"><?php echo $data['activity'] == 0 ? 'Drafted' : ($data['activity'] == 2 ? 'Rejected' : ($data['activity'] == 3 ? 'Deleted' : 'Drafted'));?></p>
+						<p class="text-ellipsis"><?php echo get_activity_text($data['activity']);?></p>
 					</div>
 				</div>
 				<p class="messages"></p>

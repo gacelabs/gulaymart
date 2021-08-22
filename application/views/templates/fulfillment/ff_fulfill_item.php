@@ -7,13 +7,13 @@
 		<div class="text-left">
 			<p><small class="elem-block"><b>PRODUCT</b><i>- <?php echo date('M. j, Y | g:i a', strtotime($orders['updated']));?></i></small></p>
 		</div>
-		<div class="text-right hidden-sm">
+		<div class="text-right hidden-sm hidden-xs">
 			<p><small class="elem-block"><b>PRICE / UNIT</b></small></p>
 		</div>
-		<div class="text-right hidden-sm">
+		<div class="text-right hidden-sm hidden-xs">
 			<p><small class="elem-block"><b>QUANTITY</b></small></p>
 		</div>
-		<div class="text-right">
+		<div class="text-right hidden-sm hidden-xs">
 			<?php if ($status_text == 'placed') : ?>
 			<p><small class="elem-block"><b tabindex="0" role="button" data-trigger="focus" data-toggle="popover" data-placement="left" title="Confirm or Cancelled" data-content="Let your customer know that you're ready to fulfill the order, otherwise, select the reason to cancel.">ACTION <i class="fa fa-question-circle"></i></b></small></p>
 			<?php else : ?>
@@ -73,10 +73,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="text-right hidden-sm">
+					<div class="text-right hidden-sm hidden-xs">
 						<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo $order['measurement'];?></p>
 					</div>
-					<div class="text-right hidden-sm">
+					<div class="text-right hidden-sm hidden-xs">
 						<p class="zero-gaps"><?php echo $order['quantity'];?></p>
 					</div>
 					<div class="text-right" js-element="selectItems">
@@ -92,8 +92,8 @@
 								<option value="Removed Product">Removed Product</option>
 							</select>
 						<?php else : ?>
-							<p class="zero-gaps">
-								<?php if ($details['status'] == GM_CANCELLED_STATUS): ?>
+							<p class="zero-gaps hidden-sm hidden-xs">
+								<?php if ($status_id == GM_CANCELLED_STATUS): ?>
 									<small class="text-capsule status-cancelled">
 										<?php echo $reason;?>
 									</small>
@@ -130,7 +130,6 @@
 	</div>
 
 	<?php
-		$farm = $orders['seller'];
 		$buyer = $orders['buyer'];
 		// debug($buyer, 'stop');
 		// debug($cancelled_items, 'stop');

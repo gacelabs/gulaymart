@@ -182,3 +182,9 @@ var appendComment = function(obj) {
 		$('[js-element="comment-panel-'+obj.under+'"]').remove();
 	}
 };
+
+var removeAddButtons = function(obj) {
+	$('[js-element="basket-btns"]').remove();
+	$('[js-element="variety"]').html('<p class="zero-gaps" style="margin-bottom:5px;">NO STOCKS AVAILABLE</p>');
+	$('.buy-now-mini').remove();
+}

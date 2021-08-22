@@ -321,19 +321,21 @@ class Admin extends MY_Controller {
 			// $approved = 1;
 			$response = false;
 			if (is_array($id)) {
-				$products = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DRAFT, GM_ITEM_REJECTED]]);
+				$products = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
 				if ($products) {
 					$response = [];
 					foreach ($products as $key => $product) {
 						$this->gm_db->save('products', ['activity' => $approved], ['id' => $product['id']]);
-						$response[$product['id']] = 'Product '.$product['name'].($approved == GM_ITEM_DRAFT ? ' Drafted' : ($approved == GM_ITEM_REJECTED ? ' Rejected' : ($approved == GM_ITEM_DELETED ? ' Deleted' : ' Approved')));
+						$activity = get_activity_text($approved);
+						$response[$product['id']] = 'Product '.$product['name'].' '.$activity;
 					}
 				}
 			} elseif (is_numeric($id)) {
-				$product = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DRAFT, GM_ITEM_REJECTED]], 'row');
+				$product = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]], 'row');
 				if ($product) {
 					$this->gm_db->save('products', ['activity' => $approved], ['id' => $id]);
-					$response = 'Product '.$product['name'].($approved == GM_ITEM_DRAFT ? ' Drafted' : ($approved == GM_ITEM_REJECTED ? ' Rejected' : ($approved == GM_ITEM_DELETED ? ' Deleted' : ' Approved')));
+					$activity = get_activity_text($approved);
+					$response = 'Product '.$product['name'].' '.$activity;
 				}
 			}
 			echo json_encode(['success' => true, 'data' => ['messages' => $response], 'callback' => 'removeItem'], JSON_NUMERIC_CHECK); exit();

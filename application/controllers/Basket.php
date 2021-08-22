@@ -104,60 +104,66 @@ class Basket extends My_Controller {
 	public function add($product_id=0, $is_test=0)
 	{
 		$data = $this->input->post() ?: $this->input->get();
-		$post = $this->baskets->prepare_to_basket($data, $product_id);
-		// debug($data, $post, 'stop');
-		if ($post) {
-			if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
-				$post['status'] = GM_VERIFIED_SCHED;
-			} else { /*from checkout button*/
-				$post['status'] = GM_VERIFIED_NOW;
-			}
-			/*check if the user is logged in if false save post to session*/
-			if ($this->accounts->has_session == false) {
-				$this->session->set_userdata('basket_session', ['baskets'=>$post]);
-				$message = 'Item added to basket, Redirecting to the registration or login page!';
-				$redirect = base_url('register');
-				$callback = false;
-			} else {
-				unset($post['added']); unset($post['updated']);
-				if ($post['existing'] == 1) {
-					unset($post['existing']);
-					$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
+		$check = $this->gm_db->get_in('products', ['id' => $product_id, 'activity' => [GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
+		// debug($data, $check, 'stop');
+		if ($check) { /*if product was already deactivated*/
+			$this->set_response('error', 'Sorry, No more stocks available for this product!', $data, false, 'removeAddButtons');
+		} else {
+			$post = $this->baskets->prepare_to_basket($data, $product_id);
+			// debug($data, $post, 'stop');
+			if ($post) {
+				if ($this->input->get('callback') == 'gmCall') { /*from add to basket button*/
+					$post['status'] = GM_VERIFIED_SCHED;
+				} else { /*from checkout button*/
+					$post['status'] = GM_VERIFIED_NOW;
+				}
+				/*check if the user is logged in if false save post to session*/
+				if ($this->accounts->has_session == false) {
+					$this->session->set_userdata('basket_session', ['baskets'=>$post]);
+					$message = 'Item added to basket, Redirecting to the registration or login page!';
+					$redirect = base_url('register');
+					$callback = false;
 				} else {
-					unset($post['existing']);
-					$post['id'] = $this->gm_db->new('baskets', $post);
-				}
-				$other_orders = $this->gm_db->get('baskets', [
-					'status' => $post['status'],
-					'user_id' => $post['user_id'],
-					'order_type' => $post['order_type'],
-					'at_date' => $post['at_date'],
-				]);
-				// debug($other_orders, 'stop');
-				$hash = '';
-				$basket_ids = [$post['id']];
-				if ($other_orders) {
-					foreach ($other_orders as $other) $basket_ids[] = $other['id'];
-				}
-				$hash = (base64_encode(json_encode(array_unique($basket_ids), JSON_NUMERIC_CHECK)));
-				$message = $post['status'] == GM_VERIFIED_SCHED ? 'Item added to basket! <a href="basket/">Check it here</a>' : 'Item added into your basket!, Proceeding checkout';
-				$redirect = ($post['status'] == GM_VERIFIED_NOW) ? base_url('basket/checkout/'.$hash) : false;
-				$callback = ($post['status'] == GM_VERIFIED_NOW) ? false : 'stockChanged';;
-				$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
+					unset($post['added']); unset($post['updated']);
+					if ($post['existing'] == 1) {
+						unset($post['existing']);
+						$this->gm_db->save('baskets', $post, ['id' => $post['id']]);
+					} else {
+						unset($post['existing']);
+						$post['id'] = $this->gm_db->new('baskets', $post);
+					}
+					$other_orders = $this->gm_db->get('baskets', [
+						'status' => $post['status'],
+						'user_id' => $post['user_id'],
+						'order_type' => $post['order_type'],
+						'at_date' => $post['at_date'],
+					]);
+					// debug($other_orders, 'stop');
+					$hash = '';
+					$basket_ids = [$post['id']];
+					if ($other_orders) {
+						foreach ($other_orders as $other) $basket_ids[] = $other['id'];
+					}
+					$hash = (base64_encode(json_encode(array_unique($basket_ids), JSON_NUMERIC_CHECK)));
+					$message = $post['status'] == GM_VERIFIED_SCHED ? 'Item added to basket! <a href="basket/">Check it here</a>' : 'Item added into your basket!, Proceeding checkout';
+					$redirect = ($post['status'] == GM_VERIFIED_NOW) ? base_url('basket/checkout/'.$hash) : false;
+					$callback = ($post['status'] == GM_VERIFIED_NOW) ? false : 'stockChanged';;
+					$post['rawdata'] = json_decode(base64_decode($post['rawdata']), true);
 
-				/*send realtime basket*/
-				$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['basket_id' => array_unique($basket_ids)]);
-			}
-			// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
-			// debug($post, 'stop');
+					/*send realtime basket*/
+					$this->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['basket_id' => array_unique($basket_ids)]);
+				}
+				// debug($this->gm_db->get_or_in('baskets', ['id'=>$post['id'], 'order_type'=>$post['order_type'], 'status'=>[0,1]]), 'stop');
+				// debug($post, 'stop');
 
-			if ($is_test) {
-				redirect(base_url('test/send/tambay'));
-			} else {
-				$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
+				if ($is_test) {
+					redirect(base_url('test/send/tambay'));
+				} else {
+					$this->set_response('success', $message, ['baskets'=>$post], $redirect, $callback, true);
+				}
 			}
+			$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
 		}
-		$this->set_response('error', 'No item(s) found', ['baskets'=>$post], false);
 	}
 
 	public function view($product_id=0, $farm_location_id=0, $product_name=false)

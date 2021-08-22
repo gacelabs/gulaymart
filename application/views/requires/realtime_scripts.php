@@ -45,6 +45,14 @@
 				realtime.bind('info-updates', 'incoming-gm-infos', function(object) {
 					var oData = object.data;
 					console.log(oData);
+					if (oData.function != undefined && oData.user_ids != undefined && oData.data != undefined) {
+						var fn = eval(oData.function);
+						if (oUser) {
+							if ($.inArray(oUser.id, oData.user_ids) >= 0) {
+								fn(oData.data);
+							}
+						}
+					}
 				});
 			}
 		});

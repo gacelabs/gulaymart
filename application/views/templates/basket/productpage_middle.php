@@ -64,12 +64,12 @@
 										</div>
 									</div>
 								<?php endforeach ?>
-								<?php if (!user()): ?>
+								<?php if (!user() AND !in_array($product['activity'], [GM_ITEM_DELETED,GM_ITEM_NO_INVENTORY,GM_ITEM_REJECTED])): ?>
 									<br>
-									You can make a feedback too! <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
+									You can make a feedback too! <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast buy-now-mini" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
 								<?php endif ?>
-							<?php elseif (!$current_profile): ?>
-								Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
+							<?php elseif (!$current_profile AND !in_array($product['activity'], [GM_ITEM_DELETED,GM_ITEM_NO_INVENTORY,GM_ITEM_REJECTED])): ?>
+								Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast buy-now-mini" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
 							<?php endif ?>
 							<?php if ($can_comment == true): ?>
 								<div class="comment-box" style="margin-left:-15px;margin-right:-15px;">
@@ -78,8 +78,8 @@
 								</div>
 							<?php elseif ($current_profile AND !$feedbacks AND ($current_profile['id'] == $product['user_id'])): ?>
 								You have an empty feedback here.
-							<?php elseif ($current_profile AND !$feedbacks): ?>
-								Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
+							<?php elseif ($current_profile AND !$feedbacks AND !in_array($product['activity'], [GM_ITEM_DELETED,GM_ITEM_NO_INVENTORY,GM_ITEM_REJECTED])): ?>
+								Be the first to make a feedback. <?php if (DISABLE_DISTANCE_COMPARING == 0): ?><button type="button" class="btn btn-xs btn-contrast buy-now-mini" onclick="$('#buy_now_btn').click();">Buy Now!</button><?php endif ?>
 							<?php endif ?>
 						</div>
 					</div>

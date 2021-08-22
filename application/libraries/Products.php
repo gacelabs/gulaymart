@@ -342,7 +342,7 @@ class Products {
 				'farm_location_id' => $farm_location_id,
 			]);
 			if ($products_location->num_rows()) {
-				$product = $this->class->gm_db->get('products', ['id' => $product_id], 'row');
+				$product = $this->class->gm_db->get('products', ['id' => $product_id, 'include_activity' => 1], 'row');
 				// debug($product, 'stop');
 				if ($product) {
 					$product['product_url'] = product_url(['id'=>$product_id, 'farm_location_id'=>$farm_location_id, 'name'=>$product['name']]);
@@ -544,14 +544,19 @@ class Products {
 					$farm_location = $this->class->gm_db->get('user_farm_locations', ['id' => $location['farm_location_id']], 'row');
 					$product['farms'][] = $location;
 					$address = explode(',', $farm_location['address_2']);
-					$locations[] = (isset($address[0])) ? $address[0] : '';
+					$product_url = product_url([
+						'id' => $product['id'],
+						'farm_location_id' => $location['farm_location_id'],
+						'name' => $product['name'],
+					]);
+					$locations[$location['farm_location_id']] = (isset($address[0])) ? '<a href="'.$product_url.'">'.$address[0].'</a>' : '';
 				}
 				// debug($product, 'stop');
 				$product['locations'] = implode(' | ', $locations);
 			}
 
 			$updated = $product['updated'];
-			$product['activity'] = $product['activity'] == 1 ? 'Published' : ($product['activity'] == 0 ? 'Draft' : ($product['activity'] == 3 ? 'Deleted' : 'Rejected'));
+			$product['activity'] = get_activity_text($product['activity']);
 
 			$display = false;
 			if ($except_field) {

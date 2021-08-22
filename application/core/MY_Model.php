@@ -16,7 +16,11 @@ class MY_Model extends CI_Model {
 			}
 			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 				$where = (array)$where;
-				$where['activity'] = 1;
+				if (!isset($where['include_activity'])) {
+					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 			}
 			if (isset($where['order_by']) AND isset($where['direction'])) {
 					if (is_array($where['order_by'])) {
@@ -57,7 +61,11 @@ class MY_Model extends CI_Model {
 			}
 			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 				$where = (array)$where;
-				$where['activity'] = 1;
+				if (!isset($where['include_activity'])) {
+					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 			}
 			if ($where) {
 				if (isset($where['limit'])) {
@@ -108,7 +116,11 @@ class MY_Model extends CI_Model {
 			}
 			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 				$where = (array)$where;
-				$where['activity'] = 1;
+				if (!isset($where['include_activity'])) {
+					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 			}
 			if ($where) {
 				if (isset($where['limit'])) {
@@ -157,7 +169,11 @@ class MY_Model extends CI_Model {
 			}
 			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 				$where = (array)$where;
-				$where['activity'] = 1;
+				if (!isset($where['include_activity'])) {
+					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 			}
 			if ($where) {
 				if (isset($where['limit'])) {
@@ -208,7 +224,11 @@ class MY_Model extends CI_Model {
 			}
 			if (is_array($where)) {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				if (!isset($where['include_activity'])) {
 					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 				}
 				if (isset($where['limit'])) {
 					$this->db->limit($where['limit']);
@@ -254,7 +274,11 @@ class MY_Model extends CI_Model {
 			}
 			if (is_array($where)) {
 				if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
+				if (!isset($where['include_activity'])) {
 					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 				}
 				if (isset($where['limit'])) {
 					$this->db->limit($where['limit']);
@@ -300,7 +324,11 @@ class MY_Model extends CI_Model {
 			}
 			if ($this->db->field_exists('activity', $table) AND !isset($where['activity'])) {
 				$where = (array)$where;
-				$where['activity'] = 1;
+				if (!isset($where['include_activity'])) {
+					$where['activity'] = 1;
+				} else {
+					unset($where['include_activity']);
+				}
 			}
 			if ($where) {
 				if (isset($where['limit'])) {

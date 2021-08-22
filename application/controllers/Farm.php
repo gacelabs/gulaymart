@@ -400,24 +400,38 @@ class Farm extends MY_Controller {
 		}
 	}
 
-	public function remove_veggy($id=0, $name='')
+	public function remove_veggy($id=0, $name='', $perm_delete=0)
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
-		if ($post AND !isset($post['_'])) {
-			if (check_data_values($post)) {
-				// unset($post['_']); unset($post['callback']);
-				// debug($post, 'stop');
-				$this->products->save(['activity' => GM_ITEM_DELETED], ['id' => $post['id']]);
+		$mode = 'deactivate';
+		if ($perm_delete == 0) $mode = 'unpublish';
+		if ($post AND (!isset($post['_']) OR (isset($post['callback']) AND $post['callback'] != 'gmCall'))) {
+			$response = check_and_remove_delivery($post);
+			// debug($response, $post, 'stop');
+			if ($response) {
+				/*remove product*/
+				$activity = GM_ITEM_DELETED;
+				$redirect = 'removeEditBtn';
+				$mode = 'unpublished';
+				if (isset($post['perm_delete']) AND $post['perm_delete'] == 1) {
+					$activity = GM_ITEM_NO_INVENTORY; 
+					$redirect = 'removeOnTable';
+					$mode = 'deactivated';
+				}
+				$this->products->save(['activity' => $activity], ['id' => $post['id']]);
 				/*email admins here*/
-				$content = remove_multi_space('<p>Product item '.ucwords($post['name']).' has been removed.</p>', true);
+				$content = remove_multi_space('<p>Product item '.ucwords($post['name']).' has been '.$mode.'.</p>', true);
 				// debug($content, 'stop');
+				/*notify user*/
 				send_gm_email($this->accounts->profile['id'], $content);
 				send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $post['id']]);
-				$this->set_response('success', 'Product removed', $post, false, 'removeOnTable');
+				$this->set_response('success', 'Product '.$mode.'', $post, false, $redirect);
 			}
-			$this->set_response('error', remove_multi_space('Unable to remove '.ucwords($post['name']).' product'), $post);
+			$this->set_response('error', remove_multi_space('Unable to '.$mode.' '.ucwords($post['name']).' product', true), $post);
 		} else {
-			$this->set_response('confirm', 'Want to remove this item?', ['id' => $id, 'name' => $name], false, 'removeItem');
+			$mode = 'deactivate';
+			if ($perm_delete == 0) $mode = 'unpublish';
+			$this->set_response('confirm', 'Want to '.$mode.' this item?', ['id' => $id, 'name' => $name, 'perm_delete' => $perm_delete], false, 'removeItem');
 		}
 	}
 
@@ -567,7 +581,7 @@ class Farm extends MY_Controller {
 				'js' => ['farm/main', 'plugins/DataTables/datatables.min', 'dashboard/main'],
 			],
 			'data' => [
-				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id'], 'activity' => [0,1,2]]),
+				'products' => $this->products->get_in(['user_id' => $this->accounts->profile['id'], 'activity !=' => GM_ITEM_NO_INVENTORY]),
 				'field_lists' => ['ACTIONS', 'NAME', 'ACTIVITY', 'CATEGORY', 'SUBCATEGORY', 'LOCATIONS', 'UPDATED'],
 			],
 		]);

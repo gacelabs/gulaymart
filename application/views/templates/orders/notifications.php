@@ -11,7 +11,7 @@
 	<div class="notif-item-footer">
 		<ul class="inline-list">
 			<?php if ($notifications['unread']): ?>
-				<li><a href="api/update/messages/<?php echo $notifications['id'];?>" data-toread="<?php echo $notifications['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $notifications['id'], 'unread' => GM_MESSAGE_READ, 'fn' => false], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius">Mark as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+				<li><a href="api/update/messages/<?php echo $notifications['id'];?>" data-toread="<?php echo $notifications['id'];?>" data-ajax data-call-jsonp="0" data-json='<?php echo json_encode(['id' => $notifications['id'], 'unread' => GM_MESSAGE_READ, 'fn' => false], JSON_NUMERIC_CHECK);?>' class="text-link normal-radius" no-abort="1">Mark as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
 			<?php else: ?>
 				<li><a href="javascript:;" class="text-link normal-radius">Marked as read</a></li>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 			<?php endif ?>

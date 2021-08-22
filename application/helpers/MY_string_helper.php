@@ -3,6 +3,7 @@
 function debug()
 {
 	$ci =& get_instance();
+	// $is_ajax = $ci->input->is_ajax_request();
 	$is_ajax = $ci->input->is_ajax_request();
 	$args = func_get_args();
 	if (!$is_ajax) {
@@ -1841,6 +1842,24 @@ function cron_finished($data=false, $date=false)
 	fclose($logfile);
 }
 
+function logger($response=false, $data=false, $type='error')
+{
+	$filename = 'assets/data/logs/'.$type.'.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
+	$txt .= "Code: $type\n";
+	$txt .= "Response: " . json_encode($response, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "Data: " . json_encode($data, JSON_NUMERIC_CHECK) . " \n";
+	$txt .= "----------------------------" . "\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
 function get_products($where=[], $limit=20)
 {
 	$ci =& get_instance();
@@ -1848,7 +1867,7 @@ function get_products($where=[], $limit=20)
 	$items = [];
 
 	if ($items_locations) {
-		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [GM_ITEM_DRAFT, GM_ITEM_REJECTED];
+		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY];
 		foreach ($items_locations as $index => $location) {
 			$where['id'] = $location['product_id'];
 			$item = $ci->gm_db->get_in('products', $where, 'row');
@@ -2015,4 +2034,27 @@ function print_cron_log($name='sequence', $echo=true, $date=false) {
 	} else {
 		return $printable;
 	}
+}
+
+function get_activity_text($approved=false)
+{
+	$activity = '';
+	switch ($approved) {
+		case GM_ITEM_DRAFT:
+			$activity = 'Draft';	
+		break;
+		case GM_ITEM_APPROVED:
+			$activity = 'Published';	
+		break;
+		case GM_ITEM_REJECTED:
+			$activity = 'Rejected';	
+		break;
+		case GM_ITEM_DELETED:
+			$activity = 'Unpublished';	
+		break;
+		case GM_ITEM_NO_INVENTORY:
+			$activity = 'Deactivated';	
+		break;
+	}
+	return $activity;
 }

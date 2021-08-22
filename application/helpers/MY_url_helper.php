@@ -873,3 +873,120 @@ function format_number($value=0)
 		return number_format($value);
 	}
 }
+
+function check_and_remove_delivery($post=false)
+{
+	if ($post AND isset($post['id'])) {
+		$ci =& get_instance();
+		$baskets_merge = $ci->gm_db->get_not_in('baskets_merge', ['seller_id' => $ci->accounts->profile['id'], 'status' => [
+			GM_ITEM_REMOVED, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS, GM_CANCELLED_STATUS
+		]]);
+		$merges = setup_orders_data($baskets_merge);
+		// debug($merges, $post, 'stop');
+		/*check order exsisting w/ this product */
+		if ($baskets_merge) {
+			$baskets_merge_ids = [];
+			$ci->load->library('ToktokApi');
+			// $test = $ci->toktokapi->app_request('cancel_reasons', [], 'website');
+			// debug($test->response, 'stop');
+			$product_id = $post['id'];
+			$product = $ci->gm_db->get_in('products', ['id' => $product_id, 'include_activity' => 1], 'row');
+			foreach ($merges as $key => $merge) {
+				/*set the order to cancelled and force notify buyer*/
+				$basket_ids = explode(',', $merge['basket_ids']);
+				$baskets = $ci->gm_db->get_in('baskets', [
+					'id' => $basket_ids,
+					'product_id' => $product_id,
+					'status' => $merge['status'],
+				]);
+				if ($baskets) {
+					// debug($merge, 'stop');
+					/*get exact toktok status base on gm status*/
+					$toktok_status = [TT_PLACED_STATUS]; /*GM_VERIFIED_SCHED, GM_VERIFIED_NOW, GM_PLACED_STATUS*/
+					if (in_array($merge['status'], [GM_FOR_PICK_UP_STATUS])) {
+						$toktok_status = [TT_FOR_PICK_UP_STATUS, TT_PICKED_UP_STATUS];
+					}
+					if (ENVIRONMENT == 'development') {
+						$delivery = $ci->toktokapi->check_delivery();
+					} else {
+						$seller_name = remove_multi_space($merge['seller']['profile']['firstname'].' '.$merge['seller']['profile']['lastname'], true);
+						$date_range = false;
+						if (isset($merge['schedule']) AND !empty($merge['schedule'])) {
+							$date_range = [
+								'from' => date('m/d/Y', strtotime($merge['schedule'])),
+								'to' => date('m/d/Y', strtotime($merge['schedule'])),
+							];
+						}
+						$delivery = $ci->toktokapi->check_delivery($date_range, '', '', $seller_name);
+					}
+					// debug($delivery->response, $toktok_status, 'stop');
+					$failed_removes = [];
+					if ($delivery->success AND count($delivery->response)) {
+						foreach ($delivery->response as $order) {
+							if (isset($order['details']) AND isset($order['details']['post'])) {
+								if (in_array($order['details']['post']['status'], $toktok_status)) {
+									if (ENVIRONMENT == 'development') {
+										$order['details']['post']['notes'] = 'GulayMart Order#:'.$merge['order_id'];
+									}
+									$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
+									$order_id = 0;
+									if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
+									if ($order_id == $merge['order_id']) {
+										$delivery_id = $order['details']['post']['id'];
+										$post_delivery = $ci->toktokapi->app_request('confirm_cancel',
+											['deliveryId' => $delivery_id, 'categoryId' => 7], 'website');
+											/*categoryId = 7 is equal to I changed my mind*/
+										if (!$post_delivery->success) {
+											$failed_removes[$delivery_id] = ['data' => $merge, 'response' => $post_delivery->response];
+										}
+									}
+								}
+							}
+						}
+					}
+					// debug($failed_removes, 'stop');
+					if (count($failed_removes)) {
+						logger('Failed to remove or delete item in toktok!', ['failed' => $failed_removes], 'gulaymart-toktok-deletion'); 
+					}
+					/*cancel orders*/
+					// debug($merge['order_details'], 'stop');
+					$order_details = $merge['order_details'];
+					foreach ($order_details as $index => $detail) {
+						$order_details[$index]['status'] = GM_CANCELLED_STATUS;
+						$order_details[$index]['reason'] = 'Removed Product';
+					}
+					// debug($order_details, 'stop');
+					foreach ($basket_ids as $id) {
+						$ci->gm_db->save('baskets', [
+							'status' => GM_CANCELLED_STATUS,
+							'reason' => 'Removed Product',
+							'cancel_by' => $ci->accounts->profile['id']
+						], ['id' => $id]);
+					}
+					$ci->gm_db->save('baskets_merge', [
+						'status' => GM_CANCELLED_STATUS,
+						'order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK)),
+						'is_sent' => 2,
+						'operator' => -1
+					], ['id' => $merge['id']]);
+					$baskets_merge_ids[] = $merge['id'];
+				}
+			}
+			// debug($baskets_merge_ids, 'stop');
+			if (count($baskets_merge_ids) > 0) {
+				$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
+				$user_ids = $ci->gm_db->columns('user_id', $baskets);
+				$ci->senddataapi->trigger('info-updates', 'incoming-gm-infos', [
+					'function' => 'runAlertBox', 'user_ids' => $user_ids,
+					'data' => [
+						'type' => 'info',
+						'message' => 'The Seller want to inform you that the product '.ucwords($product['name']).' has No stocks available now, Thank you.',
+						'unclose' => true,
+					],
+				]);
+			}
+		}
+		return true;
+	}
+	return false;
+}

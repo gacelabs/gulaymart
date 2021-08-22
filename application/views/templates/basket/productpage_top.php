@@ -43,7 +43,7 @@
 						<div class="productpage-basic-grid" id="quantity_container">
 							<p class="text-gray zero-gaps"><span class="hidden-xs">QUANTITY</span><span class="visible-xs">QTY</span></p>
 							<div class="productpage-variety" js-element="variety">
-								<?php if ($stocks > 0): ?>
+								<?php if ($stocks > 0 AND !in_array($product['activity'], [GM_ITEM_DELETED,GM_ITEM_NO_INVENTORY,GM_ITEM_REJECTED])): ?>
 									<div class="variety-location">
 										<p><span class="max-qty">Maximum of <?php echo $stocks;?></span></p>
 										<div class="input-group">
@@ -67,7 +67,7 @@
 							<p class="zero-gaps"><?php echo $product['farm_location']['city_prov'];?></p>
 						</div>
 
-						<?php if ($stocks > 0): ?>
+						<?php if ($stocks > 0 AND !in_array($product['activity'], [GM_ITEM_DELETED,GM_ITEM_NO_INVENTORY,GM_ITEM_REJECTED])): ?>
 							<div class="add-basket-btn" js-element="basket-btns"<?php if ($this->agent->is_mobile()): ?> style="width: 305px;"<?php endif ?>>
 								<button type="submit" class="btn btn-lg btn-default<?php if (DISABLE_DISTANCE_COMPARING): ?> pull-right" style="margin: 0 25% 15px 0;<?php endif ?>" id="add_product_btn"<?php echo !$current_profile ? ' data-keep-loading="3000"' : '';?>>
 									<ul class="spaced-list between text-left">

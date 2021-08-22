@@ -43,7 +43,7 @@ class ToktokApi {
 			// debug($this->url.$this->endpoint.'?'.http_build_query($params), 'stop');
 			sleep(3);
 			try {
-				if (!in_array($method, ['post_delivery', 'view_delivery', 'fetch_riders'])) {
+				if (!in_array($method, ['post_delivery', 'view_delivery', 'fetch_riders', 'cancel_reasons', 'confirm_cancel'])) {
 					curl_setopt($this->ch, CURLOPT_POST, false);
 					curl_setopt($this->ch, CURLOPT_URL, $this->url.$this->endpoint.'?'.http_build_query($params));
 				} elseif (in_array($method, ['view_delivery', 'vehicle_types'])) {

@@ -687,6 +687,7 @@ var runATagAjax = function () {
 		if ($(e.target).prop('tagName') != 'A') oThis = $(e.target).parent('a');
 		var oData = oThis.data('json') != undefined ? oThis.data('json') : {};
 		var isJsonPCallback = oThis.data('call-jsonp') != undefined ? oThis.data('call-jsonp') : 1;
+		var isNoAbort = oThis.attr('no-abort') != undefined ? oThis.attr('no-abort') : 0;
 		var origText = oThis.html();
 		var oSettings = {
 			url: oThis.data('href') == undefined ? e.target.href : oThis.data('href'),
@@ -695,6 +696,7 @@ var runATagAjax = function () {
 			dataType: 'json',
 			beforeSend: function() {
 				if (oThis.attr('no-spinner') == undefined) {
+					oThis.addClass('stop');
 					oThis.html('<span class="spinner-border spinner-border-sm"></span> '+origText);
 				}
 			},
@@ -720,6 +722,7 @@ var runATagAjax = function () {
 			},
 			complete: function(xhr, status) {
 				setTimeout(function() {
+					oThis.removeClass('stop');
 					oThis.html(origText);
 				}, 1000);
 			},
@@ -735,7 +738,7 @@ var runATagAjax = function () {
 			oSettings.dataType = 'jsonp';
 			oSettings.jsonpCallback = 'gmCall';
 		}
-		if (oPauseAjax != false && oPauseAjax.readyState !== 4) oPauseAjax.abort();
+		if (oPauseAjax != false && oPauseAjax.readyState !== 4 && isNoAbort == 0) oPauseAjax.abort();
 		oPauseAjax = $.ajax(oSettings);
 	});
 }
