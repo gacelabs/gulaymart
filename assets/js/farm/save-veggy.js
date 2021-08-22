@@ -74,7 +74,7 @@ $(document).ready(function() {
 
 var redirectNewProduct = function(obj) {
 	var sMessage = 'Product successfully updated.';
-	runAlertBox({type:'success', message: sMessage, unclose: true});
+	runAlertBox({type:'success', message: sMessage/*, unclose: true*/});
 
 	// console.log(obj);
 	$('.order-title').text(obj.products.name);

@@ -321,7 +321,7 @@ class Admin extends MY_Controller {
 			// $approved = 1;
 			$response = false;
 			if (is_array($id)) {
-				$products = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
+				$products = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DRAFT, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
 				if ($products) {
 					$response = [];
 					foreach ($products as $key => $product) {
@@ -331,7 +331,7 @@ class Admin extends MY_Controller {
 					}
 				}
 			} elseif (is_numeric($id)) {
-				$product = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]], 'row');
+				$product = $this->gm_db->get_in('products', ['id' => $id, 'activity' => [GM_ITEM_DRAFT, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]], 'row');
 				if ($product) {
 					$this->gm_db->save('products', ['activity' => $approved], ['id' => $id]);
 					$activity = get_activity_text($approved);
