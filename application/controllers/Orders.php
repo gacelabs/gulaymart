@@ -117,9 +117,9 @@ class Orders extends MY_Controller {
 				$message['product'] = $message['location'] = $message['bought'] = $message['photo'] = [];
 				if ($message['tab'] == 'Feedbacks' AND $message['type'] == 'Comments') {
 					$message['product'] = $this->gm_db->get('products', ['id' => $message['page_id']], 'row');
-					$message['product']['photos'] = false;
 					$photos = $this->gm_db->get('products_photo', ['product_id' => $message['page_id'], 'status' => 1]);
 					if ($photos) {
+						$message['product']['photos'] = [];
 						foreach ($photos as $key => $photo) {
 							if ($photo['is_main']) {
 								$message['product']['photos']['main'] = $photo;
@@ -131,7 +131,10 @@ class Orders extends MY_Controller {
 								$message['product']['photos']['other'][] = $photo;
 							}
 						}
+					} else {
+						$message['product']['photos'] = false;
 					}
+					if (!isset($message['product']['id'])) $message['product']['id'] = $message['page_id'];
 					$message['product']['farm_location_id'] = $message['entity_id'];
 					$message['location'] = $this->gm_db->get('products_location', [
 						'product_id' => $message['page_id'],
