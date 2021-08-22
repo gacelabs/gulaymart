@@ -225,7 +225,7 @@ var redirectNewProduct = function(obj) {
 		$('p.text-capsule:eq('+parseInt(obj.pos)+')').addClass('score');
 		$('.timeline-border-progress').attr('data-percent', '100');
 	}
-	runAlertBox({type:'success', message: sMessage, unclose: true});
+	runAlertBox({type:'success', message: sMessage/*, unclose: true*/});
 	// console.log(obj);
 	$('.order-title').text(obj.products.name);
 	var nice_prod_name = $.trim(obj.products.name).replace(/[^A-Za-z0-9\-]/, ' ').toLowerCase();

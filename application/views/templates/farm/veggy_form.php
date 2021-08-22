@@ -24,7 +24,7 @@
 
 				<div class="dashboard-panel theme score-0" id="score-0">
 					<div class="dashboard-panel-middle">
-						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
+						<form action="<?php echo uri_string();?>/" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="basic_prod_info">
 							<input type="hidden" name="pos" value="0">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="input-container">
@@ -102,7 +102,7 @@
 							<label>Product attributes</label>
 							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Use preset to select an attribute or enter your own. Only letters and numbers are allowed.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
+						<form action="<?php echo uri_string();?>/" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_attribute">
 							<input type="hidden" name="pos" value="1">
 							<?php foreach ($this->attributes as $key => $attribute): ?>
 								<?php
@@ -146,7 +146,7 @@
 							<label>Product Pricing (Location based)</label>
 							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Be honest with pricing and never put a stock you don't have on hand. <span class="text-link" data-toggle="modal" data-target="#veggy_product_pricing_help">NEED HELP?</span></small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
+						<form action="<?php echo uri_string();?>/" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_price">
 							<input type="hidden" name="pos" value="2">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="row">
@@ -235,7 +235,7 @@
 							<label>Short description</label>
 							<small class="text-gray" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle"></i> Write your product description here. Limit 300 characters.</small>
 						</div>
-						<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
+						<form action="<?php echo uri_string();?>/" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="prod_desc">
 							<input type="hidden" name="pos" value="3">
 							<input type="hidden" name="products[user_id]" value="<?php echo $current_profile['id'];?>">
 							<div class="form-group">
@@ -256,7 +256,7 @@
 				</div>
 
 				<div class="dashboard-panel theme<?php if ($data['is_edit'] == false): ?> hide<?php endif ?> score-4" id="score-4">
-					<form action="" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
+					<form action="<?php echo uri_string();?>/" method="post" class="form-validate" data-ajax="1" data-disable="enter" enctype="multipart/form-data" id="products_photo" data-notmedia="1">
 						<input type="hidden" name="pos" value="4">
 						<div class="dashboard-panel-middle">
 							<div>

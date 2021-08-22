@@ -37,10 +37,10 @@
 												<?php if ($index == 'id'): ?>
 													<?php if ($this->agent->is_mobile()): ?>&nbsp;&nbsp;<?php endif ?>
 													<?php if (in_array($product['activity'], ['Draft','Published'])): ?>
-														<a class="text-link normal-radius" href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>">Edit</a> | 
-														<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>" data-ajax="1">Unpublish</a>
+														<a class="text-link normal-radius" href="farm/save-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>/">Edit</a> | 
+														<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>/" data-ajax="1">Unpublish</a>
 													<?php else: ?>
-														<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>/1" data-ajax="1">Deactivate</a>
+														<a class="text-link normal-radius" href="farm/remove-veggy/<?php echo $product['id'];?>/<?php nice_url($product['name']);?>/1/" data-ajax="1">Deactivate</a>
 													<?php endif ?>
 												<?php elseif ($index == 'updated'): ?>
 													<?php echo date('M. j, Y | h:i:s a', strtotime($value));?>
