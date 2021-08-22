@@ -585,9 +585,12 @@ class CreateDev {
 		]);
 
 		sleep(5);
-		$measurements = [['label' => 'Kilogram', 'value' => 'kilogram'],
-		['label' => 'Bundle', 'value' => 'bundle'],
-		['label' => 'Box', 'value' => 'box']];
+		$measurements = [
+			['label' => 'Kilogram', 'value' => 'kilogram'],
+			['label' => 'Bundle', 'value' => 'bundle'],
+			['label' => 'Box', 'value' => 'box'],
+			['label' => 'Each', 'value' => 'each'],
+		];
 		$this->class->db->insert_batch('products_measurement', $measurements);
 
 		return $table_data;
