@@ -1867,7 +1867,7 @@ function get_products($where=[], $limit=20)
 	$items = [];
 
 	if ($items_locations) {
-		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY];
+		if ($ci->db->field_exists('activity', 'products')) $where['activity'] = [GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY];
 		foreach ($items_locations as $index => $location) {
 			$where['id'] = $location['product_id'];
 			$item = $ci->gm_db->get_in('products', $where, 'row');

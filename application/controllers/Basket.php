@@ -104,7 +104,7 @@ class Basket extends My_Controller {
 	public function add($product_id=0, $is_test=0)
 	{
 		$data = $this->input->post() ?: $this->input->get();
-		$check = $this->gm_db->get_in('products', ['id' => $product_id, 'activity' => [GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
+		$check = $this->gm_db->get_in('products', ['id' => $product_id, 'activity' => [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
 		// debug($data, $check, 'stop');
 		if ($check) { /*if product was already deactivated*/
 			$this->set_response('error', 'Sorry, No more stocks available for this product!', $data, false, 'removeAddButtons');
