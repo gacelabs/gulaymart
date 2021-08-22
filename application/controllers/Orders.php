@@ -134,7 +134,8 @@ class Orders extends MY_Controller {
 					} else {
 						$message['product']['photos'] = false;
 					}
-					if (!isset($message['product']['id'])) $message['product']['id'] = $message['page_id'];
+					if (!isset($message['product']['id']) AND empty($message['product']['id'])) $message['product']['id'] = $message['page_id'];
+					if (!isset($message['product']['name']) AND empty($message['product']['name'])) $message['product']['name'] = 'No Name';
 					$message['product']['farm_location_id'] = $message['entity_id'];
 					$message['location'] = $this->gm_db->get('products_location', [
 						'product_id' => $message['page_id'],
@@ -157,12 +158,11 @@ class Orders extends MY_Controller {
 							$reply['profile'] = $this->gm_db->get('user_profiles', ['user_id' => $reply['to_id']], 'row');
 
 							$reply['product'] = $reply['location'] = $reply['bought'] = $reply['photo'] = [];
-
 							if ($reply['tab'] == 'Feedbacks' AND $reply['type'] == 'Comments') {
 								$reply['product'] = $this->gm_db->get('products', ['id' => $reply['page_id']], 'row');
-								$reply['product']['photos'] = false;
 								$photos = $this->gm_db->get('products_photo', ['product_id' => $reply['page_id'], 'status' => 1]);
 								if ($photos) {
+									$reply['product']['photos'] = [];
 									foreach ($photos as $key => $photo) {
 										if ($photo['is_main']) {
 											$reply['product']['photos']['main'] = $photo;
@@ -174,7 +174,11 @@ class Orders extends MY_Controller {
 											$reply['product']['photos']['other'][] = $photo;
 										}
 									}
+								} else {
+									$reply['product']['photos'] = false;
 								}
+								if (!isset($reply['product']['id']) AND empty($reply['product']['id'])) $reply['product']['id'] = $reply['page_id'];
+								if (!isset($reply['product']['name']) AND empty($reply['product']['name'])) $reply['product']['name'] = 'No Name';
 								$reply['product']['farm_location_id'] = $reply['entity_id'];
 								$reply['location'] = $this->gm_db->get('products_location', [
 									'product_id' => $reply['page_id'],
