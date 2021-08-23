@@ -586,10 +586,10 @@ class CreateDev {
 
 		sleep(5);
 		$measurements = [
-			['label' => 'Kilogram', 'value' => 'kilogram'],
-			['label' => 'Bundle', 'value' => 'bundle'],
-			['label' => 'Box', 'value' => 'box'],
-			['label' => 'Each', 'value' => 'each'],
+			['label' => 'Kilogram', 'value' => 'kilogram', 'abbrv' => 'kg'],
+			['label' => 'Bundle', 'value' => 'bundle', 'abbrv' => 'bd'],
+			['label' => 'Box', 'value' => 'box', 'abbrv' => 'bx'],
+			['label' => 'Each', 'value' => 'each', 'abbrv' => 'pc'],
 		];
 		$this->class->db->insert_batch('products_measurement', $measurements);
 
