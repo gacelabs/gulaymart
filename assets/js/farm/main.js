@@ -4,6 +4,7 @@ $(document).ready(function() {
 		if ($(this).is(':checked')) {
 			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
 			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
+			$('#price_btn_container').find('input:reset').trigger('click');
 		} else {
 			uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
 			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', false);
