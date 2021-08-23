@@ -186,13 +186,13 @@
 												<br>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-right: 0;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Price"></i></span>
+														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Price"></i></span>
 														<input type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" value="<?php echo $price;?>">
 													</div>
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-right: 0; padding-left: 10px;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Unit</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Unit"></i></span>
+														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Unit</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Unit"></i></span>
 														<select type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][measurement]" style="padding: 6px 6px;">
 															<?php if ($this->measurements): ?>
 																<?php foreach ($this->measurements as $key => $measurement): ?>
@@ -208,7 +208,7 @@
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-left: 10px;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="right" title="Stocks"></i></span>
+														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Stocks"></i></span>
 														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" value="<?php echo $stocks;?>">
 													</div>
 												</div>
