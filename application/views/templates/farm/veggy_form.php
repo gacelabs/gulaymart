@@ -186,20 +186,28 @@
 												<br>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-right: 0;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Price"></i></span>
+														<span class="input-group-addon"><span class="hidden-sm hidden-xs">&#x20b1;</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Price"></i></span>
 														<input type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][price]" data-inputmask="'alias': 'decimal', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'placeholder': '0'" value="<?php echo $price;?>">
 													</div>
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-right: 0; padding-left: 10px;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Unit</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Unit"></i></span>
-														<select type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][measurement]" style="padding: 6px 6px;">
+														<span class="input-group-addon"><span class="hidden-sm hidden-xs">Unit</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Unit"></i></span>
+														<select type="text" class="form-control" name="products_location[<?php echo $location['id'];?>][measurement]" style="padding: 6px 10px;">
 															<?php if ($this->measurements): ?>
 																<?php foreach ($this->measurements as $key => $measurement): ?>
 																	<?php if ($data['is_edit'] == false): ?>
-																		<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
+																		<?php if ($this->agent->is_mobile()): ?>
+																			<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['abbrv'].' ('.$measurement['label'].')';?></option>
+																		<?php else: ?>
+																			<option value="<?php echo $measurement['value'];?>"><?php echo $measurement['label'];?></option>
+																		<?php endif ?>
 																	<?php else: ?>
-																		<option value="<?php echo $measurement['value'];?>"<?php str_has_value_echo($measurement['value'], $measure, ' selected');?>><?php echo $measurement['label'];?></option>
+																		<?php if ($this->agent->is_mobile()): ?>
+																			<option value="<?php echo $measurement['value'];?>"<?php str_has_value_echo($measurement['value'], $measure, ' selected');?>><?php echo $measurement['abbrv'].' ('.$measurement['label'].')';?></option>
+																		<?php else: ?>
+																			<option value="<?php echo $measurement['value'];?>"<?php str_has_value_echo($measurement['value'], $measure, ' selected');?>><?php echo $measurement['label'];?></option>
+																		<?php endif ?>
 																	<?php endif ?>
 																<?php endforeach ?>
 															<?php endif ?>
@@ -208,7 +216,7 @@
 												</div>
 												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-left: 10px;">
 													<div class="input-group">
-														<span class="input-group-addon"><span class=" hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Stocks"></i></span>
+														<span class="input-group-addon"><span class="hidden-sm hidden-xs">Stocks</span><i class="fa fa-question-circle visible-xs" data-toggle="tooltip" data-placement="top" title="Stocks"></i></span>
 														<input type="number" maxlength="3" class="form-control" name="products_location[<?php echo $location['id'];?>][stocks]" value="<?php echo $stocks;?>">
 													</div>
 												</div>
@@ -243,7 +251,7 @@
 								<textarea class="form-control" rows="5" name="products[description]" required="required"><?php check_value('description', $data['product']);?></textarea>
 							</div>
 							<div class="input-group">
-								<span class="input-group-addon"><span class=" hidden-sm hidden-xs">What's in the bag?</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="What's in the bag?"></i></span>
+								<span class="input-group-addon"><span class="hidden-sm hidden-xs">What's in the bag?</span><i class="fa fa-question-circle hidden-lg hidden-md" data-toggle="tooltip" data-placement="right" title="What's in the bag?"></i></span>
 								<input type="text" class="form-control" name="products[inclusion]" required="required" value="<?php check_value('inclusion', $data['product']);?>">
 							</div>
 							<div id="desc_btn_container" style="margin-top:15px;text-align:right;">
