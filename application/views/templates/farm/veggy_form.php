@@ -154,7 +154,7 @@
 									<?php if ($this->farm_locations): ?>
 										<?php foreach ($this->farm_locations as $location): ?>
 											<div class="row" id="farmlocation-<?php echo $location['id'];?>">
-												<div class="col-lg-8 pull-left">
+												<div class="col-lg-7 col-xs-9 text-left">
 													<p class="zero-gaps address_1"><?php echo $location['address_1'];?></p>
 													<p class="zero-gaps"><small class="address_2"><?php echo $location['address_2'];?></small></p>
 												</div>
@@ -167,7 +167,7 @@
 													$measure = $farm_loc['measurement'];
 													$stocks = $farm_loc['stocks'];
 												}?>
-												<div class="col-lg-4 text-right">
+												<div class="col-lg-5 col-xs-3 text-right">
 													<label class="switch">
 														<?php if ($data['is_edit'] == false): ?>
 															<input type="checkbox" name="products_location[<?php echo $location['id'];?>][farm_location_id]" value="<?php echo $location['id'];?>" js-event="new-set" />
