@@ -431,6 +431,7 @@ class Products {
 					}
 
 					$farm = $this->class->gm_db->get('user_farms', ['id' => $farm_location['farm_id']], 'row');
+					if (empty($farm)) return false;
 					$farm['farm_location_id'] = $farm_location_id;
 					$farm['storefront'] = storefront_url($farm);
 					$product['farm'] = $farm;

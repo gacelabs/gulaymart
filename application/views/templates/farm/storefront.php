@@ -166,14 +166,21 @@
 													}
 													if ($farm_locations AND isset($farm_locations[$key])) {
 														$shipping['id'] = $farm_locations[$key]['id'];
+														$has_location = 'Created';
 													} else {
 														unset($shipping['id']);
+														$has_location = false;
 													}
 													?>
-													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="border-bottom: 2px dashed #dadada;"<?php endif ?>>
+													<div class="col-lg-12" style="<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?>border-bottom: 2px dashed #2196f3; <?php endif ?>position: relative; background-color: #d2f9d2;">
 														<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 														<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping, JSON_NUMERIC_CHECK);?>' required="required">
+														<?php if ($has_location != false): ?>
+															<i class="fa fa-check-circle text-success" data-toggle="tooltip" data-placement="top" title="<?php echo $has_location;?>" style="position: absolute; top: 10px; right: 5px; font-size: 20px;"></i>
+														<?php else: ?>
+															<i class="fa fa-times-circle text-danger" data-toggle="tooltip" data-placement="top" title="Update your storefront to create this farm" style="position: absolute; top: 10px; right: 5px; font-size: 20px;"></i>
+														<?php endif ?>
 													</div>
 												<?php endforeach ?>
 											</div>
