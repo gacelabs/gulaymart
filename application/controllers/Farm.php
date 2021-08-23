@@ -327,7 +327,7 @@ class Farm extends MY_Controller {
 						}
 					}
 					/*email admins here*/
-					$content = '<p>Product '.ucwords($product['name']).' saved!</p><p>It is now being reviewed for approval.</p><p>Please check product <a href="'.base_url('farm/save-veggy/'.$id.'/'.nice_url($product['name'], true)).'" data-readit="1">here</a>.</p>';
+					$content = '<p>Product '.ucwords($product['name']).' saved!</p><p>It is now being reviewed for approval.</p><p>Please check it <a href="'.base_url('farm/save-veggy/'.$id.'/'.nice_url($product['name'], true)).'" data-readit="1">here</a>.</p>';
 					// debug($content, 'stop');
 					if (send_gm_email($this->accounts->profile['id'], $content)) {
 						send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content);

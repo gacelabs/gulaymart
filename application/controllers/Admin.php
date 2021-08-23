@@ -317,7 +317,7 @@ class Admin extends MY_Controller {
 	{
 		$id = $this->input->post('id');
 		if ($this->accounts->has_session AND $this->accounts->profile['is_admin'] AND !empty($id)) {
-			// debug($id, 'stop');
+			// debug($this->input->post(), 'stop');
 			// $approved = 1;
 			$response = false;
 			if (is_array($id)) {
@@ -328,6 +328,8 @@ class Admin extends MY_Controller {
 						$this->gm_db->save('products', ['activity' => $approved], ['id' => $product['id']]);
 						$activity = get_activity_text($approved);
 						$response[$product['id']] = 'Product '.$product['name'].' '.$activity;
+						$html_notif = '<p>Product '.$product['name'].' is now Published! Please check it <a href="'.base_url('farm/save-veggy/'.$product['id'].'/'.nice_url($product['name'], true)).'/" data-readit="1">here</a></p>';
+						send_gm_message($product['user_id'], strtotime(date('Y-m-d')), $html_notif);
 					}
 				}
 			} elseif (is_numeric($id)) {
@@ -336,6 +338,8 @@ class Admin extends MY_Controller {
 					$this->gm_db->save('products', ['activity' => $approved], ['id' => $id]);
 					$activity = get_activity_text($approved);
 					$response = 'Product '.$product['name'].' '.$activity;
+					$html_notif = '<p>Product '.$product['name'].' is now Published! Please check it <a href="'.base_url('farm/save-veggy/'.$product['id'].'/'.nice_url($product['name'], true)).'/" data-readit="1">here</a></p>';
+					send_gm_message($product['user_id'], strtotime(date('Y-m-d')), $html_notif);
 				}
 			}
 			echo json_encode(['success' => true, 'data' => ['messages' => $response], 'callback' => 'removeItem'], JSON_NUMERIC_CHECK); exit();
