@@ -219,13 +219,13 @@ $(document).ready(function() {
 			}
 			// console.log(oArr, $.inArray(window.location.pathname, oArr));
 			if (typeof oArr == 'object' && oArr.length) {
-				runSwiper(oArr);
+				runSwiper(oArr, elem);
 			}
 		});
 	}
 });
 
-var runSwiper = function(pageLinks) {
+var runSwiper = function(pageLinks, elem) {
 	if (pageLinks != undefined) {
 		// var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
 		var currentPage = $.inArray(window.location.pathname, pageLinks);
@@ -256,18 +256,30 @@ var runSwiper = function(pageLinks) {
 
 			if (Math.abs(xDiff) > Math.abs(yDiff)) {
 				/*most significant*/
+				var last_url = window.location.href;
 				if (xDiff > 0) {
 					/* right swipe */
 					// console.log("right swipe", currentPage+2, pageLinks);
 					if (pageLinks[currentPage+2] != undefined) {
-						window.location.href = pageLinks[currentPage+2]+'/#swiped';
+						var href = pageLinks[currentPage+2]/*+'#swiped'*/;
 					}
 				} else {
 					/* left swipe */
 					// console.log("left swipe", currentPage+1, pageLinks);
 					if (pageLinks[currentPage+1] != undefined) {
-						window.location.href = pageLinks[currentPage+1]+'/#swiped';
+						var href = pageLinks[currentPage+1]/*+'#swiped'*/;
 					}
+				}
+				if (href != undefined) {
+					window.history.replaceState({}, document.title, href);
+					$.ajax({
+						url: href,
+						success: function(html) {
+							var new_document = document.open('text/html', 'replace');
+							new_document.write(html);
+							new_document.close();
+						}
+					});
 				}
 			} else {
 				if (yDiff > 0) {
@@ -283,8 +295,8 @@ var runSwiper = function(pageLinks) {
 			yDown = null;
 		}
 
-		document.addEventListener("touchstart", handleTouchStart, false);
-		document.addEventListener("touchmove", handleTouchMove, false);
+		elem.addEventListener("touchstart", handleTouchStart, false);
+		elem.addEventListener("touchmove", handleTouchMove, false);
 	}
 }
 
