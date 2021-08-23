@@ -611,7 +611,7 @@ class Products {
 	{
 		if ($edit_url) {
 			$user_id = $this->profile['id'];
-			$return = $this->class->gm_db->query("SELECT DISTINCT id, $edit_url AS edit_url FROM products WHERE user_id = '$user_id' ORDER BY updated");
+			$return = $this->class->gm_db->query("SELECT DISTINCT id, $edit_url AS edit_url, updated FROM products WHERE user_id = '$user_id' ORDER BY updated");
 			$result = [];
 			if ($return) {
 				foreach ($return as $key => $row) {
