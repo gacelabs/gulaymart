@@ -6,10 +6,10 @@ $(document).ready(function() {
 				$(this).attr('checked', 'checked');
 				uiParent.next('[js-element="products-location-set"]').removeClass('hide');
 				uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
-				$('#price_btn_container').find('input:reset').trigger('click');
+				// $('#price_btn_container').find('input:reset').trigger('click');
 			} else {
 				$(this).removeAttr('checked');
-				uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
+				uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input')/*.prop('value', '').val('')*/;
 				uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', false);
 			}
 			runFormValidation();
@@ -25,7 +25,7 @@ $(document).ready(function() {
 				uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
 			} else {
 				$(this).removeAttr('checked');
-				uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input').prop('value', '').val('');
+				uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input')/*.prop('value', '').val('')*/;
 				uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', false);
 			}
 			runFormValidation();

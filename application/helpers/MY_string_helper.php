@@ -1556,18 +1556,21 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 			// debug($items_locations, 'stop');
 		}
 		if ($items_locations) {
+			// debug($items_locations, 'stop');
 			// $farm = $ci->gm_db->get('user_farms', ['id' => $row['farm_id']], 'row');
 			foreach ($items_locations as $index => $location) {
-				$where = ['id' => $location['product_id']];
-				if ($user_id) {
-					$where['user_id'] = $user_id;
-				}
+				$where = [
+					'id' => $location['product_id'], 
+					'include_activity' => 1,
+				];
+				if ($user_id) $where['user_id'] = $user_id;
 				/*if ($profile) { // this for the item ranking, abang lang
 					$where['user_id'] = [$profile['id']];
 					$item = $ci->gm_db->get_not_in('products', $where, 'row');
 				} else {*/
-					$item = $ci->gm_db->get('products', $where, 'row');
+					$item = $ci->gm_db->get_in('products', $where, 'row');
 				/*}*/
+				// debug($item, $where, 'stop');
 				if ($conditions != false) {
 					if (isset($conditions['category_ids']) AND $conditions['category_ids'] != false) {
 						$where['category_id'] = $conditions['category_ids'];
@@ -1575,10 +1578,8 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 						// debug($item, 'stop');
 					}
 				}
-
 				if ($item) {
 					$item['farm_location_id'] = $row['id'];
-
 					$item['category'] = false;
 					$item['category_value'] = false;
 					$item['subcategory'] = false;

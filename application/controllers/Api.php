@@ -166,6 +166,13 @@ class Api extends MY_Controller {
 	{
 		$post = $this->input->post() ? $this->input->post() : $this->input->get();
 		if ($post) {
+			$post = ['data' => $post];
+			$farm = $this->gm_db->get_in('user_farms', ['user_id' => $this->accounts->profile['id']], 'row');
+			$post['farm_locations'] = false;
+			if ($farm) {
+				$farm_locations = $this->gm_db->get_in('user_farm_locations', ['farm_id' => $farm['id']]);
+				$post['farm_locations'] = $farm_locations;
+			}
 			$this->set_response('info', 'Location verified!', $post, false, 'setStoreFarmLocation');
 		}
 		$this->set_response('error', 'Unable to set location!', $post);

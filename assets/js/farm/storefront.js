@@ -49,7 +49,18 @@ $(document).ready(function() {
 				var clone = $('#clone_me').clone();
 				clone.removeClass('hide').removeAttr('id').appendTo('#location_list').find('input:first')
 					.attr({'id':'location-input-'+limit});
-				$('<input />', {required:'required', type:'hidden', name:'user_farm_locations[1][]', class:'user-farm-locations'}).insertAfter(clone.find('input:first'));
+				var uflUI = $('<input />', {
+					required:'required',
+					type:'hidden',
+					name:'user_farm_locations[1][]',
+					class:'user-farm-locations'
+				}).insertAfter(clone.find('input:first'));
+				$('<input />', {
+					required:'required',
+					type:'hidden',
+					name:'locations[1][][id]',
+					class:'farm-locations'
+				}).insertAfter(uflUI);
 			}
 		});
 
@@ -140,37 +151,20 @@ var changeUIImage = function(obj) {
 
 var setStoreFarmLocation = function(obj) {
 	// console.log(obj);
-	if (obj && obj.loc_input) {
-		var input_id = obj.loc_input;
+	if (obj && obj.data && obj.data.loc_input) {
+		var input_id = obj.data.loc_input;
 		if ($(input_id).length) {
-			delete obj.loc_input;
-			var address = obj.address_1 + ' ' + obj.address_2.replace(/\s+/g, ' ').trim();
+			delete obj.data.loc_input;
+			var address = obj.data.address_1 + ' ' + obj.data.address_2.replace(/\s+/g, ' ').trim();
 			$(input_id).prop('value', address).val(address);
 			$(input_id).get(0).setSelectionRange(0, 0);
-			$(input_id).next('input:hidden').prop('value', JSON.stringify(obj)).val(JSON.stringify(obj));
+			var arr = input_id.split('#location-input-'), key = arr[1] == undefined ? -1 : $.trim(arr[1]);
+			var uflUI = $(input_id).next('input:hidden').prop('value', JSON.stringify(obj.data)).val(JSON.stringify(obj.data));
+			if (obj.farm_locations[key] != undefined) {
+				uflUI.next('input:hidden').prop('value', obj.farm_locations[key].id).val(obj.farm_locations[key].id);
+			}
 			$('#farm_location_modal').modal('hide');
 		}
-	}
-}
-
-var refreshStorePreview = function(obj) {
-	// console.log(obj);
-	if ($('form.storefront-forms').find('[name]').hasClass('error') == false) {
-		$('form.storefront-forms').each(function(i, elem) {
-			$(elem).find('.farm_id').val(obj.user_farms.id);
-			$('#storefrontTab').remove();
-			var a_tag = $('<a class="text-link btn btn-default normal-radius icon-left" id="storefrontTab" target="storefrontTab" href="store/'+obj.user_farms.id+'/'+obj.user_farms.name.replace(/\s+/g, '-').toLowerCase().trim()+'"><i class="fa fa-external-link-square"></i> View Store</a>');
-			$(elem).find('button:submit').parent('li').addClass('text-right').prepend(a_tag);
-			setTimeout(function() {
-				$(elem).find('button:submit').text('Update');
-			}, 900);
-		});
-		var farm_locations = (obj.user_farm_locations[1] != undefined ? obj.user_farm_locations[1] : false);
-		$('#location_list').find('.user-farm-locations').each(function(i, elem) {
-			if (farm_locations && farm_locations[i] != undefined) {
-				elem.value = farm_locations[i];
-			}
-		});
 	}
 }
 

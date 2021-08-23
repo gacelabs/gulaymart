@@ -203,6 +203,7 @@
 														<div class="input-group">
 															<input type="text" class="form-control" data-toggle="modal" data-target="#farm_location_modal" placeholder="Complete address" autocomplete="input" readonly="readonly" id="location-input-0" value="<?php remove_multi_space($location['address_1'] . ' ' . $location['address_2']);?>">
 															<input type="hidden" name="user_farm_locations[1][]" value='<?php echo json_encode($location, JSON_NUMERIC_CHECK);?>' class="user-farm-locations" />
+															<input type="hidden" name="locations[1][<?php echo $key;?>][id]" value='<?php echo $location['id'];?>' />
 															<span class="input-group-btn">
 															<?php if ($key == 0): ?>
 																<button type="button" class="btn btn-xs" id="add_loc_btn"><i class="fa fa-plus color-contrast"></i></button>

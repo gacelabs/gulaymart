@@ -474,13 +474,12 @@ class Farm extends MY_Controller {
 							$data[] = $location;
 						}
 						// debug($data, $farm_id, 'stop');
-						if ($index == 0) {
-							// $this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
+						if (count($data) > 0) {
 							foreach ($data as $row) {
 								$row['farm_id'] = $farm_id;
 								$row['active'] = $index;
 								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
-								if (isset($row['id'])) {
+								if (isset($row['id']) AND !empty($row['id'])) {
 									$farm_location_id = $row['id'];
 									unset($row['id']);
 									$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
@@ -488,30 +487,15 @@ class Farm extends MY_Controller {
 									$this->gm_db->new('user_farm_locations', $row);
 								}
 							}
-						} else {
-							foreach ($data as $row) {
-								$row['farm_id'] = $farm_id;
-								$row['active'] = $index;
-								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
-								if (isset($row['id'])) {
-									$farm_location_id = $row['id'];
-									/*$check = $this->gm_db->get('user_farm_locations', ['id'=>$farm_location_id, 'active'=>1]);
-									if ($check == false) {
-										$this->gm_db->remove('user_farm_locations', ['id'=>$farm_location_id]);
-										$this->gm_db->new('user_farm_locations', $row);
-									} else {*/
-										unset($row['id']);
-										$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
-									/*}*/
-								} else {
-									$this->gm_db->new('user_farm_locations', $row);
-								}
-							}
+						}
+						if ($index != 0) {
 							$user_farm_locations = $this->gm_db->get('user_farm_locations', [
 								'farm_id' => $farm_id
 							], 'result', 'id, lat, lng, address_1, address_2');
-							foreach ($user_farm_locations as $key => $row) {
-								$post['user_farm_locations'][$index][$key] = json_encode($row, JSON_NUMERIC_CHECK);
+							if ($user_farm_locations) {
+								foreach ($user_farm_locations as $key => $row) {
+									$post['user_farm_locations'][$index][$key] = json_encode($row, JSON_NUMERIC_CHECK);
+								}
 							}
 						}
 					}
@@ -519,7 +503,6 @@ class Farm extends MY_Controller {
 
 				$message = 'Storefront Succesfully Created!';
 				if ($this->farms) $message = 'Storefront Succesfully Updated!';
-					
 				if ($first_save) {
 					/*email admins here*/
 					$user_farm = $this->gm_db->get('user_farms', ['id' => $farm_id], 'row');
@@ -529,11 +512,8 @@ class Farm extends MY_Controller {
 						send_gm_email($profile['id'], $content);
 						send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'System Update', 'message', false, ['page_id' => $farm_id, 'entity_id' => $farm_location_id]);
 					}
-					/*$this->set_response('info', $message, $post, 'farm/storefront');
-				} else {
-					$this->set_response('info', $message, $post, false, 'refreshStorePreview');*/
 				}
-				$this->set_response('info', $message, $post, 'farm/storefront');
+				$this->set_response('info', $message, $post, 'farm/storefront/');
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
@@ -643,12 +623,10 @@ class Farm extends MY_Controller {
 				$user_farm['farm_location_id'] = $farm_location['id'];
 			}
 			// debug($user_farm, 'stop');
-
 			$destinations = $this->latlng;
 			if (isset($farm_location['lat']) AND isset($farm_location['lng'])) {
 				$destinations = ['lat' => $farm_location['lat'], 'lng' => $farm_location['lng']];
 			}
-
 			$data_latlng = get_cookie('prev_latlng', true);
 			if (empty($data_latlng)) {
 				$origins = $this->latlng;
