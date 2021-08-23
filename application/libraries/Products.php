@@ -606,4 +606,47 @@ class Products {
 		}
 		return $product;
 	}
+
+	public function paginate($id=0, $edit_url=false, $loop=true)
+	{
+		if ($edit_url) {
+			$user_id = $this->profile['id'];
+			$return = $this->class->gm_db->query("SELECT DISTINCT id, $edit_url AS edit_url FROM products WHERE user_id = '$user_id' ORDER BY updated");
+			$result = [];
+			if ($return) {
+				foreach ($return as $key => $row) {
+					if ($key == 0 AND $loop == false) {
+						$result['first'] = rtrim($return[$key]['edit_url'], '/').'/';
+					}
+					if ($row['id'] == $id) {
+						if ($key != 0) {
+							$result['prev'] = rtrim($return[$key-1]['edit_url'], '/').'/';
+						} else {
+							if ($loop) {
+								$result['prev'] = rtrim($return[count($return)-1]['edit_url'], '/').'/';
+							} else {
+								$result['prev'] = 0;
+							}
+						}
+						// $result[] = $row['edit_url'];
+						if (isset($return[$key+1])) {
+							$result['next'] = rtrim($return[$key+1]['edit_url'], '/').'/';
+						} else {
+							if ($loop) {
+								$result['next'] = rtrim($return[count($return)-($key+1)]['edit_url'], '/').'/';
+							} else {
+								$result['next'] = 0;
+							}
+						}
+					}
+					if (count($return)-1 == $key AND $loop == false) {
+						$result['last'] = rtrim($return[$key]['edit_url'], '/').'/';
+					}
+				}
+			}
+			// debug($result, 'stop');
+			return $result;
+		}
+		return false;
+	}
 }

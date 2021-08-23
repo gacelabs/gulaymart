@@ -49,15 +49,17 @@
 									<li class="text-right">
 										<?php if (count($data['farm_locations']) > 1): ?>
 											<div class="btn-group">
-												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i><span class="hidden-xs">View Stores</span><span class="caret"></span>
+												<button type="button" class="text-link btn btn-default dropdown-toggle icon-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i><span class="hidden-xs"> View Stores</span> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu">
 													<?php foreach ($data['farm_locations'] as $location): ?>
 														<?php
 															$farm = $data['farms'];
 															$farm['farm_location_id'] = $location['id'];
+															$address = explode(',', $location['address_2']);
+															$farm['city'] = isset($address[0]) ? $address[0] : '';
 														?>
-														<li><a id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'].'-'.$location['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>"><?php echo $farm['name'];?></a></li>
+														<li><a id="storefrontTab"<?php if (!$this->agent->is_mobile()): ?> target="storefrontTab<?php echo $farm['id'].'-'.$location['id'];?>"<?php endif ?> href="<?php storefront_url($farm, true);?>"><?php echo $farm['city'];?></a></li>
 													<?php endforeach ?>
 												</ul>
 											</div>
@@ -162,11 +164,13 @@
 															unset($shipping[$value]);
 														}
 													}
-													if ($farm_locations) {
+													if ($farm_locations AND isset($farm_locations[$key])) {
 														$shipping['id'] = $farm_locations[$key]['id'];
+													} else {
+														unset($shipping['id']);
 													}
 													?>
-													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="margin-bottom: 5px;"<?php endif ?>>
+													<div class="col-lg-12"<?php if (is_last($current_profile['shippings'], $key) == false AND count($current_profile['shippings']) > 1): ?> style="border-bottom: 2px dashed #dadada;"<?php endif ?>>
 														<p class="zero-gaps"><b><?php echo $shipping['address_1'];?></b></p>
 														<p class="zero-gaps"><small class="address_2"><?php echo $shipping['address_2'];?></small></p>
 														<input type="hidden" name="user_farm_locations[0][]" value='<?php echo json_encode($shipping, JSON_NUMERIC_CHECK);?>' required="required">
@@ -174,8 +178,8 @@
 												<?php endforeach ?>
 											</div>
 										</div>
-
-										<label class="icon-right">
+										<br>
+										<label style="margin-top:5px;">
 											<input type="radio" class="pick-up-loc" name="farm_loc" id="diff_loc" value="1"<?php str_has_value_echo(1, $farm_loc, ' checked');?>> Enter a different address.
 										</label>
 										<div id="location_list" class="<?php str_not_value_echo(1, $farm_loc, 'hide');?>">
@@ -279,7 +283,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-7 col-md-7 col-sm-12">
+			<div class="col-lg-7 col-md-7 col-sm-12 hide">
 				<div class="cover_image" id="storefront_page_container">
 					<div class="storefront-top">
 						<div class="storefront-img-bg" style="background-image: url(<?php echo(!empty($data['farms']['cover_pic']) ? $data['farms']['cover_pic'] : "assets/images/storefront-top.jpg"); ?>);">

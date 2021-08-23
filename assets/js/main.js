@@ -206,65 +206,86 @@ $(document).ready(function() {
 	}
 	
 	if (gmgc && oSegments[2] != 'view_invoice') reloadState();
+	
+	if ($('.swipe-thing').length) {
+		$('.swipe-thing').each(function(i, elem) {
+			var oArr = $(elem).data('urls');
+			if (Array.isArray(oArr) == false) {
+				if (typeof oArr == 'object') {
+					oArr = Object.values(oArr);
+				} else if (typeof oArr == 'number') {
+					oArr = [oArr];
+				}
+			}
+			// console.log(oArr, $.inArray(window.location.pathname, oArr));
+			if (typeof oArr == 'object' && oArr.length) {
+				runSwiper(oArr);
+			}
+		});
+	}
 });
 
-var runSwiper = function() {
-	var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
-	var currentPage = $.inArray(window.location.pathname, pageLinks);
-	var xDown = null;
-	var yDown = null;
+var runSwiper = function(pageLinks) {
+	if (pageLinks != undefined) {
+		// var pageLinks = ['/basket/','/orders/','/orders/messages/','/farm/inventory/'];
+		var currentPage = $.inArray(window.location.pathname, pageLinks);
+		// console.log(currentPage);
+		var xDown = null;
+		var yDown = null;
 
-	function getTouches(evt) {
-		return (
-			evt.touches || evt.originalEvent.touches // browser API
-		); // jQuery
-	}
-	function handleTouchStart(evt) {
-		const firstTouch = getTouches(evt)[0];
-		xDown = firstTouch.clientX;
-		yDown = firstTouch.clientY;
-	}
-	function handleTouchMove(evt) {
-		if (!xDown || !yDown) {
-			return;
+		function getTouches(evt) {
+			return (
+				evt.touches || evt.originalEvent.touches // browser API
+			); // jQuery
 		}
-		var xUp = evt.touches[0].clientX;
-		var yUp = evt.touches[0].clientY;
+		function handleTouchStart(evt) {
+			const firstTouch = getTouches(evt)[0];
+			xDown = firstTouch.clientX;
+			yDown = firstTouch.clientY;
+		}
+		function handleTouchMove(evt) {
+			var currentPage = $.inArray(window.location.pathname, pageLinks);
+			if (!xDown || !yDown) {
+				return;
+			}
+			var xUp = evt.touches[0].clientX;
+			var yUp = evt.touches[0].clientY;
 
-		var xDiff = xDown - xUp;
-		var yDiff = yDown - yUp;
+			var xDiff = xDown - xUp;
+			var yDiff = yDown - yUp;
 
-		if (Math.abs(xDiff) > Math.abs(yDiff)) {
-			/*most significant*/
-			if (xDiff > 0) {
-				/* right swipe */
-				console.log("right swipe");
-				if (pageLinks[currentPage+1] != undefined) {
-					window.location = pageLinks[currentPage+1];
+			if (Math.abs(xDiff) > Math.abs(yDiff)) {
+				/*most significant*/
+				if (xDiff > 0) {
+					/* right swipe */
+					// console.log("right swipe", currentPage+2, pageLinks);
+					if (pageLinks[currentPage+2] != undefined) {
+						window.location.href = pageLinks[currentPage+2]+'/#swiped';
+					}
+				} else {
+					/* left swipe */
+					// console.log("left swipe", currentPage+1, pageLinks);
+					if (pageLinks[currentPage+1] != undefined) {
+						window.location.href = pageLinks[currentPage+1]+'/#swiped';
+					}
 				}
 			} else {
-				/* left swipe */
-				console.log("left swipe");
-				if (pageLinks[currentPage-1] != undefined) {
-					window.location = pageLinks[currentPage-1];
+				if (yDiff > 0) {
+					/* down swipe */
+					console.log("down swipe");
+				} else {
+					/* up swipe */
+					console.log("up swipe");
 				}
 			}
-		} else {
-			if (yDiff > 0) {
-				/* down swipe */
-				console.log("down swipe");
-			} else {
-				/* up swipe */
-				console.log("up swipe");
-			}
+			/* reset values */
+			xDown = null;
+			yDown = null;
 		}
-		/* reset values */
-		xDown = null;
-		yDown = null;
-	}
 
-	document.addEventListener("touchstart", handleTouchStart, false);
-	document.addEventListener("touchmove", handleTouchMove, false);
+		document.addEventListener("touchstart", handleTouchStart, false);
+		document.addEventListener("touchmove", handleTouchMove, false);
+	}
 }
 
 var reCountMenuNavs = function(sNav, totalItems) {

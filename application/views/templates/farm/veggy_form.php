@@ -2,6 +2,7 @@
 	<?php // $this->view('global/mobile_note'); ?>
 
 		<div class="row" id="new_veggy">
+
 			<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" id="score_detail_container">
 				<?php if ($data['is_edit'] == false): ?>
 					<div class="dashboard-panel" id="score-detail-panel">
@@ -310,53 +311,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" id="preview_container">
-				<div class="dashboard-panel">
-					<div class="dashboard-panel-top">
-						<ul class="spaced-list between">
-							<li><label>Preview listing</label></li>
-							<!-- <li><p><a href="#"<?php if (!$this->agent->is_mobile()): ?> target="_new"<?php endif ?> class="text-link order-link">View Page</a></p></li> -->
-						</ul>
-						<div class="product-list-card">
-							<div class="product-list-photo order-photo" style="background-image:url('<?php identify_main_photo($data['product']);?>');">
-							</div>
-							<div class="product-desc-body">
-								<div class="product-title-container ellipsis-container">
-									<h1 class="zero-gaps order-title"><?php isset_echo($data['product'], 'name', 'No name');?></h1>
-									<p><?php isset_echo($data['product'], 'description', '');?></p>
-								</div>
-							</div>
-							<div class="product-list-footer">
-							<?php if (isset($data['product']) AND (isset($data['product']['latlng']) AND $data['product']['latlng'])): ?>
-								<?php foreach ($data['product']['latlng'] as $key => $prod): ?>
-									<ul class="spaced-list between">
-										<li><p class="product-price">₱ <span class="order-price"><?php echo format_number($prod['price']);?></span> / <span class="order-unit"><?php echo ucwords($prod['measurement']);?></span></p></li>
-										<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration"><?php echo ucwords($prod['duration']);?></span></p></li>
-									</ul>
-								<?php endforeach ?>
-							<?php else: ?>
-								<ul class="spaced-list between">
-									<li><p class="product-price">₱ <span class="order-price">--</span> / <span class="order-unit">--</span></p></li>
-									<li><p class="product-price"><i class="fa fa-clock-o"></i> <span class="order-duration">--</span></p></li>
-								</ul>
-							<?php endif ?>
-							</div>
-						</div>
-						<div class="new-veggy-status-container">
-							<?php
-							$status = 'None';
-							if (isset($data['product']) AND isset($data['product']['activity'])) {
-								$status = ($data['product']['activity'] == GM_ITEM_DRAFT ? 'For review' : ($data['product']['activity'] == GM_ITEM_REJECTED ? 'Unpublished' : ($data['product']['activity'] == GM_ITEM_DELETED ? 'Deleted' : 'Published')));
-							}
-							?>
-							<h5 class="zero-gaps text-center"><b>Status:</b> <span class="order-status"><?php echo $status;?></span></h5>
-						</div>
-					</div>
-					<!-- <div class="dashboard-panel-footer visible-xs">
-						<a href="farm/my-veggies" class="btn btn-default btn-block" style="width:220px;margin:0 auto;">New Veggy</a>
-					</div> -->
-				</div>
-			</div>
+			<?php $this->view('static/preview_listing', ['data' => $data]); ?>
 		</div>
 	</div>
 </div>

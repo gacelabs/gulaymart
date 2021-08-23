@@ -41,19 +41,19 @@ $(document).ready(function() {
 		}, 300);
 	});
 
-	$('#price_btn_container').find('input:reset').bind('mouseup', function(e) {
-		setTimeout(function() {
-			$(e.target).parents('form:first').find('input:checkbox').each(function(i, elem) {
-				var uiParent = $(elem).parents('[id*="farmlocation-"]').first();
-				// console.log(uiParent, uiParent.next('[js-element]'));
-				if ($(elem).is(':checked')) {
-					uiParent.next('[js-element]').removeClass('hide');
-				} else {
-					uiParent.next('[js-element]').addClass('hide');
-				}
-			});
-		}, 300);
-	});
+	// $('#price_btn_container').find('input:reset').bind('mouseup', function(e) {
+	// 	setTimeout(function() {
+	// 		$(e.target).parents('form:first').find('input:checkbox').each(function(i, elem) {
+	// 			var uiParent = $(elem).parents('[id*="farmlocation-"]').first();
+	// 			console.log(uiParent, uiParent.next('[js-element]'), $(elem).is(':checked'));
+	// 			if ($(elem).is(':checked')) {
+	// 				uiParent.next('[js-element]').addClass('hide');
+	// 			} else {
+	// 				// uiParent.next('[js-element]').removeClass('hide');
+	// 			}
+	// 		});
+	// 	}, 300);
+	// });
 
 	$('#prod_attribute .dropdown-menu li a').click(function() {
 		var preText = $(this).text();

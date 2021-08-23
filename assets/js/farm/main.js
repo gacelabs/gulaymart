@@ -1,39 +1,35 @@
 $(document).ready(function() {
-	$('[js-event="add-set"]').on('click', function() {
-		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
-		if ($(this).is(':checked')) {
-			uiParent.next('[js-element="products-location-set"]').removeClass('hide');
-			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
-			$('#price_btn_container').find('input:reset').trigger('click');
-		} else {
-			uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
-			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', false);
-		}
-	});
-
-	$('[js-event="add-set"]').each(function() {
-		if ($(this).is(':checked')) {
+	$('[js-event="add-set"]').each(function(i, elem) {
+		$(elem).unbind('click').bind('click', function() {
 			var uiParent = $(this).parents('[id*="farmlocation-"]').first();
-			uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
-		}
+			if ($(this).is(':checked')) {
+				$(this).attr('checked', 'checked');
+				uiParent.next('[js-element="products-location-set"]').removeClass('hide');
+				uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', true);
+				$('#price_btn_container').find('input:reset').trigger('click');
+			} else {
+				$(this).removeAttr('checked');
+				uiParent.next('[js-element="products-location-set"]').addClass('hide').find('input').prop('value', '').val('');
+				uiParent.next('[js-element="products-location-set"]').find('input, select').prop('required', false);
+			}
+			runFormValidation();
+		});
 	});
 
-	$('[js-event="new-set"]').on('click', function() {
-		var uiParent = $(this).parents('[id*="farmlocation-"]').first();
-		if ($(this).is(':checked')) {
-			uiParent.next('[js-element="pricing-panel"]').removeClass('hide');
-			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
-		} else {
-			uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input').prop('value', '').val('');
-			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', false);
-		}
-	});
-
-	$('[js-event="new-set"]').each(function() {
-		if ($(this).is(':checked')) {
+	$('[js-event="new-set"]').each(function(i, elem) {
+		$(elem).unbind('click').bind('click', function() {
 			var uiParent = $(this).parents('[id*="farmlocation-"]').first();
-			uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
-		}
+			if ($(this).is(':checked')) {
+				$(this).attr('checked', 'checked');
+				uiParent.next('[js-element="pricing-panel"]').removeClass('hide');
+				uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', true);
+			} else {
+				$(this).removeAttr('checked');
+				uiParent.next('[js-element="pricing-panel"]').addClass('hide').find('input').prop('value', '').val('');
+				uiParent.next('[js-element="pricing-panel"]').find('input, select').prop('required', false);
+			}
+			runFormValidation();
+		});
 	});
 });
 

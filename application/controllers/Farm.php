@@ -242,6 +242,7 @@ class Farm extends MY_Controller {
 				],
 				'data' => [
 					'has_products' => $this->products->count(),
+					'pagination' => false,
 					'product' => [],
 					'is_edit' => false,
 				],
@@ -390,6 +391,7 @@ class Farm extends MY_Controller {
 					],
 					'data' => [
 						'has_products' => $this->products->count(),
+						'pagination' => $this->products->paginate($id, 'CONCAT("farm/save-veggy/", id, "/", REPLACE(LOWER(REPLACE(TRIM(name), " ", "-")), "", "), "))'),
 						'product' => $product,
 						'is_edit' => true,
 					],
@@ -473,12 +475,18 @@ class Farm extends MY_Controller {
 						}
 						// debug($data, $farm_id, 'stop');
 						if ($index == 0) {
-							$this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
+							// $this->gm_db->remove('user_farm_locations', ['farm_id' => $farm_id]);
 							foreach ($data as $row) {
 								$row['farm_id'] = $farm_id;
 								$row['active'] = $index;
 								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
-								$this->gm_db->new('user_farm_locations', $row);
+								if (isset($row['id'])) {
+									$farm_location_id = $row['id'];
+									unset($row['id']);
+									$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
+								} else {
+									$this->gm_db->new('user_farm_locations', $row);
+								}
 							}
 						} else {
 							foreach ($data as $row) {
@@ -487,14 +495,14 @@ class Farm extends MY_Controller {
 								$row['ip_address'] = trim($_SERVER['REMOTE_ADDR']);
 								if (isset($row['id'])) {
 									$farm_location_id = $row['id'];
-									$check = $this->gm_db->get('user_farm_locations', ['id'=>$farm_location_id, 'active'=>1]);
+									/*$check = $this->gm_db->get('user_farm_locations', ['id'=>$farm_location_id, 'active'=>1]);
 									if ($check == false) {
 										$this->gm_db->remove('user_farm_locations', ['id'=>$farm_location_id]);
 										$this->gm_db->new('user_farm_locations', $row);
-									} else {
+									} else {*/
 										unset($row['id']);
 										$this->gm_db->save('user_farm_locations', $row, ['id' => $farm_location_id]);
-									}
+									/*}*/
 								} else {
 									$this->gm_db->new('user_farm_locations', $row);
 								}
@@ -521,10 +529,11 @@ class Farm extends MY_Controller {
 						send_gm_email($profile['id'], $content);
 						send_gm_message($profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'System Update', 'message', false, ['page_id' => $farm_id, 'entity_id' => $farm_location_id]);
 					}
-					$this->set_response('info', $message, $post, 'farm/storefront');
+					/*$this->set_response('info', $message, $post, 'farm/storefront');
 				} else {
-					$this->set_response('info', $message, $post, false, 'refreshStorePreview');
+					$this->set_response('info', $message, $post, false, 'refreshStorePreview');*/
 				}
+				$this->set_response('info', $message, $post, 'farm/storefront');
 			}
 			$this->set_response('error', 'Location verified!', $post);
 		} else {
