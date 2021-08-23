@@ -8,8 +8,8 @@
 			<div class="product-list-card">
 				<div class="product-list-photo order-photo" style="background-image:url('<?php identify_main_photo($data['product']);?>'); position: relative;">
 					<?php if ($data['pagination'] AND $this->agent->is_mobile()): ?>
-						<i class="fa fa-chevron-left icon-left" style="position: absolute; top: 85%; left: -30px;"></i>
-						<i class="fa fa-chevron-right icon-right" style="position: absolute; top: 85%; right: -30px;"></i>
+						<a href="<?php echo $data['pagination']['prev'];?>#swiped"><i class="fa fa-chevron-left icon-left" style="position: absolute; top: 85%; left: -30px;"></i></a>
+						<a href="<?php echo $data['pagination']['next'];?>#swiped"><i class="fa fa-chevron-right icon-right" style="position: absolute; top: 85%; right: -30px;"></i></a>
 					<?php endif ?>
 				</div>
 				<div class="product-desc-body">
@@ -50,8 +50,8 @@
 
 			<?php if ($data['pagination'] AND !$this->agent->is_mobile()): ?>
 				<div style="margin-top:15px;text-align:right;">
-					<a href="<?php echo $data['pagination']['prev'];?>" class="btn btn-theme pull-left" type="submit" loading-text=""><i class="fa fa-chevron-left icon-left"></i>Previous</a>
-					<a href="<?php echo $data['pagination']['next'];?>" class="btn btn-theme" type="submit" loading-text="">Next<i class="fa fa-chevron-right icon-right"></i></a>
+					<a href="<?php echo $data['pagination']['prev'];?>#swiped" class="btn btn-theme pull-left" type="submit" loading-text=""><i class="fa fa-chevron-left icon-left"></i>Previous</a>
+					<a href="<?php echo $data['pagination']['next'];?>#swiped" class="btn btn-theme" type="submit" loading-text="">Next<i class="fa fa-chevron-right icon-right"></i></a>
 				</div>
 			<?php endif ?>
 		</div>
