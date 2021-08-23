@@ -103,4 +103,7 @@
 	.veggy-nearby-product-item:last-child, .veggy-nearby-product-item:last-child .veggy-nearby-product-img {
 		border-radius: 0;
 	}
+	.veggy-nearby-product-body p {
+		font-size: 11px;
+	}
 }
