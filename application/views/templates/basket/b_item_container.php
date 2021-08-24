@@ -6,7 +6,7 @@
 			$order_type = $key_data[1];
 			$basket_ids = $basket_items['basket_ids'];
 			asort($basket_ids);
-			$combi = " data-".implode("-id data-", $basket_ids)."-id";
+			$combi = " id-".implode("-item id-", $basket_ids)."-item";
 			$schedule = (!is_null($key_data[2]) AND $key_data[2] == '0000-00-00') ? '' : $key_data[2];
 			$row_data = [
 				'id_combi' => $combi,

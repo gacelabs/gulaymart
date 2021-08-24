@@ -408,7 +408,8 @@ class Farm extends MY_Controller {
 		$mode = 'deactivate';
 		if ($perm_delete == 0) $mode = 'unpublish';
 		if ($post AND (!isset($post['_']) OR (isset($post['callback']) AND $post['callback'] != 'gmCall'))) {
-			$response = check_and_remove_delivery($post);
+			$product_id = isset($post['id']) ? $post['id'] : 0;
+			$response = check_gm_delivery($product_id);
 			// debug($response, $post, 'stop');
 			if ($response) {
 				/*remove product*/
@@ -420,13 +421,13 @@ class Farm extends MY_Controller {
 					$redirect = 'removeOnTable';
 					$mode = 'deactivated';
 				}
-				$this->products->save(['activity' => $activity], ['id' => $post['id']]);
+				$this->products->save(['activity' => $activity], ['id' => $product_id]);
 				/*email admins here*/
 				$content = remove_multi_space('<p>Product item '.ucwords($post['name']).' has been '.$mode.'.</p>', true);
 				// debug($content, 'stop');
 				/*notify user*/
 				send_gm_email($this->accounts->profile['id'], $content);
-				send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $post['id']]);
+				send_gm_message($this->accounts->profile['id'], strtotime(date('Y-m-d')), $content, 'Notifications', 'Inventory', 'message', false, ['page_id' => $product_id]);
 				$this->set_response('success', 'Product '.$mode.'', $post, false, $redirect);
 			}
 			$this->set_response('error', remove_multi_space('Unable to '.$mode.' '.ucwords($post['name']).' product', true), $post);

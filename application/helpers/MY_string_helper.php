@@ -1561,16 +1561,13 @@ function get_items_by_distance($items, $row, $driving_distance, $user_id, $compa
 			foreach ($items_locations as $index => $location) {
 				$where = [
 					'id' => $location['product_id'], 
-					'include_activity' => 1,
+					'activity' => [GM_ITEM_APPROVED],
 				];
 				if ($user_id) $where['user_id'] = $user_id;
-				/*if ($profile) { // this for the item ranking, abang lang
-					$where['user_id'] = [$profile['id']];
-					$item = $ci->gm_db->get_not_in('products', $where, 'row');
-				} else {*/
-					$item = $ci->gm_db->get_in('products', $where, 'row');
-				/*}*/
+				
+				$item = $ci->gm_db->get_in('products', $where, 'row');
 				// debug($item, $where, 'stop');
+
 				if ($conditions != false) {
 					if (isset($conditions['category_ids']) AND $conditions['category_ids'] != false) {
 						$where['category_id'] = $conditions['category_ids'];
@@ -1782,18 +1779,21 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 
 function cronlogger($response=false, $data=false, $type='error')
 {
-	$filename = 'assets/data/logs/cron-'.$type.'.log';
+	if ($date == false) $date = date('Y-m-d');
+	$filename = 'assets/data/logs/cron-error~'.$date.'.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
 	}
 	$logfile = fopen(get_root_path($filename), "a+");
 	/*log here*/
-	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	$txt .= "Code: $type\n";
-	$txt .= "Response: " . json_encode($response, JSON_NUMERIC_CHECK) . " \n";
-	$txt .= "Data: " . json_encode($data, JSON_NUMERIC_CHECK) . " \n";
-	$txt .= "----------------------------" . "\n";
+	$result  = [
+		'date' => Date('Y-m-d H:i:s'),
+		'code' => $type,
+		'response' => $response,
+		'data' => $data,
+	];
+	$txt = json_encode($result, JSON_NUMERIC_CHECK) . " \n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
@@ -1808,7 +1808,7 @@ function cronsequence($data=false, $type='info', $date=false)
 	}
 	$logfile = fopen(get_root_path($filename), "a+");
 	/*log here*/
-	$txt = '<div class="text-'.$type.'">' . $data . '</div>'."\n";
+	$txt = '<div class="text-'.$type.'" data-time="'.time().'">' . $data . '</div>'."\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
@@ -1823,22 +1823,36 @@ function cronreturns($data=false, $type='info', $date=false)
 	}
 	$logfile = fopen(get_root_path($filename), "a+");
 	/*log here*/
-	$txt = '<div class="text-'.$type.'">' . $data . '</div>'."\n";
+	$txt = '<div class="text-'.$type.'" data-time="'.time().'">' . $data . '</div>'."\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
 
-function cron_finished($data=false, $date=false)
+function croncancelled($data=false, $type='info', $date=false)
 {
 	if ($date == false) $date = date('Y-m-d');
-	$filename = 'assets/data/logs/cron-finish-'.$date.'.log';
+	$filename = 'assets/data/logs/cron-cancelled-'.$date.'.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
 	}
 	$logfile = fopen(get_root_path($filename), "a+");
 	/*log here*/
-	$txt = json_encode(['datetime'=>date('Y-m-d H:i:s'), 'data'=>$data], JSON_NUMERIC_CHECK) . "\n";
+	$txt = '<div class="text-'.$type.'" data-time="'.time().'">' . $data . '</div>'."\n";
+	fwrite($logfile, $txt);
+	fclose($logfile);
+}
+
+function cron_finished($data=false, $type=false)
+{
+	$filename = 'assets/data/logs/cron-finish.log';
+	if(!file_exists(get_root_path($filename))) {
+		$logfile = fopen($filename, "w");
+		fclose($logfile);
+	}
+	$logfile = fopen(get_root_path($filename), "a+");
+	/*log here*/
+	$txt = json_encode(['type'=>$type, 'datetime'=>date('Y-m-d H:i:s'), 'data'=>$data], JSON_NUMERIC_CHECK) . "\n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends MY_Controller {
 
-	public $allowed_methods = ['push_orders_to_toktok', 'orders_to_receive'];
+	public $allowed_methods = ['push_orders_to_toktok', 'orders_to_receive', 'remove_cancelled_orders'];
 	public $not_allowed_methods = [];
 
 	public function __construct()
@@ -204,7 +204,7 @@ class Admin extends MY_Controller {
 						'total' => $this->gm_db->count('baskets_merge', ['status' => GM_FOR_PICK_UP_STATUS, 'operator' => $operator_id, 'is_sent' => [0,1]]),
 					]);
 					if (in_array($senddataapi->response_code, [403,404])) {
-						cronlogger($senddataapi->response_text, ['operator_id' => $operator_id], 'operator-bookings');
+						cronlogger('Error: '.$senddataapi->response_text, ['operator_id' => $operator_id]);
 					}
 				}
 			}
@@ -304,7 +304,7 @@ class Admin extends MY_Controller {
 								$this->set_response('info', 'No bookings available for now!', $post, false, 'noAvailableBookings');
 							}
 						} else {
-							cronlogger('Error while pushing operator orders to toktok!', $operator, 'operator-bookings');
+							cronlogger('Error while pushing operator orders to toktok!', $operator);
 						}
 					}
 				}
@@ -463,12 +463,12 @@ class Admin extends MY_Controller {
 								$seller_ids[] = $toktok['seller_id'];
 								$merge_ids[] = $toktok['id'];
 								cronsequence('Order pushed DONE!', 'success');
-								cron_finished($toktok);
+								cron_finished($toktok, 'pushing');
 							} else {
-								cronlogger('Error while pushing orders to toktok!', $toktok, 'gulaymart-bookings');
+								cronlogger('Error while pushing orders to toktok!', $toktok);
 							}
 						} else {
-							cronlogger('Error unable to parse totok data!', $toktok, 'gulaymart-bookings');
+							cronlogger('Error unable to parse totok data!', $toktok);
 							cronsequence('Unable to parse totok data...');
 						}
 					}
@@ -531,11 +531,11 @@ class Admin extends MY_Controller {
 										}
 									}
 								} else {
-									cronlogger('Operator count is greater than the records', $operators, 'operator-bookings');
+									cronlogger('Operator count is greater than the records', $operators);
 								}
 							}
 						} else {
-							cronlogger('No records available for operators', $toktok_for_operators, 'operator-bookings');
+							cronlogger('No records available for operators', $toktok_for_operators);
 						}
 						// then let the cron job run this until all operator bookings are done
 						// there will be another method that checks these and switches back ON again
@@ -546,13 +546,7 @@ class Admin extends MY_Controller {
 					// Disable OPERATOR distributions FOR NOW
 					/*$this->notify_operator_booking();*/
 				}
-			} else {
-				cronlogger('push_orders_to_toktok 547: no available post!', false, 'gulaymart-bookings');
-				cronsequence('No available orders to post...', 'warning');
 			}
-		} else {
-			cronlogger('push_orders_to_toktok 551: admin setting unknown!', false, 'gulaymart-bookings');
-			cronsequence('Unable to run empty orders...', 'danger');
 		}
 		$this->senddataapi->trigger('booking-log', 'incoming-gm-logs', ['type' => 'sequence']);
 	}
@@ -634,21 +628,22 @@ class Admin extends MY_Controller {
 										}
 										$baskets_merge_ids[$id] = $data['id'];
 										cronreturns('GulayMart order id:'.$data['order_id'].' updated!', 'success');
+										cron_finished($data, 'pulling');
 									} else {
-										cronlogger('Error order ids not match!', $data, 'gulaymart-bookings');
+										cronlogger('Error order ids not match!', $data);
 										cronreturns('Order '.$order_id.' != '.$data['order_id'].' not match!', 'danger');
 									}
 								} else {
-									cronlogger('Error while Fetching orders from toktok!', $data, 'gulaymart-bookings');
+									cronlogger('Error while Fetching orders from toktok!', $data);
 									cronreturns('No delivery fetched for order_id:'.$data['order_id'], 'danger');
 								}
 							}
 						} else {
-							cronlogger('Error while receiving orders from toktok!', $data, 'gulaymart-bookings');
+							cronlogger('Error while receiving orders from toktok!', $data);
 							cronreturns('No delivery fetched for order_id:'.$data['order_id'], 'danger');
 						}
 					} else {
-						cronlogger('Error Delivery ID existing!', $data, 'gulaymart-bookings');
+						cronlogger('Error Delivery ID existing!', $data);
 						cronreturns('Delivery '.$data['delivery_id'].' already exist.', 'warning');
 					}
 				}
@@ -680,13 +675,108 @@ class Admin extends MY_Controller {
 					cronreturns('All Deliveries updated!', 'success');
 				}
 			} else {
-				cronlogger('orders_to_receive 620: failed setup!', $baskets_merge, 'gulaymart-bookings');
 				cronreturns('Failed setting up toktok orders data...', 'danger');
 			}
-		} else {
-			cronlogger('orders_to_receive 679: baskets unknown!', false, 'gulaymart-bookings');
-			cronreturns('No available orders from now...', 'danger');
 		}
 		$this->senddataapi->trigger('booking-log', 'incoming-gm-logs', ['type' => 'returns']);
+	}
+
+	/*this will be run on cron job*/
+	public function remove_cancelled_orders()
+	{
+		$products = $this->gm_db->get_in('products', ['activity' => [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
+		croncancelled('Getting GM cancelled orders...');
+		if ($products) {
+			$this->load->library('ToktokApi');
+			foreach ($products as $key => $product) {
+				$baskets = $this->gm_db->get_in('baskets', 
+					['product_id' => $product['id'], 'status' => [GM_CANCELLED_STATUS], 'reason' => 'Removed Product']);
+				if ($baskets) {
+					$seller_ids = $this->gm_db->columns('user_id', $baskets);
+					// debug($seller_ids, 'stop');
+					$baskets_merge = $this->gm_db->get_in('baskets_merge', [
+						'seller_id' => $seller_ids, 'status' => [GM_CANCELLED_STATUS],
+						'is_sent' => 1
+					]);
+					$merges = setup_orders_data($baskets_merge);
+					// debug($merges, 'stop');
+					if ($baskets_merge) {
+						foreach ($merges as $key => $merge) {
+							croncancelled('Setting up query to toktok...');
+							// $test = $this->toktokapi->app_request('cancel_reasons', [], 'website');
+							// debug($test->response, 'stop');
+							/*get exact toktok status base on gm status*/
+							$toktok_status = [TT_PLACED_STATUS]; /*GM_VERIFIED_SCHED, GM_VERIFIED_NOW, GM_PLACED_STATUS*/
+							if (in_array($merge['status'], [GM_FOR_PICK_UP_STATUS])) {
+								$toktok_status = [TT_FOR_PICK_UP_STATUS, TT_PICKED_UP_STATUS];
+							}
+							if (ENVIRONMENT == 'development') {
+								$delivery = $this->toktokapi->check_delivery();
+							} else {
+								$seller_name = remove_multi_space($merge['seller']['profile']['firstname'].' '.$merge['seller']['profile']['lastname'], true);
+								$date_range = false;
+								if (isset($merge['schedule']) AND !empty($merge['schedule'])) {
+									$date_range = [
+										'from' => date('m/d/Y', strtotime($merge['schedule'])),
+										'to' => date('m/d/Y', strtotime($merge['schedule'])),
+									];
+								}
+								$delivery = $this->toktokapi->check_delivery($date_range, '', '', $seller_name);
+							}
+							// debug($delivery->response, $toktok_status, 'stop');
+							$failed_removes = [];
+							if ($delivery->success AND count($delivery->response)) {
+								croncancelled('Cancelled orders found!', 'success');
+								foreach ($delivery->response as $order) {
+									croncancelled('Matching order status...', 'warning');
+									if (isset($order['details']) AND isset($order['details']['post'])) {
+										if (in_array($order['details']['post']['status'], $toktok_status)) {
+											croncancelled('Order status matched!', 'success');
+											if (ENVIRONMENT == 'development') {
+												$order['details']['post']['notes'] = 'GulayMart Order#:'.$merge['order_id'];
+											}
+											$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
+											$order_id = 0;
+											if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
+											croncancelled('Matching order ID...', 'warning');
+											if ($order_id == $merge['order_id']) {
+												croncancelled('Order ID matched!', 'success');
+												$delivery_id = $order['details']['post']['id'];
+												croncancelled('Requesting order for deletion...', 'warning');
+												$post_delivery = $this->toktokapi->app_request('confirm_cancel',
+													['deliveryId' => $delivery_id, 'categoryId' => 7], 'website');
+													/*categoryId = 7 is equal to I changed my mind*/
+												if (!$post_delivery->success) {
+													croncancelled('Unable to delete delivery #'.$delivery_id.' - Order ID '.$order_id.'!', 'danger');
+													$failed_removes[$delivery_id] = ['data' => $merge, 'response' => $post_delivery->response];
+													cronlogger('Error while cancelling orders to toktok!', $failed_removes);
+												} else {
+													croncancelled('Order ID '.$order_id.' deleted SUCCESSFULLY!', 'success');
+													cron_finished($merge, 'deleting');
+												}
+											} else{
+												croncancelled('Did not find any match for Order ID '.$order_id.'!', 'danger');
+											}
+										} else {
+											croncancelled('Did not find any match status!', 'danger');
+										}
+									} else {
+										croncancelled('Order not matched!', 'danger');
+									}
+								}
+							} else {
+								croncancelled('No cancelled orders seen!', 'danger');
+							}
+							// debug($failed_removes, 'stop');
+							if (count($failed_removes)) {
+								cronlogger('Failed to remove or delete item in toktok!', ['failed' => $failed_removes]); 
+							}
+
+						}
+					}
+				}
+			}
+		}
+		$this->senddataapi->trigger('booking-log', 'incoming-gm-logs', ['type' => 'cancelled']);
 	}
 }

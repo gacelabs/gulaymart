@@ -13,13 +13,16 @@ $(document).ready(function() {
 		} else {
 			initMapLocations();
 		}
-	} else if (IS_LOCAL == 0) {
+	} else {
 		navigator.geolocation.getCurrentPosition(function(response) {
 			if (response != undefined) {
 				oLatLong = {'lat': response.coords.latitude, 'lng': response.coords.longitude};
 			}
 		}, function () {
-			runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
+			if (mobileAndTabletCheck()) {
+				runAlertBox({type:'info', message: 'Please enable your location to access google map data.'/*, unclose: true*/});
+			}
+			if (oUser != false && mobileAndTabletCheck() == false) oLatLong = {lat: oUser.lat, lng: oUser.lng};
 		}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 	}
 
@@ -52,10 +55,10 @@ var findMe = function(oLocation) {
 				initMapLocations();
 			}
 		}, function () {
-			runAlertBox({type:'info', message: 'Please enable your location to access google map data.', unclose: true});
+			runAlertBox({type:'info', message: 'Please enable your location to access google map data.'/*, unclose: true*/});
 		}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 	} else if (oLocation.state == 'denied') {
-		runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.', unclose: true});
+		runAlertBox({type:'info', message: 'Please allow GulayMart.com your location to access google map data.'/*, unclose: true*/});
 	}
 }
 

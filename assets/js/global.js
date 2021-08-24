@@ -149,7 +149,7 @@ function modalCallbacks() {
 							geocoder.geocode({
 								latLng: latlng
 							}, function(results, status) {
-								console.log(results);
+								// console.log(results);
 								if (status == google.maps.GeocoderStatus.OK) {
 									if (results[1]) {
 										var arVal = [];
@@ -191,7 +191,7 @@ function modalCallbacks() {
 						});
 
 						var oGeoLatLong = oLatLong;
-						if (oUser != false) oGeoLatLong = {lat: oUser.lat, lng: oUser.lng};
+						// console.log(oGeoLatLong);
 						$('#my-curr-loc').tooltip().focus();
 						$('#my-curr-loc').off('click').on('click', function() {
 							execLocation(oGeoLatLong);

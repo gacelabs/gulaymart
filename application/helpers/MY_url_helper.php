@@ -584,15 +584,12 @@ function notify_placed_orders($final_total, $merge_ids, $seller_ids, $buyer)
 		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders');
 	}
 	/*LOGS FOR TRACKING*/
-	$logfile = fopen(get_root_path('assets/data/logs/placed-orders.log'), "a+");
-	$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	$txt .= "Basket Merge IDs: " . implode(',', $merge_ids) . " \n";
-	$txt .= "Price total: " . $final_total . " \n";
-	$txt .= "Buyer ID: " . $buyer['id'] . " \n";
-	$txt .= "Seller IDs: " . implode(',', $seller_ids) . " \n";
-	$txt .= "--------------------------------" . "\n";
-	fwrite($logfile, $txt);
-	fclose($logfile);
+	cronlogger('Placed Order(s)', [
+		'merge_ids' => $merge_ids,
+		'final_total' => $final_total,
+		'buyer' => $buyer,
+		'seller_ids' => $seller_ids,
+	], 'order-cycle');
 }
 
 function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pick up', $status='for-pick-up', $was_cancelled=false)
@@ -619,14 +616,11 @@ function notify_order_details($merge, $buyer, $seller_ids, $action='Ready for pi
 		send_gm_message($seller_id, strtotime(date('Y-m-d')), $html_seller_gm, 'Notifications', 'Orders', 'message', $was_cancelled);
 	}
 	/*LOGS FOR TRACKING*/
-	$logfile = fopen(get_root_path('assets/data/logs/'.$status.'-orders.log'), "a+");
-	$txt = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	$txt .= "Order ID: " . $merge['order_id'] . " \n";
-	$txt .= "Buyer ID: " . $buyer['id'] . " \n";
-	$txt .= "Seller IDs: " . implode(',', $seller_ids) . " \n";
-	$txt .= "--------------------------------" . "\n";
-	fwrite($logfile, $txt);
-	fclose($logfile);
+	cronlogger($action, [
+		'merge' => $merge,
+		'buyer' => $buyer,
+		'seller_ids' => $seller_ids,
+	], 'order-cycle');
 }
 
 function setup_fulfillments_data($baskets_merge=false)
@@ -874,9 +868,9 @@ function format_number($value=0)
 	}
 }
 
-function check_and_remove_delivery($post=false)
+function check_gm_delivery($product_id=0)
 {
-	if ($post AND isset($post['id'])) {
+	if ($product_id) {
 		$ci =& get_instance();
 		$baskets_merge = $ci->gm_db->get_not_in('baskets_merge', ['seller_id' => $ci->accounts->profile['id'], 'status' => [
 			GM_ITEM_REMOVED, GM_ON_DELIVERY_STATUS, GM_RECEIVED_STATUS, GM_CANCELLED_STATUS
@@ -885,12 +879,10 @@ function check_and_remove_delivery($post=false)
 		// debug($merges, $post, 'stop');
 		/*check order exsisting w/ this product */
 		if ($baskets_merge) {
-			$baskets_merge_ids = [];
-			$ci->load->library('ToktokApi');
-			// $test = $ci->toktokapi->app_request('cancel_reasons', [], 'website');
-			// debug($test->response, 'stop');
-			$product_id = $post['id'];
+			$baskets_merge_ids = $ci->gm_db->columns('id', $baskets_merge);
+			$buyer_ids = $ci->gm_db->columns('buyer_id', $baskets_merge);
 			$product = $ci->gm_db->get_in('products', ['id' => $product_id, 'include_activity' => 1], 'row');
+
 			foreach ($merges as $key => $merge) {
 				/*set the order to cancelled and force notify buyer*/
 				$basket_ids = explode(',', $merge['basket_ids']);
@@ -900,54 +892,6 @@ function check_and_remove_delivery($post=false)
 					'status' => $merge['status'],
 				]);
 				if ($baskets) {
-					// debug($merge, 'stop');
-					/*get exact toktok status base on gm status*/
-					$toktok_status = [TT_PLACED_STATUS]; /*GM_VERIFIED_SCHED, GM_VERIFIED_NOW, GM_PLACED_STATUS*/
-					if (in_array($merge['status'], [GM_FOR_PICK_UP_STATUS])) {
-						$toktok_status = [TT_FOR_PICK_UP_STATUS, TT_PICKED_UP_STATUS];
-					}
-					if (ENVIRONMENT == 'development') {
-						$delivery = $ci->toktokapi->check_delivery();
-					} else {
-						$seller_name = remove_multi_space($merge['seller']['profile']['firstname'].' '.$merge['seller']['profile']['lastname'], true);
-						$date_range = false;
-						if (isset($merge['schedule']) AND !empty($merge['schedule'])) {
-							$date_range = [
-								'from' => date('m/d/Y', strtotime($merge['schedule'])),
-								'to' => date('m/d/Y', strtotime($merge['schedule'])),
-							];
-						}
-						$delivery = $ci->toktokapi->check_delivery($date_range, '', '', $seller_name);
-					}
-					// debug($delivery->response, $toktok_status, 'stop');
-					$failed_removes = [];
-					if ($delivery->success AND count($delivery->response)) {
-						foreach ($delivery->response as $order) {
-							if (isset($order['details']) AND isset($order['details']['post'])) {
-								if (in_array($order['details']['post']['status'], $toktok_status)) {
-									if (ENVIRONMENT == 'development') {
-										$order['details']['post']['notes'] = 'GulayMart Order#:'.$merge['order_id'];
-									}
-									$notes_data = explode('GulayMart Order#:', $order['details']['post']['notes']);
-									$order_id = 0;
-									if (count($notes_data) AND isset($notes_data[1])) $order_id = trim($notes_data[1]);
-									if ($order_id == $merge['order_id']) {
-										$delivery_id = $order['details']['post']['id'];
-										$post_delivery = $ci->toktokapi->app_request('confirm_cancel',
-											['deliveryId' => $delivery_id, 'categoryId' => 7], 'website');
-											/*categoryId = 7 is equal to I changed my mind*/
-										if (!$post_delivery->success) {
-											$failed_removes[$delivery_id] = ['data' => $merge, 'response' => $post_delivery->response];
-										}
-									}
-								}
-							}
-						}
-					}
-					// debug($failed_removes, 'stop');
-					if (count($failed_removes)) {
-						logger('Failed to remove or delete item in toktok!', ['failed' => $failed_removes], 'gulaymart-toktok-deletion'); 
-					}
 					/*cancel orders*/
 					// debug($merge['order_details'], 'stop');
 					$order_details = $merge['order_details'];
@@ -973,17 +917,18 @@ function check_and_remove_delivery($post=false)
 				}
 			}
 			// debug($baskets_merge_ids, 'stop');
-			if (count($baskets_merge_ids) > 0) {
+			if (!empty($baskets_merge_ids)) {
 				$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
-				$user_ids = $ci->gm_db->columns('user_id', $baskets);
-				$ci->senddataapi->trigger('info-updates', 'incoming-gm-infos', [
-					'function' => 'runAlertBox', 'user_ids' => $user_ids,
-					'data' => [
-						'type' => 'info',
-						'message' => 'The Seller want to inform you that the product '.ucwords($product['name']).' has No stocks available now, Thank you.',
-						'unclose' => true,
-					],
-				]);
+				if (!empty($buyer_ids)) {
+					$ci->senddataapi->trigger('info-updates', 'incoming-gm-infos', [
+						'function' => 'runAlertBox', 'user_ids' => $buyer_ids,
+						'data' => [
+							'type' => 'info',
+							'message' => 'The Seller want to inform you that the product '.ucwords($product['name']).' has No stocks available now, Thank you.',
+							'unclose' => true,
+						],
+					]);
+				}
 			}
 		}
 		return true;

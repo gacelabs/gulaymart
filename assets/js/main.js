@@ -501,9 +501,9 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 	switch (sMode) {
 		case 'basket':
 			if ($.inArray(sMode, Object.values(oSegments)) >= 0) {
-				// console.log(oResponse);
+				// console.log(oResponse, Object.keys(oResponse.html).length);
 				var uiParent = $('#dashboard_panel_right [js-element="baskets-panel"]');
-				if (oResponse.html.length && uiParent.length) {
+				if (Object.keys(oResponse.html).length && uiParent.length) {
 					var oArr = [];
 					if (Array.isArray(oResponse.basket_ids) == false) {
 						if (typeof oResponse.basket_ids == 'object') {
@@ -514,6 +514,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					} else {
 						oArr = oResponse.basket_ids;
 					}
+					// console.log(oArr);
 					if (oArr.length) {
 						oArr = oArr.sort();
 						var arrRemoved = [];
@@ -521,24 +522,24 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							for (var x in oResponse.html) {
 								var newUI = oResponse.html[x];
 								if (newUI != undefined && newUI.length) {
-									var removeMethod = new Promise((resolve, reject) => {
-										var found = false;
-										oArr.forEach((id, index, array) => {
-											var item = uiParent.find('[data-'+id+'-id]');
-											if (item.length) {
-												// console.log('replace ui!', item);
-												item.replaceWith(newUI);
-												found = true;
+									var updateMethod = new Promise((resolve, reject) => {
+										oArr.forEach((attr, index, array) => {
+											if (x == attr) {
+												// console.log('attributes', attr);
+												var item = uiParent.find(attr);
+												if (item.length) {
+													// console.log('replace ui!', item);
+													item.replaceWith(newUI);
+												} else {
+													// console.log('new ui!', uiParent);
+													uiParent.prepend(newUI);
+												}
 											}
+											if (index === array.length -1) resolve();
 										});
-										if (found == false) {
-											// console.log('new ui!', uiParent);
-											uiParent.prepend(newUI);
-										}
-										resolve();
 									});
 
-									removeMethod.then(() => {
+									updateMethod.then(() => {
 										if (typeof runATagAjax == 'function') runATagAjax();
 										if (typeof runDomShowHide == 'function') runDomShowHide();
 										if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
@@ -574,7 +575,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 				if (oArr.length) {
 					var arrToRemoved = [];
 					if (Object.keys(oResponse.html).length) {
-						var removeMethod = new Promise((resolve, reject) => {
+						var updateMethod = new Promise((resolve, reject) => {
 							oArr.forEach((id, index, array) => {
 								var newUI = oResponse.html[id],
 								uiParent = $('#msg_'+oResponse.tabs[id]);
@@ -592,7 +593,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 							});
 						});
 
-						removeMethod.then(() => {
+						updateMethod.then(() => {
 							if (typeof runATagAjax == 'function') runATagAjax();
 							if (typeof runDomShowHide == 'function') runDomShowHide();
 							if (typeof msgRunDomReady == 'function') msgRunDomReady();
@@ -608,7 +609,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						});
 					} else {
 						var uiParent = []
-						var removeMethod = new Promise((resolve, reject) => {
+						var updateMethod = new Promise((resolve, reject) => {
 							oArr.forEach((id, index, array) => {
 								var item = $('[data-msg-id="'+id+'"]');
 								if (uiParent.length == 0) uiParent = item.parent('[element-name="messages"]');
@@ -620,7 +621,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 								if (index === array.length -1) resolve();
 							});
 						});
-						removeMethod.then(() => {
+						updateMethod.then(() => {
 							if (uiParent.length) {
 								if (uiParent.find('.notif-item').length == 0) {
 									uiParent.find('.no-records-ui').removeClass('hide');
@@ -661,7 +662,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					oArr = oResponse.merge_ids;
 				}
 				if (Object.keys(oResponse.html).length) {
-					var removeMethod = new Promise((resolve, reject) => {
+					var updateMethod = new Promise((resolve, reject) => {
 						oArr.forEach((id, index, array) => {
 							var newUI = oResponse.html[id];
 							if (newUI != undefined && newUI.length) {
@@ -685,7 +686,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						});
 					});
 
-					removeMethod.then(() => {
+					updateMethod.then(() => {
 						if (typeof runATagAjax == 'function') runATagAjax();
 						if (typeof runDomShowHide == 'function') runDomShowHide();
 						if (typeof fulfillmentsRunDomReady == 'function') fulfillmentsRunDomReady();
