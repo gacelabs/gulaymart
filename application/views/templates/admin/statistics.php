@@ -129,25 +129,6 @@
 				</div>
 				<div class="booking-footer"></div>
 			</div>
-
-			<div class="booking-parent col-sm-4 col-lg-6 col-md-12">
-				<div class="booking-heading">
-					<ul class="spaced-list between cron-infos">
-						<li><small>Canceling Orders...</small></li>
-						<li><small js-date><?php echo date('l, F j, Y');?></small></li>
-						<li><small>Time: <span js-time><?php echo date('g:i:s A');?></span></small></li>
-					</ul>
-				</div>
-				<div class="booking-body">
-					<div class="sender-info-form">
-						<p><b>Deleteing Information</b><b id="cron-cancelled-next" class="pull-right hide">Next run: <i></i></b></p>
-						<div id="cron-cancelled" style="background-color: black; color: whitesmoke; padding: 10px; position: relative; height: 100px; overflow-y: scroll;">
-							<?php print_cron_log('cancelled');?>
-						</div>
-					</div>
-				</div>
-				<div class="booking-footer"></div>
-			</div>
 		</div>
 	</div>
 </div>

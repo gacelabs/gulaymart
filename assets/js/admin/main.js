@@ -33,7 +33,7 @@ $(document).ready(function() {
 		});
 		$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
 		$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
-		$('#cron-cancelled').get(0).scrollTo(0,$('#cron-cancelled').get(0).scrollHeight);
+		// $('#cron-cancelled').get(0).scrollTo(0,$('#cron-cancelled').get(0).scrollHeight);
 	}
 });
 
@@ -43,7 +43,7 @@ var drawDataUpdatedLogs = function(obj) {
 		$('#cron-'+obj.name).html(obj.logs);
 		$('#cron-sequence').get(0).scrollTo(0,$('#cron-sequence').get(0).scrollHeight);
 		$('#cron-returns').get(0).scrollTo(0,$('#cron-returns').get(0).scrollHeight);
-		$('#cron-cancelled').get(0).scrollTo(0,$('#cron-cancelled').get(0).scrollHeight);
+		// $('#cron-cancelled').get(0).scrollTo(0,$('#cron-cancelled').get(0).scrollHeight);
 		$('#cron-'+obj.name+'-next').removeClass('hide').find('i').text(obj.next);
 	}
 };

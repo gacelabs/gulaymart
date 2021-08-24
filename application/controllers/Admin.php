@@ -382,16 +382,8 @@ class Admin extends MY_Controller {
 		cronsequence('Running orders to post...');
 		if ($automation_settings) {
 			$set = json_decode($automation_settings['value'], true);
-			
-			/*check here first the product that has been removed by sellers*/
-			$products = $this->gm_db->get_in('products', ['activity' => [GM_ITEM_REJECTED, GM_ITEM_DELETED, GM_ITEM_NO_INVENTORY]]);
-			// debug($products, 'stop');
-			if ($products) {
-				foreach ($products as $product) check_products_in_delivery($product['id'], $product['user_id']);
-			}
-
 			$toktok_data = $this->gm_db->get('baskets_merge', [
-				'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0, 'request_to_cancel' => TT_NO_REQUEST,
+				'status' => GM_FOR_PICK_UP_STATUS, 'operator' => 0, 'is_sent' => 0,
 				'order_by' => 'added', 'direction' => 'ASC',/* 'limit' => $set['booking_limit'],*/
 			]);
 			// debug($automation_settings, $toktok_data, 'stop');
@@ -563,7 +555,7 @@ class Admin extends MY_Controller {
 	public function orders_to_receive()
 	{
 		$baskets_merge = $this->gm_db->get('baskets_merge', [
-			'status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1, 'request_to_cancel' => TT_NO_REQUEST,
+			'status' => GM_ON_DELIVERY_STATUS, 'is_sent' => 1,
 			'order_by' => 'added', 'direction' => 'ASC'
 		]);
 		cronreturns('Listening on processed orders...');
@@ -603,7 +595,7 @@ class Admin extends MY_Controller {
 						// debug($seller_name, $delivery, 'stop');
 						if ($delivery->success AND count($delivery->response)) {
 							$draw = 1; $start = 0;
-							again:
+							loop_again:
 							cronreturns('Deliveries found...');
 							foreach ($delivery->response as $order) {
 								if (isset($order['details']) AND isset($order['details']['post'])) {
@@ -654,7 +646,7 @@ class Admin extends MY_Controller {
 								// debug($delivery->response, $toktok_status, $draw, 'stop');
 								if ($delivery->success AND count($delivery->response)) {
 									// re-query next records
-									goto again;
+									goto loop_again;
 								}
 							}
 						} else {
@@ -703,6 +695,8 @@ class Admin extends MY_Controller {
 	/*this will be run on cron job*/
 	public function remove_cancelled_orders()
 	{
+		croncancelled('This is Disabled for now...');
+		exit;
 		$baskets_merge = $this->gm_db->get_in('baskets_merge', [
 			'status' => [GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS],
 			'request_to_cancel' => TT_SEND_REQUEST,
@@ -734,7 +728,7 @@ class Admin extends MY_Controller {
 				$failed_removes = [];
 				if ($delivery->success AND count($delivery->response)) {
 					$draw = 1; $start = 0;
-					again:
+					loop_again:
 					croncancelled('Cancelled orders found!', 'success');
 					$orders = $delivery->response;
 					foreach ($orders as $index => $order) {
@@ -778,7 +772,7 @@ class Admin extends MY_Controller {
 						// debug($delivery->response, $toktok_status, $draw, 'stop');
 						if ($delivery->success AND count($delivery->response)) {
 							// re-query next records
-							goto again;
+							goto loop_again;
 						}
 					}
 				} else {

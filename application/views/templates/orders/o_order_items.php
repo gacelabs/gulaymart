@@ -143,30 +143,14 @@
 				<?php if ($status == 'on+delivery'): ?>
 					<!-- <a class="btn text-capsule bg-theme" js-data="received" href="orders/receive/<?php echo $orders['id'];?>" data-ajax="1" data-json='<?php echo json_encode(['confirm' => 1], JSON_NUMERIC_CHECK);?>'>Order Received</a> -->
 				<?php endif ?>
-				<?php if (isset($orders['request_to_cancel']) AND $orders['request_to_cancel'] == 1): ?>
-					<span class="text-capsule status-cancelled" js-data="confirmed">
-						Requested for Cancellation
-					</span>
-				<?php else: ?>
-					<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">
-						Confirmed
-					</span>
-				<?php endif ?>
+				<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 			</p>
 		</div>
 		<div class="order-footer-total">
 			<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
 			<p class="zero-gaps hidden-lg hidden-md hidden-sm text-left" style="font-size:11px;">
 				<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($status));?></span>
-				<?php if (isset($orders['request_to_cancel']) AND $orders['request_to_cancel'] == 1): ?>
-					<span class="text-capsule status-cancelled" js-data="confirmed">
-						Requested for Cancellation
-					</span>
-				<?php else: ?>
-					<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">
-						Confirmed
-					</span>
-				<?php endif ?>
+				<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 			</p>
 			<div>
 				<?php

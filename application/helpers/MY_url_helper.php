@@ -877,14 +877,13 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 			$farmer_id = $seller_id ? $seller_id : ($ci->accounts->has_session ? $ci->accounts->profile['id'] : $product['user_id']);
 			$baskets_merge = $ci->gm_db->get_in('baskets_merge', [
 				'seller_id' => $farmer_id, 
-				'status' => [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS],
-				'request_to_cancel' => TT_NO_REQUEST,
+				'status' => GM_PLACED_STATUS,
 			]);
 			$merges = setup_orders_data($baskets_merge);
 			// debug($merges, $product_id, 'stop');
 			/*check order exsisting w/ this product */
 			if ($baskets_merge) {
-				$baskets_merge_ids = $buyer_ids = $baskets_statuses = [];
+				$baskets_merge_ids = [];
 				foreach ($merges as $key => $merge) {
 					// debug($merge['order_details'], 'stop');
 					$order_details = $merge['order_details'];
@@ -901,59 +900,27 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 						}
 						// debug($order_details, 'stop');
 						if ($has_updates > 0) {
-							$request_to_cancel = false;
-							$data = ['order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK))];
-							if (in_array($merge['status'], [GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS])) {
-								if (count($basket_ids) == $has_updates) {
-									$data['request_to_cancel'] = TT_SEND_REQUEST;
-									$request_to_cancel = true;
-								}
-							} else {
-								$data['status'] = GM_CANCELLED_STATUS;
-							}
+							$data = [
+								'order_details' => base64_encode(json_encode($order_details, JSON_NUMERIC_CHECK)),
+								'status' => GM_CANCELLED_STATUS
+							];
 							$ci->gm_db->save('baskets_merge', $data, ['id' => $merge['id']]);
 
 							foreach ($basket_ids as $id) {
 								$basket_data = [
 									'reason' => 'Out Of Stock',
-									'cancel_by' => $farmer_id
+									'cancel_by' => $farmer_id,
+									'status' => GM_CANCELLED_STATUS
 								];
-								if ($request_to_cancel == false) {
-									$basket_data['status'] = GM_CANCELLED_STATUS;
-								}
 								$ci->gm_db->save('baskets', $basket_data, ['id' => $id]);
 							}
-
 							$baskets_merge_ids[] = $merge['id'];
-							$buyer_ids[] = $merge['buyer_id'];
-							$baskets_statuses[] = $merge['status'];
 						}
 					}
 				}
 				// debug($baskets_merge_ids, 'stop');
 				if (!empty($baskets_merge_ids)) {
 					$ci->senddataapi->trigger('order-cycle', 'incoming-gm-process', ['merge_id' => $baskets_merge_ids]);
-					if (!empty($buyer_ids)) {
-						$and_text = '';
-						if (!empty($baskets_statuses)) {
-							$baskets_statuses = array_unique($baskets_statuses);
-							asort($baskets_statuses);
-							foreach ($baskets_statuses as $status) {
-								if (in_array($status, [GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS])) {
-									$and_text = '<br>You have order(s) requested for cancellation.<br>Check here:';
-									if ($status == GM_FOR_PICK_UP_STATUS) {
-										$and_text .= '<br><a href="'.base_url('orders/for-pick-up/').'" data-readit="1">For pick-up</a>';
-									} else {
-										$and_text .= '<br><a href="'.base_url('orders/on-delivery/').'" data-readit="1">On delivery</a>';
-									}
-								}
-							}
-						}
-						$html_string = 'Sorry the product '.$product['name'].' has No stocks available now!'.$and_text;
-						foreach ($buyer_ids as $buyer_id) {
-							send_gm_message($buyer_id, strtotime(date('Y-m-d')), $html_string);
-						}
-					}
 				}
 			}
 			return true;
