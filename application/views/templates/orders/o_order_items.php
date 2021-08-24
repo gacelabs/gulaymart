@@ -67,9 +67,17 @@
 					<p class="zero-gaps">&#x20b1; <?php echo format_number($order['price']);?> / <?php echo ucfirst($order['measurement']);?></p>
 					<?php if ($details['status'] == GM_CANCELLED_STATUS): ?>
 						<?php if ($order['cancel_by'] == $current_profile['id']): ?>
-							<p class="zero-gaps"><small class="text-capsule status-cancelled">Removed by You</small></p>
+							<?php if ($order['reason'] != 'Out Of Stock'): ?>
+								<p class="zero-gaps">
+									<small class="text-capsule status-cancelled">Removed by You</small>
+								</p>
+							<?php else: ?>
+								<p class="zero-gaps">
+									<small class="text-capsule status-cancelled"><?php echo ($order['reason'] == 'None' ? 'Out Of Stock' : $order['reason']);?></small>
+								</p>
+							<?php endif ?>
 						<?php elseif ($order['cancel_by'] > 0 AND $order['cancel_by'] != $current_profile['id']): ?>
-							<p class="zero-gaps"><small class="text-capsule status-cancelled"><?php echo $order['reason'];?></small></p>
+							<p class="zero-gaps"><small class="text-capsule status-cancelled"><?php echo ($order['reason'] == 'None' ? 'Out Of Stock' : $order['reason']);?></small></p>
 						<?php endif ?>
 					<?php endif ?>
 				</div>
@@ -150,6 +158,7 @@
 			<button class="btn btn-xs btn-default hidden-lg hidden-md hidden-sm" js-event="showOrderFooter" style="height:22px;"><i class="fa fa-angle-down"></i></button>
 			<p class="zero-gaps hidden-lg hidden-md hidden-sm text-left" style="font-size:11px;">
 				<span class="text-capsule status-<?php echo $nospace_status;?>"><?php echo ucwords(urldecode($status));?></span>
+				<span class="text-capsule hidden-lg hidden-md status-<?php echo $nospace_status;?>"><?php echo ($order['reason'] == 'None' ? 'Out Of Stock' : $order['reason']);?></span>
 				<span class="text-capsule bg-theme<?php not_in_array_echo(6, $status_array, ' hide');?>" js-data="confirmed">Confirmed</span>
 			</p>
 			<div>

@@ -124,7 +124,7 @@ var fulfillmentsRunDomReady = function() {
 		} else {
 			$(this).next('[js-event="reasonSelect"]').addClass('hide');
 			$(this).parent('[js-element="selectItems"]').find('select').css('color', '#799938');
-			$(this).next('[js-event="reasonSelect"]').val('None');
+			$(this).next('[js-event="reasonSelect"]').val('Out Of Stock');
 		}
 		isAllSelected($(this).parents('.fulfillment-table-item').data('merge-id'));
 	});

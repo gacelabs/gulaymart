@@ -46,7 +46,7 @@
 					$reason = '';
 					if ($details['status'] == GM_CANCELLED_STATUS) {
 						$data_product = $this->gm_db->get('baskets', ['id' => $order['basket_id']], 'row');
-						$reason = $data_product ? ($data_product['reason'] == 'None' ? 'No reason selected' : $data_product['reason']) : 'No reason selected';
+						$reason = $data_product ? ($data_product['reason'] == 'None' ? 'Out Of Stock' : $data_product['reason']) : 'Out Of Stock';
 						if ($cancelled_items == false) $cancelled_items = [];
 						$cancelled_items[$order['basket_id']] = (float)$order['sub_total'];
 					}
@@ -88,7 +88,6 @@
 								<option value="5">Cancelled</option> <!-- cancelled -->
 							</select>
 							<select class="form-control hide" js-event="reasonSelect" style="margin-bottom:0;" data-json='<?php echo $json;?>'>
-								<option value="None">Select Reason</option>
 								<option value="Out Of Stock">Out Of Stock</option>
 								<option value="Removed Product">Removed Product</option>
 							</select>
