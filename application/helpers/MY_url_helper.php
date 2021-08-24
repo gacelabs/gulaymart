@@ -874,8 +874,9 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 		$ci =& get_instance();
 		$product = $ci->gm_db->get_in('products', ['id' => $product_id, 'include_activity' => 1], 'row');
 		if ($product) {
+			$farmer_id = $seller_id ? $seller_id : ($ci->accounts->has_session ? $ci->accounts->profile['id'] : $product['user_id']);
 			$baskets_merge = $ci->gm_db->get_in('baskets_merge', [
-				'seller_id' => $seller_id ? $seller_id : ($ci->accounts->has_session ? $ci->accounts->profile['id'] : $product['user_id']), 
+				'seller_id' => $farmer_id, 
 				'status' => [GM_PLACED_STATUS, GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS],
 				'request_to_cancel' => TT_NO_REQUEST,
 			]);
@@ -915,7 +916,7 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 							foreach ($basket_ids as $id) {
 								$basket_data = [
 									'reason' => 'Removed Product',
-									'cancel_by' => $seller_id ? $seller_id : ($ci->accounts->has_session ? $ci->accounts->profile['id'] : $product['user_id'])
+									'cancel_by' => $farmer_id
 								];
 								if ($request_to_cancel == false) {
 									$basket_data['status'] = GM_CANCELLED_STATUS;
