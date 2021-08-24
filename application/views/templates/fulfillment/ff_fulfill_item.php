@@ -139,6 +139,7 @@
 				$initial_total -= $amount;
 			}
 		}
+		$request_to_cancel = $orders['request_to_cancel'];
 	?>
 
 	<div class="fulfillment-grid-footer">
@@ -179,6 +180,9 @@
 			<?php else : ?>
 				<p class="zero-gaps"><small class="elem-block"><b>ORDER STATUS</b></small></p>
 				<p class="zero-gaps"><span class="text-capsule status-<?php echo str_replace(" ", "", strtolower(urldecode($status_text)));?>"><?php echo ucwords(urldecode($status_text));?></span></p>
+				<?php if ($request_to_cancel): ?>
+					<p class="zero-gaps"><span class="text-capsule status-cancelled">Requested for Cancellation</span></p>
+				<?php endif ?>
 			<?php endif ; ?>
 		</div>
 	</div>

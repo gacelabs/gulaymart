@@ -896,7 +896,7 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 							if ($detail['product_id'] == $product_id) {
 								$has_updates++;
 								$order_details[$index]['status'] = GM_CANCELLED_STATUS;
-								$order_details[$index]['reason'] = 'Removed Product';
+								$order_details[$index]['reason'] = 'Out Of Stock';
 							}
 						}
 						// debug($order_details, 'stop');
@@ -915,7 +915,7 @@ function check_products_in_delivery($product_id=0, $seller_id=0)
 
 							foreach ($basket_ids as $id) {
 								$basket_data = [
-									'reason' => 'Removed Product',
+									'reason' => 'Out Of Stock',
 									'cancel_by' => $farmer_id
 								];
 								if ($request_to_cancel == false) {
