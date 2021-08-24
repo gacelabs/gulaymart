@@ -704,8 +704,8 @@ class Admin extends MY_Controller {
 	public function remove_cancelled_orders()
 	{
 		$baskets_merge = $this->gm_db->get_in('baskets_merge', [
-			// 'status' => [GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS],
-			// 'request_to_cancel' => TT_SEND_REQUEST,
+			'status' => [GM_ON_DELIVERY_STATUS, GM_FOR_PICK_UP_STATUS],
+			'request_to_cancel' => TT_SEND_REQUEST,
 			'is_sent' => 1,
 		]);
 		$merges = setup_orders_data($baskets_merge);
