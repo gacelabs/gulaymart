@@ -451,9 +451,6 @@ var sendRequestOrderCycles = function(oData, iUser, type) {
 			if (oData.counts && oData.counts[type]['user_'+iUser] != undefined) {
 				/*just count*/
 				var oCounts = oData.counts[type]['user_'+iUser];
-				/*if ($.inArray(oData.mode, ['on-delivery']) >= 0) {
-					oCounts = oData.counts['seller']['user_'+iUser];
-				}*/
 				for (let x in oData.requests) {
 					if (x == type) {
 						var oItem = oData.requests[x];
@@ -503,7 +500,7 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 			if ($.inArray(sMode, Object.values(oSegments)) >= 0) {
 				// console.log(oResponse, Object.keys(oResponse.html).length);
 				var uiParent = $('#dashboard_panel_right [js-element="baskets-panel"]');
-				if (Object.keys(oResponse.html).length && uiParent.length) {
+				if (uiParent.length) {
 					var oArr = [];
 					if (Array.isArray(oResponse.basket_ids) == false) {
 						if (typeof oResponse.basket_ids == 'object') {
@@ -517,12 +514,12 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 					// console.log(oArr);
 					if (oArr.length) {
 						oArr = oArr.sort();
-						var arrRemoved = [];
+						var updateMethod = null;
 						if (Object.keys(oResponse.html).length) {
 							for (var x in oResponse.html) {
 								var newUI = oResponse.html[x];
 								if (newUI != undefined && newUI.length) {
-									var updateMethod = new Promise((resolve, reject) => {
+									updateMethod = new Promise((resolve, reject) => {
 										oArr.forEach((attr, index, array) => {
 											if (x == attr) {
 												// console.log('attributes', attr);
@@ -538,99 +535,102 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 											if (index === array.length -1) resolve();
 										});
 									});
-
-									updateMethod.then(() => {
-										if (typeof runATagAjax == 'function') runATagAjax();
-										if (typeof runDomShowHide == 'function') runDomShowHide();
-										if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
-
-										if (uiParent.find('.order-table-item').length == 0) {
-											uiParent.find('.no-records-ui').removeClass('hide');
-										} else {
-											uiParent.find('.no-records-ui').addClass('hide');
-										}
-										// console.log(oResponse.panel, 'All done!');
-									});
 								}
 							}
+						} else {
+							updateMethod = new Promise((resolve, reject) => {
+								oArr.forEach((attr, index, array) => {
+									// console.log('attributes', attr);
+									var item = uiParent.find(attr);
+									if (item.length) {
+										// console.log('remove ui!', item);
+										item.remove();
+									}
+									if (index === array.length -1) resolve();
+								});
+							});
+						}
+
+						if (updateMethod != null) {
+							updateMethod.then(() => {
+								if (typeof runATagAjax == 'function') runATagAjax();
+								if (typeof runDomShowHide == 'function') runDomShowHide();
+								if (typeof basketsRunDomReady == 'function') basketsRunDomReady();
+
+								if (uiParent.find('.order-table-item').length == 0) {
+									uiParent.find('.no-records-ui').removeClass('hide');
+								} else {
+									uiParent.find('.no-records-ui').addClass('hide');
+								}
+							});
 						}
 					}
-				} else {
-					// uiParent.find('.no-records-ui').removeClass('hide');
 				}
 			}
 		break;
 		case 'message':
 			if ($.inArray('messages', Object.values(oSegments)) >= 0) {
 				var oArr = [], uiParent = $('#link_panel_top .hideshow-container');
-				if (Array.isArray(oResponse.message_ids) == false) {
-					if (typeof oResponse.message_ids == 'object') {
-						oArr = Object.values(oResponse.message_ids);
-					} else if (typeof oResponse.message_ids == 'number') {
-						oArr = [oResponse.message_ids];
+				if (uiParent.length) {
+					if (Array.isArray(oResponse.message_ids) == false) {
+						if (typeof oResponse.message_ids == 'object') {
+							oArr = Object.values(oResponse.message_ids);
+						} else if (typeof oResponse.message_ids == 'number') {
+							oArr = [oResponse.message_ids];
+						}
+					} else {
+						oArr = oResponse.message_ids;
 					}
-				} else {
-					oArr = oResponse.message_ids;
-				}
-				if (oArr.length) {
-					var arrToRemoved = [];
-					if (Object.keys(oResponse.html).length) {
-						var updateMethod = new Promise((resolve, reject) => {
-							oArr.forEach((id, index, array) => {
-								var newUI = oResponse.html[id],
-								uiParent = $('#msg_'+oResponse.tabs[id]);
-								if (newUI != undefined && newUI.length) {
-									var item = uiParent.find('[data-msg-id="'+id+'"]');
+					if (oArr.length) {
+						var updateMethod = null;
+						if (Object.keys(oResponse.html).length) {
+							updateMethod = new Promise((resolve, reject) => {
+								oArr.forEach((id, index, array) => {
+									var newUI = oResponse.html[id],
+									uiParent = $('#msg_'+oResponse.tabs[id]);
+									if (newUI != undefined && newUI.length) {
+										var item = uiParent.find('[data-msg-id="'+id+'"]');
+										if (item.length) {
+											// console.log('replace ui!', item);
+											item.replaceWith(newUI);
+										} else {
+											// console.log('new ui!', uiParent);
+											uiParent.prepend(newUI);
+										}
+									}
+									if (index === array.length -1) resolve();
+								});
+							});
+						} else {
+							updateMethod = new Promise((resolve, reject) => {
+								oArr.forEach((id, index, array) => {
+									var item = $('[data-msg-id="'+id+'"]');
+									uiParent = item.parent('[element-name="messages"]');
 									if (item.length) {
-										// console.log('replace ui!', item);
-										item.replaceWith(newUI);
+										// console.log('removed ui!', item);
+										item.remove();
+									}
+									if (index === array.length -1) resolve();
+								});
+							});
+						}
+
+						if (updateMethod != null) {
+							updateMethod.then(() => {
+								if (typeof runATagAjax == 'function') runATagAjax();
+								if (typeof runDomShowHide == 'function') runDomShowHide();
+								if (typeof msgRunDomReady == 'function') msgRunDomReady();
+
+								if (uiParent.length && uiParent.is('visible')) {
+									if (uiParent.find('.notif-item').length == 0) {
+										uiParent.find('.no-records-ui').removeClass('hide');
 									} else {
-										// console.log('new ui!', uiParent);
-										uiParent.prepend(newUI);
+										uiParent.find('.no-records-ui').addClass('hide');
 									}
 								}
-								if (index === array.length -1) resolve();
+								// console.log('All done!');
 							});
-						});
-
-						updateMethod.then(() => {
-							if (typeof runATagAjax == 'function') runATagAjax();
-							if (typeof runDomShowHide == 'function') runDomShowHide();
-							if (typeof msgRunDomReady == 'function') msgRunDomReady();
-
-							if (uiParent.length && uiParent.is('visible')) {
-								if (uiParent.find('.notif-item').length == 0) {
-									uiParent.find('.no-records-ui').removeClass('hide');
-								} else {
-									uiParent.find('.no-records-ui').addClass('hide');
-								}
-							}
-							// console.log('All done!');
-						});
-					} else {
-						var uiParent = []
-						var updateMethod = new Promise((resolve, reject) => {
-							oArr.forEach((id, index, array) => {
-								var item = $('[data-msg-id="'+id+'"]');
-								if (uiParent.length == 0) uiParent = item.parent('[element-name="messages"]');
-								if (item.length) {
-									// console.log('removed ui!', item);
-									item.remove();
-									arrToRemoved.push(true);
-								}
-								if (index === array.length -1) resolve();
-							});
-						});
-						updateMethod.then(() => {
-							if (uiParent.length) {
-								if (uiParent.find('.notif-item').length == 0) {
-									uiParent.find('.no-records-ui').removeClass('hide');
-								} else {
-									uiParent.find('.no-records-ui').addClass('hide');
-								}
-							}
-							// console.log('All done!');
-						});
+						}
 					}
 				}
 			}
@@ -700,17 +700,11 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 						} else {
 							uiParent.find('.no-records-ui').addClass('hide');
 						}
-						// console.log(oResponse.panel, 'All done!');
 					});
-				} else {
-					// uiParent.find('.no-records-ui').removeClass('hide');
 				}
 			}
 		break;
 	}
-	/*if (oCounts != undefined && Object.keys(oCounts).length) {
-		for (var y in oCounts) reCountMenuNavs(y, oCounts[y]);
-	}*/
 }
 
 var runATagAjax = function () {

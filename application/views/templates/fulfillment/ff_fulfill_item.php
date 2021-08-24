@@ -27,6 +27,7 @@
 			<?php 
 				$row_cnt = 0;
 				$cancelled_items = false;
+				$reason_items = false;
 				foreach ($orders['order_details'] as $index => $order): ?>
 				<!-- per order -->
 				<?php
@@ -93,7 +94,7 @@
 							</select>
 						<?php else : ?>
 							<p class="zero-gaps hidden-sm hidden-xs">
-								<?php if ($status_id == GM_CANCELLED_STATUS): ?>
+								<?php if ($details['status'] == GM_CANCELLED_STATUS): ?>
 									<small class="text-capsule status-cancelled">
 										<?php echo $reason;?>
 									</small>

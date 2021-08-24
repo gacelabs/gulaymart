@@ -1077,6 +1077,12 @@ class CreateDev {
 				'default' => '2',
 				'null' => false,
 			],
+			'request_to_cancel' => [
+				'type' => 'TINYINT',
+				'constraint' => '1',
+				'default' => '0',
+				'null' => false,
+			],
 			'order_id' => [
 				'type' => 'TINYTEXT',
 				'default' => NULL,

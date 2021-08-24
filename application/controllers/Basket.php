@@ -68,23 +68,29 @@ class Basket extends My_Controller {
 		// debug($items_by_farm, 'stop');
 		if ($this->input->is_ajax_request()) {
 			$html = $html_ids = [];
-			foreach ($items_by_farm as $location_by_order_type => $basket_items) {
-				$key_data = explode('|', $location_by_order_type);
-				$location_id = $key_data[0];
-				$order_type = $key_data[1];
-				$basket_ids = $basket_items['basket_ids'];
-				asort($basket_ids);
-				$combi = " id-".implode("-item id-", $basket_ids)."-item";
-				$html_ids[] = $attr = "[id-".implode("-item],[id-", $basket_ids)."-item]";
-				$schedule = (!is_null($key_data[2]) AND $key_data[2] == '0000-00-00') ? '' : $key_data[2];
-				$row_data = [
-					'id_combi' => $combi,
-					'baskets' => $basket_items,
-					'location_id' => $location_id,
-					'order_type' => $order_type,
-					'schedule' => $schedule,
-				];
-				$html[trim($attr)] = $this->load->view('templates/basket/basket_items', $row_data, true);
+			if (!empty($items_by_farm)) {
+				foreach ($items_by_farm as $location_by_order_type => $basket_items) {
+					$key_data = explode('|', $location_by_order_type);
+					$location_id = $key_data[0];
+					$order_type = $key_data[1];
+					$basket_ids = $basket_items['basket_ids'];
+					asort($basket_ids);
+					$combi = " id-".implode("-item id-", $basket_ids)."-item";
+					$html_ids[] = $attr = "[id-".implode("-item],[id-", $basket_ids)."-item]";
+					$schedule = (!is_null($key_data[2]) AND $key_data[2] == '0000-00-00') ? '' : $key_data[2];
+					$row_data = [
+						'id_combi' => $combi,
+						'baskets' => $basket_items,
+						'location_id' => $location_id,
+						'order_type' => $order_type,
+						'schedule' => $schedule,
+					];
+					$html[trim($attr)] = $this->load->view('templates/basket/basket_items', $row_data, true);
+				}
+			} else if (!empty($ids)) {
+				if (!is_array($ids)) $ids = [$ids];
+				asort($ids);
+				$html_ids[] = "[id-".implode("-item],[id-", $ids)."-item]";
 			}
 			// debug($html, 'stop');
 			echo json_encode(['html' => $html, 'basket_ids' => array_unique($html_ids), 'panel' => 'basket'], JSON_NUMERIC_CHECK);

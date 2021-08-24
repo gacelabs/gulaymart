@@ -409,7 +409,7 @@ class Farm extends MY_Controller {
 		if ($perm_delete == 0) $mode = 'unpublish';
 		if ($post AND (!isset($post['_']) OR (isset($post['callback']) AND $post['callback'] != 'gmCall'))) {
 			$product_id = isset($post['id']) ? $post['id'] : 0;
-			$response = check_gm_delivery($product_id);
+			$response = check_products_in_delivery($product_id);
 			// debug($response, $post, 'stop');
 			if ($response) {
 				/*remove product*/

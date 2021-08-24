@@ -363,41 +363,50 @@ function files_upload($_files=FALSE, $dir='', $return_path=FALSE, $this_name=FAL
 	}
 }
 
-function create_dirs($dir='')
+function create_dirs($dir='', $own=false)
 {
-	if (is_dir('assets/data/files/'.$dir) == false) {
+	$directory = 'assets/data/files/';
+	if ($own == true AND !empty($dir)) {
+		$directory = '';
+	}
+	if (is_dir($directory.$dir) == false) {
 		/*create the dirs*/
-		$folder_chunks = explode('/', 'assets/data/files/');
+		$folder_chunks = explode('/', $directory);
 		if (count($folder_chunks)) {
 			$uploaddir = get_root_path();
 			foreach ($folder_chunks as $key => $folder) {
 				$uploaddir .= $folder.'/';
-				// debug($uploaddir);
+				// debug($uploaddir, 'stop');
 				@mkdir($uploaddir);
 			}
 		}
-		@mkdir(get_root_path('assets/data/files/'));
-		$uploaddir = get_root_path('assets/data/files/'.$dir);
+		@mkdir(get_root_path($directory));
+		$uploaddir = get_root_path($directory.$dir);
 		
 		if ($dir != '') {
 			/*create the dirs*/
 			$folder_chunks = explode('/', str_replace(' ', '_', $dir));
 			// debug($folder_chunks);
 			if (count($folder_chunks)) {
-				$uploaddir = get_root_path('assets/data/files/');
+				$uploaddir = get_root_path($directory);
 				foreach ($folder_chunks as $key => $folder) {
 					$uploaddir .= $folder.'/';
-					// debug($uploaddir);
+					// debug($uploaddir, 'stop');
 					@mkdir($uploaddir);
 				}
 			}
 		}
 		@chmod($uploaddir, 0755);
 	} else {
-		$uploaddir = get_root_path('assets/data/files/'.$dir);
+		$uploaddir = get_root_path($directory.$dir);
 	}
 
-	return $uploaddir;
+	if ($own) {
+		return str_replace(get_root_path(), '', (rtrim($uploaddir, '/').'/'));
+	} else {
+		return rtrim($uploaddir, '/').'/';
+	}
+
 }
 
 function construct_where($id_post_id=FALSE, $table_or_alias='') {
@@ -1779,8 +1788,8 @@ function identify_main_photo($product=false, $return=false, &$no_main=true)
 
 function cronlogger($response=false, $data=false, $type='error')
 {
-	if ($date == false) $date = date('Y-m-d');
-	$filename = 'assets/data/logs/cron-error~'.$date.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.date('Y-m-d').'/', true);
+	$filename = $uploaddir.'cron-'.$type.'.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
@@ -1801,7 +1810,8 @@ function cronlogger($response=false, $data=false, $type='error')
 function cronsequence($data=false, $type='info', $date=false)
 {
 	if ($date == false) $date = date('Y-m-d');
-	$filename = 'assets/data/logs/cron-sequence-'.$date.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.$date.'/', true);
+	$filename = $uploaddir.'cron-sequence.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
@@ -1816,7 +1826,8 @@ function cronsequence($data=false, $type='info', $date=false)
 function cronreturns($data=false, $type='info', $date=false)
 {
 	if ($date == false) $date = date('Y-m-d');
-	$filename = 'assets/data/logs/cron-returns-'.$date.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.$date.'/', true);
+	$filename = $uploaddir.'cron-returns.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
@@ -1831,7 +1842,8 @@ function cronreturns($data=false, $type='info', $date=false)
 function croncancelled($data=false, $type='info', $date=false)
 {
 	if ($date == false) $date = date('Y-m-d');
-	$filename = 'assets/data/logs/cron-cancelled-'.$date.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.$date.'/', true);
+	$filename = $uploaddir.'cron-cancelled.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
@@ -1845,7 +1857,8 @@ function croncancelled($data=false, $type='info', $date=false)
 
 function cron_finished($data=false, $type=false)
 {
-	$filename = 'assets/data/logs/cron-finish.log';
+	$uploaddir = create_dirs('assets/data/logs/'.date('Y-m-d').'/', true);
+	$filename = $uploaddir.'cron-finish.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
@@ -1859,18 +1872,21 @@ function cron_finished($data=false, $type=false)
 
 function logger($response=false, $data=false, $type='error')
 {
-	$filename = 'assets/data/logs/'.$type.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.date('Y-m-d').'/', true);
+	$filename = $uploaddir.'data.log';
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);
 	}
 	$logfile = fopen(get_root_path($filename), "a+");
 	/*log here*/
-	$txt  = "Date: " . Date('Y-m-d H:i:s') . "\n";
-	$txt .= "Code: $type\n";
-	$txt .= "Response: " . json_encode($response, JSON_NUMERIC_CHECK) . " \n";
-	$txt .= "Data: " . json_encode($data, JSON_NUMERIC_CHECK) . " \n";
-	$txt .= "----------------------------" . "\n";
+	$result  = [
+		'date' => Date('Y-m-d H:i:s'),
+		'code' => $type,
+		'response' => $response,
+		'data' => $data,
+	];
+	$txt = json_encode($result, JSON_NUMERIC_CHECK) . " \n";
 	fwrite($logfile, $txt);
 	fclose($logfile);
 }
@@ -2036,8 +2052,9 @@ function get_current_git_commit($branch='main') {
 
 function print_cron_log($name='sequence', $echo=true, $date=false) {
 	if ($date == false) $date = date('Y-m-d');
-
-	$filename = 'assets/data/logs/cron-'.$name.'-'.$date.'.log';
+	$uploaddir = create_dirs('assets/data/logs/'.$date.'/', true);
+	$filename = $uploaddir.'cron-'.$name.'.log';
+	// debug($filename, 'stop');
 	if(!file_exists(get_root_path($filename))) {
 		$logfile = fopen($filename, "w");
 		fclose($logfile);

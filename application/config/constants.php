@@ -195,3 +195,7 @@ defined('GM_ITEM_APPROVED')		OR define('GM_ITEM_APPROVED',	 1);
 defined('GM_ITEM_REJECTED')		OR define('GM_ITEM_REJECTED',	 2);
 defined('GM_ITEM_DELETED')		OR define('GM_ITEM_DELETED',	 3);
 defined('GM_ITEM_NO_INVENTORY')	OR define('GM_ITEM_NO_INVENTORY',4);
+
+/*TOKTOK REQUEST STATUS CANCEL*/
+defined('TT_NO_REQUEST')	 OR	define('TT_NO_REQUEST',	  0);
+defined('TT_SEND_REQUEST')	 OR define('TT_SEND_REQUEST', 1);
