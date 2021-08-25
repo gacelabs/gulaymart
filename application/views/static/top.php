@@ -53,5 +53,6 @@
 		var TIMEZONE = '<?php echo date_default_timezone_get();?>';
 		var badge = <?php echo (!empty($this->message_count)) ? $this->message_count : '""';?>;
 		var gmgc = <?php echo $this->has_commits ? 'true' : 'false';?>;
+		var oLatLong = <?php echo json_encode($this->current_latlng, JSON_NUMERIC_CHECK); ?>;
 	</script>
 </head>

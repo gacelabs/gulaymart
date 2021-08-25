@@ -13,12 +13,21 @@ class MY_Controller extends CI_Controller {
 	public $referrer = FALSE;
 	public $latlng = ['lat' => 14.628538456333938, 'lng' => 120.97507784318562];
 	public $current_city = FALSE;
+	public $current_latlng = FALSE;
 	public $has_commits = FALSE;
 	public $versioning = FALSE;
 
 	public function __construct()
 	{
 		parent::__construct();
+		$current_latlng = get_cookie('current_latlng', true);
+		if (!empty($current_latlng)) {
+			// debug($current_latlng, 'stop');
+			$this->current_latlng = unserialize($current_latlng);
+		} else {
+			$this->current_latlng = get_coordinates(ip_info(get_machine()));
+			set_cookie('current_latlng', serialize($this->current_latlng), 7776000); // 90 days
+		}
 		$hash = get_current_git_commit();
 		$gm_gc = get_cookie('gm_gc', true);
 		if ($gm_gc !== $hash) {
@@ -29,7 +38,7 @@ class MY_Controller extends CI_Controller {
 		$user_timezone = get_cookie('user_timezone', true);
 		// debug(date_default_timezone_get(), $user_timezone, 'stop');
 		if (empty($user_timezone)) {
-			$zone_details = ip_info((bool)strstr($_SERVER['HTTP_HOST'], 'local') ? '120.29.109.66' : NULL);
+			$zone_details = ip_info(get_machine());
 			// debug($zone_details, 'stop');
 			if (!empty($zone_details)) {
 				$user_timezone = $zone_details['timezone'];
@@ -145,6 +154,7 @@ class MY_Controller extends CI_Controller {
 			}
 			$remember = get_cookie('remember', true);
 			if (!empty($remember)) {
+				// debug($remember, 'stop');
 				$this->accounts->refetch($remember);
 			}
 		}

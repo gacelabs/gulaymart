@@ -1,9 +1,8 @@
-var hasLatlong = false, autocomplete, map, marker, infowindow, oLatLong, savedAddress1, savedAddress2, savedLatLng;
+var hasLatlong = false, autocomplete, map, marker, infowindow, savedAddress1, savedAddress2, savedLatLng;
 $(document).ready(function() {
 	modalCallbacks();
 	if ($('select.chosen').length) $('select.chosen').chosen();
 
-	oLatLong = {'lat':14.628538456333938, 'lng': 120.97507784318562};
 	if ($('#map-box').length) {
 		if (window.location.protocol == 'https:') {
 			navigator.permissions.query({name:'geolocation'}).then(function(oLocation) {
@@ -22,7 +21,7 @@ $(document).ready(function() {
 			if (mobileAndTabletCheck()) {
 				runAlertBox({type:'info', message: 'Please enable your location to access google map data.'/*, unclose: true*/});
 			}
-			if (oUser != false && mobileAndTabletCheck() == false) oLatLong = {lat: oUser.lat, lng: oUser.lng};
+			if (oUser != false && mobileAndTabletCheck() == false && Object.values(oLatLong).length == 0) oLatLong = {lat: oUser.lat, lng: oUser.lng};
 		}, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
 	}
 
