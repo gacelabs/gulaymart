@@ -230,7 +230,7 @@ class Accounts {
 	{
 		if ($user_id > 0 AND $this->has_session == FALSE) {
 			$mobile_user = $this->class->gm_db->get('users', ['id' => $user_id], 'row');
-			if ($mobile_user) $this->login($mobile_user);
+			if ($mobile_user) $this->login($mobile_user, $this->class->session->userdata('referrer'));
 		}
 		$user = $this->class->db->get_where('users', ['id' => $this->profile['id']]);
 		if ($user->num_rows()) {
