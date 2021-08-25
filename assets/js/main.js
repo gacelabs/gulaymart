@@ -621,14 +621,11 @@ var reDrawOrderCycles = function(oData, oResponse, oCounts, sPageName) {
 								if (typeof runDomShowHide == 'function') runDomShowHide();
 								if (typeof msgRunDomReady == 'function') msgRunDomReady();
 
-								if (uiParent.length && uiParent.is('visible')) {
-									if (uiParent.find('.notif-item').length == 0) {
-										uiParent.find('.no-records-ui').removeClass('hide');
-									} else {
-										uiParent.find('.no-records-ui').addClass('hide');
-									}
+								if (uiParent.find('.notif-item:visible').length == 0) {
+									uiParent.find('.no-records-ui').removeClass('hide');
+								} else {
+									uiParent.find('.no-records-ui').addClass('hide');
 								}
-								// console.log('All done!');
 							});
 						}
 					}
