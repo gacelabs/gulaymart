@@ -45,6 +45,14 @@ $(document).ready(function() {
 			}
 		});
 	}
+
+	if ($('a[loader="1"]').length) {
+		$('a[loader="1"]').bind('click', function(e) {
+			e.stopPropagation();
+			var oThis = $(this), origText = oThis.html();
+			oThis.addClass('stop').html('<span class="spinner-border spinner-border-sm"></span> '+origText);
+		});
+	}
 });
 
 window.onpopstate = function(e) {

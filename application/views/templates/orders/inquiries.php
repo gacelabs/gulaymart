@@ -33,6 +33,6 @@
 	</div>
 	<div class="no-records-ui" style="text-align:center;background-color:#fff;padding:40px 10px;">
 		<h1>Empty Inquiries</h1>
-		<p class="zero-gaps">Find the freshest veggies grown by your community at <a href="" class="btn btn-sm btn-contrast">Marketplace <i class="fa fa-leaf" style="border:1px solid #fff;padding:4px;border-radius:100px;"></i></a></p>
+		<p class="zero-gaps">Find the freshest veggies grown by your community at <a loader="1" href="" class="btn btn-sm btn-contrast">Marketplace <i class="fa fa-leaf" style="border:1px solid #fff;padding:4px;border-radius:100px;"></i></a></p>
 	</div>
 </div>
