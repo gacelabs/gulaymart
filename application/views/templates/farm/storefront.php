@@ -51,7 +51,7 @@
 											<div class="btn-group">
 												<button type="button" class="text-link btn btn-default dropdown-toggle icon-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-external-link-square"></i><span class="hidden-xs"> View Stores</span> <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu">
+												<ul class="dropdown-menu dropdown-menu-right">
 													<?php foreach ($data['farm_locations'] as $location): ?>
 														<?php
 															$farm = $data['farms'];
