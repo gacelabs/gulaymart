@@ -33,7 +33,7 @@
 									<input type="email" name="email_address" class="form-control" placeholder="Email address">
 								</div>
 								<div class="form-group" style="margin-bottom: 5px; position: relative;">
-									<i class="bi bi-eye toggle-password"></i>
+									<i class="bi bi-eye-slash toggle-password"></i>
 									<input type="password" name="password" id="log-password" class="form-control password" placeholder="Password">
 								</div>
 								<div class="checkbox<?php if ($this->agent->is_mobile()): ?> hide<?php endif ?>">

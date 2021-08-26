@@ -39,9 +39,9 @@ $(document).ready(function() {
 			password.setAttribute('type', type);
 			$(this).removeClass('bi-eye bi-eye-slash');
 			if (type == 'text') {
-				$(this).addClass('bi-eye-slash');
-			} else {
 				$(this).addClass('bi-eye');
+			} else {
+				$(this).addClass('bi-eye-slash');
 			}
 		});
 	}
