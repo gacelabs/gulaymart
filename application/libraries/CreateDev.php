@@ -575,6 +575,7 @@ class CreateDev {
 			],
 			'label tinytext',
 			'value tinytext',
+			'abbrv tinytext',
 			'added DATETIME DEFAULT CURRENT_TIMESTAMP',
 			'updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
 		]);
